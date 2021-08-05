@@ -1,0 +1,2 @@
+gooddata-sdk >= 0.1
+pandas
