@@ -6,6 +6,8 @@ This repository contains Python packages useful for integration with GoodData.CN
 -  gooddata-sdk: a Python SDK providing added value functions and convenience layers on top of the clients
 -  gooddata-fdw: a GD.CN Foreign Data Wrapper for PostgreSQL
 
+Code is compatible with Python 3.9 or newer.
+
 ## API Clients
 
 These are generated using the openapi-generator. The generated clients are fairly convoluted and can be tricky
