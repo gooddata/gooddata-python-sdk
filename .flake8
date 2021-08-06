@@ -1,0 +1,13 @@
+[flake8]
+exclude = .git,.venv,__pycache__,.tox,build,dist,gooddata-afm-client,gooddata-metadata-client
+
+max-line-length = 160
+
+# disabling formatting related lints as black should take care of these
+# see https://github.com/psf/black/issues/315
+extend-ignore = E203, W504
+
+# Ignoring unused imports in these as they are API re-exports
+per-file-ignores =
+    gooddata-sdk/gooddata_sdk/__init__.py:F401
+    gooddata-pandas/gooddata_pandas/__init__.py:F401

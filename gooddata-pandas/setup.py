@@ -1,16 +1,21 @@
-import subprocess
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, find_packages
 
 REQUIRES = [
-    "gooddata-sdk >= 0.1",
+    "gooddata-sdk==0.1",
     "pandas"
 ]
 
+
+def _read_version():
+    with open('VERSION', 'rt') as version_file:
+        return version_file.readline().strip()
+
+
 setup(
     name='gooddata-pandas',
-    version='0.1',
-    author='Lubomir Slivka',
+    version=_read_version(),
+    author='GoodData',
     license='MIT',
     install_requires=REQUIRES,
-    packages=['gooddata_pandas']
+    packages=find_packages(exclude=['tests']),
 )

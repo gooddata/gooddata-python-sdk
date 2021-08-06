@@ -1,0 +1,3 @@
+[tool.black]
+# intentionally ignore the generated clients
+extend-exclude = '(gooddata-afm-client|gooddata-metadata-client)'
