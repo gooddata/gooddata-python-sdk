@@ -2,7 +2,10 @@
 
 set -eu
 
-docker build -t postgresql-gd .
+# Note: image build requires access to the context of the entire repo in order to install the necessary
+# GoodData packages located in the repo.
+docker build -t postgresql-gd -f Dockerfile ..
+
 docker run --rm -p 2543:5432 \
           -e POSTGRES_DB=gooddata \
           -e POSTGRES_USER=gooddata \

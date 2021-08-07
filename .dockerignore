@@ -1,2 +1,8 @@
 .idea
 .venv
+.tox
+.pytest_cache
+build
+dist
+*.egg-info
+.coverage
