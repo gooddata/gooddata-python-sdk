@@ -412,7 +412,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         # catalog_service = sdk.CatalogService(client)
         # catalog = catalog_service.get_full_catalog(workspace)
 
-        _log_debug(f"loading all insights")
+        _log_debug("loading all insights")
         insights = _sdk.insights.get_insights(workspace)
 
         tables = []

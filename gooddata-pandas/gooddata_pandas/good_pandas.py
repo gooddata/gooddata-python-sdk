@@ -3,6 +3,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_pandas.series import SeriesFactory
 from gooddata_pandas.dataframe import DataFrameFactory
 
+
 class GoodPandas:
     """
     Facade to access factories that create pandas Series and DataFrames using analytics computed by GoodData.CN.

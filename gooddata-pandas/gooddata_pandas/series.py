@@ -91,7 +91,7 @@ class SeriesFactory:
         data, _ = compute_and_extract(
             self._sdk,
             self._workspace_id,
-            index_by=granularity,
+            index_by=_index,
             columns={"_series": data_by},
             filter_by=filter_by,
         )

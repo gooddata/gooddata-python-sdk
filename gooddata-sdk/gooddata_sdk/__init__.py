@@ -44,5 +44,3 @@ from gooddata_sdk.insight import (
 from gooddata_sdk.table import TableService, ExecutionTable
 from gooddata_sdk.utils import Sideloads
 from gooddata_sdk.sdk import GoodDataSdk
-
-

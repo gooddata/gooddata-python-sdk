@@ -66,10 +66,6 @@ class CatalogLabel(CatalogEntry):
         return self._obj_id
 
     @property
-    def title(self) -> str:
-        return self._l["title"]
-
-    @property
     def description(self) -> str:
         return self._l["description"]
 

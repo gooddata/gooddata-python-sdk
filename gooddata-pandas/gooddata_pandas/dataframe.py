@@ -8,7 +8,7 @@ from gooddata_pandas.utils import (
     ColumnsDef,
     _to_item,
 )
-from gooddata_sdk import GoodDataSdk, Filter, Attribute, Measure
+from gooddata_sdk import GoodDataSdk, Filter, Attribute
 
 
 class DataFrameFactory:
