@@ -8,7 +8,13 @@ from gooddata_sdk.exec_model import Attribute, Measure, Filter, exec_model_to_ap
 
 
 class ExecutionDefinition:
-    def __init__(self, attributes: list[Attribute], measures: list[Measure], filters: list[Filter], dimensions):
+    def __init__(
+        self,
+        attributes: list[Attribute],
+        measures: list[Measure],
+        filters: list[Filter],
+        dimensions,
+    ):
         self._attributes = attributes or []
         self._measures = measures or []
         self._filters = filters or []
@@ -49,12 +55,14 @@ class ExecutionDefinition:
         dimensions = []
 
         for idx, dim in enumerate(self._dimensions):
-            dimensions.append(models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim))
+            dimensions.append(
+                models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim)
+            )
 
-        execution = exec_model_to_api_model(attributes=self.attributes,
-                                            measures=self.measures,
-                                            filters=self.filters)
-        
+        execution = exec_model_to_api_model(
+            attributes=self.attributes, measures=self.measures, filters=self.filters
+        )
+
         result_spec = models.ResultSpec(dimensions=dimensions)
 
         return models.AfmExecution(execution=execution, result_spec=result_spec)
@@ -62,10 +70,10 @@ class ExecutionDefinition:
 
 class ExecutionResult:
     def __init__(self, result):
-        self._data = result['data']
-        self._headers = result['dimension_headers']
-        self._grand_totals = result['grand_totals']
-        self._paging = result['paging']
+        self._data = result["data"]
+        self._headers = result["dimension_headers"]
+        self._grand_totals = result["grand_totals"]
+        self._paging = result["paging"]
 
     @property
     def data(self):
@@ -85,25 +93,29 @@ class ExecutionResult:
 
     @property
     def paging_total(self):
-        return self._paging['total']
+        return self._paging["total"]
 
     @property
     def paging_count(self):
-        return self._paging['count']
+        return self._paging["count"]
 
     @property
     def paging_offset(self):
-        return self._paging['offset']
+        return self._paging["offset"]
 
     def is_complete(self, dim=0):
-        return self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
+        return (
+            self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
+        )
 
     def next_page_start(self, dim=0):
         return self.paging_offset[dim] + self.paging_count[dim]
 
     def get_all_header_values(self, dim, header_idx):
-        return [header['attributeHeader']['labelValue'] for header in
-                self.headers[dim]['headerGroups'][header_idx]['headers']]
+        return [
+            header["attributeHeader"]["labelValue"]
+            for header in self.headers[dim]["headerGroups"][header_idx]["headers"]
+        ]
 
     def __str__(self):
         return self.__repr__()
@@ -113,13 +125,18 @@ class ExecutionResult:
 
 
 class ExecutionResponse:
-    def __init__(self, result_api: apis.ResultControllerApi, workspace_id: str, exec_def: ExecutionDefinition,
-                 response):
+    def __init__(
+        self,
+        result_api: apis.ResultControllerApi,
+        workspace_id: str,
+        exec_def: ExecutionDefinition,
+        response,
+    ):
         self._result_api = result_api
         self._workspace_id = workspace_id
         self._exec_def = exec_def
 
-        self._r = response['execution_response']
+        self._r = response["execution_response"]
         self._response = response
 
     @property
@@ -132,9 +149,11 @@ class ExecutionResponse:
 
     @property
     def result_id(self) -> str:
-        return self._r['links']['executionResult']
+        return self._r["links"]["executionResult"]
 
-    def read_result(self, limit: Union[int, list[int]], offset: Union[int, list[int]] = None):
+    def read_result(
+        self, limit: Union[int, list[int]], offset: Union[int, list[int]] = None
+    ):
         """
         Reads from the execution result.
         :param offset:
@@ -142,16 +161,30 @@ class ExecutionResponse:
         :return:
         """
 
-        _offset = offset if isinstance(offset, list) else [offset] if offset is not None else None
+        _offset = (
+            offset
+            if isinstance(offset, list)
+            else [offset]
+            if offset is not None
+            else None
+        )
         _limit = limit if isinstance(limit, list) else [limit]
 
         # if limit is specified but offset is not, server will ignore paging completely (bug)
         # this makes sure that offset gets defaulted to start of result
-        _offset = [0 for _ in _limit] if _limit is not None and _offset is None else _offset
+        _offset = (
+            [0 for _ in _limit] if _limit is not None and _offset is None else _offset
+        )
 
         return ExecutionResult(
-            self._result_api.retrieve_result(workspace_id=self._workspace_id, result_id=self.result_id,
-                                             offset=_offset, limit=_limit, _check_return_type=False))
+            self._result_api.retrieve_result(
+                workspace_id=self._workspace_id,
+                result_id=self.result_id,
+                offset=_offset,
+                limit=_limit,
+                _check_return_type=False,
+            )
+        )
 
     def __str__(self):
         return self.__repr__()
@@ -171,7 +204,9 @@ class ComputeService:
         self._exec_api = apis.AfmControllerApi(api_client.afm_client)
         self._result_api = apis.ResultControllerApi(api_client.afm_client)
 
-    def for_exec_def(self, workspace_id, exec_def: ExecutionDefinition) -> ExecutionResponse:
+    def for_exec_def(
+        self, workspace_id, exec_def: ExecutionDefinition
+    ) -> ExecutionResponse:
         """
         Starts computation in GoodData.CN workspace, using the provided execution definition.
 
@@ -179,9 +214,13 @@ class ComputeService:
         :param exec_def: execution definition - this prescribes what to calculate, how to place labels and measure values into dimensions
         :return:
         """
-        response = self._exec_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
+        response = self._exec_api.compute_report(
+            workspace_id, exec_def.as_api_model(), _check_return_type=False
+        )
 
-        return ExecutionResponse(result_api=self._result_api,
-                                 workspace_id=workspace_id,
-                                 exec_def=exec_def,
-                                 response=response)
+        return ExecutionResponse(
+            result_api=self._result_api,
+            workspace_id=workspace_id,
+            exec_def=exec_def,
+            response=response,
+        )

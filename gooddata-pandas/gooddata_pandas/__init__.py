@@ -9,8 +9,11 @@ class GoodPandas:
     """
     Facade to access factories that create pandas Series and DataFrames using analytics computed by GoodData.CN.
     """
+
     def __init__(self, host, token):
-        self._sdk = GoodDataSdk(host=host, token=token, extra_user_agent="gooddata-pandas/0.1")
+        self._sdk = GoodDataSdk(
+            host=host, token=token, extra_user_agent="gooddata-pandas/0.1"
+        )
         self._series_per_ws = dict()
         self._frames_per_ws = dict()
 
@@ -23,7 +26,9 @@ class GoodPandas:
         :rtype: GoodDataSeriesFactory
         """
         if workspace_id not in self._series_per_ws:
-            self._series_per_ws[workspace_id] = GoodDataSeriesFactory(sdk=self._sdk, workspace_id=workspace_id)
+            self._series_per_ws[workspace_id] = GoodDataSeriesFactory(
+                sdk=self._sdk, workspace_id=workspace_id
+            )
 
         return self._series_per_ws[workspace_id]
 
@@ -36,6 +41,8 @@ class GoodPandas:
         :rtype: DataFrameFactory
         """
         if workspace_id not in self._frames_per_ws:
-            self._frames_per_ws[workspace_id] = DataFrameFactory(sdk=self._sdk, workspace_id=workspace_id)
+            self._frames_per_ws[workspace_id] = DataFrameFactory(
+                sdk=self._sdk, workspace_id=workspace_id
+            )
 
         return self._frames_per_ws[workspace_id]

@@ -2,7 +2,15 @@
 import uuid
 from typing import Union
 
-from gooddata_sdk import Attribute, SimpleMeasure, Measure, Filter, ObjId, InsightAttribute, InsightMeasure
+from gooddata_sdk import (
+    Attribute,
+    SimpleMeasure,
+    Measure,
+    Filter,
+    ObjId,
+    InsightAttribute,
+    InsightMeasure,
+)
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Measure, ObjId, str]
@@ -11,16 +19,16 @@ ColumnsDef = dict[str, DataItemDef]
 
 
 def _unique_local_id():
-    return uuid.uuid4().hex.replace('-', '')
+    return uuid.uuid4().hex.replace("-", "")
 
 
 def _try_obj_id(val):
     if isinstance(val, str):
-        split = val.split('/')
+        split = val.split("/")
         _type = split[0]
 
-        if _type in ['label', 'metric', 'fact']:
-            return ObjId(id='/'.join(split[1:]), type=_type)
+        if _type in ["label", "metric", "fact"]:
+            return ObjId(id="/".join(split[1:]), type=_type)
 
     return val
 
@@ -64,7 +72,7 @@ def _to_item(val: DataItemDef) -> Union[Attribute, Measure]:
     if isinstance(_val, (Attribute, Measure)):
         return val
     elif isinstance(_val, ObjId):
-        if _val.type in ['fact', 'metric']:
+        if _val.type in ["fact", "metric"]:
             return SimpleMeasure(local_id=_unique_local_id(), item=_val)
         else:
             return Attribute(local_id=_unique_local_id(), label=_val)
@@ -80,11 +88,11 @@ class DefaultInsightColumnNaming:
         # ensure column name uniqueness - in a dumb way by appending some number
         if candidate in self._uniques:
             i = 1
-            new_candidate = f'{candidate}_{i}'
+            new_candidate = f"{candidate}_{i}"
 
             while new_candidate in self._uniques:
                 i += 1
-                new_candidate = f'{candidate}_{i}'
+                new_candidate = f"{candidate}_{i}"
 
             return new_candidate
 
@@ -98,6 +106,8 @@ class DefaultInsightColumnNaming:
         # otherwise try alias
         # otherwise try title
         # otherwise use local_id (arbitrary, AD created local_ids are messy)
-        id_to_use = measure.item_id or measure.alias or measure.title or measure.local_id
+        id_to_use = (
+            measure.item_id or measure.alias or measure.title or measure.local_id
+        )
 
         return self._ensure_unique(id_to_use)

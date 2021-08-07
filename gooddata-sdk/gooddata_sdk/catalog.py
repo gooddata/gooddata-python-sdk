@@ -7,7 +7,14 @@ import gooddata_afm_client.models as afm_models
 from gooddata_sdk.utils import Sideloads, id_obj_to_key, load_all_entities
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute import ExecutionDefinition
-from gooddata_sdk.exec_model import Attribute, SimpleMeasure, ObjId, Measure, Filter, exec_model_to_api_model
+from gooddata_sdk.exec_model import (
+    Attribute,
+    SimpleMeasure,
+    ObjId,
+    Measure,
+    Filter,
+    exec_model_to_api_model,
+)
 
 ValidObjects = dict[str, set]
 
@@ -38,21 +45,21 @@ class CatalogLabel(CatalogEntry):
     def __init__(self, label):
         super(CatalogLabel, self).__init__()
 
-        self._l = label['attributes']
+        self._l = label["attributes"]
         self._label = label
-        self._obj_id = ObjId(self._label['id'], type=self._label['type'])
+        self._obj_id = ObjId(self._label["id"], type=self._label["type"])
 
     @property
     def id(self) -> str:
-        return self._label['id']
+        return self._label["id"]
 
     @property
     def type(self) -> str:
-        return self._label['type']
+        return self._label["type"]
 
     @property
     def title(self) -> str:
-        return self._label['type']
+        return self._label["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -60,15 +67,15 @@ class CatalogLabel(CatalogEntry):
 
     @property
     def title(self) -> str:
-        return self._l['title']
+        return self._l["title"]
 
     @property
     def description(self) -> str:
-        return self._l['description']
+        return self._l["description"]
 
     @property
     def primary(self) -> bool:
-        return 'primary' in self._l and self._l['primary']
+        return "primary" in self._l and self._l["primary"]
 
     def as_computable(self) -> Attribute:
         return Attribute(local_id=self.id, label=self.id)
@@ -84,19 +91,19 @@ class CatalogAttribute(CatalogEntry):
     def __init__(self, attribute, labels: list[CatalogLabel]):
         super(CatalogAttribute, self).__init__()
 
-        self._a = attribute['attributes']
+        self._a = attribute["attributes"]
         self._attribute = attribute
         self._labels = labels
         self._labels_idx = dict([(str(label.obj_id), label) for label in labels])
-        self._obj_id = ObjId(self._attribute['id'], self._attribute['type'])
+        self._obj_id = ObjId(self._attribute["id"], self._attribute["type"])
 
     @property
     def id(self) -> str:
-        return self._attribute['id']
+        return self._attribute["id"]
 
     @property
     def type(self) -> str:
-        return self._attribute['type']
+        return self._attribute["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -104,11 +111,11 @@ class CatalogAttribute(CatalogEntry):
 
     @property
     def title(self) -> str:
-        return self._a['title']
+        return self._a["title"]
 
     @property
     def description(self) -> str:
-        return self._a['description']
+        return self._a["description"]
 
     @property
     def labels(self) -> list[CatalogLabel]:
@@ -116,7 +123,7 @@ class CatalogAttribute(CatalogEntry):
 
     @property
     def granularity(self) -> Union[str, None]:
-        return self._a['granularity'] if 'granularity' in self._a else None
+        return self._a["granularity"] if "granularity" in self._a else None
 
     def primary_label(self) -> CatalogLabel:
         return next(filter(lambda l: l.primary, self.labels), None)
@@ -139,24 +146,26 @@ class CatalogAttribute(CatalogEntry):
         return self.__repr__()
 
     def __repr__(self):
-        return f"CatalogAttribute(id={self.id}, title={self.title}, labels={self.labels})"
+        return (
+            f"CatalogAttribute(id={self.id}, title={self.title}, labels={self.labels})"
+        )
 
 
 class CatalogFact(CatalogEntry):
     def __init__(self, fact):
         super(CatalogFact, self).__init__()
 
-        self._f = fact['attributes']
+        self._f = fact["attributes"]
         self._fact = fact
-        self._obj_id = ObjId(self._fact['id'], self._fact['type'])
+        self._obj_id = ObjId(self._fact["id"], self._fact["type"])
 
     @property
     def id(self) -> str:
-        return self._fact['id']
+        return self._fact["id"]
 
     @property
     def type(self) -> str:
-        return self._fact['type']
+        return self._fact["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -164,14 +173,14 @@ class CatalogFact(CatalogEntry):
 
     @property
     def title(self) -> str:
-        return self._f['title']
+        return self._f["title"]
 
     @property
     def description(self) -> str:
-        return self._f['description']
+        return self._f["description"]
 
     def as_computable(self) -> Measure:
-        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, 'fact'))
+        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, "fact"))
 
     def __str__(self):
         return self.__repr__()
@@ -184,17 +193,17 @@ class CatalogMetric(CatalogEntry):
     def __init__(self, metric):
         super(CatalogMetric, self).__init__()
 
-        self._m = metric['attributes']
+        self._m = metric["attributes"]
         self._metric = metric
-        self._obj_id = ObjId(self._metric['id'], self._metric['type'])
+        self._obj_id = ObjId(self._metric["id"], self._metric["type"])
 
     @property
     def id(self) -> str:
-        return self._metric['id']
+        return self._metric["id"]
 
     @property
     def type(self) -> str:
-        return self._metric['type']
+        return self._metric["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -202,14 +211,14 @@ class CatalogMetric(CatalogEntry):
 
     @property
     def title(self) -> str:
-        return self._m['title']
+        return self._m["title"]
 
     @property
     def description(self) -> str:
-        return self._m['description']
+        return self._m["description"]
 
     def as_computable(self) -> Measure:
-        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, 'metric'))
+        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, "metric"))
 
     def __str__(self):
         return self.__repr__()
@@ -222,19 +231,19 @@ class CatalogDataset(CatalogEntry):
     def __init__(self, dataset, attributes, facts):
         super(CatalogDataset, self).__init__()
 
-        self._d = dataset['attributes']
+        self._d = dataset["attributes"]
         self._dataset = dataset
         self._attributes = attributes
         self._facts = facts
-        self._obj_id = ObjId(self._dataset['id'], self._dataset['type'])
+        self._obj_id = ObjId(self._dataset["id"], self._dataset["type"])
 
     @property
     def id(self) -> str:
-        return self._dataset['id']
+        return self._dataset["id"]
 
     @property
     def type(self) -> str:
-        return self._dataset['type']
+        return self._dataset["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -242,11 +251,11 @@ class CatalogDataset(CatalogEntry):
 
     @property
     def title(self) -> str:
-        return self._d['title']
+        return self._d["title"]
 
     @property
     def description(self) -> str:
-        return self._d['description']
+        return self._d["description"]
 
     @property
     def attributes(self) -> list[CatalogAttribute]:
@@ -286,13 +295,21 @@ class CatalogDataset(CatalogEntry):
         return f"CatalogDataset(id={self.id}, title={self.title}, facts={self.facts}, attributes={self.attributes})"
 
 
-ValidObjectTypes = Union[Attribute, Measure, Filter, CatalogLabel, CatalogFact, CatalogMetric]
-ValidObjectsInputType = Union[ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition]
+ValidObjectTypes = Union[
+    Attribute, Measure, Filter, CatalogLabel, CatalogFact, CatalogMetric
+]
+ValidObjectsInputType = Union[
+    ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition
+]
 
 
 class Catalog:
-    def __init__(self, valid_obj_fun, datasets: list[CatalogDataset],
-                 metrics: list[CatalogMetric]):
+    def __init__(
+        self,
+        valid_obj_fun,
+        datasets: list[CatalogDataset],
+        metrics: list[CatalogMetric],
+    ):
         self._valid_obf_fun = valid_obj_fun
         self._datasets = datasets
         self._metrics = metrics
@@ -331,8 +348,11 @@ class Catalog:
         """
         valid_objects = self._valid_objects(ctx)
 
-        new_datasets = [non_empty for non_empty in [d.filter_dataset(valid_objects) for d in self.datasets] if
-                        non_empty is not None]
+        new_datasets = [
+            non_empty
+            for non_empty in [d.filter_dataset(valid_objects) for d in self.datasets]
+            if non_empty is not None
+        ]
         new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
 
         return Catalog(self._valid_obf_fun, datasets=new_datasets, metrics=new_metrics)
@@ -354,33 +374,45 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
 
     # now the rest requires some joins...
     # first construct the dataset's leaves - facts
-    catalog_facts = dict([(fact['id'], CatalogFact(fact)) for fact in dataset_sideloads.all_for_type('fact')])
+    catalog_facts = dict(
+        [
+            (fact["id"], CatalogFact(fact))
+            for fact in dataset_sideloads.all_for_type("fact")
+        ]
+    )
 
     # then build all attributes & their labels, map them attr.id => attribute
     catalog_attributes = dict()
     for attr in attributes.data:
-        attr_id = attr['id']
-        label_ids = attr['relationships']['labels']['data']
-        catalog_attributes[attr_id] = CatalogAttribute(attr,
-                                                       [CatalogLabel(attribute_sideloads.find(label_id)) for label_id in
-                                                        label_ids])
+        attr_id = attr["id"]
+        label_ids = attr["relationships"]["labels"]["data"]
+        catalog_attributes[attr_id] = CatalogAttribute(
+            attr,
+            [
+                CatalogLabel(attribute_sideloads.find(label_id))
+                for label_id in label_ids
+            ],
+        )
 
     # finally go through all datasets, find related attributes and facts
     catalog_datasets = dict()
     for dataset in datasets.data:
-        dataset_id = dataset['id']
-        rels = dataset['relationships']
-        attribute_ids = rels['attributes']['data'] if 'attributes' in rels else []
-        fact_ids = rels['facts']['data'] if 'facts' in rels else []
+        dataset_id = dataset["id"]
+        rels = dataset["relationships"]
+        attribute_ids = rels["attributes"]["data"] if "attributes" in rels else []
+        fact_ids = rels["facts"]["data"] if "facts" in rels else []
 
-        catalog_datasets[dataset_id] = CatalogDataset(dataset,
-                                                      [catalog_attributes[attr_id_obj['id']] for attr_id_obj in
-                                                       attribute_ids],
-                                                      [catalog_facts[fact_id_obj['id']] for fact_id_obj in fact_ids]
-                                                      )
+        catalog_datasets[dataset_id] = CatalogDataset(
+            dataset,
+            [catalog_attributes[attr_id_obj["id"]] for attr_id_obj in attribute_ids],
+            [catalog_facts[fact_id_obj["id"]] for fact_id_obj in fact_ids],
+        )
 
-    return Catalog(valid_obj_fun=valid_obj_fun,
-                   datasets=list(catalog_datasets.values()), metrics=catalog_metrics)
+    return Catalog(
+        valid_obj_fun=valid_obj_fun,
+        datasets=list(catalog_datasets.values()),
+        metrics=catalog_metrics,
+    )
 
 
 def _prepare_afm_for_availability(items: list[ValidObjectTypes]):
@@ -400,7 +432,9 @@ def _prepare_afm_for_availability(items: list[ValidObjectTypes]):
         elif isinstance(item, (CatalogFact, CatalogMetric)):
             measures.append(item.as_computable())
 
-    return exec_model_to_api_model(attributes=attributes, measures=measures, filters=filters)
+    return exec_model_to_api_model(
+        attributes=attributes, measures=measures, filters=filters
+    )
 
 
 class CatalogService:
@@ -412,7 +446,9 @@ class CatalogService:
 
     def __init__(self, api_client: GoodDataApiClient):
         self._client = api_client
-        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
+        self._api = metadata_apis.WorkspaceObjectControllerApi(
+            api_client.metadata_client
+        )
         self._valid_objects = afm_apis.ValidObjectsControllerApi(api_client.afm_client)
 
     def get_full_catalog(self, workspace_id: str) -> Catalog:
@@ -422,13 +458,23 @@ class CatalogService:
         :param workspace_id: workspace identifier
         :return:
         """
-        get_datasets = functools.partial(self._api.get_all_entities_datasets, workspace_id,
-                                         include=['attributes', 'facts'], _check_return_type=False)
+        get_datasets = functools.partial(
+            self._api.get_all_entities_datasets,
+            workspace_id,
+            include=["attributes", "facts"],
+            _check_return_type=False,
+        )
 
-        get_attributes = functools.partial(self._api.get_all_entities_attributes, workspace_id, include=['labels'],
-                                           _check_return_type=False)
+        get_attributes = functools.partial(
+            self._api.get_all_entities_attributes,
+            workspace_id,
+            include=["labels"],
+            _check_return_type=False,
+        )
 
-        get_metrics = functools.partial(self._api.get_all_entities_metrics, workspace_id, _check_return_type=False)
+        get_metrics = functools.partial(
+            self._api.get_all_entities_metrics, workspace_id, _check_return_type=False
+        )
 
         attributes = load_all_entities(get_attributes)
         datasets = load_all_entities(get_datasets)
@@ -438,7 +484,9 @@ class CatalogService:
 
         return _create_catalog(valid_obj_fun, datasets, attributes, metrics)
 
-    def compute_valid_objects(self, workspace_id: str, ctx: ValidObjectsInputType) -> ValidObjects:
+    def compute_valid_objects(
+        self, workspace_id: str, ctx: ValidObjectsInputType
+    ) -> ValidObjects:
         """
         Returns attributes, facts, and measures which are valid to add to a context that already
         contains some entities from the semantic model. The entities are typically used to compute analytics and
@@ -454,18 +502,24 @@ class CatalogService:
         id's of available items
         """
         if isinstance(ctx, ExecutionDefinition):
-            afm = exec_model_to_api_model(attributes=ctx.attributes, measures=ctx.measures, filters=ctx.filters)
+            afm = exec_model_to_api_model(
+                attributes=ctx.attributes, measures=ctx.measures, filters=ctx.filters
+            )
         else:
             _ctx = ctx if isinstance(ctx, list) else [ctx]
             afm = _prepare_afm_for_availability(_ctx)
 
-        query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
-        response = self._valid_objects.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
+        query = afm_models.AfmValidObjectsQuery(
+            afm=afm, types=["facts", "attributes", "measures"]
+        )
+        response = self._valid_objects.compute_valid_objects(
+            workspace_id=workspace_id, afm_valid_objects_query=query
+        )
 
         by_type: dict[str, set] = dict()
 
         for available in response.items:
-            _type = available['type']
+            _type = available["type"]
 
             if _type not in by_type:
                 items_of_type = set()
@@ -473,6 +527,6 @@ class CatalogService:
             else:
                 items_of_type = by_type[_type]
 
-            items_of_type.add(available['id'])
+            items_of_type.add(available["id"])
 
         return by_type

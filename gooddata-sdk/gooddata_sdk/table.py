@@ -2,7 +2,12 @@
 from typing import Union
 
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute import ExecutionResponse, ExecutionResult, ExecutionDefinition, ComputeService
+from gooddata_sdk.compute import (
+    ExecutionResponse,
+    ExecutionResult,
+    ExecutionDefinition,
+    ComputeService,
+)
 from gooddata_sdk.exec_model import Attribute, Measure, Filter
 from gooddata_sdk.insight import Insight
 
@@ -58,7 +63,9 @@ class ExecutionTable:
 
         :return:
         """
-        return [a.local_id for a in self.attributes] + [m.local_id for m in self.measures]
+        return [a.local_id for a in self.attributes] + [
+            m.local_id for m in self.measures
+        ]
 
     @property
     def column_metadata(self):
@@ -111,10 +118,14 @@ class ExecutionTable:
             page_row_idx = 0
 
             # yield all data from current page
-            while page_row_idx < paging['count'][0]:
-                headers = [header['headers'][page_row_idx]['attributeHeader']['labelValue'] for header in
-                           attribute_headers['headerGroups']]
-                measure_data = data[page_row_idx] if self._exec_def.has_measures() else []
+            while page_row_idx < paging["count"][0]:
+                headers = [
+                    header["headers"][page_row_idx]["attributeHeader"]["labelValue"]
+                    for header in attribute_headers["headerGroups"]
+                ]
+                measure_data = (
+                    data[page_row_idx] if self._exec_def.has_measures() else []
+                )
 
                 yield dict(zip(cols, headers + measure_data))
                 page_row_idx += 1
@@ -156,13 +167,17 @@ class ExecutionTable:
         return f"ExecutionTable(response={self._response}, columns={self.column_ids}, rows={len(self)})"
 
 
-def _prepare_tabular_definition(attributes: list[Attribute], filters: list[Filter], measures: list[Measure]):
+def _prepare_tabular_definition(
+    attributes: list[Attribute], filters: list[Filter], measures: list[Measure]
+):
     dims = [
         [a.local_id for a in attributes] if len(attributes) else None,
-        ['measureGroup'] if len(measures) else None
+        ["measureGroup"] if len(measures) else None,
     ]
 
-    return ExecutionDefinition(attributes=attributes, measures=measures, filters=filters, dimensions=dims)
+    return ExecutionDefinition(
+        attributes=attributes, measures=measures, filters=filters, dimensions=dims
+    )
 
 
 def _as_table(response: ExecutionResponse) -> ExecutionTable:
@@ -192,6 +207,7 @@ class TableService:
 
     The ExecutionTable returned by the TableService allows you to iterate over the rows of the calculated data.
     """
+
     def __init__(self, api_client: GoodDataApiClient):
         self._compute = ComputeService(api_client)
 
@@ -199,13 +215,20 @@ class TableService:
         exec_def = _prepare_tabular_definition(
             attributes=[a.as_computable() for a in insight.attributes],
             measures=[m.as_computable() for m in insight.measures],
-            filters=[f for f in [f.as_computable for f in insight.filters] if not f.is_noop()])
+            filters=[
+                f for f in [f.as_computable for f in insight.filters] if not f.is_noop()
+            ],
+        )
 
-        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
+        response = self._compute.for_exec_def(
+            workspace_id=workspace_id, exec_def=exec_def
+        )
 
         return _as_table(response)
 
-    def for_items(self, workspace_id, items: list[Union[Attribute, Measure]], filters=None) -> ExecutionTable:
+    def for_items(
+        self, workspace_id, items: list[Union[Attribute, Measure]], filters=None
+    ) -> ExecutionTable:
         if filters is None:
             filters = []
 
@@ -218,9 +241,15 @@ class TableService:
             elif isinstance(item, Measure):
                 measures.append(item)
             else:
-                raise ValueError(f"Invalid input item: {item}. Expecting instance of Attribute or Measure")
+                raise ValueError(
+                    f"Invalid input item: {item}. Expecting instance of Attribute or Measure"
+                )
 
-        exec_def = _prepare_tabular_definition(attributes=attributes, measures=measures, filters=filters)
-        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
+        exec_def = _prepare_tabular_definition(
+            attributes=attributes, measures=measures, filters=filters
+        )
+        response = self._compute.for_exec_def(
+            workspace_id=workspace_id, exec_def=exec_def
+        )
 
         return _as_table(response)

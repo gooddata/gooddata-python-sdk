@@ -12,8 +12,12 @@ class GoodDataSeriesFactory:
         self._sdk = sdk
         self._workspace_id = workspace_id
 
-    def indexed(self, index_by: IndexDef, data_by: Union[SimpleMeasure, str, ObjId, Attribute],
-                filter_by: Union[Filter, list[Filter]] = None) -> pandas.Series:
+    def indexed(
+        self,
+        index_by: IndexDef,
+        data_by: Union[SimpleMeasure, str, ObjId, Attribute],
+        filter_by: Union[Filter, list[Filter]] = None,
+    ) -> pandas.Series:
         """
         Creates pandas Series from data points calculated from a single `data_by` that will be computed on granularity
         of the index  labels. The elements of the index labels will be used to construct simple or hierarchical index.
@@ -32,20 +36,30 @@ class GoodDataSeriesFactory:
         :param filter_by: optionally specify filter to apply during computation on the server
         :return:
         """
-        data, index = compute_and_extract(self._sdk, self._workspace_id, index_by=index_by,
-                                          columns={'_series': data_by}, filter_by=filter_by)
+        data, index = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            index_by=index_by,
+            columns={"_series": data_by},
+            filter_by=filter_by,
+        )
 
         _idx = None
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+            _idx = pandas.MultiIndex.from_arrays(
+                list(index.values()), names=list(index.keys())
+            )
 
-        return pandas.Series(data=data['_series'], index=_idx)
+        return pandas.Series(data=data["_series"], index=_idx)
 
-    def not_indexed(self, data_by: Union[SimpleMeasure, str, ObjId, Attribute],
-                    granularity: Union[list[LabelItemDef], IndexDef] = None,
-                    filter_by: Union[Filter, list[Filter]] = None) -> pandas.Series:
+    def not_indexed(
+        self,
+        data_by: Union[SimpleMeasure, str, ObjId, Attribute],
+        granularity: Union[list[LabelItemDef], IndexDef] = None,
+        filter_by: Union[Filter, list[Filter]] = None,
+    ) -> pandas.Series:
         """
         Creates pandas Series from data points calculated from a single `data_by` that will be computed on granularity
         of the specified labels. No index will be constructed.
@@ -74,7 +88,12 @@ class GoodDataSeriesFactory:
         else:
             _index = granularity
 
-        data, _ = compute_and_extract(self._sdk, self._workspace_id, index_by=granularity,
-                                      columns={'_series': data_by}, filter_by=filter_by)
+        data, _ = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            index_by=granularity,
+            columns={"_series": data_by},
+            filter_by=filter_by,
+        )
 
-        return pandas.Series(data=data['_series'])
+        return pandas.Series(data=data["_series"])

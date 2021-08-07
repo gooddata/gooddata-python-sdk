@@ -3,9 +3,22 @@ import functools
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.exec_model import ObjId, SimpleMeasure, PopDateMeasure, PopDatesetMeasure, ArithmeticMeasure, \
-    PositiveAttributeFilter, NegativeAttributeFilter, MeasureValueFilter, RankingFilter, AbsoluteDateFilter, \
-    RelativeDateFilter, Attribute, PopDate, PopDateDataset
+from gooddata_sdk.exec_model import (
+    ObjId,
+    SimpleMeasure,
+    PopDateMeasure,
+    PopDatesetMeasure,
+    ArithmeticMeasure,
+    PositiveAttributeFilter,
+    NegativeAttributeFilter,
+    MeasureValueFilter,
+    RankingFilter,
+    AbsoluteDateFilter,
+    RelativeDateFilter,
+    Attribute,
+    PopDate,
+    PopDateDataset,
+)
 from gooddata_sdk.utils import Sideloads, load_all_entities
 
 #
@@ -14,42 +27,41 @@ from gooddata_sdk.utils import Sideloads, load_all_entities
 #
 
 _GRANULARITY_CONVERSION = {
-    'GDC.time.year': "YEAR",
-    'GDC.time.quarter': "QUARTER",
-    'GDC.time.month': "MONTH",
-    'GDC.time.week_us': "WEEK",
-    'GDC.time.week': "WEEK",
-    'GDC.time.date': "DAY",
-    'GDC.time.hour': "HOUR",
-    'GDC.time.minute': "MINUTE",
-
-    'GDC.time.quarter_in_year': 'QUARTER_OF_YEAR',
-    'GDC.time.month_in_year': 'MONTH_OF_YEAR',
-    'GDC.time.week_in_year': 'WEEK_OF_YEAR',
-    'GDC.time.day_in_year': 'DAY_OF_YEAR',
-    'GDC.time.day_in_month': 'DAY_OF_MONTH',
-    'GDC.time.day_in_week': 'DAY_OF_WEEK',
-    'GDC.time.hour_in_day': 'HOUR_OF_DAY',
-    'GDC.time.minute_in_hour': 'MINUTE_OF_HOUR',
+    "GDC.time.year": "YEAR",
+    "GDC.time.quarter": "QUARTER",
+    "GDC.time.month": "MONTH",
+    "GDC.time.week_us": "WEEK",
+    "GDC.time.week": "WEEK",
+    "GDC.time.date": "DAY",
+    "GDC.time.hour": "HOUR",
+    "GDC.time.minute": "MINUTE",
+    "GDC.time.quarter_in_year": "QUARTER_OF_YEAR",
+    "GDC.time.month_in_year": "MONTH_OF_YEAR",
+    "GDC.time.week_in_year": "WEEK_OF_YEAR",
+    "GDC.time.day_in_year": "DAY_OF_YEAR",
+    "GDC.time.day_in_month": "DAY_OF_MONTH",
+    "GDC.time.day_in_week": "DAY_OF_WEEK",
+    "GDC.time.hour_in_day": "HOUR_OF_DAY",
+    "GDC.time.minute_in_hour": "MINUTE_OF_HOUR",
 }
 
 _AGGREGATION_CONVERSION = {
-    'sum': 'SUM',
-    'avg': 'AVG',
-    'count': 'COUNT',
-    'approximate_count': 'APPROXIMATE_COUNT',
-    'max': 'MAX',
-    'median': 'MEDIAN',
-    'min': 'MIN',
-    'runsum': 'RUNSUM'
+    "sum": "SUM",
+    "avg": "AVG",
+    "count": "COUNT",
+    "approximate_count": "APPROXIMATE_COUNT",
+    "max": "MAX",
+    "median": "MEDIAN",
+    "min": "MIN",
+    "runsum": "RUNSUM",
 }
 
 _ARITHMETIC_CONVERSION = {
-    'sum': 'SUM',
-    'difference': 'DIFFERENCE',
-    'multiplication': 'MULTIPLICATION',
-    'ratio': 'RATIO',
-    'change': 'CHANGE'
+    "sum": "SUM",
+    "difference": "DIFFERENCE",
+    "multiplication": "MULTIPLICATION",
+    "ratio": "RATIO",
+    "change": "CHANGE",
 }
 
 
@@ -57,107 +69,162 @@ _ARITHMETIC_CONVERSION = {
 #
 #
 
+
 def _ref_extract(ref):
-    if 'identifier' in ref:
-        return ObjId(id=ref['identifier']['id'], type=ref['identifier']['type'])
-    elif 'localIdentifier' in ref:
-        return ref['localIdentifier']
+    if "identifier" in ref:
+        return ObjId(id=ref["identifier"]["id"], type=ref["identifier"]["type"])
+    elif "localIdentifier" in ref:
+        return ref["localIdentifier"]
 
     raise ValueError("invalid ref. must be identifier or localIdentifier")
 
 
 def _convert_filter_to_computable(filter_obj):
-    if 'positiveAttributeFilter' in filter_obj:
-        f = filter_obj['positiveAttributeFilter']
+    if "positiveAttributeFilter" in filter_obj:
+        f = filter_obj["positiveAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
-        in_values = f['in']['values'] if 'values' in f['in'] else f['in']['uris']
+        in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(label=_ref_extract(f['displayForm']),
-                                       in_values=in_values)
+        return PositiveAttributeFilter(
+            label=_ref_extract(f["displayForm"]), in_values=in_values
+        )
 
-    elif 'negativeAttributeFilter' in filter_obj:
-        f = filter_obj['negativeAttributeFilter']
+    elif "negativeAttributeFilter" in filter_obj:
+        f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
-        not_in_values = f['notIn']['values'] if 'values' in f['notIn'] else f['in']['uris']
+        not_in_values = (
+            f["notIn"]["values"] if "values" in f["notIn"] else f["in"]["uris"]
+        )
 
-        return NegativeAttributeFilter(label=_ref_extract(f['displayForm']), not_in_values=not_in_values)
-    elif 'relativeDateFilter' in filter_obj:
-        f = filter_obj['relativeDateFilter']
+        return NegativeAttributeFilter(
+            label=_ref_extract(f["displayForm"]), not_in_values=not_in_values
+        )
+    elif "relativeDateFilter" in filter_obj:
+        f = filter_obj["relativeDateFilter"]
 
-        return RelativeDateFilter(dataset=_ref_extract(f['dataSet']),
-                                  granularity=_GRANULARITY_CONVERSION[f['granularity']],
-                                  from_shift=f['from'], to_shift=f['to'])
+        return RelativeDateFilter(
+            dataset=_ref_extract(f["dataSet"]),
+            granularity=_GRANULARITY_CONVERSION[f["granularity"]],
+            from_shift=f["from"],
+            to_shift=f["to"],
+        )
 
-    elif 'absoluteDateFilter' in filter_obj:
-        f = filter_obj['absoluteDateFilter']
+    elif "absoluteDateFilter" in filter_obj:
+        f = filter_obj["absoluteDateFilter"]
 
-        return AbsoluteDateFilter(dataset=_ref_extract(f['dataSet']), from_date=f['from'], to_date=f['to'])
-    elif 'measureValueFilter' in filter_obj:
-        f = filter_obj['measureValueFilter']
-        condition = f['condition']
+        return AbsoluteDateFilter(
+            dataset=_ref_extract(f["dataSet"]), from_date=f["from"], to_date=f["to"]
+        )
+    elif "measureValueFilter" in filter_obj:
+        f = filter_obj["measureValueFilter"]
+        condition = f["condition"]
 
-        if 'comparison' in condition:
-            c = condition['comparison']
-            treat_values_as_null = c['treatNullValuesAs'] if 'treatNullValuesAs' in c else None
+        if "comparison" in condition:
+            c = condition["comparison"]
+            treat_values_as_null = (
+                c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
+            )
 
-            return MeasureValueFilter(measure=_ref_extract(f['measure']),
-                                      operator=c['operator'], values=c['value'],
-                                      treat_nulls_as=treat_values_as_null)
-        elif 'range' in condition:
-            c = condition['range']
-            treat_values_as_null = c['treatNullValuesAs'] if 'treatNullValuesAs' in c else None
-            return MeasureValueFilter(measure=_ref_extract(f['measure']),
-                                      operator=c['operator'], values=(c['from'], c['to']),
-                                      treat_nulls_as=treat_values_as_null)
-    elif 'rankingFilter' in filter_obj:
-        f = filter_obj['rankingFilter']
-        dimensionality = [_ref_extract(a) for a in f['attributes']] if 'attributes' in f else None
+            return MeasureValueFilter(
+                measure=_ref_extract(f["measure"]),
+                operator=c["operator"],
+                values=c["value"],
+                treat_nulls_as=treat_values_as_null,
+            )
+        elif "range" in condition:
+            c = condition["range"]
+            treat_values_as_null = (
+                c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
+            )
+            return MeasureValueFilter(
+                measure=_ref_extract(f["measure"]),
+                operator=c["operator"],
+                values=(c["from"], c["to"]),
+                treat_nulls_as=treat_values_as_null,
+            )
+    elif "rankingFilter" in filter_obj:
+        f = filter_obj["rankingFilter"]
+        dimensionality = (
+            [_ref_extract(a) for a in f["attributes"]] if "attributes" in f else None
+        )
 
-        return RankingFilter(measures=[_ref_extract(f['measure'])], dimensionality=dimensionality,
-                             operator=f['operator'], value=f['value'])
+        return RankingFilter(
+            measures=[_ref_extract(f["measure"])],
+            dimensionality=dimensionality,
+            operator=f["operator"],
+            value=f["value"],
+        )
 
-    raise ValueError(f'Unable to convert filter {filter_obj}')
+    raise ValueError(f"Unable to convert filter {filter_obj}")
 
 
 def _convert_measure_to_computable(measure):
-    m = measure['measure']
-    local_id = m['localIdentifier']
-    measure_def = m['definition']
+    m = measure["measure"]
+    local_id = m["localIdentifier"]
+    measure_def = m["definition"]
 
-    if 'measureDefinition' in measure_def:
-        d = measure_def['measureDefinition']
-        aggregation = _AGGREGATION_CONVERSION[d['aggregation']] if 'aggregation' in d else None
-        compute_ratio = d['computeRatio'] if 'computeRatio' in d else False
-        filters = [_convert_filter_to_computable(f) for f in d['filters']] if 'filters' in d else None
+    if "measureDefinition" in measure_def:
+        d = measure_def["measureDefinition"]
+        aggregation = (
+            _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
+        )
+        compute_ratio = d["computeRatio"] if "computeRatio" in d else False
+        filters = (
+            [_convert_filter_to_computable(f) for f in d["filters"]]
+            if "filters" in d
+            else None
+        )
 
-        return SimpleMeasure(local_id=local_id, item=_ref_extract(d['item']),
-                             aggregation=aggregation, compute_ratio=compute_ratio, filters=filters)
+        return SimpleMeasure(
+            local_id=local_id,
+            item=_ref_extract(d["item"]),
+            aggregation=aggregation,
+            compute_ratio=compute_ratio,
+            filters=filters,
+        )
 
-    elif 'popMeasureDefinition' in measure_def:
-        d = measure_def['popMeasureDefinition']
-        date_attributes = [PopDate(attribute=_ref_extract(d['popAttribute']), periods_ago=1)]
+    elif "popMeasureDefinition" in measure_def:
+        d = measure_def["popMeasureDefinition"]
+        date_attributes = [
+            PopDate(attribute=_ref_extract(d["popAttribute"]), periods_ago=1)
+        ]
 
-        return PopDateMeasure(local_id=local_id, measure=d['measureIdentifier'], date_attributes=date_attributes)
+        return PopDateMeasure(
+            local_id=local_id,
+            measure=d["measureIdentifier"],
+            date_attributes=date_attributes,
+        )
 
-    elif 'previousPeriodMeasure' in measure_def:
-        d = measure_def['previousPeriodMeasure']
+    elif "previousPeriodMeasure" in measure_def:
+        d = measure_def["previousPeriodMeasure"]
 
-        date_datasets = [PopDateDataset(_ref_extract(d['dataSet']), dd['periodsAgo']) for dd in d['dateDataSets']]
+        date_datasets = [
+            PopDateDataset(_ref_extract(d["dataSet"]), dd["periodsAgo"])
+            for dd in d["dateDataSets"]
+        ]
 
-        return PopDatesetMeasure(local_id=local_id, measure=d['measureIdentifier'], date_datasets=date_datasets)
+        return PopDatesetMeasure(
+            local_id=local_id,
+            measure=d["measureIdentifier"],
+            date_datasets=date_datasets,
+        )
 
-    elif 'arithmeticMeasure' in measure_def:
-        d = measure_def['arithmeticMeasure']
+    elif "arithmeticMeasure" in measure_def:
+        d = measure_def["arithmeticMeasure"]
 
-        return ArithmeticMeasure(local_id=local_id, operator=_ARITHMETIC_CONVERSION[d['operator']],
-                                 operands=d['measureIdentifiers'])
+        return ArithmeticMeasure(
+            local_id=local_id,
+            operator=_ARITHMETIC_CONVERSION[d["operator"]],
+            operands=d["measureIdentifiers"],
+        )
 
-    raise ValueError(f'Unable to convert measure {measure_def}')
+    raise ValueError(f"Unable to convert measure {measure_def}")
 
 
 #
 #
 #
+
 
 class InsightMeasure:
     """
@@ -168,25 +235,25 @@ class InsightMeasure:
 
     def __init__(self, measure=None):
         self._measure = measure
-        self._m = measure['measure']
-        self._d = self._m['definition']
+        self._m = measure["measure"]
+        self._d = self._m["definition"]
 
     @property
     def local_id(self):
-        return self._m['localIdentifier']
+        return self._m["localIdentifier"]
 
     @property
     def alias(self):
-        return self._m['alias'] if 'alias' in self._m else None
+        return self._m["alias"] if "alias" in self._m else None
 
     @property
     def title(self):
-        return self._m['title'] if 'title' in self._m else None
+        return self._m["title"] if "title" in self._m else None
 
     @property
     def item(self):
-        if 'measureDefinition' in self._d:
-            return self._d['measureDefinition']['item']
+        if "measureDefinition" in self._d:
+            return self._d["measureDefinition"]["item"]
 
         return None
 
@@ -194,11 +261,11 @@ class InsightMeasure:
     def item_id(self):
         item = self.item
 
-        return item['identifier']['id'] if item is not None else None
+        return item["identifier"]["id"] if item is not None else None
 
     @property
     def is_time_comparison(self):
-        return 'popMeasureDefinition' in self._d or 'previousPeriodMeasure' in self._d
+        return "popMeasureDefinition" in self._d or "previousPeriodMeasure" in self._d
 
     @property
     def time_comparison_master(self):
@@ -207,10 +274,10 @@ class InsightMeasure:
         derived.
         :return: local_id of master measure, None if not a time comparison measure
         """
-        if 'popMeasureDefinition' in self._d:
-            return self._d['popMeasureDefinition']['measureIdentifier']
-        elif 'previousPeriodMeasure' in self._d:
-            return self._d['previousPeriodMeasure']['measureIdentifier']
+        if "popMeasureDefinition" in self._d:
+            return self._d["popMeasureDefinition"]["measureIdentifier"]
+        elif "previousPeriodMeasure" in self._d:
+            return self._d["previousPeriodMeasure"]["measureIdentifier"]
 
         return None
 
@@ -227,23 +294,23 @@ class InsightMeasure:
 class InsightAttribute:
     def __init__(self, attribute):
         self._attribute = attribute
-        self._a = attribute['attribute']
+        self._a = attribute["attribute"]
 
     @property
     def local_id(self):
-        return self._a['localIdentifier']
+        return self._a["localIdentifier"]
 
     @property
     def label_id(self):
-        return self._a['displayForm']['identifier']['id']
+        return self._a["displayForm"]["identifier"]["id"]
 
     @property
     def alias(self):
-        return self._a['alias'] if 'alias' in self._a else None
+        return self._a["alias"] if "alias" in self._a else None
 
     @property
     def label(self):
-        return self._a['displayForm']
+        return self._a["displayForm"]
 
     def as_computable(self):
         return Attribute(local_id=self.local_id, label=_ref_extract(self.label))
@@ -277,23 +344,27 @@ class InsightBucket:
 
     @property
     def local_id(self):
-        return self._b['localIdentifier']
+        return self._b["localIdentifier"]
 
     @property
     def items(self):
-        return self._b['items']
+        return self._b["items"]
 
     @property
     def measures(self) -> list[InsightMeasure]:
         if self._measures is None:
-            self._measures = [InsightMeasure(item) for item in self.items if 'measure' in item]
+            self._measures = [
+                InsightMeasure(item) for item in self.items if "measure" in item
+            ]
 
         return self._measures
 
     @property
     def attributes(self) -> list[InsightAttribute]:
         if self._attributes is None:
-            self._attributes = [InsightAttribute(item) for item in self.items if 'attribute' in item]
+            self._attributes = [
+                InsightAttribute(item) for item in self.items if "attribute" in item
+            ]
 
         return self._attributes
 
@@ -314,35 +385,35 @@ class Insight:
 
     @property
     def id(self):
-        return self._vo['id']
+        return self._vo["id"]
 
     @property
     def title(self):
-        return self._vo['attributes']['title']
+        return self._vo["attributes"]["title"]
 
     @property
     def description(self):
-        return self._vo['attributes']['description']
+        return self._vo["attributes"]["description"]
 
     @property
     def buckets(self):
-        return [InsightBucket(b) for b in self._vo['attributes']['content']['buckets']]
+        return [InsightBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
 
     @property
     def filters(self):
-        return [InsightFilter(f) for f in self._vo['attributes']['content']['filters']]
+        return [InsightFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
 
     @property
     def sorts(self):
-        return self._vo['attributes']['content']['sorts']
+        return self._vo["attributes"]["content"]["sorts"]
 
     @property
     def properties(self):
-        return self._vo['attributes']['content']['properties']
+        return self._vo["attributes"]["content"]["properties"]
 
     @property
     def vis_url(self):
-        return self._vo['attributes']['content']['visualizationUrl']
+        return self._vo["attributes"]["content"]["visualizationUrl"]
 
     @property
     def measures(self):
@@ -388,7 +459,9 @@ class InsightService:
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient):
-        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
+        self._api = metadata_apis.WorkspaceObjectControllerApi(
+            api_client.metadata_client
+        )
 
     def get_insights(self, workspace_id):
         """
@@ -399,8 +472,12 @@ class InsightService:
         :return: all available insights, each insight will contain sideloaded metadata about the entities it references
         :rtype: list[Insight]
         """
-        get_func = functools.partial(self._api.get_all_entities_visualization_objects, workspace_id,
-                                     include=["ALL"], _check_return_type=False)
+        get_func = functools.partial(
+            self._api.get_all_entities_visualization_objects,
+            workspace_id,
+            include=["ALL"],
+            _check_return_type=False,
+        )
 
         vis_objects = load_all_entities(get_func)
         sideloads = Sideloads(vis_objects.included)
@@ -416,8 +493,12 @@ class InsightService:
         :return: single insight; the insight will contain sideloaded metadata about the entities it references
         :rtype: Insight
         """
-        vis_obj = self._api.get_entity_visualization_objects(workspace_id, object_id=insight_id, include=["ALL"],
-                                                             _check_return_type=False)
+        vis_obj = self._api.get_entity_visualization_objects(
+            workspace_id,
+            object_id=insight_id,
+            include=["ALL"],
+            _check_return_type=False,
+        )
         sideloads = Sideloads(vis_obj.included)
 
         return Insight(vis_obj.data, sideloads)

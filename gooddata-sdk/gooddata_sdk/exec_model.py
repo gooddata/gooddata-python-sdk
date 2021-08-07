@@ -18,13 +18,18 @@ class ObjId:
 
     def as_afm_id(self):
         return afm_models.AfmObjectIdentifier(
-            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type))
+            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type)
+        )
 
     def as_identifier(self):
-        return afm_models.Identifier(identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type))
+        return afm_models.Identifier(
+            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type)
+        )
 
     def __eq__(self, other):
-        return isinstance(other, ObjId) and self.id == other.id and self.type == other.type
+        return (
+            isinstance(other, ObjId) and self.id == other.id and self.type == other.type
+        )
 
     def __str__(self):
         """
@@ -81,7 +86,7 @@ class Attribute(ExecModelEntity):
         super(Attribute, self).__init__()
 
         self._local_id = local_id
-        self._label = ObjId(label, 'label') if isinstance(label, str) else label
+        self._label = ObjId(label, "label") if isinstance(label, str) else label
 
     @property
     def local_id(self):
@@ -95,8 +100,9 @@ class Attribute(ExecModelEntity):
         return isinstance(other, Attribute) and other.label == self.label
 
     def as_api_model(self) -> afm_models.AttributeItem:
-        return afm_models.AttributeItem(local_identifier=self.local_id,
-                                        label=self.label.as_afm_id())
+        return afm_models.AttributeItem(
+            local_identifier=self.local_id, label=self.label.as_afm_id()
+        )
 
 
 class Filter(ExecModelEntity):
@@ -128,27 +134,47 @@ class Measure(ExecModelEntity):
     def as_api_model(self) -> afm_models.MeasureItem:
         definition = self._body_as_api_model()
 
-        return afm_models.MeasureItem(local_identifier=self._local_id, definition=definition)
+        return afm_models.MeasureItem(
+            local_identifier=self._local_id, definition=definition
+        )
 
     def _body_as_api_model(self):
         raise NotImplementedError()
 
 
-SIMPLE_MEASURE_AGGREGATION = {"SUM", "AVG", "COUNT", "APPROXIMATE_COUNT", "MAX", "MEDIAN", "MIN", "RUNSUM"}
+SIMPLE_MEASURE_AGGREGATION = {
+    "SUM",
+    "AVG",
+    "COUNT",
+    "APPROXIMATE_COUNT",
+    "MAX",
+    "MEDIAN",
+    "MIN",
+    "RUNSUM",
+}
 
 
 class SimpleMeasure(Measure):
-    def __init__(self, local_id: str, item: ObjId, aggregation=None, compute_ratio=False, filters: list[Filter] = None):
+    def __init__(
+        self,
+        local_id: str,
+        item: ObjId,
+        aggregation=None,
+        compute_ratio=False,
+        filters: list[Filter] = None,
+    ):
         super(SimpleMeasure, self).__init__(local_id)
 
         _agg = aggregation.upper() if aggregation is not None else None
         if _agg is not None and _agg not in SIMPLE_MEASURE_AGGREGATION:
-            raise ValueError(f"Invalid arithmetic measure operator '{_agg}'. "
-                             f"Valid operators: {ARITHMETIC_MEASURE_OPERATORS}")
+            raise ValueError(
+                f"Invalid arithmetic measure operator '{_agg}'. "
+                f"Valid operators: {ARITHMETIC_MEASURE_OPERATORS}"
+            )
 
         self._item = item
 
-        if item.type == 'metric':
+        if item.type == "metric":
             self._aggregation = None
         elif _agg is None:
             self._aggregation = "SUM"
@@ -182,13 +208,21 @@ class SimpleMeasure(Measure):
         # aggregation is optional yet the model bombs if None is sent :(
         if self.aggregation is not None:
             return afm_models.SimpleMeasureDefinition(
-                afm_models.SimpleMeasureDefinitionMeasure(item=self.item.as_afm_id(), aggregation=self.aggregation,
-                                                          compute_ratio=self.compute_ratio, filters=self.filters)
+                afm_models.SimpleMeasureDefinitionMeasure(
+                    item=self.item.as_afm_id(),
+                    aggregation=self.aggregation,
+                    compute_ratio=self.compute_ratio,
+                    filters=self.filters,
+                )
             )
         else:
             return afm_models.SimpleMeasureDefinition(
-                afm_models.SimpleMeasureDefinitionMeasure(item=self.item.as_afm_id(), compute_ratio=self.compute_ratio,
-                                                          filters=self.filters))
+                afm_models.SimpleMeasureDefinitionMeasure(
+                    item=self.item.as_afm_id(),
+                    compute_ratio=self.compute_ratio,
+                    filters=self.filters,
+                )
+            )
 
 
 class PopDate:
@@ -205,11 +239,18 @@ class PopDate:
         return self._periods_ago
 
     def as_api_model(self):
-        return afm_models.PopDate(attribute=self.attribute.as_afm_id(), periods_ago=self.periods_ago)
+        return afm_models.PopDate(
+            attribute=self.attribute.as_afm_id(), periods_ago=self.periods_ago
+        )
 
 
 class PopDateMeasure(Measure):
-    def __init__(self, local_id: str, measure: Union[str, Measure], date_attributes: list[PopDate]):
+    def __init__(
+        self,
+        local_id: str,
+        measure: Union[str, Measure],
+        date_attributes: list[PopDate],
+    ):
         super(PopDateMeasure, self).__init__(local_id)
 
         self._measure = _extract_local_id(measure)
@@ -224,17 +265,23 @@ class PopDateMeasure(Measure):
         return self._date_attributes
 
     def _body_as_api_model(self):
-        measure_identifier = afm_models.LocalIdentifier(local_identifier=self.measure_local_id)
+        measure_identifier = afm_models.LocalIdentifier(
+            local_identifier=self.measure_local_id
+        )
         date_attributes = list([a.as_api_model() for a in self.date_attributes])
 
         return afm_models.PopDateMeasureDefinition(
-            afm_models.PopDateMeasureDefinitionOverPeriodMeasure(measure_identifier=measure_identifier,
-                                                                 date_attributes=date_attributes))
+            afm_models.PopDateMeasureDefinitionOverPeriodMeasure(
+                measure_identifier=measure_identifier, date_attributes=date_attributes
+            )
+        )
 
 
 class PopDateDataset:
     def __init__(self, dataset: Union[ObjId, str], periods_ago: int):
-        self._dataset = ObjId(dataset, "dataset") if isinstance(dataset, str) else dataset
+        self._dataset = (
+            ObjId(dataset, "dataset") if isinstance(dataset, str) else dataset
+        )
         self._periods_ago = periods_ago
 
     @property
@@ -246,11 +293,18 @@ class PopDateDataset:
         return self._periods_ago
 
     def as_api_model(self):
-        return afm_models.PopDataset(dataset=self.dataset.as_afm_id(), periods_ago=self.periods_ago)
+        return afm_models.PopDataset(
+            dataset=self.dataset.as_afm_id(), periods_ago=self.periods_ago
+        )
 
 
 class PopDatesetMeasure(Measure):
-    def __init__(self, local_id: str, measure: Union[str, Measure], date_datasets: list[PopDateDataset]):
+    def __init__(
+        self,
+        local_id: str,
+        measure: Union[str, Measure],
+        date_datasets: list[PopDateDataset],
+    ):
         super(PopDatesetMeasure, self).__init__(local_id)
 
         self._measure = _extract_local_id(measure)
@@ -265,24 +319,38 @@ class PopDatesetMeasure(Measure):
         return self._date_datasets
 
     def _body_as_api_model(self):
-        measure_identifier = afm_models.LocalIdentifier(local_identifier=self.measure_local_id)
+        measure_identifier = afm_models.LocalIdentifier(
+            local_identifier=self.measure_local_id
+        )
         date_datasets = list([d.as_api_model() for d in self.date_datasets])
 
         return afm_models.PopDatasetMeasureDefinition(
-            afm_models.PopDatasetMeasureDefinitionPreviousPeriodMeasure(measure_identifier=measure_identifier,
-                                                                        date_datasets=date_datasets))
+            afm_models.PopDatasetMeasureDefinitionPreviousPeriodMeasure(
+                measure_identifier=measure_identifier, date_datasets=date_datasets
+            )
+        )
 
 
-ARITHMETIC_MEASURE_OPERATORS = {"SUM", "DIFFERENCE", "MULTIPLICATION", "RATIO", "CHANGE"}
+ARITHMETIC_MEASURE_OPERATORS = {
+    "SUM",
+    "DIFFERENCE",
+    "MULTIPLICATION",
+    "RATIO",
+    "CHANGE",
+}
 
 
 class ArithmeticMeasure(Measure):
-    def __init__(self, local_id: str, operator: str, operands: list[Union[str, Measure]]):
+    def __init__(
+        self, local_id: str, operator: str, operands: list[Union[str, Measure]]
+    ):
         super(ArithmeticMeasure, self).__init__(local_id)
 
         if operator not in ARITHMETIC_MEASURE_OPERATORS:
-            raise ValueError(f"Invalid arithmetic measure operator '{operator}'. "
-                             f"Valid operators: {ARITHMETIC_MEASURE_OPERATORS}")
+            raise ValueError(
+                f"Invalid arithmetic measure operator '{operator}'. "
+                f"Valid operators: {ARITHMETIC_MEASURE_OPERATORS}"
+            )
 
         self._operator = operator
         self._operands = list([_extract_local_id(o) for o in operands])
@@ -296,11 +364,16 @@ class ArithmeticMeasure(Measure):
         return self._operands
 
     def _body_as_api_model(self):
-        measure_identifiers = [afm_models.LocalIdentifier(local_identifier=local_d) for local_d in self._operands]
+        measure_identifiers = [
+            afm_models.LocalIdentifier(local_identifier=local_d)
+            for local_d in self._operands
+        ]
 
         return afm_models.ArithmeticMeasureDefinition(
-            afm_models.ArithmeticMeasureDefinitionArithmeticMeasure(operator=self.operator,
-                                                                    measure_identifiers=measure_identifiers))
+            afm_models.ArithmeticMeasureDefinitionArithmeticMeasure(
+                operator=self.operator, measure_identifiers=measure_identifiers
+            )
+        )
 
 
 class PositiveAttributeFilter(Filter):
@@ -323,8 +396,9 @@ class PositiveAttributeFilter(Filter):
 
     def as_api_model(self):
         label_id = _to_identifier(self._label)
-        body = afm_models.PositiveAttributeFilterBody(label=label_id, _in=self.in_values,
-                                                      _check_type=False)
+        body = afm_models.PositiveAttributeFilterBody(
+            label=label_id, _in=self.in_values, _check_type=False
+        )
         return afm_models.PositiveAttributeFilter(body)
 
 
@@ -348,13 +422,16 @@ class NegativeAttributeFilter(Filter):
 
     def as_api_model(self):
         label_id = _to_identifier(self._label)
-        body = afm_models.NegativeAttributeFilterBody(label=label_id, not_in=self.not_in_values,
-                                                      _check_type=False)
+        body = afm_models.NegativeAttributeFilterBody(
+            label=label_id, not_in=self.not_in_values, _check_type=False
+        )
         return afm_models.NegativeAttributeFilter(body)
 
 
 class RelativeDateFilter(Filter):
-    def __init__(self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int):
+    def __init__(
+        self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int
+    ):
         super(RelativeDateFilter, self).__init__()
 
         self._dataset = dataset
@@ -382,9 +459,13 @@ class RelativeDateFilter(Filter):
         return False
 
     def as_api_model(self):
-        body = afm_models.RelativeDateFilterBody(dataset=self.dataset.as_afm_id(),
-                                                 granularity=self.granularity,
-                                                 _from=self.from_shift, to=self.to_shift, _check_type=False)
+        body = afm_models.RelativeDateFilterBody(
+            dataset=self.dataset.as_afm_id(),
+            granularity=self.granularity,
+            _from=self.from_shift,
+            to=self.to_shift,
+            _check_type=False,
+        )
         return afm_models.RelativeDateFilter(body)
 
 
@@ -412,43 +493,56 @@ class AbsoluteDateFilter(Filter):
         return False
 
     def as_api_model(self):
-        body = afm_models.AbsoluteDateFilterBody(dataset=self.dataset.as_afm_id(),
-                                                 _from=self._from_date, to=self._to_date,
-                                                 _check_type=False)
+        body = afm_models.AbsoluteDateFilterBody(
+            dataset=self.dataset.as_afm_id(),
+            _from=self._from_date,
+            to=self._to_date,
+            _check_type=False,
+        )
         return afm_models.AbsoluteDateFilter(body)
 
 
 _MEASURE_VALUE_OPERATORS = {
-    "EQUAL_TO": 'comparison',
-    "GREATER_THAN": 'comparison',
-    "GREATER_THAN_OR_EQUAL_TO": 'comparison',
-    "LESS_THAN": 'comparison',
-    "LESS_THAN_OR_EQUAL_TO": 'comparison',
-    "NOT_EQUAL_TO": 'comparison',
-    "BETWEEN": 'range',
-    "NOT_BETWEEN": 'range'
+    "EQUAL_TO": "comparison",
+    "GREATER_THAN": "comparison",
+    "GREATER_THAN_OR_EQUAL_TO": "comparison",
+    "LESS_THAN": "comparison",
+    "LESS_THAN_OR_EQUAL_TO": "comparison",
+    "NOT_EQUAL_TO": "comparison",
+    "BETWEEN": "range",
+    "NOT_BETWEEN": "range",
 }
 
 
 class MeasureValueFilter(Filter):
-    def __init__(self, measure: Union[ObjId, str, Measure], operator: str,
-                 values: Union[float, int, tuple[float, float]],
-                 treat_nulls_as: Union[bool, None] = None):
+    def __init__(
+        self,
+        measure: Union[ObjId, str, Measure],
+        operator: str,
+        values: Union[float, int, tuple[float, float]],
+        treat_nulls_as: Union[bool, None] = None,
+    ):
         super(MeasureValueFilter, self).__init__()
 
         if operator not in _MEASURE_VALUE_OPERATORS:
-            raise ValueError(f"Invalid measure value filter operator type '{operator}'."
-                             f"It is expected to be one of: {_MEASURE_VALUE_OPERATORS.keys()}")
+            raise ValueError(
+                f"Invalid measure value filter operator type '{operator}'."
+                f"It is expected to be one of: {_MEASURE_VALUE_OPERATORS.keys()}"
+            )
 
-        if _MEASURE_VALUE_OPERATORS[operator] == 'range':
+        if _MEASURE_VALUE_OPERATORS[operator] == "range":
             if len(values) != 2:
-                raise ValueError(f"Invalid number of values for {operator}. Expected two values: (from, to).")
+                raise ValueError(
+                    f"Invalid number of values for {operator}. Expected two values: (from, to)."
+                )
 
             self._values = values
         else:
             if len(values) != 1 and not isinstance(values, (int, float)):
-                raise ValueError(f"Invalid number of values for {operator}. "
-                                 f"Expected single int, float or one-sized list or tuple.")
+                raise ValueError(
+                    f"Invalid number of values for {operator}. "
+                    f"Expected single int, float or one-sized list or tuple."
+                )
 
             self._values = (values,) if isinstance(values, (int, float)) else values
 
@@ -478,21 +572,28 @@ class MeasureValueFilter(Filter):
     def as_api_model(self):
         measure = _to_identifier(self._measure)
 
-        if _MEASURE_VALUE_OPERATORS[self.operator] == 'comparison':
-            body = afm_models.ComparisonMeasureValueFilterBody(measure=measure, operator=self.operator,
-                                                               value=self.values[0],
-                                                               treat_null_values_as=self.treat_nulls_as,
-                                                               _check_type=False)
+        if _MEASURE_VALUE_OPERATORS[self.operator] == "comparison":
+            body = afm_models.ComparisonMeasureValueFilterBody(
+                measure=measure,
+                operator=self.operator,
+                value=self.values[0],
+                treat_null_values_as=self.treat_nulls_as,
+                _check_type=False,
+            )
 
             return afm_models.ComparisonMeasureValueFilter(body)
         else:
             _from = min(self.values)
             to = max(self.values)
 
-            body = afm_models.RangeMeasureValueFilterBody(measure=measure, operator=self.operator,
-                                                          _from=_from, to=to,
-                                                          treat_null_values_as=self.treat_nulls_as,
-                                                          _check_type=False)
+            body = afm_models.RangeMeasureValueFilterBody(
+                measure=measure,
+                operator=self.operator,
+                _from=_from,
+                to=to,
+                treat_null_values_as=self.treat_nulls_as,
+                _check_type=False,
+            )
 
             return afm_models.RangeMeasureValueFilter(body)
 
@@ -501,13 +602,20 @@ _RANKING_OPERATORS = {"TOP", "BOTTOM"}
 
 
 class RankingFilter(Filter):
-    def __init__(self, measures: list[Union[ObjId, Measure]], operator: str, value: int,
-                 dimensionality: list[Union[ObjId, Attribute]]):
+    def __init__(
+        self,
+        measures: list[Union[ObjId, Measure]],
+        operator: str,
+        value: int,
+        dimensionality: list[Union[ObjId, Attribute]],
+    ):
         super(RankingFilter, self).__init__()
 
         if operator not in _RANKING_OPERATORS:
-            raise ValueError(f"Invalid ranking filter operator type '{operator}'."
-                             f"It is expected to be one of: {_RANKING_OPERATORS}")
+            raise ValueError(
+                f"Invalid ranking filter operator type '{operator}'."
+                f"It is expected to be one of: {_RANKING_OPERATORS}"
+            )
 
         self._measures = [_extract_id_or_local_id(m) for m in measures]
         self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality]
@@ -537,14 +645,21 @@ class RankingFilter(Filter):
         measures = [_to_identifier(m) for m in self.measures]
         dimensionality = [_to_identifier(d) for d in self.dimensionality]
 
-        body = afm_models.RankingFilterBody(measures=measures, dimensionality=dimensionality,
-                                            operator=self.operator, value=self.value,
-                                            _check_type=False)
+        body = afm_models.RankingFilterBody(
+            measures=measures,
+            dimensionality=dimensionality,
+            operator=self.operator,
+            value=self.value,
+            _check_type=False,
+        )
         return afm_models.RankingFilter(body)
 
 
-def exec_model_to_api_model(attributes: list[Attribute] = None, measures: list[Measure] = None,
-                            filters: list[Filter] = None) -> afm_models.AFM:
+def exec_model_to_api_model(
+    attributes: list[Attribute] = None,
+    measures: list[Measure] = None,
+    filters: list[Filter] = None,
+) -> afm_models.AFM:
     """
     Transforms categorized execution model entities (attributes, measures, facts) into an API model
     that can be used for computations of data results or computations of object availability.
@@ -554,6 +669,10 @@ def exec_model_to_api_model(attributes: list[Attribute] = None, measures: list[M
     :param filters: optionally specify list of filters
     :return:
     """
-    return afm_models.AFM(attributes=[a.as_api_model() for a in attributes] if attributes is not None else [],
-                          measures=[m.as_api_model() for m in measures] if measures is not None else [],
-                          filters=[f.as_api_model() for f in filters] if filters is not None else [])
+    return afm_models.AFM(
+        attributes=[a.as_api_model() for a in attributes]
+        if attributes is not None
+        else [],
+        measures=[m.as_api_model() for m in measures] if measures is not None else [],
+        filters=[f.as_api_model() for f in filters] if filters is not None else [],
+    )

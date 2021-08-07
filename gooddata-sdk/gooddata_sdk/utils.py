@@ -20,18 +20,19 @@ def id_obj_to_key(id_obj):
         return id_obj
     elif isinstance(id_obj, ObjId):
         return str(id_obj)
-    elif 'identifier' in id_obj:
+    elif "identifier" in id_obj:
         # items in insight have id object in format {identifier: { id, type }}; unwrap them for convenience
-        unwrapped = id_obj['identifier']
+        unwrapped = id_obj["identifier"]
 
-    if 'id' not in unwrapped or 'type' not in unwrapped:
+    if "id" not in unwrapped or "type" not in unwrapped:
         raise KeyError(
-            f"Invalid id object used to find sideloaded entity: {str(id_obj)}. Need dict with 'id' and 'type' keys")
+            f"Invalid id object used to find sideloaded entity: {str(id_obj)}. Need dict with 'id' and 'type' keys"
+        )
 
     return f"{unwrapped['type']}/{unwrapped['id']}"
 
 
-AllPagedEntities = namedtuple('PagedResult', ['data', 'included'])
+AllPagedEntities = namedtuple("PagedResult", ["data", "included"])
 
 
 def load_all_entities(get_page_func, page_size=500):
@@ -86,7 +87,7 @@ class Sideloads:
         return self._objects[id_obj_key]
 
     def all_for_type(self, obj_type):
-        return [o for o in self._objects.values() if o['type'] == obj_type]
+        return [o for o in self._objects.values() if o["type"] == obj_type]
 
     def __str__(self):
         return str(self._objects)
