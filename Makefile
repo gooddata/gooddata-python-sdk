@@ -18,3 +18,14 @@ format:
 .PHONY: format-fix
 format-fix:
 	black .
+
+.PHONY: clients
+clients: afm-client metadata-client
+
+.PHONY: afm-client
+afm-client:
+	scripts/generate_afm_client.sh
+
+.PHONY: metadata-client
+metadata-client:
+	scripts/generate_metadata_client.sh
