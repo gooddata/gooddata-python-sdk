@@ -7,7 +7,7 @@ from gooddata_pandas.utils import IndexDef, LabelItemDef
 from gooddata_sdk import GoodDataSdk, Attribute, SimpleMeasure, Filter, ObjId
 
 
-class GoodDataSeriesFactory:
+class SeriesFactory:
     def __init__(self, sdk: GoodDataSdk, workspace_id: str):
         self._sdk = sdk
         self._workspace_id = workspace_id
