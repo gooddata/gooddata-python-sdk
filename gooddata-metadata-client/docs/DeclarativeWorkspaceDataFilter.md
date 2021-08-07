@@ -8,7 +8,6 @@ Name | Type | Description | Notes
 **id** | **str** | Workspace Data Filters ID. This ID is further used to refer to this instance. | 
 **title** | **str** | Workspace Data Filters title. | 
 **column_name** | **str** | Workspace Data Filters column name. Data are filtered using this physical column. | 
-**data_source_id** | **str** | Data source ID. Workspace Data Filters must always be connected to single data source. | 
 **workspace_data_filter_settings** | [**[DeclarativeWorkspaceDataFilterSetting]**](DeclarativeWorkspaceDataFilterSetting.md) | Filter settings specifying values of filters valid for the workspace. | 
 **description** | **str** | Workspace Data Filters description. | [optional] 
 **workspace** | [**WorkspaceIdentifier**](WorkspaceIdentifier.md) |  | [optional] 

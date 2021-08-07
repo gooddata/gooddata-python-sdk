@@ -30,8 +30,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
     from gooddata_metadata_client.model.json_api_user_out import JsonApiUserOut
     from gooddata_metadata_client.model.object_links import ObjectLinks
+    globals()['JsonApiUserGroupOutWithLinks'] = JsonApiUserGroupOutWithLinks
     globals()['JsonApiUserOut'] = JsonApiUserOut
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -93,7 +95,7 @@ class JsonApiUserOutDocument(ModelNormal):
         return {
             'data': (JsonApiUserOut,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiUserGroupOutWithLinks],),  # noqa: E501
         }
 
     @cached_property
@@ -152,7 +154,7 @@ class JsonApiUserOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiUserGroupOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,7 +241,7 @@ class JsonApiUserOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiUserGroupOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -31,8 +31,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_filter_context_out import JsonApiFilterContextOut
+    from gooddata_metadata_client.model.json_api_filter_context_out_includes import JsonApiFilterContextOutIncludes
     from gooddata_metadata_client.model.object_links import ObjectLinks
     globals()['JsonApiFilterContextOut'] = JsonApiFilterContextOut
+    globals()['JsonApiFilterContextOutIncludes'] = JsonApiFilterContextOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -93,7 +95,7 @@ class JsonApiFilterContextOutDocument(ModelNormal):
         return {
             'data': (JsonApiFilterContextOut,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiFilterContextOutIncludes],),  # noqa: E501
         }
 
     @cached_property
@@ -152,7 +154,7 @@ class JsonApiFilterContextOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiFilterContextOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,7 +241,7 @@ class JsonApiFilterContextOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiFilterContextOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

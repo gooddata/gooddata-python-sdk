@@ -95,7 +95,7 @@ class JsonApiUserGroupOutList(ModelNormal):
         return {
             'data': ([JsonApiUserGroupOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiUserGroupOutWithLinks],),  # noqa: E501
         }
 
     @cached_property
@@ -154,7 +154,7 @@ class JsonApiUserGroupOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiUserGroupOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,7 +241,7 @@ class JsonApiUserGroupOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiUserGroupOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

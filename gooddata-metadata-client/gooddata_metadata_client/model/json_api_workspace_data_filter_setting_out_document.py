@@ -30,8 +30,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_workspace_data_filter_out_with_links import JsonApiWorkspaceDataFilterOutWithLinks
     from gooddata_metadata_client.model.json_api_workspace_data_filter_setting_out import JsonApiWorkspaceDataFilterSettingOut
     from gooddata_metadata_client.model.object_links import ObjectLinks
+    globals()['JsonApiWorkspaceDataFilterOutWithLinks'] = JsonApiWorkspaceDataFilterOutWithLinks
     globals()['JsonApiWorkspaceDataFilterSettingOut'] = JsonApiWorkspaceDataFilterSettingOut
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -93,7 +95,7 @@ class JsonApiWorkspaceDataFilterSettingOutDocument(ModelNormal):
         return {
             'data': (JsonApiWorkspaceDataFilterSettingOut,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiWorkspaceDataFilterOutWithLinks],),  # noqa: E501
         }
 
     @cached_property
@@ -152,7 +154,7 @@ class JsonApiWorkspaceDataFilterSettingOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceDataFilterOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,7 +241,7 @@ class JsonApiWorkspaceDataFilterSettingOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceDataFilterOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

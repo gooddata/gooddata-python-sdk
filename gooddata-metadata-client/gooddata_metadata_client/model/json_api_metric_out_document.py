@@ -31,8 +31,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_metric_out import JsonApiMetricOut
+    from gooddata_metadata_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
     from gooddata_metadata_client.model.object_links import ObjectLinks
     globals()['JsonApiMetricOut'] = JsonApiMetricOut
+    globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -93,7 +95,7 @@ class JsonApiMetricOutDocument(ModelNormal):
         return {
             'data': (JsonApiMetricOut,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
         }
 
     @cached_property
@@ -152,7 +154,7 @@ class JsonApiMetricOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,7 +241,7 @@ class JsonApiMetricOutDocument(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

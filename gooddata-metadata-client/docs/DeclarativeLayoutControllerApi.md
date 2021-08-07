@@ -10,11 +10,13 @@ Method | HTTP request | Description
 [**get_organization_layout**](DeclarativeLayoutControllerApi.md#get_organization_layout) | **GET** /api/layout/organization | Get organization layout
 [**get_user_groups_layout**](DeclarativeLayoutControllerApi.md#get_user_groups_layout) | **GET** /api/layout/userGroups | Get all users
 [**get_users_layout**](DeclarativeLayoutControllerApi.md#get_users_layout) | **GET** /api/layout/users | Get all users
+[**get_users_user_groups_layout**](DeclarativeLayoutControllerApi.md#get_users_user_groups_layout) | **GET** /api/layout/usersAndUserGroups | Get all users and user groups
 [**get_workspace_data_filters_layout**](DeclarativeLayoutControllerApi.md#get_workspace_data_filters_layout) | **GET** /api/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 [**get_workspace_layout**](DeclarativeLayoutControllerApi.md#get_workspace_layout) | **GET** /api/layout/workspaces/{workspaceId} | Get workspace layout
 [**get_workspaces_layout**](DeclarativeLayoutControllerApi.md#get_workspaces_layout) | **GET** /api/layout/workspaces | Get all workspaces layout
-[**put_data_sources_layout**](DeclarativeLayoutControllerApi.md#put_data_sources_layout) | **PUT** /api/layout/userGroups | Put all data sources
+[**put_data_sources_layout**](DeclarativeLayoutControllerApi.md#put_data_sources_layout) | **PUT** /api/layout/usersAndUserGroups | Put all data sources
 [**put_data_sources_layout1**](DeclarativeLayoutControllerApi.md#put_data_sources_layout1) | **PUT** /api/layout/dataSources | Put all data sources
+[**put_user_groups_layout**](DeclarativeLayoutControllerApi.md#put_user_groups_layout) | **PUT** /api/layout/userGroups | Put all user groups
 [**put_users_layout**](DeclarativeLayoutControllerApi.md#put_users_layout) | **PUT** /api/layout/users | Put all users
 [**put_workspace_layout**](DeclarativeLayoutControllerApi.md#put_workspace_layout) | **PUT** /api/layout/workspaces/{workspaceId} | Set workspace layout
 [**set_analytics_model**](DeclarativeLayoutControllerApi.md#set_analytics_model) | **PUT** /api/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
@@ -333,7 +335,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Retrieved all groups. |  -  |
+**200** | Retrieved all user groups. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -395,6 +397,67 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved all users. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_users_user_groups_layout**
+> DeclarativeUsersUserGroups get_users_user_groups_layout()
+
+Get all users and user groups
+
+Retrieve all users and user groups with theirs properties.
+
+### Example
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import declarative_layout_controller_api
+from gooddata_metadata_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+from pprint import pprint
+# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "https://staging.anywhere.gooddata.com"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = declarative_layout_controller_api.DeclarativeLayoutControllerApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get all users and user groups
+        api_response = api_instance.get_users_user_groups_layout()
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling DeclarativeLayoutControllerApi->get_users_user_groups_layout: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**DeclarativeUsersUserGroups**](DeclarativeUsersUserGroups.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: */*
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved all users and user groups. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -586,7 +649,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **put_data_sources_layout**
-> put_data_sources_layout(declarative_user_groups)
+> put_data_sources_layout(declarative_users_user_groups)
 
 Put all data sources
 
@@ -598,7 +661,7 @@ Set all data sources including related physical model.
 import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import declarative_layout_controller_api
-from gooddata_metadata_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_metadata_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
 from pprint import pprint
 # Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
 # See configuration.py for a list of all supported configuration parameters.
@@ -611,7 +674,19 @@ configuration = gooddata_metadata_client.Configuration(
 with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = declarative_layout_controller_api.DeclarativeLayoutControllerApi(api_client)
-    declarative_user_groups = DeclarativeUserGroups(
+    declarative_users_user_groups = DeclarativeUsersUserGroups(
+        users=[
+            DeclarativeUser(
+                id="employee123",
+                auth_id="auth_id_example",
+                user_groups=[
+                    UserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
         user_groups=[
             DeclarativeUserGroup(
                 id="employees.all",
@@ -623,12 +698,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 ],
             ),
         ],
-    ) # DeclarativeUserGroups | 
+    ) # DeclarativeUsersUserGroups | 
 
     # example passing only required values which don't have defaults set
     try:
         # Put all data sources
-        api_instance.put_data_sources_layout(declarative_user_groups)
+        api_instance.put_data_sources_layout(declarative_users_user_groups)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling DeclarativeLayoutControllerApi->put_data_sources_layout: %s\n" % e)
 ```
@@ -638,7 +713,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **declarative_user_groups** | [**DeclarativeUserGroups**](DeclarativeUserGroups.md)|  |
+ **declarative_users_user_groups** | [**DeclarativeUsersUserGroups**](DeclarativeUsersUserGroups.md)|  |
 
 ### Return type
 
@@ -753,6 +828,82 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Defined all data sources. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **put_user_groups_layout**
+> put_user_groups_layout(declarative_user_groups)
+
+Put all user groups
+
+Define all user groups with their parents eventually.
+
+### Example
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import declarative_layout_controller_api
+from gooddata_metadata_client.model.declarative_user_groups import DeclarativeUserGroups
+from pprint import pprint
+# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "https://staging.anywhere.gooddata.com"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = declarative_layout_controller_api.DeclarativeLayoutControllerApi(api_client)
+    declarative_user_groups = DeclarativeUserGroups(
+        user_groups=[
+            DeclarativeUserGroup(
+                id="employees.all",
+                parents=[
+                    UserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
+                ],
+            ),
+        ],
+    ) # DeclarativeUserGroups | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put all user groups
+        api_instance.put_user_groups_layout(declarative_user_groups)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling DeclarativeLayoutControllerApi->put_user_groups_layout: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_user_groups** | [**DeclarativeUserGroups**](DeclarativeUserGroups.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Defined all user groups. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1473,7 +1624,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 title="Country ID",
                 description="ID of country",
                 column_name="country_id",
-                data_source_id="sampleDataSource",
                 workspace_data_filter_settings=[
                     DeclarativeWorkspaceDataFilterSetting(
                         id="country_id_setting",
@@ -1563,7 +1713,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 title="Country ID",
                 description="ID of country",
                 column_name="country_id",
-                data_source_id="sampleDataSource",
                 workspace_data_filter_settings=[
                     DeclarativeWorkspaceDataFilterSetting(
                         id="country_id_setting",
@@ -1776,7 +1925,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 title="Country ID",
                 description="ID of country",
                 column_name="country_id",
-                data_source_id="sampleDataSource",
                 workspace_data_filter_settings=[
                     DeclarativeWorkspaceDataFilterSetting(
                         id="country_id_setting",

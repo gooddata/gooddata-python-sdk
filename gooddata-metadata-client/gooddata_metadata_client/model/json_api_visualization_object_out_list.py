@@ -30,8 +30,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_visualization_object_out_includes import JsonApiVisualizationObjectOutIncludes
     from gooddata_metadata_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_metadata_client.model.list_links import ListLinks
+    globals()['JsonApiVisualizationObjectOutIncludes'] = JsonApiVisualizationObjectOutIncludes
     globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -95,7 +97,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
         return {
             'data': ([JsonApiVisualizationObjectOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiVisualizationObjectOutIncludes],),  # noqa: E501
         }
 
     @cached_property
@@ -154,7 +156,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,7 +243,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

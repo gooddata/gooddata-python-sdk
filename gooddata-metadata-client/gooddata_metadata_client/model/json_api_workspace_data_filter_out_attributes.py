@@ -84,7 +84,6 @@ class JsonApiWorkspaceDataFilterOutAttributes(ModelNormal):
             'title': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'column_name': (str,),  # noqa: E501
-            'data_source_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -96,7 +95,6 @@ class JsonApiWorkspaceDataFilterOutAttributes(ModelNormal):
         'title': 'title',  # noqa: E501
         'description': 'description',  # noqa: E501
         'column_name': 'columnName',  # noqa: E501
-        'data_source_id': 'dataSourceId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -143,7 +141,6 @@ class JsonApiWorkspaceDataFilterOutAttributes(ModelNormal):
             title (str): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             column_name (str): [optional]  # noqa: E501
-            data_source_id (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -228,7 +225,6 @@ class JsonApiWorkspaceDataFilterOutAttributes(ModelNormal):
             title (str): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             column_name (str): [optional]  # noqa: E501
-            data_source_id (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
