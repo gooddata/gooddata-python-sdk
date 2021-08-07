@@ -1,0 +1,13 @@
+{
+    "comparison_measure_value_filter": {
+        "measure": {
+            "identifier": {
+                "id": "metric.id",
+                "type": "metric"
+            }
+        },
+        "operator": "EQUAL_TO",
+        "treat_null_values_as": null,
+        "value": 10
+    }
+}

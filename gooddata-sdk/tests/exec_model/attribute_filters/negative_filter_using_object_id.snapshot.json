@@ -1,0 +1,14 @@
+{
+    "negative_attribute_filter": {
+        "label": {
+            "identifier": {
+                "id": "label.id",
+                "type": "label"
+            }
+        },
+        "not_in": [
+            "val1",
+            "val2"
+        ]
+    }
+}

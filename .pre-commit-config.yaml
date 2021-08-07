@@ -1,6 +1,9 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-exclude: (gooddata-afm-client|gooddata-metadata-client)
+
+# ignore all generated code + all snapshots; snapshots must not be processed otherwise they stop matching due to
+# addition of new lines
+exclude: (gooddata-afm-client|gooddata-metadata-client|.*\.snapshot\..*)
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0

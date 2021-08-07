@@ -9,3 +9,6 @@ pre-commit~=2.14.0
 -r ./gooddata-sdk/requirements.txt
 -r ./gooddata-pandas/requirements.txt
 -r ./gooddata-fdw/requirements.txt
+-r ./gooddata-sdk/test-requirements.txt
+-r ./gooddata-pandas/test-requirements.txt
+-r ./gooddata-fdw/test-requirements.txt

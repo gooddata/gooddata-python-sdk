@@ -1,0 +1,15 @@
+{
+    "definition": {
+        "measure": {
+            "compute_ratio": false,
+            "filters": [],
+            "item": {
+                "identifier": {
+                    "id": "metric_id",
+                    "type": "metric"
+                }
+            }
+        }
+    },
+    "local_identifier": "test"
+}

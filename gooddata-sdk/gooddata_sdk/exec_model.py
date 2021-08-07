@@ -23,7 +23,8 @@ class ObjId:
 
     def as_identifier(self):
         return afm_models.Identifier(
-            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type)
+            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type),
+            _check_type=False,
         )
 
     def __eq__(self, other):
@@ -46,7 +47,7 @@ class ObjId:
 
 def _to_identifier(val: Union[ObjId, str]):
     if isinstance(val, str):
-        return afm_models.Identifier(local_identifier=val)
+        return afm_models.LocalIdentifier(local_identifier=val)
 
     return val.as_identifier()
 
@@ -205,6 +206,8 @@ class SimpleMeasure(Measure):
         return self._filters
 
     def _body_as_api_model(self):
+        _filters = [f.as_api_model() for f in self.filters]
+
         # aggregation is optional yet the model bombs if None is sent :(
         if self.aggregation is not None:
             return afm_models.SimpleMeasureDefinition(
@@ -212,7 +215,8 @@ class SimpleMeasure(Measure):
                     item=self.item.as_afm_id(),
                     aggregation=self.aggregation,
                     compute_ratio=self.compute_ratio,
-                    filters=self.filters,
+                    filters=_filters,
+                    _check_type=False,
                 )
             )
         else:
@@ -220,14 +224,18 @@ class SimpleMeasure(Measure):
                 afm_models.SimpleMeasureDefinitionMeasure(
                     item=self.item.as_afm_id(),
                     compute_ratio=self.compute_ratio,
-                    filters=self.filters,
+                    filters=_filters,
+                    _check_type=False,
                 )
             )
 
 
 class PopDate:
-    def __init__(self, attribute: ObjId, periods_ago: int):
-        self._attribute = attribute
+    def __init__(self, attribute: Union[ObjId, Attribute], periods_ago: int):
+        if isinstance(attribute, Attribute):
+            self._attribute = attribute.label
+        else:
+            self._attribute = attribute
         self._periods_ago = periods_ago
 
     @property
@@ -377,11 +385,13 @@ class ArithmeticMeasure(Measure):
 
 
 class PositiveAttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], in_values: list[str]):
+    def __init__(
+        self, label: Union[ObjId, str, Attribute], in_values: list[str] = None
+    ):
         super(PositiveAttributeFilter, self).__init__()
 
         self._label = _extract_id_or_local_id(label)
-        self._in_values = in_values
+        self._in_values = in_values or []
 
     @property
     def label(self) -> Union[ObjId, str]:
@@ -399,7 +409,7 @@ class PositiveAttributeFilter(Filter):
         body = afm_models.PositiveAttributeFilterBody(
             label=label_id, _in=self.in_values, _check_type=False
         )
-        return afm_models.PositiveAttributeFilter(body)
+        return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
 
 class NegativeAttributeFilter(Filter):
@@ -428,11 +438,37 @@ class NegativeAttributeFilter(Filter):
         return afm_models.NegativeAttributeFilter(body)
 
 
+_GRANULARITY = {
+    "YEAR",
+    "QUARTER",
+    "MONTH",
+    "WEEK",
+    "WEEK",
+    "DAY",
+    "HOUR",
+    "MINUTE",
+    "QUARTER_OF_YEAR",
+    "MONTH_OF_YEAR",
+    "WEEK_OF_YEAR",
+    "DAY_OF_YEAR",
+    "DAY_OF_MONTH",
+    "DAY_OF_WEEK",
+    "HOUR_OF_DAY",
+    "MINUTE_OF_HOUR",
+}
+
+
 class RelativeDateFilter(Filter):
     def __init__(
         self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int
     ):
         super(RelativeDateFilter, self).__init__()
+
+        if granularity not in _GRANULARITY:
+            raise ValueError(
+                f"Invalid relative date filter granularity '{granularity}'."
+                f"It is expected to be one of: {_GRANULARITY.keys()}"
+            )
 
         self._dataset = dataset
         self._granularity = granularity
@@ -470,7 +506,7 @@ class RelativeDateFilter(Filter):
 
 
 class AbsoluteDateFilter(Filter):
-    def __init__(self, dataset: ObjId, from_date: int, to_date: int):
+    def __init__(self, dataset: ObjId, from_date: str, to_date: str):
         super(AbsoluteDateFilter, self).__init__()
 
         self._dataset = dataset
@@ -482,11 +518,11 @@ class AbsoluteDateFilter(Filter):
         return self._dataset
 
     @property
-    def from_date(self) -> int:
+    def from_date(self) -> str:
         return self._from_date
 
     @property
-    def to_date(self) -> int:
+    def to_date(self) -> str:
         return self._to_date
 
     def is_noop(self):
@@ -520,7 +556,7 @@ class MeasureValueFilter(Filter):
         measure: Union[ObjId, str, Measure],
         operator: str,
         values: Union[float, int, tuple[float, float]],
-        treat_nulls_as: Union[bool, None] = None,
+        treat_nulls_as: Union[float, None] = None,
     ):
         super(MeasureValueFilter, self).__init__()
 
@@ -538,7 +574,7 @@ class MeasureValueFilter(Filter):
 
             self._values = values
         else:
-            if len(values) != 1 and not isinstance(values, (int, float)):
+            if not isinstance(values, (int, float)) and len(values) != 1:
                 raise ValueError(
                     f"Invalid number of values for {operator}. "
                     f"Expected single int, float or one-sized list or tuple."
@@ -604,10 +640,10 @@ _RANKING_OPERATORS = {"TOP", "BOTTOM"}
 class RankingFilter(Filter):
     def __init__(
         self,
-        measures: list[Union[ObjId, Measure]],
+        measures: list[Union[ObjId, Measure, str]],
         operator: str,
         value: int,
-        dimensionality: list[Union[ObjId, Attribute]],
+        dimensionality: list[Union[ObjId, Attribute, str]],
     ):
         super(RankingFilter, self).__init__()
 

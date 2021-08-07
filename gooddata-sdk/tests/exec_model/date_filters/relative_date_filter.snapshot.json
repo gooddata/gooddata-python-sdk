@@ -1,0 +1,13 @@
+{
+    "relative_date_filter": {
+        "_from": -10,
+        "dataset": {
+            "identifier": {
+                "id": "dataset.id",
+                "type": "dataset"
+            }
+        },
+        "granularity": "DAY",
+        "to": -1
+    }
+}

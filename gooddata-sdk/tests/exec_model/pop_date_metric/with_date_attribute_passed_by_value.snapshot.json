@@ -1,0 +1,21 @@
+{
+    "definition": {
+        "over_period_measure": {
+            "date_attributes": [
+                {
+                    "attribute": {
+                        "identifier": {
+                            "id": "label2.id",
+                            "type": "label"
+                        }
+                    },
+                    "periods_ago": 1
+                }
+            ],
+            "measure_identifier": {
+                "local_identifier": "master_metric_id"
+            }
+        }
+    },
+    "local_identifier": "local_id1"
+}
