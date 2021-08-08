@@ -1,4 +1,5 @@
 .idea
 .env
+.env.test
 .venv
 test_clients.py

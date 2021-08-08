@@ -309,6 +309,8 @@ class Catalog:
         self._valid_obf_fun = valid_obj_fun
         self._datasets = datasets
         self._metrics = metrics
+        self._metric_idx = dict([(str(m.obj_id), m) for m in metrics])
+        self._datasets_idx = dict([(str(d.obj_id), d) for d in datasets])
 
     @property
     def datasets(self) -> list[CatalogDataset]:
@@ -317,6 +319,44 @@ class Catalog:
     @property
     def metrics(self) -> list[CatalogMetric]:
         return self._metrics
+
+    def get_metric(self, metric_id: Union[str, ObjId]) -> CatalogMetric:
+        """
+        Gets metric by id. The id can be either an instance of ObjId or string containing serialized ObjId
+        ('metric/some.metric.id') or contain just the id part ('some.metric.id').
+
+        :param metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
+        :return: instance of CatalogMetric or None if no such metric in catalog
+        :rtype CatalogMetric
+        """
+        obj_id_str = metric_id
+
+        if isinstance(metric_id, ObjId):
+            obj_id_str = str(metric_id)
+        elif not metric_id.startswith("metric/"):
+            obj_id_str = f"metric/{metric_id}"
+
+        return self._metric_idx[obj_id_str] if obj_id_str in self._metric_idx else None
+
+    def get_dataset(self, dataset_id: Union[str, ObjId]) -> CatalogDataset:
+        """
+        Gets dataset by id. The id can be either an instance of ObjId or string containing serialized ObjId
+        ('dataset/some.dataset.id') or contain just the id part ('some.dataset.id').
+
+        :param dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
+        :return: instance of CatalogDataset or None if no such dataset in catalog
+        :rtype CatalogDataset
+        """
+        obj_id_str = dataset_id
+
+        if isinstance(dataset_id, ObjId):
+            obj_id_str = str(dataset_id)
+        elif not dataset_id.startswith("dataset/"):
+            obj_id_str = f"dataset/{dataset_id}"
+
+        return (
+            self._datasets_idx[obj_id_str] if obj_id_str in self._datasets_idx else None
+        )
 
     def find_label_attribute(self, id_obj) -> Union[CatalogAttribute, None]:
         for dataset in self._datasets:

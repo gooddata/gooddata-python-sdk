@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"attr1\", \"label\": {\"identifier\": {\"id\": \"region.region_name\", \"type\": \"label\"}}}], \"filters\": [], \"measures\": [{\"localIdentifier\": \"metric1\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"claim-amount\", \"type\": \"metric\"}}, \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"attr1\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Date": [
+                        "Sun, 08 Aug 2021 19:50:43 GMT"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Content-Length": [
+                        "743"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"attr1\",\"label\":{\"id\":\"region.region_name\",\"type\":\"label\"},\"labelName\":\"Region name\",\"attribute\":{\"id\":\"region.region_name\",\"type\":\"attribute\"},\"attributeName\":\"Region name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region.region_name\",\"type\":\"label\"}}}]},{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"metric1\",\"format\":\"[>=1000000000000]$#,,,,.0 T;\\n[>=1000000000]$#,,,.0 B;\\n[>=1000000]$#,,.0 M;\\n[>=1000]$#,.0 K;\\n[>=0]$#,##0;\\n[<=-1000000000000]-$#,,,,.0 T;\\n[<=-1000000000]-$#,,,.0 B;\\n[<=-1000000]-$#,,.0 M;\\n[<=-1000]-$#,.0 K;\\n[<0]-$#,##0\",\"name\":\"Claim Amount\"}]}]}],\"links\":{\"executionResult\":\"1dbcef8df172b4c268773c833a17f60310e474ba\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/1dbcef8df172b4c268773c833a17f60310e474ba?offset=0%2C0&limit=512%2C256",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Date": [
+                        "Sun, 08 Aug 2021 19:50:43 GMT"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Content-Length": [
+                        "2374"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[[171178.594375],[33250.7575],[53502.63375],[199034.6025],[10351.5225],[101118.7375],[16298.85125],[42824.720625],[9625.218125],[80242.421875],[14343.746875],[53576.304375],[17578.54875],[30713.091875],[10790.1125],[42212.5825],[152597.063125],[40684.54875],[236780.12375],[13202.2225],[8777.779375],[244733.483125],[28708.36375],[644181.868125]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Aargau\",\"primaryLabelValue\":\"Aargau\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Landschaft\",\"primaryLabelValue\":\"Basel-Landschaft\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Stadt\",\"primaryLabelValue\":\"Basel-Stadt\"}},{\"attributeHeader\":{\"labelValue\":\"Bern\",\"primaryLabelValue\":\"Bern\"}},{\"attributeHeader\":{\"labelValue\":\"Fribourg\",\"primaryLabelValue\":\"Fribourg\"}},{\"attributeHeader\":{\"labelValue\":\"Geneva\",\"primaryLabelValue\":\"Geneva\"}},{\"attributeHeader\":{\"labelValue\":\"Glarus\",\"primaryLabelValue\":\"Glarus\"}},{\"attributeHeader\":{\"labelValue\":\"Graub\u00fcnden\",\"primaryLabelValue\":\"Graub\u00fcnden\"}},{\"attributeHeader\":{\"labelValue\":\"Jura\",\"primaryLabelValue\":\"Jura\"}},{\"attributeHeader\":{\"labelValue\":\"Lucerne\",\"primaryLabelValue\":\"Lucerne\"}},{\"attributeHeader\":{\"labelValue\":\"Neuch\u00e2tel\",\"primaryLabelValue\":\"Neuch\u00e2tel\"}},{\"attributeHeader\":{\"labelValue\":\"Nidwalden\",\"primaryLabelValue\":\"Nidwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Obwalden\",\"primaryLabelValue\":\"Obwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Schaffhausen\",\"primaryLabelValue\":\"Schaffhausen\"}},{\"attributeHeader\":{\"labelValue\":\"Schwyz\",\"primaryLabelValue\":\"Schwyz\"}},{\"attributeHeader\":{\"labelValue\":\"Solothurn\",\"primaryLabelValue\":\"Solothurn\"}},{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"Thurgau\",\"primaryLabelValue\":\"Thurgau\"}},{\"attributeHeader\":{\"labelValue\":\"Ticino\",\"primaryLabelValue\":\"Ticino\"}},{\"attributeHeader\":{\"labelValue\":\"Uri\",\"primaryLabelValue\":\"Uri\"}},{\"attributeHeader\":{\"labelValue\":\"Valais\",\"primaryLabelValue\":\"Valais\"}},{\"attributeHeader\":{\"labelValue\":\"Vaud\",\"primaryLabelValue\":\"Vaud\"}},{\"attributeHeader\":{\"labelValue\":\"Zug\",\"primaryLabelValue\":\"Zug\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}}]}]},{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[24,1],\"offset\":[0,0],\"total\":[24,1]}}"
+                }
+            }
+        }
+    ]
+}
