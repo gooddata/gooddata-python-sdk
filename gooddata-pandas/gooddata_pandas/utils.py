@@ -4,16 +4,16 @@ from typing import Union
 
 from gooddata_sdk import (
     Attribute,
-    SimpleMeasure,
-    Measure,
+    SimpleMetric,
+    Metric,
     Filter,
     ObjId,
     InsightAttribute,
-    InsightMeasure,
+    InsightMetric,
 )
 
 LabelItemDef = Union[Attribute, ObjId, str]
-DataItemDef = Union[Attribute, Measure, ObjId, str]
+DataItemDef = Union[Attribute, Metric, ObjId, str]
 IndexDef = Union[LabelItemDef, dict[str, LabelItemDef]]
 ColumnsDef = dict[str, DataItemDef]
 
@@ -46,15 +46,15 @@ def _to_attribute(val: LabelItemDef) -> Attribute:
     raise ValueError(f"Invalid attribute input: {val}")
 
 
-def _to_simple_metric(val: Union[SimpleMeasure, str, ObjId]) -> SimpleMeasure:
+def _to_simple_metric(val: Union[SimpleMetric, str, ObjId]) -> SimpleMetric:
     _val = _try_obj_id(val)
 
-    if isinstance(_val, SimpleMeasure):
+    if isinstance(_val, SimpleMetric):
         return _val
     elif isinstance(_val, ObjId):
-        return SimpleMeasure(local_id=_unique_local_id(), item=_val)
+        return SimpleMetric(local_id=_unique_local_id(), item=_val)
     elif isinstance(_val, str):
-        return SimpleMeasure(local_id=_unique_local_id(), item=ObjId(_val, "metric"))
+        return SimpleMetric(local_id=_unique_local_id(), item=ObjId(_val, "metric"))
 
     raise ValueError(f"Invalid metric input: {val}")
 
@@ -66,14 +66,14 @@ def _to_filters(val: Union[Filter, list[Filter]]) -> list[Filter]:
     return val
 
 
-def _to_item(val: DataItemDef) -> Union[Attribute, Measure]:
+def _to_item(val: DataItemDef) -> Union[Attribute, Metric]:
     _val = _try_obj_id(val)
 
-    if isinstance(_val, (Attribute, Measure)):
+    if isinstance(_val, (Attribute, Metric)):
         return val
     elif isinstance(_val, ObjId):
         if _val.type in ["fact", "metric"]:
-            return SimpleMeasure(local_id=_unique_local_id(), item=_val)
+            return SimpleMetric(local_id=_unique_local_id(), item=_val)
         else:
             return Attribute(local_id=_unique_local_id(), label=_val)
 
@@ -101,7 +101,7 @@ class DefaultInsightColumnNaming:
     def col_name_for_attribute(self, attr: InsightAttribute) -> str:
         return self._ensure_unique(attr.label_id)
 
-    def col_name_for_measure(self, measure: InsightMeasure) -> str:
+    def col_name_for_metric(self, measure: InsightMetric) -> str:
         # if simple measure, use the item identifier (nice, readable)
         # otherwise try alias
         # otherwise try title

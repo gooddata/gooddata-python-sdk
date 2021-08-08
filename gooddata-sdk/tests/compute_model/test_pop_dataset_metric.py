@@ -4,14 +4,14 @@ import os
 import pytest
 
 from gooddata_sdk import (
-    PopDatesetMeasure,
+    PopDatesetMetric,
     PopDateDataset,
     ObjId,
-    SimpleMeasure,
+    SimpleMetric,
 )
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
-_simple_metric = SimpleMeasure(
+_simple_metric = SimpleMetric(
     local_id="master_metric_id", item=ObjId(type="metric", id="metric_id")
 )
 
@@ -23,9 +23,9 @@ def _scenario_to_snapshot_name(scenario: str):
 test_pop_date_metrics = [
     [
         "with master metric by local id",
-        PopDatesetMeasure(
+        PopDatesetMetric(
             local_id="local_id1",
-            measure="master_metric_id",
+            metric="master_metric_id",
             date_datasets=[
                 PopDateDataset(
                     dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1
@@ -35,9 +35,9 @@ test_pop_date_metrics = [
     ],
     [
         "with master metric passed by value",
-        PopDatesetMeasure(
+        PopDatesetMetric(
             local_id="local_id1",
-            measure=_simple_metric,
+            metric=_simple_metric,
             date_datasets=[
                 PopDateDataset(
                     dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1
@@ -47,17 +47,17 @@ test_pop_date_metrics = [
     ],
     [
         "with date dataset by str",
-        PopDatesetMeasure(
+        PopDatesetMetric(
             local_id="local_id1",
-            measure="master_metric_id",
+            metric="master_metric_id",
             date_datasets=[PopDateDataset(dataset="dataset.id", periods_ago=1)],
         ),
     ],
     [
         "with multiple date datasets",
-        PopDatesetMeasure(
+        PopDatesetMetric(
             local_id="local_id1",
-            measure="master_metric_id",
+            metric="master_metric_id",
             date_datasets=[
                 PopDateDataset(
                     dataset=ObjId(type="dataset", id="dataset1.id"), periods_ago=1
@@ -70,7 +70,7 @@ test_pop_date_metrics = [
 
 
 @pytest.mark.parametrize("scenario,metric", test_pop_date_metrics)
-def test_simple_metric_to_api_model(scenario, metric: PopDatesetMeasure, snapshot):
+def test_simple_metric_to_api_model(scenario, metric: PopDatesetMetric, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "pop_dataset_metric")

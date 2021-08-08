@@ -15,20 +15,20 @@ from gooddata_sdk.compute import (
     ExecutionResult,
     ExecutionDefinition,
 )
-from gooddata_sdk.exec_model import (
+from gooddata_sdk.compute_model import (
     Attribute,
     Filter,
-    Measure,
+    Metric,
     PositiveAttributeFilter,
     NegativeAttributeFilter,
     AbsoluteDateFilter,
     RelativeDateFilter,
-    MeasureValueFilter,
+    MetricValueFilter,
     RankingFilter,
-    SimpleMeasure,
-    PopDateMeasure,
-    PopDatesetMeasure,
-    ArithmeticMeasure,
+    SimpleMetric,
+    PopDateMetric,
+    PopDatesetMetric,
+    ArithmeticMetric,
     PopDate,
     PopDateDataset,
     ObjId,
@@ -37,7 +37,7 @@ from gooddata_sdk.exec_model import (
 from gooddata_sdk.insight import (
     Insight,
     InsightService,
-    InsightMeasure,
+    InsightMetric,
     InsightAttribute,
     InsightBucket,
 )

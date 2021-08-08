@@ -8,7 +8,7 @@ from gooddata_sdk.compute import (
     ExecutionDefinition,
     ComputeService,
 )
-from gooddata_sdk.exec_model import Attribute, Measure, Filter
+from gooddata_sdk.compute_model import Attribute, Metric, Filter
 from gooddata_sdk.insight import Insight
 
 _TABLE_ROW_BATCH_SIZE = 512
@@ -16,9 +16,9 @@ _TABLE_ROW_BATCH_SIZE = 512
 Number of rows that the code reads from backed at once.
 """
 
-_MAX_MEASURES = 256
+_MAX_METRICS = 256
 """
-Maximum number of measures that this code is prepared to handle. This is to simplify the paging business - so that
+Maximum number of metrics that this code is prepared to handle. This is to simplify the paging business - so that
 code only pages 'down' across one (row) dimension.
 """
 
@@ -29,16 +29,16 @@ class ExecutionTable:
     the following convention:
 
     -  all attributes are in the first dimension
-    -  all measures are in the second dimension
-    -  if the execution is attribute- or measure-less, then there is always single dimension
+    -  all metrics are in the second dimension
+    -  if the execution is attribute- or metric-less, then there is always single dimension
 
     The mapping to rows is then as follows:
 
-    -  both attributes + measures are on the execution = iteration over first dimension; as many rows as total records
+    -  both attributes + metrics are on the execution = iteration over first dimension; as many rows as total records
        in the first dimension (paging.total[0])
     -  just attributes = iteration over just headers in first dimension; as many rows as total records in the
        first dimension (paging.total[0])
-    -  just measures = single row, all measure values returned in one row
+    -  just metrics = single row, all metrics values returned in one row
 
     """
 
@@ -53,8 +53,8 @@ class ExecutionTable:
         return self._exec_def.attributes
 
     @property
-    def measures(self):
-        return self._exec_def.measures
+    def metrics(self):
+        return self._exec_def.metrics
 
     @property
     def column_ids(self) -> list[str]:
@@ -64,21 +64,21 @@ class ExecutionTable:
         :return:
         """
         return [a.local_id for a in self.attributes] + [
-            m.local_id for m in self.measures
+            m.local_id for m in self.metrics
         ]
 
     @property
     def column_metadata(self):
         """
         Returns mapping of column identifier to definition of either attribute whose elements will be in that column
-        or measure whose value will be calculated in that column.
+        or metric whose value will be calculated in that column.
         :return:
         """
-        return dict(zip(self.column_ids, self.attributes + self.measures))
+        return dict(zip(self.column_ids, self.attributes + self.metrics))
 
     def _read_next_page(self) -> bool:
         if not self._exec_def.has_attributes():
-            # result without attributes has just one row with all the measures, there is no next page to load
+            # result without attributes has just one row with all the metrics, there is no next page to load
             return False
 
         last_loaded = self._pages[-1]
@@ -100,7 +100,7 @@ class ExecutionTable:
 
         return True
 
-    def _read_all_measures_in_one_row(self):
+    def _read_all_metrics_in_one_row(self):
         data = self._first_page.data
         cols = self.column_ids
 
@@ -123,11 +123,9 @@ class ExecutionTable:
                     header["headers"][page_row_idx]["attributeHeader"]["labelValue"]
                     for header in attribute_headers["headerGroups"]
                 ]
-                measure_data = (
-                    data[page_row_idx] if self._exec_def.has_measures() else []
-                )
+                metric_data = data[page_row_idx] if self._exec_def.has_metrics() else []
 
-                yield dict(zip(cols, headers + measure_data))
+                yield dict(zip(cols, headers + metric_data))
                 page_row_idx += 1
 
             # try to read next page of data. False means the end was reached so just bail out
@@ -145,7 +143,7 @@ class ExecutionTable:
         :return: generator yielding dict() representing rows of the table
         """
         if not self._exec_def.has_attributes():
-            return self._read_all_measures_in_one_row()
+            return self._read_all_metrics_in_one_row()
 
         return self._read_all_paged()
 
@@ -156,7 +154,7 @@ class ExecutionTable:
             return self._first_page.paging_total[0]
         else:
             # if there are no attributes in the result, then the sheet contains at most one row with all
-            # measure values in it; now due such result being single dim, code looks at number of computed measure
+            # metric values in it; now due such result being single dim, code looks at number of computed metric
             # values in that single dim. if there are any, then there will be one row
             return 1 if self._first_page.paging_total[0] > 0 else 0
 
@@ -168,28 +166,28 @@ class ExecutionTable:
 
 
 def _prepare_tabular_definition(
-    attributes: list[Attribute], filters: list[Filter], measures: list[Measure]
+    attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]
 ):
     dims = [
         [a.local_id for a in attributes] if len(attributes) else None,
-        ["measureGroup"] if len(measures) else None,
+        ["measureGroup"] if len(metrics) else None,
     ]
 
     return ExecutionDefinition(
-        attributes=attributes, measures=measures, filters=filters, dimensions=dims
+        attributes=attributes, metrics=metrics, filters=filters, dimensions=dims
     )
 
 
 def _as_table(response: ExecutionResponse) -> ExecutionTable:
     first_page_offset = [0, 0]
-    first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_MEASURES]
+    first_page_limit = [_TABLE_ROW_BATCH_SIZE, _MAX_METRICS]
 
     if not response.exec_def.has_attributes():
-        # there are no attributes, there shall be at most one row with the measures, so get that as first page
+        # there are no attributes, there shall be at most one row with the metrics, so get that as first page
         first_page_limit = [first_page_limit[1]]
         first_page_offset = [0]
-    elif not response.exec_def.has_measures():
-        # there are no measures; there may be many attribute headers
+    elif not response.exec_def.has_metrics():
+        # there are no metrics; there may be many attribute headers
         first_page_limit = [first_page_limit[0]]
         first_page_offset = [0]
 
@@ -214,7 +212,7 @@ class TableService:
     def for_insight(self, workspace_id, insight: Insight) -> ExecutionTable:
         exec_def = _prepare_tabular_definition(
             attributes=[a.as_computable() for a in insight.attributes],
-            measures=[m.as_computable() for m in insight.measures],
+            metrics=[m.as_computable() for m in insight.metrics],
             filters=[
                 f for f in [f.as_computable for f in insight.filters] if not f.is_noop()
             ],
@@ -227,26 +225,26 @@ class TableService:
         return _as_table(response)
 
     def for_items(
-        self, workspace_id, items: list[Union[Attribute, Measure]], filters=None
+        self, workspace_id, items: list[Union[Attribute, Metric]], filters=None
     ) -> ExecutionTable:
         if filters is None:
             filters = []
 
         attributes: list[Attribute] = []
-        measures: list[Measure] = []
+        metrics: list[Metric] = []
 
         for item in items:
             if isinstance(item, Attribute):
                 attributes.append(item)
-            elif isinstance(item, Measure):
-                measures.append(item)
+            elif isinstance(item, Metric):
+                metrics.append(item)
             else:
                 raise ValueError(
-                    f"Invalid input item: {item}. Expecting instance of Attribute or Measure"
+                    f"Invalid input item: {item}. Expecting instance of Attribute or Metric"
                 )
 
         exec_def = _prepare_tabular_definition(
-            attributes=attributes, measures=measures, filters=filters
+            attributes=attributes, metrics=metrics, filters=filters
         )
         response = self._compute.for_exec_def(
             workspace_id=workspace_id, exec_def=exec_def

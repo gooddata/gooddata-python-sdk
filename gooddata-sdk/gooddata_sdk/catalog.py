@@ -7,13 +7,13 @@ import gooddata_afm_client.models as afm_models
 from gooddata_sdk.utils import Sideloads, id_obj_to_key, load_all_entities
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute import ExecutionDefinition
-from gooddata_sdk.exec_model import (
+from gooddata_sdk.compute_model import (
     Attribute,
-    SimpleMeasure,
+    SimpleMetric,
     ObjId,
-    Measure,
+    Metric,
     Filter,
-    exec_model_to_api_model,
+    compute_model_to_api_model,
 )
 
 ValidObjects = dict[str, set]
@@ -175,8 +175,8 @@ class CatalogFact(CatalogEntry):
     def description(self) -> str:
         return self._f["description"]
 
-    def as_computable(self) -> Measure:
-        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, "fact"))
+    def as_computable(self) -> Metric:
+        return SimpleMetric(local_id=self.id, item=ObjId(self.id, "fact"))
 
     def __str__(self):
         return self.__repr__()
@@ -213,8 +213,8 @@ class CatalogMetric(CatalogEntry):
     def description(self) -> str:
         return self._m["description"]
 
-    def as_computable(self) -> Measure:
-        return SimpleMeasure(local_id=self.id, item=ObjId(self.id, "metric"))
+    def as_computable(self) -> Metric:
+        return SimpleMetric(local_id=self.id, item=ObjId(self.id, "metric"))
 
     def __str__(self):
         return self.__repr__()
@@ -292,7 +292,7 @@ class CatalogDataset(CatalogEntry):
 
 
 ValidObjectTypes = Union[
-    Attribute, Measure, Filter, CatalogLabel, CatalogFact, CatalogMetric
+    Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric
 ]
 ValidObjectsInputType = Union[
     ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition
@@ -413,23 +413,23 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
 
 def _prepare_afm_for_availability(items: list[ValidObjectTypes]):
     attributes = []
-    measures = []
+    metrics = []
     filters = []
 
     for item in items:
         if isinstance(item, Attribute):
             attributes.append(item)
-        elif isinstance(item, Measure):
-            measures.append(item)
+        elif isinstance(item, Metric):
+            metrics.append(item)
         elif isinstance(item, Filter):
             filters.append(item)
         elif isinstance(item, CatalogLabel):
             attributes.append(item.as_computable())
         elif isinstance(item, (CatalogFact, CatalogMetric)):
-            measures.append(item.as_computable())
+            metrics.append(item.as_computable())
 
-    return exec_model_to_api_model(
-        attributes=attributes, measures=measures, filters=filters
+    return compute_model_to_api_model(
+        attributes=attributes, metrics=metrics, filters=filters
     )
 
 
@@ -484,7 +484,7 @@ class CatalogService:
         self, workspace_id: str, ctx: ValidObjectsInputType
     ) -> ValidObjects:
         """
-        Returns attributes, facts, and measures which are valid to add to a context that already
+        Returns attributes, facts, and metrics which are valid to add to a context that already
         contains some entities from the semantic model. The entities are typically used to compute analytics and
         come from the execution definition. You may, however, specify the entities through different layers of
         convenience.
@@ -498,8 +498,8 @@ class CatalogService:
         id's of available items
         """
         if isinstance(ctx, ExecutionDefinition):
-            afm = exec_model_to_api_model(
-                attributes=ctx.attributes, measures=ctx.measures, filters=ctx.filters
+            afm = compute_model_to_api_model(
+                attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters
             )
         else:
             _ctx = ctx if isinstance(ctx, list) else [ctx]

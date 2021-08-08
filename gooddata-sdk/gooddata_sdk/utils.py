@@ -2,7 +2,7 @@
 from collections import namedtuple
 
 from gooddata_metadata_client import ApiAttributeError
-from gooddata_sdk.exec_model import ObjId
+from gooddata_sdk.compute_model import ObjId
 
 
 def id_obj_to_key(id_obj):

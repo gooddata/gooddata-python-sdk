@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import SimpleMeasure, ObjId, PositiveAttributeFilter
+from gooddata_sdk import SimpleMetric, ObjId, PositiveAttributeFilter
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -15,11 +15,11 @@ def _scenario_to_snapshot_name(scenario: str):
 test_simple_metrics = [
     [
         "simple metric using MAQL metric",
-        SimpleMeasure(local_id="test", item=ObjId(type="metric", id="metric_id")),
+        SimpleMetric(local_id="test", item=ObjId(type="metric", id="metric_id")),
     ],
     [
         "simple metric using MAQL metric and compute ratio",
-        SimpleMeasure(
+        SimpleMetric(
             local_id="test",
             item=ObjId(type="metric", id="metric_id"),
             compute_ratio=True,
@@ -27,23 +27,23 @@ test_simple_metrics = [
     ],
     [
         "simple metric using fact and default agg",
-        SimpleMeasure(local_id="test", item=ObjId(type="fact", id="fact_id")),
+        SimpleMetric(local_id="test", item=ObjId(type="fact", id="fact_id")),
     ],
     [
         "simple metric using fact and custom agg",
-        SimpleMeasure(
+        SimpleMetric(
             local_id="test", item=ObjId(type="fact", id="fact_id"), aggregation="AVG"
         ),
     ],
     [
         "simple metric using fact compute ratio",
-        SimpleMeasure(
+        SimpleMetric(
             local_id="test", item=ObjId(type="fact", id="fact_id"), compute_ratio=True
         ),
     ],
     [
         "simple metric with filters",
-        SimpleMeasure(
+        SimpleMetric(
             local_id="test",
             item=ObjId(type="fact", id="fact_id"),
             filters=[
@@ -57,7 +57,7 @@ test_simple_metrics = [
 
 
 @pytest.mark.parametrize("scenario,metric", test_simple_metrics)
-def test_simple_metric_to_api_model(scenario, metric: SimpleMeasure, snapshot):
+def test_simple_metric_to_api_model(scenario, metric: SimpleMetric, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "simple_metric")

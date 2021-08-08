@@ -189,8 +189,8 @@ class DataFrameFactory:
                 for a in insight.attributes
             ]
             + [
-                (naming.col_name_for_measure(m), m.as_computable())
-                for m in insight.measures
+                (naming.col_name_for_metric(m), m.as_computable())
+                for m in insight.metrics
             ]
         )
 

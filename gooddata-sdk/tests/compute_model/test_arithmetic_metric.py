@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import ArithmeticMeasure, ObjId, SimpleMeasure
+from gooddata_sdk import ArithmeticMetric, ObjId, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,10 +12,10 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_metric1 = SimpleMeasure(
+_simple_metric1 = SimpleMetric(
     local_id="local_id1", item=ObjId(type="metric", id="metric1.id")
 )
-_simple_metric2 = SimpleMeasure(
+_simple_metric2 = SimpleMetric(
     local_id="local_id2", item=ObjId(type="metric", id="metric2.id")
 )
 
@@ -23,7 +23,7 @@ _simple_metric2 = SimpleMeasure(
 test_arithmetic_metric = [
     [
         "with operands using local id",
-        ArithmeticMeasure(
+        ArithmeticMetric(
             local_id="arithmetic_local_id",
             operator="SUM",
             operands=["local_id1", "local_id2"],
@@ -31,7 +31,7 @@ test_arithmetic_metric = [
     ],
     [
         "with operands using metrics by value",
-        ArithmeticMeasure(
+        ArithmeticMetric(
             local_id="arithmetic_local_id",
             operator="SUM",
             operands=[_simple_metric1, _simple_metric2],

@@ -3,10 +3,10 @@ import os
 
 import pytest
 
-from gooddata_sdk import PopDateMeasure, PopDate, ObjId, SimpleMeasure, Attribute
+from gooddata_sdk import PopDateMetric, PopDate, ObjId, SimpleMetric, Attribute
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
-_simple_metric = SimpleMeasure(
+_simple_metric = SimpleMetric(
     local_id="master_metric_id", item=ObjId(type="metric", id="metric_id")
 )
 _attribute = Attribute(local_id="local_id4", label="label2.id")
@@ -19,9 +19,9 @@ def _scenario_to_snapshot_name(scenario: str):
 test_pop_date_metrics = [
     [
         "with master metric by local id",
-        PopDateMeasure(
+        PopDateMetric(
             local_id="local_id1",
-            measure="master_metric_id",
+            metric="master_metric_id",
             date_attributes=[
                 PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
             ],
@@ -29,9 +29,9 @@ test_pop_date_metrics = [
     ],
     [
         "with master metric passed by value",
-        PopDateMeasure(
+        PopDateMetric(
             local_id="local_id1",
-            measure=_simple_metric,
+            metric=_simple_metric,
             date_attributes=[
                 PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
             ],
@@ -39,17 +39,17 @@ test_pop_date_metrics = [
     ],
     [
         "with date attribute passed by value",
-        PopDateMeasure(
+        PopDateMetric(
             local_id="local_id1",
-            measure=_simple_metric,
+            metric=_simple_metric,
             date_attributes=[PopDate(attribute=_attribute, periods_ago=1)],
         ),
     ],
     [
         "with multiple pop date attributes",
-        PopDateMeasure(
+        PopDateMetric(
             local_id="local_id1",
-            measure=_simple_metric,
+            metric=_simple_metric,
             date_attributes=[
                 PopDate(attribute=ObjId(type="label", id="label1.id"), periods_ago=1),
                 PopDate(attribute=_attribute, periods_ago=2),
@@ -60,7 +60,7 @@ test_pop_date_metrics = [
 
 
 @pytest.mark.parametrize("scenario,metric", test_pop_date_metrics)
-def test_simple_metric_to_api_model(scenario, metric: PopDateMeasure, snapshot):
+def test_simple_metric_to_api_model(scenario, metric: PopDateMetric, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "pop_date_metric")

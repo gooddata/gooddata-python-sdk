@@ -3,16 +3,16 @@ import os
 
 import pytest
 
-from gooddata_sdk.exec_model import (
-    exec_model_to_api_model,
-    PopDatesetMeasure,
+from gooddata_sdk.compute_model import (
+    compute_model_to_api_model,
+    PopDatesetMetric,
     PositiveAttributeFilter,
     PopDateDataset,
     ObjId,
     AbsoluteDateFilter,
-    PopDateMeasure,
+    PopDateMetric,
     PopDate,
-    SimpleMeasure,
+    SimpleMetric,
     Attribute,
 )
 
@@ -23,22 +23,22 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_metric = SimpleMeasure(
+_simple_metric = SimpleMetric(
     local_id="simple_metric_local_id", item=ObjId(type="metric", id="metric_id")
 )
 _attribute = Attribute(local_id="attribute_local_id", label="label.id")
 
-_pop_dataset_metric = PopDatesetMeasure(
+_pop_dataset_metric = PopDatesetMetric(
     local_id="local_id1",
-    measure=_simple_metric,
+    metric=_simple_metric,
     date_datasets=[
         PopDateDataset(dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1)
     ],
 )
 
-_pop_date_metric = PopDateMeasure(
+_pop_date_metric = PopDateMetric(
     local_id="local_id1",
-    measure=_simple_metric,
+    metric=_simple_metric,
     date_attributes=[
         PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
     ],
@@ -80,7 +80,7 @@ def test_attribute_filters_to_api_model(
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "afm")
 
-    afm = exec_model_to_api_model(attributes, metrics, filters)
+    afm = compute_model_to_api_model(attributes, metrics, filters)
 
     snapshot.assert_match(
         json.dumps(afm.to_dict(), indent=4, sort_keys=True),

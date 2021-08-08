@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import MeasureValueFilter, ObjId, SimpleMeasure, Attribute
+from gooddata_sdk import MetricValueFilter, ObjId, SimpleMetric, Attribute
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,7 +12,7 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_measure = SimpleMeasure(
+_simple_measure = SimpleMetric(
     local_id="local_id2", item=ObjId(type="metric", id="metric_id")
 )
 _attribute = Attribute(local_id="local_id4", label="label.id")
@@ -20,34 +20,34 @@ _attribute = Attribute(local_id="local_id4", label="label.id")
 test_metric_value_filter = [
     [
         "comparison filter using local id",
-        MeasureValueFilter(
-            measure="local_id1",
+        MetricValueFilter(
+            metric="local_id1",
             operator="EQUAL_TO",
             values=10,
         ),
     ],
     [
         "comparison filter using object id",
-        MeasureValueFilter(
-            measure=ObjId(type="metric", id="metric.id"),
+        MetricValueFilter(
+            metric=ObjId(type="metric", id="metric.id"),
             operator="EQUAL_TO",
             values=10,
         ),
     ],
     [
         "comparison filter with treat nulls as",
-        MeasureValueFilter(
-            measure="local_id1", operator="EQUAL_TO", values=10, treat_nulls_as=1
+        MetricValueFilter(
+            metric="local_id1", operator="EQUAL_TO", values=10, treat_nulls_as=1
         ),
     ],
     [
         "range filter",
-        MeasureValueFilter(measure="local_id1", operator="BETWEEN", values=(2, 3)),
+        MetricValueFilter(metric="local_id1", operator="BETWEEN", values=(2, 3)),
     ],
     [
         "range filter with treat nulls as",
-        MeasureValueFilter(
-            measure="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1
+        MetricValueFilter(
+            metric="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1
         ),
     ],
 ]

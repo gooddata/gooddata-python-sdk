@@ -107,7 +107,7 @@ class InsightColumnNamingStrategy:
     def col_name_for_attribute(self, attr: sdk.InsightAttribute) -> str:
         raise NotImplementedError()
 
-    def col_name_for_measure(self, attr: sdk.InsightAttribute) -> str:
+    def col_name_for_metric(self, attr: sdk.InsightAttribute) -> str:
         raise NotImplementedError()
 
 
@@ -121,15 +121,13 @@ class DefaultInsightColumnNaming(InsightColumnNamingStrategy):
 
         return new_name
 
-    def col_name_for_measure(self, measure: sdk.InsightMeasure) -> str:
+    def col_name_for_metric(self, metric: sdk.InsightMetric) -> str:
         # if simple measure, use the item identifier (nice, readable)
         # otherwise try alias
         # otherwise try title
         # otherwise use local_id (arbitrary, AD created local_ids are messy)
         # TODO: improve this heuristic to get better names for derived measures
-        id_to_use = (
-            measure.item_id or measure.alias or measure.title or measure.local_id
-        )
+        id_to_use = metric.item_id or metric.alias or metric.title or metric.local_id
         new_name = _sanitize_str_for_postgres(id_to_use, self._uniques)
         self._uniques[new_name] = True
 
@@ -204,7 +202,7 @@ def _col_as_computable(col: ColumnDefinition):
     else:
         aggregation = col.options["agg"] if "agg" in col.options else None
 
-        return sdk.SimpleMeasure(
+        return sdk.SimpleMetric(
             local_id=col.column_name,
             item=sdk.ObjId(item_id, item_type),
             aggregation=aggregation,
@@ -435,14 +433,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 )
                 columns.append(col)
 
-            for measure in insight.measures:
-                column_name = column_naming.col_name_for_measure(measure)
-                _log_debug(f"creating col def {column_name} for measure {measure}")
+            for metric in insight.metrics:
+                column_name = column_naming.col_name_for_metric(metric)
+                _log_debug(f"creating col def {column_name} for metric {metric}")
 
                 col = ColumnDefinition(
                     column_name=column_name,
                     type_name="DECIMAL(15,5)",
-                    options=dict(local_id=measure.local_id),
+                    options=dict(local_id=metric.local_id),
                 )
                 columns.append(col)
 

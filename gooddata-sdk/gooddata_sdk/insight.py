@@ -3,15 +3,15 @@ import functools
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.exec_model import (
+from gooddata_sdk.compute_model import (
     ObjId,
-    SimpleMeasure,
-    PopDateMeasure,
-    PopDatesetMeasure,
-    ArithmeticMeasure,
+    SimpleMetric,
+    PopDateMetric,
+    PopDatesetMetric,
+    ArithmeticMetric,
     PositiveAttributeFilter,
     NegativeAttributeFilter,
-    MeasureValueFilter,
+    MetricValueFilter,
     RankingFilter,
     AbsoluteDateFilter,
     RelativeDateFilter,
@@ -125,8 +125,8 @@ def _convert_filter_to_computable(filter_obj):
                 c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
             )
 
-            return MeasureValueFilter(
-                measure=_ref_extract(f["measure"]),
+            return MetricValueFilter(
+                metric=_ref_extract(f["measure"]),
                 operator=c["operator"],
                 values=c["value"],
                 treat_nulls_as=treat_values_as_null,
@@ -136,8 +136,8 @@ def _convert_filter_to_computable(filter_obj):
             treat_values_as_null = (
                 c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
             )
-            return MeasureValueFilter(
-                measure=_ref_extract(f["measure"]),
+            return MetricValueFilter(
+                metric=_ref_extract(f["measure"]),
                 operator=c["operator"],
                 values=(c["from"], c["to"]),
                 treat_nulls_as=treat_values_as_null,
@@ -149,7 +149,7 @@ def _convert_filter_to_computable(filter_obj):
         )
 
         return RankingFilter(
-            measures=[_ref_extract(f["measure"])],
+            metrics=[_ref_extract(f["measure"])],
             dimensionality=dimensionality,
             operator=f["operator"],
             value=f["value"],
@@ -158,8 +158,8 @@ def _convert_filter_to_computable(filter_obj):
     raise ValueError(f"Unable to convert filter {filter_obj}")
 
 
-def _convert_measure_to_computable(measure):
-    m = measure["measure"]
+def _convert_metric_to_computable(metric):
+    m = metric["measure"]
     local_id = m["localIdentifier"]
     measure_def = m["definition"]
 
@@ -175,7 +175,7 @@ def _convert_measure_to_computable(measure):
             else None
         )
 
-        return SimpleMeasure(
+        return SimpleMetric(
             local_id=local_id,
             item=_ref_extract(d["item"]),
             aggregation=aggregation,
@@ -189,9 +189,9 @@ def _convert_measure_to_computable(measure):
             PopDate(attribute=_ref_extract(d["popAttribute"]), periods_ago=1)
         ]
 
-        return PopDateMeasure(
+        return PopDateMetric(
             local_id=local_id,
-            measure=d["measureIdentifier"],
+            metric=d["measureIdentifier"],
             date_attributes=date_attributes,
         )
 
@@ -203,16 +203,16 @@ def _convert_measure_to_computable(measure):
             for dd in d["dateDataSets"]
         ]
 
-        return PopDatesetMeasure(
+        return PopDatesetMetric(
             local_id=local_id,
-            measure=d["measureIdentifier"],
+            metric=d["measureIdentifier"],
             date_datasets=date_datasets,
         )
 
     elif "arithmeticMeasure" in measure_def:
         d = measure_def["arithmeticMeasure"]
 
-        return ArithmeticMeasure(
+        return ArithmeticMetric(
             local_id=local_id,
             operator=_ARITHMETIC_CONVERSION[d["operator"]],
             operands=d["measureIdentifiers"],
@@ -226,16 +226,16 @@ def _convert_measure_to_computable(measure):
 #
 
 
-class InsightMeasure:
+class InsightMetric:
     """
-    Represents measure placed on an insight.
+    Represents metric placed on an insight.
 
     Note: this has different shape than object passed to execution.
     """
 
-    def __init__(self, measure=None):
-        self._measure = measure
-        self._m = measure["measure"]
+    def __init__(self, metric=None):
+        self._metric = metric
+        self._m = metric["measure"]
         self._d = self._m["definition"]
 
     @property
@@ -270,9 +270,9 @@ class InsightMeasure:
     @property
     def time_comparison_master(self):
         """
-        If this is a time comparison measure, return local_id of the master measure from which it is
+        If this is a time comparison metric, return local_id of the master metric from which it is
         derived.
-        :return: local_id of master measure, None if not a time comparison measure
+        :return: local_id of master metric, None if not a time comparison metric
         """
         if "popMeasureDefinition" in self._d:
             return self._d["popMeasureDefinition"]["measureIdentifier"]
@@ -282,13 +282,13 @@ class InsightMeasure:
         return None
 
     def as_computable(self):
-        return _convert_measure_to_computable(self._measure)
+        return _convert_metric_to_computable(self._metric)
 
     def __str__(self):
         return self.__repr__()
 
     def __repr__(self):
-        return f"measure(local_id={self.local_id})"
+        return f"metric(local_id={self.local_id})"
 
 
 class InsightAttribute:
@@ -339,7 +339,7 @@ class InsightFilter:
 class InsightBucket:
     def __init__(self, bucket=None):
         self._b = bucket
-        self._measures = None
+        self._metrics = None
         self._attributes = None
 
     @property
@@ -351,13 +351,13 @@ class InsightBucket:
         return self._b["items"]
 
     @property
-    def measures(self) -> list[InsightMeasure]:
-        if self._measures is None:
-            self._measures = [
-                InsightMeasure(item) for item in self.items if "measure" in item
+    def metrics(self) -> list[InsightMetric]:
+        if self._metrics is None:
+            self._metrics = [
+                InsightMetric(item) for item in self.items if "measure" in item
             ]
 
-        return self._measures
+        return self._metrics
 
     @property
     def attributes(self) -> list[InsightAttribute]:
@@ -416,8 +416,8 @@ class Insight:
         return self._vo["attributes"]["content"]["visualizationUrl"]
 
     @property
-    def measures(self):
-        return [m for b in self.buckets for m in b.measures]
+    def metrics(self):
+        return [m for b in self.buckets for m in b.metrics]
 
     @property
     def attributes(self):

@@ -4,19 +4,24 @@ from typing import Union
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.exec_model import Attribute, Measure, Filter, exec_model_to_api_model
+from gooddata_sdk.compute_model import (
+    Attribute,
+    Metric,
+    Filter,
+    compute_model_to_api_model,
+)
 
 
 class ExecutionDefinition:
     def __init__(
         self,
         attributes: list[Attribute],
-        measures: list[Measure],
+        metrics: list[Metric],
         filters: list[Filter],
         dimensions,
     ):
         self._attributes = attributes or []
-        self._measures = measures or []
+        self._metrics = metrics or []
         self._filters = filters or []
         self._dimensions = [dim for dim in dimensions if dim is not None]
 
@@ -28,11 +33,11 @@ class ExecutionDefinition:
         return self.attributes is not None and len(self.attributes) > 0
 
     @property
-    def measures(self):
-        return self._measures
+    def metrics(self):
+        return self._metrics
 
-    def has_measures(self):
-        return self.measures is not None and len(self.measures) > 0
+    def has_metrics(self):
+        return self.metrics is not None and len(self.metrics) > 0
 
     @property
     def filters(self):
@@ -59,8 +64,8 @@ class ExecutionDefinition:
                 models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim)
             )
 
-        execution = exec_model_to_api_model(
-            attributes=self.attributes, measures=self.measures, filters=self.filters
+        execution = compute_model_to_api_model(
+            attributes=self.attributes, metrics=self.metrics, filters=self.filters
         )
 
         result_spec = models.ResultSpec(dimensions=dimensions)
@@ -196,7 +201,7 @@ class ExecutionResponse:
 class ComputeService:
     """
     Compute service drives computation of analytics for a GoodData.CN workspaces. The prescription of what to compute
-    is encapsulated by the ExecutionDefinition which consists of attributes, measures, filters and definition of
+    is encapsulated by the ExecutionDefinition which consists of attributes, metrics, filters and definition of
     dimensions that influence how to organize the data in the result.
     """
 
@@ -211,7 +216,8 @@ class ComputeService:
         Starts computation in GoodData.CN workspace, using the provided execution definition.
 
         :param workspace_id: workspace identifier
-        :param exec_def: execution definition - this prescribes what to calculate, how to place labels and measure values into dimensions
+        :param exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
+        into dimensions
         :return:
         """
         response = self._exec_api.compute_report(
