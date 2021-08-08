@@ -6,9 +6,11 @@
                 "type": "label"
             }
         },
-        "not_in": [
-            "val1",
-            "val2"
-        ]
+        "not_in": {
+            "values": [
+                "val1",
+                "val2"
+            ]
+        }
     }
 }

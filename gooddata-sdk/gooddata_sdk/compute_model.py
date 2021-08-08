@@ -406,8 +406,9 @@ class PositiveAttributeFilter(Filter):
 
     def as_api_model(self):
         label_id = _to_identifier(self._label)
+        elements = afm_models.AttributeFilterElements(values=self.in_values)
         body = afm_models.PositiveAttributeFilterBody(
-            label=label_id, _in=self.in_values, _check_type=False
+            label=label_id, _in=elements, _check_type=False
         )
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
@@ -432,8 +433,9 @@ class NegativeAttributeFilter(Filter):
 
     def as_api_model(self):
         label_id = _to_identifier(self._label)
+        elements = afm_models.AttributeFilterElements(values=self.not_in_values)
         body = afm_models.NegativeAttributeFilterBody(
-            label=label_id, not_in=self.not_in_values, _check_type=False
+            label=label_id, not_in=elements, _check_type=False
         )
         return afm_models.NegativeAttributeFilter(body)
 

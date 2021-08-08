@@ -3,6 +3,8 @@
         "label": {
             "local_identifier": "local_id"
         },
-        "not_in": []
+        "not_in": {
+            "values": []
+        }
     }
 }
