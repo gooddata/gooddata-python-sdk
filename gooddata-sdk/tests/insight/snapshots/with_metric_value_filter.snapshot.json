@@ -1,0 +1,42 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunity.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunity.id.name"
+        }
+    ],
+    "filters": [
+        {
+            "comparison_measure_value_filter": {
+                "measure": {
+                    "local_identifier": "m_aangOxLSeztu"
+                },
+                "operator": "GREATER_THAN",
+                "treat_null_values_as": null,
+                "value": 100000
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        }
+    ]
+}

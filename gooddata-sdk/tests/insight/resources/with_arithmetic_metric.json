@@ -1,0 +1,89 @@
+{
+  "buckets": [
+    {
+      "items": [
+        {
+          "measure": {
+            "definition": {
+              "measureDefinition": {
+                "item": {
+                  "identifier": {
+                    "id": "acugFHNJgsBy",
+                    "type": "metric"
+                  }
+                }
+              }
+            },
+            "localIdentifier": "m_acugFHNJgsBy"
+          }
+        }
+      ],
+      "localIdentifier": "measures"
+    },
+    {
+      "items": [
+        {
+          "measure": {
+            "definition": {
+              "measureDefinition": {
+                "item": {
+                  "identifier": {
+                    "id": "aangOxLSeztu",
+                    "type": "metric"
+                  }
+                }
+              }
+            },
+            "localIdentifier": "m_aangOxLSeztu"
+          }
+        }
+      ],
+      "localIdentifier": "secondary_measures"
+    },
+    {
+      "items": [
+        {
+          "measure": {
+            "alias": "Calculated 'Lost' measure",
+            "definition": {
+              "arithmeticMeasure": {
+                "measureIdentifiers": [
+                  "m_aangOxLSeztu",
+                  "m_acugFHNJgsBy"
+                ],
+                "operator": "difference"
+              }
+            },
+            "localIdentifier": "m_358184a8_f72796b0fbc7c0dc4d17a1e68c1a9933"
+          }
+        }
+      ],
+      "localIdentifier": "tertiary_measures"
+    },
+    {
+      "items": [
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.product.id.name",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.product.id.name"
+          }
+        }
+      ],
+      "localIdentifier": "view"
+    }
+  ],
+  "filters": [],
+  "identifier": "BulletChart.424a621eb766e36c22c7ac3483f52081",
+  "properties": {
+    "controls": {}
+  },
+  "sorts": [],
+  "title": "BulletChart - data labels - default",
+  "uri": "BulletChart.424a621eb766e36c22c7ac3483f52081",
+  "visualizationUrl": "local:bullet"
+}

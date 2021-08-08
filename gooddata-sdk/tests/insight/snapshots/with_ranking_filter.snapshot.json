@@ -1,0 +1,48 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunity.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunity.id.name"
+        }
+    ],
+    "filters": [
+        {
+            "ranking_filter": {
+                "dimensionality": [
+                    {
+                        "local_identifier": "a_label.opportunity.id.name"
+                    }
+                ],
+                "measures": [
+                    {
+                        "local_identifier": "aangOxLSeztu"
+                    }
+                ],
+                "operator": "TOP",
+                "value": 10
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        }
+    ]
+}

@@ -93,7 +93,7 @@ def _convert_filter_to_computable(filter_obj):
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         not_in_values = (
-            f["notIn"]["values"] if "values" in f["notIn"] else f["in"]["uris"]
+            f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
         )
 
         return NegativeAttributeFilter(
@@ -199,7 +199,7 @@ def _convert_metric_to_computable(metric):
         d = measure_def["previousPeriodMeasure"]
 
         date_datasets = [
-            PopDateDataset(_ref_extract(d["dataSet"]), dd["periodsAgo"])
+            PopDateDataset(_ref_extract(dd["dataSet"]), dd["periodsAgo"])
             for dd in d["dateDataSets"]
         ]
 

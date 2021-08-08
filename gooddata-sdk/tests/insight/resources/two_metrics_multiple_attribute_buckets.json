@@ -1,0 +1,111 @@
+{
+  "buckets": [
+    {
+      "items": [
+        {
+          "measure": {
+            "definition": {
+              "measureDefinition": {
+                "item": {
+                  "identifier": {
+                    "id": "aangOxLSeztu",
+                    "type": "metric"
+                  }
+                }
+              }
+            },
+            "localIdentifier": "m_aangOxLSeztu"
+          }
+        },
+        {
+          "measure": {
+            "definition": {
+              "measureDefinition": {
+                "item": {
+                  "identifier": {
+                    "id": "acugFHNJgsBy",
+                    "type": "metric"
+                  }
+                }
+              }
+            },
+            "localIdentifier": "m_acugFHNJgsBy"
+          }
+        }
+      ],
+      "localIdentifier": "measures"
+    },
+    {
+      "items": [
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.product.id.name",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.product.id.name"
+          }
+        },
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.owner.department",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.owner.department"
+          }
+        },
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.owner.id.name",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.owner.id.name"
+          }
+        }
+      ],
+      "localIdentifier": "attribute"
+    },
+    {
+      "items": [
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.opportunitysnapshot.forecastcategory",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.opportunitysnapshot.forecastcategory"
+          }
+        },
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.owner.region",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.owner.region"
+          }
+        }
+      ],
+      "localIdentifier": "columns"
+    }
+  ],
+  "filters": [],
+  "identifier": "PivotTable.03d6b3d66f30e0595bc109a891877850",
+  "properties": {},
+  "sorts": [],
+  "title": "PivotTable - two measures with three rows and two column attributes",
+  "uri": "PivotTable.03d6b3d66f30e0595bc109a891877850",
+  "visualizationUrl": "local:table"
+}

@@ -1,0 +1,57 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunity.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunity.id.name"
+        }
+    ],
+    "filters": [
+        {
+            "relative_date_filter": {
+                "_from": -10,
+                "dataset": {
+                    "identifier": {
+                        "id": "closed.dt",
+                        "type": "dataset"
+                    }
+                },
+                "granularity": "DAY",
+                "to": -1
+            }
+        },
+        {
+            "absolute_date_filter": {
+                "_from": "2021/1/1",
+                "dataset": {
+                    "identifier": {
+                        "id": "closed.dt",
+                        "type": "dataset"
+                    }
+                },
+                "to": "2021/1/2"
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        }
+    ]
+}

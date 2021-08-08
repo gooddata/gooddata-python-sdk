@@ -1,0 +1,15 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.product.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.product.id.name"
+        }
+    ],
+    "filters": [],
+    "measures": []
+}
