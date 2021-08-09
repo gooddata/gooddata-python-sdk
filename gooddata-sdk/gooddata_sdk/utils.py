@@ -1,4 +1,5 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 from collections import namedtuple
 
 from gooddata_metadata_client import ApiAttributeError

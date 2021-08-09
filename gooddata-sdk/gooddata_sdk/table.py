@@ -1,4 +1,5 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 from typing import Union
 
 from gooddata_sdk.client import GoodDataApiClient

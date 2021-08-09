@@ -1,4 +1,5 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 import gooddata_metadata_client as metadata_client
 import gooddata_afm_client as afm_client
 

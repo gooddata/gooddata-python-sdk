@@ -1,5 +1,6 @@
 # (C) 2021 GoodData Corporation
-from typing import Union
+from __future__ import annotations
+from typing import Union, Dict, Set, List
 import functools
 import gooddata_metadata_client.apis as metadata_apis
 import gooddata_afm_client.apis as afm_apis
@@ -16,7 +17,8 @@ from gooddata_sdk.compute_model import (
     compute_model_to_api_model,
 )
 
-ValidObjects = dict[str, set]
+# need to use types from typings here for Python <3.9
+ValidObjects = Dict[str, Set[str]]
 
 
 class CatalogEntry:
@@ -294,8 +296,10 @@ class CatalogDataset(CatalogEntry):
 ValidObjectTypes = Union[
     Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric
 ]
+
+# need to use types from typings here for Python <3.9
 ValidObjectsInputType = Union[
-    ValidObjectTypes, list[ValidObjectTypes], ExecutionDefinition
+    ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition
 ]
 
 
