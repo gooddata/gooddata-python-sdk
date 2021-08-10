@@ -1,8 +1,6 @@
 # GoodData.CN Python Foundations
 
-This repository contains Python packages useful for integration with GoodData Cloud Native.
-
-Code is compatible with Python 3.9 or newer.
+This repository contains Python packages useful for integration with [GoodData Cloud Native](https://www.gooddata.com/developers/cloud-native/).
 
 ## Available packages
 
@@ -17,29 +15,35 @@ Python SDK is a layer of convenience and use-case oriented APIs that allows simp
 
 Check out the [gooddata-sdk](./gooddata-sdk) documentation to learn more.
 
-## GoodData.CN Foreign Data Wrapper for PostgreSQL
+### GoodData.CN Foreign Data Wrapper for PostgreSQL
 
 Foreign Data Wrapper (FDW) presents a way to map GoodData.CN semantic layer and/or insights stored in your GoodData.CN
 into PostgreSQL as foreign tables that you can then query using SQL.
 
 Check out the [gooddata-fdw package](./gooddata-fdw) documentation to learn more and get started.
 
-## GoodData to pandas adapters
+### GoodData to pandas adapters
 
 The [gooddata-pandas](./gooddata-pandas) is a thin layer that utilizes Python SDK and allows you to conveniently
 create pandas series and data frames.
+
+## Requirements
+
+-  [GoodData.CN](https://www.gooddata.com/developers/cloud-native/) installation; either running on your cloud
+   infrastructure or the free Community Edition running on your workstation
+
+-  Python 3.7 or newer
+
+-  The GoodData.CN Foreign Data Wrapper is tested with latest version of multicorn (1.4.0) and PostgreSQL 12
 
 ## Contributing
 
 ### Getting Started
 
-1.  Ensure you have Python 3.9, 3.8 and 3.7 installed
+1.  Ensure you have at minimum Python 3.9 installed; Python 3.8 and 3.7 are optional for multi-environment tests
 
-    This is necessary because the packages included in this repo are tested against all these three environments
-    using [tox](https://tox.readthedocs.io/en/latest/).
-
-    The development environment bootstrap will create virtual environment using Python 3.9 so you need at minimum
-    this Python installed if you do not plan to run tests :)
+    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
+    supported versions. You can run `tox -e py39` to limit tests to just one environment.
 
 2.  Clone and setup environment:
 
@@ -54,6 +58,9 @@ create pandas series and data frames.
 
     Additionally if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
     activation of the virtual environment that was previously created in `.venv`.
+
+    If `direnv` is not your cup of tea, you may want adopt the PYTHONPATH exports that are done as part of the
+    script so that you can run custom Python code using the packages container herein without installing them.
 
 ### Coding Conventions
 
