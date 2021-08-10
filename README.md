@@ -33,7 +33,13 @@ create pandas series and data frames.
 
 ### Getting Started
 
-1.  Ensure you have Python >3.7 installed: `python3 --version`
+1.  Ensure you have Python 3.9, 3.8 and 3.7 installed
+
+    This is necessary because the packages included in this repo are tested against all these three environments
+    using [tox](https://tox.readthedocs.io/en/latest/).
+
+    The development environment bootstrap will create virtual environment using Python 3.9 so you need at minimum
+    this Python installed if you do not plan to run tests :)
 
 2.  Clone and setup environment:
 
@@ -43,7 +49,7 @@ create pandas series and data frames.
     make dev
     ```
 
-    The `make dev` command will create a new Python virtual environment in the `.venv` directory, install all
+    The `make dev` command will create a new Python 3.9 virtual environment in the `.venv` directory, install all
     third party dependencies into it and setup git hooks.
 
     Additionally if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
