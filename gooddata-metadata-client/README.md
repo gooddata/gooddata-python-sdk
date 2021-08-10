@@ -106,11 +106,13 @@ Class | Method | HTTP request | Description
 *DeclarativeLayoutControllerApi* | [**get_organization_layout**](docs/DeclarativeLayoutControllerApi.md#get_organization_layout) | **GET** /api/layout/organization | Get organization layout
 *DeclarativeLayoutControllerApi* | [**get_user_groups_layout**](docs/DeclarativeLayoutControllerApi.md#get_user_groups_layout) | **GET** /api/layout/userGroups | Get all users
 *DeclarativeLayoutControllerApi* | [**get_users_layout**](docs/DeclarativeLayoutControllerApi.md#get_users_layout) | **GET** /api/layout/users | Get all users
+*DeclarativeLayoutControllerApi* | [**get_users_user_groups_layout**](docs/DeclarativeLayoutControllerApi.md#get_users_user_groups_layout) | **GET** /api/layout/usersAndUserGroups | Get all users and user groups
 *DeclarativeLayoutControllerApi* | [**get_workspace_data_filters_layout**](docs/DeclarativeLayoutControllerApi.md#get_workspace_data_filters_layout) | **GET** /api/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 *DeclarativeLayoutControllerApi* | [**get_workspace_layout**](docs/DeclarativeLayoutControllerApi.md#get_workspace_layout) | **GET** /api/layout/workspaces/{workspaceId} | Get workspace layout
 *DeclarativeLayoutControllerApi* | [**get_workspaces_layout**](docs/DeclarativeLayoutControllerApi.md#get_workspaces_layout) | **GET** /api/layout/workspaces | Get all workspaces layout
-*DeclarativeLayoutControllerApi* | [**put_data_sources_layout**](docs/DeclarativeLayoutControllerApi.md#put_data_sources_layout) | **PUT** /api/layout/userGroups | Put all data sources
+*DeclarativeLayoutControllerApi* | [**put_data_sources_layout**](docs/DeclarativeLayoutControllerApi.md#put_data_sources_layout) | **PUT** /api/layout/usersAndUserGroups | Put all data sources
 *DeclarativeLayoutControllerApi* | [**put_data_sources_layout1**](docs/DeclarativeLayoutControllerApi.md#put_data_sources_layout1) | **PUT** /api/layout/dataSources | Put all data sources
+*DeclarativeLayoutControllerApi* | [**put_user_groups_layout**](docs/DeclarativeLayoutControllerApi.md#put_user_groups_layout) | **PUT** /api/layout/userGroups | Put all user groups
 *DeclarativeLayoutControllerApi* | [**put_users_layout**](docs/DeclarativeLayoutControllerApi.md#put_users_layout) | **PUT** /api/layout/users | Put all users
 *DeclarativeLayoutControllerApi* | [**put_workspace_layout**](docs/DeclarativeLayoutControllerApi.md#put_workspace_layout) | **PUT** /api/layout/workspaces/{workspaceId} | Set workspace layout
 *DeclarativeLayoutControllerApi* | [**set_analytics_model**](docs/DeclarativeLayoutControllerApi.md#set_analytics_model) | **PUT** /api/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
@@ -220,6 +222,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
  - [DeclarativeUsers](docs/DeclarativeUsers.md)
+ - [DeclarativeUsersUserGroups](docs/DeclarativeUsersUserGroups.md)
  - [DeclarativeVisualizationObject](docs/DeclarativeVisualizationObject.md)
  - [DeclarativeWorkspace](docs/DeclarativeWorkspace.md)
  - [DeclarativeWorkspaceDataFilter](docs/DeclarativeWorkspaceDataFilter.md)
@@ -235,6 +238,7 @@ Class | Method | HTTP request | Description
  - [JsonApiACLOut](docs/JsonApiACLOut.md)
  - [JsonApiACLOutAttributes](docs/JsonApiACLOutAttributes.md)
  - [JsonApiACLOutDocument](docs/JsonApiACLOutDocument.md)
+ - [JsonApiACLOutIncludes](docs/JsonApiACLOutIncludes.md)
  - [JsonApiACLOutList](docs/JsonApiACLOutList.md)
  - [JsonApiACLOutRelationships](docs/JsonApiACLOutRelationships.md)
  - [JsonApiACLOutRelationshipsObjects](docs/JsonApiACLOutRelationshipsObjects.md)
@@ -246,6 +250,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardOut](docs/JsonApiAnalyticalDashboardOut.md)
  - [JsonApiAnalyticalDashboardOutAttributes](docs/JsonApiAnalyticalDashboardOutAttributes.md)
  - [JsonApiAnalyticalDashboardOutDocument](docs/JsonApiAnalyticalDashboardOutDocument.md)
+ - [JsonApiAnalyticalDashboardOutIncludes](docs/JsonApiAnalyticalDashboardOutIncludes.md)
  - [JsonApiAnalyticalDashboardOutList](docs/JsonApiAnalyticalDashboardOutList.md)
  - [JsonApiAnalyticalDashboardOutRelationships](docs/JsonApiAnalyticalDashboardOutRelationships.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards](docs/JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md)
@@ -267,6 +272,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAttributeOut](docs/JsonApiAttributeOut.md)
  - [JsonApiAttributeOutAttributes](docs/JsonApiAttributeOutAttributes.md)
  - [JsonApiAttributeOutDocument](docs/JsonApiAttributeOutDocument.md)
+ - [JsonApiAttributeOutIncludes](docs/JsonApiAttributeOutIncludes.md)
  - [JsonApiAttributeOutList](docs/JsonApiAttributeOutList.md)
  - [JsonApiAttributeOutRelationships](docs/JsonApiAttributeOutRelationships.md)
  - [JsonApiAttributeOutRelationshipsDataset](docs/JsonApiAttributeOutRelationshipsDataset.md)
@@ -274,9 +280,9 @@ Class | Method | HTTP request | Description
  - [JsonApiAttributeToManyLinkage](docs/JsonApiAttributeToManyLinkage.md)
  - [JsonApiAttributeToOneLinkage](docs/JsonApiAttributeToOneLinkage.md)
  - [JsonApiCookieSecurityConfigurationIn](docs/JsonApiCookieSecurityConfigurationIn.md)
+ - [JsonApiCookieSecurityConfigurationInAttributes](docs/JsonApiCookieSecurityConfigurationInAttributes.md)
  - [JsonApiCookieSecurityConfigurationInDocument](docs/JsonApiCookieSecurityConfigurationInDocument.md)
  - [JsonApiCookieSecurityConfigurationOut](docs/JsonApiCookieSecurityConfigurationOut.md)
- - [JsonApiCookieSecurityConfigurationOutAttributes](docs/JsonApiCookieSecurityConfigurationOutAttributes.md)
  - [JsonApiCookieSecurityConfigurationOutDocument](docs/JsonApiCookieSecurityConfigurationOutDocument.md)
  - [JsonApiDataSourceIn](docs/JsonApiDataSourceIn.md)
  - [JsonApiDataSourceInAttributes](docs/JsonApiDataSourceInAttributes.md)
@@ -298,6 +304,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutAttributesGrain](docs/JsonApiDatasetOutAttributesGrain.md)
  - [JsonApiDatasetOutAttributesReferenceProperties](docs/JsonApiDatasetOutAttributesReferenceProperties.md)
  - [JsonApiDatasetOutDocument](docs/JsonApiDatasetOutDocument.md)
+ - [JsonApiDatasetOutIncludes](docs/JsonApiDatasetOutIncludes.md)
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)
  - [JsonApiDatasetOutRelationships](docs/JsonApiDatasetOutRelationships.md)
  - [JsonApiDatasetOutRelationshipsAttributes](docs/JsonApiDatasetOutRelationshipsAttributes.md)
@@ -318,6 +325,7 @@ Class | Method | HTTP request | Description
  - [JsonApiFilterContextLinkage](docs/JsonApiFilterContextLinkage.md)
  - [JsonApiFilterContextOut](docs/JsonApiFilterContextOut.md)
  - [JsonApiFilterContextOutDocument](docs/JsonApiFilterContextOutDocument.md)
+ - [JsonApiFilterContextOutIncludes](docs/JsonApiFilterContextOutIncludes.md)
  - [JsonApiFilterContextOutList](docs/JsonApiFilterContextOutList.md)
  - [JsonApiFilterContextOutRelationships](docs/JsonApiFilterContextOutRelationships.md)
  - [JsonApiFilterContextOutWithLinks](docs/JsonApiFilterContextOutWithLinks.md)
@@ -338,6 +346,7 @@ Class | Method | HTTP request | Description
  - [JsonApiMetricOutAttributes](docs/JsonApiMetricOutAttributes.md)
  - [JsonApiMetricOutAttributesContent](docs/JsonApiMetricOutAttributesContent.md)
  - [JsonApiMetricOutDocument](docs/JsonApiMetricOutDocument.md)
+ - [JsonApiMetricOutIncludes](docs/JsonApiMetricOutIncludes.md)
  - [JsonApiMetricOutList](docs/JsonApiMetricOutList.md)
  - [JsonApiMetricOutRelationships](docs/JsonApiMetricOutRelationships.md)
  - [JsonApiMetricOutWithLinks](docs/JsonApiMetricOutWithLinks.md)
@@ -377,6 +386,7 @@ Class | Method | HTTP request | Description
  - [JsonApiVisualizationObjectLinkage](docs/JsonApiVisualizationObjectLinkage.md)
  - [JsonApiVisualizationObjectOut](docs/JsonApiVisualizationObjectOut.md)
  - [JsonApiVisualizationObjectOutDocument](docs/JsonApiVisualizationObjectOutDocument.md)
+ - [JsonApiVisualizationObjectOutIncludes](docs/JsonApiVisualizationObjectOutIncludes.md)
  - [JsonApiVisualizationObjectOutList](docs/JsonApiVisualizationObjectOutList.md)
  - [JsonApiVisualizationObjectOutRelationships](docs/JsonApiVisualizationObjectOutRelationships.md)
  - [JsonApiVisualizationObjectOutWithLinks](docs/JsonApiVisualizationObjectOutWithLinks.md)

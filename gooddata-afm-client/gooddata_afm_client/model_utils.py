@@ -32,16 +32,16 @@ file_type = io.IOBase
 def convert_js_args_to_python_args(fn):
     from functools import wraps
     @wraps(fn)
-    def wrapped_init(_self_loathing__loathing__loathing_, *args, **kwargs):
+    def wrapped_init(_self_sanitized, *args, **kwargs):
         """
         An attribute named `self` received from the api will conflicts with the reserved `self`
         parameter of a class method. During generation, `self` attributes are mapped
-        to `_self_loathing__loathing__loathing_` in models. Here, we name `_self_loathing__loathing__loathing_` instead of `self` to avoid conflicts.
+        to `_self_sanitized` in models. Here, we name `_self_sanitized` instead of `self` to avoid conflicts.
         """
         spec_property_naming = kwargs.get('_spec_property_naming', False)
         if spec_property_naming:
-            kwargs = change_keys_js_to_python(kwargs, _self_loathing__loathing__loathing_ if isinstance(_self_loathing__loathing__loathing_, type) else _self_loathing__loathing__loathing_.__class__)
-        return fn(_self_loathing__loathing__loathing_, *args, **kwargs)
+            kwargs = change_keys_js_to_python(kwargs, _self_sanitized if isinstance(_self_sanitized, type) else _self_sanitized.__class__)
+        return fn(_self_sanitized, *args, **kwargs)
     return wrapped_init
 
 

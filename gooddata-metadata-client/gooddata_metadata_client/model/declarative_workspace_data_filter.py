@@ -92,7 +92,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
             'column_name': (str,),  # noqa: E501
-            'data_source_id': (str,),  # noqa: E501
             'workspace_data_filter_settings': ([DeclarativeWorkspaceDataFilterSetting],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'workspace': (WorkspaceIdentifier,),  # noqa: E501
@@ -107,7 +106,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
         'column_name': 'columnName',  # noqa: E501
-        'data_source_id': 'dataSourceId',  # noqa: E501
         'workspace_data_filter_settings': 'workspaceDataFilterSettings',  # noqa: E501
         'description': 'description',  # noqa: E501
         'workspace': 'workspace',  # noqa: E501
@@ -120,14 +118,13 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, title, column_name, data_source_id, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, title, column_name, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilter - a model defined in OpenAPI
 
         Args:
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters title.
             column_name (str): Workspace Data Filters column name. Data are filtered using this physical column.
-            data_source_id (str): Data source ID. Workspace Data Filters must always be connected to single data source.
             workspace_data_filter_settings ([DeclarativeWorkspaceDataFilterSetting]): Filter settings specifying values of filters valid for the workspace.
 
         Keyword Args:
@@ -193,7 +190,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         self.id = id
         self.title = title
         self.column_name = column_name
-        self.data_source_id = data_source_id
         self.workspace_data_filter_settings = workspace_data_filter_settings
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -215,14 +211,13 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, title, column_name, data_source_id, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, title, column_name, workspace_data_filter_settings, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilter - a model defined in OpenAPI
 
         Args:
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters title.
             column_name (str): Workspace Data Filters column name. Data are filtered using this physical column.
-            data_source_id (str): Data source ID. Workspace Data Filters must always be connected to single data source.
             workspace_data_filter_settings ([DeclarativeWorkspaceDataFilterSetting]): Filter settings specifying values of filters valid for the workspace.
 
         Keyword Args:
@@ -286,7 +281,6 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
         self.id = id
         self.title = title
         self.column_name = column_name
-        self.data_source_id = data_source_id
         self.workspace_data_filter_settings = workspace_data_filter_settings
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -30,8 +30,8 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_metadata_client.model.json_api_cookie_security_configuration_out_attributes import JsonApiCookieSecurityConfigurationOutAttributes
-    globals()['JsonApiCookieSecurityConfigurationOutAttributes'] = JsonApiCookieSecurityConfigurationOutAttributes
+    from gooddata_metadata_client.model.json_api_cookie_security_configuration_in_attributes import JsonApiCookieSecurityConfigurationInAttributes
+    globals()['JsonApiCookieSecurityConfigurationInAttributes'] = JsonApiCookieSecurityConfigurationInAttributes
 
 
 class JsonApiCookieSecurityConfigurationOut(ModelNormal):
@@ -95,9 +95,9 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
         """
         lazy_import()
         return {
-            'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiCookieSecurityConfigurationOutAttributes,),  # noqa: E501
+            'id': (str,),  # noqa: E501
+            'attributes': (JsonApiCookieSecurityConfigurationInAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -106,8 +106,8 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
     }
 
@@ -156,7 +156,7 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiCookieSecurityConfigurationOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiCookieSecurityConfigurationInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "cookieSecurityConfiguration")
@@ -185,8 +185,8 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -245,7 +245,7 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiCookieSecurityConfigurationOutAttributes): [optional]  # noqa: E501
+            attributes (JsonApiCookieSecurityConfigurationInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "cookieSecurityConfiguration")
@@ -272,8 +272,8 @@ class JsonApiCookieSecurityConfigurationOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

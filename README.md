@@ -1,64 +1,21 @@
 # GoodData.CN Python Foundations
 
-This repository contains Python packages useful for integration with GoodData.CN:
-
--  gooddata-afm-client, gooddata-metadata-client: low-level API clients generated from GD.CN Open API specifications
--  gooddata-sdk: a Python SDK providing added value functions and convenience layers on top of the clients
--  gooddata-fdw: a GD.CN Foreign Data Wrapper for PostgreSQL
+This repository contains Python packages useful for integration with GoodData Cloud Native.
 
 Code is compatible with Python 3.9 or newer.
 
-## API Clients
+## Available packages
 
-These are generated using the openapi-generator. The generated clients are fairly convoluted and can be tricky
-to use. They do work with some known issues and allow you to call any metadata or computation API in your GoodData.CN
-installation.
+### API Clients
 
-### Known issues
+API clients are generated directly from GoodData.CN OpenAPI specifications and allow you to call any API from
+Python. Learn more about the clients in their [dedicated readme](./clients_README.md).
 
-The complexity of some of the GD.CN API schemas combined with the bugs in the generated code mean you may need to
-disable return type checking and/or type checking when creating model objects.
+### Python SDK
 
-Use the `_check_return_type=False` keyword parameter when calling generated API client methods to disable return
-type checking. For example:
+Python SDK is a layer of convenience and use-case oriented APIs that allows simple interaction with GoodData.CN.
 
-```python
-import gooddata_metadata_client.apis as metadata_apis
-
-api = metadata_apis.WorkspaceObjectControllerApi()
-metrics = api.get_all_entities_metrics('workspace_id', size=500, _check_return_type=False)
-```
-
-Use the `_check_type=False` keyword parameter when creating objects from generated models. For example:
-
-```python
-import gooddata_afm_client.models as afm_models
-
-afm_models.RelativeDateFilterBody(dataset=..., granularity=..., _from=..., to=..., _check_type=False)
-```
-
-## Python SDK
-
-The Python SDK aims to provide cleaner APIs and convenience layers on top of the generated clients.
-
-For instance behold how it is possible to read an Insight from GD.CN server, trigger its computation and then
-read the data:
-
-```python
-import gooddata_sdk
-
-sdk = gooddata_sdk.GoodDataSdk(HOST, TOKEN)
-
-# reads insight from workspace
-insight = sdk.insights.get_insight(workspace_id, insight_id)
-
-# triggers computation for the insight. the result will be returned in a tabular form
-table = sdk.tables.for_insight(workspace_id, insight)
-
-# and this is how you can read data row-by-row and do something with it
-for row in table.read_all():
-    print(row)
-```
+Check out the [gooddata-sdk](./gooddata-sdk) documentation to learn more.
 
 ## GoodData.CN Foreign Data Wrapper for PostgreSQL
 
@@ -71,3 +28,39 @@ Check out the [gooddata-fdw package](./gooddata-fdw) documentation to learn more
 
 The [gooddata-pandas](./gooddata-pandas) is a thin layer that utilizes Python SDK and allows you to conveniently
 create pandas series and data frames.
+
+## Contributing
+
+### Getting Started
+
+1.  Ensure you have Python >3.7 installed: `python3 --version`
+
+2.  Clone and setup environment:
+
+    ```
+    git clone git@github.com:gooddata/gooddata-python-sdk.git
+    cd gooddata-python-sdk
+    make dev
+    ```
+
+    The `make dev` command will create a new Python virtual environment in the `.venv` directory, install all
+    third party dependencies into it and setup git hooks.
+
+    Additionally if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
+    activation of the virtual environment that was previously created in `.venv`.
+
+### Coding Conventions
+
+This project uses [flake8](https://flake8.pycqa.org/en/latest/) to ensure basic code sanity and [black](https://github.com/psf/black)
+for no-nonsense, consistent formatting.
+
+Both `flake8` and auto-fixing `black` are part of the pre-commit hook that is automatically set up during `make dev`.
+
+You can also run the lint and formatter manually:
+
+-  To run flake8 run: `make lint`
+-  To reformat code black run: `make format-fix`
+
+**NOTE** If the pre-commit hook finds and auto-corrects some formatting errors, it will not auto-stage
+the updated files and will fail the commit operation. You have to re-drive the commit. This is a well-known and
+unlikely-to-change behavior of the [pre-commit](https://github.com/pre-commit/pre-commit/issues/806) package that this repository uses to manage hooks.

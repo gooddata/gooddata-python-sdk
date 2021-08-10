@@ -1,0 +1,35 @@
+{
+  "buckets": [
+    {
+      "items": [],
+      "localIdentifier": "measures"
+    },
+    {
+      "items": [],
+      "localIdentifier": "attribute"
+    },
+    {
+      "items": [
+        {
+          "attribute": {
+            "displayForm": {
+              "identifier": {
+                "id": "label.product.id.name",
+                "type": "label"
+              }
+            },
+            "localIdentifier": "a_label.product.id.name"
+          }
+        }
+      ],
+      "localIdentifier": "columns"
+    }
+  ],
+  "filters": [],
+  "identifier": "PivotTable.1892e5c001ce80d560a10d6ec5ef748d",
+  "properties": {},
+  "sorts": [],
+  "title": "PivotTable - single column",
+  "uri": "PivotTable.1892e5c001ce80d560a10d6ec5ef748d",
+  "visualizationUrl": "local:table"
+}

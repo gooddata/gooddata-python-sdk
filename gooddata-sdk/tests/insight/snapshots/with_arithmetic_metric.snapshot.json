@@ -1,0 +1,62 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.product.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.product.id.name"
+        }
+    ],
+    "filters": [],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "acugFHNJgsBy",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_acugFHNJgsBy"
+        },
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        },
+        {
+            "definition": {
+                "arithmetic_measure": {
+                    "measure_identifiers": [
+                        {
+                            "local_identifier": "m_aangOxLSeztu"
+                        },
+                        {
+                            "local_identifier": "m_acugFHNJgsBy"
+                        }
+                    ],
+                    "operator": "DIFFERENCE"
+                }
+            },
+            "local_identifier": "m_358184a8_f72796b0fbc7c0dc4d17a1e68c1a9933"
+        }
+    ]
+}

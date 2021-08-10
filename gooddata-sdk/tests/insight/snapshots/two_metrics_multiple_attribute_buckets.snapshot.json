@@ -1,0 +1,82 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.product.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.product.id.name"
+        },
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.owner.department",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.owner.department"
+        },
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.owner.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.owner.id.name"
+        },
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunitysnapshot.forecastcategory",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunitysnapshot.forecastcategory"
+        },
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.owner.region",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.owner.region"
+        }
+    ],
+    "filters": [],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        },
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "acugFHNJgsBy",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_acugFHNJgsBy"
+        }
+    ]
+}

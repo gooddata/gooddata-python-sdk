@@ -103,8 +103,8 @@ class JsonApiAttributeOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'attributes': (JsonApiAttributeOutAttributes,),  # noqa: E501
             'relationships': (JsonApiAttributeOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
@@ -116,8 +116,8 @@ class JsonApiAttributeOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
@@ -132,8 +132,8 @@ class JsonApiAttributeOutWithLinks(ModelComposed):
         """JsonApiAttributeOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            id (str): API identifier of an object
             type (str): Object type. defaults to "attribute", must be one of ["attribute", ]  # noqa: E501
+            id (str): API identifier of an object
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -237,8 +237,8 @@ class JsonApiAttributeOutWithLinks(ModelComposed):
         """JsonApiAttributeOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            id (str): API identifier of an object
             type (str): Object type. defaults to "attribute", must be one of ["attribute", ]  # noqa: E501
+            id (str): API identifier of an object
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.

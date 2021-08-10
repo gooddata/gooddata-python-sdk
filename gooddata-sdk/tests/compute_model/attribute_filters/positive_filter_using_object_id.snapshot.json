@@ -1,0 +1,16 @@
+{
+    "positive_attribute_filter": {
+        "_in": {
+            "values": [
+                "val1",
+                "val2"
+            ]
+        },
+        "label": {
+            "identifier": {
+                "id": "label.id",
+                "type": "label"
+            }
+        }
+    }
+}

@@ -69,8 +69,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_analytical_dashboard_in_document = JsonApiAnalyticalDashboardInDocument(
         data=JsonApiAnalyticalDashboardIn(
-            id="id1",
             type="analyticalDashboard",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -82,8 +82,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ),
     ) # JsonApiAnalyticalDashboardInDocument | 
-    predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
     include = [
         "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -98,7 +96,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, predicate=predicate, filter=filter, include=include)
+        api_response = api_instance.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, include=include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_analytical_dashboards: %s\n" % e)
@@ -111,8 +109,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_analytical_dashboard_in_document** | [**JsonApiAnalyticalDashboardInDocument**](JsonApiAnalyticalDashboardInDocument.md)|  |
- **predicate** | [**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**](bool, date, datetime, dict, float, int, list, str, none_type.md)| Composed query parameters used for filtering. &#39;id&#39; parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name&#x3D;John&amp;language&#x3D;english,czech&amp;address.city&#x3D;London&amp;father.id&#x3D;123). | [optional]
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;) | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -164,8 +160,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_filter_context_in_document = JsonApiFilterContextInDocument(
         data=JsonApiFilterContextIn(
-            id="id1",
             type="filterContext",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -177,8 +173,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ),
     ) # JsonApiFilterContextInDocument | 
-    predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
     include = [
         "include=attributes,datasets,labels",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -193,7 +187,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_in_document, predicate=predicate, filter=filter, include=include)
+        api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_in_document, include=include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_filter_contexts: %s\n" % e)
@@ -206,8 +200,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_filter_context_in_document** | [**JsonApiFilterContextInDocument**](JsonApiFilterContextInDocument.md)|  |
- **predicate** | [**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**](bool, date, datetime, dict, float, int, list, str, none_type.md)| Composed query parameters used for filtering. &#39;id&#39; parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name&#x3D;John&amp;language&#x3D;english,czech&amp;address.city&#x3D;London&amp;father.id&#x3D;123). | [optional]
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;) | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -259,8 +251,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_metric_in_document = JsonApiMetricInDocument(
         data=JsonApiMetricIn(
-            id="id1",
             type="metric",
+            id="id1",
             attributes=JsonApiMetricOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -275,8 +267,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ),
     ) # JsonApiMetricInDocument | 
-    predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
     include = [
         "include=facts,attributes,labels,metrics",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -291,7 +281,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_metrics(workspace_id, json_api_metric_in_document, predicate=predicate, filter=filter, include=include)
+        api_response = api_instance.create_entity_metrics(workspace_id, json_api_metric_in_document, include=include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_metrics: %s\n" % e)
@@ -304,8 +294,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_metric_in_document** | [**JsonApiMetricInDocument**](JsonApiMetricInDocument.md)|  |
- **predicate** | [**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**](bool, date, datetime, dict, float, int, list, str, none_type.md)| Composed query parameters used for filtering. &#39;id&#39; parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name&#x3D;John&amp;language&#x3D;english,czech&amp;address.city&#x3D;London&amp;father.id&#x3D;123). | [optional]
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;) | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -357,8 +345,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_visualization_object_in_document = JsonApiVisualizationObjectInDocument(
         data=JsonApiVisualizationObjectIn(
-            id="id1",
             type="visualizationObject",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -370,8 +358,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ),
     ) # JsonApiVisualizationObjectInDocument | 
-    predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
     include = [
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -386,7 +372,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, predicate=predicate, filter=filter, include=include)
+        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, include=include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_visualization_objects: %s\n" % e)
@@ -399,8 +385,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_visualization_object_in_document** | [**JsonApiVisualizationObjectInDocument**](JsonApiVisualizationObjectInDocument.md)|  |
- **predicate** | [**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**](bool, date, datetime, dict, float, int, list, str, none_type.md)| Composed query parameters used for filtering. &#39;id&#39; parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name&#x3D;John&amp;language&#x3D;english,czech&amp;address.city&#x3D;London&amp;father.id&#x3D;123). | [optional]
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;) | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -452,13 +436,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     json_api_workspace_data_filter_in_document = JsonApiWorkspaceDataFilterInDocument(
         data=JsonApiWorkspaceDataFilterIn(
-            id="id1",
             type="workspaceDataFilter",
+            id="id1",
             attributes=JsonApiWorkspaceDataFilterOutAttributes(
                 title="title_example",
                 description="description_example",
                 column_name="column_name_example",
-                data_source_id="data_source_id_example",
             ),
             relationships=JsonApiWorkspaceDataFilterOutRelationships(
                 filter_settings=JsonApiWorkspaceDataFilterOutRelationshipsFilterSettings(
@@ -472,8 +455,6 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ),
     ) # JsonApiWorkspaceDataFilterInDocument | 
-    predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
     include = [
         "include=filterSettings",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -488,7 +469,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document, predicate=predicate, filter=filter, include=include)
+        api_response = api_instance.create_entity_workspace_data_filters(workspace_id, json_api_workspace_data_filter_in_document, include=include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling WorkspaceObjectControllerApi->create_entity_workspace_data_filters: %s\n" % e)
@@ -501,8 +482,6 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_workspace_data_filter_in_document** | [**JsonApiWorkspaceDataFilterInDocument**](JsonApiWorkspaceDataFilterInDocument.md)|  |
- **predicate** | [**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**](bool, date, datetime, dict, float, int, list, str, none_type.md)| Composed query parameters used for filtering. &#39;id&#39; parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name&#x3D;John&amp;language&#x3D;english,czech&amp;address.city&#x3D;London&amp;father.id&#x3D;123). | [optional]
- **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;) | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
 
 ### Return type
@@ -2620,8 +2599,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_analytical_dashboard_in_document = JsonApiAnalyticalDashboardInDocument(
         data=JsonApiAnalyticalDashboardIn(
-            id="id1",
             type="analyticalDashboard",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -2717,8 +2696,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_in_document = JsonApiFilterContextInDocument(
         data=JsonApiFilterContextIn(
-            id="id1",
             type="filterContext",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -2814,8 +2793,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_metric_in_document = JsonApiMetricInDocument(
         data=JsonApiMetricIn(
-            id="id1",
             type="metric",
+            id="id1",
             attributes=JsonApiMetricOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -2914,8 +2893,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_visualization_object_in_document = JsonApiVisualizationObjectInDocument(
         data=JsonApiVisualizationObjectIn(
-            id="id1",
             type="visualizationObject",
+            id="id1",
             attributes=JsonApiAnalyticalDashboardOutAttributes(
                 title="title_example",
                 description="description_example",
@@ -3011,13 +2990,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_workspace_data_filter_in_document = JsonApiWorkspaceDataFilterInDocument(
         data=JsonApiWorkspaceDataFilterIn(
-            id="id1",
             type="workspaceDataFilter",
+            id="id1",
             attributes=JsonApiWorkspaceDataFilterOutAttributes(
                 title="title_example",
                 description="description_example",
                 column_name="column_name_example",
-                data_source_id="data_source_id_example",
             ),
             relationships=JsonApiWorkspaceDataFilterOutRelationships(
                 filter_settings=JsonApiWorkspaceDataFilterOutRelationshipsFilterSettings(

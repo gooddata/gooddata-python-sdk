@@ -3,7 +3,7 @@
 ## Getting Started
 
 For convenience a Dockerfile is in place which when started will run PostgreSQL 12 with multicorn and gooddata-fdw
-installed. There is a [script in place](../start_gooddata_fdw.sh) to automate build and startup steps:
+installed. There is a [script in place](./start_gooddata_fdw.sh) to automate build and startup steps:
 
     POSTGRES_PASSWORD=... ./start_gooddata_fdw
 
@@ -13,11 +13,11 @@ a new `gooddata` DB and `gooddata` user who will have access to this DB. The pas
 entered in the `POSTGRES_PASSWORD` variable.
 
 After the container starts, you can connect to the running PostgreSQL:
- 
+
 -   From console using `psql --host localhost --port 2543 --user gooddata gooddata`
-    
+
     You will be asked to enter the password that you have specified when starting the script.
-    
+
 -   From any other client using JDBC string: `jdbc:postgresql://localhost:2543/gooddata`
 
     You will be asked to enter username (gooddata) and password.
@@ -40,8 +40,8 @@ Typically you have to do this once per GD.CN installation. You can add as many s
 
 ## Import insights from your workspace
 
-You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables. You can import insights 
-from as many workspaces as you want. We recommend you to create schema per workspace otherwise you run risk of table 
+You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables. You can import insights
+from as many workspaces as you want. We recommend you to create schema per workspace otherwise you run risk of table
 name clashes.
 
 ```postgresql
@@ -76,8 +76,8 @@ specified on the SELECT.
 
 Note that the `compute` is called pseudo-table for a reason. It does not adhere to the relational model. The columns
 that you SELECT map to facts, metrics and labels in your semantic model. Computing results for the select will automatically
-aggregate results on the columns that are mapped to labels in your semantic model. In other words cardinality of 
-the `compute` table changes based on the columns that you SELECT. 
+aggregate results on the columns that are mapped to labels in your semantic model. In other words cardinality of
+the `compute` table changes based on the columns that you SELECT.
 
 This is how you can import the semantic model:
 
@@ -123,18 +123,18 @@ To explain:
 -  OPTIONS on foreign table must contain identifier of workspace to map to
 -  OPTIONS on each column must contain identifier of semantic model entity. The id is string but consisting
    of two parts `<entity_type>/<entity_id>`. Where `entity_type` is either label, fact or metric.
-   
+
 For columns that map to facts in your semantic model, you can also specify what aggregation function should be used when
-aggregating the fact values for the labels in your custom report table. You can use the following aggregation functions: 
+aggregating the fact values for the labels in your custom report table. You can use the following aggregation functions:
 
 -  `sum`
--  `avg`, 
--  `min`, 
--  `max`, 
+-  `avg`,
+-  `min`,
+-  `max`,
 -  `median`
 
 The `agg` key is optional. If you do not specify it, then default 'sum' aggregation will be used. The value of `agg` is
 case insensitive.
-   
-Note: If you do not specify the required options, the CREATE command will fail. If you specify wrong entity IDs, 
+
+Note: If you do not specify the required options, the CREATE command will fail. If you specify wrong entity IDs,
 the failures will happen at SELECT time.

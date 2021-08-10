@@ -1,9 +1,14 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 import pandas
-
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.utils import DefaultInsightColumnNaming, IndexDef, ColumnsDef, _to_item
-from gooddata_sdk import GoodDataSdk, Filter, Attribute, Measure
+from gooddata_pandas.utils import (
+    DefaultInsightColumnNaming,
+    IndexDef,
+    ColumnsDef,
+    _to_item,
+)
+from gooddata_sdk import GoodDataSdk, Filter, Attribute
 
 
 class DataFrameFactory:
@@ -24,11 +29,14 @@ class DataFrameFactory:
     Note that all of these methods have additional levels of convenience and flexibility so their purpose is not
     limited to just what is listed above.
     """
+
     def __init__(self, sdk: GoodDataSdk, workspace_id: str):
         self._sdk = sdk
         self._workspace_id = workspace_id
 
-    def indexed(self, index_by: IndexDef, columns: ColumnsDef, filter_by: list[Filter] = None) -> pandas.DataFrame:
+    def indexed(
+        self, index_by: IndexDef, columns: ColumnsDef, filter_by: list[Filter] = None
+    ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
         metrics or other label values.
@@ -52,18 +60,26 @@ class DataFrameFactory:
         :param filter_by: filters to apply during computation on the server
         :return:
         """
-        data, index = compute_and_extract(self._sdk, self._workspace_id, columns=columns, index_by=index_by,
-                                          filter_by=filter_by)
+        data, index = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            columns=columns,
+            index_by=index_by,
+            filter_by=filter_by,
+        )
         _idx = None
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+            _idx = pandas.MultiIndex.from_arrays(
+                list(index.values()), names=list(index.keys())
+            )
 
         return pandas.DataFrame(data=data, index=_idx)
 
-    def not_indexed(self, columns: ColumnsDef,
-                    filter_by: list[Filter] = None) -> pandas.DataFrame:
+    def not_indexed(
+        self, columns: ColumnsDef, filter_by: list[Filter] = None
+    ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
 
@@ -79,11 +95,15 @@ class DataFrameFactory:
         :return:
         """
 
-        data, _ = compute_and_extract(self._sdk, self._workspace_id, columns=columns, filter_by=filter_by)
+        data, _ = compute_and_extract(
+            self._sdk, self._workspace_id, columns=columns, filter_by=filter_by
+        )
 
         return pandas.DataFrame(data=data)
 
-    def for_items(self, items: ColumnsDef, filter_by: list[Filter] = None, auto_index=True):
+    def for_items(
+        self, items: ColumnsDef, filter_by: list[Filter] = None, auto_index=True
+    ):
         """
         Creates a data frame for a named items. This is a convenience method that will create DataFrame with or
         without index based on the context of the items that you pass.
@@ -113,7 +133,7 @@ class DataFrameFactory:
         has_measures = False
 
         for col_name, col_def in items.items():
-            item = _to_item(col_def)
+            item = _to_item(col_def, local_id=col_name)
 
             if isinstance(item, Attribute):
                 has_attributes = True
@@ -127,7 +147,11 @@ class DataFrameFactory:
 
             return self.not_indexed(columns=columns, filter_by=filter_by)
 
-        return self.indexed(index_by=resolved_attr_cols, columns=resolved_measure_cols, filter_by=filter_by)
+        return self.indexed(
+            index_by=resolved_attr_cols,
+            columns=resolved_measure_cols,
+            filter_by=filter_by,
+        )
 
     def for_insight(self, insight_id: str, auto_index=True) -> pandas.DataFrame:
         """
@@ -155,11 +179,19 @@ class DataFrameFactory:
         :return:
         """
         naming = DefaultInsightColumnNaming()
-        insight = self._sdk.insights.get_insight(workspace_id=self._workspace_id, insight_id=insight_id)
+        insight = self._sdk.insights.get_insight(
+            workspace_id=self._workspace_id, insight_id=insight_id
+        )
         filter_by = [f.as_computable() for f in insight.filters]
         columns = dict(
-            [(naming.col_name_for_attribute(a), a.as_computable()) for a in insight.attributes] +
-            [(naming.col_name_for_measure(m), m.as_computable()) for m in insight.measures]
+            [
+                (naming.col_name_for_attribute(a), a.as_computable())
+                for a in insight.attributes
+            ]
+            + [
+                (naming.col_name_for_metric(m), m.as_computable())
+                for m in insight.metrics
+            ]
         )
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)

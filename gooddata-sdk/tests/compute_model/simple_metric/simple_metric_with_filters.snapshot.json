@@ -1,0 +1,30 @@
+{
+    "definition": {
+        "measure": {
+            "aggregation": "SUM",
+            "compute_ratio": false,
+            "filters": [
+                {
+                    "positive_attribute_filter": {
+                        "_in": {
+                            "values": [
+                                "val1",
+                                "val2"
+                            ]
+                        },
+                        "label": {
+                            "local_identifier": "label_local_id"
+                        }
+                    }
+                }
+            ],
+            "item": {
+                "identifier": {
+                    "id": "fact_id",
+                    "type": "fact"
+                }
+            }
+        }
+    },
+    "local_identifier": "test"
+}

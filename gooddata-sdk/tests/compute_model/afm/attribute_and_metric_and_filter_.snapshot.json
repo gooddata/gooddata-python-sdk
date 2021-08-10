@@ -1,0 +1,45 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.id",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "attribute_local_id"
+        }
+    ],
+    "filters": [
+        {
+            "positive_attribute_filter": {
+                "_in": {
+                    "values": [
+                        "val1",
+                        "val2"
+                    ]
+                },
+                "label": {
+                    "local_identifier": "attribute_local_id"
+                }
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "metric_id",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "simple_metric_local_id"
+        }
+    ]
+}

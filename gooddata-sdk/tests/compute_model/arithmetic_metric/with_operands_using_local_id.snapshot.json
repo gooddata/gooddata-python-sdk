@@ -1,0 +1,16 @@
+{
+    "definition": {
+        "arithmetic_measure": {
+            "measure_identifiers": [
+                {
+                    "local_identifier": "local_id1"
+                },
+                {
+                    "local_identifier": "local_id2"
+                }
+            ],
+            "operator": "SUM"
+        }
+    },
+    "local_identifier": "arithmetic_local_id"
+}

@@ -1,0 +1,13 @@
+{
+    "negative_attribute_filter": {
+        "label": {
+            "local_identifier": "local_id"
+        },
+        "not_in": {
+            "values": [
+                "val1",
+                "val2"
+            ]
+        }
+    }
+}

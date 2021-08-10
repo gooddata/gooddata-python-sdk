@@ -1,0 +1,76 @@
+{
+  "buckets": [
+    {
+      "items": [
+        {
+          "measure": {
+            "definition": {
+              "measureDefinition": {
+                "item": {
+                  "identifier": {
+                    "id": "aangOxLSeztu",
+                    "type": "metric"
+                  }
+                }
+              }
+            },
+            "localIdentifier": "m_aangOxLSeztu"
+          }
+        },
+        {
+          "measure": {
+            "definition": {
+              "previousPeriodMeasure": {
+                "measureIdentifier": "m_aangOxLSeztu",
+                "dateDataSets": [
+                  {
+                    "dataSet": {
+                      "identifier": {
+                        "id": "closed.dt",
+                        "type": "dataset"
+                      }
+                    },
+                    "periodsAgo": 1
+                  }
+                ]
+              }
+            },
+            "localIdentifier": "m_previous_period"
+          }
+        }
+      ],
+      "localIdentifier": "measures"
+    },
+    {
+      "items": [],
+      "localIdentifier": "view"
+    },
+    {
+      "items": [],
+      "localIdentifier": "stack"
+    }
+  ],
+  "filters": [
+    {
+      "relativeDateFilter": {
+        "granularity": "GDC.time.date",
+        "dataSet": {
+          "identifier": {
+            "id": "closed.dt",
+            "type": "dataset"
+          }
+        },
+        "from": -10,
+        "to": -1
+      }
+    }
+  ],
+  "identifier": "AreaChart.a97be468994b89529a3efba0a264a799",
+  "properties": {
+    "controls": {}
+  },
+  "sorts": [],
+  "title": "AreaChart - data points - dense chart - default",
+  "uri": "AreaChart.a97be468994b89529a3efba0a264a799",
+  "visualizationUrl": "local:area"
+}

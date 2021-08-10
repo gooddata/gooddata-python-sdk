@@ -1,0 +1,16 @@
+{
+    "definition": {
+        "measure": {
+            "aggregation": "SUM",
+            "compute_ratio": false,
+            "filters": [],
+            "item": {
+                "identifier": {
+                    "id": "fact_id",
+                    "type": "fact"
+                }
+            }
+        }
+    },
+    "local_identifier": "test"
+}

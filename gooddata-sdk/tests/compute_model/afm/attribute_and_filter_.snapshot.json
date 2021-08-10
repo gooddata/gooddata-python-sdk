@@ -1,0 +1,29 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.id",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "attribute_local_id"
+        }
+    ],
+    "filters": [
+        {
+            "positive_attribute_filter": {
+                "_in": {
+                    "values": [
+                        "val1",
+                        "val2"
+                    ]
+                },
+                "label": {
+                    "local_identifier": "attribute_local_id"
+                }
+            }
+        }
+    ],
+    "measures": []
+}

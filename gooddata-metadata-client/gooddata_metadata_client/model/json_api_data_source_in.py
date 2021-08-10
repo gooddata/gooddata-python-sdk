@@ -95,8 +95,8 @@ class JsonApiDataSourceIn(ModelNormal):
         """
         lazy_import()
         return {
-            'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'attributes': (JsonApiDataSourceInAttributes,),  # noqa: E501
         }
 
@@ -106,8 +106,8 @@ class JsonApiDataSourceIn(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
     }
 
@@ -185,8 +185,8 @@ class JsonApiDataSourceIn(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         self.attributes = attributes
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -273,8 +273,8 @@ class JsonApiDataSourceIn(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         self.attributes = attributes
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

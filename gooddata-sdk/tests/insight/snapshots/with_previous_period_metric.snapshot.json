@@ -1,0 +1,56 @@
+{
+    "attributes": [],
+    "filters": [
+        {
+            "relative_date_filter": {
+                "_from": -10,
+                "dataset": {
+                    "identifier": {
+                        "id": "closed.dt",
+                        "type": "dataset"
+                    }
+                },
+                "granularity": "DAY",
+                "to": -1
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        },
+        {
+            "definition": {
+                "previous_period_measure": {
+                    "date_datasets": [
+                        {
+                            "dataset": {
+                                "identifier": {
+                                    "id": "closed.dt",
+                                    "type": "dataset"
+                                }
+                            },
+                            "periods_ago": 1
+                        }
+                    ],
+                    "measure_identifier": {
+                        "local_identifier": "m_aangOxLSeztu"
+                    }
+                }
+            },
+            "local_identifier": "m_previous_period"
+        }
+    ]
+}

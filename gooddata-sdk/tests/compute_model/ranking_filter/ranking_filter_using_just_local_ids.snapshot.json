@@ -1,0 +1,22 @@
+{
+    "ranking_filter": {
+        "dimensionality": [
+            {
+                "local_identifier": "local_id3"
+            },
+            {
+                "local_identifier": "local_id4"
+            }
+        ],
+        "measures": [
+            {
+                "local_identifier": "local_id1"
+            },
+            {
+                "local_identifier": "local_id2"
+            }
+        ],
+        "operator": "TOP",
+        "value": 10
+    }
+}

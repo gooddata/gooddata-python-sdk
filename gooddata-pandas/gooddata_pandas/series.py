@@ -1,19 +1,24 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 from typing import Union
 
 import pandas
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import IndexDef, LabelItemDef
-from gooddata_sdk import GoodDataSdk, Attribute, SimpleMeasure, Filter, ObjId
+from gooddata_sdk import GoodDataSdk, Attribute, SimpleMetric, Filter, ObjId
 
 
-class GoodDataSeriesFactory:
+class SeriesFactory:
     def __init__(self, sdk: GoodDataSdk, workspace_id: str):
         self._sdk = sdk
         self._workspace_id = workspace_id
 
-    def indexed(self, index_by: IndexDef, data_by: Union[SimpleMeasure, str, ObjId, Attribute],
-                filter_by: Union[Filter, list[Filter]] = None) -> pandas.Series:
+    def indexed(
+        self,
+        index_by: IndexDef,
+        data_by: Union[SimpleMetric, str, ObjId, Attribute],
+        filter_by: Union[Filter, list[Filter]] = None,
+    ) -> pandas.Series:
         """
         Creates pandas Series from data points calculated from a single `data_by` that will be computed on granularity
         of the index  labels. The elements of the index labels will be used to construct simple or hierarchical index.
@@ -24,28 +29,38 @@ class GoodDataSeriesFactory:
          - string representation of object identifier: 'label/some_label_id'
          - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
-        :param data_by: label, fact or metric to that will provide data (measure values or label elements); specify either:
+        :param data_by: label, fact or metric to that will provide data (metric values or label elements); specify either:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
          - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - SimpleMeasure object used in the compute model: SimpleMeasure(local_id=..., item=..., aggregation=...)
+         - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
         :param filter_by: optionally specify filter to apply during computation on the server
         :return:
         """
-        data, index = compute_and_extract(self._sdk, self._workspace_id, index_by=index_by,
-                                          columns={'_series': data_by}, filter_by=filter_by)
+        data, index = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            index_by=index_by,
+            columns={"_series": data_by},
+            filter_by=filter_by,
+        )
 
         _idx = None
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+            _idx = pandas.MultiIndex.from_arrays(
+                list(index.values()), names=list(index.keys())
+            )
 
-        return pandas.Series(data=data['_series'], index=_idx)
+        return pandas.Series(data=data["_series"], index=_idx)
 
-    def not_indexed(self, data_by: Union[SimpleMeasure, str, ObjId, Attribute],
-                    granularity: Union[list[LabelItemDef], IndexDef] = None,
-                    filter_by: Union[Filter, list[Filter]] = None) -> pandas.Series:
+    def not_indexed(
+        self,
+        data_by: Union[SimpleMetric, str, ObjId, Attribute],
+        granularity: Union[list[LabelItemDef], IndexDef] = None,
+        filter_by: Union[Filter, list[Filter]] = None,
+    ) -> pandas.Series:
         """
         Creates pandas Series from data points calculated from a single `data_by` that will be computed on granularity
         of the specified labels. No index will be constructed.
@@ -56,7 +71,7 @@ class GoodDataSeriesFactory:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
          - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - SimpleMeasure object used in the compute model: SimpleMeasure(local_id=..., item=..., aggregation=...)
+         - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
         :param granularity: optionally specify label to slice the metric by; specify either:
          - string with id: 'some_label_id',
          - object identifier: ObjId(id='some_label_id', type='label'),
@@ -74,7 +89,12 @@ class GoodDataSeriesFactory:
         else:
             _index = granularity
 
-        data, _ = compute_and_extract(self._sdk, self._workspace_id, index_by=granularity,
-                                      columns={'_series': data_by}, filter_by=filter_by)
+        data, _ = compute_and_extract(
+            self._sdk,
+            self._workspace_id,
+            index_by=_index,
+            columns={"_series": data_by},
+            filter_by=filter_by,
+        )
 
-        return pandas.Series(data=data['_series'])
+        return pandas.Series(data=data["_series"])

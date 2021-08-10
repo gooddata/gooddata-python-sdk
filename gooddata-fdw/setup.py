@@ -1,15 +1,18 @@
-import subprocess
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, find_packages
 
-REQUIRES = [
-    "gooddata-sdk >= 0.1"
-]
+REQUIRES = ["gooddata-sdk==0.1"]
+
+
+def _read_version():
+    with open("VERSION", "rt") as version_file:
+        return version_file.readline().strip()
+
 
 setup(
-    name='gooddata-fdw',
-    version='0.1',
-    author='Lubomir Slivka',
-    license='MIT',
+    name="gooddata-fdw",
+    version=_read_version(),
+    author="GoodData",
+    license="MIT",
     install_requires=REQUIRES,
-    packages=['gooddata_fdw']
+    packages=find_packages(exclude=["tests"]),
 )

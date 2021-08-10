@@ -1,0 +1,14 @@
+flake8==3.9.0
+tox~=3.24.0
+bump2version~=1.0.1
+black==21.7b0
+pre-commit~=2.14.0
+
+-r ./gooddata-afm-client/requirements.txt
+-r ./gooddata-metadata-client/requirements.txt
+-r ./gooddata-sdk/requirements.txt
+-r ./gooddata-pandas/requirements.txt
+-r ./gooddata-fdw/requirements.txt
+-r ./gooddata-sdk/test-requirements.txt
+-r ./gooddata-pandas/test-requirements.txt
+-r ./gooddata-fdw/test-requirements.txt

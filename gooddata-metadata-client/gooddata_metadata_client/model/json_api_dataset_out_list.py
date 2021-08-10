@@ -30,8 +30,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_dataset_out_includes import JsonApiDatasetOutIncludes
     from gooddata_metadata_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_metadata_client.model.list_links import ListLinks
+    globals()['JsonApiDatasetOutIncludes'] = JsonApiDatasetOutIncludes
     globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -95,7 +97,7 @@ class JsonApiDatasetOutList(ModelNormal):
         return {
             'data': ([JsonApiDatasetOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiDatasetOutIncludes],),  # noqa: E501
         }
 
     @cached_property
@@ -154,7 +156,7 @@ class JsonApiDatasetOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiDatasetOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,7 +243,7 @@ class JsonApiDatasetOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiDatasetOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

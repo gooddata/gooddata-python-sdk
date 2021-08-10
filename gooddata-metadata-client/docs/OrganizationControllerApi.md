@@ -36,7 +36,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = organization_controller_api.OrganizationControllerApi(api_client)
     id = "26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW" # str | 
     predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=keySet==KeysetHandleValue;lastRotation==InstantValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
+    filter = "filter=lastRotation==InstantValue;rotationInterval==DurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -190,16 +190,16 @@ with gooddata_metadata_client.ApiClient() as api_client:
     id = "26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW" # str | 
     json_api_cookie_security_configuration_in_document = JsonApiCookieSecurityConfigurationInDocument(
         data=JsonApiCookieSecurityConfigurationIn(
-            id="id1",
             type="cookieSecurityConfiguration",
-            attributes=JsonApiCookieSecurityConfigurationOutAttributes(
+            id="id1",
+            attributes=JsonApiCookieSecurityConfigurationInAttributes(
                 last_rotation=dateutil_parser('1970-01-01T00:00:00.00Z'),
                 rotation_interval="P30D",
             ),
         ),
     ) # JsonApiCookieSecurityConfigurationInDocument | 
     predicate = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123). (optional)
-    filter = "filter=keySet==KeysetHandleValue;lastRotation==InstantValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
+    filter = "filter=lastRotation==InstantValue;rotationInterval==DurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc') (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -276,8 +276,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     id = "26bUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW" # str | 
     json_api_organization_in_document = JsonApiOrganizationInDocument(
         data=JsonApiOrganizationIn(
-            id="id1",
             type="organization",
+            id="id1",
             attributes=JsonApiOrganizationInAttributes(
                 name="name_example",
                 hostname="hostname_example",

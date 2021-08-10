@@ -1,0 +1,5 @@
+pytest~=6.2.4
+pytest-cov~=2.12.1
+pytest-snapshot==0.6.1
+vcrpy~=4.1.1
+python-dotenv~=0.19.0

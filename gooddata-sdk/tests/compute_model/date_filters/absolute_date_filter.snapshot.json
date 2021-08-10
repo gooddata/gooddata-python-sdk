@@ -1,0 +1,12 @@
+{
+    "absolute_date_filter": {
+        "_from": "2021/1/1",
+        "dataset": {
+            "identifier": {
+                "id": "dataset.id",
+                "type": "dataset"
+            }
+        },
+        "to": "2021/1/2"
+    }
+}

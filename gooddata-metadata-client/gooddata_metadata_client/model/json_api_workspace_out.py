@@ -99,8 +99,8 @@ class JsonApiWorkspaceOut(ModelNormal):
         """
         lazy_import()
         return {
-            'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
             'attributes': (JsonApiWorkspaceOutAttributes,),  # noqa: E501
             'relationships': (JsonApiWorkspaceOutRelationships,),  # noqa: E501
@@ -112,8 +112,8 @@ class JsonApiWorkspaceOut(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
@@ -195,8 +195,8 @@ class JsonApiWorkspaceOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -284,8 +284,8 @@ class JsonApiWorkspaceOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.type = type
+        self.id = id
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

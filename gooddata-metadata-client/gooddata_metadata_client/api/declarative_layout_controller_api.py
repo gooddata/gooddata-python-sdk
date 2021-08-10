@@ -27,6 +27,7 @@ from gooddata_metadata_client.model.declarative_model import DeclarativeModel
 from gooddata_metadata_client.model.declarative_organization import DeclarativeOrganization
 from gooddata_metadata_client.model.declarative_user_groups import DeclarativeUserGroups
 from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
+from gooddata_metadata_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
 from gooddata_metadata_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from gooddata_metadata_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
@@ -698,6 +699,111 @@ class DeclarativeLayoutControllerApi(object):
             callable=__get_users_layout
         )
 
+        def __get_users_user_groups_layout(
+            self,
+            **kwargs
+        ):
+            """Get all users and user groups  # noqa: E501
+
+            Retrieve all users and user groups with theirs properties.  # noqa: E501
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
+
+            >>> thread = api.get_users_user_groups_layout(async_req=True)
+            >>> result = thread.get()
+
+
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (int/float/tuple): timeout setting for this request. If
+                    one number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
+
+            Returns:
+                DeclarativeUsersUserGroups
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            return self.call_with_http_info(**kwargs)
+
+        self.get_users_user_groups_layout = _Endpoint(
+            settings={
+                'response_type': (DeclarativeUsersUserGroups,),
+                'auth': [],
+                'endpoint_path': '/api/layout/usersAndUserGroups',
+                'operation_id': 'get_users_user_groups_layout',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    '*/*'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client,
+            callable=__get_users_user_groups_layout
+        )
+
         def __get_workspace_data_filters_layout(
             self,
             **kwargs
@@ -1027,7 +1133,7 @@ class DeclarativeLayoutControllerApi(object):
 
         def __put_data_sources_layout(
             self,
-            declarative_user_groups,
+            declarative_users_user_groups,
             **kwargs
         ):
             """Put all data sources  # noqa: E501
@@ -1036,11 +1142,11 @@ class DeclarativeLayoutControllerApi(object):
             This method makes a synchronous HTTP request by default. To make an
             asynchronous HTTP request, please pass async_req=True
 
-            >>> thread = api.put_data_sources_layout(declarative_user_groups, async_req=True)
+            >>> thread = api.put_data_sources_layout(declarative_users_user_groups, async_req=True)
             >>> result = thread.get()
 
             Args:
-                declarative_user_groups (DeclarativeUserGroups):
+                declarative_users_user_groups (DeclarativeUsersUserGroups):
 
             Keyword Args:
                 _return_http_data_only (bool): response data without head status
@@ -1087,25 +1193,25 @@ class DeclarativeLayoutControllerApi(object):
                 '_check_return_type', True
             )
             kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['declarative_user_groups'] = \
-                declarative_user_groups
+            kwargs['declarative_users_user_groups'] = \
+                declarative_users_user_groups
             return self.call_with_http_info(**kwargs)
 
         self.put_data_sources_layout = _Endpoint(
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/userGroups',
+                'endpoint_path': '/api/layout/usersAndUserGroups',
                 'operation_id': 'put_data_sources_layout',
                 'http_method': 'PUT',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'declarative_user_groups',
+                    'declarative_users_user_groups',
                 ],
                 'required': [
-                    'declarative_user_groups',
+                    'declarative_users_user_groups',
                 ],
                 'nullable': [
                 ],
@@ -1120,13 +1226,13 @@ class DeclarativeLayoutControllerApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
-                    'declarative_user_groups':
-                        (DeclarativeUserGroups,),
+                    'declarative_users_user_groups':
+                        (DeclarativeUsersUserGroups,),
                 },
                 'attribute_map': {
                 },
                 'location_map': {
-                    'declarative_user_groups': 'body',
+                    'declarative_users_user_groups': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -1255,6 +1361,122 @@ class DeclarativeLayoutControllerApi(object):
             },
             api_client=api_client,
             callable=__put_data_sources_layout1
+        )
+
+        def __put_user_groups_layout(
+            self,
+            declarative_user_groups,
+            **kwargs
+        ):
+            """Put all user groups  # noqa: E501
+
+            Define all user groups with their parents eventually.  # noqa: E501
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
+
+            >>> thread = api.put_user_groups_layout(declarative_user_groups, async_req=True)
+            >>> result = thread.get()
+
+            Args:
+                declarative_user_groups (DeclarativeUserGroups):
+
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (int/float/tuple): timeout setting for this request. If
+                    one number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
+
+            Returns:
+                None
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['declarative_user_groups'] = \
+                declarative_user_groups
+            return self.call_with_http_info(**kwargs)
+
+        self.put_user_groups_layout = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/layout/userGroups',
+                'operation_id': 'put_user_groups_layout',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'declarative_user_groups',
+                ],
+                'required': [
+                    'declarative_user_groups',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'declarative_user_groups':
+                        (DeclarativeUserGroups,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'declarative_user_groups': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client,
+            callable=__put_user_groups_layout
         )
 
         def __put_users_layout(

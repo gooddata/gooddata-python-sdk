@@ -1,0 +1,64 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "label.opportunity.id.name",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "a_label.opportunity.id.name"
+        }
+    ],
+    "filters": [
+        {
+            "positive_attribute_filter": {
+                "_in": {
+                    "values": [
+                        "element1",
+                        "element2"
+                    ]
+                },
+                "label": {
+                    "identifier": {
+                        "id": "label.opportunity.id.name",
+                        "type": "label"
+                    }
+                }
+            }
+        },
+        {
+            "negative_attribute_filter": {
+                "label": {
+                    "identifier": {
+                        "id": "label.opportunity.id.name",
+                        "type": "label"
+                    }
+                },
+                "not_in": {
+                    "values": [
+                        "element1",
+                        "element2"
+                    ]
+                }
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "aangOxLSeztu",
+                            "type": "metric"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "m_aangOxLSeztu"
+        }
+    ]
+}

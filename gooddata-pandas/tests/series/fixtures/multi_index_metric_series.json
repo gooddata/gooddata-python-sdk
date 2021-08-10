@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"reg\", \"label\": {\"identifier\": {\"id\": \"region.region_name\", \"type\": \"label\"}}}, {\"localIdentifier\": \"prod\", \"label\": {\"identifier\": {\"id\": \"product.product_name\", \"type\": \"label\"}}}], \"filters\": [], \"measures\": [{\"localIdentifier\": \"_series\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"coverage.coverage_risk_score\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"reg\", \"prod\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 06:41:14 GMT"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Length": [
+                        "780"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"_series\"}]}]},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"reg\",\"label\":{\"id\":\"region.region_name\",\"type\":\"label\"},\"labelName\":\"Region name\",\"attribute\":{\"id\":\"region.region_name\",\"type\":\"attribute\"},\"attributeName\":\"Region name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region.region_name\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"prod\",\"label\":{\"id\":\"product.product_name\",\"type\":\"label\"},\"labelName\":\"Product name\",\"attribute\":{\"id\":\"product.product_name\",\"type\":\"attribute\"},\"attributeName\":\"Product name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"product.product_name\",\"type\":\"label\"}}}]}],\"links\":{\"executionResult\":\"058f874d2e4c7dab475212fc0639befcc97d0230\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/058f874d2e4c7dab475212fc0639befcc97d0230?offset=0%2C0&limit=1%2C1000",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 06:41:15 GMT"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Length": [
+                        "6632"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[[28145.0,260.0,5590.0,8710.0,130.0,34255.0,1950.0,16445.0,650.0,2535.0,7605.0,1820.0,65.0,13780.0,130.0,2210.0,9230.0,3250.0,5655.0,130.0,1820.0,7020.0,65.0,24505.0,65.0,6370.0,65.0,40235.0,65.0,2600.0,1365.0,36725.0,1495.0,4485.0,65.0,65.0,108745.0,975.0]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]},{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Aargau\",\"primaryLabelValue\":\"Aargau\"}},{\"attributeHeader\":{\"labelValue\":\"Aargau\",\"primaryLabelValue\":\"Aargau\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Landschaft\",\"primaryLabelValue\":\"Basel-Landschaft\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Stadt\",\"primaryLabelValue\":\"Basel-Stadt\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Stadt\",\"primaryLabelValue\":\"Basel-Stadt\"}},{\"attributeHeader\":{\"labelValue\":\"Bern\",\"primaryLabelValue\":\"Bern\"}},{\"attributeHeader\":{\"labelValue\":\"Fribourg\",\"primaryLabelValue\":\"Fribourg\"}},{\"attributeHeader\":{\"labelValue\":\"Geneva\",\"primaryLabelValue\":\"Geneva\"}},{\"attributeHeader\":{\"labelValue\":\"Geneva\",\"primaryLabelValue\":\"Geneva\"}},{\"attributeHeader\":{\"labelValue\":\"Glarus\",\"primaryLabelValue\":\"Glarus\"}},{\"attributeHeader\":{\"labelValue\":\"Graub\u00fcnden\",\"primaryLabelValue\":\"Graub\u00fcnden\"}},{\"attributeHeader\":{\"labelValue\":\"Jura\",\"primaryLabelValue\":\"Jura\"}},{\"attributeHeader\":{\"labelValue\":\"Jura\",\"primaryLabelValue\":\"Jura\"}},{\"attributeHeader\":{\"labelValue\":\"Lucerne\",\"primaryLabelValue\":\"Lucerne\"}},{\"attributeHeader\":{\"labelValue\":\"Lucerne\",\"primaryLabelValue\":\"Lucerne\"}},{\"attributeHeader\":{\"labelValue\":\"Neuch\u00e2tel\",\"primaryLabelValue\":\"Neuch\u00e2tel\"}},{\"attributeHeader\":{\"labelValue\":\"Nidwalden\",\"primaryLabelValue\":\"Nidwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Obwalden\",\"primaryLabelValue\":\"Obwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Schaffhausen\",\"primaryLabelValue\":\"Schaffhausen\"}},{\"attributeHeader\":{\"labelValue\":\"Schaffhausen\",\"primaryLabelValue\":\"Schaffhausen\"}},{\"attributeHeader\":{\"labelValue\":\"Schwyz\",\"primaryLabelValue\":\"Schwyz\"}},{\"attributeHeader\":{\"labelValue\":\"Solothurn\",\"primaryLabelValue\":\"Solothurn\"}},{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"Thurgau\",\"primaryLabelValue\":\"Thurgau\"}},{\"attributeHeader\":{\"labelValue\":\"Thurgau\",\"primaryLabelValue\":\"Thurgau\"}},{\"attributeHeader\":{\"labelValue\":\"Ticino\",\"primaryLabelValue\":\"Ticino\"}},{\"attributeHeader\":{\"labelValue\":\"Ticino\",\"primaryLabelValue\":\"Ticino\"}},{\"attributeHeader\":{\"labelValue\":\"Uri\",\"primaryLabelValue\":\"Uri\"}},{\"attributeHeader\":{\"labelValue\":\"Valais\",\"primaryLabelValue\":\"Valais\"}},{\"attributeHeader\":{\"labelValue\":\"Vaud\",\"primaryLabelValue\":\"Vaud\"}},{\"attributeHeader\":{\"labelValue\":\"Vaud\",\"primaryLabelValue\":\"Vaud\"}},{\"attributeHeader\":{\"labelValue\":\"Zug\",\"primaryLabelValue\":\"Zug\"}},{\"attributeHeader\":{\"labelValue\":\"Zug\",\"primaryLabelValue\":\"Zug\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}}]},{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Hybrid\",\"primaryLabelValue\":\"Hybrid\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}},{\"attributeHeader\":{\"labelValue\":\"Hybrid\",\"primaryLabelValue\":\"Hybrid\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics\",\"primaryLabelValue\":\"Telematics\"}},{\"attributeHeader\":{\"labelValue\":\"Telematics Employee\",\"primaryLabelValue\":\"Telematics Employee\"}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[1,38],\"offset\":[0,0],\"total\":[1,38]}}"
+                }
+            }
+        }
+    ]
+}

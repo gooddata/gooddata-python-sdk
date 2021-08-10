@@ -1,0 +1,11 @@
+{
+    "range_measure_value_filter": {
+        "_from": 2,
+        "measure": {
+            "local_identifier": "local_id1"
+        },
+        "operator": "BETWEEN",
+        "to": 3,
+        "treat_null_values_as": 1
+    }
+}

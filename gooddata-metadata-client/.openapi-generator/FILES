@@ -1,5 +1,6 @@
 .gitignore
 .gitlab-ci.yml
+.openapi-generator-ignore
 .travis.yml
 README.md
 docs/DataSourceActionsControllerApi.md
@@ -33,6 +34,7 @@ docs/DeclarativeUser.md
 docs/DeclarativeUserGroup.md
 docs/DeclarativeUserGroups.md
 docs/DeclarativeUsers.md
+docs/DeclarativeUsersUserGroups.md
 docs/DeclarativeVisualizationObject.md
 docs/DeclarativeWorkspace.md
 docs/DeclarativeWorkspaceDataFilter.md
@@ -48,6 +50,7 @@ docs/JsonApiACLInDocument.md
 docs/JsonApiACLOut.md
 docs/JsonApiACLOutAttributes.md
 docs/JsonApiACLOutDocument.md
+docs/JsonApiACLOutIncludes.md
 docs/JsonApiACLOutList.md
 docs/JsonApiACLOutRelationships.md
 docs/JsonApiACLOutRelationshipsObjects.md
@@ -59,6 +62,7 @@ docs/JsonApiAnalyticalDashboardLinkage.md
 docs/JsonApiAnalyticalDashboardOut.md
 docs/JsonApiAnalyticalDashboardOutAttributes.md
 docs/JsonApiAnalyticalDashboardOutDocument.md
+docs/JsonApiAnalyticalDashboardOutIncludes.md
 docs/JsonApiAnalyticalDashboardOutList.md
 docs/JsonApiAnalyticalDashboardOutRelationships.md
 docs/JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md
@@ -80,6 +84,7 @@ docs/JsonApiAttributeLinkage.md
 docs/JsonApiAttributeOut.md
 docs/JsonApiAttributeOutAttributes.md
 docs/JsonApiAttributeOutDocument.md
+docs/JsonApiAttributeOutIncludes.md
 docs/JsonApiAttributeOutList.md
 docs/JsonApiAttributeOutRelationships.md
 docs/JsonApiAttributeOutRelationshipsDataset.md
@@ -87,9 +92,9 @@ docs/JsonApiAttributeOutWithLinks.md
 docs/JsonApiAttributeToManyLinkage.md
 docs/JsonApiAttributeToOneLinkage.md
 docs/JsonApiCookieSecurityConfigurationIn.md
+docs/JsonApiCookieSecurityConfigurationInAttributes.md
 docs/JsonApiCookieSecurityConfigurationInDocument.md
 docs/JsonApiCookieSecurityConfigurationOut.md
-docs/JsonApiCookieSecurityConfigurationOutAttributes.md
 docs/JsonApiCookieSecurityConfigurationOutDocument.md
 docs/JsonApiDataSourceIn.md
 docs/JsonApiDataSourceInAttributes.md
@@ -111,6 +116,7 @@ docs/JsonApiDatasetOutAttributes.md
 docs/JsonApiDatasetOutAttributesGrain.md
 docs/JsonApiDatasetOutAttributesReferenceProperties.md
 docs/JsonApiDatasetOutDocument.md
+docs/JsonApiDatasetOutIncludes.md
 docs/JsonApiDatasetOutList.md
 docs/JsonApiDatasetOutRelationships.md
 docs/JsonApiDatasetOutRelationshipsAttributes.md
@@ -131,6 +137,7 @@ docs/JsonApiFilterContextInDocument.md
 docs/JsonApiFilterContextLinkage.md
 docs/JsonApiFilterContextOut.md
 docs/JsonApiFilterContextOutDocument.md
+docs/JsonApiFilterContextOutIncludes.md
 docs/JsonApiFilterContextOutList.md
 docs/JsonApiFilterContextOutRelationships.md
 docs/JsonApiFilterContextOutWithLinks.md
@@ -151,6 +158,7 @@ docs/JsonApiMetricOut.md
 docs/JsonApiMetricOutAttributes.md
 docs/JsonApiMetricOutAttributesContent.md
 docs/JsonApiMetricOutDocument.md
+docs/JsonApiMetricOutIncludes.md
 docs/JsonApiMetricOutList.md
 docs/JsonApiMetricOutRelationships.md
 docs/JsonApiMetricOutWithLinks.md
@@ -190,6 +198,7 @@ docs/JsonApiVisualizationObjectInDocument.md
 docs/JsonApiVisualizationObjectLinkage.md
 docs/JsonApiVisualizationObjectOut.md
 docs/JsonApiVisualizationObjectOutDocument.md
+docs/JsonApiVisualizationObjectOutIncludes.md
 docs/JsonApiVisualizationObjectOutList.md
 docs/JsonApiVisualizationObjectOutRelationships.md
 docs/JsonApiVisualizationObjectOutWithLinks.md
@@ -285,6 +294,7 @@ gooddata_metadata_client/model/declarative_user.py
 gooddata_metadata_client/model/declarative_user_group.py
 gooddata_metadata_client/model/declarative_user_groups.py
 gooddata_metadata_client/model/declarative_users.py
+gooddata_metadata_client/model/declarative_users_user_groups.py
 gooddata_metadata_client/model/declarative_visualization_object.py
 gooddata_metadata_client/model/declarative_workspace.py
 gooddata_metadata_client/model/declarative_workspace_data_filter.py
@@ -298,6 +308,7 @@ gooddata_metadata_client/model/granularities_formatting.py
 gooddata_metadata_client/model/json_api_acl_out.py
 gooddata_metadata_client/model/json_api_acl_out_attributes.py
 gooddata_metadata_client/model/json_api_acl_out_document.py
+gooddata_metadata_client/model/json_api_acl_out_includes.py
 gooddata_metadata_client/model/json_api_acl_out_list.py
 gooddata_metadata_client/model/json_api_acl_out_relationships.py
 gooddata_metadata_client/model/json_api_acl_out_relationships_objects.py
@@ -311,6 +322,7 @@ gooddata_metadata_client/model/json_api_analytical_dashboard_linkage.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out_attributes.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out_document.py
+gooddata_metadata_client/model/json_api_analytical_dashboard_out_includes.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out_list.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out_relationships.py
 gooddata_metadata_client/model/json_api_analytical_dashboard_out_relationships_analytical_dashboards.py
@@ -332,6 +344,7 @@ gooddata_metadata_client/model/json_api_attribute_linkage.py
 gooddata_metadata_client/model/json_api_attribute_out.py
 gooddata_metadata_client/model/json_api_attribute_out_attributes.py
 gooddata_metadata_client/model/json_api_attribute_out_document.py
+gooddata_metadata_client/model/json_api_attribute_out_includes.py
 gooddata_metadata_client/model/json_api_attribute_out_list.py
 gooddata_metadata_client/model/json_api_attribute_out_relationships.py
 gooddata_metadata_client/model/json_api_attribute_out_relationships_dataset.py
@@ -339,9 +352,9 @@ gooddata_metadata_client/model/json_api_attribute_out_with_links.py
 gooddata_metadata_client/model/json_api_attribute_to_many_linkage.py
 gooddata_metadata_client/model/json_api_attribute_to_one_linkage.py
 gooddata_metadata_client/model/json_api_cookie_security_configuration_in.py
+gooddata_metadata_client/model/json_api_cookie_security_configuration_in_attributes.py
 gooddata_metadata_client/model/json_api_cookie_security_configuration_in_document.py
 gooddata_metadata_client/model/json_api_cookie_security_configuration_out.py
-gooddata_metadata_client/model/json_api_cookie_security_configuration_out_attributes.py
 gooddata_metadata_client/model/json_api_cookie_security_configuration_out_document.py
 gooddata_metadata_client/model/json_api_data_source_in.py
 gooddata_metadata_client/model/json_api_data_source_in_attributes.py
@@ -363,6 +376,7 @@ gooddata_metadata_client/model/json_api_dataset_out_attributes.py
 gooddata_metadata_client/model/json_api_dataset_out_attributes_grain.py
 gooddata_metadata_client/model/json_api_dataset_out_attributes_reference_properties.py
 gooddata_metadata_client/model/json_api_dataset_out_document.py
+gooddata_metadata_client/model/json_api_dataset_out_includes.py
 gooddata_metadata_client/model/json_api_dataset_out_list.py
 gooddata_metadata_client/model/json_api_dataset_out_relationships.py
 gooddata_metadata_client/model/json_api_dataset_out_relationships_attributes.py
@@ -383,6 +397,7 @@ gooddata_metadata_client/model/json_api_filter_context_in_document.py
 gooddata_metadata_client/model/json_api_filter_context_linkage.py
 gooddata_metadata_client/model/json_api_filter_context_out.py
 gooddata_metadata_client/model/json_api_filter_context_out_document.py
+gooddata_metadata_client/model/json_api_filter_context_out_includes.py
 gooddata_metadata_client/model/json_api_filter_context_out_list.py
 gooddata_metadata_client/model/json_api_filter_context_out_relationships.py
 gooddata_metadata_client/model/json_api_filter_context_out_with_links.py
@@ -403,6 +418,7 @@ gooddata_metadata_client/model/json_api_metric_out.py
 gooddata_metadata_client/model/json_api_metric_out_attributes.py
 gooddata_metadata_client/model/json_api_metric_out_attributes_content.py
 gooddata_metadata_client/model/json_api_metric_out_document.py
+gooddata_metadata_client/model/json_api_metric_out_includes.py
 gooddata_metadata_client/model/json_api_metric_out_list.py
 gooddata_metadata_client/model/json_api_metric_out_relationships.py
 gooddata_metadata_client/model/json_api_metric_out_with_links.py
@@ -442,6 +458,7 @@ gooddata_metadata_client/model/json_api_visualization_object_in_document.py
 gooddata_metadata_client/model/json_api_visualization_object_linkage.py
 gooddata_metadata_client/model/json_api_visualization_object_out.py
 gooddata_metadata_client/model/json_api_visualization_object_out_document.py
+gooddata_metadata_client/model/json_api_visualization_object_out_includes.py
 gooddata_metadata_client/model/json_api_visualization_object_out_list.py
 gooddata_metadata_client/model/json_api_visualization_object_out_relationships.py
 gooddata_metadata_client/model/json_api_visualization_object_out_with_links.py
@@ -525,6 +542,7 @@ test/test_declarative_user.py
 test/test_declarative_user_group.py
 test/test_declarative_user_groups.py
 test/test_declarative_users.py
+test/test_declarative_users_user_groups.py
 test/test_declarative_visualization_object.py
 test/test_declarative_workspace.py
 test/test_declarative_workspace_data_filter.py
@@ -538,6 +556,7 @@ test/test_granularities_formatting.py
 test/test_json_api_acl_out.py
 test/test_json_api_acl_out_attributes.py
 test/test_json_api_acl_out_document.py
+test/test_json_api_acl_out_includes.py
 test/test_json_api_acl_out_list.py
 test/test_json_api_acl_out_relationships.py
 test/test_json_api_acl_out_relationships_objects.py
@@ -551,6 +570,7 @@ test/test_json_api_analytical_dashboard_linkage.py
 test/test_json_api_analytical_dashboard_out.py
 test/test_json_api_analytical_dashboard_out_attributes.py
 test/test_json_api_analytical_dashboard_out_document.py
+test/test_json_api_analytical_dashboard_out_includes.py
 test/test_json_api_analytical_dashboard_out_list.py
 test/test_json_api_analytical_dashboard_out_relationships.py
 test/test_json_api_analytical_dashboard_out_relationships_analytical_dashboards.py
@@ -572,6 +592,7 @@ test/test_json_api_attribute_linkage.py
 test/test_json_api_attribute_out.py
 test/test_json_api_attribute_out_attributes.py
 test/test_json_api_attribute_out_document.py
+test/test_json_api_attribute_out_includes.py
 test/test_json_api_attribute_out_list.py
 test/test_json_api_attribute_out_relationships.py
 test/test_json_api_attribute_out_relationships_dataset.py
@@ -579,9 +600,9 @@ test/test_json_api_attribute_out_with_links.py
 test/test_json_api_attribute_to_many_linkage.py
 test/test_json_api_attribute_to_one_linkage.py
 test/test_json_api_cookie_security_configuration_in.py
+test/test_json_api_cookie_security_configuration_in_attributes.py
 test/test_json_api_cookie_security_configuration_in_document.py
 test/test_json_api_cookie_security_configuration_out.py
-test/test_json_api_cookie_security_configuration_out_attributes.py
 test/test_json_api_cookie_security_configuration_out_document.py
 test/test_json_api_data_source_in.py
 test/test_json_api_data_source_in_attributes.py
@@ -603,6 +624,7 @@ test/test_json_api_dataset_out_attributes.py
 test/test_json_api_dataset_out_attributes_grain.py
 test/test_json_api_dataset_out_attributes_reference_properties.py
 test/test_json_api_dataset_out_document.py
+test/test_json_api_dataset_out_includes.py
 test/test_json_api_dataset_out_list.py
 test/test_json_api_dataset_out_relationships.py
 test/test_json_api_dataset_out_relationships_attributes.py
@@ -623,6 +645,7 @@ test/test_json_api_filter_context_in_document.py
 test/test_json_api_filter_context_linkage.py
 test/test_json_api_filter_context_out.py
 test/test_json_api_filter_context_out_document.py
+test/test_json_api_filter_context_out_includes.py
 test/test_json_api_filter_context_out_list.py
 test/test_json_api_filter_context_out_relationships.py
 test/test_json_api_filter_context_out_with_links.py
@@ -643,6 +666,7 @@ test/test_json_api_metric_out.py
 test/test_json_api_metric_out_attributes.py
 test/test_json_api_metric_out_attributes_content.py
 test/test_json_api_metric_out_document.py
+test/test_json_api_metric_out_includes.py
 test/test_json_api_metric_out_list.py
 test/test_json_api_metric_out_relationships.py
 test/test_json_api_metric_out_with_links.py
@@ -682,6 +706,7 @@ test/test_json_api_visualization_object_in_document.py
 test/test_json_api_visualization_object_linkage.py
 test/test_json_api_visualization_object_out.py
 test/test_json_api_visualization_object_out_document.py
+test/test_json_api_visualization_object_out_includes.py
 test/test_json_api_visualization_object_out_list.py
 test/test_json_api_visualization_object_out_relationships.py
 test/test_json_api_visualization_object_out_with_links.py

@@ -95,7 +95,7 @@ class JsonApiWorkspaceOutList(ModelNormal):
         return {
             'data': ([JsonApiWorkspaceOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
-            'included': ([dict],),  # noqa: E501
+            'included': ([JsonApiWorkspaceOutWithLinks],),  # noqa: E501
         }
 
     @cached_property
@@ -154,7 +154,7 @@ class JsonApiWorkspaceOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,7 +241,7 @@ class JsonApiWorkspaceOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
-            included ([dict]): Included resources. [optional]  # noqa: E501
+            included ([JsonApiWorkspaceOutWithLinks]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

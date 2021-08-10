@@ -79,8 +79,6 @@ class WorkspaceObjectControllerApi(object):
                 json_api_analytical_dashboard_in_document (JsonApiAnalyticalDashboardInDocument):
 
             Keyword Args:
-                predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
-                filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc'). [optional]
                 include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -145,8 +143,6 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_analytical_dashboard_in_document',
-                    'predicate',
-                    'filter',
                     'include',
                 ],
                 'required': [
@@ -181,24 +177,16 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_analytical_dashboard_in_document':
                         (JsonApiAnalyticalDashboardInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
                     'include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_analytical_dashboard_in_document': 'body',
-                    'predicate': 'query',
-                    'filter': 'query',
                     'include': 'query',
                 },
                 'collection_format_map': {
@@ -236,8 +224,6 @@ class WorkspaceObjectControllerApi(object):
                 json_api_filter_context_in_document (JsonApiFilterContextInDocument):
 
             Keyword Args:
-                predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
-                filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc'). [optional]
                 include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -302,8 +288,6 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_filter_context_in_document',
-                    'predicate',
-                    'filter',
                     'include',
                 ],
                 'required': [
@@ -335,24 +319,16 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_filter_context_in_document':
                         (JsonApiFilterContextInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
                     'include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_filter_context_in_document': 'body',
-                    'predicate': 'query',
-                    'filter': 'query',
                     'include': 'query',
                 },
                 'collection_format_map': {
@@ -390,8 +366,6 @@ class WorkspaceObjectControllerApi(object):
                 json_api_metric_in_document (JsonApiMetricInDocument):
 
             Keyword Args:
-                predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
-                filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc'). [optional]
                 include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -456,8 +430,6 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_metric_in_document',
-                    'predicate',
-                    'filter',
                     'include',
                 ],
                 'required': [
@@ -490,24 +462,16 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_metric_in_document':
                         (JsonApiMetricInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
                     'include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_metric_in_document': 'body',
-                    'predicate': 'query',
-                    'filter': 'query',
                     'include': 'query',
                 },
                 'collection_format_map': {
@@ -545,8 +509,6 @@ class WorkspaceObjectControllerApi(object):
                 json_api_visualization_object_in_document (JsonApiVisualizationObjectInDocument):
 
             Keyword Args:
-                predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
-                filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc'). [optional]
                 include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -611,8 +573,6 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_visualization_object_in_document',
-                    'predicate',
-                    'filter',
                     'include',
                 ],
                 'required': [
@@ -646,24 +606,16 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_visualization_object_in_document':
                         (JsonApiVisualizationObjectInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
                     'include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_visualization_object_in_document': 'body',
-                    'predicate': 'query',
-                    'filter': 'query',
                     'include': 'query',
                 },
                 'collection_format_map': {
@@ -701,8 +653,6 @@ class WorkspaceObjectControllerApi(object):
                 json_api_workspace_data_filter_in_document (JsonApiWorkspaceDataFilterInDocument):
 
             Keyword Args:
-                predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
-                filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser.You can specify any object parameter and parameter of related entity up to 2nd level (for example title=='Some Title';description=='desc'). [optional]
                 include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -767,8 +717,6 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_workspace_data_filter_in_document',
-                    'predicate',
-                    'filter',
                     'include',
                 ],
                 'required': [
@@ -799,24 +747,16 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_workspace_data_filter_in_document':
                         (JsonApiWorkspaceDataFilterInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
                     'include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_workspace_data_filter_in_document': 'body',
-                    'predicate': 'query',
-                    'filter': 'query',
                     'include': 'query',
                 },
                 'collection_format_map': {
