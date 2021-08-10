@@ -1,4 +1,5 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 from gooddata_sdk import GoodDataSdk
 from gooddata_pandas.series import SeriesFactory
 from gooddata_pandas.dataframe import DataFrameFactory

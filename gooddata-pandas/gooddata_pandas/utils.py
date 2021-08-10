@@ -1,6 +1,7 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 import uuid
-from typing import Union
+from typing import Union, Dict
 
 from gooddata_sdk import (
     Attribute,
@@ -14,8 +15,8 @@ from gooddata_sdk import (
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]
-IndexDef = Union[LabelItemDef, dict[str, LabelItemDef]]
-ColumnsDef = dict[str, DataItemDef]
+IndexDef = Union[LabelItemDef, Dict[str, LabelItemDef]]
+ColumnsDef = Dict[str, DataItemDef]
 
 
 def _unique_local_id():
@@ -33,30 +34,17 @@ def _try_obj_id(val):
     return val
 
 
-def _to_attribute(val: LabelItemDef) -> Attribute:
+def _to_attribute(val: LabelItemDef, local_id=None) -> Attribute:
     _val = _try_obj_id(val)
 
     if isinstance(_val, Attribute):
         return _val
     elif isinstance(_val, ObjId):
-        return Attribute(local_id=_unique_local_id(), label=_val)
+        return Attribute(local_id=local_id or _unique_local_id(), label=_val)
     elif isinstance(_val, str):
-        return Attribute(local_id=_unique_local_id(), label=val)
+        return Attribute(local_id=local_id or _unique_local_id(), label=val)
 
     raise ValueError(f"Invalid attribute input: {val}")
-
-
-def _to_simple_metric(val: Union[SimpleMetric, str, ObjId]) -> SimpleMetric:
-    _val = _try_obj_id(val)
-
-    if isinstance(_val, SimpleMetric):
-        return _val
-    elif isinstance(_val, ObjId):
-        return SimpleMetric(local_id=_unique_local_id(), item=_val)
-    elif isinstance(_val, str):
-        return SimpleMetric(local_id=_unique_local_id(), item=ObjId(_val, "metric"))
-
-    raise ValueError(f"Invalid metric input: {val}")
 
 
 def _to_filters(val: Union[Filter, list[Filter]]) -> list[Filter]:
@@ -66,16 +54,16 @@ def _to_filters(val: Union[Filter, list[Filter]]) -> list[Filter]:
     return val
 
 
-def _to_item(val: DataItemDef) -> Union[Attribute, Metric]:
+def _to_item(val: DataItemDef, local_id=None) -> Union[Attribute, Metric]:
     _val = _try_obj_id(val)
 
     if isinstance(_val, (Attribute, Metric)):
         return val
     elif isinstance(_val, ObjId):
         if _val.type in ["fact", "metric"]:
-            return SimpleMetric(local_id=_unique_local_id(), item=_val)
+            return SimpleMetric(local_id=local_id or _unique_local_id(), item=_val)
         else:
-            return Attribute(local_id=_unique_local_id(), label=_val)
+            return Attribute(local_id=local_id or _unique_local_id(), label=_val)
 
     raise ValueError(f"Invalid column_by item {val}")
 

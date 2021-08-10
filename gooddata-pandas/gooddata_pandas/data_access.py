@@ -1,4 +1,6 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
+
 from gooddata_sdk import (
     ExecutionDefinition,
     ExecutionResponse,
@@ -56,12 +58,12 @@ def _compute(
     col_to_metric_idx = dict()
 
     for index_name, index_col in (_index_by or dict()).items():
-        item = _to_attribute(index_col)
+        item = _to_attribute(index_col, local_id=index_name)
         index_to_attr_idx[index_name] = len(attributes)
         attributes.append(item)
 
     for col_name, col in columns.items():
-        item = _to_item(col)
+        item = _to_item(col, local_id=col_name)
 
         if isinstance(item, Attribute):
             # prevent double-add for attributes that are using same labels. this has no real effect on the result

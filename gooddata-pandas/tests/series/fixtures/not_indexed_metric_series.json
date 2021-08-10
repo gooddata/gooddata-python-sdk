@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [], \"filters\": [], \"measures\": [{\"localIdentifier\": \"_series\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"region.region_crime_rate\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_0\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 08:28:45 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Content-Length": [
+                        "179"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"_series\"}]}]}],\"links\":{\"executionResult\":\"45b4d342ad4dbd11e052785902fba346dcf1a1ab\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/45b4d342ad4dbd11e052785902fba346dcf1a1ab?offset=0&limit=1",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 08:28:45 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Content-Length": [
+                        "173"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[587.87],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[1],\"offset\":[0],\"total\":[1]}}"
+                }
+            }
+        }
+    ]
+}

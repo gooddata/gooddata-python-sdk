@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"reg\", \"label\": {\"identifier\": {\"id\": \"region.region_name\", \"type\": \"label\"}}}, {\"localIdentifier\": \"prod\", \"label\": {\"identifier\": {\"id\": \"product.product_name\", \"type\": \"label\"}}}], \"filters\": [{\"positiveAttributeFilter\": {\"label\": {\"localIdentifier\": \"prod\"}, \"in\": {\"values\": [\"Hybrid\"]}}}], \"measures\": [{\"localIdentifier\": \"_series\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"coverage.coverage_risk_score\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"reg\", \"prod\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Content-Length": [
+                        "780"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 06:48:04 GMT"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"_series\"}]}]},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"reg\",\"label\":{\"id\":\"region.region_name\",\"type\":\"label\"},\"labelName\":\"Region name\",\"attribute\":{\"id\":\"region.region_name\",\"type\":\"attribute\"},\"attributeName\":\"Region name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region.region_name\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"prod\",\"label\":{\"id\":\"product.product_name\",\"type\":\"label\"},\"labelName\":\"Product name\",\"attribute\":{\"id\":\"product.product_name\",\"type\":\"attribute\"},\"attributeName\":\"Product name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"product.product_name\",\"type\":\"label\"}}}]}],\"links\":{\"executionResult\":\"6831531cc80dbf8d5e1e177b05ccc9ff729c3f92\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/6831531cc80dbf8d5e1e177b05ccc9ff729c3f92?offset=0%2C0&limit=1%2C1000",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Content-Length": [
+                        "533"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 06:48:04 GMT"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[[65.0,65.0]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]},{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}}]},{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Hybrid\",\"primaryLabelValue\":\"Hybrid\"}},{\"attributeHeader\":{\"labelValue\":\"Hybrid\",\"primaryLabelValue\":\"Hybrid\"}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[1,2],\"offset\":[0,0],\"total\":[1,2]}}"
+                }
+            }
+        }
+    ]
+}

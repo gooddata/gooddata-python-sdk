@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
 import pandas
-
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import (
     DefaultInsightColumnNaming,
@@ -133,7 +133,7 @@ class DataFrameFactory:
         has_measures = False
 
         for col_name, col_def in items.items():
-            item = _to_item(col_def)
+            item = _to_item(col_def, local_id=col_name)
 
             if isinstance(item, Attribute):
                 has_attributes = True

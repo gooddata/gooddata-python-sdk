@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"reg\", \"label\": {\"identifier\": {\"id\": \"region.region_name\", \"type\": \"label\"}}}], \"filters\": [{\"positiveAttributeFilter\": {\"label\": {\"localIdentifier\": \"reg\"}, \"in\": {\"values\": [\"Bern\"]}}}], \"measures\": [{\"localIdentifier\": \"crime_rate\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"region.region_crime_rate\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}, {\"localIdentifier\": \"safety_scale\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"region.region_safety_scale\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"reg\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 08:35:04 GMT"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Length": [
+                        "520"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"crime_rate\"},{\"localIdentifier\":\"safety_scale\"}]}]},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"reg\",\"label\":{\"id\":\"region.region_name\",\"type\":\"label\"},\"labelName\":\"Region name\",\"attribute\":{\"id\":\"region.region_name\",\"type\":\"attribute\"},\"attributeName\":\"Region name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region.region_name\",\"type\":\"label\"}}}]}],\"links\":{\"executionResult\":\"e1b09735ab5d96e1594986251d3612d89eb5a3d2\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/e1b09735ab5d96e1594986251d3612d89eb5a3d2?offset=0%2C0&limit=2%2C1000",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-pandas/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 08:35:04 GMT"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ],
+                    "Content-Length": [
+                        "327"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[[23.44],[76.56]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}},{\"measureHeader\":{\"measureIndex\":1}}]}]},{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Bern\",\"primaryLabelValue\":\"Bern\"}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[2,1],\"offset\":[0,0],\"total\":[2,1]}}"
+                }
+            }
+        }
+    ]
+}
