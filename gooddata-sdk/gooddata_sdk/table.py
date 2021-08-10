@@ -215,7 +215,9 @@ class TableService:
             attributes=[a.as_computable() for a in insight.attributes],
             metrics=[m.as_computable() for m in insight.metrics],
             filters=[
-                f for f in [f.as_computable for f in insight.filters] if not f.is_noop()
+                f
+                for f in [f.as_computable() for f in insight.filters]
+                if not f.is_noop()
             ],
         )
 
