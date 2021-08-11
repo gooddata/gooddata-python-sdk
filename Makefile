@@ -3,9 +3,9 @@ all:
 
 .PHONY: dev
 dev:
-	python3 -m venv .venv --upgrade-deps
+	python3.9 -m venv .venv --upgrade-deps
 	.venv/bin/pip3 install -r dev-requirements.txt
-	pre-commit install
+	.venv/bin/pre-commit install
 
 .PHONY: lint
 lint:

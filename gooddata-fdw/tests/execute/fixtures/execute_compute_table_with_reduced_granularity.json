@@ -1,0 +1,172 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"car_make\", \"label\": {\"identifier\": {\"id\": \"car.car_make\", \"type\": \"label\"}}}], \"filters\": [], \"measures\": [{\"localIdentifier\": \"coverage_lifetime\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"coverage.coverage_lifetime\", \"type\": \"fact\"}}, \"aggregation\": \"SUM\", \"computeRatio\": false, \"filters\": []}}}, {\"localIdentifier\": \"claim_amount\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"claim-amount\", \"type\": \"metric\"}}, \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"car_make\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-fdw/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 19:37:57 GMT"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Content-Length": [
+                        "767"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ]
+                },
+                "body": {
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"car_make\",\"label\":{\"id\":\"car.car_make\",\"type\":\"label\"},\"labelName\":\"Car make\",\"attribute\":{\"id\":\"car.car_make\",\"type\":\"attribute\"},\"attributeName\":\"Car make\",\"granularity\":null,\"primaryLabel\":{\"id\":\"car.car_make\",\"type\":\"label\"}}}]},{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"coverage_lifetime\"},{\"localIdentifier\":\"claim_amount\",\"format\":\"[>=1000000000000]$#,,,,.0 T;\\n[>=1000000000]$#,,,.0 B;\\n[>=1000000]$#,,.0 M;\\n[>=1000]$#,.0 K;\\n[>=0]$#,##0;\\n[<=-1000000000000]-$#,,,,.0 T;\\n[<=-1000000000]-$#,,,.0 B;\\n[<=-1000000]-$#,,.0 M;\\n[<=-1000]-$#,.0 K;\\n[<0]-$#,##0\",\"name\":\"Claim Amount\"}]}]}],\"links\":{\"executionResult\":\"2c50a952c7c76aa32dade6c646ba5151e9c5177c\"}}}"
+                }
+            }
+        },
+        {
+            "request": {
+                "method": "GET",
+                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/2c50a952c7c76aa32dade6c646ba5151e9c5177c?offset=0%2C0&limit=512%2C256",
+                "body": null,
+                "headers": {
+                    "Accept": [
+                        "*/*"
+                    ],
+                    "User-Agent": [
+                        "gooddata-python-sdk/0.1 gooddata-fdw/0.1"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": "OK"
+                },
+                "headers": {
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "Date": [
+                        "Tue, 10 Aug 2021 19:37:57 GMT"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Content-Length": [
+                        "4547"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    ]
+                },
+                "body": {
+                    "string": "{\"data\":[[9186.0,19010.06875],[57679.0,109833.1975],[61480.0,123738.644375],[7459.0,14879.395625],[599.0,435.036875],[86281.0,162050.675625],[5231.0,10425.255],[4225.0,8675.260625],[241.0,404.59125],[83.0,252.160625],[295.0,568.393125],[30847.0,61319.8125],[104726.0,201791.385625],[335.0,374.784375],[9676.0,20266.29125],[28702.0,58069.14875],[77.0,461.4075],[2665.0,5061.249375],[19273.0,36311.795625],[268.0,667.050625],[837.0,1584.424375],[2416.0,3950.803125],[174.0,282.108125],[9703.0,18284.46875],[166.0,224.274375],[16627.0,31311.31375],[1664.0,2629.214375],[4757.0,9921.60375],[6825.0,12320.813125],[28826.0,55964.335625],[115558.0,215857.369375],[96478.0,184505.34875],[217.0,794.72875],[110467.0,226976.86625],[5374.0,11799.393125],[1877.0,4679.34875],[180407.0,337205.8775],[7605.0,15291.503125],[1484.0,3055.264375],[2266.0,3494.22625],[110.0,306.644375],[5333.0,11978.265],[265.0,261.455625],[26352.0,53234.33125],[108288.0,206569.050625],[3518.0,9229.261875]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"ALFAROMEO\",\"primaryLabelValue\":\"ALFAROMEO\"}},{\"attributeHeader\":{\"labelValue\":\"AUDI\",\"primaryLabelValue\":\"AUDI\"}},{\"attributeHeader\":{\"labelValue\":\"BMW\",\"primaryLabelValue\":\"BMW\"}},{\"attributeHeader\":{\"labelValue\":\"CHEVROLET\",\"primaryLabelValue\":\"CHEVROLET\"}},{\"attributeHeader\":{\"labelValue\":\"CHRYSLER\",\"primaryLabelValue\":\"CHRYSLER\"}},{\"attributeHeader\":{\"labelValue\":\"CITROEN\",\"primaryLabelValue\":\"CITROEN\"}},{\"attributeHeader\":{\"labelValue\":\"DACIA\",\"primaryLabelValue\":\"DACIA\"}},{\"attributeHeader\":{\"labelValue\":\"DAEWOO\",\"primaryLabelValue\":\"DAEWOO\"}},{\"attributeHeader\":{\"labelValue\":\"DATSUN\",\"primaryLabelValue\":\"DATSUN\"}},{\"attributeHeader\":{\"labelValue\":\"DODGE\",\"primaryLabelValue\":\"DODGE\"}},{\"attributeHeader\":{\"labelValue\":\"FERRARI\",\"primaryLabelValue\":\"FERRARI\"}},{\"attributeHeader\":{\"labelValue\":\"FIAT\",\"primaryLabelValue\":\"FIAT\"}},{\"attributeHeader\":{\"labelValue\":\"FORD\",\"primaryLabelValue\":\"FORD\"}},{\"attributeHeader\":{\"labelValue\":\"GALLOPER\",\"primaryLabelValue\":\"GALLOPER\"}},{\"attributeHeader\":{\"labelValue\":\"HONDA\",\"primaryLabelValue\":\"HONDA\"}},{\"attributeHeader\":{\"labelValue\":\"HYUNDAI\",\"primaryLabelValue\":\"HYUNDAI\"}},{\"attributeHeader\":{\"labelValue\":\"JAGUAR\",\"primaryLabelValue\":\"JAGUAR\"}},{\"attributeHeader\":{\"labelValue\":\"JEEP\",\"primaryLabelValue\":\"JEEP\"}},{\"attributeHeader\":{\"labelValue\":\"KIA\",\"primaryLabelValue\":\"KIA\"}},{\"attributeHeader\":{\"labelValue\":\"LADA\",\"primaryLabelValue\":\"LADA\"}},{\"attributeHeader\":{\"labelValue\":\"LANCIA\",\"primaryLabelValue\":\"LANCIA\"}},{\"attributeHeader\":{\"labelValue\":\"LANDROVER\",\"primaryLabelValue\":\"LANDROVER\"}},{\"attributeHeader\":{\"labelValue\":\"LEXUS\",\"primaryLabelValue\":\"LEXUS\"}},{\"attributeHeader\":{\"labelValue\":\"MAZDA\",\"primaryLabelValue\":\"MAZDA\"}},{\"attributeHeader\":{\"labelValue\":\"MCC\",\"primaryLabelValue\":\"MCC\"}},{\"attributeHeader\":{\"labelValue\":\"MERCEDES\",\"primaryLabelValue\":\"MERCEDES\"}},{\"attributeHeader\":{\"labelValue\":\"MG\",\"primaryLabelValue\":\"MG\"}},{\"attributeHeader\":{\"labelValue\":\"MINI\",\"primaryLabelValue\":\"MINI\"}},{\"attributeHeader\":{\"labelValue\":\"MITSUBISHI\",\"primaryLabelValue\":\"MITSUBISHI\"}},{\"attributeHeader\":{\"labelValue\":\"NISSAN\",\"primaryLabelValue\":\"NISSAN\"}},{\"attributeHeader\":{\"labelValue\":\"OPEL\",\"primaryLabelValue\":\"OPEL\"}},{\"attributeHeader\":{\"labelValue\":\"PEUGEOT\",\"primaryLabelValue\":\"PEUGEOT\"}},{\"attributeHeader\":{\"labelValue\":\"PORSCHE\",\"primaryLabelValue\":\"PORSCHE\"}},{\"attributeHeader\":{\"labelValue\":\"RENAULT\",\"primaryLabelValue\":\"RENAULT\"}},{\"attributeHeader\":{\"labelValue\":\"ROVER\",\"primaryLabelValue\":\"ROVER\"}},{\"attributeHeader\":{\"labelValue\":\"SAAB\",\"primaryLabelValue\":\"SAAB\"}},{\"attributeHeader\":{\"labelValue\":\"SEAT\",\"primaryLabelValue\":\"SEAT\"}},{\"attributeHeader\":{\"labelValue\":\"SKODA\",\"primaryLabelValue\":\"SKODA\"}},{\"attributeHeader\":{\"labelValue\":\"SMART\",\"primaryLabelValue\":\"SMART\"}},{\"attributeHeader\":{\"labelValue\":\"SSANGYONG\",\"primaryLabelValue\":\"SSANGYONG\"}},{\"attributeHeader\":{\"labelValue\":\"SUBARU\",\"primaryLabelValue\":\"SUBARU\"}},{\"attributeHeader\":{\"labelValue\":\"SUZUKI\",\"primaryLabelValue\":\"SUZUKI\"}},{\"attributeHeader\":{\"labelValue\":\"TATA\",\"primaryLabelValue\":\"TATA\"}},{\"attributeHeader\":{\"labelValue\":\"TOYOTA\",\"primaryLabelValue\":\"TOYOTA\"}},{\"attributeHeader\":{\"labelValue\":\"VOLKSWAGEN\",\"primaryLabelValue\":\"VOLKSWAGEN\"}},{\"attributeHeader\":{\"labelValue\":\"VOLVO\",\"primaryLabelValue\":\"VOLVO\"}}]}]},{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}},{\"measureHeader\":{\"measureIndex\":1}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[46,2],\"offset\":[0,0],\"total\":[46,2]}}"
+                }
+            }
+        }
+    ]
+}
