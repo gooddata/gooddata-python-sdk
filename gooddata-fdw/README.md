@@ -12,6 +12,27 @@ image containing official PostgreSQL v12 and install all the requirements and Go
 a new `gooddata` DB and `gooddata` user who will have access to this DB. The password for this user is what you have
 entered in the `POSTGRES_PASSWORD` variable.
 
+__Note on using GD.CN.CE and provided Postgre image in docker__:
+In case you are about to run both components in docker, both should be connected to same docker network.
+Then the containers are able to address each other via hostnames that are equal to value of provided --name value
+as shown in the next excerpt:
+
+``` shell
+# create the network
+docker network create tiger_network -d bridge
+
+# pass --name and --network to both starting containers, eg.:
+docker run --name gdcnce --network tiger_network -i -t -p 3000:3000 -p 5432:5432 -v gd-volume:/data gooddata/gooddata-cn-ce:latest
+
+docker run --name multicorn --network tiger_network --rm -p 2543:5432 \
+          -e POSTGRES_DB=gooddata \
+          -e POSTGRES_USER=gooddata \
+          -e POSTGRES_PASSWORD=$PASS \
+          -e GOODDATA_SDK_HTTP_HEADERS='{"Host": "localhost"}' \
+          postgresql-gd postgres -c shared_preload_libraries='foreign_table_exposer'
+```
+
+
 After the container starts, you can connect to the running PostgreSQL:
 
 -   From console using `psql --host localhost --port 2543 --user gooddata gooddata`

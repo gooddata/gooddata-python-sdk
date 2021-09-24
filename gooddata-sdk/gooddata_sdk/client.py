@@ -7,9 +7,20 @@ USER_AGENT = "gooddata-python-sdk/0.1"
 
 
 class GoodDataApiClient:
-    def __init__(self, host, token, extra_user_agent=None):
+    """Provide access to metadata and afm services."""
+
+    def __init__(self, host, token, custom_headers=None, extra_user_agent=None):
+        """Take url, token for connecting to GoodData.CN.
+
+        HTTP requests made by this class may be enriched by `custom_headers` dict
+        containing header names as keys and header values as dict values.
+
+        `extra_user_agent` is optional string to be added to default http User-Agent
+        header. This takes precedence over custom_headers setting.
+        """
         self._hostname = host
         self._token = token
+        self._custom_headers = custom_headers or {}
 
         user_agent = (
             f"{USER_AGENT} {extra_user_agent}"
@@ -24,6 +35,8 @@ class GoodDataApiClient:
             header_value=f"Bearer {token}",
         )
         self._metadata_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        for header_name, header_value in self._custom_headers.items():
+            self._metadata_client.default_headers[header_name] = header_value
         self._metadata_client.user_agent = user_agent
 
         self._afm_config = afm_client.Configuration(host=host)
@@ -33,6 +46,8 @@ class GoodDataApiClient:
             header_value=f"Bearer {token}",
         )
         self._afm_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        for header_name, header_value in self._custom_headers.items():
+            self.afm_client.default_headers[header_name] = header_value
         self._afm_client.user_agent = user_agent
 
     @property

@@ -8,8 +8,29 @@ from gooddata_sdk.insight import InsightService
 
 
 class GoodDataSdk:
-    def __init__(self, host, token, extra_user_agent=None):
-        self._client = GoodDataApiClient(host, token, extra_user_agent)
+    """Top-level class that wraps all the functionality together."""
+
+    @classmethod
+    def new(cls, host, token, extra_user_agent=None):
+        """Create common GoodDataApiClient and return new GoodDataSdk instance.
+
+        This is preffered way of creating GoodDataSdk, when no tweaks are needed.
+        """
+        client = GoodDataApiClient(
+            host,
+            token,
+            extra_user_agent=extra_user_agent,
+        )
+        return cls(client)
+
+    def __init__(self, client: GoodDataApiClient):
+        """Take instance of GoodDataApiClient and return new GoodDataSdk instance.
+
+        Useful when customized GoodDataApiClient is needed. Usually users should use
+        `GoodDataSdk.new` classmethod.
+        """
+        self._client = client
+
         self._catalog = CatalogService(self._client)
         self._compute = ComputeService(self._client)
         self._insights = InsightService(self._client)

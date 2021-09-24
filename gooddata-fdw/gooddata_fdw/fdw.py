@@ -1,7 +1,10 @@
 # (C) 2021 GoodData Corporation
-import gooddata_sdk as sdk
-from gooddata_fdw.logging import _log_debug, _log_info
+import os
 from operator import itemgetter
+import json
+
+import gooddata_sdk as sdk
+from gooddata_fdw.logging import _log_debug, _log_info, _log_error
 
 from gooddata_fdw.environment import (
     ForeignDataWrapper,
@@ -36,6 +39,25 @@ def _col_as_computable(col: ColumnDefinition):
         )
 
 
+def _create_sdk(host, token):
+    """Return GoodDataSdk instance."""
+    headers = os.environ.get("GOODDATA_SDK_HTTP_HEADERS", None)
+    if headers:
+        try:
+            headers = json.loads(headers)
+            assert isinstance(headers, dict), "Not a dictionary"
+        except (AssertionError, json.JSONDecodeError) as e:
+            _log_error(
+                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. "
+                "Json object expected."
+            )
+            raise e
+    client = sdk.client.GoodDataApiClient(
+        host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
+    )
+    return sdk.GoodDataSdk(client)
+
+
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def __init__(self, options, columns):
         super(GoodDataForeignDataWrapper, self).__init__(options, columns)
@@ -58,9 +80,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._columns = columns
         self._insight = options["insight"] if "insight" in options else None
         self._compute = options["compute"] if "compute" in options else None
-        self._sdk = sdk.GoodDataSdk(
-            host=self._host, token=self._token, extra_user_agent=_USER_AGENT
-        )
+        self._sdk = _create_sdk(self._host, self._token)
 
         self._validate()
 
@@ -221,11 +241,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}"
         )
 
-        _sdk = sdk.GoodDataSdk(
-            host=srv_options["host"],
-            token=srv_options["token"],
-            extra_user_agent=_USER_AGENT,
-        )
+        _sdk = _create_sdk(srv_options["host"], srv_options["token"])
 
         # TODO catalog will be needed to correctly identify cols that contain date/timestamp; skipping for now
         # _log_debug(f"loading full catalog")
@@ -285,11 +301,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             f"importing semantic layer as tables from {srv_options['host']} workspace {options['workspace']}"
         )
 
-        _sdk = sdk.GoodDataSdk(
-            host=srv_options["host"],
-            token=srv_options["token"],
-            extra_user_agent=_USER_AGENT,
-        )
+        _sdk = _create_sdk(srv_options["host"], srv_options["token"])
 
         catalog = _sdk.catalog.get_full_catalog(workspace)
         columns = []
