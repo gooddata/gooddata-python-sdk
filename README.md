@@ -62,6 +62,8 @@ create pandas series and data frames.
     If `direnv` is not your cup of tea, you may want adopt the PYTHONPATH exports that are done as part of the
     script so that you can run custom Python code using the packages container herein without installing them.
 
+    To make sure you have successfully set up your environment run `make test` in virtualenv in the root of git repo.
+
 ### Coding Conventions
 
 This project uses [flake8](https://flake8.pycqa.org/en/latest/) to ensure basic code sanity and [black](https://github.com/psf/black)

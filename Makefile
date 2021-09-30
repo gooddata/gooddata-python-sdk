@@ -29,3 +29,9 @@ afm-client:
 .PHONY: metadata-client
 metadata-client:
 	scripts/generate_metadata_client.sh
+
+.PHONY: test
+test:
+	tox -r -e py39 -c gooddata-sdk/tox.ini
+	tox -r -e py39 -c gooddata-pandas/tox.ini
+	tox -r -e py39 -c gooddata-fdw/tox.ini
