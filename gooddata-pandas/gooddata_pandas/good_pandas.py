@@ -11,7 +11,7 @@ class GoodPandas:
     """
 
     def __init__(self, host, token):
-        self._sdk = GoodDataSdk(
+        self._sdk = GoodDataSdk.new(
             host=host, token=token, extra_user_agent="gooddata-pandas/0.1"
         )
         self._series_per_ws = dict()
