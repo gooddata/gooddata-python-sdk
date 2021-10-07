@@ -23,6 +23,7 @@ from gooddata_sdk.compute_model import (
     NegativeAttributeFilter,
     AbsoluteDateFilter,
     RelativeDateFilter,
+    AllTimeFilter,
     MetricValueFilter,
     RankingFilter,
     SimpleMetric,

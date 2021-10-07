@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import AbsoluteDateFilter, RelativeDateFilter, ObjId
+from gooddata_sdk import AbsoluteDateFilter, RelativeDateFilter, AllTimeFilter, ObjId
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -46,3 +46,13 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
         json.dumps(filter.as_api_model().to_dict(), indent=4, sort_keys=True),
         _scenario_to_snapshot_name(scenario),
     )
+
+
+def test_cannot_create_api_model_from_all_time_filter():
+    """As All time filter from GoodData.CN does not contain from and to fields,
+    we are not sure how to make valid model from it. We prefer to fail, until
+    we decide what to do with this situation.
+    """
+    with pytest.raises(NotImplementedError):
+        f = AllTimeFilter()
+        f.as_api_model()
