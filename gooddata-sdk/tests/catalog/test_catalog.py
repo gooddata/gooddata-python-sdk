@@ -19,7 +19,7 @@ def test_catalog_load():
     catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)
 
     # rough initial smoke-test; just do a quick 'rub'
-    assert len(catalog.metrics) == 26
+    assert len(catalog.metrics) == 25
     assert len(catalog.datasets) == 9
 
     assert catalog.get_metric("claim-count") is not None
@@ -40,5 +40,5 @@ def test_catalog_availability():
     filtered_catalog = catalog.catalog_with_valid_objects(claim_count)
 
     # rough initial smoke-test; just do a quick 'rub' that filtered catalog has less entries than full catalog
-    assert len(filtered_catalog.metrics) == 26
+    assert len(filtered_catalog.metrics) == 25
     assert len(filtered_catalog.datasets) == 7
