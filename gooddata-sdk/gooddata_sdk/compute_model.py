@@ -106,6 +106,11 @@ class Attribute(ExecModelEntity):
             local_identifier=self.local_id, label=self.label.as_afm_id()
         )
 
+    def __repr__(self):
+        return (
+            f"compute_model.Attribute(local_id='{self.local_id}', label='{self.label}')"
+        )
+
 
 class Filter(ExecModelEntity):
     def __init__(self):
@@ -229,6 +234,15 @@ class SimpleMetric(Metric):
                     _check_type=False,
                 )
             )
+
+    def __repr__(self):
+        return (
+            f"compute_model.SimpleMetric("
+            f"item='{self.item}', "
+            f"aggregation='{self.aggregation}', "
+            f"compute_ratio='{self.compute_ratio}', "
+            f"filters='{self.filters}')"
+        )
 
 
 class PopDate:

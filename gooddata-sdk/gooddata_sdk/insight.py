@@ -445,7 +445,7 @@ class Insight:
         return self.__repr__()
 
     def __repr__(self):
-        return f"insight(title='{self.title}', id='{self.id}, buckets='{str(self.buckets)}')'"
+        return f"insight(title='{self.title}', id='{self.id}', buckets='{str(self.buckets)}')'"
 
 
 class InsightService:
