@@ -86,13 +86,19 @@ class CatalogLabel(CatalogEntry):
 
 
 class CatalogAttribute(CatalogEntry):
-    def __init__(self, attribute, labels: list[CatalogLabel]):
+    def __init__(
+        self, attribute, labels: list[CatalogLabel], datasets: list[CatalogDataset]
+    ):
         super(CatalogAttribute, self).__init__()
 
         self._a = attribute["attributes"]
         self._attribute = attribute
         self._labels = labels
         self._labels_idx = dict([(str(label.obj_id), label) for label in labels])
+        self._datasets = datasets
+        self._datasets_idx = dict(
+            [(str(dataset.obj_id), dataset) for dataset in datasets]
+        )
         self._obj_id = ObjId(self._attribute["id"], self._attribute["type"])
 
     @property
@@ -244,6 +250,10 @@ class CatalogDataset(CatalogEntry):
         return self._dataset["type"]
 
     @property
+    def data_type(self) -> str:
+        return self._d["type"]
+
+    @property
     def obj_id(self) -> ObjId:
         return self._obj_id
 
@@ -309,10 +319,12 @@ class Catalog:
         valid_obj_fun,
         datasets: list[CatalogDataset],
         metrics: list[CatalogMetric],
+        attributes: list[CatalogAttribute],
     ):
         self._valid_obf_fun = valid_obj_fun
         self._datasets = datasets
         self._metrics = metrics
+        self._attributes = attributes
         self._metric_idx = dict([(str(m.obj_id), m) for m in metrics])
         self._datasets_idx = dict([(str(d.obj_id), d) for d in datasets])
 
@@ -395,7 +407,12 @@ class Catalog:
         ]
         new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
 
-        return Catalog(self._valid_obf_fun, datasets=new_datasets, metrics=new_metrics)
+        return Catalog(
+            self._valid_obf_fun,
+            datasets=new_datasets,
+            metrics=new_metrics,
+            attributes=None,
+        )
 
     def __str__(self):
         return self.__repr__()
@@ -426,12 +443,14 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
     for attr in attributes.data:
         attr_id = attr["id"]
         label_ids = attr["relationships"]["labels"]["data"]
+        dataset_ids = attr["relationships"]["dataset"]["data"]
         catalog_attributes[attr_id] = CatalogAttribute(
             attr,
             [
                 CatalogLabel(attribute_sideloads.find(label_id))
                 for label_id in label_ids
             ],
+            [CatalogDataset(attribute_sideloads.find(dataset_ids), None, None)],
         )
 
     # finally go through all datasets, find related attributes and facts
@@ -452,6 +471,7 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
         valid_obj_fun=valid_obj_fun,
         datasets=list(catalog_datasets.values()),
         metrics=catalog_metrics,
+        attributes=catalog_attributes,
     )
 
 
@@ -508,7 +528,7 @@ class CatalogService:
         get_attributes = functools.partial(
             self._api.get_all_entities_attributes,
             workspace_id,
-            include=["labels"],
+            include=["labels", "datasets"],
             _check_return_type=False,
         )
 
