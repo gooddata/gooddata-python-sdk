@@ -22,6 +22,8 @@ _USER_AGENT = "gooddata-fdw/0.1"
 Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent.
 """
 
+DEFAULT_ATTRIBUTE_DATATYPE = "VARCHAR(255)"
+
 
 def _col_as_computable(col: ColumnDefinition):
     item_type, item_id = col.options["id"].split("/")
@@ -56,6 +58,28 @@ def _create_sdk(host, token):
         host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
     )
     return sdk.GoodDataSdk(client)
+
+
+def column_data_type_for(attribute):
+    """Determine what postgres type should be used for `attribute`."""
+    declared_data_type = attribute._datasets[0].data_type
+    granularity = attribute.granularity
+    return {
+        "DATE": date_granularity_to_data_type(granularity),
+        "NORMAL": DEFAULT_ATTRIBUTE_DATATYPE,
+    }.get(declared_data_type, DEFAULT_ATTRIBUTE_DATATYPE)
+
+
+def date_granularity_to_data_type(granularity):
+    """Determine what postgres type should be used for an attribute of type date based on `granularity`."""
+    time_granularity = (
+        "MINUTE",
+        "HOUR",
+        "DAY",
+    )
+    return (
+        "TIMESTAMP" if granularity in time_granularity else DEFAULT_ATTRIBUTE_DATATYPE
+    )
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
@@ -240,14 +264,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         _log_info(
             f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}"
         )
-
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
-
-        # TODO catalog will be needed to correctly identify cols that contain date/timestamp; skipping for now
-        # _log_debug(f"loading full catalog")
-        # catalog_service = sdk.CatalogService(client)
-        # catalog = catalog_service.get_full_catalog(workspace)
-
+        _log_debug("loading full catalog")
+        catalog = _sdk.catalog.get_full_catalog(workspace)
         _log_debug("loading all insights")
         insights = _sdk.insights.get_insights(workspace)
 
@@ -264,9 +283,11 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 column_name = column_naming.col_name_for_attribute(attr)
                 _log_debug(f"creating col def {column_name} for attribute {attr}")
 
+                data_type = column_data_type_for(catalog._attributes[attr.label_id])
+
                 col = ColumnDefinition(
                     column_name=column_name,
-                    type_name="VARCHAR(256)",
+                    type_name=data_type,
                     options=dict(local_id=attr.local_id),
                 )
                 columns.append(col)
@@ -335,17 +356,16 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 )
 
             for attribute in dataset.attributes:
-                # TODO: correctly identify cols that should be DATE or TIMESTAMP. skipping for now because
-                #  can't be bothered doing the date conversions
                 for label in attribute.labels:
                     column_name = naming.col_name_for_label(label, dataset)
+                    data_type = column_data_type_for(attribute)
 
                     _log_info(f"label {label.id} mapped to column {column_name}")
 
                     columns.append(
                         ColumnDefinition(
                             column_name=column_name,
-                            type_name="VARCHAR(256)",
+                            type_name=data_type,
                             options=dict(id=f"label/{label.id}"),
                         )
                     )
