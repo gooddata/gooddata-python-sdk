@@ -126,6 +126,10 @@ class CatalogAttribute(CatalogEntry):
         return self._labels
 
     @property
+    def datasets(self) -> list[CatalogDataset]:
+        return self._datasets
+
+    @property
     def granularity(self) -> Union[str, None]:
         return self._a["granularity"] if "granularity" in self._a else None
 
@@ -333,6 +337,10 @@ class Catalog:
         return self._datasets
 
     @property
+    def attributes(self) -> list[CatalogAttribute]:
+        return self._attributes
+
+    @property
     def metrics(self) -> list[CatalogMetric]:
         return self._metrics
 
@@ -375,6 +383,7 @@ class Catalog:
         )
 
     def find_label_attribute(self, id_obj) -> Union[CatalogAttribute, None]:
+        """Get attribute by label id."""
         for dataset in self._datasets:
             res = dataset.find_label_attribute(id_obj)
 

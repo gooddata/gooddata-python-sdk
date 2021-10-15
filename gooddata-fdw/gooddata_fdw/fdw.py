@@ -16,6 +16,7 @@ from gooddata_fdw.naming import (
     DefaultInsightColumnNaming,
     DefaultCatalogNamingStrategy,
 )
+from gooddata_sdk.compute_model import ObjId
 
 _USER_AGENT = "gooddata-fdw/0.1"
 """
@@ -62,7 +63,7 @@ def _create_sdk(host, token):
 
 def column_data_type_for(attribute):
     """Determine what postgres type should be used for `attribute`."""
-    declared_data_type = attribute._datasets[0].data_type
+    declared_data_type = attribute.datasets[0].data_type
     granularity = attribute.granularity
     return {
         "DATE": date_granularity_to_data_type(granularity),
@@ -283,7 +284,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 column_name = column_naming.col_name_for_attribute(attr)
                 _log_debug(f"creating col def {column_name} for attribute {attr}")
 
-                data_type = column_data_type_for(catalog._attributes[attr.label_id])
+                label_id = ObjId(id=attr.label_id, type="label")
+                data_type = column_data_type_for(catalog.find_label_attribute(label_id))
 
                 col = ColumnDefinition(
                     column_name=column_name,
