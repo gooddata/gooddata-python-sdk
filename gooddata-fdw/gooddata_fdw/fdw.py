@@ -73,14 +73,15 @@ def column_data_type_for(attribute):
 
 def date_granularity_to_data_type(granularity):
     """Determine what postgres type should be used for an attribute of type date based on `granularity`."""
-    time_granularity = (
-        "MINUTE",
-        "HOUR",
-        "DAY",
-    )
-    return (
-        "TIMESTAMP" if granularity in time_granularity else DEFAULT_ATTRIBUTE_DATATYPE
-    )
+    return {
+        "MINUTE": "TIMESTAMP",  # No conversion needed
+        "HOUR": "TIMESTAMP",  # Add minutes
+        "DAY": "DATE",  # No conversion needed
+        "WEEK": DEFAULT_ATTRIBUTE_DATATYPE,
+        "MONTH": "DATE",  # Add day
+        "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
+        "YEAR": "INTEGER",
+    }.get(granularity, "INTEGER")
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
@@ -165,12 +166,49 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         for result_row in table.read_all():
             row = dict()
 
-            # TODO: it is likely that conversion to DATE/TIMESTAMP will have to happen here if the column is of
-            #  the respective type
             for column_name in columns:
-                row[column_name] = result_row[col_to_local_id[column_name]]
+                value = result_row[col_to_local_id[column_name]]
+                sanitized = self._sanitize_value(column_name, value)
+                row[column_name] = sanitized
 
             yield row
+
+    def _sanitize_value(self, column_name, value):
+        """Alter the value to comply with postgres data type"""
+        type_name = self._columns[column_name].base_type_name
+
+        sanitizations = {
+            "date": self._sanitize_date,
+            "timestamp without time zone": self._sanitize_timestamp,
+            "timestamp": self._sanitize_timestamp,
+        }
+        if type_name in sanitizations:
+            return sanitizations[type_name](value)
+        else:
+            return value
+
+    def _sanitize_date(self, value):
+        """Add first month and first date to incomplete iso date string.
+
+        >>>assert sanitize_date("2021-01") == "2021-01-01"
+        >>>assert sanitize_date("1992") == "1992-01-01"
+        """
+        parts = value.split("-")
+        missing_count = 3 - len(parts)
+        for i in range(0, missing_count):
+            parts.append("01")
+        return "-".join(parts)
+
+    def _sanitize_timestamp(self, value):
+        """Append minutes to incomplete datetime string.
+
+        >>>assert sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
+        >>>assert sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
+        """
+        parts = value.split(":")
+        if len(parts) == 1:
+            value = value + ":00"
+        return value
 
     def get_computable_for_col_name(self, column_name):
         return _col_as_computable(self._columns[column_name])

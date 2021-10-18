@@ -24,58 +24,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
                     ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Strict-Transport-Security": [
-                        "max-age=31536000; includeSubDomains"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Expires": [
-                        "0"
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "transfer-encoding": [
+                        "chunked"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Date": [
+                        "Mon, 18 Oct 2021 14:53:35 GMT"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
-                    ],
-                    "transfer-encoding": [
-                        "chunked"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Date": [
-                        "Tue, 12 Oct 2021 12:46:17 GMT"
-                    ],
-                    "Access-Control-Allow-Origin": [
-                        "https://localhost:8443"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
+                    "Expires": [
+                        "0"
                     ]
                 },
                 "body": {
@@ -106,58 +106,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
                     ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Strict-Transport-Security": [
-                        "max-age=31536000; includeSubDomains"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Expires": [
-                        "0"
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "transfer-encoding": [
+                        "chunked"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Date": [
+                        "Mon, 18 Oct 2021 14:53:35 GMT"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
-                    ],
-                    "transfer-encoding": [
-                        "chunked"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Date": [
-                        "Tue, 12 Oct 2021 12:46:17 GMT"
-                    ],
-                    "Access-Control-Allow-Origin": [
-                        "https://localhost:8443"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
+                    "Expires": [
+                        "0"
                     ]
                 },
                 "body": {
@@ -188,58 +188,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    "Content-Security-Policy": [
+                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
                     ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Strict-Transport-Security": [
-                        "max-age=31536000; includeSubDomains"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Expires": [
-                        "0"
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "Strict-Transport-Security": [
+                        "max-age=31536000; includeSubDomains"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "transfer-encoding": [
+                        "chunked"
+                    ],
+                    "Access-Control-Allow-Origin": [
+                        "https://localhost:8443"
+                    ],
+                    "Date": [
+                        "Mon, 18 Oct 2021 14:53:35 GMT"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly"
+                    ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob: www.gooddata.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
-                    ],
-                    "transfer-encoding": [
-                        "chunked"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Date": [
-                        "Tue, 12 Oct 2021 12:46:17 GMT"
-                    ],
-                    "Access-Control-Allow-Origin": [
-                        "https://localhost:8443"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
+                    "Expires": [
+                        "0"
                     ]
                 },
                 "body": {

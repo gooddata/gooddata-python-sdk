@@ -76,6 +76,7 @@ except ImportError as e:
         def __init__(self, column_name, type_name, options):
             self.column_name = column_name
             self.type_name = type_name
+            self.base_type_name = type_name
             self.options = options
 
     ColumnDefinition = ColumnDefinitionStub
