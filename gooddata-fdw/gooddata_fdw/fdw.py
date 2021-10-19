@@ -63,7 +63,7 @@ def _create_sdk(host, token):
 
 def column_data_type_for(attribute):
     """Determine what postgres type should be used for `attribute`."""
-    declared_data_type = attribute.datasets[0].data_type
+    declared_data_type = attribute.dataset.data_type
     granularity = attribute.granularity
     return {
         "DATE": date_granularity_to_data_type(granularity),
