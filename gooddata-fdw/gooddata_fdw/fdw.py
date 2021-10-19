@@ -223,9 +223,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         items = [self.get_computable_for_col_name(col_name) for col_name in columns]
         table = self._sdk.tables.for_items(self._workspace, items)
 
-        # TODO: it is likely that this has to change to support DATE and TIMESTAMP. have mapping that need to be
-        #  timestamp/date, instead of returning generator, iterate rows, convert to dates and yield the converted row
-        return table.read_all()
+        for row in table.read_all():
+            sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
+            yield sanitized_row
 
     def _execute_custom_report(self, quals, columns, sortKeys=None):
         """
