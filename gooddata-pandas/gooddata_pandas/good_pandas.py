@@ -1,8 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
-from gooddata_sdk import GoodDataSdk
+import os
+import json
+from gooddata_sdk import GoodDataSdk, client as sdk_client
 from gooddata_pandas.series import SeriesFactory
 from gooddata_pandas.dataframe import DataFrameFactory
+
+
+_USER_AGENT = "gooddata-pandas/0.1"
 
 
 class GoodPandas:
@@ -11,9 +16,7 @@ class GoodPandas:
     """
 
     def __init__(self, host, token):
-        self._sdk = GoodDataSdk.new(
-            host=host, token=token, extra_user_agent="gooddata-pandas/0.1"
-        )
+        self._sdk = _create_sdk(host, token)
         self._series_per_ws = dict()
         self._frames_per_ws = dict()
 
@@ -46,3 +49,22 @@ class GoodPandas:
             )
 
         return self._frames_per_ws[workspace_id]
+
+
+def _create_sdk(host, token):
+    """Return GoodDataSdk instance."""
+    headers = os.environ.get("GOODDATA_SDK_HTTP_HEADERS", None)
+    if headers:
+        try:
+            headers = json.loads(headers)
+            assert isinstance(headers, dict), "Not a dictionary"
+        except (AssertionError, json.JSONDecodeError) as e:
+            text = (
+                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. "
+                "Json object expected."
+            )
+            raise ValueError(text) from e
+    client = sdk_client.GoodDataApiClient(
+        host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
+    )
+    return GoodDataSdk(client)
