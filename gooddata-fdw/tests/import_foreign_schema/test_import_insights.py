@@ -28,7 +28,7 @@ def test_import_insights_without_restrictions(import_srv_options):
     # do a rough rub now.. there are 8 stable insights in the insurance-demo.. those should be mapped to
     # tables. then pick a couple of tables and make sure their columns are looking ok
 
-    assert len(tables) == 8
+    assert len(tables) == 9
 
     tables_idx = _tables_to_dict(tables)
     premium_revenue_structure = tables_idx["premium_revenue_structure"]

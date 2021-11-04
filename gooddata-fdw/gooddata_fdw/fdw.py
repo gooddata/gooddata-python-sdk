@@ -16,11 +16,14 @@ from gooddata_fdw.naming import (
     DefaultInsightColumnNaming,
     DefaultCatalogNamingStrategy,
 )
+from gooddata_sdk.compute_model import ObjId
 
 _USER_AGENT = "gooddata-fdw/0.1"
 """
 Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent.
 """
+
+DEFAULT_ATTRIBUTE_DATATYPE = "VARCHAR(255)"
 
 
 def _col_as_computable(col: ColumnDefinition):
@@ -56,6 +59,29 @@ def _create_sdk(host, token):
         host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
     )
     return sdk.GoodDataSdk(client)
+
+
+def column_data_type_for(attribute):
+    """Determine what postgres type should be used for `attribute`."""
+    declared_data_type = attribute.dataset.data_type
+    granularity = attribute.granularity
+    return {
+        "DATE": date_granularity_to_data_type(granularity),
+        "NORMAL": DEFAULT_ATTRIBUTE_DATATYPE,
+    }.get(declared_data_type, DEFAULT_ATTRIBUTE_DATATYPE)
+
+
+def date_granularity_to_data_type(granularity):
+    """Determine what postgres type should be used for an attribute of type date based on `granularity`."""
+    return {
+        "MINUTE": "TIMESTAMP",  # No conversion needed
+        "HOUR": "TIMESTAMP",  # Add minutes
+        "DAY": "DATE",  # No conversion needed
+        "WEEK": DEFAULT_ATTRIBUTE_DATATYPE,
+        "MONTH": "DATE",  # Add day
+        "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
+        "YEAR": "INTEGER",
+    }.get(granularity, "INTEGER")
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
@@ -140,12 +166,49 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         for result_row in table.read_all():
             row = dict()
 
-            # TODO: it is likely that conversion to DATE/TIMESTAMP will have to happen here if the column is of
-            #  the respective type
             for column_name in columns:
-                row[column_name] = result_row[col_to_local_id[column_name]]
+                value = result_row[col_to_local_id[column_name]]
+                sanitized = self._sanitize_value(column_name, value)
+                row[column_name] = sanitized
 
             yield row
+
+    def _sanitize_value(self, column_name, value):
+        """Alter the value to comply with postgres data type"""
+        type_name = self._columns[column_name].base_type_name
+
+        sanitizations = {
+            "date": self._sanitize_date,
+            "timestamp without time zone": self._sanitize_timestamp,
+            "timestamp": self._sanitize_timestamp,
+        }
+        if type_name in sanitizations:
+            return sanitizations[type_name](value)
+        else:
+            return value
+
+    def _sanitize_date(self, value):
+        """Add first month and first date to incomplete iso date string.
+
+        >>>assert sanitize_date("2021-01") == "2021-01-01"
+        >>>assert sanitize_date("1992") == "1992-01-01"
+        """
+        parts = value.split("-")
+        missing_count = 3 - len(parts)
+        for i in range(0, missing_count):
+            parts.append("01")
+        return "-".join(parts)
+
+    def _sanitize_timestamp(self, value):
+        """Append minutes to incomplete datetime string.
+
+        >>>assert sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
+        >>>assert sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
+        """
+        parts = value.split(":")
+        if len(parts) == 1:
+            value = value + ":00"
+        return value
 
     def get_computable_for_col_name(self, column_name):
         return _col_as_computable(self._columns[column_name])
@@ -160,9 +223,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         items = [self.get_computable_for_col_name(col_name) for col_name in columns]
         table = self._sdk.tables.for_items(self._workspace, items)
 
-        # TODO: it is likely that this has to change to support DATE and TIMESTAMP. have mapping that need to be
-        #  timestamp/date, instead of returning generator, iterate rows, convert to dates and yield the converted row
-        return table.read_all()
+        for row in table.read_all():
+            sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
+            yield sanitized_row
 
     def _execute_custom_report(self, quals, columns, sortKeys=None):
         """
@@ -240,14 +303,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         _log_info(
             f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}"
         )
-
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
-
-        # TODO catalog will be needed to correctly identify cols that contain date/timestamp; skipping for now
-        # _log_debug(f"loading full catalog")
-        # catalog_service = sdk.CatalogService(client)
-        # catalog = catalog_service.get_full_catalog(workspace)
-
+        _log_debug("loading full catalog")
+        catalog = _sdk.catalog.get_full_catalog(workspace)
         _log_debug("loading all insights")
         insights = _sdk.insights.get_insights(workspace)
 
@@ -264,9 +322,12 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 column_name = column_naming.col_name_for_attribute(attr)
                 _log_debug(f"creating col def {column_name} for attribute {attr}")
 
+                label_id = ObjId(id=attr.label_id, type="label")
+                data_type = column_data_type_for(catalog.find_label_attribute(label_id))
+
                 col = ColumnDefinition(
                     column_name=column_name,
-                    type_name="VARCHAR(256)",
+                    type_name=data_type,
                     options=dict(local_id=attr.local_id),
                 )
                 columns.append(col)
@@ -335,17 +396,16 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 )
 
             for attribute in dataset.attributes:
-                # TODO: correctly identify cols that should be DATE or TIMESTAMP. skipping for now because
-                #  can't be bothered doing the date conversions
                 for label in attribute.labels:
                     column_name = naming.col_name_for_label(label, dataset)
+                    data_type = column_data_type_for(attribute)
 
                     _log_info(f"label {label.id} mapped to column {column_name}")
 
                     columns.append(
                         ColumnDefinition(
                             column_name=column_name,
-                            type_name="VARCHAR(256)",
+                            type_name=data_type,
                             options=dict(id=f"label/{label.id}"),
                         )
                     )

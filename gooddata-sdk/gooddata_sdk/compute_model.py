@@ -106,6 +106,11 @@ class Attribute(ExecModelEntity):
             local_identifier=self.local_id, label=self.label.as_afm_id()
         )
 
+    def __repr__(self):
+        return (
+            f"compute_model.Attribute(local_id='{self.local_id}', label='{self.label}')"
+        )
+
 
 class Filter(ExecModelEntity):
     def __init__(self):
@@ -229,6 +234,15 @@ class SimpleMetric(Metric):
                     _check_type=False,
                 )
             )
+
+    def __repr__(self):
+        return (
+            f"compute_model.SimpleMetric("
+            f"item='{self.item}', "
+            f"aggregation='{self.aggregation}', "
+            f"compute_ratio='{self.compute_ratio}', "
+            f"filters='{self.filters}')"
+        )
 
 
 class PopDate:
@@ -508,6 +522,21 @@ class RelativeDateFilter(Filter):
         return afm_models.RelativeDateFilter(body)
 
 
+class AllTimeFilter(Filter):
+    """Filter that is semantically equivalent to absent filter.
+
+    This filter exists because 'All time filter' retrieved from GoodData.CN
+    is non-standard as it does not have `from` and `to` fields;
+    this is also the reason why as_api_model method is not implemented - it
+    would lead to invalid object.
+
+    The main feature of this filter is noop.
+    """
+
+    def is_noop(self) -> bool:
+        return True
+
+
 class AbsoluteDateFilter(Filter):
     def __init__(self, dataset: ObjId, from_date: str, to_date: str):
         super(AbsoluteDateFilter, self).__init__()
@@ -713,5 +742,7 @@ def compute_model_to_api_model(
         if attributes is not None
         else [],
         measures=[m.as_api_model() for m in metrics] if metrics is not None else [],
-        filters=[f.as_api_model() for f in filters] if filters is not None else [],
+        filters=[f.as_api_model() for f in filters if not f.is_noop()]
+        if filters is not None
+        else [],
     )

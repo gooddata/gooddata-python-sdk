@@ -47,9 +47,7 @@ def test_import_compute_without_restrictions(import_srv_options):
         == "fact/claim.claim_amount"
     )
 
-    assert (
-        compute_table.col_idx["coverage_created_date_day"].type_name == "VARCHAR(256)"
-    )
+    assert compute_table.col_idx["coverage_created_date_day"].type_name == "DATE"
     assert (
         compute_table.col_idx["coverage_created_date_day"].options["id"]
         == "label/coverage_created_date.day"

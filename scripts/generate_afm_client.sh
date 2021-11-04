@@ -35,4 +35,4 @@ rm -rf "${CLIENT_DIR}/test"
 # - our ObjectLinks contain self (as in links.self); the generator for some of its internal workings also generates '_self' as key of some dict
 # - the decorator function eventually gets called with this '_self' thing.. and things bomb because there are multiple values of a named argument
 #
-sed -i 's/_self/_self_sanitized/g' "${CLIENT_DIR}/gooddata_afm_client/model_utils.py"
+sed -i -e 's/_self/_self_sanitized/g' "${CLIENT_DIR}/gooddata_afm_client/model_utils.py"

@@ -16,6 +16,7 @@ from gooddata_sdk.compute_model import (
     RankingFilter,
     AbsoluteDateFilter,
     RelativeDateFilter,
+    AllTimeFilter,
     Attribute,
     PopDate,
     PopDateDataset,
@@ -103,6 +104,10 @@ def _convert_filter_to_computable(filter_obj):
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 
+        # there is filter present, but uses all time
+        if ("from" not in f) or ("to" not in f):
+            return AllTimeFilter()
+
         return RelativeDateFilter(
             dataset=_ref_extract(f["dataSet"]),
             granularity=_GRANULARITY_CONVERSION[f["granularity"]],
@@ -170,6 +175,7 @@ def _convert_metric_to_computable(metric):
             _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
         )
         compute_ratio = d["computeRatio"] if "computeRatio" in d else False
+
         filters = (
             [_convert_filter_to_computable(f) for f in d["filters"]]
             if "filters" in d
@@ -439,7 +445,7 @@ class Insight:
         return self.__repr__()
 
     def __repr__(self):
-        return f"insight(title='{self.title}', id='{self.id}, buckets='{str(self.buckets)}')'"
+        return f"insight(title='{self.title}', id='{self.id}', buckets='{str(self.buckets)}')'"
 
 
 class InsightService:

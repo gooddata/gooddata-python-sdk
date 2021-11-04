@@ -93,6 +93,7 @@ class CatalogAttribute(CatalogEntry):
         self._attribute = attribute
         self._labels = labels
         self._labels_idx = dict([(str(label.obj_id), label) for label in labels])
+        self._dataset = None
         self._obj_id = ObjId(self._attribute["id"], self._attribute["type"])
 
     @property
@@ -118,6 +119,14 @@ class CatalogAttribute(CatalogEntry):
     @property
     def labels(self) -> list[CatalogLabel]:
         return self._labels
+
+    @property
+    def dataset(self) -> CatalogDataset:
+        return self._dataset
+
+    @dataset.setter
+    def dataset(self, value):
+        self._dataset = value
 
     @property
     def granularity(self) -> Union[str, None]:
@@ -235,6 +244,9 @@ class CatalogDataset(CatalogEntry):
         self._facts = facts
         self._obj_id = ObjId(self._dataset["id"], self._dataset["type"])
 
+        for attr in self.attributes:
+            attr.dataset = self
+
     @property
     def id(self) -> str:
         return self._dataset["id"]
@@ -242,6 +254,10 @@ class CatalogDataset(CatalogEntry):
     @property
     def type(self) -> str:
         return self._dataset["type"]
+
+    @property
+    def data_type(self) -> str:
+        return self._d["type"]
 
     @property
     def obj_id(self) -> ObjId:
@@ -321,6 +337,10 @@ class Catalog:
         return self._datasets
 
     @property
+    def attributes(self) -> list[CatalogAttribute]:
+        return self._attributes
+
+    @property
     def metrics(self) -> list[CatalogMetric]:
         return self._metrics
 
@@ -363,6 +383,7 @@ class Catalog:
         )
 
     def find_label_attribute(self, id_obj) -> Union[CatalogAttribute, None]:
+        """Get attribute by label id."""
         for dataset in self._datasets:
             res = dataset.find_label_attribute(id_obj)
 
@@ -395,7 +416,11 @@ class Catalog:
         ]
         new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
 
-        return Catalog(self._valid_obf_fun, datasets=new_datasets, metrics=new_metrics)
+        return Catalog(
+            self._valid_obf_fun,
+            datasets=new_datasets,
+            metrics=new_metrics,
+        )
 
     def __str__(self):
         return self.__repr__()
