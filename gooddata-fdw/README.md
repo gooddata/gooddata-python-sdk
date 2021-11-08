@@ -14,7 +14,7 @@ entered in the `POSTGRES_PASSWORD` variable.
 
 __Note on using GD.CN.CE and provided Postgre image in docker__:
 In case you are about to run both components in docker, both should be connected to same docker network.
-Then the containers are able to address each other via hostnames that are equal to value of provided --name value
+Then the containers are able to address each other via __hostnames that are equal to value of provided --name value__
 as shown in the next excerpt:
 
 ``` shell
@@ -31,7 +31,6 @@ docker run --name multicorn --network tiger_network --rm -p 2543:5432 \
           -e GOODDATA_SDK_HTTP_HEADERS='{"Host": "localhost"}' \
           postgresql-gd postgres -c shared_preload_libraries='foreign_table_exposer'
 ```
-
 
 After the container starts, you can connect to the running PostgreSQL:
 
@@ -50,7 +49,7 @@ server in PostgreSQL:
 CREATE SERVER multicorn_gooddata FOREIGN DATA WRAPPER multicorn
 OPTIONS (
     wrapper 'gooddata_fdw.GoodDataForeignDataWrapper',
-    host 'https://gdcn_host',
+    host 'https://gdcnce:3000', -- host equal to name of container with GD.CN.CE 
     token 'auth_token'
 );
 ```
