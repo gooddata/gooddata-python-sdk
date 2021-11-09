@@ -35,13 +35,13 @@ def test_import_insights_without_restrictions(import_srv_options):
     kpi_claim = tables_idx["kpi_claim"]
 
     assert "car_car_make" in premium_revenue_structure.col_idx
-    assert premium_revenue_structure.col_idx["car_car_make"].type_name == "VARCHAR(256)"
+    assert premium_revenue_structure.col_idx["car_car_make"].type_name == "VARCHAR(255)"
     assert "local_id" in premium_revenue_structure.col_idx["car_car_make"].options
 
     assert "customer_customer_age_group" in premium_revenue_structure.col_idx
     assert (
         premium_revenue_structure.col_idx["customer_customer_age_group"].type_name
-        == "VARCHAR(256)"
+        == "VARCHAR(255)"
     )
     assert (
         "local_id"

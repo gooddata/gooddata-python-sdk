@@ -53,5 +53,5 @@ def test_import_compute_without_restrictions(import_srv_options):
         == "label/coverage_created_date.day"
     )
 
-    assert compute_table.col_idx["car_gears"].type_name == "VARCHAR(256)"
+    assert compute_table.col_idx["car_gears"].type_name == "VARCHAR(255)"
     assert compute_table.col_idx["car_gears"].options["id"] == "label/car.car_gears"

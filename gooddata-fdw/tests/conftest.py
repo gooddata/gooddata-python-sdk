@@ -27,12 +27,12 @@ def test_insight_columns():
     columns = OrderedDict()
     columns["car_car_make"] = ColumnDefinition(
         column_name="car_car_make",
-        type_name="VARCHAR(256)",
+        type_name="VARCHAR(255)",
         options=dict(local_id="bb6895568384411a909514dd5b95011f"),
     )
     columns["customer_customer_age_group"] = ColumnDefinition(
         column_name="customer_customer_age_group",
-        type_name="VARCHAR(256)",
+        type_name="VARCHAR(255)",
         options=dict(local_id="b08cd137253d405f803601bf12fa89cb"),
     )
     columns["premium_revenue"] = ColumnDefinition(
@@ -69,12 +69,12 @@ def test_compute_table_columns():
     )
     columns["car_make"] = ColumnDefinition(
         column_name="car_make",
-        type_name="VARCHAR(256)",
+        type_name="VARCHAR(255)",
         options=dict(id="label/car.car_make"),
     )
     columns["car_model"] = ColumnDefinition(
         column_name="car_model",
-        type_name="VARCHAR(256)",
+        type_name="VARCHAR(255)",
         options=dict(id="label/car.car_model"),
     )
 
