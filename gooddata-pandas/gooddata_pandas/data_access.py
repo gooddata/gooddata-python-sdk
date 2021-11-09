@@ -8,6 +8,7 @@ from gooddata_sdk import (
     Metric,
     Filter,
     GoodDataSdk,
+    Catalog,
 )
 from gooddata_pandas.utils import (
     ColumnsDef,
@@ -15,6 +16,7 @@ from gooddata_pandas.utils import (
     _to_item,
     _to_attribute,
     _to_filters,
+    _typed_attribute_value,
 )
 
 
@@ -132,13 +134,21 @@ def _extract_for_metrics_only(
     return data
 
 
+def _typed_result(catalog, attribute, result_values):
+    """Convert result_values to proper data types."""
+    catalog_attribute = catalog.find_label_attribute(attribute.label)
+    return [_typed_attribute_value(catalog_attribute, value) for value in result_values]
+
+
 def _extract_from_attributes_and_maybe_metrics(
     response: ExecutionResponse,
+    catalog: Catalog,
     cols: list,
     col_to_attr_idx: dict,
     col_to_metric_idx: dict,
     index_to_attr_idx: dict = None,
 ) -> tuple[dict, dict]:
+
     exec_def = response.exec_def
     offset = [0 for _ in exec_def.dimensions]
     limit = (
@@ -149,6 +159,16 @@ def _extract_from_attributes_and_maybe_metrics(
     attribute_dim = 1 if exec_def.has_metrics() else 0
     result = response.read_result(limit=limit, offset=offset)
 
+    # mapings from column name to Attribute
+    index_to_attribute = {
+        index_name: exec_def.attributes[i]
+        for index_name, i in index_to_attr_idx.items()
+    }
+    col_to_attribute = {
+        col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()
+    }
+
+    # datastructures to return
     index = (
         dict([(idx_name, []) for idx_name in index_to_attr_idx])
         if index_to_attr_idx is not None
@@ -158,18 +178,18 @@ def _extract_from_attributes_and_maybe_metrics(
 
     while True:
         for idx_name in index:
-            index[idx_name] += result.get_all_header_values(
+            rs = result.get_all_header_values(
                 attribute_dim, index_to_attr_idx[idx_name]
             )
-
+            attribute = index_to_attribute[idx_name]
+            index[idx_name] += _typed_result(catalog, attribute, rs)
         for col in cols:
             if col in col_to_attr_idx:
-                data[col] += result.get_all_header_values(
-                    attribute_dim, col_to_attr_idx[col]
-                )
+                rs = result.get_all_header_values(attribute_dim, col_to_attr_idx[col])
+                attribute = col_to_attribute[col]
+                data[col] += _typed_result(catalog, attribute, rs)
             else:
                 data[col] += result.data[col_to_metric_idx[col]]
-
         if result.is_complete(attribute_dim):
             break
 
@@ -212,9 +232,16 @@ def compute_and_extract(
     exec_def = response.exec_def
     cols = list(columns.keys())
 
+    catalog = sdk.catalog.get_full_catalog(workspace_id)
+
     if not exec_def.has_attributes():
         return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
     else:
         return _extract_from_attributes_and_maybe_metrics(
-            response, cols, col_to_attr_idx, col_to_metric_idx, index_to_attr_idx
+            response,
+            catalog,
+            cols,
+            col_to_attr_idx,
+            col_to_metric_idx,
+            index_to_attr_idx,
         )

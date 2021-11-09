@@ -1,6 +1,8 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 from collections import namedtuple
+from datetime import date
+from dateutil.parser import parse
 
 from gooddata_metadata_client import ApiAttributeError
 from gooddata_sdk.compute_model import ObjId
@@ -73,6 +75,50 @@ def load_all_entities(get_page_func, page_size=500):
         current_page += 1
 
     return all_paged_entities
+
+
+def typed_value(data_type, granularity, value):
+    """Return typed value based on declared data_type and granularity.
+
+    >>> assert(typed_value("DATE", "MINUTE", '2020-01-20 00:00') == datetime(2020, 1, 20, 0, 0))
+    """
+    if data_type == "DATE":
+        return {
+            "MINUTE": _sanitize_timestamp,
+            "HOUR": _sanitize_timestamp,
+            "DAY": _sanitize_date,
+            "WEEK": str,
+            "MONTH": _sanitize_date,
+            "QUARTER": str,
+            "YEAR": int,
+        }.get(granularity, int)(value)
+    else:  # NORMAL
+        return value
+
+
+def _sanitize_date(value):
+    """Add first month and first date to incomplete iso date string.
+
+    >>> assert _sanitize_date("2021-01") == date(2021, 1 1)
+    >>> assert _sanitize_date("1992") == date(1992, 1, 1)
+    """
+    parts = value.split("-")
+    missing_count = 3 - len(parts)
+    parts.extend([1 for i in range(0, missing_count)])
+    parts = map(int, parts)
+    return date(*parts)
+
+
+def _sanitize_timestamp(value):
+    """Append minutes to incomplete datetime string.
+
+    >>> assert _sanitize_timestamp("2021-01-01 02") == datetime(2021, 1, 1, 2, 0)
+    >>> assert _sanitize_timestamp("2021-01-01 12:34") == datetime(2021, 1, 1, 12, 34)
+    """
+    parts = value.split(":")
+    if len(parts) == 1:
+        value = value + ":00"
+    return parse(value)
 
 
 class Sideloads:

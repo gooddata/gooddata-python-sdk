@@ -2,6 +2,8 @@
 from __future__ import annotations
 import uuid
 from typing import Union, Dict
+import pandas
+from datetime import datetime, date
 
 from gooddata_sdk import (
     Attribute,
@@ -12,6 +14,7 @@ from gooddata_sdk import (
     InsightAttribute,
     InsightMetric,
 )
+from gooddata_sdk.utils import typed_value
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]
@@ -36,7 +39,6 @@ def _try_obj_id(val):
 
 def _to_attribute(val: LabelItemDef, local_id=None) -> Attribute:
     _val = _try_obj_id(val)
-
     if isinstance(_val, Attribute):
         return _val
     elif isinstance(_val, ObjId):
@@ -66,6 +68,34 @@ def _to_item(val: DataItemDef, local_id=None) -> Union[Attribute, Metric]:
             return Attribute(local_id=local_id or _unique_local_id(), label=_val)
 
     raise ValueError(f"Invalid column_by item {val}")
+
+
+def _typed_attribute_value(ct_attr, value):
+    return _to_pandas_type(
+        typed_value(ct_attr.dataset.data_type, ct_attr.granularity, value)
+    )
+
+
+def _to_pandas_type(val):
+    if isinstance(
+        val,
+        (
+            datetime,
+            date,
+        ),
+    ):
+        r = pandas.to_datetime(val)
+        return r
+    elif isinstance(
+        val,
+        (
+            int,
+            float,
+        ),
+    ):
+        return pandas.to_numeric(val)
+    else:
+        return val
 
 
 class DefaultInsightColumnNaming:
