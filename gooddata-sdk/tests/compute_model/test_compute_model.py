@@ -26,25 +26,19 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_metric = SimpleMetric(
-    local_id="simple_metric_local_id", item=ObjId(type="metric", id="metric_id")
-)
+_simple_metric = SimpleMetric(local_id="simple_metric_local_id", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="attribute_local_id", label="label.id")
 
 _pop_dataset_metric = PopDatesetMetric(
     local_id="local_id1",
     metric=_simple_metric,
-    date_datasets=[
-        PopDateDataset(dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1)
-    ],
+    date_datasets=[PopDateDataset(dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1)],
 )
 
 _pop_date_metric = PopDateMetric(
     local_id="local_id1",
     metric=_simple_metric,
-    date_attributes=[
-        PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
-    ],
+    date_attributes=[PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)],
 )
 
 _positive_filter = PositiveAttributeFilter(label=_attribute, in_values=["val1", "val2"])
@@ -76,9 +70,7 @@ test_inputs = [
 
 
 @pytest.mark.parametrize("scenario,attributes,metrics,filters", test_inputs)
-def test_attribute_filters_to_api_model(
-    scenario, attributes, metrics, filters, snapshot
-):
+def test_attribute_filters_to_api_model(scenario, attributes, metrics, filters, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "afm")

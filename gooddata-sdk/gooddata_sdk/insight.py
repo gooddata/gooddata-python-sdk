@@ -87,20 +87,14 @@ def _convert_filter_to_computable(filter_obj):
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(
-            label=_ref_extract(f["displayForm"]), in_values=in_values
-        )
+        return PositiveAttributeFilter(label=_ref_extract(f["displayForm"]), in_values=in_values)
 
     elif "negativeAttributeFilter" in filter_obj:
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
-        not_in_values = (
-            f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
-        )
+        not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
-        return NegativeAttributeFilter(
-            label=_ref_extract(f["displayForm"]), not_in_values=not_in_values
-        )
+        return NegativeAttributeFilter(label=_ref_extract(f["displayForm"]), not_in_values=not_in_values)
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 
@@ -118,18 +112,14 @@ def _convert_filter_to_computable(filter_obj):
     elif "absoluteDateFilter" in filter_obj:
         f = filter_obj["absoluteDateFilter"]
 
-        return AbsoluteDateFilter(
-            dataset=_ref_extract(f["dataSet"]), from_date=f["from"], to_date=f["to"]
-        )
+        return AbsoluteDateFilter(dataset=_ref_extract(f["dataSet"]), from_date=f["from"], to_date=f["to"])
     elif "measureValueFilter" in filter_obj:
         f = filter_obj["measureValueFilter"]
         condition = f["condition"]
 
         if "comparison" in condition:
             c = condition["comparison"]
-            treat_values_as_null = (
-                c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
-            )
+            treat_values_as_null = c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
 
             return MetricValueFilter(
                 metric=_ref_extract(f["measure"]),
@@ -139,9 +129,7 @@ def _convert_filter_to_computable(filter_obj):
             )
         elif "range" in condition:
             c = condition["range"]
-            treat_values_as_null = (
-                c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
-            )
+            treat_values_as_null = c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
             return MetricValueFilter(
                 metric=_ref_extract(f["measure"]),
                 operator=c["operator"],
@@ -150,9 +138,7 @@ def _convert_filter_to_computable(filter_obj):
             )
     elif "rankingFilter" in filter_obj:
         f = filter_obj["rankingFilter"]
-        dimensionality = (
-            [_ref_extract(a) for a in f["attributes"]] if "attributes" in f else None
-        )
+        dimensionality = [_ref_extract(a) for a in f["attributes"]] if "attributes" in f else None
 
         return RankingFilter(
             metrics=[_ref_extract(f["measure"])],
@@ -171,16 +157,10 @@ def _convert_metric_to_computable(metric):
 
     if "measureDefinition" in measure_def:
         d = measure_def["measureDefinition"]
-        aggregation = (
-            _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
-        )
+        aggregation = _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
         compute_ratio = d["computeRatio"] if "computeRatio" in d else False
 
-        filters = (
-            [_convert_filter_to_computable(f) for f in d["filters"]]
-            if "filters" in d
-            else None
-        )
+        filters = [_convert_filter_to_computable(f) for f in d["filters"]] if "filters" in d else None
 
         return SimpleMetric(
             local_id=local_id,
@@ -192,9 +172,7 @@ def _convert_metric_to_computable(metric):
 
     elif "popMeasureDefinition" in measure_def:
         d = measure_def["popMeasureDefinition"]
-        date_attributes = [
-            PopDate(attribute=_ref_extract(d["popAttribute"]), periods_ago=1)
-        ]
+        date_attributes = [PopDate(attribute=_ref_extract(d["popAttribute"]), periods_ago=1)]
 
         return PopDateMetric(
             local_id=local_id,
@@ -205,10 +183,7 @@ def _convert_metric_to_computable(metric):
     elif "previousPeriodMeasure" in measure_def:
         d = measure_def["previousPeriodMeasure"]
 
-        date_datasets = [
-            PopDateDataset(_ref_extract(dd["dataSet"]), dd["periodsAgo"])
-            for dd in d["dateDataSets"]
-        ]
+        date_datasets = [PopDateDataset(_ref_extract(dd["dataSet"]), dd["periodsAgo"]) for dd in d["dateDataSets"]]
 
         return PopDatesetMetric(
             local_id=local_id,
@@ -360,18 +335,14 @@ class InsightBucket:
     @property
     def metrics(self) -> list[InsightMetric]:
         if self._metrics is None:
-            self._metrics = [
-                InsightMetric(item) for item in self.items if "measure" in item
-            ]
+            self._metrics = [InsightMetric(item) for item in self.items if "measure" in item]
 
         return self._metrics
 
     @property
     def attributes(self) -> list[InsightAttribute]:
         if self._attributes is None:
-            self._attributes = [
-                InsightAttribute(item) for item in self.items if "attribute" in item
-            ]
+            self._attributes = [InsightAttribute(item) for item in self.items if "attribute" in item]
 
         return self._attributes
 
@@ -466,9 +437,7 @@ class InsightService:
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient):
-        self._api = metadata_apis.WorkspaceObjectControllerApi(
-            api_client.metadata_client
-        )
+        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
 
     def get_insights(self, workspace_id):
         """

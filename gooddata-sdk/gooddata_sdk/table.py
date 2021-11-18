@@ -64,9 +64,7 @@ class ExecutionTable:
 
         :return:
         """
-        return [a.local_id for a in self.attributes] + [
-            m.local_id for m in self.metrics
-        ]
+        return [a.local_id for a in self.attributes] + [m.local_id for m in self.metrics]
 
     @property
     def column_metadata(self):
@@ -166,17 +164,13 @@ class ExecutionTable:
         return f"ExecutionTable(response={self._response}, columns={self.column_ids}, rows={len(self)})"
 
 
-def _prepare_tabular_definition(
-    attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]
-):
+def _prepare_tabular_definition(attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]):
     dims = [
         [a.local_id for a in attributes] if len(attributes) else None,
         ["measureGroup"] if len(metrics) else None,
     ]
 
-    return ExecutionDefinition(
-        attributes=attributes, metrics=metrics, filters=filters, dimensions=dims
-    )
+    return ExecutionDefinition(attributes=attributes, metrics=metrics, filters=filters, dimensions=dims)
 
 
 def _as_table(response: ExecutionResponse) -> ExecutionTable:
@@ -214,22 +208,14 @@ class TableService:
         exec_def = _prepare_tabular_definition(
             attributes=[a.as_computable() for a in insight.attributes],
             metrics=[m.as_computable() for m in insight.metrics],
-            filters=[
-                f
-                for f in [f.as_computable() for f in insight.filters]
-                if not f.is_noop()
-            ],
+            filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
         )
 
-        response = self._compute.for_exec_def(
-            workspace_id=workspace_id, exec_def=exec_def
-        )
+        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
 
         return _as_table(response)
 
-    def for_items(
-        self, workspace_id, items: list[Union[Attribute, Metric]], filters=None
-    ) -> ExecutionTable:
+    def for_items(self, workspace_id, items: list[Union[Attribute, Metric]], filters=None) -> ExecutionTable:
         if filters is None:
             filters = []
 
@@ -242,15 +228,9 @@ class TableService:
             elif isinstance(item, Metric):
                 metrics.append(item)
             else:
-                raise ValueError(
-                    f"Invalid input item: {item}. Expecting instance of Attribute or Metric"
-                )
+                raise ValueError(f"Invalid input item: {item}. Expecting instance of Attribute or Metric")
 
-        exec_def = _prepare_tabular_definition(
-            attributes=attributes, metrics=metrics, filters=filters
-        )
-        response = self._compute.for_exec_def(
-            workspace_id=workspace_id, exec_def=exec_def
-        )
+        exec_def = _prepare_tabular_definition(attributes=attributes, metrics=metrics, filters=filters)
+        response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
 
         return _as_table(response)

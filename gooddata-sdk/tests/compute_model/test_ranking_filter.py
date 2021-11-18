@@ -15,9 +15,7 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_measure = SimpleMetric(
-    local_id="local_id2", item=ObjId(type="metric", id="metric_id")
-)
+_simple_measure = SimpleMetric(local_id="local_id2", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="local_id4", label="label.id")
 
 test_ranking_filter = [

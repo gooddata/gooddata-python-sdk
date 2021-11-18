@@ -14,9 +14,7 @@ from gooddata_sdk import (
 )
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
-_simple_metric = SimpleMetric(
-    local_id="master_metric_id", item=ObjId(type="metric", id="metric_id")
-)
+_simple_metric = SimpleMetric(local_id="master_metric_id", item=ObjId(type="metric", id="metric_id"))
 
 
 def _scenario_to_snapshot_name(scenario: str):
@@ -29,11 +27,7 @@ test_pop_date_metrics = [
         PopDatesetMetric(
             local_id="local_id1",
             metric="master_metric_id",
-            date_datasets=[
-                PopDateDataset(
-                    dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1
-                )
-            ],
+            date_datasets=[PopDateDataset(dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1)],
         ),
     ],
     [
@@ -41,11 +35,7 @@ test_pop_date_metrics = [
         PopDatesetMetric(
             local_id="local_id1",
             metric=_simple_metric,
-            date_datasets=[
-                PopDateDataset(
-                    dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1
-                )
-            ],
+            date_datasets=[PopDateDataset(dataset=ObjId(type="dataset", id="dataset.id"), periods_ago=1)],
         ),
     ],
     [
@@ -62,9 +52,7 @@ test_pop_date_metrics = [
             local_id="local_id1",
             metric="master_metric_id",
             date_datasets=[
-                PopDateDataset(
-                    dataset=ObjId(type="dataset", id="dataset1.id"), periods_ago=1
-                ),
+                PopDateDataset(dataset=ObjId(type="dataset", id="dataset1.id"), periods_ago=1),
                 PopDateDataset(dataset="dataset2.id", periods_ago=2),
             ],
         ),

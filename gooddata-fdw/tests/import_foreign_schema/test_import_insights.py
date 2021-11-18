@@ -13,9 +13,7 @@ _fixtures_dir = os.path.join(_current_dir, "fixtures")
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "import_insights_without_restrictions.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "import_insights_without_restrictions.json"))
 def test_import_insights_without_restrictions(import_srv_options):
     tables = fdw.import_schema(
         schema="gooddata_insights",
@@ -39,20 +37,11 @@ def test_import_insights_without_restrictions(import_srv_options):
     assert "local_id" in premium_revenue_structure.col_idx["car_car_make"].options
 
     assert "customer_customer_age_group" in premium_revenue_structure.col_idx
-    assert (
-        premium_revenue_structure.col_idx["customer_customer_age_group"].type_name
-        == "VARCHAR(255)"
-    )
-    assert (
-        "local_id"
-        in premium_revenue_structure.col_idx["customer_customer_age_group"].options
-    )
+    assert premium_revenue_structure.col_idx["customer_customer_age_group"].type_name == "VARCHAR(255)"
+    assert "local_id" in premium_revenue_structure.col_idx["customer_customer_age_group"].options
 
     assert "premium_revenue" in premium_revenue_structure.col_idx
-    assert (
-        premium_revenue_structure.col_idx["premium_revenue"].type_name
-        == "DECIMAL(15,5)"
-    )
+    assert premium_revenue_structure.col_idx["premium_revenue"].type_name == "DECIMAL(15,5)"
     assert "local_id" in premium_revenue_structure.col_idx["premium_revenue"].options
 
     assert "claim_amount" in kpi_claim.col_idx

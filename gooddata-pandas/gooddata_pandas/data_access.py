@@ -73,11 +73,7 @@ def _compute(
             #
             # this may typically happen when same labels are used for indexing & data
             existing_attr_idx = next(
-                (
-                    idx
-                    for idx, attr in enumerate(attributes)
-                    if item.has_same_label(attr)
-                ),
+                (idx for idx, attr in enumerate(attributes) if item.has_same_label(attr)),
                 None,
             )
 
@@ -121,9 +117,7 @@ _RESULT_PAGE_LEN = 1000
 #
 
 
-def _extract_for_metrics_only(
-    response: ExecutionResponse, cols: list, col_to_metric_idx: dict
-) -> dict:
+def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_metric_idx: dict) -> dict:
     exec_def = response.exec_def
     result = response.read_result(len(exec_def.metrics))
     data = dict()
@@ -151,36 +145,23 @@ def _extract_from_attributes_and_maybe_metrics(
 
     exec_def = response.exec_def
     offset = [0 for _ in exec_def.dimensions]
-    limit = (
-        [len(exec_def.metrics), _RESULT_PAGE_LEN]
-        if exec_def.has_metrics()
-        else [_RESULT_PAGE_LEN]
-    )
+    limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]
     attribute_dim = 1 if exec_def.has_metrics() else 0
     result = response.read_result(limit=limit, offset=offset)
 
     # mappings from column name to Attribute
-    index_to_attribute = {
-        index_name: exec_def.attributes[i]
-        for index_name, i in index_to_attr_idx.items()
-    }
-    col_to_attribute = {
-        col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()
-    }
+    index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in index_to_attr_idx.items()}
+    col_to_attribute = {col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()}
 
     # datastructures to return
-    index = (
-        dict([(idx_name, []) for idx_name in index_to_attr_idx])
-        if index_to_attr_idx is not None
-        else dict()
-    )
-    data = dict([(col, []) for col in cols])
+    index = dict()
+    if index_to_attr_idx is not None:
+        index = {idx_name: [] for idx_name in index_to_attr_idx}
+    data = {col: [] for col in cols}
 
     while True:
         for idx_name in index:
-            rs = result.get_all_header_values(
-                attribute_dim, index_to_attr_idx[idx_name]
-            )
+            rs = result.get_all_header_values(attribute_dim, index_to_attr_idx[idx_name])
             attribute = index_to_attribute[idx_name]
             index[idx_name] += _typed_result(catalog, attribute, rs)
         for col in cols:

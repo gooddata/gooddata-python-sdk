@@ -34,26 +34,18 @@ test_simple_metrics = [
     ],
     [
         "simple metric using fact and custom agg",
-        SimpleMetric(
-            local_id="test", item=ObjId(type="fact", id="fact_id"), aggregation="AVG"
-        ),
+        SimpleMetric(local_id="test", item=ObjId(type="fact", id="fact_id"), aggregation="AVG"),
     ],
     [
         "simple metric using fact compute ratio",
-        SimpleMetric(
-            local_id="test", item=ObjId(type="fact", id="fact_id"), compute_ratio=True
-        ),
+        SimpleMetric(local_id="test", item=ObjId(type="fact", id="fact_id"), compute_ratio=True),
     ],
     [
         "simple metric with filters",
         SimpleMetric(
             local_id="test",
             item=ObjId(type="fact", id="fact_id"),
-            filters=[
-                PositiveAttributeFilter(
-                    label="label_local_id", in_values=["val1", "val2"]
-                )
-            ],
+            filters=[PositiveAttributeFilter(label="label_local_id", in_values=["val1", "val2"])],
         ),
     ],
 ]

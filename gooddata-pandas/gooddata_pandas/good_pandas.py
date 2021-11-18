@@ -29,9 +29,7 @@ class GoodPandas:
         :rtype: SeriesFactory
         """
         if workspace_id not in self._series_per_ws:
-            self._series_per_ws[workspace_id] = SeriesFactory(
-                sdk=self._sdk, workspace_id=workspace_id
-            )
+            self._series_per_ws[workspace_id] = SeriesFactory(sdk=self._sdk, workspace_id=workspace_id)
 
         return self._series_per_ws[workspace_id]
 
@@ -44,9 +42,7 @@ class GoodPandas:
         :rtype: DataFrameFactory
         """
         if workspace_id not in self._frames_per_ws:
-            self._frames_per_ws[workspace_id] = DataFrameFactory(
-                sdk=self._sdk, workspace_id=workspace_id
-            )
+            self._frames_per_ws[workspace_id] = DataFrameFactory(sdk=self._sdk, workspace_id=workspace_id)
 
         return self._frames_per_ws[workspace_id]
 
@@ -59,12 +55,7 @@ def _create_sdk(host, token):
             headers = json.loads(headers)
             assert isinstance(headers, dict), "Not a dictionary"
         except (AssertionError, json.JSONDecodeError) as e:
-            text = (
-                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. "
-                "Json object expected."
-            )
+            text = "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. Json object expected."
             raise ValueError(text) from e
-    client = sdk_client.GoodDataApiClient(
-        host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
-    )
+    client = sdk_client.GoodDataApiClient(host, token, custom_headers=headers, extra_user_agent=_USER_AGENT)
     return GoodDataSdk(client)

@@ -22,11 +22,7 @@ class GoodDataApiClient:
         self._token = token
         self._custom_headers = custom_headers or {}
 
-        user_agent = (
-            f"{USER_AGENT} {extra_user_agent}"
-            if extra_user_agent is not None
-            else USER_AGENT
-        )
+        user_agent = f"{USER_AGENT} {extra_user_agent}" if extra_user_agent is not None else USER_AGENT
 
         self._metadata_config = metadata_client.Configuration(host=host)
         self._metadata_client = metadata_client.ApiClient(

@@ -6,9 +6,7 @@ import os
 
 import pytest
 
-__location__ = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__), "resources")
-)
+__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__), "resources"))
 
 
 def load_vis_obj(filename):

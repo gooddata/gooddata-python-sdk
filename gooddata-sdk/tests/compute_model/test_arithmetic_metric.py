@@ -15,12 +15,8 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_metric1 = SimpleMetric(
-    local_id="local_id1", item=ObjId(type="metric", id="metric1.id")
-)
-_simple_metric2 = SimpleMetric(
-    local_id="local_id2", item=ObjId(type="metric", id="metric2.id")
-)
+_simple_metric1 = SimpleMetric(local_id="local_id1", item=ObjId(type="metric", id="metric1.id"))
+_simple_metric2 = SimpleMetric(local_id="local_id2", item=ObjId(type="metric", id="metric2.id"))
 
 
 test_arithmetic_metric = [

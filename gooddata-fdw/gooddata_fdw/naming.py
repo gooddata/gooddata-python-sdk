@@ -4,9 +4,7 @@ import gooddata_sdk as sdk
 
 def _sanitize_str_for_postgres(string, used_names=None):
     # replace non-alpha-num stuff with underscores
-    with_underscores = "".join(
-        char if char.isalnum() else "_" for char in string.lower()
-    )
+    with_underscores = "".join(char if char.isalnum() else "_" for char in string.lower())
 
     # then get rid of sequences of underscores
     candidate = "_".join([s for s in with_underscores.split("_") if s != ""])
@@ -100,33 +98,21 @@ class DefaultCatalogNamingStrategy:
     def __init__(self):
         self._uniques = dict()
 
-    def col_name_for_label(
-        self, label: sdk.CatalogLabel, dataset: sdk.CatalogDataset
-    ) -> str:
+    def col_name_for_label(self, label: sdk.CatalogLabel, dataset: sdk.CatalogDataset) -> str:
         ds_prefix = f"{dataset.id}."
         # some of our tests project have convention where fact/label is as: dataset.dataset_something
         # that looks awkward in a table.. thus this funny stuff
-        use_id = (
-            label.id
-            if not label.id.startswith(f"{ds_prefix}{dataset.id}")
-            else label.id[len(ds_prefix) :]
-        )
+        use_id = label.id if not label.id.startswith(f"{ds_prefix}{dataset.id}") else label.id[len(ds_prefix) :]
         new_name = _sanitize_str_for_postgres(use_id, self._uniques)
         self._uniques[new_name] = True
 
         return new_name
 
-    def col_name_for_fact(
-        self, fact: sdk.CatalogFact, dataset: sdk.CatalogDataset
-    ) -> str:
+    def col_name_for_fact(self, fact: sdk.CatalogFact, dataset: sdk.CatalogDataset) -> str:
         ds_prefix = f"{dataset.id}."
         # some of our tests project have convention where fact/label is as: dataset.dataset_something
         # that looks awkward in a table.. thus this funny stuff
-        use_id = (
-            fact.id
-            if not fact.id.startswith(f"{ds_prefix}{dataset.id}")
-            else fact.id[len(ds_prefix) :]
-        )
+        use_id = fact.id if not fact.id.startswith(f"{ds_prefix}{dataset.id}") else fact.id[len(ds_prefix) :]
         new_name = _sanitize_str_for_postgres(use_id, self._uniques)
         self._uniques[new_name] = True
 

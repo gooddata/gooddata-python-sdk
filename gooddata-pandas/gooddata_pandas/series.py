@@ -51,9 +51,7 @@ class SeriesFactory:
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(
-                list(index.values()), names=list(index.keys())
-            )
+            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
 
         return pandas.Series(data=data["_series"], index=_idx)
 

@@ -71,9 +71,7 @@ def _to_item(val: DataItemDef, local_id=None) -> Union[Attribute, Metric]:
 
 
 def _typed_attribute_value(ct_attr, value):
-    return _to_pandas_type(
-        typed_value(ct_attr.dataset.data_type, ct_attr.granularity, value)
-    )
+    return _to_pandas_type(typed_value(ct_attr.dataset.data_type, ct_attr.granularity, value))
 
 
 def _to_pandas_type(val):
@@ -124,8 +122,6 @@ class DefaultInsightColumnNaming:
         # otherwise try alias
         # otherwise try title
         # otherwise use local_id (arbitrary, AD created local_ids are messy)
-        id_to_use = (
-            measure.item_id or measure.alias or measure.title or measure.local_id
-        )
+        id_to_use = measure.item_id or measure.alias or measure.title or measure.local_id
 
         return self._ensure_unique(id_to_use)
