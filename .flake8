@@ -1,7 +1,7 @@
 [flake8]
 exclude = .git,.venv,__pycache__,.tox,build,dist,gooddata-afm-client,gooddata-metadata-client
 
-max-line-length = 160
+max-line-length = 120
 
 # disabling formatting related lints as black should take care of these
 # see https://github.com/psf/black/issues/315

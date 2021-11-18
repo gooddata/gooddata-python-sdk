@@ -54,9 +54,11 @@ class DataFrameFactory:
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: filters to apply during computation on the server
         :return:
         """
@@ -88,9 +90,11 @@ class DataFrameFactory:
 
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
         :return:
         """
@@ -119,9 +123,11 @@ class DataFrameFactory:
 
         :param items: dict mapping item name to its definition; item may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
         :param auto_index: optionally force creation of DataFrame without index even if the contents of items make it
         eligible for indexing

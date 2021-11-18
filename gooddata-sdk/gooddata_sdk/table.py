@@ -138,8 +138,8 @@ class ExecutionTable:
 
     def read_all(self):
         """
-        Returns a generator that will be yielding execution result as rows. Each row is a dict() mapping column identifier
-        to value of that column.
+        Returns a generator that will be yielding execution result as rows. Each row is a dict() mapping column
+        identifier to value of that column.
 
         :return: generator yielding dict() representing rows of the table
         """

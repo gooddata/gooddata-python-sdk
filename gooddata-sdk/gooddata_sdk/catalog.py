@@ -292,7 +292,8 @@ class CatalogDataset(CatalogEntry):
         structure.
 
         :param valid_objects: mapping of object type to a set of valid object ids
-        :return: CatalogDataset containing only valid attributes and facts; None if all of the attributes and facts were filtered out
+        :return: CatalogDataset containing only valid attributes and facts; None if all of the attributes and facts
+                 were filtered out
         """
         new_attributes = [a for a in self.attributes if a.id in valid_objects[a.type]]
         new_facts = [f for f in self.facts if f.id in valid_objects[f.type]]

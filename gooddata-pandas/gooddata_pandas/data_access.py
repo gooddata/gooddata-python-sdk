@@ -159,7 +159,7 @@ def _extract_from_attributes_and_maybe_metrics(
     attribute_dim = 1 if exec_def.has_metrics() else 0
     result = response.read_result(limit=limit, offset=offset)
 
-    # mapings from column name to Attribute
+    # mappings from column name to Attribute
     index_to_attribute = {
         index_name: exec_def.attributes[i]
         for index_name, i in index_to_attr_idx.items()

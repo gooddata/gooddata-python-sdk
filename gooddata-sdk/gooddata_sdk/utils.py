@@ -40,8 +40,8 @@ AllPagedEntities = namedtuple("PagedResult", ["data", "included"])
 
 def load_all_entities(get_page_func, page_size=500):
     """
-    Loads all entities from a paged resource. The primary input to this function is a partial function that is setup with
-    all the fixed parameters. Given this the function will get entities page-by-page and merge them into a single
+    Loads all entities from a paged resource. The primary input to this function is a partial function that is setup
+    with all the fixed parameters. Given this the function will get entities page-by-page and merge them into a single
     'pseudo-response' containing data and included attributes.
 
     An example usage:
@@ -104,7 +104,7 @@ def _sanitize_date(value):
     """
     parts = value.split("-")
     missing_count = 3 - len(parts)
-    parts.extend([1 for i in range(0, missing_count)])
+    parts.extend([1 for _ in range(0, missing_count)])
     parts = map(int, parts)
     return date(*parts)
 

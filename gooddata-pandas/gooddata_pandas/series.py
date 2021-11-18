@@ -29,9 +29,11 @@ class SeriesFactory:
          - string representation of object identifier: 'label/some_label_id'
          - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
-        :param data_by: label, fact or metric to that will provide data (metric values or label elements); specify either:
+        :param data_by: label, fact or metric to that will provide data (metric values or label elements); specify
+         either:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
         :param filter_by: optionally specify filter to apply during computation on the server
@@ -69,7 +71,8 @@ class SeriesFactory:
 
         :param data_by: label, fact or metric to get data from; specify either:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
         :param granularity: optionally specify label to slice the metric by; specify either:
