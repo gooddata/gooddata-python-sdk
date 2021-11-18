@@ -61,13 +61,9 @@ class ExecutionDefinition:
         dimensions = []
 
         for idx, dim in enumerate(self._dimensions):
-            dimensions.append(
-                models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim)
-            )
+            dimensions.append(models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim))
 
-        execution = compute_model_to_api_model(
-            attributes=self.attributes, metrics=self.metrics, filters=self.filters
-        )
+        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
 
         result_spec = models.ResultSpec(dimensions=dimensions)
 
@@ -110,9 +106,7 @@ class ExecutionResult:
         return self._paging["offset"]
 
     def is_complete(self, dim=0):
-        return (
-            self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
-        )
+        return self.paging_offset[dim] + self.paging_count[dim] >= self.paging_total[dim]
 
     def next_page_start(self, dim=0):
         return self.paging_offset[dim] + self.paging_count[dim]
@@ -157,9 +151,7 @@ class ExecutionResponse:
     def result_id(self) -> str:
         return self._r["links"]["executionResult"]
 
-    def read_result(
-        self, limit: Union[int, list[int]], offset: Union[int, list[int]] = None
-    ):
+    def read_result(self, limit: Union[int, list[int]], offset: Union[int, list[int]] = None):
         """
         Reads from the execution result.
         :param offset:
@@ -167,20 +159,12 @@ class ExecutionResponse:
         :return:
         """
 
-        _offset = (
-            offset
-            if isinstance(offset, list)
-            else [offset]
-            if offset is not None
-            else None
-        )
+        _offset = offset if isinstance(offset, list) else [offset] if offset is not None else None
         _limit = limit if isinstance(limit, list) else [limit]
 
         # if limit is specified but offset is not, server will ignore paging completely (bug)
         # this makes sure that offset gets defaulted to start of result
-        _offset = (
-            [0 for _ in _limit] if _limit is not None and _offset is None else _offset
-        )
+        _offset = [0 for _ in _limit] if _limit is not None and _offset is None else _offset
 
         return ExecutionResult(
             self._result_api.retrieve_result(
@@ -210,9 +194,7 @@ class ComputeService:
         self._exec_api = apis.AfmControllerApi(api_client.afm_client)
         self._result_api = apis.ResultControllerApi(api_client.afm_client)
 
-    def for_exec_def(
-        self, workspace_id, exec_def: ExecutionDefinition
-    ) -> ExecutionResponse:
+    def for_exec_def(self, workspace_id, exec_def: ExecutionDefinition) -> ExecutionResponse:
         """
         Starts computation in GoodData.CN workspace, using the provided execution definition.
 
@@ -221,9 +203,7 @@ class ComputeService:
         into dimensions
         :return:
         """
-        response = self._exec_api.compute_report(
-            workspace_id, exec_def.as_api_model(), _check_return_type=False
-        )
+        response = self._exec_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
 
         return ExecutionResponse(
             result_api=self._result_api,

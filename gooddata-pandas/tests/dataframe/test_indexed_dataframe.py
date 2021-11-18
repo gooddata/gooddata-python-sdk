@@ -47,9 +47,7 @@ def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "region_code"
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "simple_index_filtered_metrics_and_label.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_filtered_metrics_and_label.json"))
 def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by=dict(reg="label/region.region_name"),
@@ -71,12 +69,8 @@ def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_metrics.json"))
 def test_multi_index_metrics(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(
-            reg="label/region.region_name", prod="label/product.product_name"
-        ),
-        columns=dict(
-            claim_amount="metric/claim-amount", claim_count="metric/claim-count"
-        ),
+        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
+        columns=dict(claim_amount="metric/claim-amount", claim_count="metric/claim-count"),
     )
 
     assert len(df) > len(TEST_DATA_REGIONS)
@@ -90,9 +84,7 @@ def test_multi_index_metrics(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_metrics_and_label.json"))
 def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(
-            reg="label/region.region_name", prod="label/product.product_name"
-        ),
+        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
         columns=dict(
             claim_amount="metric/claim-amount",
             claim_count="metric/claim-count",
@@ -109,14 +101,10 @@ def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "region_code"
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "multi_index_filtered_metrics_and_label.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_filtered_metrics_and_label.json"))
 def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(
-            reg="label/region.region_name", prod="label/product.product_name"
-        ),
+        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
         columns=dict(
             claim_amount="metric/claim-amount",
             claim_count="metric/claim-count",
@@ -134,9 +122,7 @@ def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "region_code"
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "multi_index_filtered_metrics_and_label_reuse.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_filtered_metrics_and_label_reuse.json"))
 def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     # note here: if a single label is reused in both index and columns, that label will be used in computation
     # just once. the first-found occurrence will be used in computation. local id of the attribute will be
@@ -144,9 +130,7 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     #
     # this has implications when referencing label by local id
     df = gdf.indexed(
-        index_by=dict(
-            reg_idx="label/region.region_name", prod="label/product.product_name"
-        ),
+        index_by=dict(reg_idx="label/region.region_name", prod="label/product.product_name"),
         columns=dict(
             claim_amount="metric/claim-amount",
             claim_count="metric/claim-count",

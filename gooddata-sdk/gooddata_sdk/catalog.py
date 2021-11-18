@@ -153,9 +153,7 @@ class CatalogAttribute(CatalogEntry):
         return self.__repr__()
 
     def __repr__(self):
-        return (
-            f"CatalogAttribute(id={self.id}, title={self.title}, labels={self.labels})"
-        )
+        return f"CatalogAttribute(id={self.id}, title={self.title}, labels={self.labels})"
 
 
 class CatalogFact(CatalogEntry):
@@ -292,7 +290,8 @@ class CatalogDataset(CatalogEntry):
         structure.
 
         :param valid_objects: mapping of object type to a set of valid object ids
-        :return: CatalogDataset containing only valid attributes and facts; None if all of the attributes and facts were filtered out
+        :return: CatalogDataset containing only valid attributes and facts; None if all of the attributes and facts
+                 were filtered out
         """
         new_attributes = [a for a in self.attributes if a.id in valid_objects[a.type]]
         new_facts = [f for f in self.facts if f.id in valid_objects[f.type]]
@@ -309,14 +308,10 @@ class CatalogDataset(CatalogEntry):
         return f"CatalogDataset(id={self.id}, title={self.title}, facts={self.facts}, attributes={self.attributes})"
 
 
-ValidObjectTypes = Union[
-    Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric
-]
+ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
 # need to use types from typings here for Python <3.9
-ValidObjectsInputType = Union[
-    ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition
-]
+ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
 
 
 class Catalog:
@@ -378,9 +373,7 @@ class Catalog:
         elif not dataset_id.startswith("dataset/"):
             obj_id_str = f"dataset/{dataset_id}"
 
-        return (
-            self._datasets_idx[obj_id_str] if obj_id_str in self._datasets_idx else None
-        )
+        return self._datasets_idx[obj_id_str] if obj_id_str in self._datasets_idx else None
 
     def find_label_attribute(self, id_obj) -> Union[CatalogAttribute, None]:
         """Get attribute by label id."""
@@ -409,11 +402,9 @@ class Catalog:
         """
         valid_objects = self._valid_objects(ctx)
 
-        new_datasets = [
-            non_empty
-            for non_empty in [d.filter_dataset(valid_objects) for d in self.datasets]
-            if non_empty is not None
-        ]
+        # lambda x: x instead of None to satisfy type checking system which recognized list(filter(None, iter)) as
+        # list[None]
+        new_datasets = list(filter(lambda x: x, [d.filter_dataset(valid_objects) for d in self.datasets]))
         new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
 
         return Catalog(
@@ -439,12 +430,7 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
 
     # now the rest requires some joins...
     # first construct the dataset's leaves - facts
-    catalog_facts = dict(
-        [
-            (fact["id"], CatalogFact(fact))
-            for fact in dataset_sideloads.all_for_type("fact")
-        ]
-    )
+    catalog_facts = {fact["id"]: CatalogFact(fact) for fact in dataset_sideloads.all_for_type("fact")}
 
     # then build all attributes & their labels, map them attr.id => attribute
     catalog_attributes = dict()
@@ -453,10 +439,7 @@ def _create_catalog(valid_obj_fun, datasets, attributes, metrics) -> Catalog:
         label_ids = attr["relationships"]["labels"]["data"]
         catalog_attributes[attr_id] = CatalogAttribute(
             attr,
-            [
-                CatalogLabel(attribute_sideloads.find(label_id))
-                for label_id in label_ids
-            ],
+            [CatalogLabel(attribute_sideloads.find(label_id)) for label_id in label_ids],
         )
 
     # finally go through all datasets, find related attributes and facts
@@ -497,9 +480,7 @@ def _prepare_afm_for_availability(items: list[ValidObjectTypes]):
         elif isinstance(item, (CatalogFact, CatalogMetric)):
             metrics.append(item.as_computable())
 
-    return compute_model_to_api_model(
-        attributes=attributes, metrics=metrics, filters=filters
-    )
+    return compute_model_to_api_model(attributes=attributes, metrics=metrics, filters=filters)
 
 
 class CatalogService:
@@ -511,9 +492,7 @@ class CatalogService:
 
     def __init__(self, api_client: GoodDataApiClient):
         self._client = api_client
-        self._api = metadata_apis.WorkspaceObjectControllerApi(
-            api_client.metadata_client
-        )
+        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
         self._valid_objects = afm_apis.ValidObjectsControllerApi(api_client.afm_client)
 
     def get_full_catalog(self, workspace_id: str) -> Catalog:
@@ -537,9 +516,7 @@ class CatalogService:
             _check_return_type=False,
         )
 
-        get_metrics = functools.partial(
-            self._api.get_all_entities_metrics, workspace_id, _check_return_type=False
-        )
+        get_metrics = functools.partial(self._api.get_all_entities_metrics, workspace_id, _check_return_type=False)
 
         attributes = load_all_entities(get_attributes)
         datasets = load_all_entities(get_datasets)
@@ -549,9 +526,7 @@ class CatalogService:
 
         return _create_catalog(valid_obj_fun, datasets, attributes, metrics)
 
-    def compute_valid_objects(
-        self, workspace_id: str, ctx: ValidObjectsInputType
-    ) -> ValidObjects:
+    def compute_valid_objects(self, workspace_id: str, ctx: ValidObjectsInputType) -> ValidObjects:
         """
         Returns attributes, facts, and metrics which are valid to add to a context that already
         contains some entities from the semantic model. The entities are typically used to compute analytics and
@@ -567,19 +542,13 @@ class CatalogService:
         id's of available items
         """
         if isinstance(ctx, ExecutionDefinition):
-            afm = compute_model_to_api_model(
-                attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters
-            )
+            afm = compute_model_to_api_model(attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters)
         else:
             _ctx = ctx if isinstance(ctx, list) else [ctx]
             afm = _prepare_afm_for_availability(_ctx)
 
-        query = afm_models.AfmValidObjectsQuery(
-            afm=afm, types=["facts", "attributes", "measures"]
-        )
-        response = self._valid_objects.compute_valid_objects(
-            workspace_id=workspace_id, afm_valid_objects_query=query
-        )
+        query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
+        response = self._valid_objects.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
 
         by_type: dict[str, set] = dict()
 

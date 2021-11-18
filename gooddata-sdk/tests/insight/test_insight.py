@@ -18,9 +18,7 @@ def _insight_filename_to_snapshot_name(absolute_path):
     return os.path.basename(absolute_path).replace(".json", ".snapshot.json")
 
 
-@pytest.mark.parametrize(
-    "filename", [os.path.join(_resources_dir, d) for d in os.listdir(_resources_dir)]
-)
+@pytest.mark.parametrize("filename", [os.path.join(_resources_dir, d) for d in os.listdir(_resources_dir)])
 def test_attribute_filters_to_api_model(filename, snapshot):
     vis_obj = load_vis_obj(filename)
     insight = Insight(vis_obj)

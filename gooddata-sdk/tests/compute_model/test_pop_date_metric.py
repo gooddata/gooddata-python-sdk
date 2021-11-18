@@ -9,9 +9,7 @@ import pytest
 from gooddata_sdk import PopDateMetric, PopDate, ObjId, SimpleMetric, Attribute
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
-_simple_metric = SimpleMetric(
-    local_id="master_metric_id", item=ObjId(type="metric", id="metric_id")
-)
+_simple_metric = SimpleMetric(local_id="master_metric_id", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="local_id4", label="label2.id")
 
 
@@ -25,9 +23,7 @@ test_pop_date_metrics = [
         PopDateMetric(
             local_id="local_id1",
             metric="master_metric_id",
-            date_attributes=[
-                PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
-            ],
+            date_attributes=[PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)],
         ),
     ],
     [
@@ -35,9 +31,7 @@ test_pop_date_metrics = [
         PopDateMetric(
             local_id="local_id1",
             metric=_simple_metric,
-            date_attributes=[
-                PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)
-            ],
+            date_attributes=[PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)],
         ),
     ],
     [

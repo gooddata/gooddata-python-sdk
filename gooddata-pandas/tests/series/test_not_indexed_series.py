@@ -32,9 +32,7 @@ def test_not_index_label_series(gds: SeriesFactory):
     assert series[23] == "Zürich"
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "not_indexed_metric_series_with_granularity.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metric_series_with_granularity.json"))
 def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
         granularity=dict(reg="label/region.region_name"),
@@ -45,9 +43,7 @@ def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "not_indexed_label_series_with_granularity.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_label_series_with_granularity.json"))
 def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
         granularity=dict(reg="label/region.region_name"),
@@ -60,18 +56,14 @@ def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     assert len(series) > len(TEST_DATA_REGIONS)
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "not_indexed_filtered_metric_series.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_filtered_metric_series.json"))
 def test_not_indexed_filtered_metric_series(gds: SeriesFactory):
     # crime rate across all regions
     not_filtered_series = gds.not_indexed(data_by="fact/region.region_crime_rate")
     # crime rate just in Bern
     filtered_series = gds.not_indexed(
         data_by="fact/region.region_crime_rate",
-        filter_by=PositiveAttributeFilter(
-            label=ObjId(type="label", id="region.region_name"), in_values=["Bern"]
-        ),
+        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="region.region_name"), in_values=["Bern"]),
     )
 
     # having metric with no granularity will return series with single item

@@ -29,9 +29,7 @@ def test_catalog_load():
     assert catalog.get_dataset("coverage_cancelled_date") is not None
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "insurance_demo_catalog_availability.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "insurance_demo_catalog_availability.json"))
 def test_catalog_availability():
     sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
     catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)

@@ -23,9 +23,7 @@ test_filters = [
     ],
     [
         "positive filter using object id",
-        PositiveAttributeFilter(
-            label=ObjId(type="label", id="label.id"), in_values=["val1", "val2"]
-        ),
+        PositiveAttributeFilter(label=ObjId(type="label", id="label.id"), in_values=["val1", "val2"]),
     ],
     [
         "empty negative attribute filter",
@@ -37,9 +35,7 @@ test_filters = [
     ],
     [
         "negative filter using object id",
-        NegativeAttributeFilter(
-            label=ObjId(type="label", id="label.id"), not_in_values=["val1", "val2"]
-        ),
+        NegativeAttributeFilter(label=ObjId(type="label", id="label.id"), not_in_values=["val1", "val2"]),
     ],
 ]
 

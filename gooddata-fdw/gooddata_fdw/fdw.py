@@ -51,13 +51,10 @@ def _create_sdk(host, token):
             assert isinstance(headers, dict), "Not a dictionary"
         except (AssertionError, json.JSONDecodeError) as e:
             _log_error(
-                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. "
-                "Json object expected."
+                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. Json object expected."
             )
             raise e
-    client = sdk.client.GoodDataApiClient(
-        host, token, custom_headers=headers, extra_user_agent=_USER_AGENT
-    )
+    client = sdk.client.GoodDataApiClient(host, token, custom_headers=headers, extra_user_agent=_USER_AGENT)
     return sdk.GoodDataSdk(client)
 
 
@@ -93,15 +90,12 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         if "workspace" not in options:
             raise ValueError(
-                "attempting to work with an incorrectly defined foreign table."
-                "Table must contain both 'workspace'."
+                "attempting to work with an incorrectly defined foreign table.Table must contain both 'workspace'."
             )
 
         _log_debug(f"initializing (options={options}, columns={columns})")
 
-        self._host, self._token, self._workspace = itemgetter(
-            "host", "token", "workspace"
-        )(options)
+        self._host, self._token, self._workspace = itemgetter("host", "token", "workspace")(options)
         self._options = options
         self._columns = columns
         self._insight = options["insight"] if "insight" in options else None
@@ -157,9 +151,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         """
         # TODO add validation that the table columns are consistent with insight bucket items
 
-        col_to_local_id = dict(
-            [(c.column_name, c.options["local_id"]) for c in self._columns.values()]
-        )
+        col_to_local_id = dict([(c.column_name, c.options["local_id"]) for c in self._columns.values()])
         insight = self._sdk.insights.get_insight(self._workspace, self._insight)
         table = self._sdk.tables.for_insight(self._workspace, insight)
 
@@ -245,9 +237,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         return table.read_all()
 
     def execute(self, quals, columns, sortkeys=None):
-        _log_debug(
-            f"query in fdw with options {self._options}; columns {type(columns)}"
-        )
+        _log_debug(f"query in fdw with options {self._options}; columns {type(columns)}")
 
         if self._insight:
             return self._execute_insight(quals, columns, sortkeys)
@@ -276,33 +266,22 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         if not host.startswith("https://") and not host.startswith("http://"):
             raise ValueError(
-                "gooddata_fdw: your server is not defined correctly. "
-                "The host must start with https:// or http://"
+                "gooddata_fdw: your server is not defined correctly. The host must start with https:// or http://"
             )
 
         if schema == "gooddata_insights":
-            return cls.import_insights_from_workspace(
-                schema, srv_options, options, restriction_type, restricts
-            )
+            return cls.import_insights_from_workspace(schema, srv_options, options, restriction_type, restricts)
         elif schema == "gooddata_compute":
-            return cls.import_semantic_layer_from_workspace(
-                schema, srv_options, options, restriction_type, restricts
-            )
+            return cls.import_semantic_layer_from_workspace(schema, srv_options, options, restriction_type, restricts)
 
-        raise NotImplementedError(
-            f"This FDW does not support IMPORT FOREIGN SCHEMA for {schema}"
-        )
+        raise NotImplementedError(f"This FDW does not support IMPORT FOREIGN SCHEMA for {schema}")
 
     @classmethod
-    def import_insights_from_workspace(
-        cls, schema, srv_options, options, restriction_type, restricts
-    ):
+    def import_insights_from_workspace(cls, schema, srv_options, options, restriction_type, restricts):
         workspace = options["workspace"]
         table_naming = DefaultInsightTableNaming()
 
-        _log_info(
-            f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}"
-        )
+        _log_info(f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}")
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
         _log_debug("loading full catalog")
         catalog = _sdk.catalog.get_full_catalog(workspace)
@@ -353,14 +332,10 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         return tables
 
     @classmethod
-    def import_semantic_layer_from_workspace(
-        cls, schema, srv_options, options, restriction_type, restricts
-    ):
+    def import_semantic_layer_from_workspace(cls, schema, srv_options, options, restriction_type, restricts):
         workspace = options["workspace"]
 
-        _log_info(
-            f"importing semantic layer as tables from {srv_options['host']} workspace {options['workspace']}"
-        )
+        _log_info(f"importing semantic layer as tables from {srv_options['host']} workspace {options['workspace']}")
 
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
 

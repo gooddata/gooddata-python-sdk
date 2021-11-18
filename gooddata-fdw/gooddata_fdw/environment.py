@@ -53,9 +53,7 @@ except ImportError as e:
             self.columns = columns
 
         @classmethod
-        def import_schema(
-            cls, schema, srv_options, options, restriction_type, restricts
-        ):
+        def import_schema(cls, schema, srv_options, options, restriction_type, restricts):
             pass
 
         def execute(self, quals, columns, sortkeys=None):

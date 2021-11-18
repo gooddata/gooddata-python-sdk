@@ -34,9 +34,7 @@ class DataFrameFactory:
         self._sdk = sdk
         self._workspace_id = workspace_id
 
-    def indexed(
-        self, index_by: IndexDef, columns: ColumnsDef, filter_by: list[Filter] = None
-    ) -> pandas.DataFrame:
+    def indexed(self, index_by: IndexDef, columns: ColumnsDef, filter_by: list[Filter] = None) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
         metrics or other label values.
@@ -54,9 +52,11 @@ class DataFrameFactory:
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: filters to apply during computation on the server
         :return:
         """
@@ -71,15 +71,11 @@ class DataFrameFactory:
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(
-                list(index.values()), names=list(index.keys())
-            )
+            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
 
         return pandas.DataFrame(data=data, index=_idx)
 
-    def not_indexed(
-        self, columns: ColumnsDef, filter_by: list[Filter] = None
-    ) -> pandas.DataFrame:
+    def not_indexed(self, columns: ColumnsDef, filter_by: list[Filter] = None) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
 
@@ -88,22 +84,20 @@ class DataFrameFactory:
 
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
         :return:
         """
 
-        data, _ = compute_and_extract(
-            self._sdk, self._workspace_id, columns=columns, filter_by=filter_by
-        )
+        data, _ = compute_and_extract(self._sdk, self._workspace_id, columns=columns, filter_by=filter_by)
 
         return pandas.DataFrame(data=data)
 
-    def for_items(
-        self, items: ColumnsDef, filter_by: list[Filter] = None, auto_index=True
-    ):
+    def for_items(self, items: ColumnsDef, filter_by: list[Filter] = None, auto_index=True):
         """
         Creates a data frame for a named items. This is a convenience method that will create DataFrame with or
         without index based on the context of the items that you pass.
@@ -119,9 +113,11 @@ class DataFrameFactory:
 
         :param items: dict mapping item name to its definition; item may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or 'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
+           'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure, ArithmeticMeasure
+         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+           ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
         :param auto_index: optionally force creation of DataFrame without index even if the contents of items make it
         eligible for indexing
@@ -179,19 +175,11 @@ class DataFrameFactory:
         :return:
         """
         naming = DefaultInsightColumnNaming()
-        insight = self._sdk.insights.get_insight(
-            workspace_id=self._workspace_id, insight_id=insight_id
-        )
+        insight = self._sdk.insights.get_insight(workspace_id=self._workspace_id, insight_id=insight_id)
         filter_by = [f.as_computable() for f in insight.filters]
         columns = dict(
-            [
-                (naming.col_name_for_attribute(a), a.as_computable())
-                for a in insight.attributes
-            ]
-            + [
-                (naming.col_name_for_metric(m), m.as_computable())
-                for m in insight.metrics
-            ]
+            [(naming.col_name_for_attribute(a), a.as_computable()) for a in insight.attributes]
+            + [(naming.col_name_for_metric(m), m.as_computable()) for m in insight.metrics]
         )
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)

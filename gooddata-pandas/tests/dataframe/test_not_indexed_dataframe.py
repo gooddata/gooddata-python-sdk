@@ -45,9 +45,7 @@ def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
     assert df.columns[2] == "safety_scale"
 
 
-@gd_vcr.use_cassette(
-    os.path.join(_fixtures_dir, "not_indexed_filtered_metrics_and_labels.json")
-)
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_filtered_metrics_and_labels.json"))
 def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(

@@ -51,9 +51,7 @@ def test_simple_index_filtered_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_metric_series.json"))
 def test_multi_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(
-            reg="label/region.region_name", prod="label/product.product_name"
-        ),
+        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
         data_by="fact/coverage.coverage_risk_score",
     )
 
@@ -68,9 +66,7 @@ def test_multi_index_metric_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_filtered_series.json"))
 def test_multi_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(
-            reg="label/region.region_name", prod="label/product.product_name"
-        ),
+        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
         data_by="fact/coverage.coverage_risk_score",
         filter_by=PositiveAttributeFilter(label="prod", in_values=["Hybrid"]),
     )

@@ -15,9 +15,7 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
-_simple_measure = SimpleMetric(
-    local_id="local_id2", item=ObjId(type="metric", id="metric_id")
-)
+_simple_measure = SimpleMetric(local_id="local_id2", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="local_id4", label="label.id")
 
 test_metric_value_filter = [
@@ -39,9 +37,7 @@ test_metric_value_filter = [
     ],
     [
         "comparison filter with treat nulls as",
-        MetricValueFilter(
-            metric="local_id1", operator="EQUAL_TO", values=10, treat_nulls_as=1
-        ),
+        MetricValueFilter(metric="local_id1", operator="EQUAL_TO", values=10, treat_nulls_as=1),
     ],
     [
         "range filter",
@@ -49,9 +45,7 @@ test_metric_value_filter = [
     ],
     [
         "range filter with treat nulls as",
-        MetricValueFilter(
-            metric="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1
-        ),
+        MetricValueFilter(metric="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1),
     ],
 ]
 
