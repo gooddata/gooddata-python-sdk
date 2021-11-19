@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import PositiveAttributeFilter, NegativeAttributeFilter, ObjId
+from gooddata_sdk import NegativeAttributeFilter, ObjId, PositiveAttributeFilter
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 

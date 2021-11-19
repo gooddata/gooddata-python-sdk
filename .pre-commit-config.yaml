@@ -5,18 +5,22 @@
 # addition of new lines
 exclude: (gooddata-afm-client|gooddata-metadata-client|.*\.snapshot\..*)
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
-    -   id: check-added-large-files
-    -   id: check-case-conflict
--   repo: https://gitlab.com/pycqa/flake8
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-case-conflict
+  - repo: https://gitlab.com/pycqa/flake8
     rev: 3.9.0
     hooks:
-    -   id: flake8
--   repo: https://github.com/psf/black
+      - id: flake8
+  - repo: https://github.com/psf/black
     rev: 21.7b0
     hooks:
-    -   id: black
+      - id: black
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort

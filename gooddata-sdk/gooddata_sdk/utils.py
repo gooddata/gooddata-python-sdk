@@ -1,7 +1,9 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 from collections import namedtuple
 from datetime import date
+
 from dateutil.parser import parse
 
 from gooddata_metadata_client import ApiAttributeError

@@ -1,21 +1,16 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
-from typing import Union, Dict, Set, List
+
 import functools
-import gooddata_metadata_client.apis as metadata_apis
+from typing import Dict, List, Set, Union
+
 import gooddata_afm_client.apis as afm_apis
 import gooddata_afm_client.models as afm_models
-from gooddata_sdk.utils import Sideloads, id_obj_to_key, load_all_entities
+import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute import ExecutionDefinition
-from gooddata_sdk.compute_model import (
-    Attribute,
-    SimpleMetric,
-    ObjId,
-    Metric,
-    Filter,
-    compute_model_to_api_model,
-)
+from gooddata_sdk.compute_model import Attribute, Filter, Metric, ObjId, SimpleMetric, compute_model_to_api_model
+from gooddata_sdk.utils import Sideloads, id_obj_to_key, load_all_entities
 
 # need to use types from typings here for Python <3.9
 ValidObjects = Dict[str, Set[str]]

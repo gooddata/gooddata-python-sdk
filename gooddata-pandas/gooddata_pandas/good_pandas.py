@@ -1,11 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
-import os
-import json
-from gooddata_sdk import GoodDataSdk, client as sdk_client
-from gooddata_pandas.series import SeriesFactory
-from gooddata_pandas.dataframe import DataFrameFactory
 
+import json
+import os
+
+from gooddata_pandas.dataframe import DataFrameFactory
+from gooddata_pandas.series import SeriesFactory
+from gooddata_sdk import GoodDataSdk
+from gooddata_sdk import client as sdk_client
 
 _USER_AGENT = "gooddata-pandas/0.1"
 

@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import MetricValueFilter, ObjId, SimpleMetric, Attribute
+from gooddata_sdk import Attribute, MetricValueFilter, ObjId, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 

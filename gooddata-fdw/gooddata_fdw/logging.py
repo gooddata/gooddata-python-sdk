@@ -1,5 +1,6 @@
 # (C) 2021 GoodData Corporation
-from logging import ERROR, INFO, DEBUG, WARNING, CRITICAL
+from logging import CRITICAL, DEBUG, ERROR, INFO, WARNING
+
 from gooddata_fdw.environment import log_to_postgres
 
 

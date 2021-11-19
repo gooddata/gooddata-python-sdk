@@ -1,11 +1,12 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 import os
 
 import vcr
 
 from gooddata_sdk import GoodDataSdk
-from tests import TEST_HOST, test_token, TEST_WORKSPACE
+from tests import TEST_HOST, TEST_WORKSPACE, test_token
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 _fixtures_dir = os.path.join(_current_dir, "fixtures")

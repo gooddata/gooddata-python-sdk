@@ -1,19 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
-import uuid
-from typing import Union, Dict
-import pandas
-from datetime import datetime, date
 
-from gooddata_sdk import (
-    Attribute,
-    SimpleMetric,
-    Metric,
-    Filter,
-    ObjId,
-    InsightAttribute,
-    InsightMetric,
-)
+import uuid
+from datetime import date, datetime
+from typing import Dict, Union
+
+import pandas
+
+from gooddata_sdk import Attribute, Filter, InsightAttribute, InsightMetric, Metric, ObjId, SimpleMetric
 from gooddata_sdk.utils import typed_value
 
 LabelItemDef = Union[Attribute, ObjId, str]

@@ -14,10 +14,17 @@ lint:
 .PHONY: format
 format:
 	black --check .
+	isort --check .
+
+.PHONY: format-diff
+format-diff:
+	black --diff .
+	isort --diff .
 
 .PHONY: format-fix
 format-fix:
 	black .
+	isort .
 
 .PHONY: clients
 clients: afm-client metadata-client

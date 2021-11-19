@@ -1,10 +1,11 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
-from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.table import TableService
-from gooddata_sdk.compute import ComputeService
+
 from gooddata_sdk.catalog import CatalogService
+from gooddata_sdk.client import GoodDataApiClient
+from gooddata_sdk.compute import ComputeService
 from gooddata_sdk.insight import InsightService
+from gooddata_sdk.table import TableService
 
 
 class GoodDataSdk:

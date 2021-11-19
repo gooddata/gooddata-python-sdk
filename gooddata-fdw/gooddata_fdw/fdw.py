@@ -1,21 +1,12 @@
 # (C) 2021 GoodData Corporation
+import json
 import os
 from operator import itemgetter
-import json
 
 import gooddata_sdk as sdk
-from gooddata_fdw.logging import _log_debug, _log_info, _log_error
-
-from gooddata_fdw.environment import (
-    ForeignDataWrapper,
-    TableDefinition,
-    ColumnDefinition,
-)
-from gooddata_fdw.naming import (
-    DefaultInsightTableNaming,
-    DefaultInsightColumnNaming,
-    DefaultCatalogNamingStrategy,
-)
+from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, TableDefinition
+from gooddata_fdw.logging import _log_debug, _log_error, _log_info
+from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
 from gooddata_sdk.compute_model import ObjId
 
 _USER_AGENT = "gooddata-fdw/0.1"

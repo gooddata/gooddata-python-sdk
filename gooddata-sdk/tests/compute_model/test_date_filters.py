@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import AbsoluteDateFilter, RelativeDateFilter, AllTimeFilter, ObjId
+from gooddata_sdk import AbsoluteDateFilter, AllTimeFilter, ObjId, RelativeDateFilter
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 

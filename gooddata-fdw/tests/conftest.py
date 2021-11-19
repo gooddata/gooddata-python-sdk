@@ -4,7 +4,7 @@ from collections import OrderedDict
 import pytest
 
 from gooddata_fdw.environment import ColumnDefinition
-from tests import TEST_HOST, get_test_token, TEST_WORKSPACE
+from tests import TEST_HOST, TEST_WORKSPACE, get_test_token
 
 
 @pytest.fixture

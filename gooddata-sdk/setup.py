@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 REQUIRES = [
     "gooddata-afm-client>=1.0.0, <2.0.0",

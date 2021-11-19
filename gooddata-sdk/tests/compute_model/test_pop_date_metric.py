@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from gooddata_sdk import PopDateMetric, PopDate, ObjId, SimpleMetric, Attribute
+from gooddata_sdk import Attribute, ObjId, PopDate, PopDateMetric, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 _simple_metric = SimpleMetric(local_id="master_metric_id", item=ObjId(type="metric", id="metric_id"))
