@@ -1,15 +1,11 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 from typing import Union
 
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute import (
-    ExecutionResponse,
-    ExecutionResult,
-    ExecutionDefinition,
-    ComputeService,
-)
-from gooddata_sdk.compute_model import Attribute, Metric, Filter
+from gooddata_sdk.compute import ComputeService, ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute_model import Attribute, Filter, Metric
 from gooddata_sdk.insight import Insight
 
 _TABLE_ROW_BATCH_SIZE = 512

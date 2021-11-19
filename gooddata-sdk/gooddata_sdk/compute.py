@@ -1,16 +1,12 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 from typing import Union
 
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute_model import (
-    Attribute,
-    Metric,
-    Filter,
-    compute_model_to_api_model,
-)
+from gooddata_sdk.compute_model import Attribute, Filter, Metric, compute_model_to_api_model
 
 
 class ExecutionDefinition:

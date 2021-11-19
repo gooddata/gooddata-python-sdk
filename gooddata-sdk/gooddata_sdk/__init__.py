@@ -1,47 +1,36 @@
 # (C) 2021 GoodData Corporation
 from gooddata_sdk.catalog import (
     Catalog,
-    CatalogService,
+    CatalogAttribute,
     CatalogDataset,
+    CatalogFact,
     CatalogLabel,
     CatalogMetric,
-    CatalogAttribute,
-    CatalogFact,
+    CatalogService,
 )
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute import (
-    ComputeService,
-    ExecutionResponse,
-    ExecutionResult,
-    ExecutionDefinition,
-)
+from gooddata_sdk.compute import ComputeService, ExecutionDefinition, ExecutionResponse, ExecutionResult
 from gooddata_sdk.compute_model import (
+    AbsoluteDateFilter,
+    AllTimeFilter,
+    ArithmeticMetric,
     Attribute,
+    ExecModelEntity,
     Filter,
     Metric,
-    PositiveAttributeFilter,
-    NegativeAttributeFilter,
-    AbsoluteDateFilter,
-    RelativeDateFilter,
-    AllTimeFilter,
     MetricValueFilter,
-    RankingFilter,
-    SimpleMetric,
-    PopDateMetric,
-    PopDatesetMetric,
-    ArithmeticMetric,
+    NegativeAttributeFilter,
+    ObjId,
     PopDate,
     PopDateDataset,
-    ObjId,
-    ExecModelEntity,
+    PopDateMetric,
+    PopDatesetMetric,
+    PositiveAttributeFilter,
+    RankingFilter,
+    RelativeDateFilter,
+    SimpleMetric,
 )
-from gooddata_sdk.insight import (
-    Insight,
-    InsightService,
-    InsightMetric,
-    InsightAttribute,
-    InsightBucket,
-)
-from gooddata_sdk.table import TableService, ExecutionTable
-from gooddata_sdk.utils import Sideloads
+from gooddata_sdk.insight import Insight, InsightAttribute, InsightBucket, InsightMetric, InsightService
 from gooddata_sdk.sdk import GoodDataSdk
+from gooddata_sdk.table import ExecutionTable, TableService
+from gooddata_sdk.utils import Sideloads

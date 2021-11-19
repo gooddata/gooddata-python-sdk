@@ -5,7 +5,7 @@ import vcr
 from numpy import float64
 
 from gooddata_pandas import SeriesFactory
-from gooddata_sdk import PositiveAttributeFilter, ObjId
+from gooddata_sdk import ObjId, PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

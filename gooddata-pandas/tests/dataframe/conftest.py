@@ -1,8 +1,8 @@
 # (C) 2021 GoodData Corporation
 import pytest
 
-from gooddata_pandas import GoodPandas, DataFrameFactory
-from tests import TEST_HOST, get_test_token, TEST_WORKSPACE
+from gooddata_pandas import DataFrameFactory, GoodPandas
+from tests import TEST_HOST, TEST_WORKSPACE, get_test_token
 
 
 @pytest.fixture

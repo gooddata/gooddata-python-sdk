@@ -7,16 +7,16 @@ import os
 import pytest
 
 from gooddata_sdk.compute_model import (
-    compute_model_to_api_model,
+    AbsoluteDateFilter,
+    Attribute,
+    ObjId,
+    PopDate,
+    PopDateDataset,
+    PopDateMetric,
     PopDatesetMetric,
     PositiveAttributeFilter,
-    PopDateDataset,
-    ObjId,
-    AbsoluteDateFilter,
-    PopDateMetric,
-    PopDate,
     SimpleMetric,
-    Attribute,
+    compute_model_to_api_model,
 )
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

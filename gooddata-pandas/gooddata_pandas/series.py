@@ -1,11 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 from typing import Union
 
 import pandas
+
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import IndexDef, LabelItemDef
-from gooddata_sdk import GoodDataSdk, Attribute, SimpleMetric, Filter, ObjId
+from gooddata_sdk import Attribute, Filter, GoodDataSdk, ObjId, SimpleMetric
 
 
 class SeriesFactory:

@@ -1,14 +1,11 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 import pandas
+
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.utils import (
-    DefaultInsightColumnNaming,
-    IndexDef,
-    ColumnsDef,
-    _to_item,
-)
-from gooddata_sdk import GoodDataSdk, Filter, Attribute
+from gooddata_pandas.utils import ColumnsDef, DefaultInsightColumnNaming, IndexDef, _to_item
+from gooddata_sdk import Attribute, Filter, GoodDataSdk
 
 
 class DataFrameFactory:

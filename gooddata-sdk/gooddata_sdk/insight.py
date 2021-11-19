@@ -1,25 +1,26 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
+
 import functools
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute_model import (
-    ObjId,
-    SimpleMetric,
-    PopDateMetric,
-    PopDatesetMetric,
-    ArithmeticMetric,
-    PositiveAttributeFilter,
-    NegativeAttributeFilter,
-    MetricValueFilter,
-    RankingFilter,
     AbsoluteDateFilter,
-    RelativeDateFilter,
     AllTimeFilter,
+    ArithmeticMetric,
     Attribute,
+    MetricValueFilter,
+    NegativeAttributeFilter,
+    ObjId,
     PopDate,
     PopDateDataset,
+    PopDateMetric,
+    PopDatesetMetric,
+    PositiveAttributeFilter,
+    RankingFilter,
+    RelativeDateFilter,
+    SimpleMetric,
 )
 from gooddata_sdk.utils import Sideloads, load_all_entities
 

@@ -1,23 +1,8 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from gooddata_sdk import (
-    ExecutionDefinition,
-    ExecutionResponse,
-    Attribute,
-    Metric,
-    Filter,
-    GoodDataSdk,
-    Catalog,
-)
-from gooddata_pandas.utils import (
-    ColumnsDef,
-    IndexDef,
-    _to_item,
-    _to_attribute,
-    _to_filters,
-    _typed_attribute_value,
-)
+from gooddata_pandas.utils import ColumnsDef, IndexDef, _to_attribute, _to_filters, _to_item, _typed_attribute_value
+from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric
 
 
 def _compute(

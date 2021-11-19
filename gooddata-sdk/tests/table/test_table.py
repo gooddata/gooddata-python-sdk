@@ -5,14 +5,8 @@ import os
 
 import vcr
 
-from gooddata_sdk import (
-    GoodDataSdk,
-    Attribute,
-    SimpleMetric,
-    ObjId,
-    PositiveAttributeFilter,
-)
-from tests import TEST_HOST, test_token, TEST_WORKSPACE
+from gooddata_sdk import Attribute, GoodDataSdk, ObjId, PositiveAttributeFilter, SimpleMetric
+from tests import TEST_HOST, TEST_WORKSPACE, test_token
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 _fixtures_dir = os.path.join(_current_dir, "fixtures")
