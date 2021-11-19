@@ -34,20 +34,20 @@ create pandas series and data frames.
 
 -  Python 3.7 or newer
 
--  The GoodData.CN Foreign Data Wrapper is tested with latest version of multicorn (1.4.0) and PostgreSQL 12
+-  The GoodData.CN Foreign Data Wrapper is tested with the latest version of multicorn (1.4.0) and PostgreSQL 12
 
 ## Contributing
 
 ### Getting Started
 
-1.  Ensure you have at minimum Python 3.9 installed; Python 3.8 and 3.7 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.9 installed; Python 3.8 and 3.7 are optional for multi-environment tests
 
     This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
     supported versions. You can run `tox -e py39` to limit tests to just one environment.
 
-2.  Clone and setup environment:
+2. Clone and setup environment:
 
-    ```
+    ```bash
     git clone git@github.com:gooddata/gooddata-python-sdk.git
     cd gooddata-python-sdk
     make dev
@@ -56,13 +56,15 @@ create pandas series and data frames.
     The `make dev` command will create a new Python 3.9 virtual environment in the `.venv` directory, install all
     third party dependencies into it and setup git hooks.
 
-    Additionally if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
+    Additionally, if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
     activation of the virtual environment that was previously created in `.venv`.
 
-    If `direnv` is not your cup of tea, you may want adopt the PYTHONPATH exports that are done as part of the
+    If `direnv` is not your cup of tea, you may want to adopt the PYTHONPATH exports that are done as part of the
     script so that you can run custom Python code using the packages container herein without installing them.
 
     To make sure you have successfully set up your environment run `make test` in virtualenv in the root of git repo.
+    Please note, that `make test` executes tests against all the supported python versions. If you need to specify only
+    subset of them, see section [Run tests](#Run tests)
 
 ### Coding Conventions
 
@@ -79,3 +81,31 @@ You can also run the lint and formatter manually:
 **NOTE** If the pre-commit hook finds and auto-corrects some formatting errors, it will not auto-stage
 the updated files and will fail the commit operation. You have to re-drive the commit. This is a well-known and
 unlikely-to-change behavior of the [pre-commit](https://github.com/pre-commit/pre-commit/issues/806) package that this repository uses to manage hooks.
+
+### Run tests
+Tests use [tox](https://tox.wiki/en/latest/index.html) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html)
+libraries. Each project has its own `tox.ini`. Here are the options how to run the tests:
+- run tests for one sub-project - drill down to sub-project's directory
+  - use `make test` to trigger tests
+  ```bash
+  cd gooddata-sdk
+  make test
+  ```
+  - or execute `tox` command with arguments of your choice
+  ```bash
+  cd gooddata-sdk
+  tox -e py39
+  ```
+- run tests for all non-client projects using `make test` in project root directory
+
+Tests triggered by make can be controlled via these environment variables:
+- `RECREATE_ENVS` - set environment variable `RECREATE_ENVS` to 1 and make will add `--recreate` flag, `--recreate`
+  flag is not used otherwise
+  ```bash
+  RECREATE_ENVS=1 make test
+  ```
+- `TEST_ENVS` - define tox test environments (targets) as comma-separated list, by default all tox default targets are
+  executed
+  ```bash
+  TEST_ENVS=py39,py37 make test
+  ```
