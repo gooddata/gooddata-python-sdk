@@ -1,5 +1,5 @@
 [flake8]
-exclude = .git,.venv,__pycache__,.tox,build,dist,gooddata-afm-client,gooddata-metadata-client
+exclude = .git,.venv,__pycache__,.tox,build,dist,gooddata-afm-client,gooddata-metadata-client,gooddata-scan-client
 
 max-line-length = 120
 

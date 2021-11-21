@@ -7,6 +7,7 @@ isort==5.10.1
 
 -r ./gooddata-afm-client/requirements.txt
 -r ./gooddata-metadata-client/requirements.txt
+-r ./gooddata-scan-client/requirements.txt
 -r ./gooddata-sdk/requirements.txt
 -r ./gooddata-pandas/requirements.txt
 -r ./gooddata-fdw/requirements.txt

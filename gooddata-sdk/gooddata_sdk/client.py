@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import gooddata_afm_client as afm_client
 import gooddata_metadata_client as metadata_client
+import gooddata_scan_client as scan_client
 
 USER_AGENT = "gooddata-python-sdk/0.1"
 
@@ -36,6 +37,17 @@ class GoodDataApiClient:
             self._metadata_client.default_headers[header_name] = header_value
         self._metadata_client.user_agent = user_agent
 
+        self._scan_config = scan_client.Configuration(host=host)
+        self._scan_client = scan_client.ApiClient(
+            configuration=self._scan_config,
+            header_name="Authorization",
+            header_value=f"Bearer {token}",
+        )
+        self._scan_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        for header_name, header_value in self._custom_headers.items():
+            self._scan_client.default_headers[header_name] = header_value
+        self._scan_client.user_agent = user_agent
+
         self._afm_config = afm_client.Configuration(host=host)
         self._afm_client = afm_client.ApiClient(
             configuration=self._afm_config,
@@ -44,7 +56,7 @@ class GoodDataApiClient:
         )
         self._afm_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
         for header_name, header_value in self._custom_headers.items():
-            self.afm_client.default_headers[header_name] = header_value
+            self._afm_client.default_headers[header_name] = header_value
         self._afm_client.user_agent = user_agent
 
     @property
@@ -54,3 +66,7 @@ class GoodDataApiClient:
     @property
     def metadata_client(self):
         return self._metadata_client
+
+    @property
+    def scan_client(self):
+        return self._scan_client
