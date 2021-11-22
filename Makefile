@@ -37,6 +37,10 @@ afm-client:
 metadata-client:
 	scripts/generate_metadata_client.sh
 
+.PHONY: scan-client
+scan-client:
+	scripts/generate_scan_client.sh
+
 .PHONY: test
 test:
 	tox -r -e py39 -c gooddata-sdk/tox.ini
