@@ -1,3 +1,8 @@
+# list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
+NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata*))
+# for each path, take only the base name of the path
+NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
+
 all:
 	echo "Nothing here yet."
 
@@ -41,8 +46,7 @@ metadata-client:
 scan-client:
 	scripts/generate_scan_client.sh
 
+# execute tests for each project excluding clients, which are generated
 .PHONY: test
 test:
-	tox -r -e py39 -c gooddata-sdk/tox.ini
-	tox -r -e py39 -c gooddata-pandas/tox.ini
-	tox -r -e py39 -c gooddata-fdw/tox.ini
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} test; done
