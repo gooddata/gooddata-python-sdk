@@ -28,11 +28,13 @@ RUN apk add --no-cache --update wget make musl-dev llvm11 gcc clang python3 pyth
 #
 ADD gooddata-afm-client /gd/gooddata-afm-client
 ADD gooddata-metadata-client /gd/gooddata-metadata-client
+ADD gooddata-scan-client /gd/gooddata-scan-client
 ADD gooddata-sdk /gd/gooddata-sdk
 ADD gooddata-fdw /gd/gooddata-fdw
 
 RUN cd /gd/gooddata-afm-client && python3 setup.py install \
      && cd /gd/gooddata-metadata-client && python3 setup.py install \
+     && cd /gd/gooddata-scan-client && python3 setup.py install \
      && cd /gd/gooddata-sdk && python3 setup.py install \
      && cd /gd/gooddata-fdw && python3 setup.py install \
      && echo "CREATE EXTENSION multicorn; CREATE EXTENSION foreign_table_exposer; " > /docker-entrypoint-initdb.d/create_extensions.sql
