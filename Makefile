@@ -3,6 +3,8 @@ NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata
 # for each path, take only the base name of the path
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 
+include ci_tests.mk
+
 all:
 	echo "Nothing here yet."
 
