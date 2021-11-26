@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-REQUIRES = ["gooddata-sdk==0.1"]
+REQUIRES = ["gooddata-sdk==0.2"]
 
 
 def _read_version():

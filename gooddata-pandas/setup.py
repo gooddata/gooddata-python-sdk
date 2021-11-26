@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-REQUIRES = ["gooddata-sdk==0.1", "pandas"]
+REQUIRES = ["gooddata-sdk==0.2", "pandas"]
 
 
 def _read_version():
