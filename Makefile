@@ -32,7 +32,7 @@ format-fix:
 	isort .
 
 .PHONY: clients
-clients: afm-client metadata-client
+clients: afm-client metadata-client scan-client
 
 .PHONY: afm-client
 afm-client:
