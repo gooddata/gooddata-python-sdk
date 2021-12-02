@@ -1,0 +1,2 @@
+sonar.sources=gooddata-sdk,gooddata-fdw,gooddata-pandas
+sonar.exclusions=gooddata-afm-client/**/*,gooddata-metadata-client/**/*,gooddata-scan-client/**/*
