@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import functools
+from typing import List
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
@@ -227,11 +228,15 @@ class InsightMetric:
 
     @property
     def alias(self):
-        return self._m["alias"] if "alias" in self._m else None
+        return self._m.get("alias")
 
     @property
     def title(self):
-        return self._m["title"] if "title" in self._m else None
+        return self._m.get("title")
+
+    @property
+    def format(self):
+        return self._m.get("format")
 
     @property
     def item(self):
@@ -375,7 +380,7 @@ class Insight:
         return self._vo["attributes"]["description"]
 
     @property
-    def buckets(self):
+    def buckets(self) -> list[InsightBucket]:
         return [InsightBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
 
     @property
@@ -395,7 +400,7 @@ class Insight:
         return self._vo["attributes"]["content"]["visualizationUrl"]
 
     @property
-    def metrics(self):
+    def metrics(self) -> list[InsightMetric]:
         return [m for b in self.buckets for m in b.metrics]
 
     @property
@@ -440,7 +445,7 @@ class InsightService:
     def __init__(self, api_client: GoodDataApiClient):
         self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
 
-    def get_insights(self, workspace_id):
+    def get_insights(self, workspace_id) -> List[Insight]:
         """
         Gets all insights for a workspace. The insights will contain sideloaded metadata for all execution entities
         that they reference.
@@ -461,7 +466,7 @@ class InsightService:
 
         return [Insight(vis_obj, sideloads) for vis_obj in vis_objects.data]
 
-    def get_insight(self, workspace_id, insight_id):
+    def get_insight(self, workspace_id, insight_id) -> Insight:
         """
         Gets a single insight from a workspace.
 

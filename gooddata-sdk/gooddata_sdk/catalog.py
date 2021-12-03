@@ -217,6 +217,10 @@ class CatalogMetric(CatalogEntry):
     def description(self) -> str:
         return self._m["description"]
 
+    @property
+    def format(self) -> str:
+        return self._m["content"]["format"]
+
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=ObjId(self.id, "metric"))
 
