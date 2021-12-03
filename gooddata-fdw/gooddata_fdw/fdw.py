@@ -1,13 +1,16 @@
 # (C) 2021 GoodData Corporation
 import json
 import os
+import re
 from operator import itemgetter
 
 import gooddata_sdk as sdk
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, TableDefinition
 from gooddata_fdw.logging import _log_debug, _log_error, _log_info
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
+from gooddata_sdk.catalog import Catalog
 from gooddata_sdk.compute_model import ObjId
+from gooddata_sdk.insight import InsightMetric
 
 _USER_AGENT = "gooddata-fdw/0.1"
 """
@@ -15,6 +18,9 @@ Extra segment of the User-Agent header that will be appended to standard gooddat
 """
 
 DEFAULT_ATTRIBUTE_DATATYPE = "VARCHAR(255)"
+METRIC_DATA_TYPE = "DECIMAL"
+METRIC_DIGITS_BEFORE_DEC_POINT = 18
+METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT = 2
 
 
 def _col_as_computable(col: ColumnDefinition):
@@ -70,6 +76,27 @@ def date_granularity_to_data_type(granularity):
         "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
         "YEAR": "INTEGER",
     }.get(granularity, "INTEGER")
+
+
+# InsightMetric do not contain format in case of stored metrics
+def get_insight_metric_format(metric: InsightMetric, catalog: Catalog) -> str:
+    metric_id = ObjId(id=metric.item_id, type="metric")
+    full_metric = catalog.get_metric(metric_id)
+    return metric.format or full_metric.format
+
+
+def get_metric_data_type(digits_after: int) -> str:
+    return f"{METRIC_DATA_TYPE}({METRIC_DIGITS_BEFORE_DEC_POINT}, {digits_after})"
+
+
+def metric_format_to_data_type(metric_format: str) -> str:
+    re_decimal_places = re.compile(r"^[^.]+\.([#0]+)")
+    match = re_decimal_places.search(metric_format)
+    if match:
+        digits_after = len(match.group(1))
+    else:
+        digits_after = METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
+    return get_metric_data_type(digits_after)
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
@@ -283,14 +310,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         for insight in insights:
             table_name = table_naming.table_name_for_insight(insight)
-            _log_info(f"creating table def {table_name} for insight {insight.title}")
+            _log_info(f'creating table def "{table_name}" for insight "{insight.title}"')
 
             column_naming = DefaultInsightColumnNaming()
             columns = []
 
             for attr in insight.attributes:
                 column_name = column_naming.col_name_for_attribute(attr)
-                _log_debug(f"creating col def {column_name} for attribute {attr}")
+                _log_debug(f'creating col def "{column_name}" for attribute "{attr.label_id}"')
 
                 label_id = ObjId(id=attr.label_id, type="label")
                 data_type = column_data_type_for(catalog.find_label_attribute(label_id))
@@ -303,12 +330,16 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 columns.append(col)
 
             for metric in insight.metrics:
+                metric_format = get_insight_metric_format(metric, catalog)
+                data_type = metric_format_to_data_type(metric_format)
                 column_name = column_naming.col_name_for_metric(metric)
-                _log_debug(f"creating col def {column_name} for metric {metric}")
-
+                _log_debug(
+                    f'creating col def "{column_name}" for metric "{metric.title}(id={metric.item_id})" '
+                    + f"format={metric_format} data_type={data_type}"
+                )
                 col = ColumnDefinition(
                     column_name=column_name,
-                    type_name="DECIMAL(15,5)",
+                    type_name=data_type,
                     options=dict(local_id=metric.local_id),
                 )
                 columns.append(col)
@@ -336,13 +367,15 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         for metric in catalog.metrics:
             column_name = naming.col_name_for_metric(metric)
+            metric_format = metric.format
+            data_type = metric_format_to_data_type(metric_format)
 
-            _log_info(f"metric {metric.id} mapped to column {column_name}")
+            _log_info(f"metric {metric.id} mapped to column {column_name} target data_type={data_type}")
 
             columns.append(
                 ColumnDefinition(
                     column_name=column_name,
-                    type_name="DECIMAL(15,5)",
+                    type_name=data_type,
                     options=dict(id=f"metric/{metric.id}"),
                 )
             )
@@ -356,7 +389,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 columns.append(
                     ColumnDefinition(
                         column_name=column_name,
-                        type_name="DECIMAL(15,5)",
+                        # TODO - get data type from PDM
+                        type_name=get_metric_data_type(METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT),
                         options=dict(id=f"fact/{fact.id}"),
                     )
                 )
