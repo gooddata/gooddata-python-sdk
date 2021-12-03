@@ -2,37 +2,35 @@
 
 ## Getting Started
 
-For convenience a Dockerfile is in place which when started will run PostgreSQL 12 with multicorn and gooddata-fdw
-installed. There is a [script in place](./start_gooddata_fdw.sh) to automate build and startup steps:
+For convenience a `Dockerfile` is in place which when started will run `PostgreSQL 12` with `multicorn` and `gooddata-fdw`
+installed.
 
-    POSTGRES_PASSWORD=... ./start_gooddata_fdw
-
-You need to provide your own password via the `POSTGRES_PASSWORD` environmental variable. The command will build an
-image containing official PostgreSQL v12 and install all the requirements and GoodData FDW into it. It will create
-a new `gooddata` DB and `gooddata` user who will have access to this DB. The password for this user is what you have
-entered in the `POSTGRES_PASSWORD` variable.
-
-__Note on using GD.CN.CE and provided Postgre image in docker__:
-In case you are about to run both components in docker, both should be connected to same docker network.
-Then the containers are able to address each other via __hostnames that are equal to value of provided --name value__
-as shown in the next excerpt:
-
+For even better user experience we prepared `docker-compose.yaml` file, which contains both `gooddata-fdw` and `gooddata-cn-ce` services.
+If you execute (in this folder):
 ``` shell
-# create the network
-docker network create tiger_network -d bridge
+docker-compose up -d
+```
+gooddata-fdw image is built from the Dockerfile and both services are started in background.
+Note: services in docker-compose.yaml contain setup of various environment variables including `POSTGRES_PASSWORD`.
+Set the variables in your environment if you want to, before you execute the above command.
+Default value for`POSTGRES_PASSWORD` is `gooddata123`.
 
-# pass --name and --network to both starting containers, eg.:
-docker run --name gdcnce --network tiger_network -i -t -p 3000:3000 -p 5432:5432 -v gd-volume:/data gooddata/gooddata-cn-ce:latest
+You can also execute:
+``` shell
+docker-compose build
+```
+to rebuild the fdw image.
 
-docker run --name multicorn --network tiger_network --rm -p 2543:5432 \
-          -e POSTGRES_DB=gooddata \
-          -e POSTGRES_USER=gooddata \
-          -e POSTGRES_PASSWORD=$PASS \
-          -e GOODDATA_SDK_HTTP_HEADERS='{"Host": "localhost"}' \
-          postgresql-gd postgres -c shared_preload_libraries='foreign_table_exposer'
+If you would like to purge a container completely (including the volume) and start from scratch, you can use a helper script:
+```
+./rebuild.sh gooddata-cn-ce
+./rebuild.sh gooddata-fdw
 ```
 
-After the container starts, you can connect to the running PostgreSQL:
+Before you start playing with gooddata-fdw, fill the gooddata-cn-ce with a content (LDM, metrics, insights).
+E.g you can follow our [Getting Started documentation](https://www.gooddata.com/developers/cloud-native/doc/1.5/getting-started/).
+
+After the `gooddata-fdw` container starts, you can connect to the running PostgreSQL:
 
 -   From console using `psql --host localhost --port 2543 --user gooddata gooddata`
 
@@ -42,19 +40,19 @@ After the container starts, you can connect to the running PostgreSQL:
 
     You will be asked to enter username (gooddata) and password.
 
-Once connected you will be able to work with the GD.CN Foreign Data Wrapper. At first, you need to define your GD.CN
-server in PostgreSQL:
+Once connected you will be able to work with the GD.CN Foreign Data Wrapper.
+At first, you need to define your GD.CN server in PostgreSQL:
 
 ```postgresql
 CREATE SERVER multicorn_gooddata FOREIGN DATA WRAPPER multicorn
 OPTIONS (
     wrapper 'gooddata_fdw.GoodDataForeignDataWrapper',
-    host 'https://gdcnce:3000', -- host equal to name of container with GD.CN.CE 
-    token 'auth_token'
+    host 'https://gooddata-cn-ce:3000', -- host equal to name of container with GD.CN.CE
+    token 'YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz' -- default gooddata-cn-ce token, documented in public DOC as well
 );
 ```
 
-Typically you have to do this once per GD.CN installation. You can add as many servers as you want/need.
+Typically, you have to do this once per GD.CN installation. You can add as many servers as you want/need.
 
 **IMPORTANT**: do not forget to specify host including the schema (http or https).
 
