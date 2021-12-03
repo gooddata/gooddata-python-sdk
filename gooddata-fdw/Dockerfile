@@ -15,7 +15,7 @@ FROM postgres:12-alpine
 # The preflight-check is removed because of this.
 #
 
-RUN apk add --no-cache --update wget make musl-dev llvm11 gcc clang python3 python3-dev py3-setuptools py3-pip \
+RUN apk add --no-cache --update wget make musl-dev llvm11 llvm-dev gcc clang python3 python3-dev py3-setuptools py3-pip \
      && pip3 --no-color --no-cache-dir -qq install pgxnclient \
      \
      && pgxnclient install foreign_table_exposer \
