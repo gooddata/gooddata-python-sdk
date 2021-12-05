@@ -36,5 +36,9 @@ RUN cd /gd/gooddata-afm-client && python3 setup.py install \
      && cd /gd/gooddata-metadata-client && python3 setup.py install \
      && cd /gd/gooddata-scan-client && python3 setup.py install \
      && cd /gd/gooddata-sdk && python3 setup.py install \
-     && cd /gd/gooddata-fdw && python3 setup.py install \
-     && echo "CREATE EXTENSION multicorn; CREATE EXTENSION foreign_table_exposer; " > /docker-entrypoint-initdb.d/create_extensions.sql
+     && cd /gd/gooddata-fdw && python3 setup.py install
+
+# Add sql files to be executed during start of container
+# They register extensions and install helping sql procedures
+ADD gooddata-fdw/sql/create_extensions.sql /docker-entrypoint-initdb.d/create_extensions.sql
+ADD gooddata-fdw/sql/import_gooddata.sql /docker-entrypoint-initdb.d/import_gooddata.sql
