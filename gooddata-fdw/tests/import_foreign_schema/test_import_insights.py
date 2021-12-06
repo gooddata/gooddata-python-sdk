@@ -41,9 +41,9 @@ def test_import_insights_without_restrictions(import_srv_options):
     assert "local_id" in premium_revenue_structure.col_idx["customer_customer_age_group"].options
 
     assert "premium_revenue" in premium_revenue_structure.col_idx
-    assert premium_revenue_structure.col_idx["premium_revenue"].type_name == "DECIMAL(15,5)"
+    assert premium_revenue_structure.col_idx["premium_revenue"].type_name == "DECIMAL(18, 1)"
     assert "local_id" in premium_revenue_structure.col_idx["premium_revenue"].options
 
     assert "claim_amount" in kpi_claim.col_idx
-    assert kpi_claim.col_idx["claim_amount"].type_name == "DECIMAL(15,5)"
+    assert kpi_claim.col_idx["claim_amount"].type_name == "DECIMAL(18, 1)"
     assert "local_id" in kpi_claim.col_idx["claim_amount"].options

@@ -36,10 +36,10 @@ def test_import_compute_without_restrictions(import_srv_options):
     # normal label
     assert "car_gears" in compute_table.col_idx
 
-    assert compute_table.col_idx["claim_amount"].type_name == "DECIMAL(15,5)"
+    assert compute_table.col_idx["claim_amount"].type_name == "DECIMAL(18, 1)"
     assert compute_table.col_idx["claim_amount"].options["id"] == "metric/claim-amount"
 
-    assert compute_table.col_idx["claim_amount_1"].type_name == "DECIMAL(15,5)"
+    assert compute_table.col_idx["claim_amount_1"].type_name == "DECIMAL(18, 2)"
     assert compute_table.col_idx["claim_amount_1"].options["id"] == "fact/claim.claim_amount"
 
     assert compute_table.col_idx["coverage_created_date_day"].type_name == "DATE"
