@@ -48,7 +48,8 @@ metadata-client:
 scan-client:
 	scripts/generate_scan_client.sh
 
-# execute tests for each project excluding clients, which are generated
 .PHONY: test
 test:
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} test; done
+	RESULT=0; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} test || RESULT=$$?; done; \
+	exit $$RESULT
