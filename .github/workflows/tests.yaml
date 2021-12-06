@@ -1,0 +1,49 @@
+name: tests
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '.docker/**'
+      - 'gooddata-fdw/**'
+      - 'gooddata-pandas/**'
+      - 'gooddata-sdk/**'
+      - '*.mk'
+      - 'Makefile'
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: [py39, py38, py37]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute tests
+        run: |
+          make test-ci
+        env:
+          TEST_ENVS: ${{ matrix.python_version }}
+  lint-and-format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            lint-requirements.txt
+            fmt-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r lint-requirements.txt -r fmt-requirements.txt
+      - name: Pep8 check
+        run: |
+          make lint
+      - name: Formatting check
+        run: |
+          make format
