@@ -84,7 +84,10 @@ unlikely-to-change behavior of the [pre-commit](https://github.com/pre-commit/pr
 
 ### Run tests
 Tests use [tox](https://tox.wiki/en/latest/index.html) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html)
-libraries. Each project has its own `tox.ini`. Here are the options how to run the tests:
+libraries. Each project has its own `tox.ini`.
+NOTE: Tests are not executed for OpenAPI client projects.
+
+Here are the options how to run the tests:
 - run tests for one sub-project - drill down to sub-project's directory
   - use `make test` to trigger tests
   ```bash
@@ -108,4 +111,38 @@ Tests triggered by make can be controlled via these environment variables:
   executed
   ```bash
   TEST_ENVS=py39,py37 make test
+  ```
+- `ADD_ARGS` - send additional arguments to pytest tool, useful for pin-pointing just part of tests
+  ```bash
+  ADD_ARGS="-k http_headers" make test
+  ```
+
+### Run continuous integration tests
+Tests in pull request (PR) are executed using docker. The following is done to make tests environment as close
+to reproducible as possible:
+- each supported python version has defined python base docker image
+- tox version installed to docker is frozen to specific version
+- all test dependencies specified in test-requirements.txt should be limited to some version range
+
+Above rules give a chance to execute tests on localhost in the same or very similar environment as used in PR.
+Orchestration is driven by `make test-ci`. Target `test-ci` supports the same features as `make test`, see
+[Run tests](#Run tests) for details.
+
+NOTE: docker tox tests and localhost tox tests are using the same .tox directory. Virtual environments for both test
+types are most likely incompatible due to different base python version. tox is able to recognize it and recreate
+venv automatically. So when docker tox tests are executed after localhost tests or vice-versa envs are recreated.
+
+#### Examples
+- run all tests for all supported python environments
+  ```bash
+  make test-ci
+  ```
+- run all tests for all supported python environments and for one project
+  ```bash
+  cd gooddata-sdk
+  make test-ci
+  ```
+- run all tests containing `http_headers` in name for py39 and py38 for all projects
+  ```bash
+  TEST_ENVS=py39,py38 ADD_ARGS="-k http_headers" make test-ci
   ```
