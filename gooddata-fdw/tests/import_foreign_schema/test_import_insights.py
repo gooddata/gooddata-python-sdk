@@ -16,9 +16,9 @@ gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "import_insights_without_restrictions.json"))
 def test_import_insights_without_restrictions(import_srv_options):
     tables = fdw.import_schema(
-        schema="gooddata_insights",
+        schema=TEST_WORKSPACE,
         srv_options=import_srv_options,
-        options=dict(workspace=TEST_WORKSPACE),
+        options=dict(object_type="insights"),
         restriction_type=None,
         restricts=[],
     )

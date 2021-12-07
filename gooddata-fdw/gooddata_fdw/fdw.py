@@ -6,7 +6,7 @@ from operator import itemgetter
 
 import gooddata_sdk as sdk
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, TableDefinition
-from gooddata_fdw.logging import _log_debug, _log_error, _log_info
+from gooddata_fdw.logging import _log_debug, _log_error, _log_info, _log_warn
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
 from gooddata_sdk.catalog import Catalog
 from gooddata_sdk.compute_model import ObjId
@@ -267,18 +267,25 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     @classmethod
     def import_schema(cls, schema, srv_options, options, restriction_type, restricts):
         _log_info(
-            f"import fdw schema {schema} (srv_options={srv_options}, "
+            f"import fdw {schema} (srv_options={srv_options}, "
             f"options={options}, restriction_type={restriction_type}, restricts={restricts})"
         )
 
         if "host" not in srv_options or "token" not in srv_options:
             raise ValueError("server OPTIONS must contain 'host' and 'token' keys.")
 
-        if "workspace" not in options:
+        if "object_type" not in options:
             raise ValueError(
-                "gooddata_fdw: IMPORT SCHEMA OPTIONS must contain 'workspace' key "
-                "to indicate workspace from which to import."
+                "gooddata_fdw: IMPORT SCHEMA OPTIONS must contain 'object_type' key "
+                "to indicate type of object to be imported"
             )
+        else:
+            object_type = options["object_type"]
+            if object_type not in ["insights", "compute", "all"]:
+                raise ValueError(
+                    f"gooddata_fdw: IMPORT SCHEMA OPTION 'object_type' unsupported value '{object_type}'."
+                    + " Supported values are: 'insights', 'compute', 'all'"
+                )
 
         host = srv_options["host"]
 
@@ -287,19 +294,22 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 "gooddata_fdw: your server is not defined correctly. The host must start with https:// or http://"
             )
 
-        if schema == "gooddata_insights":
-            return cls.import_insights_from_workspace(schema, srv_options, options, restriction_type, restricts)
-        elif schema == "gooddata_compute":
-            return cls.import_semantic_layer_from_workspace(schema, srv_options, options, restriction_type, restricts)
-
-        raise NotImplementedError(f"This FDW does not support IMPORT FOREIGN SCHEMA for {schema}")
+        tables = []
+        # (Source) schema represents GoodData workspace
+        # Insight name `compute` is not allowed and filtered out inside the import_insights_from_workspace()
+        if object_type in ["insights", "all"]:
+            tables += cls.import_insights_from_workspace(schema, srv_options, options, restriction_type, restricts)
+        if object_type in ["compute", "all"]:
+            tables += cls.import_semantic_layer_from_workspace(
+                schema, srv_options, options, restriction_type, restricts
+            )
+        return tables
 
     @classmethod
-    def import_insights_from_workspace(cls, schema, srv_options, options, restriction_type, restricts):
-        workspace = options["workspace"]
+    def import_insights_from_workspace(cls, workspace, srv_options, options, restriction_type, restricts):
         table_naming = DefaultInsightTableNaming()
 
-        _log_info(f"importing insights as tables from {srv_options['host']} workspace {options['workspace']}")
+        _log_info(f"importing insights as tables from {srv_options['host']} workspace {workspace}")
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
         _log_debug("loading full catalog")
         catalog = _sdk.catalog.get_full_catalog(workspace)
@@ -344,20 +354,21 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 )
                 columns.append(col)
 
-            table = TableDefinition(
-                table_name=table_name,
-                columns=columns,
-                options=dict(workspace=workspace, insight=insight.id),
-            )
-            tables.append(table)
+            if table_name == "compute":
+                _log_warn("Insight name may not equal to `compute` used by import_semantic_layer_from_workspace()")
+            else:
+                table = TableDefinition(
+                    table_name=table_name,
+                    columns=columns,
+                    options=dict(workspace=workspace, insight=insight.id),
+                )
+                tables.append(table)
 
         return tables
 
     @classmethod
-    def import_semantic_layer_from_workspace(cls, schema, srv_options, options, restriction_type, restricts):
-        workspace = options["workspace"]
-
-        _log_info(f"importing semantic layer as tables from {srv_options['host']} workspace {options['workspace']}")
+    def import_semantic_layer_from_workspace(cls, workspace, srv_options, options, restriction_type, restricts):
+        _log_info(f"importing semantic layer as tables from {srv_options['host']} workspace {workspace}")
 
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
 

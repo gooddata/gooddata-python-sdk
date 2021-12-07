@@ -56,65 +56,48 @@ Typically, you have to do this once per GD.CN installation. You can add as many 
 
 **IMPORTANT**: do not forget to specify host including the schema (http or https).
 
-## Import insights from your workspace
+## Import GoodData objects as foreign tables into Postgres schema
 
 You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables. You can import insights
-from as many workspaces as you want. We recommend you to create schema per workspace otherwise you run risk of table
-name clashes.
+from as many workspaces as you want.
 
-```postgresql
---
--- Schema to map insights into. This can be anything you want.
---
-CREATE SCHEMA gooddata_workspace;
-
---
--- This maps all insights stored in GD.CN workspace into a schema of your choice.
---
--- Note: it is essential that you import from 'gooddata_insights'. That is the schema that the FDW uses to
--- identify that you actually want to map the workspace's insights
---
-IMPORT FOREIGN SCHEMA gooddata_insights FROM SERVER multicorn_gooddata INTO gooddata_workspace OPTIONS (
-    workspace 'workspace_id'
-);
-```
-
-You will get couple of 'NOTICE' messages as the import progresses. You can then check the imported tables for instance
-by executing:
-
-```postgresql
-SELECT * FROM information_schema.foreign_tables WHERE foreign_table_schema = 'gooddata_workspace';
-```
-
-## Free-form computations on top of Semantic Model
-
-You can import your entire semantic model including MAQL metrics into a special `compute` **pseudo-table**. Doing SELECTs
-from this table will trigger computation of analytics on your GoodData.CN server based on the columns that you have
-specified on the SELECT.
+You can also import your entire semantic model including MAQL metrics into a special `compute` **pseudo-table**.
+Doing SELECTs from this table will trigger computation of analytics on your GoodData.CN server based on the columns
+that you have specified on the SELECT.
 
 Note that the `compute` is called pseudo-table for a reason. It does not adhere to the relational model. The columns
 that you SELECT map to facts, metrics and labels in your semantic model. Computing results for the select will automatically
 aggregate results on the columns that are mapped to labels in your semantic model. In other words cardinality of
 the `compute` table changes based on the columns that you SELECT.
 
-This is how you can import the semantic model:
+For your convenience we prepared a stored procedure, which:
+- (re)creates target schema
+- imports currently existing insights and/or entire semantic model
+
+You can re-execute the procedure to update foreign tables.
 
 ```postgresql
 --
--- Schema where the compute pseudo-table should be created. This can be any schema, even schema where you map the
--- insights.
+-- This maps all insights stored in GD.CN workspace `workspace_id` into the Postgres schema named `workspace_id`
 --
-CREATE SCHEMA gooddata_workspace;
+CALL import_gooddata('workspace_id', 'insights');
+-- By utilizing the third parameter you can override the name of the target Postgres schema
+CALL import_gooddata('workspace_id', 'insights', 'custom_schema');
 
 --
 -- This imports the semantic model into the 'compute' pseudo-table.
 --
--- Note: it is essential that you import from 'gooddata_compute'. That is the schema that the FDW uses to
--- identify that you actually want to import the semantic layer.
---
-IMPORT FOREIGN SCHEMA gooddata_compute FROM SERVER multicorn_gooddata INTO gooddata_workspace OPTIONS (
-    workspace 'workspace_id'
-);
+CALL import_gooddata('workspace_id', 'compute');
+
+-- This imports both insights and compute
+CALL import_gooddata('workspace_id', 'all');
+```
+
+You will get couple of 'NOTICE' messages as the import progresses. You can then check the imported tables for instance
+by executing:
+
+```postgresql
+SELECT * FROM information_schema.foreign_tables WHERE foreign_table_schema = 'workspace_id';
 ```
 
 **IMPORTANT**: Your semantic model may consist of multiple isolated segments that have no relationship between them. Attempting
