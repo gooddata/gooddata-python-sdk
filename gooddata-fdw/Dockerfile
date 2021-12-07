@@ -1,5 +1,7 @@
 FROM postgres:12-alpine
 
+# test github action
+
 #
 # Docker image that adds multicorn & gooddata-fdw on top of official PostgreSQL image.
 #
