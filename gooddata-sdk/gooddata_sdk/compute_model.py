@@ -7,7 +7,7 @@ import gooddata_afm_client.models as afm_models
 
 
 class ObjId:
-    def __init__(self, id, type):
+    def __init__(self, id: str, type):
         self._id: str = id
         self._type: str = type
 
