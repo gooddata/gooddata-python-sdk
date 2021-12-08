@@ -21,7 +21,7 @@ DECLARE
   server VARCHAR := 'multicorn_gooddata';
 BEGIN
   -- Recreate schema, where foreign tables will be imported
-  sql_statement := format('DROP SCHEMA IF EXISTS "%s"', foreign_schema);
+  sql_statement := format('DROP SCHEMA IF EXISTS "%s" CASCADE', foreign_schema);
   CALL execute_sql(sql_statement, debug);
 
   sql_statement := format('CREATE SCHEMA "%s"', foreign_schema);
