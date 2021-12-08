@@ -23,10 +23,10 @@ gp = GoodPandas(host=HOST, token=TOKEN)
 series = gp.series(workspace_id)
 
 # create indexed series
-indexed_series = series.indexed(index_by="label_id", data_by="measure_id")
+indexed_series = series.indexed(index_by="label/label_id", data_by="fact/measure_id")
 
 # create non-indexed series containing just the values of measure sliced by elements of the label
-non_indexed = series.not_indexed(data_by="measure_id, granularity="label_id")
+non_indexed = series.not_indexed(data_by="fact/measure_id, granularity="label/label_id")
 ```
 
 ### Data Frames
