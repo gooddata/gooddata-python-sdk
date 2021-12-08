@@ -1,17 +1,16 @@
 from setuptools import find_packages, setup
 
-REQUIRES = ["gooddata-sdk==0.2", "pandas"]
-
-
-def _read_version():
-    with open("VERSION", "rt") as version_file:
-        return version_file.readline().strip()
+REQUIRES = [
+    "gooddata-sdk~=0.6.0",
+    "pandas",
+    'importlib-metadata >= 1.0 ; python_version < "3.8"',
+]
 
 
 setup(
     name="gooddata-pandas",
     description="GoodData.CN to pandas",
-    version=_read_version(),
+    version="0.6.0",
     author="GoodData",
     license="MIT",
     install_requires=REQUIRES,

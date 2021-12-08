@@ -6,8 +6,9 @@ from typing import Optional
 import gooddata_afm_client as afm_client
 import gooddata_metadata_client as metadata_client
 import gooddata_scan_client as scan_client
+from gooddata_sdk import __version__
 
-USER_AGENT = "gooddata-python-sdk/0.1"
+USER_AGENT = f"gooddata-python-sdk/{__version__}"
 
 
 class GoodDataApiClient:

@@ -1,2 +1,1 @@
-include VERSION
 graft gooddata_pandas

@@ -3,11 +3,13 @@ from __future__ import annotations
 
 from typing import Optional
 
+from gooddata_pandas import __version__
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.series import SeriesFactory
 from gooddata_sdk import create_sdk
 
-_USER_AGENT = "gooddata-pandas/0.1"
+USER_AGENT = f"gooddata-pandas/{__version__}"
+"""Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""
 
 
 class GoodPandas:
@@ -16,7 +18,7 @@ class GoodPandas:
     """
 
     def __init__(self, host: str, token: str, headers_host: Optional[str] = None) -> None:
-        self._sdk = create_sdk(host, token, _USER_AGENT, headers_host)
+        self._sdk = create_sdk(host, token, USER_AGENT, headers_host)
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 

@@ -1,17 +1,16 @@
 from setuptools import find_packages, setup
 
-REQUIRES = ["gooddata-sdk==0.2"]
-
-
-def _read_version():
-    with open("VERSION", "rt") as version_file:
-        return version_file.readline().strip()
+REQUIRES = [
+    "gooddata-sdk~=0.6.0",
+    'importlib-metadata >= 1.0 ; python_version < "3.8"',
+    #    "multicorn>=1.4.0",
+]
 
 
 setup(
     name="gooddata-fdw",
     description="GoodData.CN Foreign Data Wrapper For PostgreSQL",
-    version=_read_version(),
+    version="0.6.0",
     author="GoodData",
     license="MIT",
     install_requires=REQUIRES,
