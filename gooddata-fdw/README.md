@@ -91,7 +91,12 @@ CALL import_gooddata('workspace_id', 'compute');
 
 -- This imports both insights and compute
 CALL import_gooddata('workspace_id', 'all');
+
+-- This is how you can extend max size of numeric columns in foreign tables (basically to support larger numbers)
+CALL import_gooddata(workspace := 'goodsales', object_type := 'all', numeric_max_size := 24);
 ```
+
+Default max numeric size is 18, default digits after decimal point is 2 unless metric format defines more.
 
 You will get couple of 'NOTICE' messages as the import progresses. You can then check the imported tables for instance
 by executing:
