@@ -1,5 +1,11 @@
 # (C) 2021 GoodData Corporation
+"""The `gooddata-sdk` package aims to provide clean and convenient Python APIs to interact with GoodData.CN.
+
+At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics.
+"""
+
 from gooddata_sdk._version import __version__
+
 from gooddata_sdk.catalog import (
     Catalog,
     CatalogAttribute,
