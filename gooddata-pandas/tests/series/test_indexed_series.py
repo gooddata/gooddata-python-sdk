@@ -41,7 +41,7 @@ def test_simple_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name"),
         data_by="label/region.region_code",
-        filter_by=PositiveAttributeFilter(label="reg", in_values=["Bern"]),
+        filter_by=PositiveAttributeFilter(label="reg", values=["Bern"]),
     )
 
     assert len(series) == 1
@@ -68,7 +68,7 @@ def test_multi_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
         data_by="fact/coverage.coverage_risk_score",
-        filter_by=PositiveAttributeFilter(label="prod", in_values=["Hybrid"]),
+        filter_by=PositiveAttributeFilter(label="prod", values=["Hybrid"]),
     )
 
     # only two regions have the 'Hybrid' product filtered above. each sub-index for each region will contain

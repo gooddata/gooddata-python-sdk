@@ -89,14 +89,14 @@ def _convert_filter_to_computable(filter_obj):
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         in_values = f["in"]["values"] if "values" in f["in"] else f["in"]["uris"]
 
-        return PositiveAttributeFilter(label=_ref_extract(f["displayForm"]), in_values=in_values)
+        return PositiveAttributeFilter(label=_ref_extract(f["displayForm"]), values=in_values)
 
     elif "negativeAttributeFilter" in filter_obj:
         f = filter_obj["negativeAttributeFilter"]
         # fallback to use URIs; SDK may be able to create filter with attr elements as uris...
         not_in_values = f["notIn"]["values"] if "values" in f["notIn"] else f["notIn"]["uris"]
 
-        return NegativeAttributeFilter(label=_ref_extract(f["displayForm"]), not_in_values=not_in_values)
+        return NegativeAttributeFilter(label=_ref_extract(f["displayForm"]), values=not_in_values)
     elif "relativeDateFilter" in filter_obj:
         f = filter_obj["relativeDateFilter"]
 

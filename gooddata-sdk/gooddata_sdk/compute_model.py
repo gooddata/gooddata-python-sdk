@@ -375,52 +375,46 @@ class ArithmeticMetric(Metric):
         )
 
 
-class PositiveAttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], in_values: list[str] = None):
-        super(PositiveAttributeFilter, self).__init__()
+class AttributeFilter(Filter):
+    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] = None):
+        super(AttributeFilter, self).__init__()
 
         self._label = _extract_id_or_local_id(label)
-        self._in_values = in_values or []
+        self._values = values or []
 
     @property
     def label(self) -> Union[ObjId, str]:
         return self._label
 
     @property
-    def in_values(self) -> list[str]:
-        return self._in_values
+    def values(self) -> list[str]:
+        return self._values
 
     def is_noop(self):
         return False
 
     def as_api_model(self):
+        raise NotImplementedError()
+
+    def __eq__(self, other):
+        return isinstance(other, AttributeFilter) and self._label == other._label and self._values == other._values
+
+
+class PositiveAttributeFilter(AttributeFilter):
+    def as_api_model(self):
         label_id = _to_identifier(self._label)
-        elements = afm_models.AttributeFilterElements(values=self.in_values)
+        elements = afm_models.AttributeFilterElements(values=self.values)
         body = afm_models.PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
 
-class NegativeAttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], not_in_values: list[str]):
-        super(NegativeAttributeFilter, self).__init__()
-
-        self._label = _extract_id_or_local_id(label)
-        self._not_in_values = not_in_values
-
-    @property
-    def label(self) -> Union[ObjId, str]:
-        return self._label
-
-    @property
-    def not_in_values(self) -> list[str]:
-        return self._not_in_values
-
+class NegativeAttributeFilter(AttributeFilter):
     def is_noop(self):
-        return len(self.not_in_values) == 0
+        return len(self.values) == 0
 
     def as_api_model(self):
         label_id = _to_identifier(self._label)
-        elements = afm_models.AttributeFilterElements(values=self.not_in_values)
+        elements = afm_models.AttributeFilterElements(values=self.values)
         body = afm_models.NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
 
@@ -536,6 +530,14 @@ class AbsoluteDateFilter(Filter):
             _check_type=False,
         )
         return afm_models.AbsoluteDateFilter(body)
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, AbsoluteDateFilter)
+            and self._dataset == other._dataset
+            and self._from_date == other._from_date
+            and self._to_date == other._to_date
+        )
 
 
 _METRIC_VALUE_FILTER_OPERATORS = {

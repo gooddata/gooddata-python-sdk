@@ -63,7 +63,7 @@ def test_not_indexed_filtered_metric_series(gds: SeriesFactory):
     # crime rate just in Bern
     filtered_series = gds.not_indexed(
         data_by="fact/region.region_crime_rate",
-        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="region.region_name"), in_values=["Bern"]),
+        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="region.region_name"), values=["Bern"]),
     )
 
     # having metric with no granularity will return series with single item

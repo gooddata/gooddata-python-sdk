@@ -53,7 +53,7 @@ def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
             crime_rate="fact/region.region_crime_rate",
             safety_scale="fact/region.region_safety_scale",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", in_values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
     )
 
     assert len(df) == 1

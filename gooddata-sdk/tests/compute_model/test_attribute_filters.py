@@ -19,23 +19,23 @@ test_filters = [
     ["empty positive attribute filter", PositiveAttributeFilter(label="local_id")],
     [
         "positive filter using local id",
-        PositiveAttributeFilter(label="local_id", in_values=["val1", "val2"]),
+        PositiveAttributeFilter(label="local_id", values=["val1", "val2"]),
     ],
     [
         "positive filter using object id",
-        PositiveAttributeFilter(label=ObjId(type="label", id="label.id"), in_values=["val1", "val2"]),
+        PositiveAttributeFilter(label=ObjId(type="label", id="label.id"), values=["val1", "val2"]),
     ],
     [
         "empty negative attribute filter",
-        NegativeAttributeFilter(label="local_id", not_in_values=[]),
+        NegativeAttributeFilter(label="local_id", values=[]),
     ],
     [
         "negative filter using local id",
-        NegativeAttributeFilter(label="local_id", not_in_values=["val1", "val2"]),
+        NegativeAttributeFilter(label="local_id", values=["val1", "val2"]),
     ],
     [
         "negative filter using object id",
-        NegativeAttributeFilter(label=ObjId(type="label", id="label.id"), not_in_values=["val1", "val2"]),
+        NegativeAttributeFilter(label=ObjId(type="label", id="label.id"), values=["val1", "val2"]),
     ],
 ]
 
@@ -53,7 +53,7 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
 
 
 def test_empty_negative_filter_is_noop():
-    f = NegativeAttributeFilter(label="test", not_in_values=[])
+    f = NegativeAttributeFilter(label="test", values=[])
 
     assert f.is_noop() is True
 
