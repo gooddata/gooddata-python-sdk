@@ -15,6 +15,7 @@ services:
       - gooddata-cn-ce-data:/data
     environment:
       LICENSE_AND_PRIVACY_POLICY_ACCEPTED: "YES"
+      APP_LOGLEVEL: "INFO"
 
   gooddata-fdw:
     build:
