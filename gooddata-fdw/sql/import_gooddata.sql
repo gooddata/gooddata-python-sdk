@@ -13,6 +13,7 @@ CREATE OR REPLACE PROCEDURE import_gooddata(
   workspace VARCHAR,
   object_type VARCHAR,
   foreign_schema VARCHAR = NULL,
+  numeric_max_size INT = 18,
   debug BOOLEAN = FALSE
 ) LANGUAGE plpgsql AS $$
 DECLARE
@@ -29,8 +30,8 @@ BEGIN
 
   -- Import GoodData objects as foreign tables into the schema created above
   sql_statement := format(
-    'IMPORT FOREIGN SCHEMA "%s" FROM SERVER "%s" INTO "%s" OPTIONS (object_type ''%s'')',
-    workspace, server, foreign_schema, object_type
+    'IMPORT FOREIGN SCHEMA "%s" FROM SERVER "%s" INTO "%s" OPTIONS (object_type ''%s'', numeric_max_size ''%s'')',
+    workspace, server, foreign_schema, object_type, numeric_max_size
   );
   CALL execute_sql(sql_statement, debug);
 END; $$;

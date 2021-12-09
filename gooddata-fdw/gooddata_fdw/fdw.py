@@ -19,8 +19,8 @@ Extra segment of the User-Agent header that will be appended to standard gooddat
 
 DEFAULT_ATTRIBUTE_DATATYPE = "VARCHAR(255)"
 METRIC_DATA_TYPE = "DECIMAL"
-METRIC_DIGITS_BEFORE_DEC_POINT = 18
-METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT = 2
+METRIC_DIGITS_BEFORE_DEC_POINT_DEFAULT = "18"
+METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT = "2"
 
 
 def _col_as_computable(col: ColumnDefinition):
@@ -85,18 +85,18 @@ def get_insight_metric_format(metric: InsightMetric, catalog: Catalog) -> str:
     return metric.format or full_metric.format
 
 
-def get_metric_data_type(digits_after: int) -> str:
-    return f"{METRIC_DATA_TYPE}({METRIC_DIGITS_BEFORE_DEC_POINT}, {digits_after})"
+def get_metric_data_type(metric_digits_before_dec_point: str, digits_after: str) -> str:
+    return f"{METRIC_DATA_TYPE}({metric_digits_before_dec_point}, {digits_after})"
 
 
-def metric_format_to_data_type(metric_format: str) -> str:
+def metric_format_to_data_type(metric_format: str, metric_digits_before_dec_point: str) -> str:
     re_decimal_places = re.compile(r"^[^.]+\.([#0]+)")
     match = re_decimal_places.search(metric_format)
     if match:
-        digits_after = len(match.group(1))
+        digits_after = str(len(match.group(1)))
     else:
         digits_after = METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
-    return get_metric_data_type(digits_after)
+    return get_metric_data_type(metric_digits_before_dec_point, digits_after)
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
@@ -200,8 +200,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def _sanitize_date(self, value):
         """Add first month and first date to incomplete iso date string.
 
-        >>>assert sanitize_date("2021-01") == "2021-01-01"
-        >>>assert sanitize_date("1992") == "1992-01-01"
+        >>>assert self._sanitize_date("2021-01") == "2021-01-01"
+        >>>assert self._sanitize_date("1992") == "1992-01-01"
         """
         parts = value.split("-")
         missing_count = 3 - len(parts)
@@ -212,8 +212,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def _sanitize_timestamp(self, value):
         """Append minutes to incomplete datetime string.
 
-        >>>assert sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
-        >>>assert sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
+        >>>assert self._sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
+        >>>assert self._sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
         """
         parts = value.split(":")
         if len(parts) == 1:
@@ -286,6 +286,10 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                     f"gooddata_fdw: IMPORT SCHEMA OPTION 'object_type' unsupported value '{object_type}'."
                     + " Supported values are: 'insights', 'compute', 'all'"
                 )
+        if "numeric_max_size" in options:
+            metric_digits_before_dec_point = options["numeric_max_size"]
+        else:
+            metric_digits_before_dec_point = METRIC_DIGITS_BEFORE_DEC_POINT_DEFAULT
 
         host = srv_options["host"]
 
@@ -298,15 +302,19 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         # (Source) schema represents GoodData workspace
         # Insight name `compute` is not allowed and filtered out inside the import_insights_from_workspace()
         if object_type in ["insights", "all"]:
-            tables += cls.import_insights_from_workspace(schema, srv_options, options, restriction_type, restricts)
+            tables += cls.import_insights_from_workspace(
+                schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
+            )
         if object_type in ["compute", "all"]:
             tables += cls.import_semantic_layer_from_workspace(
-                schema, srv_options, options, restriction_type, restricts
+                schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
             )
         return tables
 
     @classmethod
-    def import_insights_from_workspace(cls, workspace, srv_options, options, restriction_type, restricts):
+    def import_insights_from_workspace(
+        cls, workspace, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
+    ):
         table_naming = DefaultInsightTableNaming()
 
         _log_info(f"importing insights as tables from {srv_options['host']} workspace {workspace}")
@@ -341,7 +349,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
             for metric in insight.metrics:
                 metric_format = get_insight_metric_format(metric, catalog)
-                data_type = metric_format_to_data_type(metric_format)
+                data_type = metric_format_to_data_type(metric_format, metric_digits_before_dec_point)
                 column_name = column_naming.col_name_for_metric(metric)
                 _log_debug(
                     f'creating col def "{column_name}" for metric "{metric.title}(id={metric.item_id})" '
@@ -367,7 +375,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         return tables
 
     @classmethod
-    def import_semantic_layer_from_workspace(cls, workspace, srv_options, options, restriction_type, restricts):
+    def import_semantic_layer_from_workspace(
+        cls, workspace, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
+    ):
         _log_info(f"importing semantic layer as tables from {srv_options['host']} workspace {workspace}")
 
         _sdk = _create_sdk(srv_options["host"], srv_options["token"])
@@ -379,7 +389,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         for metric in catalog.metrics:
             column_name = naming.col_name_for_metric(metric)
             metric_format = metric.format
-            data_type = metric_format_to_data_type(metric_format)
+            data_type = metric_format_to_data_type(metric_format, metric_digits_before_dec_point)
 
             _log_info(f"metric {metric.id} mapped to column {column_name} target data_type={data_type}")
 
@@ -401,7 +411,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                     ColumnDefinition(
                         column_name=column_name,
                         # TODO - get data type from PDM
-                        type_name=get_metric_data_type(METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT),
+                        type_name=get_metric_data_type(
+                            metric_digits_before_dec_point, METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
+                        ),
                         options=dict(id=f"fact/{fact.id}"),
                     )
                 )
