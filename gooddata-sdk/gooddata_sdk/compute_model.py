@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Union
+from typing import Optional, Union
 
 import gooddata_afm_client.models as afm_models
 
@@ -643,7 +643,7 @@ class RankingFilter(Filter):
         metrics: list[Union[ObjId, Metric, str]],
         operator: str,
         value: int,
-        dimensionality: list[Union[ObjId, Attribute, str]],
+        dimensionality: Optional[list[Union[ObjId, Attribute, str]]],
     ):
         super(RankingFilter, self).__init__()
 
@@ -654,7 +654,10 @@ class RankingFilter(Filter):
             )
 
         self._metrics = [_extract_id_or_local_id(m) for m in metrics]
-        self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality]
+        if dimensionality:
+            self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality]
+        else:
+            self._dimensionality = None
         self._operator = operator
         self._value = value
 
@@ -679,14 +682,11 @@ class RankingFilter(Filter):
 
     def as_api_model(self):
         measures = [_to_identifier(m) for m in self.metrics]
-        dimensionality = [_to_identifier(d) for d in self.dimensionality]
-
+        dimensionality = {}
+        if self.dimensionality:
+            dimensionality["dimensionality"] = [_to_identifier(d) for d in self.dimensionality]
         body = afm_models.RankingFilterBody(
-            measures=measures,
-            dimensionality=dimensionality,
-            operator=self.operator,
-            value=self.value,
-            _check_type=False,
+            measures=measures, operator=self.operator, value=self.value, _check_type=False, **dimensionality
         )
         return afm_models.RankingFilter(body)
 

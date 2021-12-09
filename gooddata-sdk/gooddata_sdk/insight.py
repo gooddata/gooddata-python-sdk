@@ -321,7 +321,7 @@ class InsightFilter:
         return self.__repr__()
 
     def __repr__(self):
-        return self._filter
+        return str(self._filter)
 
 
 class InsightBucket:
