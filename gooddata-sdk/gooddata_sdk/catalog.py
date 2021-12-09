@@ -346,7 +346,9 @@ class Catalog:
         ('metric/some.metric.id') or contain just the id part ('some.metric.id').
 
         :param metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
+
         :return: instance of CatalogMetric or None if no such metric in catalog
+
         :rtype CatalogMetric
         """
         if isinstance(metric_id, ObjId):
@@ -364,7 +366,9 @@ class Catalog:
         ('dataset/some.dataset.id') or contain just the id part ('some.dataset.id').
 
         :param dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
+
         :return: instance of CatalogDataset or None if no such dataset in catalog
+
         :rtype CatalogDataset
         """
         if isinstance(dataset_id, ObjId):
@@ -396,9 +400,10 @@ class Catalog:
         the filtered catalog will contain only those entities that can be safely added on top of that existing context.
 
         :param ctx: existing context. you can specify context in one of the following ways:
-        - single item or list of items from the execution model
-        - single item or list of items from catalog model; catalog fact, label or metric may be added
-        - the entire execution definition that is used to compute analytics
+            - single item or list of items from the execution model
+            - single item or list of items from catalog model; catalog fact, label or metric may be added
+            - the entire execution definition that is used to compute analytics
+
         :return:
         """
         valid_objects = self._valid_objects(ctx)
@@ -548,11 +553,12 @@ class CatalogService:
 
         :param workspace_id: workspace identifier
         :param ctx: items already in context. you can specify context in one of the following ways:
-        - single item or list of items from the execution model
-        - single item or list of items from catalog model; catalog fact, label or metric may be added
-        - the entire execution definition that is used to compute analytics
-        :return: a dict of sets; type of available object is used as key in the dict, the value is a set containing
-        id's of available items
+            - single item or list of items from the execution model
+            - single item or list of items from catalog model; catalog fact, label or metric may be added
+            - the entire execution definition that is used to compute analytics
+
+        :return: a dict of sets; type of available object is used as key in the dict,
+            the value is a set containing id's of available items
         """
         if isinstance(ctx, ExecutionDefinition):
             afm = compute_model_to_api_model(attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters)
