@@ -62,3 +62,5 @@ source_suffix = {
     ".txt": "markdown",
     ".md": "markdown",
 }
+
+template_path = ["_templates"]
