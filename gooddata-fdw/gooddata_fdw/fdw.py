@@ -200,8 +200,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def _sanitize_date(self, value):
         """Add first month and first date to incomplete iso date string.
 
-        >>>assert sanitize_date("2021-01") == "2021-01-01"
-        >>>assert sanitize_date("1992") == "1992-01-01"
+        >>>assert self._sanitize_date("2021-01") == "2021-01-01"
+        >>>assert self._sanitize_date("1992") == "1992-01-01"
         """
         parts = value.split("-")
         missing_count = 3 - len(parts)
@@ -212,8 +212,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def _sanitize_timestamp(self, value):
         """Append minutes to incomplete datetime string.
 
-        >>>assert sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
-        >>>assert sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
+        >>>assert self._sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
+        >>>assert self._sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
         """
         parts = value.split(":")
         if len(parts) == 1:
