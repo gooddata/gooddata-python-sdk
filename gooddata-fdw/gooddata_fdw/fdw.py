@@ -24,6 +24,7 @@ from gooddata_sdk.compute_model import (
     SimpleMetric,
 )
 from gooddata_sdk.insight import InsightMetric
+from gooddata_sdk.utils import _sanitize_date, _sanitize_timestamp
 
 _USER_AGENT = "gooddata-fdw/0.1"
 """
@@ -91,7 +92,7 @@ def date_granularity_to_data_type(granularity):
         "WEEK": DEFAULT_ATTRIBUTE_DATATYPE,
         "MONTH": "DATE",  # Add day
         "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
-        "YEAR": "INTEGER",
+        "YEAR": "DATE",
     }.get(granularity, "INTEGER")
 
 
@@ -209,37 +210,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         type_name = self._columns[column_name].base_type_name
 
         sanitizations = {
-            "date": self._sanitize_date,
-            "timestamp without time zone": self._sanitize_timestamp,
-            "timestamp": self._sanitize_timestamp,
+            "date": _sanitize_date,
+            "timestamp without time zone": _sanitize_timestamp,
+            "timestamp": _sanitize_timestamp,
         }
         if type_name in sanitizations:
             return sanitizations[type_name](value)
         else:
             return value
-
-    def _sanitize_date(self, value):
-        """Add first month and first date to incomplete iso date string.
-
-        >>>assert self._sanitize_date("2021-01") == "2021-01-01"
-        >>>assert self._sanitize_date("1992") == "1992-01-01"
-        """
-        parts = value.split("-")
-        missing_count = 3 - len(parts)
-        for i in range(0, missing_count):
-            parts.append("01")
-        return "-".join(parts)
-
-    def _sanitize_timestamp(self, value):
-        """Append minutes to incomplete datetime string.
-
-        >>>assert self._sanitize_timestamp("2021-01-01 02") == "2021-01-01 02:00"
-        >>>assert self._sanitize_timestamp("2021-01-01 12:34") == "2021-01-01 12:34"
-        """
-        parts = value.split(":")
-        if len(parts) == 1:
-            value = value + ":00"
-        return value
 
     def get_computable_for_col_name(self, column_name):
         return _col_as_computable(self._columns[column_name])
@@ -359,6 +337,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         for row in table.read_all():
             sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
+            _log_debug(f"ROW={sanitized_row}")
             yield sanitized_row
 
     def _execute_custom_report(self, quals: list[Qual], columns, sortKeys=None):
@@ -377,11 +356,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             _log_error(traceback.format_exc())
             raise e
 
-        # TODO: it is likely that this has to change to support DATE and TIMESTAMP. have mapping that need to be
-        #  timestamp/date, instead of returning generator, iterate rows, convert to dates and yield the converted row
-        # note: no need to filter result rows to only those that are SELECTed.. multicorn/postgres takes care of
-        # that
-        return table.read_all()
+        for row in table.read_all():
+            sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
+            yield sanitized_row
 
     def execute(self, quals, columns, sortkeys=None):
         _log_debug(f"query in fdw with options {self._options}; columns {columns}; quals={quals}")
