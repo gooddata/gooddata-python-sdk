@@ -94,6 +94,9 @@ CALL import_gooddata('workspace_id', 'all');
 
 -- This is how you can extend max size of numeric columns in foreign tables (basically to support larger numbers)
 CALL import_gooddata(workspace := 'goodsales', object_type := 'all', numeric_max_size := 24);
+
+-- Specify custom foreign server name
+CALL import_gooddata(workspace := 'goodsales', object_type := 'all', foreign_server := 'multicorn_gooddata_stg');
 ```
 
 Default max numeric size is 18, default digits after decimal point is 2 unless metric format defines more.
