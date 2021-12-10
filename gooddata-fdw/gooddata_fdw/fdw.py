@@ -424,6 +424,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         tables = []
 
         for insight in insights:
+            if not insight.are_relations_valid:
+                _log_warn(f"Insight title={insight.title} id={insight.id} is invalid, we cannot import it.")
+                continue
             table_name = table_naming.table_name_for_insight(insight)
             _log_info(f'creating table def "{table_name}" for insight "{insight.title}"')
 

@@ -380,6 +380,11 @@ class Insight:
         return self._vo["attributes"]["description"]
 
     @property
+    def are_relations_valid(self) -> str:
+        # Fallback to true for tests, where fixtures were generated without HTTP header activating this feature
+        return self._vo["attributes"].get("areRelationsValid", "true")
+
+    @property
     def buckets(self) -> list[InsightBucket]:
         return [InsightBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
 
