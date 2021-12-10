@@ -27,8 +27,6 @@ services:
       POSTGRES_DB: gooddata
       POSTGRES_USER: gooddata
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD-gooddata123}"
-      # This enables FDW to connect to GD.CN running on a host different from localhost (current limitation of GD.CN CE)
-      GOODDATA_SDK_HTTP_HEADERS: '{"Host": "localhost"}'
     command: ["postgres", "-c", "shared_preload_libraries=foreign_table_exposer", "-c", "log_statement=all", "-c", "client_min_messages=DEBUG1", "-c", "log_min_messages=DEBUG1"]
 
 volumes:

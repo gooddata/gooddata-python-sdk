@@ -12,7 +12,7 @@ class GoodDataSdk:
     """Top-level class that wraps all the functionality together."""
 
     @classmethod
-    def new(cls, host, token, extra_user_agent=None):
+    def new(cls, host, token, custom_headers=None, extra_user_agent=None):
         """Create common GoodDataApiClient and return new GoodDataSdk instance.
 
         This is preffered way of creating GoodDataSdk, when no tweaks are needed.
@@ -20,6 +20,7 @@ class GoodDataSdk:
         client = GoodDataApiClient(
             host,
             token,
+            custom_headers=custom_headers,
             extra_user_agent=extra_user_agent,
         )
         return cls(client)
@@ -52,3 +53,12 @@ class GoodDataSdk:
     @property
     def tables(self) -> TableService:
         return self._tables
+
+
+def create_sdk(host: str, token: str, user_agent: str, headers_host: str = None):
+    """Return GoodDataSdk instance."""
+    headers = {"X-GDC-VALIDATE-RELATIONS": "true"}
+    if headers_host:
+        headers["Host"] = headers_host
+    client = GoodDataApiClient(host, token, custom_headers=headers, extra_user_agent=user_agent)
+    return GoodDataSdk(client)
