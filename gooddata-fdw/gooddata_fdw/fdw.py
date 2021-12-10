@@ -5,6 +5,7 @@ import datetime
 import json
 import os
 import re
+import traceback
 from operator import itemgetter
 from typing import Union
 
@@ -187,7 +188,11 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         col_to_local_id = dict([(c.column_name, c.options["local_id"]) for c in self._columns.values()])
         insight = self._sdk.insights.get_insight(self._workspace, self._insight)
-        table = self._sdk.tables.for_insight(self._workspace, insight)
+        try:
+            table = self._sdk.tables.for_insight(self._workspace, insight)
+        except Exception as e:
+            _log_error(traceback.format_exc())
+            raise e
 
         for result_row in table.read_all():
             row = dict()
@@ -343,10 +348,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         relational tables: the input columns determine what data will be calculated and the cardinality of the result
         fully depends on the input columns.
         """
-        items = [self.get_computable_for_col_name(col_name) for col_name in columns]
-        # TODO: pushdown more filters that are included in quals
-        filters = self.extract_filters_from_quals(quals)
-        table = self._sdk.tables.for_items(self._workspace, items, filters)
+        try:
+            items = [self.get_computable_for_col_name(col_name) for col_name in columns]
+            # TODO: pushdown more filters that are included in quals
+            filters = self.extract_filters_from_quals(quals)
+            table = self._sdk.tables.for_items(self._workspace, items, filters)
+        except Exception as e:
+            _log_error(traceback.format_exc())
+            raise e
 
         for row in table.read_all():
             sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
@@ -359,10 +368,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         pseudo-table though, the custom report execution always computes data for all columns - thus appears like
         any other relational table.
         """
-        items = [_col_as_computable(col) for col in self._columns.values()]
-        # TODO: pushdown more filters that are included in quals
-        filters = self.extract_filters_from_quals(quals)
-        table = self._sdk.tables.for_items(self._workspace, items, filters)
+        try:
+            items = [_col_as_computable(col) for col in self._columns.values()]
+            # TODO: pushdown more filters that are included in quals
+            filters = self.extract_filters_from_quals(quals)
+            table = self._sdk.tables.for_items(self._workspace, items, filters)
+        except Exception as e:
+            _log_error(traceback.format_exc())
+            raise e
 
         # TODO: it is likely that this has to change to support DATE and TIMESTAMP. have mapping that need to be
         #  timestamp/date, instead of returning generator, iterate rows, convert to dates and yield the converted row
@@ -374,11 +387,12 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         _log_debug(f"query in fdw with options {self._options}; columns {columns}; quals={quals}")
 
         if self._insight:
-            return self._execute_insight(quals, columns, sortkeys)
-        if self._compute:
-            return self._execute_compute(quals, columns, sortkeys)
-
-        return self._execute_custom_report(quals, columns, sortkeys)
+            result = self._execute_insight(quals, columns, sortkeys)
+        elif self._compute:
+            result = self._execute_compute(quals, columns, sortkeys)
+        else:
+            result = self._execute_custom_report(quals, columns, sortkeys)
+        return result
 
     @classmethod
     def import_schema(cls, schema, srv_options, options, restriction_type, restricts):
@@ -417,15 +431,19 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         tables = []
         # (Source) schema represents GoodData workspace
         # Insight name `compute` is not allowed and filtered out inside the import_insights_from_workspace()
-        if object_type in ["insights", "all"]:
-            tables += cls.import_insights_from_workspace(
-                schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
-            )
-        if object_type in ["compute", "all"]:
-            tables += cls.import_semantic_layer_from_workspace(
-                schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
-            )
-        return tables
+        try:
+            if object_type in ["insights", "all"]:
+                tables += cls.import_insights_from_workspace(
+                    schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
+                )
+            if object_type in ["compute", "all"]:
+                tables += cls.import_semantic_layer_from_workspace(
+                    schema, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
+                )
+            return tables
+        except Exception as e:
+            _log_error(traceback.format_exc())
+            raise e
 
     @classmethod
     def import_insights_from_workspace(
