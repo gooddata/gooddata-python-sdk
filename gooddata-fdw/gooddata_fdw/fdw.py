@@ -1,15 +1,27 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
+
+import datetime
 import json
 import os
 import re
 from operator import itemgetter
+from typing import Union
 
 import gooddata_sdk as sdk
-from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, TableDefinition
+from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, Qual, TableDefinition
 from gooddata_fdw.logging import _log_debug, _log_error, _log_info, _log_warn
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
 from gooddata_sdk.catalog import Catalog
-from gooddata_sdk.compute_model import ObjId
+from gooddata_sdk.compute_model import (
+    AbsoluteDateFilter,
+    Attribute,
+    Filter,
+    NegativeAttributeFilter,
+    ObjId,
+    PositiveAttributeFilter,
+    SimpleMetric,
+)
 from gooddata_sdk.insight import InsightMetric
 
 _USER_AGENT = "gooddata-fdw/0.1"
@@ -22,8 +34,12 @@ METRIC_DATA_TYPE = "DECIMAL"
 METRIC_DIGITS_BEFORE_DEC_POINT_DEFAULT = "18"
 METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT = "2"
 
+# Once AbsoluteDateFilter supports empty from/to, remove this workaround
+MIN_DATE = "0001-01-01"
+MAX_DATE = "2999-01-01"
 
-def _col_as_computable(col: ColumnDefinition):
+
+def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, SimpleMetric]:
     item_type, item_id = col.options["id"].split("/")
 
     # since all cols are from the compute table, the uniqueness of local_id is ensured...
@@ -223,30 +239,130 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def get_computable_for_col_name(self, column_name):
         return _col_as_computable(self._columns[column_name])
 
-    def _execute_compute(self, quals, columns, sortKeys=None):
+    @staticmethod
+    def _date_to_str(date: datetime.date) -> str:
+        return date.strftime("%Y-%m-%d")
+
+    def _get_date_filter(self, operator: str, value: datetime.date, label: ObjId):
+        date_from = MIN_DATE
+        date_to = MAX_DATE
+        add_filter = True
+        # AbsoluteDateFilter supports only day granularity
+        # date_to must equal to qual.value + 1 day, if qual.value day is to be included
+        if operator == ">=":
+            date_from = self._date_to_str(value)
+        elif operator == "<=":
+            date_to = self._date_to_str(value + datetime.timedelta(days=1))
+        elif operator == ">":
+            date_from = self._date_to_str(value + datetime.timedelta(days=1))
+        elif operator == "<":
+            date_to = self._date_to_str(value)
+        elif operator == "=":
+            date_from = self._date_to_str(value)
+            date_to = self._date_to_str(value + datetime.timedelta(days=1))
+        else:
+            add_filter = False
+
+        if add_filter:
+            date_filter = AbsoluteDateFilter(label, date_from, date_to)
+            _log_debug(f"extract_filters_from_quals: date_filter={date_filter.__dict__}")
+            return date_filter
+        else:
+            return None
+
+    def qual_to_date_filter(self, filters: list[Filter], filter_entity: Attribute, qual: Qual):
+        _log_debug(f"extract_filters_from_quals: filter_column={filter_entity} is date attribute")
+        # Hack - Absolute date filter requires <date_dataset>.day label, but user can limit e.g. month granularity
+        re_day = re.compile(r"(.*)\.[^.]+$")
+        label = ObjId(re_day.sub(r"\1", filter_entity.label.id), "dataset")
+        if isinstance(qual.operator, tuple):
+            # Can't be implemented by multiple filters, because GD.CN does not support OR between filters
+            _log_debug("extract_filters_from_quals: IN (date1, date2, ..) is not supported")
+        else:
+            date_filter = self._get_date_filter(qual.operator, qual.value, label)
+            if date_filter:
+                filters.append(date_filter)
+
+    @staticmethod
+    def qual_to_attribute_filter(filters: list[Filter], filter_entity: Attribute, qual: Qual):
+        _log_debug(f"extract_filters_from_quals: filter_column={filter_entity} is normal attribute")
+        if isinstance(qual.operator, tuple):
+            values = qual.value
+            positive = qual.operator[1]
+        else:
+            values = [qual.value]
+            positive = qual.operator == "="
+        _log_debug(f"extract_filters_from_quals: values={values} positive={positive}")
+        if positive:
+            filters.append(PositiveAttributeFilter(filter_entity, values))
+        else:
+            filters.append(NegativeAttributeFilter(filter_entity, values))
+
+    @staticmethod
+    def _is_qual_date(qual: Qual):
+        return isinstance(qual.value, datetime.date) or (
+            isinstance(qual.value, list) and isinstance(qual.value[0], datetime.date)
+        )
+
+    def extract_filters_from_quals(self, quals: list[Qual]) -> list[Filter]:
+        """
+        Convert quals to Attribute filters.
+        Now only simple attribute filters are supported.
+
+        :param quals: multicorn quals representing filters in SQL WHERE clause
+        :return: Attribute filters
+        """
+        filters = []
+        for qual in quals:
+            _log_info(
+                f"extract_filters_from_quals: field_name={qual.field_name} operator={qual.operator} value={qual.value}"
+            )
+            filter_entity = self.get_computable_for_col_name(qual.field_name)
+            if filter_entity:
+                if isinstance(filter_entity, Attribute):
+                    _log_debug(f"extract_filters_from_quals: filter_entity={filter_entity} is attribute")
+                    if self._is_qual_date(qual):
+                        self.qual_to_date_filter(filters, filter_entity, qual)
+                    else:
+                        self.qual_to_attribute_filter(filters, filter_entity, qual)
+                else:
+                    _log_info(
+                        f"extract_filters_from_quals: field_name={qual.field_name} is not attribute, "
+                        + f"but {type(filter_entity)}"
+                    )
+            else:
+                _log_info(
+                    f"extract_filters_from_quals: field_name={qual.field_name} not found in report columns, "
+                    + "cannot push it down"
+                )
+        return filters
+
+    def _execute_compute(self, quals: list[Qual], columns, sortKeys=None):
         """
         Computes data for the 'compute' pseudo-table. The 'compute' table is special. It does not behave as other
         relational tables: the input columns determine what data will be calculated and the cardinality of the result
         fully depends on the input columns.
         """
-        # TODO: pushdown some of the filters that are included in quals
         items = [self.get_computable_for_col_name(col_name) for col_name in columns]
-        table = self._sdk.tables.for_items(self._workspace, items)
+        # TODO: pushdown more filters that are included in quals
+        filters = self.extract_filters_from_quals(quals)
+        table = self._sdk.tables.for_items(self._workspace, items, filters)
 
         for row in table.read_all():
             sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
             yield sanitized_row
 
-    def _execute_custom_report(self, quals, columns, sortKeys=None):
+    def _execute_custom_report(self, quals: list[Qual], columns, sortKeys=None):
         """
         Computes data for manually created table that maps to particular workspace and its columns map to label, fact or
         metric in that workspace. The mapping conventions are same as for the 'compute' pseudo-table. Compared to the
         pseudo-table though, the custom report execution always computes data for all columns - thus appears like
         any other relational table.
         """
-        # TODO: pushdown some of the filters that are included in quals
         items = [_col_as_computable(col) for col in self._columns.values()]
-        table = self._sdk.tables.for_items(self._workspace, items)
+        # TODO: pushdown more filters that are included in quals
+        filters = self.extract_filters_from_quals(quals)
+        table = self._sdk.tables.for_items(self._workspace, items, filters)
 
         # TODO: it is likely that this has to change to support DATE and TIMESTAMP. have mapping that need to be
         #  timestamp/date, instead of returning generator, iterate rows, convert to dates and yield the converted row
@@ -255,7 +371,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         return table.read_all()
 
     def execute(self, quals, columns, sortkeys=None):
-        _log_debug(f"query in fdw with options {self._options}; columns {type(columns)}")
+        _log_debug(f"query in fdw with options {self._options}; columns {columns}; quals={quals}")
 
         if self._insight:
             return self._execute_insight(quals, columns, sortkeys)

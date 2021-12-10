@@ -77,5 +77,10 @@ def test_compute_table_columns():
         type_name="VARCHAR(255)",
         options=dict(id="label/car.car_model"),
     )
+    columns["datetime"] = ColumnDefinition(
+        column_name="datetime",
+        type_name="DATE",
+        options=dict(id="label/datetime.day"),
+    )
 
     return columns

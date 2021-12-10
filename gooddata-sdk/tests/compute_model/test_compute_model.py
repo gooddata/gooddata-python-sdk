@@ -41,7 +41,7 @@ _pop_date_metric = PopDateMetric(
     date_attributes=[PopDate(attribute=ObjId(type="label", id="label.id"), periods_ago=1)],
 )
 
-_positive_filter = PositiveAttributeFilter(label=_attribute, in_values=["val1", "val2"])
+_positive_filter = PositiveAttributeFilter(label=_attribute, values=["val1", "val2"])
 
 _absolute_date_filter = AbsoluteDateFilter(
     dataset=ObjId(type="dataset", id="dataset.id"),

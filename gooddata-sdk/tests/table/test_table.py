@@ -89,7 +89,7 @@ def test_table_with_attribute_metric_and_filter():
             Attribute(local_id="attr1", label="region.region_name"),
             SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="claim-amount")),
         ],
-        filters=[PositiveAttributeFilter(label="attr1", in_values=["Aargau", "Bern", "Vaud"])],
+        filters=[PositiveAttributeFilter(label="attr1", values=["Aargau", "Bern", "Vaud"])],
     )
 
     values = list((result["attr1"], result["metric1"]) for result in table.read_all())

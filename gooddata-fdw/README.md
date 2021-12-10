@@ -144,3 +144,32 @@ case insensitive.
 
 Note: If you do not specify the required options, the CREATE command will fail. If you specify wrong entity IDs,
 the failures will happen at SELECT time.
+
+## Push down of filters
+
+When querying foreign tables, you can add WHERE clause filtering the result.
+Due to performance reasons, it makes sense to push such filters down to the GD.CN, so not all data must be collected.
+
+We are able to push only some filters down to the GD.CN:
+- Simple attribute(label) filters
+  - Example: `WHERE region IN ('East', 'West')`
+- Simple date filters
+  - Only DAY granularity is supported
+  - (NOT) IN operator is `not` supported
+  - Example: `WHERE my_date BETWEEN '2021-01-01 AND 2021-02-01`
+
+If you use OR between conditions, it is not pushed down.
+Push down is possible in case of custom tables and `compute` table, not in case of foreign tables imported from `insights`.
+
+## Known limitations
+
+It is not possible to reference a column in WHERE clause, which is not used in SELECT section.
+Example:
+```sql92
+SELECT label1, metric FROM insight WHERE label2 = 'a';
+SELECT label1, metric FROM compute WHERE label2 = 'a'
+```
+
+While it is obvious in case of `insight` (it does not contain the column at all), in case of `compute` we would like to support it,
+but we are not allowed due to lack of functionality in Multicorn -
+the filter is always applied on final result set and if it does not contain the column, it does not work.

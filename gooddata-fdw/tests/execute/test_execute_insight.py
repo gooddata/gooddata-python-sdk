@@ -15,7 +15,7 @@ gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 def test_execute_insight_all_columns(fdw_options_for_insight, test_insight_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_insight, test_insight_columns)
 
-    results = list(row for row in fdw.execute(None, ["car_car_make", "customer_customer_age_group", "premium_revenue"]))
+    results = list(row for row in fdw.execute([], ["car_car_make", "customer_customer_age_group", "premium_revenue"]))
 
     assert len(results) == 146
     first_row = results[0]
@@ -29,7 +29,7 @@ def test_execute_insight_all_columns(fdw_options_for_insight, test_insight_colum
 def test_execute_insight_some_columns(fdw_options_for_insight, test_insight_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_insight, test_insight_columns)
 
-    results = list(row for row in fdw.execute(None, ["premium_revenue"]))
+    results = list(row for row in fdw.execute([], ["premium_revenue"]))
 
     # selecting only some cols behaves like in normal table - the cardinality is same, the result rows
     # contain just the selected cols

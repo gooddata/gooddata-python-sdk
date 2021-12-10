@@ -25,6 +25,7 @@ try:
     ForeignDataWrapper = multicorn.ForeignDataWrapper
     TableDefinition = multicorn.TableDefinition
     ColumnDefinition = multicorn.ColumnDefinition
+    Qual = multicorn.Qual
     log_to_postgres = utils.log_to_postgres
 except ImportError as e:
     # determine if running as part of test suite
@@ -78,3 +79,11 @@ except ImportError as e:
             self.options = options
 
     ColumnDefinition = ColumnDefinitionStub
+
+    class QualStub:
+        def __init__(self, field_name, operator, value):
+            self.field_name = field_name
+            self.operator = operator
+            self.value = value
+
+    Qual = QualStub

@@ -45,7 +45,7 @@ test_simple_metrics = [
         SimpleMetric(
             local_id="test",
             item=ObjId(type="fact", id="fact_id"),
-            filters=[PositiveAttributeFilter(label="label_local_id", in_values=["val1", "val2"])],
+            filters=[PositiveAttributeFilter(label="label_local_id", values=["val1", "val2"])],
         ),
     ],
 ]

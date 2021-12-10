@@ -56,7 +56,7 @@ def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
             safety_scale="fact/region.region_safety_scale",
             region_code="label/region.region_code",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", in_values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
     )
 
     assert len(df) == 1
@@ -110,7 +110,7 @@ def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
             claim_count="metric/claim-count",
             region_code="label/region.region_code",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", in_values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
     )
 
     assert len(df) == 1
@@ -136,7 +136,7 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
             claim_count="metric/claim-count",
             reg="label/region.region_name",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg_idx", in_values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg_idx", values=["Bern"])],
     )
 
     assert len(df) == 1
