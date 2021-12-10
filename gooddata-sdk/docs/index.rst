@@ -12,7 +12,7 @@ Welcome to GoodData SDK's documentation!
 Check out the :doc:`api` section for further information.
 
 .. toctree::
-   :maxdepth: 22
+   :maxdepth: 3
    :caption: Contents:
 
    api
