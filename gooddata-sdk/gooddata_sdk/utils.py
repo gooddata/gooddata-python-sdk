@@ -92,7 +92,7 @@ def typed_value(data_type, granularity, value):
             "WEEK": str,
             "MONTH": _sanitize_date,
             "QUARTER": str,
-            "YEAR": int,
+            "YEAR": _sanitize_date,
         }.get(granularity, int)(value)
     else:  # NORMAL
         return value
