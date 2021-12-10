@@ -158,7 +158,8 @@ We are able to push only some filters down to the GD.CN:
   - (NOT) IN operator is `not` supported
   - Example: `WHERE my_date BETWEEN '2021-01-01 AND 2021-02-01`
 
-If you use OR between conditions, it is not pushed down as well.
+If you use OR between conditions, it is not pushed down.
+Push down is possible in case of custom tables and `compute` table, not in case of foreign tables imported from `insights`.
 
 ## Known limitations
 
