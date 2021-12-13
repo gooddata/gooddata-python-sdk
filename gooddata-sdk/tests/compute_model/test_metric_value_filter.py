@@ -32,7 +32,7 @@ test_metric_value_filter = [
         MetricValueFilter(
             metric=ObjId(type="metric", id="metric.id"),
             operator="EQUAL_TO",
-            values=10,
+            values=10.0,
         ),
     ],
     [

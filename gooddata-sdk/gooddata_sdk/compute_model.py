@@ -581,7 +581,7 @@ class MetricValueFilter(Filter):
                     f"Invalid number of values for {operator}. "
                     f"Expected single int, float or one-sized list or tuple."
                 )
-
+            # Convert int to float as AFM model filters accept float values
             self._values = (float(values),) if isinstance(values, (int, float)) else values
 
         self._metric = _extract_id_or_local_id(metric)
