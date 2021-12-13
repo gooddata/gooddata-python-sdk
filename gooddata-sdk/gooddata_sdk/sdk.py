@@ -1,6 +1,8 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+from typing import Optional
+
 from gooddata_sdk.catalog import CatalogService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute import ComputeService
@@ -12,10 +14,16 @@ class GoodDataSdk:
     """Top-level class that wraps all the functionality together."""
 
     @classmethod
-    def new(cls, host, token, custom_headers=None, extra_user_agent=None):
+    def new(
+        cls,
+        host: str,
+        token: str,
+        custom_headers: Optional[dict[str, str]] = None,
+        extra_user_agent: Optional[str] = None,
+    ) -> GoodDataSdk:
         """Create common GoodDataApiClient and return new GoodDataSdk instance.
 
-        This is preffered way of creating GoodDataSdk, when no tweaks are needed.
+        This is preferred way of creating GoodDataSdk, when no tweaks are needed.
         """
         client = GoodDataApiClient(
             host,
@@ -25,7 +33,7 @@ class GoodDataSdk:
         )
         return cls(client)
 
-    def __init__(self, client: GoodDataApiClient):
+    def __init__(self, client: GoodDataApiClient) -> None:
         """Take instance of GoodDataApiClient and return new GoodDataSdk instance.
 
         Useful when customized GoodDataApiClient is needed. Usually users should use
@@ -55,7 +63,7 @@ class GoodDataSdk:
         return self._tables
 
 
-def create_sdk(host: str, token: str, user_agent: str, headers_host: str = None):
+def create_sdk(host: str, token: str, user_agent: str, headers_host: str = None) -> GoodDataSdk:
     """Return GoodDataSdk instance."""
     headers = {"X-GDC-VALIDATE-RELATIONS": "true"}
     if headers_host:
