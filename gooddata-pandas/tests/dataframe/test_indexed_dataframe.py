@@ -31,20 +31,21 @@ def test_simple_index_metrics(gdf: DataFrameFactory):
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_metrics_and_label.json"))
 def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
+    columns = {
+        "Crime rate": "fact/region.region_crime_rate",
+        "Safety scale ($special$%^&)": "fact/region.region_safety_scale",
+        "Region code ($special$%^&)": "label/region.region_code",
+    }
     df = gdf.indexed(
         index_by=dict(reg="label/region.region_name"),
-        columns=dict(
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
-            region_code="label/region.region_code",
-        ),
+        columns=columns,
     )
 
     assert len(df) == len(TEST_DATA_REGIONS)
     assert len(df.columns) == 3
-    assert df.columns[0] == "crime_rate"
-    assert df.columns[1] == "safety_scale"
-    assert df.columns[2] == "region_code"
+    assert df.columns[0] == "Crime rate"
+    assert df.columns[1] == "Safety scale ($special$%^&)"
+    assert df.columns[2] == "Region code ($special$%^&)"
 
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_filtered_metrics_and_label.json"))

@@ -1,8 +1,15 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import hashlib
+
 from gooddata_pandas.utils import ColumnsDef, IndexDef, _to_attribute, _to_filters, _to_item, _typed_attribute_value
 from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric
+
+
+def _col_name_to_hash(column_name):
+    hash_object = hashlib.md5(column_name.encode())
+    return hash_object.hexdigest()
 
 
 def _compute(
@@ -50,7 +57,9 @@ def _compute(
         attributes.append(item)
 
     for col_name, col in columns.items():
-        item = _to_item(col, local_id=col_name)
+        # local_id can contain only [.A-Za-z0-9_-]
+        # We can transform it into its hash, it is not connected to headers in result set.
+        item = _to_item(col, local_id=_col_name_to_hash(col_name))
 
         if isinstance(item, Attribute):
             # prevent double-add for attributes that are using same labels. this has no real effect on the result
