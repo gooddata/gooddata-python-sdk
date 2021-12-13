@@ -52,14 +52,27 @@ OPTIONS (
 );
 ```
 
+As of now GD.CN community edition (single container deployment) does support only `localhost` as target host.
+If you spin-up GD.CN and FDW using docker-compose, GD.CN host equals to the service name in the docker-compose, e.g. `gooddata-cn-ce`.
+To enable such setup, we provide an option `header_host`:
+```postgresql
+CREATE SERVER multicorn_gooddata FOREIGN DATA WRAPPER multicorn
+  OPTIONS (
+    wrapper 'gooddata_fdw.GoodDataForeignDataWrapper',
+    host 'http://gooddata-cn-ce:3000', -- host equal to name of container with GD.CN.CE
+    token 'YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz', -- default gooddata-cn-ce token, documented in public DOC as well
+    headers_host 'localhost'
+  );
+```
+
 Typically, you have to do this once per GD.CN installation. You can add as many servers as you want/need.
 
 **IMPORTANT**: do not forget to specify host including the schema (http or https).
 
 ## Import GoodData objects as foreign tables into Postgres schema
 
-You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables. You can import insights
-from as many workspaces as you want.
+You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables.
+You can import insights from as many workspaces and / or GoodData.CN instances (servers) as you want.
 
 You can also import your entire semantic model including MAQL metrics into a special `compute` **pseudo-table**.
 Doing SELECTs from this table will trigger computation of analytics on your GoodData.CN server based on the columns
@@ -77,16 +90,12 @@ For your convenience we prepared a stored procedure, which:
 You can re-execute the procedure to update foreign tables.
 
 ```postgresql
---
 -- This maps all insights stored in GD.CN workspace `workspace_id` into the Postgres schema named `workspace_id`
---
 CALL import_gooddata('workspace_id', 'insights');
 -- By utilizing the third parameter you can override the name of the target Postgres schema
 CALL import_gooddata('workspace_id', 'insights', 'custom_schema');
 
---
 -- This imports the semantic model into the 'compute' pseudo-table.
---
 CALL import_gooddata('workspace_id', 'compute');
 
 -- This imports both insights and compute
@@ -94,6 +103,9 @@ CALL import_gooddata('workspace_id', 'all');
 
 -- This is how you can extend max size of numeric columns in foreign tables (basically to support larger numbers)
 CALL import_gooddata(workspace := 'goodsales', object_type := 'all', numeric_max_size := 24);
+
+-- Specify custom foreign server name - this enables you importing from multiple servers into the same FDW instance
+CALL import_gooddata(workspace := 'goodsales', object_type := 'all', foreign_server := 'multicorn_gooddata_stg');
 ```
 
 Default max numeric size is 18, default digits after decimal point is 2 unless metric format defines more.

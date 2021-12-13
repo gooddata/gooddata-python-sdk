@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import datetime
-import json
-import os
 import re
 import traceback
 from operator import itemgetter
@@ -13,6 +11,7 @@ import gooddata_sdk as sdk
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, Qual, TableDefinition
 from gooddata_fdw.logging import _log_debug, _log_error, _log_info, _log_warn
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
+from gooddata_sdk import create_sdk
 from gooddata_sdk.catalog import Catalog
 from gooddata_sdk.compute_model import (
     AbsoluteDateFilter,
@@ -55,22 +54,6 @@ def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, SimpleMetric]:
             item=sdk.ObjId(item_id, item_type),
             aggregation=aggregation,
         )
-
-
-def _create_sdk(host, token):
-    """Return GoodDataSdk instance."""
-    headers = os.environ.get("GOODDATA_SDK_HTTP_HEADERS", None)
-    if headers:
-        try:
-            headers = json.loads(headers)
-            assert isinstance(headers, dict), "Not a dictionary"
-        except (AssertionError, json.JSONDecodeError) as e:
-            _log_error(
-                "environment variable GOODDATA_SDK_HTTP_HEADERS contains data in bad format. Json object expected."
-            )
-            raise e
-    client = sdk.client.GoodDataApiClient(host, token, custom_headers=headers, extra_user_agent=_USER_AGENT)
-    return sdk.GoodDataSdk(client)
 
 
 def column_data_type_for(attribute):
@@ -134,9 +117,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._host, self._token, self._workspace = itemgetter("host", "token", "workspace")(options)
         self._options = options
         self._columns = columns
-        self._insight = options["insight"] if "insight" in options else None
-        self._compute = options["compute"] if "compute" in options else None
-        self._sdk = _create_sdk(self._host, self._token)
+        self._insight = options.get("insight")
+        self._compute = options.get("compute")
+        self._sdk = create_sdk(self._host, self._token, _USER_AGENT, options.get("headers_host"))
 
         self._validate()
 
@@ -428,8 +411,11 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     ):
         table_naming = DefaultInsightTableNaming()
 
-        _log_info(f"importing insights as tables from {srv_options['host']} workspace {workspace}")
-        _sdk = _create_sdk(srv_options["host"], srv_options["token"])
+        _log_info(
+            f"importing insights as tables from {srv_options['host']} workspace {workspace} "
+            + f"headers_host={srv_options.get('headers_host')}"
+        )
+        _sdk = create_sdk(srv_options["host"], srv_options["token"], _USER_AGENT, srv_options.get("headers_host"))
         _log_debug("loading full catalog")
         catalog = _sdk.catalog.get_full_catalog(workspace)
         _log_debug("loading all insights")
@@ -438,6 +424,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         tables = []
 
         for insight in insights:
+            if not insight.are_relations_valid:
+                _log_warn(f"Insight title={insight.title} id={insight.id} is invalid, we cannot import it.")
+                continue
             table_name = table_naming.table_name_for_insight(insight)
             _log_info(f'creating table def "{table_name}" for insight "{insight.title}"')
 
@@ -489,9 +478,12 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def import_semantic_layer_from_workspace(
         cls, workspace, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
     ):
-        _log_info(f"importing semantic layer as tables from {srv_options['host']} workspace {workspace}")
+        _log_info(
+            f"importing semantic layer as tables from {srv_options['host']} workspace {workspace} "
+            + f"headers_host={srv_options.get('headers_host')}"
+        )
 
-        _sdk = _create_sdk(srv_options["host"], srv_options["token"])
+        _sdk = create_sdk(srv_options["host"], srv_options["token"], _USER_AGENT, srv_options.get("headers_host"))
 
         catalog = _sdk.catalog.get_full_catalog(workspace)
         columns = []
