@@ -4,6 +4,7 @@ REQUIRES = [
     "gooddata-afm-client>=1.0.0, <2.0.0",
     "gooddata-metadata-client>=1.0.0, <2.0.0",
     "gooddata-scan-client>=1.0.0, <2.0.0",
+    "python-dateutil>=2.5.3",
 ]
 
 
