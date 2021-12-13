@@ -48,6 +48,13 @@ metadata-client:
 scan-client:
 	scripts/generate_scan_client.sh
 
+MYPY_READY_PROJECTS = "gooddata-sdk"
+.PHONY: mypy
+mypy:
+	RESULT=0; \
+	for project in $(MYPY_READY_PROJECTS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	exit $$RESULT
+
 .PHONY: test
 test:
 	RESULT=0; \
