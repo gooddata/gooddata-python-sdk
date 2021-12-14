@@ -2,12 +2,13 @@
 from __future__ import annotations
 
 import hashlib
+from typing import Any, Optional, Union
 
 from gooddata_pandas.utils import ColumnsDef, IndexDef, _to_attribute, _to_filters, _to_item, _typed_attribute_value
 from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric
 
 
-def _col_name_to_hash(column_name):
+def _col_name_to_hash(column_name: str) -> str:
     hash_object = hashlib.md5(column_name.encode())
     return hash_object.hexdigest()
 
@@ -16,9 +17,9 @@ def _compute(
     sdk: GoodDataSdk,
     workspace_id: str,
     columns: ColumnsDef,
-    index_by: IndexDef = None,
-    filter_by: list[Filter] = None,
-) -> tuple[ExecutionResponse, dict, dict, dict]:
+    index_by: Optional[IndexDef] = None,
+    filter_by: Optional[Union[Filter, list[Filter]]] = None,
+) -> tuple[ExecutionResponse, dict[str, int], dict[str, int], dict[str, int]]:
     """
     Creates execution-by-convention to retrieve data for frame with the provided columns that is optionally
     indexed by index_by label and optionally also filtered.
@@ -38,23 +39,23 @@ def _compute(
     -  pandas col name to index where headers appear in metric dimension
     -  pandas index name to index where headers appear in the attribute dimension
     """
-    _index_by = dict()
-
     if isinstance(index_by, dict):
         _index_by = index_by
     elif isinstance(index_by, str):
-        _index_by = {0: index_by}
+        _index_by = {"0": index_by}
+    else:
+        _index_by = dict()
 
-    attributes = []
-    metrics = []
+    attributes: list[Attribute] = []
+    metrics: list[Metric] = []
     col_to_attr_idx = dict()
     index_to_attr_idx = dict()
     col_to_metric_idx = dict()
 
-    for index_name, index_col in (_index_by or dict()).items():
-        item = _to_attribute(index_col, local_id=index_name)
+    for index_name, index_col in _index_by.items():
+        attr_item = _to_attribute(index_col, local_id=str(index_name))
         index_to_attr_idx[index_name] = len(attributes)
-        attributes.append(item)
+        attributes.append(attr_item)
 
     for col_name, col in columns.items():
         # local_id can contain only [.A-Za-z0-9_-]
@@ -122,19 +123,21 @@ def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_me
     return data
 
 
-def _typed_result(catalog, attribute, result_values):
+def _typed_result(catalog: Catalog, attribute: Attribute, result_values: list[Any]) -> list[Any]:
     """Convert result_values to proper data types."""
     catalog_attribute = catalog.find_label_attribute(attribute.label)
+    if catalog_attribute is None:
+        raise ValueError(f"Unable to find attribute {attribute.label} in catalog")
     return [_typed_attribute_value(catalog_attribute, value) for value in result_values]
 
 
 def _extract_from_attributes_and_maybe_metrics(
     response: ExecutionResponse,
     catalog: Catalog,
-    cols: list,
-    col_to_attr_idx: dict,
-    col_to_metric_idx: dict,
-    index_to_attr_idx: dict = None,
+    cols: list[str],
+    col_to_attr_idx: dict[str, int],
+    col_to_metric_idx: dict[str, int],
+    index_to_attr_idx: Optional[dict[str, int]] = None,
 ) -> tuple[dict, dict]:
 
     exec_def = response.exec_def
@@ -142,20 +145,19 @@ def _extract_from_attributes_and_maybe_metrics(
     limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]
     attribute_dim = 1 if exec_def.has_metrics() else 0
     result = response.read_result(limit=limit, offset=offset)
+    safe_index_to_attr_idx = index_to_attr_idx if index_to_attr_idx is not None else dict()
 
     # mappings from column name to Attribute
-    index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in index_to_attr_idx.items()}
+    index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in safe_index_to_attr_idx.items()}
     col_to_attribute = {col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()}
 
     # datastructures to return
-    index = dict()
-    if index_to_attr_idx is not None:
-        index = {idx_name: [] for idx_name in index_to_attr_idx}
-    data = {col: [] for col in cols}
+    index: dict[str, list[Any]] = {idx_name: [] for idx_name in safe_index_to_attr_idx}
+    data: dict[str, list[Any]] = {col: [] for col in cols}
 
     while True:
         for idx_name in index:
-            rs = result.get_all_header_values(attribute_dim, index_to_attr_idx[idx_name])
+            rs = result.get_all_header_values(attribute_dim, safe_index_to_attr_idx[idx_name])
             attribute = index_to_attribute[idx_name]
             index[idx_name] += _typed_result(catalog, attribute, rs)
         for col in cols:
@@ -178,8 +180,8 @@ def compute_and_extract(
     sdk: GoodDataSdk,
     workspace_id: str,
     columns: ColumnsDef,
-    index_by: IndexDef = None,
-    filter_by: list[Filter] = None,
+    index_by: Optional[IndexDef] = None,
+    filter_by: Optional[Union[Filter, list[Filter]]] = None,
 ) -> tuple[dict, dict]:
     """
     Convenience function to drive computation & data extraction on behalf of the series and data frame factories.

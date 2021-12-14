@@ -3,11 +3,20 @@ from __future__ import annotations
 
 import uuid
 from datetime import date, datetime
-from typing import Dict, Union
+from typing import Any, Dict, Optional, Union
 
 import pandas
 
-from gooddata_sdk import Attribute, Filter, InsightAttribute, InsightMetric, Metric, ObjId, SimpleMetric
+from gooddata_sdk import (
+    Attribute,
+    CatalogAttribute,
+    Filter,
+    InsightAttribute,
+    InsightMetric,
+    Metric,
+    ObjId,
+    SimpleMetric,
+)
 from gooddata_sdk.utils import typed_value
 
 LabelItemDef = Union[Attribute, ObjId, str]
@@ -16,11 +25,11 @@ IndexDef = Union[LabelItemDef, Dict[str, LabelItemDef]]
 ColumnsDef = Dict[str, DataItemDef]
 
 
-def _unique_local_id():
+def _unique_local_id() -> str:
     return uuid.uuid4().hex.replace("-", "")
 
 
-def _try_obj_id(val):
+def _try_obj_id(val: DataItemDef) -> DataItemDef:
     if isinstance(val, str):
         split = val.split("/")
         _type = split[0]
@@ -31,30 +40,30 @@ def _try_obj_id(val):
     return val
 
 
-def _to_attribute(val: LabelItemDef, local_id=None) -> Attribute:
+def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribute:
     _val = _try_obj_id(val)
     if isinstance(_val, Attribute):
         return _val
     elif isinstance(_val, ObjId):
         return Attribute(local_id=local_id or _unique_local_id(), label=_val)
     elif isinstance(_val, str):
-        return Attribute(local_id=local_id or _unique_local_id(), label=val)
+        return Attribute(local_id=local_id or _unique_local_id(), label=_val)
 
     raise ValueError(f"Invalid attribute input: {val}")
 
 
-def _to_filters(val: Union[Filter, list[Filter]]) -> list[Filter]:
+def _to_filters(val: Optional[Union[Filter, list[Filter]]]) -> Optional[list[Filter]]:
     if isinstance(val, Filter):
         return [val]
 
     return val
 
 
-def _to_item(val: DataItemDef, local_id=None) -> Union[Attribute, Metric]:
+def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribute, Metric]:
     _val = _try_obj_id(val)
 
     if isinstance(_val, (Attribute, Metric)):
-        return val
+        return _val
     elif isinstance(_val, ObjId):
         if _val.type in ["fact", "metric"]:
             return SimpleMetric(local_id=local_id or _unique_local_id(), item=_val)
@@ -64,11 +73,11 @@ def _to_item(val: DataItemDef, local_id=None) -> Union[Attribute, Metric]:
     raise ValueError(f"Invalid column_by item {val}")
 
 
-def _typed_attribute_value(ct_attr, value):
+def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     return _to_pandas_type(typed_value(ct_attr.dataset.data_type, ct_attr.granularity, value))
 
 
-def _to_pandas_type(val):
+def _to_pandas_type(val: Any) -> Any:
     if isinstance(
         val,
         (
@@ -91,10 +100,10 @@ def _to_pandas_type(val):
 
 
 class DefaultInsightColumnNaming:
-    def __init__(self):
-        self._uniques = dict()
+    def __init__(self) -> None:
+        self._uniques: dict[str, int] = dict()
 
-    def _ensure_unique(self, candidate):
+    def _get_unique_candidate(self, candidate: str) -> str:
         # ensure column name uniqueness - in a dumb way by appending some number
         if candidate in self._uniques:
             i = 1
@@ -107,6 +116,11 @@ class DefaultInsightColumnNaming:
             return new_candidate
 
         return candidate
+
+    def _ensure_unique(self, candidate: str) -> str:
+        unique_candidate = self._get_unique_candidate(candidate)
+        self._uniques[unique_candidate] = 1
+        return unique_candidate
 
     def col_name_for_attribute(self, attr: InsightAttribute) -> str:
         return self._ensure_unique(attr.label_id)
