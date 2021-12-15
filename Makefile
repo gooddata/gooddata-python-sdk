@@ -48,11 +48,10 @@ metadata-client:
 scan-client:
 	scripts/generate_scan_client.sh
 
-MYPY_READY_PROJECTS = gooddata-sdk gooddata-pandas
 .PHONY: mypy
 mypy:
 	RESULT=0; \
-	for project in $(MYPY_READY_PROJECTS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: test
