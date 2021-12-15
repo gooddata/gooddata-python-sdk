@@ -1,10 +1,12 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+from typing import Optional, Union
+
 import pandas
 
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.utils import ColumnsDef, DefaultInsightColumnNaming, IndexDef, _to_item
+from gooddata_pandas.utils import ColumnsDef, DefaultInsightColumnNaming, IndexDef, LabelItemDef, _to_item
 from gooddata_sdk import Attribute, Filter, GoodDataSdk
 
 
@@ -27,11 +29,13 @@ class DataFrameFactory:
     limited to just what is listed above.
     """
 
-    def __init__(self, sdk: GoodDataSdk, workspace_id: str):
+    def __init__(self, sdk: GoodDataSdk, workspace_id: str) -> None:
         self._sdk = sdk
         self._workspace_id = workspace_id
 
-    def indexed(self, index_by: IndexDef, columns: ColumnsDef, filter_by: list[Filter] = None) -> pandas.DataFrame:
+    def indexed(
+        self, index_by: IndexDef, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
+    ) -> pandas.DataFrame:
         """
         Creates a data frame indexed by values of the label. The data frame columns will be created from either
         metrics or other label values.
@@ -64,15 +68,19 @@ class DataFrameFactory:
             index_by=index_by,
             filter_by=filter_by,
         )
-        _idx = None
+
         if len(index) == 1:
             _idx = pandas.Index(list(index.values())[0])
         elif len(index) > 1:
             _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+        else:
+            _idx = None
 
         return pandas.DataFrame(data=data, index=_idx)
 
-    def not_indexed(self, columns: ColumnsDef, filter_by: list[Filter] = None) -> pandas.DataFrame:
+    def not_indexed(
+        self, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
+    ) -> pandas.DataFrame:
         """
         Creates a data frame with columns created from metrics and or labels.
 
@@ -94,7 +102,9 @@ class DataFrameFactory:
 
         return pandas.DataFrame(data=data)
 
-    def for_items(self, items: ColumnsDef, filter_by: list[Filter] = None, auto_index=True):
+    def for_items(
+        self, items: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None, auto_index: bool = True
+    ) -> pandas.DataFrame:
         """
         Creates a data frame for a named items. This is a convenience method that will create DataFrame with or
         without index based on the context of the items that you pass.
@@ -118,10 +128,9 @@ class DataFrameFactory:
         :param filter_by: optionally specify filters to apply during computation on the server
         :param auto_index: optionally force creation of DataFrame without index even if the contents of items make it
         eligible for indexing
-        :return:
         """
-        resolved_attr_cols = dict()
-        resolved_measure_cols = dict()
+        resolved_attr_cols: dict[str, LabelItemDef] = dict()
+        resolved_measure_cols: ColumnsDef = dict()
         has_attributes = False
         has_measures = False
 
@@ -136,7 +145,7 @@ class DataFrameFactory:
                 resolved_measure_cols[col_name] = item
 
         if not auto_index or not has_measures or not has_attributes:
-            columns = {**resolved_attr_cols, **resolved_measure_cols}
+            columns: ColumnsDef = {**resolved_attr_cols, **resolved_measure_cols}
 
             return self.not_indexed(columns=columns, filter_by=filter_by)
 
@@ -146,7 +155,7 @@ class DataFrameFactory:
             filter_by=filter_by,
         )
 
-    def for_insight(self, insight_id: str, auto_index=True) -> pandas.DataFrame:
+    def for_insight(self, insight_id: str, auto_index: bool = True) -> pandas.DataFrame:
         """
         Creates a data frame with columns based on the content of the insight with the provided identifier. The
         filters that are set on the insight will be applied and used for the server-side computation of the data
@@ -174,9 +183,9 @@ class DataFrameFactory:
         naming = DefaultInsightColumnNaming()
         insight = self._sdk.insights.get_insight(workspace_id=self._workspace_id, insight_id=insight_id)
         filter_by = [f.as_computable() for f in insight.filters]
-        columns = dict(
-            [(naming.col_name_for_attribute(a), a.as_computable()) for a in insight.attributes]
-            + [(naming.col_name_for_metric(m), m.as_computable()) for m in insight.metrics]
-        )
+        columns: ColumnsDef = {
+            **{naming.col_name_for_attribute(a): a.as_computable() for a in insight.attributes},
+            **{naming.col_name_for_metric(m): m.as_computable() for m in insight.metrics},
+        }
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
