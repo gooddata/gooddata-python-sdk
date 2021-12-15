@@ -18,7 +18,7 @@
                 },
                 "operator": "GREATER_THAN",
                 "treat_null_values_as": null,
-                "value": 100000
+                "value": 100000.0
             }
         }
     ],

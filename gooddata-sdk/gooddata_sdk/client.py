@@ -1,6 +1,8 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+from typing import Optional
+
 import gooddata_afm_client as afm_client
 import gooddata_metadata_client as metadata_client
 import gooddata_scan_client as scan_client
@@ -11,7 +13,13 @@ USER_AGENT = "gooddata-python-sdk/0.1"
 class GoodDataApiClient:
     """Provide access to metadata and afm services."""
 
-    def __init__(self, host, token, custom_headers=None, extra_user_agent=None):
+    def __init__(
+        self,
+        host: str,
+        token: str,
+        custom_headers: Optional[dict[str, str]] = None,
+        extra_user_agent: Optional[str] = None,
+    ) -> None:
         """Take url, token for connecting to GoodData.CN.
 
         HTTP requests made by this class may be enriched by `custom_headers` dict
@@ -60,13 +68,13 @@ class GoodDataApiClient:
         self._afm_client.user_agent = user_agent
 
     @property
-    def afm_client(self):
+    def afm_client(self) -> afm_client.ApiClient:
         return self._afm_client
 
     @property
-    def metadata_client(self):
+    def metadata_client(self) -> metadata_client.ApiClient:
         return self._metadata_client
 
     @property
-    def scan_client(self):
+    def scan_client(self) -> scan_client.ApiClient:
         return self._scan_client

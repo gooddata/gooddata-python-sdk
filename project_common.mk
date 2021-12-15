@@ -41,6 +41,10 @@ format-fix:
 	(cd ..; black $(CURR_DIR_BASE_NAME))
 	(cd ..; isort $(CURR_DIR_BASE_NAME))
 
+.PHONY: mypy
+mypy:
+	tox $(TOX_FLAGS) -e mypy
+
 .PHONY: test
 test:
 	tox $(TOX_FLAGS) $(LOCAL_TEST_ENVS) $(LOCAL_ADD_ARGS)

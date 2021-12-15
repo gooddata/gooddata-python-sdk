@@ -1,16 +1,20 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from collections import namedtuple
-from datetime import date
+import functools
+from datetime import date, datetime
+from typing import Any, Dict, NamedTuple, Optional, Union, cast
 
 from dateutil.parser import parse
 
 from gooddata_metadata_client import ApiAttributeError
 from gooddata_sdk.compute_model import ObjId
 
+# Use typing collection types to support python < py3.9
+IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
 
-def id_obj_to_key(id_obj):
+
+def id_obj_to_key(id_obj: IdObjType) -> str:
     """
     Given an object containing an id+type pair, this function will return a string key.
 
@@ -20,27 +24,42 @@ def id_obj_to_key(id_obj):
     :param id_obj: id object
     :return: string that can be used as key
     """
-    unwrapped = id_obj
     if isinstance(id_obj, str):
         return id_obj
     elif isinstance(id_obj, ObjId):
         return str(id_obj)
-    elif "identifier" in id_obj:
-        # items in insight have id object in format {identifier: { id, type }}; unwrap them for convenience
-        unwrapped = id_obj["identifier"]
+
+    try:
+        unwrapped_id = id_obj["identifier"]
+        if isinstance(unwrapped_id, str):
+            raise ValueError(
+                f'Invalid value type "{type(id_obj)}" for key "identifier" in id object. Expected dict[str, str]'
+            )
+        # let type checking rule out str type after accessing key "identifier"
+        unwrapped = unwrapped_id
+    except KeyError:
+        # make sure id_obj is of type dict[str, str], eliminate dict[str, dict[str, str]]
+        value_item = list(id_obj.values())[0]
+        if isinstance(value_item, dict):
+            raise ValueError(f'Invalid value type "{type(id_obj)}" of id object. Expected dict[str, str]')
+        # Use typing collection types to support python < py3.9
+        unwrapped = cast(Dict[str, str], id_obj)
 
     if "id" not in unwrapped or "type" not in unwrapped:
         raise KeyError(
-            f"Invalid id object used to find sideloaded entity: {str(id_obj)}. Need dict with 'id' and 'type' keys"
+            f"Invalid id object used to find side loaded entity: {str(id_obj)}. Need dict with 'id' and 'type' keys"
         )
 
     return f"{unwrapped['type']}/{unwrapped['id']}"
 
 
-AllPagedEntities = namedtuple("PagedResult", ["data", "included"])
+class AllPagedEntities(NamedTuple):
+    data: list[Any]
+    included: list[Any]
 
 
-def load_all_entities(get_page_func, page_size=500):
+# Use functools.partial instead of Protocol because Protocol is available starting by py3.8
+def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 500) -> AllPagedEntities:
     """
     Loads all entities from a paged resource. The primary input to this function is a partial function that is setup
     with all the fixed parameters. Given this the function will get entities page-by-page and merge them into a single
@@ -49,8 +68,10 @@ def load_all_entities(get_page_func, page_size=500):
     An example usage:
 
     >>> import functools
+    >>> import gooddata_metadata_client as metadata_client
     >>> import gooddata_metadata_client.apis as metadata_apis
-    >>> get_func = functools.partial(metadata_apis.get_all_entities_visualization_objects, 'some-workspace-id',
+    >>> api = metadata_apis.WorkspaceObjectControllerApi(metadata_client.ApiClient())
+    >>> get_func = functools.partial(api.get_all_entities_visualization_objects, 'some-workspace-id',
     >>>                              include=["ALL"], _check_return_type=False)
     >>> vis_objects = load_all_entities(get_func)
 
@@ -79,12 +100,16 @@ def load_all_entities(get_page_func, page_size=500):
     return all_paged_entities
 
 
-def typed_value(data_type, granularity, value):
+def typed_value(data_type: str, granularity: Optional[str], value: str) -> Union[str, int, date, datetime]:
     """Return typed value based on declared data_type and granularity.
 
+    >>> from datetime import datetime
     >>> assert(typed_value("DATE", "MINUTE", '2020-01-20 00:00') == datetime(2020, 1, 20, 0, 0))
     """
     if data_type == "DATE":
+        if granularity is None:
+            raise ValueError("Missing granularity for DATE type")
+
         return {
             "MINUTE": _sanitize_timestamp,
             "HOUR": _sanitize_timestamp,
@@ -93,27 +118,30 @@ def typed_value(data_type, granularity, value):
             "MONTH": _sanitize_date,
             "QUARTER": str,
             "YEAR": _sanitize_date,
-        }.get(granularity, int)(value)
+        }.get(granularity, int)(
+            value
+        )  # type: ignore
     else:  # NORMAL
         return value
 
 
-def _sanitize_date(value):
+def _sanitize_date(value: str) -> date:
     """Add first month and first date to incomplete iso date string.
 
-    >>> assert _sanitize_date("2021-01") == date(2021, 1 1)
+    >>> assert _sanitize_date("2021-01") == date(2021, 1, 1)
     >>> assert _sanitize_date("1992") == date(1992, 1, 1)
     """
     parts = value.split("-")
-    missing_count = 3 - len(parts)
-    parts.extend([1 for _ in range(0, missing_count)])
-    parts = map(int, parts)
-    return date(*parts)
+    int_parts = list(map(int, parts))
+    missing_count = 3 - len(int_parts)
+    int_parts.extend([1] * missing_count)
+    return date(*int_parts)
 
 
-def _sanitize_timestamp(value):
+def _sanitize_timestamp(value: str) -> datetime:
     """Append minutes to incomplete datetime string.
 
+    >>> from datetime import datetime
     >>> assert _sanitize_timestamp("2021-01-01 02") == datetime(2021, 1, 1, 2, 0)
     >>> assert _sanitize_timestamp("2021-01-01 12:34") == datetime(2021, 1, 1, 12, 34)
     """
@@ -123,11 +151,11 @@ def _sanitize_timestamp(value):
     return parse(value)
 
 
-class Sideloads:
-    def __init__(self, objs):
+class SideLoads:
+    def __init__(self, objs: list[Any]) -> None:
         self._objects = dict([(f"{o['type']}/{o['id']}", o) for o in objs])
 
-    def find(self, id_obj):
+    def find(self, id_obj: IdObjType) -> Union[Any, None]:
         id_obj_key = id_obj_to_key(id_obj)
 
         if id_obj_key not in self._objects:
@@ -135,14 +163,14 @@ class Sideloads:
 
         return self._objects[id_obj_key]
 
-    def all_for_type(self, obj_type):
+    def all_for_type(self, obj_type: str) -> list[Any]:
         return [o for o in self._objects.values() if o["type"] == obj_type]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self._objects)
 
-    def __repr__(self):
-        return f"Sideloads({','.join(self._objects.keys())})"
+    def __repr__(self) -> str:
+        return f"SideLoads({','.join(self._objects.keys())})"
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._objects)

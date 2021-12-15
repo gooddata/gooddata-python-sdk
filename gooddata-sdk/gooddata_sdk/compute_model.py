@@ -4,10 +4,11 @@ from __future__ import annotations
 from typing import Optional, Union
 
 import gooddata_afm_client.models as afm_models
+from gooddata_afm_client.model_utils import OpenApiModel
 
 
 class ObjId:
-    def __init__(self, id, type):
+    def __init__(self, id: str, type: str) -> None:
         self._id: str = id
         self._type: str = type
 
@@ -19,19 +20,19 @@ class ObjId:
     def type(self) -> str:
         return self._type
 
-    def as_afm_id(self):
+    def as_afm_id(self) -> afm_models.AfmObjectIdentifier:
         return afm_models.AfmObjectIdentifier(identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type))
 
-    def as_identifier(self):
+    def as_identifier(self) -> afm_models.Identifier:
         return afm_models.Identifier(
             identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type),
             _check_type=False,
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, ObjId) and self.id == other.id and self.type == other.type
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation is used to transform ObjId to string key.
 
@@ -40,18 +41,18 @@ class ObjId:
         """
         return f"{self.type}/{self.id}"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.type}/{self.id}"
 
 
-def _to_identifier(val: Union[ObjId, str]):
+def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.LocalIdentifier, afm_models.Identifier]:
     if isinstance(val, str):
         return afm_models.LocalIdentifier(local_identifier=val)
 
     return val.as_identifier()
 
 
-def _extract_id_or_local_id(val) -> Union[ObjId, str]:
+def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[ObjId, str]:
     if isinstance(val, (str, ObjId)):
         return val
     else:
@@ -59,7 +60,7 @@ def _extract_id_or_local_id(val) -> Union[ObjId, str]:
         return val.local_id
 
 
-def _extract_local_id(val) -> str:
+def _extract_local_id(val: Union[str, Metric]) -> str:
     if isinstance(val, str):
         return val
     else:
@@ -68,15 +69,15 @@ def _extract_local_id(val) -> str:
 
 
 class ExecModelEntity:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
-    def as_api_model(self):
+    def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
 
 class Attribute(ExecModelEntity):
-    def __init__(self, local_id: str, label: Union[ObjId, str]):
+    def __init__(self, local_id: str, label: Union[ObjId, str]) -> None:
         """
         Creates new attribute that can be used to slice or dice metric values during computation.
 
@@ -90,25 +91,25 @@ class Attribute(ExecModelEntity):
         self._label = ObjId(label, "label") if isinstance(label, str) else label
 
     @property
-    def local_id(self):
+    def local_id(self) -> str:
         return self._local_id
 
     @property
-    def label(self):
+    def label(self) -> ObjId:
         return self._label
 
-    def has_same_label(self, other):
+    def has_same_label(self, other: ExecModelEntity) -> bool:
         return isinstance(other, Attribute) and other.label == self.label
 
     def as_api_model(self) -> afm_models.AttributeItem:
         return afm_models.AttributeItem(local_identifier=self.local_id, label=self.label.as_afm_id())
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"compute_model.Attribute(local_id='{self.local_id}', label='{self.label}')"
 
 
 class Filter(ExecModelEntity):
-    def __init__(self):
+    def __init__(self) -> None:
         super(Filter, self).__init__()
 
         self._apply_on_result = None
@@ -117,15 +118,15 @@ class Filter(ExecModelEntity):
     def apply_on_result(self) -> Union[bool, None]:
         return self._apply_on_result
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         raise NotImplementedError()
 
-    def as_api_model(self):
+    def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
 
 class Metric(ExecModelEntity):
-    def __init__(self, local_id: str):
+    def __init__(self, local_id: str) -> None:
         super(Metric, self).__init__()
         self._local_id = local_id
 
@@ -138,7 +139,7 @@ class Metric(ExecModelEntity):
 
         return afm_models.MeasureItem(local_identifier=self._local_id, definition=definition)
 
-    def _body_as_api_model(self):
+    def _body_as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
 
@@ -159,10 +160,10 @@ class SimpleMetric(Metric):
         self,
         local_id: str,
         item: ObjId,
-        aggregation=None,
-        compute_ratio=False,
+        aggregation: Optional[str] = None,
+        compute_ratio: bool = False,
         filters: list[Filter] = None,
-    ):
+    ) -> None:
         super(SimpleMetric, self).__init__(local_id)
 
         _agg = aggregation.upper() if aggregation is not None else None
@@ -192,7 +193,7 @@ class SimpleMetric(Metric):
         return self._item
 
     @property
-    def aggregation(self) -> str:
+    def aggregation(self) -> Optional[str]:
         return self._aggregation
 
     @property
@@ -203,7 +204,7 @@ class SimpleMetric(Metric):
     def filters(self) -> list[Filter]:
         return self._filters
 
-    def _body_as_api_model(self):
+    def _body_as_api_model(self) -> afm_models.SimpleMeasureDefinition:
         _filters = [f.as_api_model() for f in self.filters]
 
         # aggregation is optional yet the model bombs if None is sent :(
@@ -227,7 +228,7 @@ class SimpleMetric(Metric):
                 )
             )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return (
             f"compute_model.SimpleMetric("
             f"item='{self.item}', "
@@ -238,7 +239,7 @@ class SimpleMetric(Metric):
 
 
 class PopDate:
-    def __init__(self, attribute: Union[ObjId, Attribute], periods_ago: int):
+    def __init__(self, attribute: Union[ObjId, Attribute], periods_ago: int) -> None:
         if isinstance(attribute, Attribute):
             self._attribute = attribute.label
         else:
@@ -253,7 +254,7 @@ class PopDate:
     def periods_ago(self) -> int:
         return self._periods_ago
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.PopDate:
         return afm_models.PopDate(attribute=self.attribute.as_afm_id(), periods_ago=self.periods_ago)
 
 
@@ -263,7 +264,7 @@ class PopDateMetric(Metric):
         local_id: str,
         metric: Union[str, Metric],
         date_attributes: list[PopDate],
-    ):
+    ) -> None:
         super(PopDateMetric, self).__init__(local_id)
 
         self._metric = _extract_local_id(metric)
@@ -277,7 +278,7 @@ class PopDateMetric(Metric):
     def date_attributes(self) -> list[PopDate]:
         return self._date_attributes
 
-    def _body_as_api_model(self):
+    def _body_as_api_model(self) -> afm_models.PopDateMeasureDefinition:
         measure_identifier = afm_models.LocalIdentifier(local_identifier=self.metric_local_id)
         date_attributes = list([a.as_api_model() for a in self.date_attributes])
 
@@ -289,7 +290,7 @@ class PopDateMetric(Metric):
 
 
 class PopDateDataset:
-    def __init__(self, dataset: Union[ObjId, str], periods_ago: int):
+    def __init__(self, dataset: Union[ObjId, str], periods_ago: int) -> None:
         self._dataset = ObjId(dataset, "dataset") if isinstance(dataset, str) else dataset
         self._periods_ago = periods_ago
 
@@ -301,7 +302,7 @@ class PopDateDataset:
     def periods_ago(self) -> int:
         return self._periods_ago
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.PopDataset:
         return afm_models.PopDataset(dataset=self.dataset.as_afm_id(), periods_ago=self.periods_ago)
 
 
@@ -311,7 +312,7 @@ class PopDatesetMetric(Metric):
         local_id: str,
         metric: Union[str, Metric],
         date_datasets: list[PopDateDataset],
-    ):
+    ) -> None:
         super(PopDatesetMetric, self).__init__(local_id)
 
         self._metric = _extract_local_id(metric)
@@ -325,7 +326,7 @@ class PopDatesetMetric(Metric):
     def date_datasets(self) -> list[PopDateDataset]:
         return self._date_datasets
 
-    def _body_as_api_model(self):
+    def _body_as_api_model(self) -> afm_models.PopDatasetMeasureDefinition:
         measure_identifier = afm_models.LocalIdentifier(local_identifier=self.metric_local_id)
         date_datasets = list([d.as_api_model() for d in self.date_datasets])
 
@@ -346,7 +347,7 @@ ARITHMETIC_METRIC_OPERATORS = {
 
 
 class ArithmeticMetric(Metric):
-    def __init__(self, local_id: str, operator: str, operands: list[Union[str, Metric]]):
+    def __init__(self, local_id: str, operator: str, operands: list[Union[str, Metric]]) -> None:
         super(ArithmeticMetric, self).__init__(local_id)
 
         if operator not in ARITHMETIC_METRIC_OPERATORS:
@@ -365,7 +366,7 @@ class ArithmeticMetric(Metric):
     def operand_local_ids(self) -> list[str]:
         return self._operands
 
-    def _body_as_api_model(self):
+    def _body_as_api_model(self) -> afm_models.ArithmeticMeasureDefinition:
         measure_identifiers = [afm_models.LocalIdentifier(local_identifier=local_d) for local_d in self._operands]
 
         return afm_models.ArithmeticMeasureDefinition(
@@ -376,7 +377,7 @@ class ArithmeticMetric(Metric):
 
 
 class AttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] = None):
+    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] = None) -> None:
         super(AttributeFilter, self).__init__()
 
         self._label = _extract_id_or_local_id(label)
@@ -390,18 +391,18 @@ class AttributeFilter(Filter):
     def values(self) -> list[str]:
         return self._values
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self):
+    def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, AttributeFilter) and self._label == other._label and self._values == other._values
 
 
 class PositiveAttributeFilter(AttributeFilter):
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.PositiveAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
         body = afm_models.PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
@@ -409,17 +410,17 @@ class PositiveAttributeFilter(AttributeFilter):
 
 
 class NegativeAttributeFilter(AttributeFilter):
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return len(self.values) == 0
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.NegativeAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
         body = afm_models.NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
 
 
-_GRANULARITY = {
+_GRANULARITY: set[str] = {
     "YEAR",
     "QUARTER",
     "MONTH",
@@ -440,13 +441,13 @@ _GRANULARITY = {
 
 
 class RelativeDateFilter(Filter):
-    def __init__(self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int):
+    def __init__(self, dataset: ObjId, granularity: str, from_shift: int, to_shift: int) -> None:
         super(RelativeDateFilter, self).__init__()
 
         if granularity not in _GRANULARITY:
             raise ValueError(
                 f"Invalid relative date filter granularity '{granularity}'."
-                f"It is expected to be one of: {_GRANULARITY.keys()}"
+                f"It is expected to be one of: {_GRANULARITY}"
             )
 
         self._dataset = dataset
@@ -470,10 +471,10 @@ class RelativeDateFilter(Filter):
     def to_shift(self) -> int:
         return self._to_shift
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.RelativeDateFilter:
         body = afm_models.RelativeDateFilterBody(
             dataset=self.dataset.as_afm_id(),
             granularity=self.granularity,
@@ -484,6 +485,7 @@ class RelativeDateFilter(Filter):
         return afm_models.RelativeDateFilter(body)
 
 
+# noinspection PyAbstractClass
 class AllTimeFilter(Filter):
     """Filter that is semantically equivalent to absent filter.
 
@@ -500,7 +502,7 @@ class AllTimeFilter(Filter):
 
 
 class AbsoluteDateFilter(Filter):
-    def __init__(self, dataset: ObjId, from_date: str, to_date: str):
+    def __init__(self, dataset: ObjId, from_date: str, to_date: str) -> None:
         super(AbsoluteDateFilter, self).__init__()
 
         self._dataset = dataset
@@ -519,10 +521,10 @@ class AbsoluteDateFilter(Filter):
     def to_date(self) -> str:
         return self._to_date
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.AbsoluteDateFilter:
         body = afm_models.AbsoluteDateFilterBody(
             dataset=self.dataset.as_afm_id(),
             _from=self._from_date,
@@ -531,7 +533,7 @@ class AbsoluteDateFilter(Filter):
         )
         return afm_models.AbsoluteDateFilter(body)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return (
             isinstance(other, AbsoluteDateFilter)
             and self._dataset == other._dataset
@@ -559,7 +561,7 @@ class MetricValueFilter(Filter):
         operator: str,
         values: Union[float, int, tuple[float, float]],
         treat_nulls_as: Union[float, None] = None,
-    ):
+    ) -> None:
         super(MetricValueFilter, self).__init__()
 
         if operator not in _METRIC_VALUE_FILTER_OPERATORS:
@@ -569,18 +571,18 @@ class MetricValueFilter(Filter):
             )
 
         if _METRIC_VALUE_FILTER_OPERATORS[operator] == "range":
-            if len(values) != 2:
+            if not isinstance(values, tuple) or len(values) != 2:
                 raise ValueError(f"Invalid number of values for {operator}. Expected two values: (from, to).")
 
-            self._values = values
+            self._values: Union[tuple[float], tuple[float, float]] = values
         else:
             if not isinstance(values, (int, float)) and len(values) != 1:
                 raise ValueError(
                     f"Invalid number of values for {operator}. "
                     f"Expected single int, float or one-sized list or tuple."
                 )
-
-            self._values = (values,) if isinstance(values, (int, float)) else values
+            # Convert int to float as AFM model filters accept float values
+            self._values = (float(values),) if isinstance(values, (int, float)) else values
 
         self._metric = _extract_id_or_local_id(metric)
         self._operator = operator
@@ -595,17 +597,17 @@ class MetricValueFilter(Filter):
         return self._operator
 
     @property
-    def values(self) -> tuple[float]:
+    def values(self) -> Union[tuple[float], tuple[float, float]]:
         return self._values
 
     @property
     def treat_nulls_as(self) -> Union[float, None]:
         return self._treat_nulls_as
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self):
+    def as_api_model(self) -> Union[afm_models.ComparisonMeasureValueFilter, afm_models.RangeMeasureValueFilter]:
         measure = _to_identifier(self._metric)
 
         if _METRIC_VALUE_FILTER_OPERATORS[self.operator] == "comparison":
@@ -643,8 +645,8 @@ class RankingFilter(Filter):
         metrics: list[Union[ObjId, Metric, str]],
         operator: str,
         value: int,
-        dimensionality: Optional[list[Union[ObjId, Attribute, str]]],
-    ):
+        dimensionality: Optional[list[Union[str, ObjId, Attribute, Metric]]],
+    ) -> None:
         super(RankingFilter, self).__init__()
 
         if operator not in _RANKING_OPERATORS:
@@ -654,10 +656,7 @@ class RankingFilter(Filter):
             )
 
         self._metrics = [_extract_id_or_local_id(m) for m in metrics]
-        if dimensionality:
-            self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality]
-        else:
-            self._dimensionality = None
+        self._dimensionality = [_extract_id_or_local_id(d) for d in dimensionality] if dimensionality else None
         self._operator = operator
         self._value = value
 
@@ -674,13 +673,13 @@ class RankingFilter(Filter):
         return self._value
 
     @property
-    def dimensionality(self) -> list[Union[ObjId, str]]:
+    def dimensionality(self) -> Optional[list[Union[ObjId, str]]]:
         return self._dimensionality
 
-    def is_noop(self):
+    def is_noop(self) -> bool:
         return False
 
-    def as_api_model(self):
+    def as_api_model(self) -> afm_models.RankingFilter:
         measures = [_to_identifier(m) for m in self.metrics]
         dimensionality = {}
         if self.dimensionality:
@@ -692,9 +691,9 @@ class RankingFilter(Filter):
 
 
 def compute_model_to_api_model(
-    attributes: list[Attribute] = None,
-    metrics: list[Metric] = None,
-    filters: list[Filter] = None,
+    attributes: Optional[list[Attribute]] = None,
+    metrics: Optional[list[Metric]] = None,
+    filters: Optional[list[Filter]] = None,
 ) -> afm_models.AFM:
     """
     Transforms categorized execution model entities (attributes, metrics, facts) into an API model

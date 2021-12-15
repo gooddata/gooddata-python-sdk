@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Union
+from typing import Any, Generator, Optional, Union
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute import ComputeService, ExecutionDefinition, ExecutionResponse, ExecutionResult
@@ -39,18 +39,18 @@ class ExecutionTable:
 
     """
 
-    def __init__(self, response: ExecutionResponse, first_page: ExecutionResult):
+    def __init__(self, response: ExecutionResponse, first_page: ExecutionResult) -> None:
         self._exec_def = response.exec_def
         self._response = response
         self._first_page = first_page
         self._pages = [first_page]
 
     @property
-    def attributes(self):
+    def attributes(self) -> list[Attribute]:
         return self._exec_def.attributes
 
     @property
-    def metrics(self):
+    def metrics(self) -> list[Metric]:
         return self._exec_def.metrics
 
     @property
@@ -63,13 +63,13 @@ class ExecutionTable:
         return [a.local_id for a in self.attributes] + [m.local_id for m in self.metrics]
 
     @property
-    def column_metadata(self):
+    def column_metadata(self) -> dict[str, Union[Attribute, Metric]]:
         """
         Returns mapping of column identifier to definition of either attribute whose elements will be in that column
         or metric whose value will be calculated in that column.
         :return:
         """
-        return dict(zip(self.column_ids, self.attributes + self.metrics))
+        return {**{a.local_id: a for a in self.attributes}, **{m.local_id: m for m in self.metrics}}
 
     def _read_next_page(self) -> bool:
         if not self._exec_def.has_attributes():
@@ -95,13 +95,14 @@ class ExecutionTable:
 
         return True
 
-    def _read_all_metrics_in_one_row(self):
+    # TODO: spatne type resultu???
+    def _read_all_metrics_in_one_row(self) -> Generator[dict[str, Any], None, None]:
         data = self._first_page.data
         cols = self.column_ids
 
         yield dict(zip(cols, data))
 
-    def _read_all_paged(self):
+    def _read_all_paged(self) -> Generator[dict[str, Any], None, None]:
         page_idx = 0
         cols = self.column_ids
 
@@ -130,7 +131,7 @@ class ExecutionTable:
             # otherwise the self._pages was updated so go on with next page
             page_idx += 1
 
-    def read_all(self):
+    def read_all(self) -> Generator[dict[str, Any], None, None]:
         """
         Returns a generator that will be yielding execution result as rows. Each row is a dict() mapping column
         identifier to value of that column.
@@ -142,7 +143,7 @@ class ExecutionTable:
 
         return self._read_all_paged()
 
-    def __len__(self):
+    def __len__(self) -> int:
         if self._exec_def.has_attributes():
             # if there are attributes in the result, then the sheet will be sliced with one row per
             # attribute => whatever the paging says is total for the first dimension is the number of rows
@@ -153,14 +154,16 @@ class ExecutionTable:
             # values in that single dim. if there are any, then there will be one row
             return 1 if self._first_page.paging_total[0] > 0 else 0
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"ExecutionTable(response={self._response}, columns={self.column_ids}, rows={len(self)})"
 
 
-def _prepare_tabular_definition(attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]):
+def _prepare_tabular_definition(
+    attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]
+) -> ExecutionDefinition:
     dims = [
         [a.local_id for a in attributes] if len(attributes) else None,
         ["measureGroup"] if len(metrics) else None,
@@ -197,10 +200,10 @@ class TableService:
     The ExecutionTable returned by the TableService allows you to iterate over the rows of the calculated data.
     """
 
-    def __init__(self, api_client: GoodDataApiClient):
+    def __init__(self, api_client: GoodDataApiClient) -> None:
         self._compute = ComputeService(api_client)
 
-    def for_insight(self, workspace_id, insight: Insight) -> ExecutionTable:
+    def for_insight(self, workspace_id: str, insight: Insight) -> ExecutionTable:
         exec_def = _prepare_tabular_definition(
             attributes=[a.as_computable() for a in insight.attributes],
             metrics=[m.as_computable() for m in insight.metrics],
@@ -211,7 +214,9 @@ class TableService:
 
         return _as_table(response)
 
-    def for_items(self, workspace_id, items: list[Union[Attribute, Metric]], filters=None) -> ExecutionTable:
+    def for_items(
+        self, workspace_id: str, items: list[Union[Attribute, Metric]], filters: Optional[list[Filter]] = None
+    ) -> ExecutionTable:
         if filters is None:
             filters = []
 
