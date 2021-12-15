@@ -11,12 +11,9 @@ present (likely during test run) it will use stub implementations.
 The stubbing only happens if the FDW code is called during test execution. Otherwise the import error is raised
 as usual to prevent some wicked behavior on mis-configured PostgreSQL.
 """
+from __future__ import annotations
 
-ForeignDataWrapper = None
-TableDefinition = None
-ColumnDefinition = None
-log_to_postgres = None
-
+from typing import Any, Optional, Union
 
 try:
     import multicorn
@@ -41,38 +38,15 @@ except ImportError as e:
         # in that case raise the error normally.
         raise e
 
-    def _log_to_console(msg, level):
+    def _log_to_console(msg: str, level: int) -> None:
         from logging import getLevelName
 
         print(f"{getLevelName(level)}: gooddata_fdw: {msg}")
 
     log_to_postgres = _log_to_console
 
-    class ForeignDataWrapperStub:
-        def __init__(self, options, columns):
-            self.options = options
-            self.columns = columns
-
-        @classmethod
-        def import_schema(cls, schema, srv_options, options, restriction_type, restricts):
-            pass
-
-        def execute(self, quals, columns, sortkeys=None):
-            pass
-
-    ForeignDataWrapper = ForeignDataWrapperStub
-
-    class TableDefinitionStub:
-        def __init__(self, table_name, columns, options):
-            self.table_name = table_name
-            self.columns = columns
-            self.options = options
-            self.col_idx = dict([(c.column_name, c) for c in columns])
-
-    TableDefinition = TableDefinitionStub
-
     class ColumnDefinitionStub:
-        def __init__(self, column_name, type_name, options):
+        def __init__(self, column_name: str, type_name: str, options: dict[str, str]) -> None:
             self.column_name = column_name
             self.type_name = type_name
             self.base_type_name = type_name
@@ -81,9 +55,41 @@ except ImportError as e:
     ColumnDefinition = ColumnDefinitionStub
 
     class QualStub:
-        def __init__(self, field_name, operator, value):
+        def __init__(self, field_name: str, operator: Union[str, tuple[str, str]], value: Any) -> None:
             self.field_name = field_name
             self.operator = operator
             self.value = value
 
     Qual = QualStub
+
+    class TableDefinitionStub:
+        def __init__(
+            self, table_name: str, columns: list[ColumnDefinition], options: dict[str, str]  # type: ignore
+        ) -> None:
+            self.table_name = table_name
+            self.columns = columns
+            self.options = options
+            self.col_idx = dict([(c.column_name, c) for c in columns])  # type: ignore
+
+    TableDefinition = TableDefinitionStub
+
+    class ForeignDataWrapperStub:
+        def __init__(self, options: dict[str, str], columns: dict[str, ColumnDefinition]) -> None:  # type: ignore
+            self.options = options
+            self.columns = columns
+
+        @classmethod
+        def import_schema(
+            cls,
+            schema: str,
+            srv_options: dict[str, str],
+            options: dict[str, str],
+            restriction_type: Optional[str],
+            restricts: list[str],
+        ) -> list[TableDefinition]:  # type: ignore
+            pass
+
+        def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):  # type: ignore
+            pass
+
+    ForeignDataWrapper = ForeignDataWrapperStub

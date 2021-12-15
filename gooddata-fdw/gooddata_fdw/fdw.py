@@ -5,25 +5,25 @@ import datetime
 import re
 import traceback
 from operator import itemgetter
-from typing import Union
+from typing import Any, Optional, Union
 
 import gooddata_sdk as sdk
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, Qual, TableDefinition
-from gooddata_fdw.logging import _log_debug, _log_error, _log_info, _log_warn
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
+from gooddata_fdw.pg_logging import _log_debug, _log_error, _log_info, _log_warn
 from gooddata_sdk import create_sdk
-from gooddata_sdk.catalog import Catalog
+from gooddata_sdk.catalog import Catalog, CatalogAttribute
 from gooddata_sdk.compute_model import (
     AbsoluteDateFilter,
     Attribute,
     Filter,
+    Metric,
     NegativeAttributeFilter,
     ObjId,
     PositiveAttributeFilter,
-    SimpleMetric,
 )
 from gooddata_sdk.insight import InsightMetric
-from gooddata_sdk.utils import _sanitize_date, _sanitize_timestamp
+from gooddata_sdk.utils import sanitize_date, sanitize_timestamp
 
 _USER_AGENT = "gooddata-fdw/0.1"
 """
@@ -40,7 +40,7 @@ MIN_DATE = "0001-01-01"
 MAX_DATE = "2999-01-01"
 
 
-def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, SimpleMetric]:
+def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:
     item_type, item_id = col.options["id"].split("/")
 
     # since all cols are from the compute table, the uniqueness of local_id is ensured...
@@ -56,17 +56,19 @@ def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, SimpleMetric]:
         )
 
 
-def column_data_type_for(attribute):
+def column_data_type_for(attribute: Optional[CatalogAttribute]) -> str:
     """Determine what postgres type should be used for `attribute`."""
+    if not attribute:
+        return DEFAULT_ATTRIBUTE_DATATYPE
+
     declared_data_type = attribute.dataset.data_type
-    granularity = attribute.granularity
     return {
-        "DATE": date_granularity_to_data_type(granularity),
+        "DATE": date_granularity_to_data_type(attribute.granularity),
         "NORMAL": DEFAULT_ATTRIBUTE_DATATYPE,
     }.get(declared_data_type, DEFAULT_ATTRIBUTE_DATATYPE)
 
 
-def date_granularity_to_data_type(granularity):
+def date_granularity_to_data_type(granularity: Optional[str]) -> str:
     """Determine what postgres type should be used for an attribute of type date based on `granularity`."""
     return {
         "MINUTE": "TIMESTAMP",  # No conversion needed
@@ -76,32 +78,39 @@ def date_granularity_to_data_type(granularity):
         "MONTH": "DATE",  # Add day
         "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
         "YEAR": "DATE",
-    }.get(granularity, "INTEGER")
+    }.get(granularity if granularity else "", "INTEGER")
 
 
 # InsightMetric do not contain format in case of stored metrics
-def get_insight_metric_format(metric: InsightMetric, catalog: Catalog) -> str:
-    metric_id = ObjId(id=metric.item_id, type="metric")
-    full_metric = catalog.get_metric(metric_id)
-    return metric.format or full_metric.format
+def get_insight_metric_format(metric: InsightMetric, catalog: Catalog) -> Optional[str]:
+    if metric.format:
+        return metric.format
+    elif metric.item_id:
+        metric_id = ObjId(id=metric.item_id, type="metric")
+        full_metric = catalog.get_metric(metric_id)
+        if full_metric:
+            return full_metric.format
+
+    return None
 
 
 def get_metric_data_type(metric_digits_before_dec_point: str, digits_after: str) -> str:
     return f"{METRIC_DATA_TYPE}({metric_digits_before_dec_point}, {digits_after})"
 
 
-def metric_format_to_data_type(metric_format: str, metric_digits_before_dec_point: str) -> str:
-    re_decimal_places = re.compile(r"^[^.]+\.([#0]+)")
-    match = re_decimal_places.search(metric_format)
-    if match:
-        digits_after = str(len(match.group(1)))
-    else:
-        digits_after = METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
+def metric_format_to_data_type(metric_format: Optional[str], metric_digits_before_dec_point: str) -> str:
+    digits_after = METRIC_DIGITS_AFTER_DEC_POINT_DEFAULT
+    if metric_format:
+        re_decimal_places = re.compile(r"^[^.]+\.([#0]+)")
+        match = re_decimal_places.search(metric_format)
+        if match:
+            digits_after = str(len(match.group(1)))
+
     return get_metric_data_type(metric_digits_before_dec_point, digits_after)
 
 
 class GoodDataForeignDataWrapper(ForeignDataWrapper):
-    def __init__(self, options, columns):
+    def __init__(self, options: dict[str, str], columns: dict[str, ColumnDefinition]) -> None:
         super(GoodDataForeignDataWrapper, self).__init__(options, columns)
 
         if "host" not in options or "token" not in options:
@@ -123,7 +132,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
         self._validate()
 
-    def _validate(self):
+    def _validate(self) -> None:
         """
         Validates column definitions, making sure that the options contain all the essential mapping metadata.
 
@@ -163,12 +172,15 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                         f"'metric/your.metric.id'. Instead got: {c.options['id']}"
                     )
 
-    def _execute_insight(self, quals, columns, sortKeys=None):
+    def _execute_insight(  # type: ignore
+        self, quals: list[Qual], columns: list[str], sortKeys: Optional[list[Any]] = None
+    ):
         """
         Computes data for table mapped to an insight. Note that this execution maintains insight's filters - the
         table is implicitly filtered.
         """
         # TODO add validation that the table columns are consistent with insight bucket items
+        assert self._insight is not None
 
         col_to_local_id = dict([(c.column_name, c.options["local_id"]) for c in self._columns.values()])
         insight = self._sdk.insights.get_insight(self._workspace, self._insight)
@@ -188,28 +200,28 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
             yield row
 
-    def _sanitize_value(self, column_name, value):
+    def _sanitize_value(self, column_name: str, value: str) -> Any:
         """Alter the value to comply with postgres data type"""
         type_name = self._columns[column_name].base_type_name
 
         sanitizations = {
-            "date": _sanitize_date,
-            "timestamp without time zone": _sanitize_timestamp,
-            "timestamp": _sanitize_timestamp,
+            "date": sanitize_date,
+            "timestamp without time zone": sanitize_timestamp,
+            "timestamp": sanitize_timestamp,
         }
         if type_name in sanitizations:
             return sanitizations[type_name](value)
         else:
             return value
 
-    def get_computable_for_col_name(self, column_name):
+    def get_computable_for_col_name(self, column_name: str) -> Union[Attribute, Metric]:
         return _col_as_computable(self._columns[column_name])
 
     @staticmethod
     def _date_to_str(date: datetime.date) -> str:
         return date.strftime("%Y-%m-%d")
 
-    def _get_date_filter(self, operator: str, value: datetime.date, label: ObjId):
+    def _get_date_filter(self, operator: str, value: datetime.date, label: ObjId) -> Union[Filter, None]:
         date_from = MIN_DATE
         date_to = MAX_DATE
         add_filter = True
@@ -236,7 +248,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         else:
             return None
 
-    def qual_to_date_filter(self, filters: list[Filter], filter_entity: Attribute, qual: Qual):
+    def qual_to_date_filter(self, filters: list[Filter], filter_entity: Attribute, qual: Qual) -> None:
         _log_debug(f"extract_filters_from_quals: filter_column={filter_entity} is date attribute")
         # Hack - Absolute date filter requires <date_dataset>.day label, but user can limit e.g. month granularity
         re_day = re.compile(r"(.*)\.[^.]+$")
@@ -250,7 +262,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 filters.append(date_filter)
 
     @staticmethod
-    def qual_to_attribute_filter(filters: list[Filter], filter_entity: Attribute, qual: Qual):
+    def qual_to_attribute_filter(filters: list[Filter], filter_entity: Attribute, qual: Qual) -> None:
         _log_debug(f"extract_filters_from_quals: filter_column={filter_entity} is normal attribute")
         if isinstance(qual.operator, tuple):
             values = qual.value
@@ -265,7 +277,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             filters.append(NegativeAttributeFilter(filter_entity, values))
 
     @staticmethod
-    def _is_qual_date(qual: Qual):
+    def _is_qual_date(qual: Qual) -> bool:
         return isinstance(qual.value, datetime.date) or (
             isinstance(qual.value, list) and isinstance(qual.value[0], datetime.date)
         )
@@ -278,7 +290,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         :param quals: multicorn quals representing filters in SQL WHERE clause
         :return: Attribute filters
         """
-        filters = []
+        filters: list[Filter] = []
         for qual in quals:
             _log_info(
                 f"extract_filters_from_quals: field_name={qual.field_name} operator={qual.operator} value={qual.value}"
@@ -303,7 +315,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 )
         return filters
 
-    def _execute_compute(self, quals: list[Qual], columns, sortKeys=None):
+    def _execute_compute(  # type: ignore
+        self, quals: list[Qual], columns: list[str], sortKeys: Optional[list[Any]] = None
+    ):
         """
         Computes data for the 'compute' pseudo-table. The 'compute' table is special. It does not behave as other
         relational tables: the input columns determine what data will be calculated and the cardinality of the result
@@ -311,7 +325,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         """
         try:
             items = [self.get_computable_for_col_name(col_name) for col_name in columns]
-            # TODO: pushdown more filters that are included in quals
+            # TODO: push down more filters that are included in quals
             filters = self.extract_filters_from_quals(quals)
             table = self._sdk.tables.for_items(self._workspace, items, filters)
         except Exception as e:
@@ -323,7 +337,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             _log_debug(f"ROW={sanitized_row}")
             yield sanitized_row
 
-    def _execute_custom_report(self, quals: list[Qual], columns, sortKeys=None):
+    def _execute_custom_report(  # type: ignore
+        self, quals: list[Qual], columns: list[str], sortKeys: Optional[list[Any]] = None
+    ):
         """
         Computes data for manually created table that maps to particular workspace and its columns map to label, fact or
         metric in that workspace. The mapping conventions are same as for the 'compute' pseudo-table. Compared to the
@@ -343,7 +359,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             sanitized_row = {k: self._sanitize_value(k, v) for k, v in row.items()}
             yield sanitized_row
 
-    def execute(self, quals, columns, sortkeys=None):
+    def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):  # type: ignore
         _log_debug(f"query in fdw with options {self._options}; columns {columns}; quals={quals}")
 
         if self._insight:
@@ -355,7 +371,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         return result
 
     @classmethod
-    def import_schema(cls, schema, srv_options, options, restriction_type, restricts):
+    def import_schema(
+        cls,
+        schema: str,
+        srv_options: dict[str, str],
+        options: dict[str, str],
+        restriction_type: Optional[str],
+        restricts: list[str],
+    ) -> list[TableDefinition]:  # type: ignore
         _log_info(
             f"import fdw {schema} (srv_options={srv_options}, "
             f"options={options}, restriction_type={restriction_type}, restricts={restricts})"
@@ -407,8 +430,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
     @classmethod
     def import_insights_from_workspace(
-        cls, workspace, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
-    ):
+        cls,
+        workspace: str,
+        srv_options: dict[str, str],
+        options: dict[str, str],
+        metric_digits_before_dec_point: str,
+        restriction_type: Optional[str],
+        restricts: list[str],
+    ) -> list[TableDefinition]:
         table_naming = DefaultInsightTableNaming()
 
         _log_info(
@@ -476,8 +505,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
     @classmethod
     def import_semantic_layer_from_workspace(
-        cls, workspace, srv_options, options, metric_digits_before_dec_point, restriction_type, restricts
-    ):
+        cls,
+        workspace: str,
+        srv_options: dict[str, str],
+        options: dict[str, str],
+        metric_digits_before_dec_point: str,
+        restriction_type: Optional[str],
+        restricts: list[str],
+    ) -> list[TableDefinition]:
         _log_info(
             f"importing semantic layer as tables from {srv_options['host']} workspace {workspace} "
             + f"headers_host={srv_options.get('headers_host')}"
@@ -545,14 +580,14 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         ]
 
     @property
-    def rowid_column(self):
+    def rowid_column(self):  # type: ignore
         return super().rowid_column
 
-    def insert(self, values):
+    def insert(self, values):  # type: ignore
         return super().insert(values)
 
-    def update(self, oldvalues, newvalues):
+    def update(self, oldvalues, newvalues):  # type: ignore
         return super().update(oldvalues, newvalues)
 
-    def delete(self, oldvalues):
+    def delete(self, oldvalues):  # type: ignore
         return super().delete(oldvalues)

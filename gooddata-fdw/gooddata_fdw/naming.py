@@ -1,8 +1,12 @@
 # (C) 2021 GoodData Corporation
+from __future__ import annotations
+
+from typing import Optional
+
 import gooddata_sdk as sdk
 
 
-def _sanitize_str_for_postgres(string, used_names=None):
+def _sanitize_str_for_postgres(string: str, used_names: Optional[dict[str, bool]] = None) -> str:
     # replace non-alpha-num stuff with underscores
     with_underscores = "".join(char if char.isalnum() else "_" for char in string.lower())
 
@@ -15,7 +19,7 @@ def _sanitize_str_for_postgres(string, used_names=None):
     return _ensure_unique(candidate, used_names)
 
 
-def _ensure_unique(candidate, used_names):
+def _ensure_unique(candidate: str, used_names: dict[str, bool]) -> str:
     # ensure column name uniqueness - in a dumb way by appending some number
     if candidate in used_names:
         i = 1
@@ -42,8 +46,8 @@ class InsightTableNamingStrategy:
 
 
 class DefaultInsightTableNaming(InsightTableNamingStrategy):
-    def __init__(self):
-        self._uniques = dict()
+    def __init__(self) -> None:
+        self._uniques: dict[str, bool] = dict()
 
     def table_name_for_insight(self, insight: sdk.Insight) -> str:
         new_name = _sanitize_str_for_postgres(insight.title, self._uniques)
@@ -56,13 +60,13 @@ class InsightColumnNamingStrategy:
     def col_name_for_attribute(self, attr: sdk.InsightAttribute) -> str:
         raise NotImplementedError()
 
-    def col_name_for_metric(self, attr: sdk.InsightAttribute) -> str:
+    def col_name_for_metric(self, attr: sdk.InsightMetric) -> str:
         raise NotImplementedError()
 
 
 class DefaultInsightColumnNaming(InsightColumnNamingStrategy):
-    def __init__(self):
-        self._uniques = dict()
+    def __init__(self) -> None:
+        self._uniques: dict[str, bool] = dict()
 
     def col_name_for_attribute(self, attr: sdk.InsightAttribute) -> str:
         new_name = _sanitize_str_for_postgres(attr.label_id, self._uniques)
@@ -95,28 +99,24 @@ class CatalogNamingStrategy:
 
 
 class DefaultCatalogNamingStrategy:
-    def __init__(self):
-        self._uniques = dict()
+    def __init__(self) -> None:
+        self._uniques: dict[str, bool] = dict()
+
+    def _col_name_for_id_without_prefix(self, item_id: str, dataset: sdk.CatalogDataset) -> str:
+        ds_prefix = f"{dataset.id}."
+        # some of our tests project have convention where fact/label is as: dataset.dataset_something
+        # that looks awkward in a table.. thus this funny stuff
+        use_id = item_id if not item_id.startswith(f"{ds_prefix}{dataset.id}") else item_id[len(ds_prefix) :]
+        new_name = _sanitize_str_for_postgres(use_id, self._uniques)
+        self._uniques[new_name] = True
+
+        return new_name
 
     def col_name_for_label(self, label: sdk.CatalogLabel, dataset: sdk.CatalogDataset) -> str:
-        ds_prefix = f"{dataset.id}."
-        # some of our tests project have convention where fact/label is as: dataset.dataset_something
-        # that looks awkward in a table.. thus this funny stuff
-        use_id = label.id if not label.id.startswith(f"{ds_prefix}{dataset.id}") else label.id[len(ds_prefix) :]
-        new_name = _sanitize_str_for_postgres(use_id, self._uniques)
-        self._uniques[new_name] = True
-
-        return new_name
+        return self._col_name_for_id_without_prefix(label.id, dataset)
 
     def col_name_for_fact(self, fact: sdk.CatalogFact, dataset: sdk.CatalogDataset) -> str:
-        ds_prefix = f"{dataset.id}."
-        # some of our tests project have convention where fact/label is as: dataset.dataset_something
-        # that looks awkward in a table.. thus this funny stuff
-        use_id = fact.id if not fact.id.startswith(f"{ds_prefix}{dataset.id}") else fact.id[len(ds_prefix) :]
-        new_name = _sanitize_str_for_postgres(use_id, self._uniques)
-        self._uniques[new_name] = True
-
-        return new_name
+        return self._col_name_for_id_without_prefix(fact.id, dataset)
 
     def col_name_for_metric(self, metric: sdk.CatalogMetric) -> str:
         new_name = _sanitize_str_for_postgres(metric.id, self._uniques)
