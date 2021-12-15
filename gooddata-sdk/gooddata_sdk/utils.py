@@ -111,13 +111,13 @@ def typed_value(data_type: str, granularity: Optional[str], value: str) -> Union
             raise ValueError("Missing granularity for DATE type")
 
         return {
-            "MINUTE": _sanitize_timestamp,
-            "HOUR": _sanitize_timestamp,
-            "DAY": _sanitize_date,
+            "MINUTE": sanitize_timestamp,
+            "HOUR": sanitize_timestamp,
+            "DAY": sanitize_date,
             "WEEK": str,
-            "MONTH": _sanitize_date,
+            "MONTH": sanitize_date,
             "QUARTER": str,
-            "YEAR": _sanitize_date,
+            "YEAR": sanitize_date,
         }.get(granularity, int)(
             value
         )  # type: ignore
@@ -125,11 +125,11 @@ def typed_value(data_type: str, granularity: Optional[str], value: str) -> Union
         return value
 
 
-def _sanitize_date(value: str) -> date:
+def sanitize_date(value: str) -> date:
     """Add first month and first date to incomplete iso date string.
 
-    >>> assert _sanitize_date("2021-01") == date(2021, 1, 1)
-    >>> assert _sanitize_date("1992") == date(1992, 1, 1)
+    >>> assert sanitize_date("2021-01") == date(2021, 1, 1)
+    >>> assert sanitize_date("1992") == date(1992, 1, 1)
     """
     parts = value.split("-")
     int_parts = list(map(int, parts))
@@ -138,12 +138,12 @@ def _sanitize_date(value: str) -> date:
     return date(*int_parts)
 
 
-def _sanitize_timestamp(value: str) -> datetime:
+def sanitize_timestamp(value: str) -> datetime:
     """Append minutes to incomplete datetime string.
 
     >>> from datetime import datetime
-    >>> assert _sanitize_timestamp("2021-01-01 02") == datetime(2021, 1, 1, 2, 0)
-    >>> assert _sanitize_timestamp("2021-01-01 12:34") == datetime(2021, 1, 1, 12, 34)
+    >>> assert sanitize_timestamp("2021-01-01 02") == datetime(2021, 1, 1, 2, 0)
+    >>> assert sanitize_timestamp("2021-01-01 12:34") == datetime(2021, 1, 1, 12, 34)
     """
     parts = value.split(":")
     if len(parts) == 1:
