@@ -1,22 +1,18 @@
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    "gooddata-afm-client>=1.0.0, <2.0.0",
-    "gooddata-metadata-client>=1.0.0, <2.0.0",
-    "gooddata-scan-client>=1.0.0, <2.0.0",
+    "gooddata-afm-client~=0.6.0",
+    "gooddata-metadata-client~=0.6.0",
+    "gooddata-scan-client~=0.6.0",
+    'importlib-metadata >= 1.0 ; python_version < "3.8"',
     "python-dateutil>=2.5.3",
 ]
-
-
-def _read_version():
-    with open("VERSION", "rt") as version_file:
-        return version_file.readline().strip()
 
 
 setup(
     name="gooddata-sdk",
     description="GoodData.CN Python SDK",
-    version=_read_version(),
+    version="0.6.0",
     author="GoodData",
     license="MIT",
     install_requires=REQUIRES,

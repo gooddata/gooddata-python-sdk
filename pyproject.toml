@@ -18,3 +18,96 @@ src_paths = [
     "gooddata-fdw",
     "gooddata-pandas"
 ]
+
+[tool.tbump]
+# Uncomment this if your project is hosted on GitHub:
+# github_url = "https://github.com/<user or organization>/<project>/"
+
+[tool.tbump.version]
+current = "0.6.0"
+regex = '''
+  (?P<major>\d+)
+  \.
+  (?P<minor>\d+)
+  \.
+  (?P<patch>\d+)
+  '''
+
+[tool.tbump.git]
+message_template = "Bump to {new_version}"
+tag_template = "v{new_version}"
+
+[[tool.tbump.file]]
+#docs
+src="gooddata**/docs/conf.py"
+search="release = \"{current_version}\""
+
+[[tool.tbump.file]]
+# clients setup.py
+src="gooddata-*-client/setup.py"
+search="VERSION = \"{current_version}\""
+
+[[tool.tbump.file]]
+# fdw setup.py
+src="gooddata-fdw/setup.py"
+search="version=\"{current_version}\""
+
+[[tool.tbump.file]]
+# fdw setup.py dependency
+src="gooddata-fdw/setup.py"
+search="gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
+# pandas setup.py
+src="gooddata-pandas/setup.py"
+search="version=\"{current_version}\""
+
+[[tool.tbump.file]]
+# pandas setup.py dependency
+src="gooddata-pandas/setup.py"
+search="gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
+# sdk setup.py
+src="gooddata-sdk/setup.py"
+search="version=\"{current_version}\""
+
+[[tool.tbump.file]]
+# sdk setup.py dependency
+src="gooddata-sdk/setup.py"
+search="gooddata-.*-client~={current_version}"
+
+[[tool.tbump.file]]
+# clients README
+src="gooddata-*-client/README.md"
+
+[[tool.tbump.file]]
+# clients user agent
+src="gooddata-*-client/gooddata_*_client/api_client.py"
+
+[[tool.tbump.file]]
+# clients config
+src="gooddata-*-client/gooddata_*_client/configuration.py"
+
+[[tool.tbump.file]]
+# clients __init__.py
+src="gooddata-*-client/gooddata_*_client/__init__.py"
+
+[[tool.tbump.file]]
+# clients generator
+src="scripts/generate_*_client.sh"
+search="packageVersion={current_version}"
+
+# You can specify a list of commands to
+# run after the files have been patched
+# and before the git commit is made
+
+#  [[tool.tbump.before_commit]]
+#  name = "check changelog"
+#  cmd = "grep -q {new_version} Changelog.rst"
+
+# Or run some commands after the git tag and the branch
+# have been pushed:
+#  [[tool.tbump.after_push]]
+#  name = "publish"
+#  cmd = "./publish.sh"

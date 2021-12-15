@@ -1,0 +1,75 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build Python Package and Create Release
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+    - name: Build gooddata-afm-client
+      run: |
+          cd gooddata-afm-client
+          python -m build
+    - name: Build gooddata-metadata-client
+      run: |
+          cd gooddata-metadata-client
+          python -m build
+    - name: Build gooddata-scan-client
+      run: |
+          cd gooddata-scan-client
+          python -m build
+    - name: Build gooddata-pandas
+      run: |
+          cd gooddata-pandas
+          python -m build
+    - name: Build gooddata-fdw
+      run: |
+          cd gooddata-fdw
+          python -m build
+    - name: Build gooddata-sdk
+      run: |
+          cd gooddata-sdk
+          python -m build
+    - name: Create Github release
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+              gooddata-afm-client/dist/*.whl
+              gooddata-afm-client/dist/*.tar.gz
+              gooddata-metadata-client/dist/*.whl
+              gooddata-metadata-client/dist/*.tar.gz
+              gooddata-scan-client/dist/*.whl
+              gooddata-scan-client/dist/*.tar.gz
+              gooddata-pandas/dist/*.whl
+              gooddata-pandas/dist/*.tar.gz
+              gooddata-fdw/dist/*.whl
+              gooddata-fdw/dist/*.tar.gz
+              gooddata-sdk/dist/*.whl
+              gooddata-sdk/dist/*.tar.gz
+#    - name: Publish package
+#      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+#      with:
+#        user: __token__
+#        password: ${{ secrets.PYPI_API_TOKEN }}

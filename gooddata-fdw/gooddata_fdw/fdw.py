@@ -8,6 +8,7 @@ from operator import itemgetter
 from typing import Any, Optional, Union
 
 import gooddata_sdk as sdk
+from gooddata_fdw import __version__
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, Qual, TableDefinition
 from gooddata_fdw.naming import DefaultCatalogNamingStrategy, DefaultInsightColumnNaming, DefaultInsightTableNaming
 from gooddata_fdw.pg_logging import _log_debug, _log_error, _log_info, _log_warn
@@ -25,10 +26,9 @@ from gooddata_sdk.compute_model import (
 from gooddata_sdk.insight import InsightMetric
 from gooddata_sdk.utils import sanitize_date, sanitize_timestamp
 
-_USER_AGENT = "gooddata-fdw/0.1"
-"""
-Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent.
-"""
+USER_AGENT = f"gooddata-fdw/{__version__}"
+"""Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""
+
 
 DEFAULT_ATTRIBUTE_DATATYPE = "VARCHAR(255)"
 METRIC_DATA_TYPE = "DECIMAL"
@@ -128,7 +128,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._columns = columns
         self._insight = options.get("insight")
         self._compute = options.get("compute")
-        self._sdk = create_sdk(self._host, self._token, _USER_AGENT, options.get("headers_host"))
+        self._sdk = create_sdk(self._host, self._token, USER_AGENT, options.get("headers_host"))
 
         self._validate()
 
@@ -444,7 +444,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             f"importing insights as tables from {srv_options['host']} workspace {workspace} "
             + f"headers_host={srv_options.get('headers_host')}"
         )
-        _sdk = create_sdk(srv_options["host"], srv_options["token"], _USER_AGENT, srv_options.get("headers_host"))
+        _sdk = create_sdk(srv_options["host"], srv_options["token"], USER_AGENT, srv_options.get("headers_host"))
         _log_debug("loading full catalog")
         catalog = _sdk.catalog.get_full_catalog(workspace)
         _log_debug("loading all insights")
@@ -518,7 +518,7 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
             + f"headers_host={srv_options.get('headers_host')}"
         )
 
-        _sdk = create_sdk(srv_options["host"], srv_options["token"], _USER_AGENT, srv_options.get("headers_host"))
+        _sdk = create_sdk(srv_options["host"], srv_options["token"], USER_AGENT, srv_options.get("headers_host"))
 
         catalog = _sdk.catalog.get_full_catalog(workspace)
         columns = []

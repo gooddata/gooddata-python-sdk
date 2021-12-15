@@ -12,7 +12,8 @@ docker run --rm \
     -u $(id -u ${USER}):$(id -g ${USER}) \
     openapitools/openapi-generator-cli generate \
     -g python \
-    --additional-properties=packageName=gooddata_metadata_client \
+    --package-name gooddata_metadata_client \
+    --additional-properties packageVersion=0.6.0,packageName=gooddata_metadata_client \
     -i https://staging.anywhere.gooddata.com/api/schemas/metadata \
     -o /local/gooddata-metadata-client
 

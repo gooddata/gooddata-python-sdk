@@ -1,4 +1,5 @@
 # (C) 2021 GoodData Corporation
+from gooddata_sdk._version import __version__
 from gooddata_sdk.catalog import (
     Catalog,
     CatalogAttribute,

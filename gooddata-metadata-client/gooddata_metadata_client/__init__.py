@@ -10,7 +10,7 @@
 """
 
 
-__version__ = "1.0.0"
+__version__ = "0.6.0"
 
 # import ApiClient
 from gooddata_metadata_client.api_client import ApiClient

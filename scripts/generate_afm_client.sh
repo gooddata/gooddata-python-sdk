@@ -18,6 +18,7 @@ docker run --rm \
     openapitools/openapi-generator-cli generate \
     -g python \
     --package-name gooddata_afm_client \
+    --additional-properties packageVersion=0.6.0,packageName=gooddata_afm_client \
     -i https://staging.anywhere.gooddata.com/api/schemas/afm \
     -o /local/gooddata-afm-client
 
