@@ -2,10 +2,7 @@
 from __future__ import annotations
 
 import functools
-from datetime import date, datetime
-from typing import Any, Dict, NamedTuple, Optional, Union, cast
-
-from dateutil.parser import parse
+from typing import Any, Dict, NamedTuple, Union, cast
 
 from gooddata_metadata_client import ApiAttributeError
 from gooddata_sdk.compute_model import ObjId
@@ -98,57 +95,6 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
         current_page += 1
 
     return all_paged_entities
-
-
-def typed_value(data_type: str, granularity: Optional[str], value: str) -> Union[str, int, date, datetime]:
-    """Return typed value based on declared data_type and granularity.
-
-    >>> from datetime import datetime
-    >>> assert(typed_value("DATE", "MINUTE", '2020-01-20 00:00') == datetime(2020, 1, 20, 0, 0))
-    """
-    if data_type == "DATE":
-        if granularity is None:
-            raise ValueError("Missing granularity for DATE type")
-
-        return {
-            "MINUTE": sanitize_timestamp,
-            "HOUR": sanitize_timestamp,
-            "DAY": sanitize_date,
-            "WEEK": str,
-            "MONTH": sanitize_date,
-            "QUARTER": str,
-            "YEAR": sanitize_date,
-        }.get(granularity, int)(
-            value
-        )  # type: ignore
-    else:  # NORMAL
-        return value
-
-
-def sanitize_date(value: str) -> date:
-    """Add first month and first date to incomplete iso date string.
-
-    >>> assert sanitize_date("2021-01") == date(2021, 1, 1)
-    >>> assert sanitize_date("1992") == date(1992, 1, 1)
-    """
-    parts = value.split("-")
-    int_parts = list(map(int, parts))
-    missing_count = 3 - len(int_parts)
-    int_parts.extend([1] * missing_count)
-    return date(*int_parts)
-
-
-def sanitize_timestamp(value: str) -> datetime:
-    """Append minutes to incomplete datetime string.
-
-    >>> from datetime import datetime
-    >>> assert sanitize_timestamp("2021-01-01 02") == datetime(2021, 1, 1, 2, 0)
-    >>> assert sanitize_timestamp("2021-01-01 12:34") == datetime(2021, 1, 1, 12, 34)
-    """
-    parts = value.split(":")
-    if len(parts) == 1:
-        value = value + ":00"
-    return parse(value)
 
 
 class SideLoads:

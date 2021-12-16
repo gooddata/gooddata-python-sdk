@@ -24,7 +24,7 @@ from gooddata_sdk.compute_model import (
     PositiveAttributeFilter,
 )
 from gooddata_sdk.insight import InsightMetric
-from gooddata_sdk.utils import sanitize_date, sanitize_timestamp
+from gooddata_sdk.type_converter import AttributeConverterStore, Converter, DBTypeConverterStore
 
 USER_AGENT = f"gooddata-fdw/{__version__}"
 """Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""
@@ -59,26 +59,10 @@ def _col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:
 def column_data_type_for(attribute: Optional[CatalogAttribute]) -> str:
     """Determine what postgres type should be used for `attribute`."""
     if not attribute:
-        return DEFAULT_ATTRIBUTE_DATATYPE
+        return Converter.DEFAULT_DB_DATA_TYPE
 
-    declared_data_type = attribute.dataset.data_type
-    return {
-        "DATE": date_granularity_to_data_type(attribute.granularity),
-        "NORMAL": DEFAULT_ATTRIBUTE_DATATYPE,
-    }.get(declared_data_type, DEFAULT_ATTRIBUTE_DATATYPE)
-
-
-def date_granularity_to_data_type(granularity: Optional[str]) -> str:
-    """Determine what postgres type should be used for an attribute of type date based on `granularity`."""
-    return {
-        "MINUTE": "TIMESTAMP",  # No conversion needed
-        "HOUR": "TIMESTAMP",  # Add minutes
-        "DAY": "DATE",  # No conversion needed
-        "WEEK": DEFAULT_ATTRIBUTE_DATATYPE,
-        "MONTH": "DATE",  # Add day
-        "QUARTER": DEFAULT_ATTRIBUTE_DATATYPE,
-        "YEAR": "DATE",
-    }.get(granularity if granularity else "", "INTEGER")
+    converter = AttributeConverterStore.find_converter(attribute.dataset.data_type, attribute.granularity)
+    return converter.db_data_type()
 
 
 # InsightMetric do not contain format in case of stored metrics
@@ -203,16 +187,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
     def _sanitize_value(self, column_name: str, value: str) -> Any:
         """Alter the value to comply with postgres data type"""
         type_name = self._columns[column_name].base_type_name
-
-        sanitizations = {
-            "date": sanitize_date,
-            "timestamp without time zone": sanitize_timestamp,
-            "timestamp": sanitize_timestamp,
-        }
-        if type_name in sanitizations:
-            return sanitizations[type_name](value)
-        else:
-            return value
+        converter = DBTypeConverterStore.find_converter(type_name)
+        return converter.to_type(value)
 
     def get_computable_for_col_name(self, column_name: str) -> Union[Attribute, Metric]:
         return _col_as_computable(self._columns[column_name])
