@@ -83,6 +83,16 @@ def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     return converter.to_external_type(value)
 
 
+def make_pandas_index(index):
+    if len(index) == 1:
+        _idx = pandas.Index(list(index.values())[0])
+    elif len(index) > 1:
+        _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+    else:
+        _idx = None
+    return _idx
+
+
 class DefaultInsightColumnNaming:
     def __init__(self) -> None:
         self._uniques: dict[str, int] = dict()
