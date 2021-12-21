@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import uuid
-from datetime import date, datetime
 from typing import Any, Dict, Optional, Union
 
 import pandas
@@ -17,12 +16,18 @@ from gooddata_sdk import (
     ObjId,
     SimpleMetric,
 )
-from gooddata_sdk.utils import typed_value
+from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]
 IndexDef = Union[LabelItemDef, Dict[str, LabelItemDef]]
 ColumnsDef = Dict[str, DataItemDef]
+
+
+# register external pandas types to converters
+IntegerConverter.set_external_fnc(lambda self, value: pandas.to_numeric(value))
+DateConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
+DatetimeConverter.set_external_fnc(lambda self, value: pandas.to_datetime(value))
 
 
 def _unique_local_id() -> str:
@@ -74,29 +79,8 @@ def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribut
 
 
 def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
-    return _to_pandas_type(typed_value(ct_attr.dataset.data_type, ct_attr.granularity, value))
-
-
-def _to_pandas_type(val: Any) -> Any:
-    if isinstance(
-        val,
-        (
-            datetime,
-            date,
-        ),
-    ):
-        r = pandas.to_datetime(val)
-        return r
-    elif isinstance(
-        val,
-        (
-            int,
-            float,
-        ),
-    ):
-        return pandas.to_numeric(val)
-    else:
-        return val
+    converter = AttributeConverterStore.find_converter(ct_attr.dataset.data_type, ct_attr.granularity)
+    return converter.to_external_type(value)
 
 
 class DefaultInsightColumnNaming:
