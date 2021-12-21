@@ -5,6 +5,7 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 import pandas
+from pandas.core.index import Index, MultiIndex
 
 from gooddata_sdk import (
     Attribute,
@@ -83,7 +84,7 @@ def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     return converter.to_external_type(value)
 
 
-def make_pandas_index(index):
+def make_pandas_index(index: dict) -> Optional[Union[Index, MultiIndex]]:
     if len(index) == 1:
         _idx = pandas.Index(list(index.values())[0])
     elif len(index) > 1:

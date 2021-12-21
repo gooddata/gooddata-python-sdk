@@ -1,10 +1,11 @@
 # (C) 2021 GoodData Corporation
 import os
 
+import pytest
 import vcr
 
 from gooddata_pandas import DataFrameFactory
-from gooddata_sdk import PositiveAttributeFilter
+from gooddata_sdk import Attribute, ObjId, PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -12,11 +13,19 @@ _fixtures_dir = os.path.join(_current_dir, "fixtures")
 
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
+index_types = [
+    "label/region.region_name",
+    dict(reg="label/region.region_name"),
+    Attribute(local_id="abcd", label=ObjId(id="region.region_name", type="label")),
+    ObjId(id="region.region_name", type="label"),
+]
+
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_metrics.json"))
-def test_simple_index_metrics(gdf: DataFrameFactory):
+@pytest.mark.parametrize("index", index_types)
+def test_simple_index_metrics(gdf: DataFrameFactory, index):
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name"),
+        index_by=index,
         columns=dict(
             crime_rate="fact/region.region_crime_rate",
             safety_scale="fact/region.region_safety_scale",

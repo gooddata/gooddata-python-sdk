@@ -5,7 +5,7 @@ import hashlib
 from typing import Any, Optional, Union
 
 from gooddata_pandas.utils import ColumnsDef, IndexDef, _to_attribute, _to_filters, _to_item, _typed_attribute_value
-from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric
+from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric, ObjId
 
 
 def _col_name_to_hash(column_name: str) -> str:
@@ -41,7 +41,7 @@ def _compute(
     """
     if isinstance(index_by, dict):
         _index_by = index_by
-    elif isinstance(index_by, str):
+    elif isinstance(index_by, (str, Attribute, ObjId)):
         _index_by = {"0": index_by}
     else:
         _index_by = dict()
