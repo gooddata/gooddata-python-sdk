@@ -5,7 +5,6 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 """
 
 from gooddata_sdk._version import __version__
-
 from gooddata_sdk.catalog import (
     Catalog,
     CatalogAttribute,
