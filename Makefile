@@ -69,3 +69,9 @@ release:
 .PHONY: check-copyright
 check-copyright:
 	./scripts/check_copyright.py FOLDER
+
+.PHONY: docs
+docs:
+	RESULT=0; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	exit $$RESULT
