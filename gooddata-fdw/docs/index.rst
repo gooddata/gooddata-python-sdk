@@ -6,14 +6,14 @@
 Welcome to GoodData Foreign Data Wrapper's documentation!
 =========================================================
 
-.. include:: ../README.md
-   :parser: myst_parser.sphinx_
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    api
+
+.. include:: ../README.md
+   :parser: myst_parser.sphinx_
 
 
 
