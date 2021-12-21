@@ -64,3 +64,9 @@ test:
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \
 	tbump $(VERSION) --no-tag --no-push ; fi
+
+.PHONY: docs
+docs:
+	RESULT=0; \
+	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	exit $$RESULT
