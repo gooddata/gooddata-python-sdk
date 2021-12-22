@@ -64,3 +64,7 @@ test:
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \
 	tbump $(VERSION) --no-tag --no-push ; fi
+
+.PHONY: check-copyrights
+check-copyrights:
+	./scripts/check_copyrights.sh
