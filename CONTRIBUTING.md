@@ -6,6 +6,12 @@
 * Test everything is ok by running `make test-ci` (light-weight `make test` is also available)
 * Create a pull request
 
+# Code convetions
+
+* We go with PEP-8 and related python coding standards. It is checked by set up pre-commit hook
+* We document our code by docstrings in rst format. Compliance with rst format may be checked by running `make docs`
+* We put one logical change in one commit
+
 # How to release new version
 
 * Run `make release VERSION=X.Y.Z`
