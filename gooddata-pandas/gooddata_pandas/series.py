@@ -6,7 +6,7 @@ from typing import Optional, Union
 import pandas
 
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.utils import IndexDef, LabelItemDef
+from gooddata_pandas.utils import IndexDef, LabelItemDef, make_pandas_index
 from gooddata_sdk import Attribute, Filter, GoodDataSdk, ObjId, SimpleMetric
 
 
@@ -49,12 +49,7 @@ class SeriesFactory:
             filter_by=filter_by,
         )
 
-        if len(index) == 1:
-            _idx = pandas.Index(list(index.values())[0])
-        elif len(index) > 1:
-            _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
-        else:
-            _idx = None
+        _idx = make_pandas_index(index)
 
         return pandas.Series(data=data["_series"], index=_idx)
 

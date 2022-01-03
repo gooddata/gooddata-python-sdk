@@ -5,6 +5,7 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 import pandas
+from pandas.core.index import Index, MultiIndex
 
 from gooddata_sdk import (
     Attribute,
@@ -81,6 +82,16 @@ def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribut
 def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     converter = AttributeConverterStore.find_converter(ct_attr.dataset.data_type, ct_attr.granularity)
     return converter.to_external_type(value)
+
+
+def make_pandas_index(index: dict) -> Optional[Union[Index, MultiIndex]]:
+    if len(index) == 1:
+        _idx = pandas.Index(list(index.values())[0])
+    elif len(index) > 1:
+        _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
+    else:
+        _idx = None
+    return _idx
 
 
 class DefaultInsightColumnNaming:
