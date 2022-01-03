@@ -448,22 +448,32 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
                 col = ColumnDefinition(
                     column_name=column_name,
                     type_name=data_type,
-                    options=dict(local_id=attr.local_id),
+                    options=dict(id=f"label/{attr.label_id}", local_id=attr.local_id),
                 )
                 columns.append(col)
 
             for metric in insight.metrics:
+                # TODO - distinguish facts and metrics better when loading insights
+                if metric.format:
+                    metric_obj_type = "fact"
+                else:
+                    metric_obj_type = "metric"
+                metric_id = metric.item_id or metric.local_id
                 metric_format = get_insight_metric_format(metric, catalog)
                 data_type = metric_format_to_data_type(metric_format, metric_digits_before_dec_point)
                 column_name = column_naming.col_name_for_metric(metric)
+                if metric.item_id:
+                    options = dict(id=f"{metric_obj_type}/{metric.item_id}", local_id=metric.local_id)
+                else:
+                    options = dict(local_id=metric.local_id)
                 _log_debug(
-                    f'creating col def "{column_name}" for metric "{metric.title}(id={metric.item_id})" '
+                    f'creating col def "{column_name}" for metric "{metric.title}(id={metric_id})" '
                     + f"format={metric_format} data_type={data_type}"
                 )
                 col = ColumnDefinition(
                     column_name=column_name,
                     type_name=data_type,
-                    options=dict(local_id=metric.local_id),
+                    options=options,
                 )
                 columns.append(col)
 
