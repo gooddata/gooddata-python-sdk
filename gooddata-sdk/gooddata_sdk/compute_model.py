@@ -387,6 +387,10 @@ class AttributeFilter(Filter):
     def label(self) -> Union[ObjId, str]:
         return self._label
 
+    @label.setter
+    def label(self, label: Union[ObjId, str]) -> None:
+        self._label = label
+
     @property
     def values(self) -> list[str]:
         return self._values
@@ -591,6 +595,10 @@ class MetricValueFilter(Filter):
     @property
     def metric(self) -> Union[ObjId, str]:
         return self._metric
+
+    @metric.setter
+    def metric(self, metric: Union[ObjId, str]) -> None:
+        self._metric = metric
 
     @property
     def operator(self) -> str:

@@ -1,6 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import hashlib
 import uuid
 from typing import Any, Dict, Optional, Union
 
@@ -17,6 +18,7 @@ from gooddata_sdk import (
     ObjId,
     SimpleMetric,
 )
+from gooddata_sdk.compute_model import AttributeFilter, MetricValueFilter
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
 
 LabelItemDef = Union[Attribute, ObjId, str]
@@ -35,48 +37,70 @@ def _unique_local_id() -> str:
     return uuid.uuid4().hex.replace("-", "")
 
 
-def _try_obj_id(val: DataItemDef) -> DataItemDef:
+def _val_to_hash(val: str) -> str:
+    hash_object = hashlib.md5(val.encode())
+    return hash_object.hexdigest()
+
+
+def _str_to_obj_id(val: DataItemDef) -> Optional[ObjId]:
     if isinstance(val, str):
         split = val.split("/")
         _type = split[0]
 
         if _type in ["label", "metric", "fact"]:
             return ObjId(id="/".join(split[1:]), type=_type)
-
-    return val
-
-
-def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribute:
-    _val = _try_obj_id(val)
-    if isinstance(_val, Attribute):
-        return _val
-    elif isinstance(_val, ObjId):
-        return Attribute(local_id=local_id or _unique_local_id(), label=_val)
-    elif isinstance(_val, str):
-        return Attribute(local_id=local_id or _unique_local_id(), label=_val)
-
-    raise ValueError(f"Invalid attribute input: {val}")
+    return None
 
 
-def _to_filters(val: Optional[Union[Filter, list[Filter]]]) -> Optional[list[Filter]]:
-    if isinstance(val, Filter):
-        return [val]
-
-    return val
+def _try_obj_id(val: DataItemDef) -> DataItemDef:
+    _obj_id = _str_to_obj_id(val)
+    if _obj_id:
+        return _obj_id
+    else:
+        return val
 
 
 def _to_item(val: DataItemDef, local_id: Optional[str] = None) -> Union[Attribute, Metric]:
     _val = _try_obj_id(val)
-
     if isinstance(_val, (Attribute, Metric)):
         return _val
     elif isinstance(_val, ObjId):
+        # local_id can contain only [.A-Za-z0-9_-]
+        # We have to transform it into its hash.
+        _local_id = local_id or _val_to_hash(str(val))
         if _val.type in ["fact", "metric"]:
-            return SimpleMetric(local_id=local_id or _unique_local_id(), item=_val)
+            return SimpleMetric(local_id=_local_id, item=_val)
         else:
-            return Attribute(local_id=local_id or _unique_local_id(), label=_val)
+            return Attribute(local_id=_local_id, label=_val)
 
     raise ValueError(f"Invalid column_by item {val}")
+
+
+def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribute:
+    _val = _to_item(val, local_id)
+    if isinstance(_val, Attribute):
+        return _val
+    else:
+        raise ValueError(f"Invalid attribute input: {val}")
+
+
+def _resolve_identifiers_in_filters(
+    columns: ColumnsDef,
+    filter_by: Optional[Union[Filter, list[Filter]]] = None,
+) -> Optional[list[Filter]]:
+    filters = [filter_by] if isinstance(filter_by, Filter) else filter_by
+    if filters:
+        for _filter in filters:
+            if isinstance(_filter, AttributeFilter) and isinstance(_filter.label, str):
+                if _filter.label in columns.keys():
+                    _filter.label = _str_to_obj_id(columns[_filter.label]) or _filter.label
+                else:
+                    _filter.label = _str_to_obj_id(_filter.label) or _filter.label
+            elif isinstance(_filter, MetricValueFilter) and isinstance(_filter.metric, str):
+                if _filter.metric in columns.keys():
+                    _filter.metric = _str_to_obj_id(columns[_filter.metric]) or _filter.metric
+
+    return filters
 
 
 def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:

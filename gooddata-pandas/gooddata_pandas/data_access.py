@@ -1,16 +1,17 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-import hashlib
 from typing import Any, Optional, Union
 
-from gooddata_pandas.utils import ColumnsDef, IndexDef, _to_attribute, _to_filters, _to_item, _typed_attribute_value
+from gooddata_pandas.utils import (
+    ColumnsDef,
+    IndexDef,
+    _resolve_identifiers_in_filters,
+    _to_attribute,
+    _to_item,
+    _typed_attribute_value,
+)
 from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric, ObjId
-
-
-def _col_name_to_hash(column_name: str) -> str:
-    hash_object = hashlib.md5(column_name.encode())
-    return hash_object.hexdigest()
 
 
 def _compute(
@@ -34,6 +35,9 @@ def _compute(
 
     -  Otherwise the execution will be single-dim and will contain either measureGroup or all attributes
 
+    Only columns contain always full identification of objects in a form { 'index', 'full identification' }.
+    index_by and filters may contain references to columns using the index!
+
     The compute will return execution response and two mappings:
     -  pandas name to index where headers appear in the attribute dimension
     -  pandas col name to index where headers appear in metric dimension
@@ -53,15 +57,20 @@ def _compute(
     col_to_metric_idx = dict()
 
     for index_name, index_col in _index_by.items():
-        attr_item = _to_attribute(index_col, local_id=str(index_name))
+        if isinstance(index_col, str) and index_col in columns.keys():
+            entity = columns[index_col]
+            if isinstance(entity, (str, ObjId, Attribute)):
+                # Index references column name from columns, take object identification from there
+                attr_item = _to_attribute(entity)
+            else:
+                raise ValueError(f"Invalid index_col item {index_col}, type={type(entity)}")
+        else:
+            attr_item = _to_attribute(index_col)
         index_to_attr_idx[index_name] = len(attributes)
         attributes.append(attr_item)
 
     for col_name, col in columns.items():
-        # local_id can contain only [.A-Za-z0-9_-]
-        # We can transform it into its hash, it is not connected to headers in result set.
-        item = _to_item(col, local_id=_col_name_to_hash(col_name))
-
+        item = _to_item(col)
         if isinstance(item, Attribute):
             # prevent double-add for attributes that are using same labels. this has no real effect on the result
             # apart from extra load/size of the result that would contain the duplicates.
@@ -86,10 +95,12 @@ def _compute(
         [a.local_id for a in attributes] if len(attributes) else None,
     ]
 
+    filters = _resolve_identifiers_in_filters(columns, filter_by)
+
     exec_def = ExecutionDefinition(
         attributes=attributes,
         metrics=metrics,
-        filters=_to_filters(filter_by),
+        filters=filters,
         dimensions=dimensions,
     )
 

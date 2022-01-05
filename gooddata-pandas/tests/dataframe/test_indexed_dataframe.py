@@ -5,7 +5,7 @@ import pytest
 import vcr
 
 from gooddata_pandas import DataFrameFactory
-from gooddata_sdk import Attribute, ObjId, PositiveAttributeFilter
+from gooddata_sdk import Attribute, MetricValueFilter, ObjId, PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,6 +14,7 @@ _fixtures_dir = os.path.join(_current_dir, "fixtures")
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 index_types = [
+    "region_name",
     "label/region.region_name",
     dict(reg="label/region.region_name"),
     Attribute(local_id="abcd", label=ObjId(id="region.region_name", type="label")),
@@ -26,6 +27,24 @@ index_types = [
 def test_simple_index_metrics(gdf: DataFrameFactory, index):
     df = gdf.indexed(
         index_by=index,
+        columns=dict(
+            region_name="label/region.region_name",
+            crime_rate="fact/region.region_crime_rate",
+            safety_scale="fact/region.region_safety_scale",
+        ),
+    )
+
+    assert len(df) == len(TEST_DATA_REGIONS)
+    assert len(df.columns) == 3
+    assert df.columns[0] == "region_name"
+    assert df.columns[1] == "crime_rate"
+    assert df.columns[2] == "safety_scale"
+
+
+@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_metrics.json"))
+def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
+    df = gdf.indexed(
+        index_by="label/region.region_name",
         columns=dict(
             crime_rate="fact/region.region_crime_rate",
             safety_scale="fact/region.region_safety_scale",
@@ -66,7 +85,17 @@ def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
             safety_scale="fact/region.region_safety_scale",
             region_code="label/region.region_code",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
+        filter_by=[
+            # Label referenced by localIdentifier
+            PositiveAttributeFilter(label="reg", values=["Bern"]),
+            # Label referenced by full ID
+            PositiveAttributeFilter(label="label/region.region_name", values=["Bern"]),
+            # Label referenced by ObjId
+            PositiveAttributeFilter(label=ObjId(id="region.region_name", type="label"), values=["Bern"]),
+            # label referenced by index in columns
+            PositiveAttributeFilter(label="region_code", values=["BE"]),
+            MetricValueFilter(metric="crime_rate", operator="GREATER_THAN", values=0),
+        ],
     )
 
     assert len(df) == 1
