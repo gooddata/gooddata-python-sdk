@@ -5,7 +5,7 @@ import datetime
 import pytest
 
 from gooddata_fdw.environment import Qual
-from gooddata_fdw.fdw import MAX_DATE, MIN_DATE, GoodDataForeignDataWrapper
+from gooddata_fdw.filter import MAX_DATE, MIN_DATE, extract_filters_from_quals
 from gooddata_sdk.compute_model import AbsoluteDateFilter, ObjId, PositiveAttributeFilter
 
 start_date = datetime.date(2021, 1, 1)
@@ -45,8 +45,7 @@ test_data = [
 
 
 @pytest.mark.parametrize("quals,expected", test_data)
-def test_quals(fdw_options_for_compute_table, test_compute_table_columns, quals, expected):
-    fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
-    filters = fdw.extract_filters_from_quals(quals)
+def test_quals(test_compute_table_columns, quals, expected):
+    filters = extract_filters_from_quals(quals, test_compute_table_columns)
 
     assert filters == expected
