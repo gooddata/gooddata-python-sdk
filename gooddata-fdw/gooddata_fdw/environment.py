@@ -41,7 +41,7 @@ except ImportError as e:
     def _log_to_console(msg: str, level: int) -> None:
         from logging import getLevelName
 
-        print(f"{getLevelName(level)}: gooddata_fdw: {msg}")
+        print(f"{getLevelName(level)}: {msg}")
 
     log_to_postgres = _log_to_console
 
