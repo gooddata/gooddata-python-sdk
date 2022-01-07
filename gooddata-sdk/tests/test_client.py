@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 from gooddata_sdk import GoodDataApiClient
 
 

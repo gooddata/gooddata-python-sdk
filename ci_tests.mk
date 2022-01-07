@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 IN_TEST_ENVS = py39,py38,py37
 ifdef TEST_ENVS
 	IN_TEST_ENVS = $(TEST_ENVS)

@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 FROM harbor.intgdc.com/tools/gdc-fossa-cli:c505bd0
 
 RUN set -x \
