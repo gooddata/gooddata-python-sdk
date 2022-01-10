@@ -1,4 +1,5 @@
 #!/bin/bash
+# (C) 2021 GoodData Corporation
 
 DIR=$(echo $(cd $(dirname "${BASH_SOURCE[0]}") && pwd -P))
 ROOT_DIR="${DIR}/.."

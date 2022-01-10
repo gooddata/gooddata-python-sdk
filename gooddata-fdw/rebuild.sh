@@ -1,4 +1,5 @@
 #!/bin/bash
+# (C) 2021 GoodData Corporation
 
 if [ -z "$1" ]; then
   echo "Usage: $0 <service_name>"

@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 TOX_FLAGS =
 ifeq (1,$(RECREATE_ENVS))
   TOX_FLAGS += -r

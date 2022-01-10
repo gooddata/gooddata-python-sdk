@@ -1,4 +1,5 @@
 #!/bin/bash
+# (C) 2021 GoodData Corporation
 set -e
 set -x
 

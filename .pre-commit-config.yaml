@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
@@ -24,3 +25,12 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
+  - repo: local
+    hooks:
+      - id: copyright
+        name: Copyright
+        description: Scan for missing copyright
+        entry: scripts/check_copyright.py
+        args: ["--update", "FILES"]
+        language: script
+        types: [text]

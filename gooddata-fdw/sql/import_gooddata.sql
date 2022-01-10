@@ -1,3 +1,4 @@
+-- (C) 2021 GoodData Corporation
 CREATE OR REPLACE PROCEDURE execute_sql(
   sqlStatement VARCHAR,
   debug BOOLEAN DEFAULT FALSE

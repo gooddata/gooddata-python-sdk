@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 FROM postgres:12-alpine
 
 #

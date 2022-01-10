@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 from setuptools import find_packages, setup
 
 REQUIRES = [

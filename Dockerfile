@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 ARG PY_TAG
 FROM python:${PY_TAG}
 

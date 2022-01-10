@@ -1,3 +1,4 @@
+# (C) 2021 GoodData Corporation
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
 NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata*))
 # for each path, take only the base name of the path
@@ -64,3 +65,7 @@ test:
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \
 	tbump $(VERSION) --no-tag --no-push ; fi
+
+.PHONY: check-copyright
+check-copyright:
+	./scripts/check_copyright.py FOLDER
