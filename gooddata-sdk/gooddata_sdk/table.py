@@ -95,7 +95,6 @@ class ExecutionTable:
 
         return True
 
-    # TODO: spatne type resultu???
     def _read_all_metrics_in_one_row(self) -> Generator[dict[str, Any], None, None]:
         data = self._first_page.data
         cols = self.column_ids
