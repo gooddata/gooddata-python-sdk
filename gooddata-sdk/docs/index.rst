@@ -9,6 +9,8 @@ Welcome to GoodData SDK's documentation!
 .. include:: ../README.md
    :parser: myst_parser.sphinx_
 
+API documentation
+^^^^^^^^^^^^^^^^^
 Check out the :doc:`api` section for further information.
 
 .. toctree::
