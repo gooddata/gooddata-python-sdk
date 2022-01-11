@@ -56,4 +56,4 @@ test-ci:
 
 .PHONY: docs
 docs:
-	sphinx-build -W -b html docs docs/_build/html
+	tox $(TOX_FLAGS) -e docs
