@@ -1,3 +1,4 @@
+# (C) 2022 GoodData Corporation
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
