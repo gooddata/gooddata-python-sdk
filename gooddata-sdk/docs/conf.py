@@ -13,6 +13,8 @@
 import os
 import sys
 
+import gooddata_sdk
+
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath(".."))
 print(f"sys.path = {sys.path}")
@@ -25,7 +27,7 @@ copyright = "2021, GoodData Corporation"
 author = "GoodData Corporation"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = gooddata_sdk.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -62,8 +64,5 @@ html_static_path = ["_static"]
 
 source_suffix = {
     ".rst": "restructuredtext",
-    ".txt": "markdown",
     ".md": "markdown",
 }
-
-template_path = ["_templates"]

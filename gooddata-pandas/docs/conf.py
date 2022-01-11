@@ -13,6 +13,8 @@
 import os
 import sys
 
+import gooddata_pandas
+
 sys.path.insert(0, os.path.abspath(".."))
 print(f"sys.path = {sys.path}")
 print(f"os.getcwd() = {os.getcwd()}")
@@ -22,7 +24,7 @@ copyright = "2021, GoodData Corporation"
 author = "GoodData Corporation"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = gooddata_pandas.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -56,3 +58,8 @@ html_theme = "alabaster"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
