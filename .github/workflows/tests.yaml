@@ -11,97 +11,77 @@ on:
       - '*.mk'
       - 'Makefile'
 jobs:
-    unit-tests:
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          python_version: [py39, py38, py37]
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Execute tests
-          run: |
-            make test-ci
-          env:
-            TEST_ENVS: ${{ matrix.python_version }}
-    lint-and-format-check:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Set up Python 3.9
-          uses: actions/setup-python@v2
-          with:
-            python-version: 3.9
-            cache: 'pip'
-            cache-dependency-path: |
-              lint-requirements.txt
-              fmt-requirements.txt
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r lint-requirements.txt -r fmt-requirements.txt
-        - name: Pep8 check
-          run: |
-            make lint
-        - name: Formatting check
-          run: |
-            make format
-    types-check:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Set up Python 3.9
-          uses: actions/setup-python@v2
-          with:
-            python-version: 3.9
-            cache: 'pip'
-            cache-dependency-path: |
-              type-requirements.txt
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r type-requirements.txt
-        - name: mypy check
-          run: |
-            make mypy
-    docs-check:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Set up python 3.9
-          uses: actions/setup-python@v2
-          with:
-            python-version: 3.9
-            cache: 'pip'
-            cache-dependency-path: |
-              docs-requirements.txt
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r dev-requirements.txt
-        - name: Install clients
-          run: |
-              cd gooddata-scan-client
-              python setup.py install
-              cd ../gooddata-metadata-client
-              python setup.py install
-              cd ../gooddata-afm-client
-              python setup.py install
-        - name: Build sdk docs
-          run: |
-              cd gooddata-sdk
-              python setup.py install
-              sphinx-build -W -b html docs docs/build/html
-        - name: Build pandas docs
-          run: |
-              cd gooddata-pandas
-              python setup.py install
-              sphinx-build -W -b html docs docs/build/html
-        - name: Build fdw docs
-          run: |
-              cd gooddata-fdw
-              python setup.py install
-              sphinx-build -W -b html docs docs/build/html
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: [py39, py38, py37]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute tests
+        run: |
+          make test-ci
+        env:
+          TEST_ENVS: ${{ matrix.python_version }}
+  lint-and-format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            lint-requirements.txt
+            fmt-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r lint-requirements.txt -r fmt-requirements.txt
+      - name: Pep8 check
+        run: |
+          make lint
+      - name: Formatting check
+        run: |
+          make format
+  types-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            tox-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tox-requirements.txt
+      - name: mypy check
+        run: |
+          make mypy
+  docs-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            tox-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tox-requirements.txt
+      - name: Doc checks
+        run: |
+          make docs
