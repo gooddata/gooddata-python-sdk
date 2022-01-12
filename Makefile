@@ -39,15 +39,15 @@ clients: afm-client metadata-client scan-client
 
 .PHONY: afm-client
 afm-client:
-	scripts/generate_afm_client.sh
+	./scripts/generate_client.sh gooddata-afm-client
 
 .PHONY: metadata-client
 metadata-client:
-	scripts/generate_metadata_client.sh
+	./scripts/generate_client.sh gooddata-metadata-client
 
 .PHONY: scan-client
 scan-client:
-	scripts/generate_scan_client.sh
+	./scripts/generate_client.sh gooddata-scan-client
 
 .PHONY: mypy
 mypy:
