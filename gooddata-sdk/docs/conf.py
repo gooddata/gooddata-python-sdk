@@ -38,6 +38,7 @@ release = gooddata_sdk.__version__
 # ones.
 extensions = [
     "myst_parser",
+    "pallets_sphinx_themes",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
 ]
@@ -56,7 +57,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
+html_theme = "flask"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
