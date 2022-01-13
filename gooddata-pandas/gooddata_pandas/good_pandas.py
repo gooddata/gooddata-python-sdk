@@ -6,7 +6,7 @@ from typing import Optional
 from gooddata_pandas import __version__
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.series import SeriesFactory
-from gooddata_sdk import create_sdk
+from gooddata_sdk import GoodDataSdk
 
 USER_AGENT = f"gooddata-pandas/{__version__}"
 """Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""
@@ -18,7 +18,7 @@ class GoodPandas:
     """
 
     def __init__(self, host: str, token: str, headers_host: Optional[str] = None) -> None:
-        self._sdk = create_sdk(host, token, USER_AGENT, headers_host)
+        self._sdk = GoodDataSdk.create(host, token, USER_AGENT, Host=headers_host)
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 

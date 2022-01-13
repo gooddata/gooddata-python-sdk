@@ -10,7 +10,7 @@ from gooddata_fdw.executor import ExecutorFactory, InitData
 from gooddata_fdw.import_workspace import ImporterInitData, WorkspaceImportersLocator
 from gooddata_fdw.options import ImportSchemaOptions, ServerOptions, TableOptions
 from gooddata_fdw.pg_logging import _log_debug, _log_error, _log_info
-from gooddata_sdk import create_sdk
+from gooddata_sdk import GoodDataSdk
 
 USER_AGENT = f"gooddata-fdw/{__version__}"
 """Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""
@@ -26,8 +26,8 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
         self._table_options = TableOptions(options)
 
         self._columns = columns
-        gd_sdk = create_sdk(
-            self._server_options.host, self._server_options.token, USER_AGENT, self._server_options.headers_host
+        gd_sdk = GoodDataSdk.create(
+            self._server_options.host, self._server_options.token, USER_AGENT, Host=self._server_options.headers_host
         )
 
         self._executor = ExecutorFactory.create(InitData(gd_sdk, self._server_options, self._table_options, columns))
@@ -61,7 +61,9 @@ class GoodDataForeignDataWrapper(ForeignDataWrapper):
 
             importer_classes = WorkspaceImportersLocator.locate(import_options.object_type)
 
-            _sdk = create_sdk(server_options.host, server_options.token, USER_AGENT, server_options.headers_host)
+            _sdk = GoodDataSdk.create(
+                server_options.host, server_options.token, USER_AGENT, Host=server_options.headers_host
+            )
             init_data = ImporterInitData(_sdk, schema, server_options, import_options, restriction_type, restricts)
             tables = []
             for importer_class in importer_classes:

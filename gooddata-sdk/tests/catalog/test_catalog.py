@@ -16,7 +16,7 @@ gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "insurance_demo_catalog.json"))
 def test_catalog_load():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)
 
     # rough initial smoke-test; just do a quick 'rub'
@@ -32,7 +32,7 @@ def test_catalog_load():
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "insurance_demo_catalog_availability.json"))
 def test_catalog_availability():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)
     claim_count = catalog.get_metric("claim-count")
 

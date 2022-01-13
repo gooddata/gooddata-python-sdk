@@ -45,7 +45,7 @@ class GoodDataApiClient:
             header_name="Authorization",
             header_value=f"Bearer {token}",
         )
-        self._metadata_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        self._set_default_headers(self._metadata_client.default_headers)
         for header_name, header_value in self._custom_headers.items():
             self._metadata_client.default_headers[header_name] = header_value
         self._metadata_client.user_agent = user_agent
@@ -56,7 +56,7 @@ class GoodDataApiClient:
             header_name="Authorization",
             header_value=f"Bearer {token}",
         )
-        self._scan_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        self._set_default_headers(self._scan_client.default_headers)
         for header_name, header_value in self._custom_headers.items():
             self._scan_client.default_headers[header_name] = header_value
         self._scan_client.user_agent = user_agent
@@ -67,10 +67,15 @@ class GoodDataApiClient:
             header_name="Authorization",
             header_value=f"Bearer {token}",
         )
-        self._afm_client.default_headers["X-Requested-With"] = "XMLHttpRequest"
+        self._set_default_headers(self._afm_client.default_headers)
         for header_name, header_value in self._custom_headers.items():
             self._afm_client.default_headers[header_name] = header_value
         self._afm_client.user_agent = user_agent
+
+    @staticmethod
+    def _set_default_headers(headers: dict) -> None:
+        headers["X-Requested-With"] = "XMLHttpRequest"
+        headers["X-GDC-VALIDATE-RELATIONS"] = "true"
 
     @property
     def afm_client(self) -> afm_client.ApiClient:
