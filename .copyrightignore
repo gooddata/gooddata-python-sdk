@@ -64,6 +64,8 @@ var/**
 
 # Sphinx documentation
 docs/_build/**
+docs/_autosummary/**
+*.rst
 
 # PyBuilder
 target/**

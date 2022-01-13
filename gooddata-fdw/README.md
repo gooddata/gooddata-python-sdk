@@ -177,7 +177,7 @@ Push down is possible in case of custom tables and `compute` table, not in case 
 
 It is not possible to reference a column in WHERE clause, which is not used in SELECT section.
 Example:
-```sql92
+```sql
 SELECT label1, metric FROM insight WHERE label2 = 'a';
 SELECT label1, metric FROM compute WHERE label2 = 'a'
 ```

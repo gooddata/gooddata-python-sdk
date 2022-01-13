@@ -58,11 +58,30 @@ jobs:
           python-version: 3.9
           cache: 'pip'
           cache-dependency-path: |
-            type-requirements.txt
+            tox-requirements.txt
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r type-requirements.txt
+          pip install -r tox-requirements.txt
       - name: mypy check
         run: |
           make mypy
+  docs-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            tox-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tox-requirements.txt
+      - name: Doc checks
+        run: |
+          make docs

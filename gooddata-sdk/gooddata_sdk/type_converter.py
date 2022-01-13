@@ -223,7 +223,7 @@ class ConverterRegistryStore:
         Register Converter instance created from provided Converter class to given type and list of sub types.
         When sub types are not provided, converter is registered as the default one for given type.
         :param type_name: type name
-        :param class_: Converter class
+        :param class\\_: Converter class
         :param sub_types: list of sub types or None (default type Converter)
         """
         registry = cls._get_registry(type_name)

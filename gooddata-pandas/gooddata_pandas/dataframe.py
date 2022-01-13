@@ -23,14 +23,14 @@ class DataFrameFactory:
 
     There are several methods in place that should provide for convenient construction of data frames:
 
-    -  indexed() - calculate measure values sliced by one or more labels, indexed by those labels
-    -  not_indexed() - calculate measure values sliced by one or more labels, but not indexed by those labels,
-        label values will be part of the DataFrame and will be in the same row as the measure values calculated
-        for them
-    -  for_items() - calculate measure values for a one or more items which may be labels or measures. Depending
-        what items you specify, this method will create DataFrame with or without index
-    -  for_insight() - calculate DataFrame for insight created by GoodData.CN Analytical Designer. Depending
-        on what items are in the insight, this method will create DataFrame with or without index.
+        - indexed() - calculate measure values sliced by one or more labels, indexed by those labels
+        - not_indexed() - calculate measure values sliced by one or more labels, but not indexed by those labels,
+            label values will be part of the DataFrame and will be in the same row as the measure values calculated
+            for them
+        - for_items() - calculate measure values for a one or more items which may be labels or measures. Depending
+            what items you specify, this method will create DataFrame with or without index
+        - for_insight() - calculate DataFrame for insight created by GoodData.CN Analytical Designer. Depending
+            on what items are in the insight, this method will create DataFrame with or without index.
 
     Note that all of these methods have additional levels of convenience and flexibility so their purpose is not
     limited to just what is listed above.
@@ -58,14 +58,16 @@ class DataFrameFactory:
          - string representation of object identifier: 'label/some_label_id'
          - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id'),
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
+
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
          - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
-           'metric'
+         'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
-           ArithmeticMeasure
+         ArithmeticMeasure
         :param filter_by: filters to apply during computation on the server
+
         :return:
         """
         data, index = compute_and_extract(
@@ -91,12 +93,13 @@ class DataFrameFactory:
 
         :param columns: dict mapping column name to its definition; column may be specified as:
          - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
-           'metric'
+         - string representation of object identifier: '<type>/some_id' - where type is either 'label',
+         'fact' or 'metric'
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
-           ArithmeticMeasure
+         ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
+
         :return:
         """
 
@@ -111,25 +114,25 @@ class DataFrameFactory:
         Creates a data frame for a named items. This is a convenience method that will create DataFrame with or
         without index based on the context of the items that you pass.
 
-        -  If items contain labels and measures, then DataFrame with index will be created. If there is more than
-           one label among the items, then hierarchical index will be created.
+            - If items contain labels and measures, then DataFrame with index will be created. If there is more than
+               one label among the items, then hierarchical index will be created.
 
-           You can turn this behavior using 'auto_index' parameter.
+               You can turn this behavior using 'auto_index' parameter.
 
-        -  Otherwise DataFrame without index will be created and will contain column per item.
+            - Otherwise DataFrame without index will be created and will contain column per item.
 
         You may also optionally specify filters to apply during the computation on the server.
 
         :param items: dict mapping item name to its definition; item may be specified as:
-         - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
-           'metric'
-         - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
-           ArithmeticMeasure
+             - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
+             - string representation of object identifier: '<type>/some_id' - where type is either 'label',
+             'fact' or 'metric'
+             - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
+             - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
+             ArithmeticMeasure
         :param filter_by: optionally specify filters to apply during computation on the server
         :param auto_index: optionally force creation of DataFrame without index even if the contents of items make it
-        eligible for indexing
+            eligible for indexing
         """
         resolved_attr_cols: dict[str, LabelItemDef] = dict()
         resolved_measure_cols: ColumnsDef = dict()
@@ -166,20 +169,21 @@ class DataFrameFactory:
         This method will create DataFrame with or without index - depending on the contents of the insight. The
         rules are as follows:
 
-        -  if the insight contains both attributes and measures, it will be mapped to a DataFrame with index
-           -  if there are multiple attributes, hieararchical index (pandas.MultiIndex) will be used
-           -  otherwise a normal index will be used (pandas.Index)
-           -  you can use the option 'auto_index' argument to disable this logic and force no indexing
+            - if the insight contains both attributes and measures, it will be mapped to a DataFrame with index
+               - if there are multiple attributes, hieararchical index (pandas.MultiIndex) will be used
+               - otherwise a normal index will be used (pandas.Index)
+               - you can use the option 'auto_index' argument to disable this logic and force no indexing
 
-        -  if the insight contains either only attributes or only measures, then DataFrame will not be indexed
-           and all attribute or measures values will be used as data.
+            - if the insight contains either only attributes or only measures, then DataFrame will not be indexed
+              and all attribute or measures values will be used as data.
 
            Note that if the insight consists of single measure only, the resulting data frame is guaranteed to have
            single 'row' of data with one column per measure.
 
         :param insight_id: insight identifier
         :param auto_index: optionally force creation of DataFrame without index even if the data in the insight is
-        eligible for indexing
+            eligible for indexing
+
         :return:
         """
         naming = DefaultInsightColumnNaming()

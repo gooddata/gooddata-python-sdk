@@ -53,3 +53,7 @@ test:
 .PHONY: test-ci
 test-ci:
 	TEST_CI_PROJECT=$(CURR_DIR_BASE_NAME) $(MAKE) -C .. -f ci_tests.mk test-ci
+
+.PHONY: docs
+docs:
+	tox $(TOX_FLAGS) -e docs

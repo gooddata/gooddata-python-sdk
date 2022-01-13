@@ -33,8 +33,8 @@ except ImportError as e:
     # which will then try to import from this file before the variable is even set
     import sys
 
-    if "pytest" not in sys.modules:
-        # multicorn stuff cannot be imported & the FDW code is not currently under test.
+    if "pytest" not in sys.modules and "sphinx" not in sys.modules:
+        # multicorn stuff cannot be imported & the FDW code is not currently under test or as documentation build.
         # in that case raise the error normally.
         raise e
 
