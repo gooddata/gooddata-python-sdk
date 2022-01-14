@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-import os
+from pathlib import Path
 
 import vcr
 from numpy import float64
@@ -8,13 +8,13 @@ from gooddata_pandas import SeriesFactory
 from gooddata_sdk import ObjId, PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series.json"))
 def test_not_indexed_metric_series(gds: SeriesFactory):
     series = gds.not_indexed(data_by="fact/region.region_crime_rate")
 
@@ -23,7 +23,7 @@ def test_not_indexed_metric_series(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_label_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series.json"))
 def test_not_index_label_series(gds: SeriesFactory):
     series = gds.not_indexed(data_by="label/region.region_name")
 
@@ -32,7 +32,7 @@ def test_not_index_label_series(gds: SeriesFactory):
     assert series[23] == "Zürich"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metric_series_with_granularity.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series_with_granularity.json"))
 def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
         granularity=dict(reg="label/region.region_name"),
@@ -43,7 +43,7 @@ def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_label_series_with_granularity.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series_with_granularity.json"))
 def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
         granularity=dict(reg="label/region.region_name"),
@@ -56,7 +56,7 @@ def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     assert len(series) > len(TEST_DATA_REGIONS)
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_filtered_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_filtered_metric_series.json"))
 def test_not_indexed_filtered_metric_series(gds: SeriesFactory):
     # crime rate across all regions
     not_filtered_series = gds.not_indexed(data_by="fact/region.region_crime_rate")

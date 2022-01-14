@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-import os
+from pathlib import Path
 
 import vcr
 
@@ -7,13 +7,13 @@ from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metrics.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metrics.json"))
 def test_not_indexed_metrics(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
@@ -28,7 +28,7 @@ def test_not_indexed_metrics(gdf: DataFrameFactory):
     assert df.columns[1] == "safety_scale"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metrics_and_labels.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metrics_and_labels.json"))
 def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
@@ -45,7 +45,7 @@ def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
     assert df.columns[2] == "safety_scale"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_filtered_metrics_and_labels.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_filtered_metrics_and_labels.json"))
 def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(

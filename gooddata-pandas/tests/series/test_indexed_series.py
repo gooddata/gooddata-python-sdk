@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-import os
+from pathlib import Path
 
 import vcr
 from numpy import float64
@@ -8,13 +8,13 @@ from gooddata_pandas import SeriesFactory
 from gooddata_sdk import PositiveAttributeFilter
 from tests import TEST_DATA_REGIONS
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metric_series.json"))
 def test_simple_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name"),
@@ -25,7 +25,7 @@ def test_simple_index_metric_series(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_label_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_label_series.json"))
 def test_simple_index_label_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name"),
@@ -36,7 +36,7 @@ def test_simple_index_label_series(gds: SeriesFactory):
     assert series["Bern"] == "BE"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "simple_index_filtered_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_series.json"))
 def test_simple_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name"),
@@ -48,7 +48,7 @@ def test_simple_index_filtered_series(gds: SeriesFactory):
     assert series["Bern"] == "BE"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metric_series.json"))
 def test_multi_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
@@ -63,7 +63,7 @@ def test_multi_index_metric_series(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "multi_index_filtered_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_series.json"))
 def test_multi_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),

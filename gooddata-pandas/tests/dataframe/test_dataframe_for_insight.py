@@ -1,12 +1,12 @@
 # (C) 2021 GoodData Corporation
-import os
+from pathlib import Path
 
 import vcr
 
 from gooddata_pandas import DataFrameFactory
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
 gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
 
@@ -16,7 +16,7 @@ Simple insight with 2 labels and one metric
 """
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "dataframe_for_insight.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_insight.json"))
 def test_dataframe_for_insight(gdf: DataFrameFactory):
     df = gdf.for_insight(insight_id=_PREMIUM_REVENUE_STRUCTURE)
 
@@ -25,7 +25,7 @@ def test_dataframe_for_insight(gdf: DataFrameFactory):
     assert df.columns[0] == "premium-revenue"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "dataframe_for_insight_no_index.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_insight_no_index.json"))
 def test_dataframe_for_insight_no_index(gdf: DataFrameFactory):
     df = gdf.for_insight(insight_id=_PREMIUM_REVENUE_STRUCTURE, auto_index=False)
 
