@@ -18,10 +18,10 @@ import gooddata_fdw.options as options
     ],
     ids=["custom", "insight", "insight-priority", "compute"],
 )
-def test_executor_factory(import_srv_options, table_options, expected_executor):
+def test_executor_factory(test_config, table_options, expected_executor):
     inputs = executor.InitData(
         mock.Mock(name="sdk"),
-        options.ServerOptions(import_srv_options),
+        options.ServerOptions(dict(host=test_config["host"], token=test_config["token"])),
         options.TableOptions(table_options),
         mock.Mock(name="table_columns"),
     )
