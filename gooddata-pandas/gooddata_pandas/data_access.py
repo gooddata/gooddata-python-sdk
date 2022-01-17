@@ -3,7 +3,15 @@ from __future__ import annotations
 
 from typing import Any, Optional, Union
 
-from gooddata_pandas.utils import ColumnsDef, IndexDef, _str_to_obj_id, _to_attribute, _to_item, _typed_attribute_value
+from gooddata_pandas.utils import (
+    ColumnsDef,
+    IndexDef,
+    LabelItemDef,
+    _str_to_obj_id,
+    _to_attribute,
+    _to_item,
+    _typed_attribute_value,
+)
 from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric, ObjId
 from gooddata_sdk.compute_model import AttributeFilter, MetricValueFilter
 
@@ -59,26 +67,21 @@ class ExecutionDefinitionBuilder:
         if index_by is None:
             return
 
-        if isinstance(index_by, str) and (index_by in self._col_to_attr_idx):
-            # known attribute, use it
-            self._index_to_attr_idx[self._DEFAULT_INDEX_NAME] = self._col_to_attr_idx[index_by]
-        elif isinstance(index_by, str) and (index_by in self._col_to_metric_idx):
-            # known Metric - index_by cannot be a metric
-            raise ValueError(f"Invalid index_col item {index_by}, type={type(self._col_to_metric_idx[index_by])}")
+        if not isinstance(index_by, dict):
+            _index_by = {self._DEFAULT_INDEX_NAME: index_by}
         else:
-            if not isinstance(index_by, dict):
-                _index_by = {self._DEFAULT_INDEX_NAME: index_by}
-            else:
-                _index_by = index_by
+            _index_by = index_by
 
-            for index_name, index_def in _index_by.items():
-                attr_item = _to_attribute(index_def)
-                attr_index = self._find_attribute_index(attr_item)
-                if attr_index is not None:
-                    self._index_to_attr_idx[index_name] = attr_index
-                else:
-                    self._index_to_attr_idx[index_name] = len(self._attributes)
-                    self._attributes.append(attr_item)
+        for index_name, index_def in _index_by.items():
+            if isinstance(index_def, str) and (index_def in self._col_to_attr_idx):
+                # known attribute defined in columns referenced by the column key
+                attr_index = self._col_to_attr_idx[index_def]
+                self._index_to_attr_idx[index_name] = attr_index
+            elif isinstance(index_def, str) and (index_def in self._col_to_metric_idx):
+                # known metric defined in columns referenced by the column key - index_by cannot be a metric
+                raise ValueError(f"Invalid index_col item {index_def}, type={type(self._col_to_metric_idx[index_def])}")
+            else:
+                self._process_index_item_without_col_ref(index_name, index_def)
 
     def _find_attribute_index(self, item: Attribute) -> Union[int | None]:
         existing_attr_idx = next(
@@ -86,6 +89,20 @@ class ExecutionDefinitionBuilder:
             None,
         )
         return existing_attr_idx
+
+    def _process_index_item_without_col_ref(self, index_name: str, index_def: LabelItemDef) -> None:
+        norm_index_def = index_def
+        if isinstance(index_def, str) and (not index_def.startswith("label/")):
+            # it is not a obj id in string form - consider it label_id and extend it to obj id string form
+            norm_index_def = f"label/{index_def}"
+        attr_item = _to_attribute(norm_index_def)
+        attr_index = self._find_attribute_index(attr_item)
+
+        if attr_index is not None:
+            self._index_to_attr_idx[index_name] = attr_index
+        else:
+            self._index_to_attr_idx[index_name] = len(self._attributes)
+            self._attributes.append(attr_item)
 
     def _update_filter_ids(self, filter_by: Optional[Union[Filter, list[Filter]]] = None) -> Optional[list[Filter]]:
         filters = [filter_by] if isinstance(filter_by, Filter) else filter_by

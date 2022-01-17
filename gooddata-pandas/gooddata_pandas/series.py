@@ -42,7 +42,14 @@ class SeriesFactory:
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
 
-        :param filter_by: optionally specify filter to apply during computation on the server
+        :param filter_by: optionally specify filter to apply during computation on the server, reference to filtering
+            column can be one of:
+            - string reference to index key
+            - object identifier in string form
+            - object identifier: ObjId(id='some_label_id', type='<type>')
+            - Attribute or Metric depending on type of filter
+
+        :return pandas series instance
         """
         data, index = compute_and_extract(
             self._sdk,
@@ -86,7 +93,13 @@ class SeriesFactory:
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above;
            this option is available so that you can easily switch from indexed factory method to this one if needed
 
-        :param filter_by: optionally specify filter to apply during computation on the server
+        :param filter_by: optionally specify filter to apply during computation on the server, reference to filtering
+            column can be one of:
+            - object identifier in string form
+            - object identifier: ObjId(id='some_label_id', type='<type>')
+            - Attribute or Metric depending on type of filter
+
+        :return pandas series instance
         """
 
         if isinstance(granularity, list):
