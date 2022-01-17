@@ -1,13 +1,13 @@
-# (C) 2021 GoodData Corporation
-#
+# (C) 2022 GoodData Corporation
+# docker-compose.yaml is dedicated to testing. All the tests are expected to be passing
+# against this docker compose.
 
 version: '3.7'
 
 services:
   gooddata-cn-ce:
-    # dev_latest tag represents weekly builds, which may be unstable.
-    # Feel free to use stable releases represented by tags like 1.5.0
-    image: gooddata/gooddata-cn-ce:dev_latest
+    # Use stable releases represented by tags like 1.5
+    image: gooddata/gooddata-cn-ce:1.5
     ports:
       - "3000:3000"
       - "5432:5432"
@@ -19,7 +19,7 @@ services:
 
   gooddata-fdw:
     build:
-      context: ../
+      context: .
       dockerfile: gooddata-fdw/Dockerfile
     ports:
       - "2543:5432"
@@ -28,6 +28,19 @@ services:
       POSTGRES_USER: gooddata
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD-gooddata123}"
     command: ["postgres", "-c", "shared_preload_libraries=foreign_table_exposer", "-c", "log_statement=all", "-c", "client_min_messages=DEBUG1", "-c", "log_min_messages=DEBUG1"]
+
+  upload-layout:
+    build:
+      context: .
+      dockerfile: tests-support/Dockerfile
+    volumes:
+      - ./tests-support/fixtures:/app/fixtures
+    environment:
+      FIXTURES_DIR: /app/fixtures
+      HOST: "http://gooddata-cn-ce:3000"
+      HEADER_HOST: localhost
+    command: ["python3", "upload_demo_layout.py"]
+
 
 volumes:
   gooddata-cn-ce-data:
