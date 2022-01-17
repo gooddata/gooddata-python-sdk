@@ -7,7 +7,6 @@
             }
         },
         "operator": "EQUAL_TO",
-        "treat_null_values_as": null,
         "value": 10.0
     }
 }

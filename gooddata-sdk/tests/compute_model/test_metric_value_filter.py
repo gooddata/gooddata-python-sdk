@@ -57,6 +57,6 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
     snapshot.snapshot_dir = os.path.join(_current_dir, "metric_value_filter")
 
     snapshot.assert_match(
-        json.dumps(filter.as_api_model().to_dict(), indent=4, sort_keys=True),
+        json.dumps(filter.as_api_model().to_dict(), indent=4, sort_keys=True) + "\n",
         _scenario_to_snapshot_name(scenario),
     )

@@ -4,7 +4,6 @@
             "local_identifier": "local_id1"
         },
         "operator": "EQUAL_TO",
-        "treat_null_values_as": null,
         "value": 10.0
     }
 }

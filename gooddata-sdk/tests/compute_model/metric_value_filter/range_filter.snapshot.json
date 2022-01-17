@@ -5,7 +5,6 @@
             "local_identifier": "local_id1"
         },
         "operator": "BETWEEN",
-        "to": 3,
-        "treat_null_values_as": null
+        "to": 3
     }
 }
