@@ -3,15 +3,127 @@ from __future__ import annotations
 
 from typing import Any, Optional, Union
 
-from gooddata_pandas.utils import (
-    ColumnsDef,
-    IndexDef,
-    _resolve_identifiers_in_filters,
-    _to_attribute,
-    _to_item,
-    _typed_attribute_value,
-)
+from gooddata_pandas.utils import ColumnsDef, IndexDef, _str_to_obj_id, _to_attribute, _to_item, _typed_attribute_value
 from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric, ObjId
+from gooddata_sdk.compute_model import AttributeFilter, MetricValueFilter
+
+
+class ExecutionDefinitionBuilder:
+    _DEFAULT_INDEX_NAME: str = "0"
+
+    def __init__(self, columns: ColumnsDef, index_by: Optional[IndexDef] = None) -> None:
+        self._attributes: list[Attribute] = []
+        self._metrics: list[Metric] = []
+        self._col_to_attr_idx: dict[str, int] = dict()
+        self._index_to_attr_idx: dict[str, int] = dict()
+        self._col_to_metric_idx: dict[str, int] = dict()
+
+        self._process_columns(columns)
+        self._process_index(index_by)
+
+    @property
+    def col_to_attr_idx(self) -> dict[str, int]:
+        return self._col_to_attr_idx
+
+    @property
+    def index_to_attr_idx(self) -> dict[str, int]:
+        return self._index_to_attr_idx
+
+    @property
+    def col_to_metric_idx(self) -> dict[str, int]:
+        return self._col_to_metric_idx
+
+    def _process_columns(self, columns: ColumnsDef) -> None:
+        for column_name, column_def in columns.items():
+            self._add_column(column_name, column_def)
+
+    def _add_column(self, column_name: str, column_def: Union[str, Attribute, Metric, ObjId]) -> None:
+        item = _to_item(column_def)
+        if isinstance(item, Attribute):
+            # prevent double-add for attributes that are using same labels. this has no real effect on the result
+            # apart from extra load/size of the result that would contain the duplicates.
+            #
+            # this may typically happen when same labels are used for indexing & data
+            attr_index = self._find_attribute_index(item)
+
+            if attr_index is not None:
+                self._col_to_attr_idx[column_name] = attr_index
+            else:
+                self._col_to_attr_idx[column_name] = len(self._attributes)
+                self._attributes.append(item)
+        elif isinstance(item, Metric):
+            self._col_to_metric_idx[column_name] = len(self._metrics)
+            self._metrics.append(item)
+
+    def _process_index(self, index_by: Optional[IndexDef] = None) -> None:
+        if index_by is None:
+            return
+
+        if isinstance(index_by, str) and (index_by in self._col_to_attr_idx):
+            # known attribute, use it
+            self._index_to_attr_idx[self._DEFAULT_INDEX_NAME] = self._col_to_attr_idx[index_by]
+        elif isinstance(index_by, str) and (index_by in self._col_to_metric_idx):
+            # known Metric - index_by cannot be a metric
+            raise ValueError(f"Invalid index_col item {index_by}, type={type(self._col_to_metric_idx[index_by])}")
+        else:
+            if not isinstance(index_by, dict):
+                _index_by = {self._DEFAULT_INDEX_NAME: index_by}
+            else:
+                _index_by = index_by
+
+            for index_name, index_def in _index_by.items():
+                attr_item = _to_attribute(index_def)
+                attr_index = self._find_attribute_index(attr_item)
+                if attr_index is not None:
+                    self._index_to_attr_idx[index_name] = attr_index
+                else:
+                    self._index_to_attr_idx[index_name] = len(self._attributes)
+                    self._attributes.append(attr_item)
+
+    def _find_attribute_index(self, item: Attribute) -> Union[int | None]:
+        existing_attr_idx = next(
+            (idx for idx, attr in enumerate(self._attributes) if item.has_same_label(attr)),
+            None,
+        )
+        return existing_attr_idx
+
+    def _update_filter_ids(self, filter_by: Optional[Union[Filter, list[Filter]]] = None) -> Optional[list[Filter]]:
+        filters = [filter_by] if isinstance(filter_by, Filter) else filter_by
+        if filters:
+            for _filter in filters:
+                if isinstance(_filter, AttributeFilter) and isinstance(_filter.label, str):
+                    if _filter.label in self._col_to_attr_idx:
+                        _filter.label = self._attributes[self._col_to_attr_idx[_filter.label]].label
+                    elif _filter.label in self._index_to_attr_idx:
+                        _filter.label = self._attributes[self._index_to_attr_idx[_filter.label]].label
+                    elif _filter.label in self._col_to_metric_idx:
+                        raise ValueError(f"AttributeFilter instance referencing metric [{_filter.label}]")
+                    else:
+                        _filter.label = _str_to_obj_id(_filter.label) or _filter.label
+                elif isinstance(_filter, MetricValueFilter) and isinstance(_filter.metric, str):
+                    if _filter.metric in self._col_to_metric_idx:
+                        # Metric is referenced by local_id which was already generated during creation of columns
+                        # When Metric filter contains ObjId reference, it does not need to be modified
+                        _filter.metric = self._metrics[self._col_to_metric_idx[_filter.metric]].local_id
+
+        return filters
+
+    def build_execution_definition(
+        self, filter_by: Optional[Union[Filter, list[Filter]]] = None
+    ) -> ExecutionDefinition:
+        dimensions = [
+            ["measureGroup"] if len(self._metrics) else None,
+            [a.local_id for a in self._attributes] if len(self._attributes) else None,
+        ]
+
+        filters = self._update_filter_ids(filter_by)
+
+        return ExecutionDefinition(
+            attributes=self._attributes,
+            metrics=self._metrics,
+            filters=filters,
+            dimensions=dimensions,
+        )
 
 
 def _compute(
@@ -43,72 +155,15 @@ def _compute(
     -  pandas col name to index where headers appear in metric dimension
     -  pandas index name to index where headers appear in the attribute dimension
     """
-    if isinstance(index_by, dict):
-        _index_by = index_by
-    elif isinstance(index_by, (str, Attribute, ObjId)):
-        _index_by = {"0": index_by}
-    else:
-        _index_by = dict()
 
-    attributes: list[Attribute] = []
-    metrics: list[Metric] = []
-    col_to_attr_idx = dict()
-    index_to_attr_idx = dict()
-    col_to_metric_idx = dict()
-
-    for index_name, index_col in _index_by.items():
-        if isinstance(index_col, str) and index_col in columns.keys():
-            entity = columns[index_col]
-            if isinstance(entity, (str, ObjId, Attribute)):
-                # Index references column name from columns, take object identification from there
-                attr_item = _to_attribute(entity)
-            else:
-                raise ValueError(f"Invalid index_col item {index_col}, type={type(entity)}")
-        else:
-            attr_item = _to_attribute(index_col)
-        index_to_attr_idx[index_name] = len(attributes)
-        attributes.append(attr_item)
-
-    for col_name, col in columns.items():
-        item = _to_item(col)
-        if isinstance(item, Attribute):
-            # prevent double-add for attributes that are using same labels. this has no real effect on the result
-            # apart from extra load/size of the result that would contain the duplicates.
-            #
-            # this may typically happen when same labels are used for indexing & data
-            existing_attr_idx = next(
-                (idx for idx, attr in enumerate(attributes) if item.has_same_label(attr)),
-                None,
-            )
-
-            if existing_attr_idx is not None:
-                col_to_attr_idx[col_name] = existing_attr_idx
-            else:
-                col_to_attr_idx[col_name] = len(attributes)
-                attributes.append(item)
-        elif isinstance(item, Metric):
-            col_to_metric_idx[col_name] = len(metrics)
-            metrics.append(item)
-
-    dimensions = [
-        ["measureGroup"] if len(metrics) else None,
-        [a.local_id for a in attributes] if len(attributes) else None,
-    ]
-
-    filters = _resolve_identifiers_in_filters(columns, filter_by)
-
-    exec_def = ExecutionDefinition(
-        attributes=attributes,
-        metrics=metrics,
-        filters=filters,
-        dimensions=dimensions,
-    )
+    builder = ExecutionDefinitionBuilder(columns, index_by)
+    exec_def = builder.build_execution_definition(filter_by)
 
     return (
         sdk.compute.for_exec_def(workspace_id, exec_def),
-        col_to_attr_idx,
-        col_to_metric_idx,
-        index_to_attr_idx,
+        builder.col_to_attr_idx,
+        builder.col_to_metric_idx,
+        builder.index_to_attr_idx,
     )
 
 
