@@ -2,10 +2,9 @@
 import pytest
 
 from gooddata_pandas import DataFrameFactory, GoodPandas
-from tests import TEST_HOST, TEST_WORKSPACE, get_test_token
 
 
 @pytest.fixture
-def gdf() -> DataFrameFactory:
-    gdpd = GoodPandas(host=TEST_HOST, token=get_test_token())
-    return gdpd.data_frames(TEST_WORKSPACE)
+def gdf(test_config) -> DataFrameFactory:
+    gdpd = GoodPandas(host=test_config["host"], token=test_config["token"])
+    return gdpd.data_frames(test_config["workspace"])

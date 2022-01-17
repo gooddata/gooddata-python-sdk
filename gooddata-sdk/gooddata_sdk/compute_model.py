@@ -618,29 +618,24 @@ class MetricValueFilter(Filter):
     def as_api_model(self) -> Union[afm_models.ComparisonMeasureValueFilter, afm_models.RangeMeasureValueFilter]:
         measure = _to_identifier(self._metric)
 
-        if _METRIC_VALUE_FILTER_OPERATORS[self.operator] == "comparison":
-            body = afm_models.ComparisonMeasureValueFilterBody(
-                measure=measure,
-                operator=self.operator,
-                value=self.values[0],
-                treat_null_values_as=self.treat_nulls_as,
-                _check_type=False,
-            )
+        kwargs = dict(
+            measure=measure,
+            operator=self.operator,
+            _check_type=False,
+        )
+        if self.treat_nulls_as is not None:
+            kwargs["treat_null_values_as"] = self.treat_nulls_as
 
+        if _METRIC_VALUE_FILTER_OPERATORS[self.operator] == "comparison":
+            kwargs["value"] = self.values[0]
+
+            body = afm_models.ComparisonMeasureValueFilterBody(**kwargs)
             return afm_models.ComparisonMeasureValueFilter(body)
         else:
-            _from = min(self.values)
-            to = max(self.values)
+            kwargs["_from"] = min(self.values)
+            kwargs["to"] = max(self.values)
 
-            body = afm_models.RangeMeasureValueFilterBody(
-                measure=measure,
-                operator=self.operator,
-                _from=_from,
-                to=to,
-                treat_null_values_as=self.treat_nulls_as,
-                _check_type=False,
-            )
-
+            body = afm_models.RangeMeasureValueFilterBody(**kwargs)
             return afm_models.RangeMeasureValueFilter(body)
 
 

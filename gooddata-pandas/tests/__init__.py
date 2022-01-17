@@ -1,8 +1,7 @@
 # (C) 2021 GoodData Corporation
 from dotenv import dotenv_values, find_dotenv
 
-TEST_HOST = "https://insurance-dev.anywhere.gooddata.com"
-TEST_WORKSPACE = "insurance-demo"
+VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
 
 
 def _load_test_env():

@@ -1,69 +1,68 @@
 # (C) 2021 GoodData Corporation
-import os
+from pathlib import Path
 
 import vcr
 from numpy import float64
 
 from gooddata_pandas import SeriesFactory
 from gooddata_sdk import ObjId, PositiveAttributeFilter
-from tests import TEST_DATA_REGIONS
+from tests import VCR_MATCH_ON
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series.json"))
 def test_not_indexed_metric_series(gds: SeriesFactory):
-    series = gds.not_indexed(data_by="fact/region.region_crime_rate")
+    series = gds.not_indexed(data_by="fact/order_lines.price")
 
     # having metric with no granularity will return series with single item
     assert len(series) == 1
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_label_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series.json"))
 def test_not_index_label_series(gds: SeriesFactory):
-    series = gds.not_indexed(data_by="label/region.region_name")
+    series = gds.not_indexed(data_by="label/customers.region")
 
-    assert len(series) == len(TEST_DATA_REGIONS)
-    assert series[0] == "Aargau"
-    assert series[23] == "Zürich"
+    assert len(series) == 5
+    assert series[0] == "Midwest"
+    assert series[4] == "West"
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_metric_series_with_granularity.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series_with_granularity.json"))
 def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/region.region_name"),
-        data_by="fact/region.region_crime_rate",
+        granularity=dict(reg="label/customers.region"),
+        data_by="fact/order_lines.price",
     )
 
-    assert len(series) == len(TEST_DATA_REGIONS)
+    assert len(series) == 5
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_label_series_with_granularity.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series_with_granularity.json"))
 def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/region.region_name"),
-        data_by="label/product.product_name",
+        granularity=dict(reg="label/customers.region"),
+        data_by="label/products.category",
     )
 
     # just a rough rub; getting series of products on the region granularity leads to series containing
-    # an assorted listing of products used in the different regions. there is 1:N relationship there. just
-    # checking the series is longer than number of regions
-    assert len(series) > len(TEST_DATA_REGIONS)
+    # an assorted listing of products used in the different regions. there is 1:N relationship there.
+    assert len(series) == 17
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "not_indexed_filtered_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_filtered_metric_series.json"))
 def test_not_indexed_filtered_metric_series(gds: SeriesFactory):
-    # crime rate across all regions
-    not_filtered_series = gds.not_indexed(data_by="fact/region.region_crime_rate")
-    # crime rate just in Bern
+    # price across all regions
+    not_filtered_series = gds.not_indexed(data_by="fact/order_lines.price")
+    # price just in Unknown
     filtered_series = gds.not_indexed(
-        data_by="fact/region.region_crime_rate",
-        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="region.region_name"), values=["Bern"]),
+        data_by="fact/order_lines.price",
+        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="customers.region"), values=["Unknown"]),
     )
 
     # having metric with no granularity will return series with single item

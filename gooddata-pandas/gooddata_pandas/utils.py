@@ -8,17 +8,7 @@ from typing import Any, Dict, Optional, Union
 import pandas
 from pandas.core.index import Index, MultiIndex
 
-from gooddata_sdk import (
-    Attribute,
-    CatalogAttribute,
-    Filter,
-    InsightAttribute,
-    InsightMetric,
-    Metric,
-    ObjId,
-    SimpleMetric,
-)
-from gooddata_sdk.compute_model import AttributeFilter, MetricValueFilter
+from gooddata_sdk import Attribute, CatalogAttribute, InsightAttribute, InsightMetric, Metric, ObjId, SimpleMetric
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
 
 LabelItemDef = Union[Attribute, ObjId, str]
@@ -84,25 +74,6 @@ def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribut
         raise ValueError(f"Invalid attribute input: {val}")
 
 
-def _resolve_identifiers_in_filters(
-    columns: ColumnsDef,
-    filter_by: Optional[Union[Filter, list[Filter]]] = None,
-) -> Optional[list[Filter]]:
-    filters = [filter_by] if isinstance(filter_by, Filter) else filter_by
-    if filters:
-        for _filter in filters:
-            if isinstance(_filter, AttributeFilter) and isinstance(_filter.label, str):
-                if _filter.label in columns.keys():
-                    _filter.label = _str_to_obj_id(columns[_filter.label]) or _filter.label
-                else:
-                    _filter.label = _str_to_obj_id(_filter.label) or _filter.label
-            elif isinstance(_filter, MetricValueFilter) and isinstance(_filter.metric, str):
-                if _filter.metric in columns.keys():
-                    _filter.metric = _str_to_obj_id(columns[_filter.metric]) or _filter.metric
-
-    return filters
-
-
 def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
     converter = AttributeConverterStore.find_converter(ct_attr.dataset.data_type, ct_attr.granularity)
     return converter.to_external_type(value)
@@ -110,7 +81,8 @@ def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
 
 def make_pandas_index(index: dict) -> Optional[Union[Index, MultiIndex]]:
     if len(index) == 1:
-        _idx = pandas.Index(list(index.values())[0])
+        index_key = list(index.keys())[0]
+        _idx = pandas.Index(index[index_key], name=index_key)
     elif len(index) > 1:
         _idx = pandas.MultiIndex.from_arrays(list(index.values()), names=list(index.keys()))
     else:
