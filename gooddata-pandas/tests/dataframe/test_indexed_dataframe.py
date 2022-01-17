@@ -6,19 +6,19 @@ import vcr
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import Attribute, MetricValueFilter, ObjId, PositiveAttributeFilter
-from tests import TEST_DATA_REGIONS
+from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 index_types = [
-    "region_name",
-    "label/region.region_name",
-    dict(reg="label/region.region_name"),
-    Attribute(local_id="abcd", label=ObjId(id="region.region_name", type="label")),
-    ObjId(id="region.region_name", type="label"),
+    "region",
+    "label/customers.region",
+    dict(reg="label/customers.region"),
+    Attribute(local_id="abcd", label=ObjId(id="customers.region", type="label")),
+    ObjId(id="customers.region", type="label"),
 ]
 
 
@@ -28,137 +28,139 @@ def test_simple_index_metrics(gdf: DataFrameFactory, index):
     df = gdf.indexed(
         index_by=index,
         columns=dict(
-            region_name="label/region.region_name",
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
+            region="label/customers.region",
+            category="label/products.category",
+            price="fact/order_lines.price",
         ),
     )
 
-    assert len(df) == len(TEST_DATA_REGIONS)
+    assert len(df) == 17
     assert len(df.columns) == 3
-    assert df.columns[0] == "region_name"
-    assert df.columns[1] == "crime_rate"
-    assert df.columns[2] == "safety_scale"
+    assert df.columns[0] == "region"
+    assert df.columns[1] == "category"
+    assert df.columns[2] == "price"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_no_duplicate.json"))
 def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by="label/region.region_name",
+        index_by="label/customers.region",
         columns=dict(
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
+            price="fact/order_lines.price",
+            quantity="fact/order_lines.quantity",
         ),
     )
 
-    assert len(df) == len(TEST_DATA_REGIONS)
+    assert len(df) == 5
     assert len(df.columns) == 2
-    assert df.columns[0] == "crime_rate"
-    assert df.columns[1] == "safety_scale"
+    assert df.columns[0] == "price"
+    assert df.columns[1] == "quantity"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_and_label.json"))
 def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
     columns = {
-        "Crime rate": "fact/region.region_crime_rate",
-        "Safety scale ($special$%^&)": "fact/region.region_safety_scale",
-        "Region code ($special$%^&)": "label/region.region_code",
+        "Price": "fact/order_lines.price",
+        "Quantity ($special$%^&)": "fact/order_lines.quantity",
+        "Region code ($special$%^&)": "label/customers.region",
     }
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name"),
+        index_by=dict(reg="label/customers.region"),
         columns=columns,
     )
 
-    assert len(df) == len(TEST_DATA_REGIONS)
+    assert len(df) == 5
     assert len(df.columns) == 3
-    assert df.columns[0] == "Crime rate"
-    assert df.columns[1] == "Safety scale ($special$%^&)"
-    assert df.columns[2] == "Region code ($special$%^&)"
+    for df_col_name, col_name in zip(df.columns, columns.keys()):
+        assert df_col_name == col_name
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_metrics_and_label.json"))
 def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name"),
+        index_by=dict(reg="label/customers.region"),
         columns=dict(
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
-            region_code="label/region.region_code",
+            price="fact/order_lines.price",
+            quantity="fact/order_lines.quantity",
+            category="label/products.category",
         ),
         filter_by=[
             # Label referenced by localIdentifier
-            PositiveAttributeFilter(label="reg", values=["Bern"]),
+            PositiveAttributeFilter(label="reg", values=["Midwest"]),
             # Label referenced by full ID
-            PositiveAttributeFilter(label="label/region.region_name", values=["Bern"]),
+            PositiveAttributeFilter(label="label/customers.region", values=["Midwest"]),
             # Label referenced by ObjId
-            PositiveAttributeFilter(label=ObjId(id="region.region_name", type="label"), values=["Bern"]),
+            PositiveAttributeFilter(label=ObjId(id="customers.region", type="label"), values=["Midwest"]),
             # label referenced by index in columns
-            PositiveAttributeFilter(label="region_code", values=["BE"]),
-            MetricValueFilter(metric="crime_rate", operator="GREATER_THAN", values=0),
+            PositiveAttributeFilter(label="category", values=["Clothing"]),
+            MetricValueFilter(metric="price", operator="GREATER_THAN", values=100),
         ],
     )
 
     assert len(df) == 1
     assert len(df.columns) == 3
-    assert df.columns[0] == "crime_rate"
-    assert df.columns[1] == "safety_scale"
-    assert df.columns[2] == "region_code"
+    assert df.columns[0] == "price"
+    assert df.columns[1] == "quantity"
+    assert df.columns[2] == "category"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics.json"))
 def test_multi_index_metrics(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
-        columns=dict(claim_amount="metric/claim-amount", claim_count="metric/claim-count"),
+        index_by=dict(reg="label/customers.region", category="label/products.category"),
+        columns=dict(order_amount="metric/order_amount", order_count="metric/amount_of_orders"),
     )
 
-    assert len(df) > len(TEST_DATA_REGIONS)
+    assert len(df) == 17
     assert len(df.columns) == 2
     assert df.index.names[0] == "reg"
-    assert df.index.names[1] == "prod"
-    assert df.columns[0] == "claim_amount"
-    assert df.columns[1] == "claim_count"
+    assert df.index.names[1] == "category"
+    assert df.columns[0] == "order_amount"
+    assert df.columns[1] == "order_count"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics_and_label.json"))
 def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
+        index_by=dict(reg="label/customers.region", category="label/products.category"),
         columns=dict(
-            claim_amount="metric/claim-amount",
-            claim_count="metric/claim-count",
-            region_code="label/region.region_code",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
+            state="label/customers.state",
         ),
     )
 
-    assert len(df) > len(TEST_DATA_REGIONS)
+    assert len(df) > 17
     assert len(df.columns) == 3
     assert df.index.names[0] == "reg"
-    assert df.index.names[1] == "prod"
-    assert df.columns[0] == "claim_amount"
-    assert df.columns[1] == "claim_count"
-    assert df.columns[2] == "region_code"
+    assert df.index.names[1] == "category"
+    assert df.columns[0] == "order_amount"
+    assert df.columns[1] == "order_count"
+    assert df.columns[2] == "state"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label.json"))
 def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/region.region_name", prod="label/product.product_name"),
+        index_by=dict(reg="label/customers.region", category="label/products.category"),
         columns=dict(
-            claim_amount="metric/claim-amount",
-            claim_count="metric/claim-count",
-            region_code="label/region.region_code",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
+            state="label/customers.state",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
+        filter_by=[
+            PositiveAttributeFilter(label="reg", values=["Northeast"]),
+            MetricValueFilter(metric="order_count", operator="GREATER_THAN", values=50),
+        ],
     )
 
-    assert len(df) == 1
+    assert len(df) == 3
     assert len(df.columns) == 3
     assert df.index.names[0] == "reg"
-    assert df.index.names[1] == "prod"
-    assert df.columns[0] == "claim_amount"
-    assert df.columns[1] == "claim_count"
-    assert df.columns[2] == "region_code"
+    assert df.index.names[1] == "category"
+    assert df.columns[0] == "order_amount"
+    assert df.columns[1] == "order_count"
+    assert df.columns[2] == "state"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label_reuse.json"))
@@ -169,19 +171,19 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     #
     # this has implications when referencing label by local id
     df = gdf.indexed(
-        index_by=dict(reg_idx="label/region.region_name", prod="label/product.product_name"),
+        index_by=dict(reg="label/customers.region", category="label/products.category"),
         columns=dict(
-            claim_amount="metric/claim-amount",
-            claim_count="metric/claim-count",
-            reg="label/region.region_name",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
+            reg="label/customers.region",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg_idx", values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg", values=["Midwest"])],
     )
 
-    assert len(df) == 1
+    assert len(df) == 4
     assert len(df.columns) == 3
-    assert df.index.names[0] == "reg_idx"
-    assert df.index.names[1] == "prod"
-    assert df.columns[0] == "claim_amount"
-    assert df.columns[1] == "claim_count"
+    assert df.index.names[0] == "reg"
+    assert df.index.names[1] == "category"
+    assert df.columns[0] == "order_amount"
+    assert df.columns[1] == "order_count"
     assert df.columns[2] == "reg"

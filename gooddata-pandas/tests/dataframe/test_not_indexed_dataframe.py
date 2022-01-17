@@ -5,59 +5,59 @@ import vcr
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import PositiveAttributeFilter
-from tests import TEST_DATA_REGIONS
+from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metrics.json"))
 def test_not_indexed_metrics(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
         )
     )
 
     assert len(df) == 1
     assert len(df.columns) == 2
-    assert df.columns[0] == "crime_rate"
-    assert df.columns[1] == "safety_scale"
+    assert df.columns[0] == "order_amount"
+    assert df.columns[1] == "order_count"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metrics_and_labels.json"))
 def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
-            reg="label/region.region_name",
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
+            reg="label/customers.region",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
         )
     )
 
-    assert len(df) == len(TEST_DATA_REGIONS)
+    assert len(df) == 5
     assert len(df.columns) == 3
     assert df.columns[0] == "reg"
-    assert df.columns[1] == "crime_rate"
-    assert df.columns[2] == "safety_scale"
+    assert df.columns[1] == "order_amount"
+    assert df.columns[2] == "order_count"
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_filtered_metrics_and_labels.json"))
 def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
-            reg="label/region.region_name",
-            crime_rate="fact/region.region_crime_rate",
-            safety_scale="fact/region.region_safety_scale",
+            reg="label/customers.region",
+            order_amount="metric/order_amount",
+            order_count="metric/amount_of_orders",
         ),
-        filter_by=[PositiveAttributeFilter(label="reg", values=["Bern"])],
+        filter_by=[PositiveAttributeFilter(label="reg", values=["Midwest"])],
     )
 
     assert len(df) == 1
     assert len(df.columns) == 3
     assert df.columns[0] == "reg"
-    assert df.columns[1] == "crime_rate"
-    assert df.columns[2] == "safety_scale"
+    assert df.columns[1] == "order_amount"
+    assert df.columns[2] == "order_count"
