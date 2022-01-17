@@ -29,7 +29,7 @@ For instance behold how it is possible to get tabular data for an insight define
 import gooddata_sdk
 
 # HOST in the form of uri eg. "http://localhost:3000"
-sdk = gooddata_sdk.GoodDataSdk.new(HOST, TOKEN)
+sdk = gooddata_sdk.GoodDataSdk.create(HOST, TOKEN)
 
 # reads insight from workspace
 insight = sdk.insights.get_insight(workspace_id, insight_id)

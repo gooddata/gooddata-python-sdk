@@ -43,7 +43,7 @@ _regions = [
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_just_attribute.json"))
 def test_table_with_just_attribute():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     table = sdk.tables.for_items(TEST_WORKSPACE, items=[Attribute(local_id="attr1", label="region.region_name")])
 
     values = list(result["attr1"] for result in table.read_all())
@@ -53,7 +53,7 @@ def test_table_with_just_attribute():
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_just_metric.json"))
 def test_table_with_just_measure():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     table = sdk.tables.for_items(
         TEST_WORKSPACE,
         items=[SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="claim-amount"))],
@@ -67,7 +67,7 @@ def test_table_with_just_measure():
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_attribute_and_metric.json"))
 def test_table_with_attribute_and_metric():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     table = sdk.tables.for_items(
         TEST_WORKSPACE,
         items=[
@@ -82,7 +82,7 @@ def test_table_with_attribute_and_metric():
 
 @gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_attribute_metric_and_filter.json"))
 def test_table_with_attribute_metric_and_filter():
-    sdk = GoodDataSdk.new(host=TEST_HOST, token=test_token())
+    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
     table = sdk.tables.for_items(
         TEST_WORKSPACE,
         items=[

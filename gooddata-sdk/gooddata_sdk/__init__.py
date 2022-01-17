@@ -37,6 +37,6 @@ from gooddata_sdk.compute_model import (
     SimpleMetric,
 )
 from gooddata_sdk.insight import Insight, InsightAttribute, InsightBucket, InsightMetric, InsightService
-from gooddata_sdk.sdk import GoodDataSdk, create_sdk
+from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
