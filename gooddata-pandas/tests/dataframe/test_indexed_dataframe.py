@@ -14,11 +14,21 @@ _fixtures_dir = _current_dir / "fixtures"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 index_types = [
+    # reference to the columns key
     "region",
+    dict(reg="region"),
+    # label_id, i.e. obj id without "label/" prefix - index can reference only attributes
+    "customers.region",
+    dict(region="customers.region"),
+    # object identifier in string form
     "label/customers.region",
     dict(reg="label/customers.region"),
+    # Attribute instance
     Attribute(local_id="abcd", label=ObjId(id="customers.region", type="label")),
+    dict(region=Attribute(local_id="abcd", label=ObjId(id="customers.region", type="label"))),
+    # ObjId instance
     ObjId(id="customers.region", type="label"),
+    dict(region=ObjId(id="customers.region", type="label")),
 ]
 
 

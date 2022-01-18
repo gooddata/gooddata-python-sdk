@@ -53,9 +53,10 @@ class DataFrameFactory:
         Note that depending on composition of the labels, the DataFrame's index may or may not be unique.
 
         :param index_by: one or more labels to index by; specify either:
+         - string with reference to columns key - only attribute can be referenced
          - string with id: 'some_label_id',
-         - object identifier: ObjId(id='some_label_id', type='label'),
          - string representation of object identifier: 'label/some_label_id'
+         - object identifier: ObjId(id='some_label_id', type='label'),
          - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id'),
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
 
@@ -66,9 +67,14 @@ class DataFrameFactory:
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
          ArithmeticMeasure
-        :param filter_by: filters to apply during computation on the server
+        :param filter_by: optional filters to apply during computation on the server, reference to filtering column
+            can be one of:
+            - string reference to column key or index key
+            - object identifier in string form
+            - object identifier: ObjId(id='some_label_id', type='<type>')
+            - Attribute or Metric depending on type of filter
 
-        :return:
+        :return: pandas dataframe instance
         """
         data, index = compute_and_extract(
             self._sdk,
@@ -98,9 +104,14 @@ class DataFrameFactory:
          - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
          - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
          ArithmeticMeasure
-        :param filter_by: optionally specify filters to apply during computation on the server
+        :param filter_by: optionally specify filters to apply during computation on the server, reference to filtering
+            column can be one of:
+            - string reference to column key
+            - object identifier in string form
+            - object identifier: ObjId(id='some_label_id', type='<type>')
+            - Attribute or Metric depending on type of filter
 
-        :return:
+        :return: pandas dataframe instance
         """
 
         data, _ = compute_and_extract(self._sdk, self._workspace_id, columns=columns, filter_by=filter_by)
@@ -130,9 +141,15 @@ class DataFrameFactory:
              - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
              - subclass of Measure object used in the compute model: SimpleMeasure, PopDateMeasure, PopDatasetMeasure,
              ArithmeticMeasure
-        :param filter_by: optionally specify filters to apply during computation on the server
+        :param filter_by: optionally specify filters to apply during computation on the server, reference to filtering
+            column can be one of:
+            - string reference to item key
+            - object identifier in string form
+            - object identifier: ObjId(id='some_label_id', type='<type>')
+            - Attribute or Metric depending on type of filter
         :param auto_index: optionally force creation of DataFrame without index even if the contents of items make it
             eligible for indexing
+        :return: pandas dataframe instance
         """
         resolved_attr_cols: dict[str, LabelItemDef] = dict()
         resolved_measure_cols: ColumnsDef = dict()
@@ -184,7 +201,7 @@ class DataFrameFactory:
         :param auto_index: optionally force creation of DataFrame without index even if the data in the insight is
             eligible for indexing
 
-        :return:
+        :return: pandas dataframe instance
         """
         naming = DefaultInsightColumnNaming()
         insight = self._sdk.insights.get_insight(workspace_id=self._workspace_id, insight_id=insight_id)
