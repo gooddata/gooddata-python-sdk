@@ -39,15 +39,15 @@ clients: afm-client metadata-client scan-client
 
 .PHONY: afm-client
 afm-client:
-	./scripts/generate_client.sh gooddata-afm-client
+	./scripts/generate_client.sh gooddata-afm-client -u "http://gooddata-cn-ce:3000" -n gooddata-python-sdk_default
 
 .PHONY: metadata-client
 metadata-client:
-	./scripts/generate_client.sh gooddata-metadata-client
+	./scripts/generate_client.sh gooddata-metadata-client -u "http://gooddata-cn-ce:3000" -n gooddata-python-sdk_default
 
 .PHONY: scan-client
 scan-client:
-	./scripts/generate_client.sh gooddata-scan-client
+	./scripts/generate_client.sh gooddata-scan-client -u "http://gooddata-cn-ce:3000" -n gooddata-python-sdk_default
 
 .PHONY: mypy
 mypy:
