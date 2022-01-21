@@ -13,6 +13,8 @@
     git clone git@github.com:gooddata/gooddata-python-sdk.git
     cd gooddata-python-sdk
     make dev
+    # activate venv
+    source .venv/bin/activate
     ```
 
    The `make dev` command will create a new Python 3.9 virtual environment in the `.venv` directory, install all
