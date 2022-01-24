@@ -4,6 +4,10 @@ custom templates for part of generated code. Layout:
 - configs - configuration files
 - custom_templates - custom_templates directory used for all generated clients
 
+Clients are created using [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator). Python language
+was marked as STABLE recently by [PR](https://github.com/OpenAPITools/openapi-generator/pull/11270).
+
+
 #### How to generate or re-generate client
 OpenAPI client generation is orchestrated by script `scripts/generate_client.sh`. Script either creates a new client
 if no such exists or update existing client code.
