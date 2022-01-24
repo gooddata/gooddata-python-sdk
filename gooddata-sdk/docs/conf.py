@@ -37,10 +37,10 @@ release = gooddata_sdk.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "myst_parser",
     "pallets_sphinx_themes",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -66,5 +66,4 @@ html_static_path = ["_static"]
 
 source_suffix = {
     ".rst": "restructuredtext",
-    ".md": "markdown",
 }

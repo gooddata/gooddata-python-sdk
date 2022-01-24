@@ -36,10 +36,10 @@ release = gooddata_fdw.__version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "myst_parser",
     "pallets_sphinx_themes",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
 ]
 
 # Mock multicorn as it is not easy to set it up
@@ -68,5 +68,8 @@ html_static_path = ["_static"]
 
 source_suffix = {
     ".rst": "restructuredtext",
-    ".md": "markdown",
 }
+
+# intersphinx_mapping = {
+#     "gooddata_sdk": ("", None)
+# }
