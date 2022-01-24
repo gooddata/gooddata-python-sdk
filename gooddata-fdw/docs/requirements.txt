@@ -6,3 +6,4 @@ pallets-sphinx-themes
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-afm-client
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-scan-client
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-sdk
+-e${CWD_TO_ROOT_RELATIVE}/gooddata-fdw
