@@ -7,3 +7,4 @@ API
    :recursive:
 
    gooddata_pandas
+   gooddata_sdk
