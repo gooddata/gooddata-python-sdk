@@ -1,19 +1,26 @@
 # GoodData.CN Foreign Data Wrapper
 
+This project delivers PostgreSQL foreign data wrapper extension built on top of [multicorn](https://multicorn.org/).
+The extension makes GoodData.CN insights, computations and ad-hoc report data available in PostgreSQL as tables.
+It can be selected like any other table using SQL language.
+
 ## Getting Started
+
+### Install gooddata-fdw to PostgreSQL in docker
 
 For convenience a `Dockerfile` is in place which when started will run `PostgreSQL 12` with `multicorn` and `gooddata-fdw`
 installed.
 
-For even better user experience we prepared `docker-compose.yaml` file, which contains both `gooddata-fdw` and `gooddata-cn-ce` services.
-If you execute (in this folder):
+For even better user experience we prepared `docker-compose.yaml` file, which contains both `gooddata-fdw` and
+`gooddata-cn-ce` services.
+If you execute (in repository root folder):
 ``` shell
 docker-compose up -d
 ```
-gooddata-fdw image is built from the Dockerfile and both services are started in background.
+`gooddata-fdw` image is built from the Dockerfile and both services are started in background.
 Note: services in docker-compose.yaml contain setup of various environment variables including `POSTGRES_PASSWORD`.
 Set the variables in your environment if you want to, before you execute the above command.
-Default value for`POSTGRES_PASSWORD` is `gooddata123`.
+Default value for `POSTGRES_PASSWORD` is `gooddata123`.
 
 You can also execute:
 ``` shell
@@ -27,9 +34,19 @@ If you would like to purge a container completely (including the volume) and sta
 ./rebuild.sh gooddata-fdw
 ```
 
-Before you start playing with gooddata-fdw, fill the gooddata-cn-ce with a content (LDM, metrics, insights).
-E.g you can follow our [Getting Started documentation](https://www.gooddata.com/developers/cloud-native/doc/1.5/getting-started/).
+#### GD.CN content in gooddata-cn-ce service
+Before you start playing with gooddata-fdw, you will need a content in the gooddata-cn-ce.
 
+`docker-compose.yaml` spins up also `upload-layout` service. Its purpose is to bootstrap demo and testing content
+into gooddata-cn-ce. You can use it as the starting point.
+
+But gooddata-cn-ce service is not limited to the demo content only. You can fill the gooddata-cn-ce with
+the content (LDM, metrics, insights) on your own. Follow
+our [Getting Started documentation](https://www.gooddata.com/developers/cloud-native/doc/1.5/getting-started/) if you
+need help with that.
+
+
+### Setup GD.CN Foreign Data Wrapper
 After the `gooddata-fdw` container starts, you can connect to the running PostgreSQL:
 
 -   From console using `psql --host localhost --port 2543 --user gooddata gooddata`
@@ -145,7 +162,7 @@ To explain:
 For columns that map to facts in your semantic model, you can also specify what aggregation function should be used when
 aggregating the fact values for the labels in your custom report table. You can use the following aggregation functions:
 
--  `sum`
+-  `sum`,
 -  `avg`,
 -  `min`,
 -  `max`,
