@@ -5,13 +5,17 @@
 1. Ensure you have at minimum Python 3.9 installed; Python 3.8 and 3.7 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
-   supported versions. You can run `tox -e py39` to limit tests to just one environment.
+   supported versions. If you have only subset of supported python interpreters installed, see
+   [Run tests](#run-tests) section for information how to limit tests only to your subset.
 
-2. Clone and setup environment:
+2. Create your fork of `gooddata-python-sdk` repository
+
+3. Clone and setup environment:
 
     ```bash
-    git clone git@github.com:gooddata/gooddata-python-sdk.git
+    git clone git@github.com:<your_user>/gooddata-python-sdk.git
     cd gooddata-python-sdk
+    git remote add upstream git@github.com:gooddata/gooddata-python-sdk.git
     make dev
     # activate venv
     source .venv/bin/activate
@@ -29,6 +33,10 @@
    To make sure you have successfully set up your environment run `make test` in virtualenv in the root of git repo.
    Please note, that `make test` executes tests against all the supported python versions. If you need to specify only
    subset of them, see section [Run tests](#Run tests)
+
+4. Develop the feature or the fix. Make sure your code follows [coding conventions](#coding-conventions). Create pull
+   request.
+
 
 ## Coding Conventions
 

@@ -35,3 +35,7 @@ create pandas series and data frames.
 -  Python 3.7 or newer
 
 -  The GoodData.CN Foreign Data Wrapper is tested with the latest version of multicorn (1.4.0) and PostgreSQL 12
+
+## Contributing
+If you would like to improve, extend or fix a feature in the repository read and follow
+[Contributing guide](./CONTRIBUTING.md).
