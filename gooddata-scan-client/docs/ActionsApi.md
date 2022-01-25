@@ -1,6 +1,6 @@
 # gooddata_scan_client.ActionsApi
 
-All URIs are relative to *https://staging.anywhere.gooddata.com*
+All URIs are relative to *http://gooddata-cn-ce:3000*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -25,10 +25,10 @@ from gooddata_scan_client.api import actions_api
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.scan_request import ScanRequest
 from pprint import pprint
-# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
-    host = "https://staging.anywhere.gooddata.com"
+    host = "http://gooddata-cn-ce:3000"
 )
 
 
@@ -100,10 +100,10 @@ import gooddata_scan_client
 from gooddata_scan_client.api import actions_api
 from gooddata_scan_client.model.data_source_schemata import DataSourceSchemata
 from pprint import pprint
-# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
-    host = "https://staging.anywhere.gooddata.com"
+    host = "http://gooddata-cn-ce:3000"
 )
 
 
@@ -166,10 +166,10 @@ import gooddata_scan_client
 from gooddata_scan_client.api import actions_api
 from gooddata_scan_client.model.test_response import TestResponse
 from pprint import pprint
-# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
-    host = "https://staging.anywhere.gooddata.com"
+    host = "http://gooddata-cn-ce:3000"
 )
 
 
@@ -236,10 +236,10 @@ from gooddata_scan_client.api import actions_api
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_scan_client.model.test_response import TestResponse
 from pprint import pprint
-# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
-    host = "https://staging.anywhere.gooddata.com"
+    host = "http://gooddata-cn-ce:3000"
 )
 
 

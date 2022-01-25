@@ -1,7 +1,4 @@
 .gitignore
-.gitlab-ci.yml
-.openapi-generator-ignore
-.travis.yml
 README.md
 docs/ActionsApi.md
 docs/ColumnWarning.md
@@ -14,7 +11,6 @@ docs/ScanResultPdm.md
 docs/TableWarning.md
 docs/TestDefinitionRequest.md
 docs/TestResponse.md
-git_push.sh
 gooddata_scan_client/__init__.py
 gooddata_scan_client/api/__init__.py
 gooddata_scan_client/api/actions_api.py
@@ -40,16 +36,4 @@ requirements.txt
 setup.cfg
 setup.py
 test-requirements.txt
-test/__init__.py
-test/test_actions_api.py
-test/test_column_warning.py
-test/test_data_source_schemata.py
-test/test_declarative_column.py
-test/test_declarative_table.py
-test/test_declarative_tables.py
-test/test_scan_request.py
-test/test_scan_result_pdm.py
-test/test_table_warning.py
-test/test_test_definition_request.py
-test/test_test_response.py
 tox.ini
