@@ -27,71 +27,68 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Access-Control-Allow-Methods": [
-                        "GET, POST, PUT, DELETE, OPTIONS"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
-                    ],
-                    "Access-Control-Allow-Headers": [
-                        "Accept, Accept-Language, Authentication-Token, Cache-Control, Content-Language, Content-Type, Cookie, If-Modified-Since, Range, User-Agent, X-Requested-With, X-GDC-JS-SDK-COMP, X-GDC-JS-SDK-COMP-PROPS, X-GDC-JS-PACKAGE, X-GDC-JS-PACKAGE-VERSION, X-GDC-VALIDATE-RELATIONS"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
                     "Set-Cookie": [
                         "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
                     ],
-                    "Date": [
-                        "Fri, 14 Jan 2022 20:25:55 GMT"
-                    ],
-                    "X-XSS-Protection": [
-                        "1 ; mode=block"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
                     "Expires": [
                         "0"
-                    ],
-                    "Content-Length": [
-                        "204"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Content-Type": [
-                        "application/json"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Referrer-Policy": [
-                        "no-referrer"
-                    ],
-                    "Connection": [
-                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:17:33 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "1d89cc916cae1a28"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Length": [
+                        "204"
                     ]
                 },
                 "body": {
-                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"50a72b87a271590dc777476e28c0c622\"}]}]}],\"links\":{\"executionResult\":\"a1b943c8260d6626b14d5d24835967db269861d9\"}}}"
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"50a72b87a271590dc777476e28c0c622\"}]}]}],\"links\":{\"executionResult\":\"512f0c798df221c5e9c7bc681b95059ce13e08a9\"}}}"
                 }
             }
         },
@@ -118,47 +115,40 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Allow-Methods": [
-                        "GET, POST, PUT, DELETE, OPTIONS"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
-                    ],
-                    "Access-Control-Allow-Headers": [
-                        "Accept, Accept-Language, Authentication-Token, Cache-Control, Content-Language, Content-Type, Cookie, If-Modified-Since, Range, User-Agent, X-Requested-With, X-GDC-JS-SDK-COMP, X-GDC-JS-SDK-COMP-PROPS, X-GDC-JS-PACKAGE, X-GDC-JS-PACKAGE-VERSION, X-GDC-VALIDATE-RELATIONS"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
                     "Set-Cookie": [
                         "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Date": [
-                        "Fri, 14 Jan 2022 20:25:55 GMT"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
                     ],
                     "Expires": [
                         "0"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:17:33 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "X-Content-Type-Options": [
                         "nosniff"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "275d399db5956df8"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
@@ -166,23 +156,27 @@
                     "X-Frame-Options": [
                         "DENY"
                     ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
                     "Transfer-Encoding": [
                         "chunked"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Cache-Control": [
                         "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Pragma": [
+                        "no-cache"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.campaign_channel_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.type\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.type\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaigns.campaign_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaigns.campaign_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.customer_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.customer_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.region\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.region\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.state\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.state\",\"type\":\"label\"},{\"id\":\"customers.geo__state__location\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_line_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_status\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_status\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.product_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.product_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\",\"areRelationsValid\":true},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.day\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.day\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\",\"areRelationsValid\":true},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.month\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.month\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\",\"areRelationsValid\":true},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.quarter\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarter\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\",\"areRelationsValid\":true},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.week\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.week\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\",\"areRelationsValid\":true},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.year\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.year\",\"type\":\"label\"}]}},\"type\":\"attribute\"}],\"included\":[{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_name\"},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.customer_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_id\"},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.customer_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.week\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_name\"},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaigns.campaign_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_line_id\"},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_line_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Location\",\"description\":\"Location\",\"tags\":[\"Customers\"],\"primary\":false,\"sourceColumn\":\"geo__state__location\"},\"id\":\"customers.geo__state__location\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.geo__state__location\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.month\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.quarter\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"state\"},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.state\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_id\"},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.product_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.day\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"type\"},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.type\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.campaign_channel_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.year\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_name\"},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.product_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_status\"},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_status\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_id\"},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaigns.campaign_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_id\"},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"region\"},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.region\"},\"type\":\"label\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes?include=labels&page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/workspaces/demo/attributes?include=labels&page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.campaign_channel_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.type\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.type\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaigns.campaign_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaigns.campaign_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.customer_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.customer_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.region\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.region\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"areRelationsValid\":true},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.state\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customers.geo__state__location\",\"type\":\"label\"},{\"id\":\"customers.state\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_line_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_status\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_lines.order_status\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.product_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"areRelationsValid\":true},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.product_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\",\"areRelationsValid\":true},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.day\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.day\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\",\"areRelationsValid\":true},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.month\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.month\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\",\"areRelationsValid\":true},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.quarter\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarter\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\",\"areRelationsValid\":true},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.week\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.week\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\",\"areRelationsValid\":true},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.year\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.year\",\"type\":\"label\"}]}},\"type\":\"attribute\"}],\"included\":[{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_name\"},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.customer_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_id\"},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.customer_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.week\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_name\"},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaigns.campaign_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_line_id\"},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_line_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Location\",\"description\":\"Location\",\"tags\":[\"Customers\"],\"primary\":false,\"sourceColumn\":\"geo__state__location\"},\"id\":\"customers.geo__state__location\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.geo__state__location\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.month\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.quarter\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"state\"},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.state\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_id\"},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.product_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.day\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"type\"},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.type\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaign_channels.campaign_channel_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/date.year\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_name\"},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.product_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_status\"},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_status\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/products.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_id\"},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/campaigns.campaign_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_id\"},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/order_lines.order_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"region\"},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/labels/customers.region\"},\"type\":\"label\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes?include=labels&page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/workspaces/demo/attributes?include=labels&page=1&size=500\"}}"
                 }
             }
         },
@@ -209,47 +203,40 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Allow-Methods": [
-                        "GET, POST, PUT, DELETE, OPTIONS"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
-                    ],
-                    "Access-Control-Allow-Headers": [
-                        "Accept, Accept-Language, Authentication-Token, Cache-Control, Content-Language, Content-Type, Cookie, If-Modified-Since, Range, User-Agent, X-Requested-With, X-GDC-JS-SDK-COMP, X-GDC-JS-SDK-COMP-PROPS, X-GDC-JS-PACKAGE, X-GDC-JS-PACKAGE-VERSION, X-GDC-VALIDATE-RELATIONS"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
                     "Set-Cookie": [
                         "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Date": [
-                        "Fri, 14 Jan 2022 20:25:55 GMT"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
                     ],
                     "Expires": [
                         "0"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:17:33 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "X-Content-Type-Options": [
                         "nosniff"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "2d6115b52ee62f07"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
@@ -257,23 +244,27 @@
                     "X-Frame-Options": [
                         "DENY"
                     ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
                     "Transfer-Encoding": [
                         "chunked"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Cache-Control": [
                         "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Pragma": [
+                        "no-cache"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channels\",\"description\":\"Campaign channels\",\"tags\":[\"Campaign channels\"],\"grain\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]}],\"dataSourceTableId\":\"demo-test-ds:campaign_channels\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaign_channels\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/campaign_channels\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.type\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.category\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"campaign_channels.budget\",\"type\":\"fact\"},{\"id\":\"campaign_channels.spend\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Campaigns\",\"description\":\"Campaigns\",\"tags\":[\"Campaigns\"],\"grain\":[{\"id\":\"campaigns.campaign_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:campaigns\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaigns\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/campaigns\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaigns.campaign_name\",\"type\":\"attribute\"},{\"id\":\"campaigns.campaign_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Customers\",\"description\":\"Customers\",\"tags\":[\"Customers\"],\"grain\":[{\"id\":\"customers.customer_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:customers\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"customers\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/customers\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"customers.region\",\"type\":\"attribute\"},{\"id\":\"customers.customer_name\",\"type\":\"attribute\"},{\"id\":\"customers.state\",\"type\":\"attribute\"},{\"id\":\"customers.customer_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Order lines\",\"description\":\"Order lines\",\"tags\":[\"Order lines\"],\"grain\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]},{\"identifier\":{\"id\":\"customers\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"customer_id\"]},{\"identifier\":{\"id\":\"date\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"date\"]},{\"identifier\":{\"id\":\"products\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"product_id\"]}],\"dataSourceTableId\":\"demo-test-ds:order_lines\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"order_lines\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/order_lines\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"attribute\"},{\"id\":\"order_lines.order_id\",\"type\":\"attribute\"},{\"id\":\"order_lines.order_status\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"order_lines.quantity\",\"type\":\"fact\"},{\"id\":\"order_lines.price\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Products\",\"description\":\"Products\",\"tags\":[\"Products\"],\"grain\":[{\"id\":\"products.product_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:products\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"products\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/products\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"products.product_id\",\"type\":\"attribute\"},{\"id\":\"products.category\",\"type\":\"attribute\"},{\"id\":\"products.product_name\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Date\",\"tags\":[\"Date\"],\"areRelationsValid\":true,\"type\":\"DATE\"},\"id\":\"date\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/date\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"date.week\",\"type\":\"attribute\"},{\"id\":\"date.quarter\",\"type\":\"attribute\"},{\"id\":\"date.month\",\"type\":\"attribute\"},{\"id\":\"date.day\",\"type\":\"attribute\"},{\"id\":\"date.year\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"}],\"included\":[{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"]},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.year\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_line_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.day\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_status\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.campaign_channel_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Budget\",\"description\":\"Budget\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"budget\"},\"id\":\"campaign_channels.budget\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/campaign_channels.budget\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.month\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"]},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"]},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.region\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"]},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"]},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Quantity\",\"description\":\"Quantity\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"quantity\"},\"id\":\"order_lines.quantity\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/order_lines.quantity\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.quarter\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Price\",\"description\":\"Price\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"price\"},\"id\":\"order_lines.price\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/order_lines.price\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Spend\",\"description\":\"Spend\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"spend\"},\"id\":\"campaign_channels.spend\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/campaign_channels.spend\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"]},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"]},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.state\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.week\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.type\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"]},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"]},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_id\"},\"type\":\"attribute\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets?include=attributes,facts&page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/workspaces/demo/datasets?include=attributes,facts&page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channels\",\"description\":\"Campaign channels\",\"tags\":[\"Campaign channels\"],\"grain\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]}],\"dataSourceTableId\":\"demo-test-ds:campaign_channels\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaign_channels\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/campaign_channels\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_channels.campaign_channel_id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.type\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.category\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"campaign_channels.budget\",\"type\":\"fact\"},{\"id\":\"campaign_channels.spend\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Order lines\",\"description\":\"Order lines\",\"tags\":[\"Order lines\"],\"grain\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"products\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"product_id\"]},{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]},{\"identifier\":{\"id\":\"customers\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"customer_id\"]},{\"identifier\":{\"id\":\"date\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"date\"]}],\"dataSourceTableId\":\"demo-test-ds:order_lines\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"order_lines\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/order_lines\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"order_lines.order_line_id\",\"type\":\"attribute\"},{\"id\":\"order_lines.order_id\",\"type\":\"attribute\"},{\"id\":\"order_lines.order_status\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"order_lines.quantity\",\"type\":\"fact\"},{\"id\":\"order_lines.price\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Campaigns\",\"description\":\"Campaigns\",\"tags\":[\"Campaigns\"],\"grain\":[{\"id\":\"campaigns.campaign_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:campaigns\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaigns\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/campaigns\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaigns.campaign_name\",\"type\":\"attribute\"},{\"id\":\"campaigns.campaign_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Products\",\"description\":\"Products\",\"tags\":[\"Products\"],\"grain\":[{\"id\":\"products.product_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:products\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"products\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/products\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"products.product_id\",\"type\":\"attribute\"},{\"id\":\"products.category\",\"type\":\"attribute\"},{\"id\":\"products.product_name\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Date\",\"tags\":[\"Date\"],\"areRelationsValid\":true,\"type\":\"DATE\"},\"id\":\"date\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/date\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"date.year\",\"type\":\"attribute\"},{\"id\":\"date.week\",\"type\":\"attribute\"},{\"id\":\"date.day\",\"type\":\"attribute\"},{\"id\":\"date.month\",\"type\":\"attribute\"},{\"id\":\"date.quarter\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Customers\",\"description\":\"Customers\",\"tags\":[\"Customers\"],\"grain\":[{\"id\":\"customers.customer_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:customers\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"customers\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets/customers\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"customers.region\",\"type\":\"attribute\"},{\"id\":\"customers.customer_name\",\"type\":\"attribute\"},{\"id\":\"customers.state\",\"type\":\"attribute\"},{\"id\":\"customers.customer_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"}],\"included\":[{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"]},\"id\":\"products.product_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.year\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_line_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.day\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_status\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_status\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.campaign_channel_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Budget\",\"description\":\"Budget\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"budget\"},\"id\":\"campaign_channels.budget\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/campaign_channels.budget\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.month\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"]},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"]},\"id\":\"customers.region\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.region\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"]},\"id\":\"customers.customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"]},\"id\":\"products.product_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/products.product_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Quantity\",\"description\":\"Quantity\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"quantity\"},\"id\":\"order_lines.quantity\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/order_lines.quantity\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.quarter\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"]},\"id\":\"order_lines.order_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/order_lines.order_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Price\",\"description\":\"Price\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"price\"},\"id\":\"order_lines.price\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/order_lines.price\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Spend\",\"description\":\"Spend\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"spend\"},\"id\":\"campaign_channels.spend\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/facts/campaign_channels.spend\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"]},\"id\":\"campaigns.campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"]},\"id\":\"customers.state\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.state\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/date.week\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"]},\"id\":\"campaign_channels.type\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaign_channels.type\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"]},\"id\":\"campaigns.campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/campaigns.campaign_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"]},\"id\":\"customers.customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/attributes/customers.customer_id\"},\"type\":\"attribute\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/workspaces/demo/datasets?include=attributes,facts&page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/workspaces/demo/datasets?include=attributes,facts&page=1&size=500\"}}"
                 }
             }
         },
@@ -300,47 +291,40 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Allow-Methods": [
-                        "GET, POST, PUT, DELETE, OPTIONS"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
-                    ],
-                    "Access-Control-Allow-Headers": [
-                        "Accept, Accept-Language, Authentication-Token, Cache-Control, Content-Language, Content-Type, Cookie, If-Modified-Since, Range, User-Agent, X-Requested-With, X-GDC-JS-SDK-COMP, X-GDC-JS-SDK-COMP-PROPS, X-GDC-JS-PACKAGE, X-GDC-JS-PACKAGE-VERSION, X-GDC-VALIDATE-RELATIONS"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
                     "Set-Cookie": [
                         "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Date": [
-                        "Fri, 14 Jan 2022 20:25:55 GMT"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
                     ],
                     "Expires": [
                         "0"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:17:34 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "X-Content-Type-Options": [
                         "nosniff"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "90d4dbc57e123eb3"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
@@ -348,19 +332,23 @@
                     "X-Frame-Options": [
                         "DENY"
                     ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
                     "Transfer-Encoding": [
                         "chunked"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Cache-Control": [
                         "no-cache, no-store, max-age=0, must-revalidate"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Pragma": [
+                        "no-cache"
                     ]
                 },
                 "body": {
@@ -371,7 +359,7 @@
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/actions/workspaces/demo/execution/afm/execute/result/a1b943c8260d6626b14d5d24835967db269861d9?offset=0&limit=1",
+                "uri": "http://localhost:3000/api/actions/workspaces/demo/execution/afm/execute/result/512f0c798df221c5e9c7bc681b95059ce13e08a9?offset=0&limit=1",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -391,67 +379,64 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Access-Control-Allow-Methods": [
-                        "GET, POST, PUT, DELETE, OPTIONS"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
-                    ],
-                    "Access-Control-Allow-Headers": [
-                        "Accept, Accept-Language, Authentication-Token, Cache-Control, Content-Language, Content-Type, Cookie, If-Modified-Since, Range, User-Agent, X-Requested-With, X-GDC-JS-SDK-COMP, X-GDC-JS-SDK-COMP-PROPS, X-GDC-JS-PACKAGE, X-GDC-JS-PACKAGE-VERSION, X-GDC-VALIDATE-RELATIONS"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
                     "Set-Cookie": [
                         "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
                     ],
-                    "Date": [
-                        "Fri, 14 Jan 2022 20:25:55 GMT"
-                    ],
-                    "X-XSS-Protection": [
-                        "1 ; mode=block"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
                     "Expires": [
                         "0"
-                    ],
-                    "Content-Length": [
-                        "176"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Content-Type": [
-                        "application/json"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Referrer-Policy": [
-                        "no-referrer"
-                    ],
-                    "Connection": [
-                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:17:34 GMT"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "f9920f40f6ad35f9"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Length": [
+                        "176"
                     ]
                 },
                 "body": {
