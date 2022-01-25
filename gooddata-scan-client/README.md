@@ -55,10 +55,10 @@ from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_scan_client.model.test_response import TestResponse
-# Defining the host is optional and defaults to https://staging.anywhere.gooddata.com
+# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
-    host = "https://staging.anywhere.gooddata.com"
+    host = "http://gooddata-cn-ce:3000"
 )
 
 
@@ -88,7 +88,7 @@ scan_request = ScanRequest(
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://staging.anywhere.gooddata.com*
+All URIs are relative to *http://gooddata-cn-ce:3000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -118,7 +118,7 @@ Class | Method | HTTP request | Description
 
 ## Author
 
-
+support@gooddata.com
 
 
 ## Notes for Large OpenAPI documents

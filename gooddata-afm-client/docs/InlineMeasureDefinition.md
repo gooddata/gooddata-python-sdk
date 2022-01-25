@@ -1,6 +1,6 @@
 # InlineMeasureDefinition
 
-Measure defined by the raw MAQL query.
+Metric defined by the raw MAQL query.
 
 ## Properties
 Name | Type | Description | Notes

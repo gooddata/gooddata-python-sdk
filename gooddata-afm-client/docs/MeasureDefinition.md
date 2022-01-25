@@ -1,6 +1,6 @@
 # MeasureDefinition
 
-Abstract measure definition type
+Abstract metric definition type
 
 ## Properties
 Name | Type | Description | Notes

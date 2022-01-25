@@ -1,43 +1,43 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 import vcr
 
 from gooddata_sdk import GoodDataSdk
-from tests import TEST_HOST, TEST_WORKSPACE, test_token
+from tests import VCR_MATCH_ON
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "insurance_demo_catalog.json"))
-def test_catalog_load():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
-    catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)
+@gd_vcr.use_cassette(str(_fixtures_dir / "insurance_demo_catalog.json"))
+def test_catalog_load(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    catalog = sdk.catalog.get_full_catalog(test_config["workspace"])
 
     # rough initial smoke-test; just do a quick 'rub'
-    assert len(catalog.metrics) == 25
-    assert len(catalog.datasets) == 9
+    assert len(catalog.metrics) == 24
+    assert len(catalog.datasets) == 6
 
-    assert catalog.get_metric("claim-count") is not None
-    assert catalog.get_metric("total-car-count") is not None
-    assert catalog.get_dataset("region") is not None
-    assert catalog.get_dataset("claim") is not None
-    assert catalog.get_dataset("coverage_cancelled_date") is not None
+    assert catalog.get_metric("order_amount") is not None
+    assert catalog.get_metric("revenue") is not None
+    assert catalog.get_dataset("customers") is not None
+    assert catalog.get_dataset("order_lines") is not None
+    assert catalog.get_dataset("products") is not None
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "insurance_demo_catalog_availability.json"))
-def test_catalog_availability():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
-    catalog = sdk.catalog.get_full_catalog(TEST_WORKSPACE)
-    claim_count = catalog.get_metric("claim-count")
+@gd_vcr.use_cassette(str(_fixtures_dir / "insurance_demo_catalog_availability.json"))
+def test_catalog_availability(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    catalog = sdk.catalog.get_full_catalog(test_config["workspace"])
+    claim_count = catalog.get_metric("campaign_spend")
 
     filtered_catalog = catalog.catalog_with_valid_objects(claim_count)
 
     # rough initial smoke-test; just do a quick 'rub' that filtered catalog has less entries than full catalog
-    assert len(filtered_catalog.metrics) == 25
-    assert len(filtered_catalog.datasets) == 7
+    assert len(filtered_catalog.metrics) == 24
+    assert len(filtered_catalog.datasets) == 3

@@ -1,0 +1,5 @@
+# (C) 2022 GoodData Corporation
+host: "http://localhost:3000"
+token: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+workspace: "demo"
+header_host: localhost

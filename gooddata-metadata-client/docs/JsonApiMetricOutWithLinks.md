@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | API identifier of an object | 
-**attributes** | [**JsonApiMetricOutAttributes**](JsonApiMetricOutAttributes.md) |  | 
+**attributes** | [**JsonApiMetricInAttributes**](JsonApiMetricInAttributes.md) |  | 
 **type** | **str** | Object type | defaults to "metric"
 **relationships** | [**JsonApiMetricOutRelationships**](JsonApiMetricOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 

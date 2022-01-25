@@ -1,62 +1,37 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-import os
+from pathlib import Path
 
 import vcr
 
 from gooddata_sdk import Attribute, GoodDataSdk, ObjId, PositiveAttributeFilter, SimpleMetric
-from tests import TEST_HOST, TEST_WORKSPACE, test_token
+from tests import VCR_MATCH_ON
 
-_current_dir = os.path.dirname(os.path.abspath(__file__))
-_fixtures_dir = os.path.join(_current_dir, "fixtures")
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization"], serializer="json")
-
-_regions = [
-    "Aargau",
-    "Basel-Landschaft",
-    "Basel-Stadt",
-    "Bern",
-    "Fribourg",
-    "Geneva",
-    "Glarus",
-    "Graubünden",
-    "Jura",
-    "Lucerne",
-    "Neuchâtel",
-    "Nidwalden",
-    "Obwalden",
-    "Schaffhausen",
-    "Schwyz",
-    "Solothurn",
-    "St. Gallen",
-    "Thurgau",
-    "Ticino",
-    "Uri",
-    "Valais",
-    "Vaud",
-    "Zug",
-    "Zürich",
-]
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_just_attribute.json"))
-def test_table_with_just_attribute():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
-    table = sdk.tables.for_items(TEST_WORKSPACE, items=[Attribute(local_id="attr1", label="region.region_name")])
+@gd_vcr.use_cassette(str(_fixtures_dir / "table_with_just_attribute.json"))
+def test_table_with_just_attribute(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    table = sdk.tables.for_items(
+        test_config["workspace"], items=[Attribute(local_id="attr1", label="customers.region")]
+    )
 
     values = list(result["attr1"] for result in table.read_all())
 
-    assert values == _regions
+    assert values == ["Midwest", "Northeast", "South", "Unknown", "West"]
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_just_metric.json"))
-def test_table_with_just_measure():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
+@gd_vcr.use_cassette(str(_fixtures_dir / "table_with_just_metric.json"))
+def test_table_with_just_measure(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     table = sdk.tables.for_items(
-        TEST_WORKSPACE,
-        items=[SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="claim-amount"))],
+        test_config["workspace"],
+        items=[SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount"))],
     )
 
     values = list(result["metric1"] for result in table.read_all())
@@ -65,32 +40,32 @@ def test_table_with_just_measure():
     assert values[0] > 0
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_attribute_and_metric.json"))
-def test_table_with_attribute_and_metric():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
+@gd_vcr.use_cassette(str(_fixtures_dir / "table_with_attribute_and_metric.json"))
+def test_table_with_attribute_and_metric(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     table = sdk.tables.for_items(
-        TEST_WORKSPACE,
+        test_config["workspace"],
         items=[
-            Attribute(local_id="attr1", label="region.region_name"),
-            SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="claim-amount")),
+            Attribute(local_id="attr1", label="customers.region"),
+            SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount")),
         ],
     )
 
     values = list((result["attr1"], result["metric1"]) for result in table.read_all())
-    assert len(values) == len(_regions)
+    assert len(values) == 5
 
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, "table_with_attribute_metric_and_filter.json"))
-def test_table_with_attribute_metric_and_filter():
-    sdk = GoodDataSdk.create(host_=TEST_HOST, token_=test_token())
+@gd_vcr.use_cassette(str(_fixtures_dir / "table_with_attribute_metric_and_filter.json"))
+def test_table_with_attribute_metric_and_filter(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     table = sdk.tables.for_items(
-        TEST_WORKSPACE,
+        test_config["workspace"],
         items=[
-            Attribute(local_id="attr1", label="region.region_name"),
-            SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="claim-amount")),
+            Attribute(local_id="attr1", label="customers.region"),
+            SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount")),
         ],
-        filters=[PositiveAttributeFilter(label="attr1", values=["Aargau", "Bern", "Vaud"])],
+        filters=[PositiveAttributeFilter(label="attr1", values=["Unknown", "Northeast"])],
     )
 
     values = list((result["attr1"], result["metric1"]) for result in table.read_all())
-    assert len(values) == 3
+    assert len(values) == 2

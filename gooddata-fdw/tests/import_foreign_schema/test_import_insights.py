@@ -23,8 +23,8 @@ def test_import_insights_without_restrictions(test_config):
         restricts=[],
     )
 
-    # do a rough rub now.. there are 8 stable insights in the insurance-demo.. those should be mapped to
-    # tables. then pick a couple of tables and make sure their columns are looking ok
+    # do a rough rub now.. fetch stable insights in the demo workspace.. those should be mapped to
+    # tables. Then pick a couple of tables and make sure their columns are looking ok
 
     assert len(tables) == 15
 

@@ -1,6 +1,6 @@
 # FilterDefinitionForSimpleMeasure
 
-Abstract filter definition type for simple measure.
+Abstract filter definition type for simple metric.
 
 ## Properties
 Name | Type | Description | Notes

@@ -1,6 +1,6 @@
 # RangeMeasureValueFilter
 
-Filter the result by comparing specified measure to given range of values.
+Filter the result by comparing specified metric to given range of values.
 
 ## Properties
 Name | Type | Description | Notes

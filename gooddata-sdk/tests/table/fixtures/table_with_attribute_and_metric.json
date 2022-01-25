@@ -4,8 +4,8 @@
         {
             "request": {
                 "method": "POST",
-                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute",
-                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"attr1\", \"label\": {\"identifier\": {\"id\": \"region.region_name\", \"type\": \"label\"}}}], \"filters\": [], \"measures\": [{\"localIdentifier\": \"metric1\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"claim-amount\", \"type\": \"metric\"}}, \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"attr1\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_1\"}]}}",
+                "uri": "http://localhost:3000/api/actions/workspaces/demo/execution/afm/execute",
+                "body": "{\"execution\": {\"attributes\": [{\"localIdentifier\": \"attr1\", \"label\": {\"identifier\": {\"id\": \"customers.region\", \"type\": \"label\"}}}], \"filters\": [], \"measures\": [{\"localIdentifier\": \"metric1\", \"definition\": {\"measure\": {\"item\": {\"identifier\": {\"id\": \"order_amount\", \"type\": \"metric\"}}, \"computeRatio\": false, \"filters\": []}}}]}, \"resultSpec\": {\"dimensions\": [{\"itemIdentifiers\": [\"attr1\"], \"localIdentifier\": \"dim_0\"}, {\"itemIdentifiers\": [\"measureGroup\"], \"localIdentifier\": \"dim_1\"}]}}",
                 "headers": {
                     "Accept": [
                         "application/json"
@@ -13,11 +13,11 @@
                     "Content-Type": [
                         "application/json"
                     ],
-                    "User-Agent": [
-                        "gooddata-python-sdk/0.1"
-                    ],
                     "X-Requested-With": [
                         "XMLHttpRequest"
+                    ],
+                    "X-GDC-VALIDATE-RELATIONS": [
+                        "true"
                     ]
                 }
             },
@@ -27,44 +27,41 @@
                     "message": "OK"
                 },
                 "headers": {
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:48:17 GMT"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Content-Length": [
+                        "508"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
                     "X-XSS-Protection": [
                         "1 ; mode=block"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Strict-Transport-Security": [
-                        "max-age=31536000; includeSubDomains"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Date": [
-                        "Sun, 08 Aug 2021 19:50:43 GMT"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Access-Control-Allow-Origin": [
-                        "https://localhost:8443"
-                    ],
-                    "Content-Length": [
-                        "743"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
                     ],
                     "Expires": [
                         "0"
@@ -74,32 +71,41 @@
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "985128861191d076"
+                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Referrer-Policy": [
-                        "no-referrer"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"attr1\",\"label\":{\"id\":\"region.region_name\",\"type\":\"label\"},\"labelName\":\"Region name\",\"attribute\":{\"id\":\"region.region_name\",\"type\":\"attribute\"},\"attributeName\":\"Region name\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region.region_name\",\"type\":\"label\"}}}]},{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"metric1\",\"format\":\"[>=1000000000000]$#,,,,.0 T;\\n[>=1000000000]$#,,,.0 B;\\n[>=1000000]$#,,.0 M;\\n[>=1000]$#,.0 K;\\n[>=0]$#,##0;\\n[<=-1000000000000]-$#,,,,.0 T;\\n[<=-1000000000]-$#,,,.0 B;\\n[<=-1000000]-$#,,.0 M;\\n[<=-1000]-$#,.0 K;\\n[<0]-$#,##0\",\"name\":\"Claim Amount\"}]}]}],\"links\":{\"executionResult\":\"1dbcef8df172b4c268773c833a17f60310e474ba\"}}}"
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"attr1\",\"label\":{\"id\":\"customers.region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"customers.region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"customers.region\",\"type\":\"label\"}}}]},{\"headers\":[{\"measureGroupHeaders\":[{\"localIdentifier\":\"metric1\",\"format\":\"$#,##0\",\"name\":\"Order Amount\"}]}]}],\"links\":{\"executionResult\":\"a4a66066c52b0bb7e9d21e4855d91fd819cc77dd\"}}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "https://insurance-dev.anywhere.gooddata.com/api/actions/workspaces/insurance-demo/execution/afm/execute/result/1dbcef8df172b4c268773c833a17f60310e474ba?offset=0%2C0&limit=512%2C256",
+                "uri": "http://localhost:3000/api/actions/workspaces/demo/execution/afm/execute/result/a4a66066c52b0bb7e9d21e4855d91fd819cc77dd?offset=0%2C0&limit=512%2C256",
                 "body": null,
                 "headers": {
                     "Accept": [
                         "*/*"
                     ],
-                    "User-Agent": [
-                        "gooddata-python-sdk/0.1"
-                    ],
                     "X-Requested-With": [
                         "XMLHttpRequest"
+                    ],
+                    "X-GDC-VALIDATE-RELATIONS": [
+                        "true"
                     ]
                 }
             },
@@ -109,44 +115,41 @@
                     "message": "OK"
                 },
                 "headers": {
+                    "Server": [
+                        "nginx"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "Content-Security-Policy": [
-                        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://matomo.anywhere.gooddata.com connectors.tableau.com; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com https://at.alicdn.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com matomo.anywhere.gooddata.com *.okta.com;"
+                    "Date": [
+                        "Tue, 25 Jan 2022 16:48:17 GMT"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Content-Length": [
+                        "626"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
                     "X-XSS-Protection": [
                         "1 ; mode=block"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Strict-Transport-Security": [
-                        "max-age=31536000; includeSubDomains"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Date": [
-                        "Sun, 08 Aug 2021 19:50:43 GMT"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Access-Control-Allow-Origin": [
-                        "https://localhost:8443"
-                    ],
-                    "Content-Length": [
-                        "2374"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; SameSite=None"
                     ],
                     "Expires": [
                         "0"
@@ -156,15 +159,24 @@
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "32508094e70906ff"
+                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Referrer-Policy": [
-                        "no-referrer"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[[171178.594375],[33250.7575],[53502.63375],[199034.6025],[10351.5225],[101118.7375],[16298.85125],[42824.720625],[9625.218125],[80242.421875],[14343.746875],[53576.304375],[17578.54875],[30713.091875],[10790.1125],[42212.5825],[152597.063125],[40684.54875],[236780.12375],[13202.2225],[8777.779375],[244733.483125],[28708.36375],[644181.868125]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Aargau\",\"primaryLabelValue\":\"Aargau\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Landschaft\",\"primaryLabelValue\":\"Basel-Landschaft\"}},{\"attributeHeader\":{\"labelValue\":\"Basel-Stadt\",\"primaryLabelValue\":\"Basel-Stadt\"}},{\"attributeHeader\":{\"labelValue\":\"Bern\",\"primaryLabelValue\":\"Bern\"}},{\"attributeHeader\":{\"labelValue\":\"Fribourg\",\"primaryLabelValue\":\"Fribourg\"}},{\"attributeHeader\":{\"labelValue\":\"Geneva\",\"primaryLabelValue\":\"Geneva\"}},{\"attributeHeader\":{\"labelValue\":\"Glarus\",\"primaryLabelValue\":\"Glarus\"}},{\"attributeHeader\":{\"labelValue\":\"Graub\u00fcnden\",\"primaryLabelValue\":\"Graub\u00fcnden\"}},{\"attributeHeader\":{\"labelValue\":\"Jura\",\"primaryLabelValue\":\"Jura\"}},{\"attributeHeader\":{\"labelValue\":\"Lucerne\",\"primaryLabelValue\":\"Lucerne\"}},{\"attributeHeader\":{\"labelValue\":\"Neuch\u00e2tel\",\"primaryLabelValue\":\"Neuch\u00e2tel\"}},{\"attributeHeader\":{\"labelValue\":\"Nidwalden\",\"primaryLabelValue\":\"Nidwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Obwalden\",\"primaryLabelValue\":\"Obwalden\"}},{\"attributeHeader\":{\"labelValue\":\"Schaffhausen\",\"primaryLabelValue\":\"Schaffhausen\"}},{\"attributeHeader\":{\"labelValue\":\"Schwyz\",\"primaryLabelValue\":\"Schwyz\"}},{\"attributeHeader\":{\"labelValue\":\"Solothurn\",\"primaryLabelValue\":\"Solothurn\"}},{\"attributeHeader\":{\"labelValue\":\"St. Gallen\",\"primaryLabelValue\":\"St. Gallen\"}},{\"attributeHeader\":{\"labelValue\":\"Thurgau\",\"primaryLabelValue\":\"Thurgau\"}},{\"attributeHeader\":{\"labelValue\":\"Ticino\",\"primaryLabelValue\":\"Ticino\"}},{\"attributeHeader\":{\"labelValue\":\"Uri\",\"primaryLabelValue\":\"Uri\"}},{\"attributeHeader\":{\"labelValue\":\"Valais\",\"primaryLabelValue\":\"Valais\"}},{\"attributeHeader\":{\"labelValue\":\"Vaud\",\"primaryLabelValue\":\"Vaud\"}},{\"attributeHeader\":{\"labelValue\":\"Zug\",\"primaryLabelValue\":\"Zug\"}},{\"attributeHeader\":{\"labelValue\":\"Z\u00fcrich\",\"primaryLabelValue\":\"Z\u00fcrich\"}}]}]},{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[24,1],\"offset\":[0,0],\"total\":[24,1]}}"
+                    "string": "{\"data\":[[98425.2],[56710.83],[228392.39],[18.7],[132511.22]],\"dimensionHeaders\":[{\"headerGroups\":[{\"headers\":[{\"attributeHeader\":{\"labelValue\":\"Midwest\",\"primaryLabelValue\":\"Midwest\"}},{\"attributeHeader\":{\"labelValue\":\"Northeast\",\"primaryLabelValue\":\"Northeast\"}},{\"attributeHeader\":{\"labelValue\":\"South\",\"primaryLabelValue\":\"South\"}},{\"attributeHeader\":{\"labelValue\":\"Unknown\",\"primaryLabelValue\":\"Unknown\"}},{\"attributeHeader\":{\"labelValue\":\"West\",\"primaryLabelValue\":\"West\"}}]}]},{\"headerGroups\":[{\"headers\":[{\"measureHeader\":{\"measureIndex\":0}}]}]}],\"grandTotals\":[],\"paging\":{\"count\":[5,1],\"offset\":[0,0],\"total\":[5,1]}}"
                 }
             }
         }

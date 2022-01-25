@@ -1,6 +1,6 @@
 # PopDatasetMeasureDefinition
 
-Previous period type of measure.
+Previous period type of metric.
 
 ## Properties
 Name | Type | Description | Notes

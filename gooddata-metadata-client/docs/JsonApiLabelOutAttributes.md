@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **tags** | **[str]** |  | [optional] 
 **primary** | **bool** |  | [optional] 
 **source_column** | **str** |  | [optional] 
+**value_type** | **str** |  | [optional] 
 **are_relations_valid** | **bool** |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

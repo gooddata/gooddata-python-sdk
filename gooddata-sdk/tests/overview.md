@@ -38,22 +38,29 @@ will find that the data in snapshots does not match the conventions of the API.
 
 ## Component tests with vcrpy
 
-The vcrpy simplifies mocking HTTP endpoints. The component tests use the insurance-dev environment and the insurance-demo
-workspace. The connection details are stored in [__init__.py](__init__.py) with the exception of the authentication token.
+The vcrpy simplifies mocking HTTP endpoints. The component tests use the AIO image environment and the demo
+workspace. The connection details are stored in [gd_test_config.yaml](gd_test_config.yaml). Tests accept command
+line parameter `--gd-test-config` to pass custom test configuration.
 
-You can specify token in the `.env.test` file located either in the gooddata-sdk directory or in the repository root. The
-file is set to be ignored by git.
-
-Additionally, make sure that every time you use vcrpy, you configure the tool to not store the 'Authorization' token
-in the captured data:
+Additionally, make sure that every time you use vcrpy, you configure the tool:
+- to not store the 'Authorization' token and 'user-agent' in the captured data
+- to compare also by request body
 
 ```python3
-gd_vcr = vcr.VCR(filter_headers=['authorization'], serializer='json')
+from pathlib import Path
+
 import vcr
 
-@gd_vcr.use_cassette(os.path.join(_fixtures_dir, 'my_fixture.json'))
+from tests import VCR_MATCH_ON
+
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
+
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
+
+@gd_vcr.use_cassette(str(_fixtures_dir / 'my_fixture.json'))
 def test_something():
     pass
 ```
 
-**NOTE**: you do not have to set any token in `.env.test` unless you are going to create new recordings.
+**NOTE**: you do not have to set token value in config file unless you are going to create new recordings.

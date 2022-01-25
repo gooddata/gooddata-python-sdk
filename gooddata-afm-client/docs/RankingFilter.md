@@ -1,6 +1,6 @@
 # RankingFilter
 
-Filter the result on top/bottom N values according to given measure(s).
+Filter the result on top/bottom N values according to given metric(s).
 
 ## Properties
 Name | Type | Description | Notes

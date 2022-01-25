@@ -123,12 +123,12 @@ class ExecutionResult:
 class ExecutionResponse:
     def __init__(
         self,
-        result_api: apis.ResultControllerApi,
+        actions_api: apis.ActionsApi,
         workspace_id: str,
         exec_def: ExecutionDefinition,
         response: models.AfmExecutionResponse,
     ):
-        self._result_api = result_api
+        self._actions_api = actions_api
         self._workspace_id = workspace_id
         self._exec_def = exec_def
 
@@ -163,7 +163,7 @@ class ExecutionResponse:
         _offset = [0 for _ in _limit] if _limit is not None and _offset is None else _offset
 
         return ExecutionResult(
-            self._result_api.retrieve_result(
+            self._actions_api.retrieve_result(
                 workspace_id=self._workspace_id,
                 result_id=self.result_id,
                 offset=_offset,
@@ -187,8 +187,7 @@ class ComputeService:
     """
 
     def __init__(self, api_client: GoodDataApiClient):
-        self._exec_api = apis.AfmControllerApi(api_client.afm_client)
-        self._result_api = apis.ResultControllerApi(api_client.afm_client)
+        self._actions_api = apis.ActionsApi(api_client.afm_client)
 
     def for_exec_def(self, workspace_id: str, exec_def: ExecutionDefinition) -> ExecutionResponse:
         """
@@ -200,10 +199,10 @@ class ComputeService:
 
         :return:
         """
-        response = self._exec_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
+        response = self._actions_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
 
         return ExecutionResponse(
-            result_api=self._result_api,
+            actions_api=self._actions_api,
             workspace_id=workspace_id,
             exec_def=exec_def,
             response=response,
