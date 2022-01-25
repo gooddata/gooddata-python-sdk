@@ -11,7 +11,7 @@ def pytest_addoption(parser):
         "--gd-test-config",
         action="store",
         default=str(default_config_path),
-        help="Absolut path to an application charts",
+        help="Absolut path to test configuration",
     )
 
 
