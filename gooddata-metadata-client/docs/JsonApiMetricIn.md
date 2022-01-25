@@ -6,7 +6,7 @@ JSON:API representation of metric entity.
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | API identifier of an object | 
-**attributes** | [**JsonApiMetricOutAttributes**](JsonApiMetricOutAttributes.md) |  | 
+**attributes** | [**JsonApiMetricInAttributes**](JsonApiMetricInAttributes.md) |  | 
 **type** | **str** | Object type | defaults to "metric"
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

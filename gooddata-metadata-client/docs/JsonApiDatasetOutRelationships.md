@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attributes** | [**JsonApiDatasetOutRelationshipsAttributes**](JsonApiDatasetOutRelationshipsAttributes.md) |  | [optional] 
-**facts** | [**JsonApiDatasetOutRelationshipsFacts**](JsonApiDatasetOutRelationshipsFacts.md) |  | [optional] 
+**attributes** | [**JsonApiFilterContextOutRelationshipsAttributes**](JsonApiFilterContextOutRelationshipsAttributes.md) |  | [optional] 
+**facts** | [**JsonApiMetricOutRelationshipsFacts**](JsonApiMetricOutRelationshipsFacts.md) |  | [optional] 
 **references** | [**JsonApiAnalyticalDashboardOutRelationshipsDatasets**](JsonApiAnalyticalDashboardOutRelationshipsDatasets.md) |  | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
