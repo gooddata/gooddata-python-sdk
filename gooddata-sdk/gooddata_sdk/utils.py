@@ -67,7 +67,7 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
     >>> import functools
     >>> import gooddata_metadata_client as metadata_client
     >>> import gooddata_metadata_client.apis as metadata_apis
-    >>> api = metadata_apis.WorkspaceObjectControllerApi(metadata_client.ApiClient())
+    >>> api = metadata_apis.EntitiesApi(metadata_client.ApiClient())
     >>> get_func = functools.partial(api.get_all_entities_visualization_objects, 'some-workspace-id',
     >>>                              include=["ALL"], _check_return_type=False)
     >>> vis_objects = load_all_entities(get_func)

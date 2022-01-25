@@ -510,8 +510,8 @@ class CatalogService:
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
-        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
-        self._valid_objects = afm_apis.ValidObjectsControllerApi(api_client.afm_client)
+        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        self._afm_actions_api = afm_apis.ActionsApi(api_client.afm_client)
 
     def get_full_catalog(self, workspace_id: str) -> Catalog:
         """
@@ -521,20 +521,22 @@ class CatalogService:
         :return:
         """
         get_datasets = functools.partial(
-            self._api.get_all_entities_datasets,
+            self._entities_api.get_all_entities_datasets,
             workspace_id,
             include=["attributes", "facts"],
             _check_return_type=False,
         )
 
         get_attributes = functools.partial(
-            self._api.get_all_entities_attributes,
+            self._entities_api.get_all_entities_attributes,
             workspace_id,
             include=["labels"],
             _check_return_type=False,
         )
 
-        get_metrics = functools.partial(self._api.get_all_entities_metrics, workspace_id, _check_return_type=False)
+        get_metrics = functools.partial(
+            self._entities_api.get_all_entities_metrics, workspace_id, _check_return_type=False
+        )
 
         attributes = load_all_entities(get_attributes)
         datasets = load_all_entities(get_datasets)
@@ -567,7 +569,7 @@ class CatalogService:
             afm = _prepare_afm_for_availability(_ctx)
 
         query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
-        response = self._valid_objects.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
+        response = self._afm_actions_api.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
 
         by_type: dict[str, set[str]] = dict()
 

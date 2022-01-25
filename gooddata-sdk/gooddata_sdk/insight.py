@@ -467,7 +467,7 @@ class InsightService:
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._api = metadata_apis.WorkspaceObjectControllerApi(api_client.metadata_client)
+        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
 
     def get_insights(self, workspace_id: str) -> list[Insight]:
         """
@@ -478,7 +478,7 @@ class InsightService:
         :return: all available insights, each insight will contain side loaded metadata about the entities it references
         """
         get_func = functools.partial(
-            self._api.get_all_entities_visualization_objects,
+            self._entities_api.get_all_entities_visualization_objects,
             workspace_id,
             include=["ALL"],
             _check_return_type=False,
@@ -498,7 +498,7 @@ class InsightService:
         :return: single insight; the insight will contain sideloaded metadata about the entities it references
         :rtype: Insight
         """
-        vis_obj = self._api.get_entity_visualization_objects(
+        vis_obj = self._entities_api.get_entity_visualization_objects(
             workspace_id,
             object_id=insight_id,
             include=["ALL"],
