@@ -1,6 +1,6 @@
 # PopDateMeasureDefinition
 
-Period over period type of measure.
+Period over period type of metric.
 
 ## Properties
 Name | Type | Description | Notes

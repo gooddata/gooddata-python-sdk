@@ -1,6 +1,6 @@
 # LocalIdentifier
 
-String that uniquely identifies the measure in the context of the current AFM.
+String that uniquely identifies the metric in the context of the current AFM.
 
 ## Properties
 Name | Type | Description | Notes

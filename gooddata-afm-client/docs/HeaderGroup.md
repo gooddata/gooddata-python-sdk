@@ -1,6 +1,6 @@
 # HeaderGroup
 
-Contains the information specific for a group of headers. These groups correlate to attributes and measure groups.
+Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.
 
 ## Properties
 Name | Type | Description | Notes

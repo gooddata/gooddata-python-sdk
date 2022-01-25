@@ -1,6 +1,6 @@
 # ComparisonMeasureValueFilter
 
-Filter the result by comparing specified measure to given constant value, using given comparison operator.
+Filter the result by comparing specified metric to given constant value, using given comparison operator.
 
 ## Properties
 Name | Type | Description | Notes

@@ -1,6 +1,6 @@
 # MeasureValueFilter
 
-Abstract filter definition type filtering by the value of the measure.
+Abstract filter definition type filtering by the value of the metric.
 
 ## Properties
 Name | Type | Description | Notes
