@@ -143,13 +143,5 @@ venv automatically. So when docker tox tests are executed after localhost tests 
   TEST_ENVS=py39,py38 ADD_ARGS="-k http_headers" make test-ci
   ```
 
-# How to release new version
-
-* Run `make release VERSION=X.Y.Z`
-* Create pull request with the latest commit with bumped versions
-* Ask for merge of pull request. Once it is merged:
-* Checkout latest master tag it vX.Y.Z
-* Push the tag to master branch (`git push --tags`)
-
 # How to generate and maintain OpenAPI clients
 Refer to our [OpenAPI client README](./.openapi-generator/README.md)
