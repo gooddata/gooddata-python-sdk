@@ -1,26 +1,37 @@
 .. _index_root:
 
-Welcome to GoodData Pandas documentation!
-*****************************************
+GoodData Pandas Documentation
+*****************************
 
-GoodData to pandas adapters
-===========================
-
-This package contains a thin layer that utilizes gooddata-sdk and allows you to conveniently create pandas series and
+GoodData Pandas contains a thin layer that utilizes GoodData Python SDK and allows you to conveniently create pandas series and
 data frames from the computations done against semantic model in your GoodData.CN workspace.
+
+Getting Started
+---------------
+
+Requirements
+============
+
+-  GoodData.CN installation; either running on your cloud
+   infrastructure or the free Community Edition running on your workstation
+-  Python 3.7 or newer
+
+Installation
+============
+
+Run the following command to install the ``gooddata-pandas`` package on your system:
+
+.. code-block:: shell
+
+    pip install gooddata-pandas
 
 Examples
 --------
 
-Here are a couple of introductory examples how to create indexed and not-indexed series and data frames.
-
-The examples show the simplest possible way to specify labels, facts or metrics to use in your series or data frames.
-The factory functions allow for greater flexibility on the inputs - you can also use the objects that are normally
-input to the compute model - Attribute, different types of Measures and also specify filters to apply during the
-computation on the server.
+Here are a couple of introductory examples how to create indexed and not-indexed series and data frames:
 
 Series
-""""""
+======
 
 .. code-block:: python
 
@@ -43,7 +54,7 @@ Series
     non_indexed = series.not_indexed(data_by="fact/measure_id", granularity="label/label_id")
 
 Data Frames
-"""""""""""
+===========
 
 .. code-block:: python
 
@@ -103,7 +114,7 @@ Data Frames
 
 .. _index_api:
 
-API documentation
+API Documentation
 -----------------
 Check out the :doc:`api` section for further information.
 
@@ -114,7 +125,7 @@ Check out the :doc:`api` section for further information.
    api
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`

@@ -1,6 +1,6 @@
 # GoodData Python SDK
 
-The `gooddata-sdk` package aims to provide clean and convenient Python APIs to interact with GoodData.CN.
+The `gooddata-sdk` package provides a clean and convenient Python API to interact with [GoodData.CN](https://www.gooddata.com/developers/cloud-native/).
 
 At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics:
 * Catalog Service
@@ -8,7 +8,24 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Compute Service
 * Table Service
 
-Example of insight execution:
+See [DOCUMENTATION](https://gooddata-sdk.readthedocs.io) for more details.
+
+## Requirements
+
+-  GoodData.CN installation; either running on your cloud
+   infrastructure or the free Community Edition running on your workstation
+
+-  Python 3.7 or newer
+
+## Installation
+
+Run the following command to install the `gooddata-sdk` package on your system:
+
+    pip install gooddata-sdk
+
+## Example
+
+Compute an insight:
 ```python
 import gooddata_sdk
 
@@ -30,16 +47,13 @@ for row in table.read_all():
     print(row)
 ```
 
-## Documentation
 
-Documentation is available [here](https://gooddata-sdk.readthedocs.io)
+## Bugs & Requests
 
-## Bugs/Requests
-
-Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues)` to submit bugs
+Please use the [GitHub issue tracker](https://github.com/gooddata/gooddata-python-sdk/issues) to submit bugs
 or request features.
 
 ## Changelog
 
-Consult [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for a released versions
-and list of changes.
+See  [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for released versions
+and a list of changes.
