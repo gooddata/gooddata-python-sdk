@@ -1,41 +1,34 @@
 # GoodData.CN Python Foundations
 
-This repository contains Python packages useful for integration with [GoodData Cloud Native](https://www.gooddata.com/developers/cloud-native/).
+This repository contains Python packages useful for integration with [GoodData.CN](https://www.gooddata.com/developers/cloud-native/).
 
 ## Available packages
 
-### API Clients
+### GoodData API Clients
 
-API clients are generated directly from GoodData.CN OpenAPI specifications and allow you to call any API from
+API clients are generated directly from the GoodData.CN OpenAPI specifications and allow you to call any API from
 Python. Learn more about the clients in their [dedicated readme](./clients_README.md).
 
-### Python SDK
+### GoodData Python SDK
 
-Python SDK is a layer of convenience and use-case oriented APIs that allows simple interaction with GoodData.CN.
+The [gooddata-sdk](./gooddata-sdk) package provides a clean and convenient Python API to interact with GoodData.CN.
 
-Check out the [gooddata-sdk](./gooddata-sdk) documentation to learn more.
+Check out the GoodData Python SDK [documentation](https://gooddata-sdk.readthedocs.io/en/latest/) to learn more and get started.
 
-### GoodData.CN Foreign Data Wrapper for PostgreSQL
+### GoodData Foreign Data Wrapper
 
-Foreign Data Wrapper (FDW) presents a way to map GoodData.CN semantic layer and/or insights stored in your GoodData.CN
+The [gooddata-fdw](./gooddata-fdw) package provides a way to map GoodData.CN semantic layer and/or insights stored in your GoodData.CN
 into PostgreSQL as foreign tables that you can then query using SQL.
 
-Check out the [gooddata-fdw package](./gooddata-fdw) documentation to learn more and get started.
+Check out the GoodData Foreign Data Wrapper [documentation](https://gooddata-fdw.readthedocs.io/en/latest/) to learn more and get started.
 
-### GoodData to pandas adapters
+### GoodData Pandas
 
-The [gooddata-pandas](./gooddata-pandas) is a thin layer that utilizes Python SDK and allows you to conveniently
+The [gooddata-pandas](./gooddata-pandas) package is a thin layer that utilizes Python SDK and allows you to conveniently
 create pandas series and data frames.
 
-## Requirements
-
--  [GoodData.CN](https://www.gooddata.com/developers/cloud-native/) installation; either running on your cloud
-   infrastructure or the free Community Edition running on your workstation
-
--  Python 3.7 or newer
-
--  The GoodData.CN Foreign Data Wrapper is tested with the latest version of multicorn (1.4.0) and PostgreSQL 12
+Check out the GoodData Pandas [documentation](https://gooddata-pandas.readthedocs.io/en/latest/) to learn more and get started.
 
 ## Contributing
-If you would like to improve, extend or fix a feature in the repository read and follow
+If you would like to improve, extend or fix a feature in the repository, read and follow the
 [Contributing guide](./CONTRIBUTING.md).

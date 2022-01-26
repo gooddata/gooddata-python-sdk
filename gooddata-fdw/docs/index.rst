@@ -1,21 +1,29 @@
-Welcome to GoodData Foreign Data Wrapper's documentation!
-*********************************************************
+GoodData Foreign Data Wrapper Documentation
+*******************************************
 
-This project delivers PostgreSQL foreign data wrapper extension built on top of `multicorn <https://multicorn.org/>`_.
+GoodData Foreign Data Wrapper delivers PostgreSQL foreign data wrapper extension built on top of `multicorn <https://multicorn.org/>`_.
 The extension makes GoodData.CN insights, computations and ad-hoc report data available in PostgreSQL as tables.
-It can be selected like any other table using SQL language.
+It can be selected like any other table using the SQL language.
 
 Getting Started
-===============
+---------------
 
-Install gooddata-fdw to PostgreSQL in docker
---------------------------------------------
+Requirements
+============
 
-For convenience a ``Dockerfile`` is in place which when started will run ``PostgreSQL 12`` with ``multicorn``
-and ``gooddata-fdw`` installed.
+-  GoodData.CN installation; either running on your cloud
+   infrastructure or the free Community Edition running on your workstation
+-  Python 3.7 or newer
 
-For even better user experience we prepared ``docker-compose.yaml`` file, which contains both ``gooddata-fdw`` and
+Installation
+============
+
+For convenience a ``Dockerfile`` is already in place which, when started, will run ``PostgreSQL 12`` with ``multicorn``
+and ``gooddata-fdw`` pre-installed.
+
+For an even better user experience we prepared a ``docker-compose.yaml`` file which contains both the ``gooddata-fdw`` and
 ``gooddata-cn-ce`` services.
+
 If you execute (in repository root folder):
 
 .. code-block:: shell
@@ -23,9 +31,11 @@ If you execute (in repository root folder):
    docker-compose up -d
 
 ``gooddata-fdw`` image is built from the Dockerfile and both services are started in background.
-Note: services in docker-compose.yaml contain setup of various environment variables including ``POSTGRES_PASSWORD``.
-Set the variables in your environment if you want to, before you execute the above command.
-Default value for ``POSTGRES_PASSWORD`` is ``gooddata123``.
+
+.. note::
+   Services in docker-compose.yaml contain a setup of various environment variables including ``POSTGRES_PASSWORD``.
+   Feel free to set the variables in your environment, before you execute the above command.
+   Default value for ``POSTGRES_PASSWORD`` is ``gooddata123``.
 
 You can also execute:
 
@@ -33,7 +43,7 @@ You can also execute:
 
    docker-compose build
 
-to rebuild the fdw image.
+to rebuild the Foreign Data Wrapper image.
 
 If you would like to purge a container completely (including the volume) and start from scratch, you can use a helper script:
 
@@ -42,22 +52,21 @@ If you would like to purge a container completely (including the volume) and sta
    ./rebuild.sh gooddata-cn-ce
    ./rebuild.sh gooddata-fdw
 
-GD.CN content in gooddata-cn-ce service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Add Your Data
+=============
 
-Before you start playing with gooddata-fdw, you will need a content in the gooddata-cn-ce.
+Before you start playing with the Foreign Data Wrapper, you will need a content in the gooddata-cn-ce.
 
-`docker-compose.yaml` spins up also `upload-layout` service. Its purpose is to bootstrap demo and testing content
-into gooddata-cn-ce. You can use it as the starting point.
+`docker-compose.yaml` launches the `upload-layout` service. Its purpose is to bootstrap the demo and testing content
+into gooddata-cn-ce. You can use this as a starting point.
 
-But gooddata-cn-ce service is not limited to the demo content only. You can fill the gooddata-cn-ce with
-the content (LDM, metrics, insights) on your own. Follow
-our `Getting Started documentation <https://www.gooddata.com/developers/cloud-native/doc/1.5/getting-started/>`_ if you
+But gooddata-cn-ce service is not limited only to the demo content. You can fill the gooddata-cn-ce with your own
+content (LDM, metrics, insights). Follow
+our `Getting Started documentation <https://www.gooddata.com/developers/cloud-native/doc/1.6/getting-started/>`_ if you
 need help with that.
 
-
-Setup GD.CN Foreign Data Wrapper
---------------------------------
+Usage
+-----
 
 After the ``gooddata-fdw`` container starts, you can connect to the running PostgreSQL:
 
@@ -69,20 +78,20 @@ After the ``gooddata-fdw`` container starts, you can connect to the running Post
 
     You will be asked to enter username (gooddata) and password.
 
-Once connected you will be able to work with the GD.CN Foreign Data Wrapper.
-At first, you need to define your GD.CN server in PostgreSQL:
+Once connected you will be able to work with the GoodData.CN Foreign Data Wrapper.
+At first, you need to define your GoodData.CN server in PostgreSQL:
 
 .. code-block:: postgresql
 
    CREATE SERVER multicorn_gooddata FOREIGN DATA WRAPPER multicorn
    OPTIONS (
        wrapper 'gooddata_fdw.GoodDataForeignDataWrapper',
-       host 'https://gooddata-cn-ce:3000', -- host equal to name of container with GD.CN.CE
+       host 'https://gooddata-cn-ce:3000', -- host equal to name of container with GoodData.CN.CE
        token 'YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz' -- default gooddata-cn-ce token, documented in public DOC as well
    );
 
-As of now GD.CN community edition (single container deployment) does support only ``localhost`` as target host.
-If you spin-up GD.CN and FDW using docker-compose, GD.CN host equals to the service name in the docker-compose, e.g. ``gooddata-cn-ce``.
+As of now the GoodData.CN community edition (single container deployment) supports only ``localhost`` as the target host.
+If you spin-up GoodData.CN and FDW using docker-compose, GoodData.CN host name is the service name in the docker-compose, e.g. ``gooddata-cn-ce``.
 To enable such setup, we provide an option ``header_host``:
 
 .. code-block:: postgresql
@@ -90,41 +99,43 @@ To enable such setup, we provide an option ``header_host``:
    CREATE SERVER multicorn_gooddata FOREIGN DATA WRAPPER multicorn
      OPTIONS (
        wrapper 'gooddata_fdw.GoodDataForeignDataWrapper',
-       host 'http://gooddata-cn-ce:3000', -- host equal to name of container with GD.CN.CE
+       host 'http://gooddata-cn-ce:3000', -- host equal to name of container with GoodData.CN.CE
        token 'YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz', -- default gooddata-cn-ce token, documented in public DOC as well
        headers_host 'localhost'
      );
 
-Typically, you have to do this once per GD.CN installation. You can add as many servers as you want/need.
+Typically, you have to do this once per GoodData.CN installation. You may add as many servers as you need.
 
-**IMPORTANT**: do not forget to specify host including the schema (http or https).
+**IMPORTANT**: Do not forget to specify host including the schema (http or https).
 
-Import GoodData objects as foreign tables into Postgres schema
-==============================================================
+Import GoodData Objects into PostgreSQL Schema
+==============================================
 
 You can import insights created in GoodData.CN Analytical Designer as PostgreSQL foreign tables.
-You can import insights from as many workspaces and / or GoodData.CN instances (servers) as you want.
+You can import insights from as many workspaces and/or GoodData.CN instances (servers) as you want.
 
-You can also import your entire semantic model including MAQL metrics into a special ``compute`` **pseudo-table**.
+You can also import your entire semantic model including MAQL metrics into a special ``compute`` *pseudo-table*.
 Doing SELECTs from this table will trigger computation of analytics on your GoodData.CN server based on the columns
 that you have specified on the SELECT.
 
-Note that the ``compute`` is called pseudo-table for a reason. It does not adhere to the relational model. The columns
-that you SELECT map to facts, metrics and labels in your semantic model. Computing results for the select will automatically
-aggregate results on the columns that are mapped to labels in your semantic model. In other words cardinality of
-the ``compute`` table changes based on the columns that you SELECT.
+.. note::
+   The ``compute`` is called pseudo-table for a reason. It does not adhere to the relational model. The columns
+   that you SELECT map to facts, metrics and labels in your semantic model. Computing results for the select will automatically
+   aggregate results on the columns that are mapped to labels in your semantic model. In other words cardinality of
+   the ``compute`` table changes based on the columns that you SELECT.
 
 For your convenience we prepared a stored procedure, which:
-- (re)creates target schema
-- imports currently existing insights and/or entire semantic model
+
+-  (re)creates target schema
+-  imports currently existing insights and/or entire semantic model
 
 You can re-execute the procedure to update foreign tables.
 
 .. code-block:: postgresql
 
-   -- This maps all insights stored in GD.CN workspace `workspace_id` into the Postgres schema named `workspace_id`
+   -- This maps all insights stored in GoodData.CN workspace `workspace_id` into the PostgreSQL schema named `workspace_id`
    CALL import_gooddata('workspace_id', 'insights');
-   -- By utilizing the third parameter you can override the name of the target Postgres schema
+   -- By utilizing the third parameter you can override the name of the target PostgreSQL schema
    CALL import_gooddata('workspace_id', 'insights', 'custom_schema');
 
    -- This imports the semantic model into the 'compute' pseudo-table.
@@ -141,7 +152,7 @@ You can re-execute the procedure to update foreign tables.
 
 Default max numeric size is 18, default digits after decimal point is 2 unless metric format defines more.
 
-You will get couple of 'NOTICE' messages as the import progresses. You can then check the imported tables for instance
+You will get a couple of 'NOTICE' messages as the import progresses. You can then check the imported tables
 by executing:
 
 .. code-block:: postgresql
@@ -152,7 +163,7 @@ by executing:
 **IMPORTANT**: Your semantic model may consist of multiple isolated segments that have no relationship between them. Attempting
 to compute results from multiple isolated segments will result in errors.
 
-Custom reports as foreign tables
+Custom Reports as Foreign Tables
 ================================
 
 You can manually create your own foreign tables and map their columns to GoodData.CN semantic model. This is similar
@@ -178,25 +189,26 @@ To explain:
 For columns that map to facts in your semantic model, you can also specify what aggregation function should be used when
 aggregating the fact values for the labels in your custom report table. You can use the following aggregation functions:
 
--  ``sum``,
--  ``avg``,
--  ``min``,
--  ``max``,
+-  ``sum``
+-  ``avg``
+-  ``min``
+-  ``max``
 -  ``median``
 
 The ``agg`` key is optional. If you do not specify it, then default ``sum`` aggregation will be used. The value of
 ``agg`` is case insensitive.
 
-Note: If you do not specify the required options, the CREATE command will fail. If you specify wrong entity IDs,
-the failures will happen at SELECT time.
+.. note::
+   If you do not specify the required options, the CREATE command will fail. If you specify wrong entity IDs,
+   the failures will happen at SELECT time.
 
-Push down of filters
+Push Down of Filters
 ====================
 
-When querying foreign tables, you can add WHERE clause filtering the result.
-Due to performance reasons, it makes sense to push such filters down to the GD.CN, so not all data must be collected.
+When querying foreign tables, you can add ``WHERE`` clause filtering the result.
+For performance optimization, it makes sense to push such filters down to the GoodData.CN, so not all data has to be collected.
 
-We are able to push only some filters down to the GD.CN:
+We are able to push only some filters down to GoodData.CN:
 
 - Simple attribute(label) filters
 
@@ -208,14 +220,14 @@ We are able to push only some filters down to the GD.CN:
   - (NOT) IN operator is ``not`` supported
   - Example: ``WHERE my_date BETWEEN '2021-01-01 AND 2021-02-01``
 
-If you use OR between conditions, it is not pushed down.
+If you use an ``OR`` between conditions, it is not pushed down.
 Push down is possible in case of custom tables and ``compute`` table, not in case of foreign tables imported
 from ``insights``.
 
-Known limitations
+Known Limitations
 =================
 
-It is not possible to reference a column in WHERE clause, which is not used in SELECT section.
+It is not possible to reference a column in ``WHERE`` clause, which is not used in ``SELECT`` section.
 Example:
 
 .. code-block:: sql
@@ -223,12 +235,12 @@ Example:
    SELECT label1, metric FROM insight WHERE label2 = 'a';
    SELECT label1, metric FROM compute WHERE label2 = 'a';
 
-While it is obvious in case of ``insight`` (it does not contain the column at all), in case of ``compute`` we would
+While it is obvious in case of an ``insight`` (it does not contain the column at all), in case of ``compute`` we would
 like to support it, but we are not allowed due to lack of functionality in Multicorn -
 the filter is always applied on final result set and if it does not contain the column, it does not work.
 
 
-API documentation
+API Documentation
 -----------------
 
 .. toctree::
@@ -239,7 +251,7 @@ API documentation
 
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
