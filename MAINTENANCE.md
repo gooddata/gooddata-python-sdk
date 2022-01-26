@@ -8,6 +8,22 @@
 * Checkout latest master tag it vX.Y.Z
 * Push the tag to master branch (`git push --tags`)
 
+### Errors that may appear
+
+* Github release could not be created as the same release already exists.
+  Possible Solutions:
+   - Delete the release and retry.
+   - It's highly probable that also Pypi release exists, so it's easier to bump version and try with higher version tag
+* Pypi upload failed with file already exists.
+  The file with the same name ever existed, it does not matter that it no longer exists
+  (see [the linkded document](https://test.pypi.org/help/#file-name-reuse))
+  Possible solutions:
+  - It's desirable to have a release in consistent state (all packages of the given version updoaded in pypi),
+    so in case there was partial success, please upload rest of packages manually as described in
+    [packaging documentation](https://packaging.python.org/en/latest/tutorials/packaging-projects/#uploading-the-distribution-archives)
+    Credentials were distributed though LastPass
+  - Another solution is to bump version and create new release
+
 ## readthedocs integration
 Repository is integrated with readthedocs pages. Currently, we have set up three separate documentation projects:
 - gooddata-sdk
