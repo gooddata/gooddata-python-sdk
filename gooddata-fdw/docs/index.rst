@@ -163,6 +163,13 @@ by executing:
 **IMPORTANT**: Your semantic model may consist of multiple isolated segments that have no relationship between them. Attempting
 to compute results from multiple isolated segments will result in errors.
 
+.. warning::
+
+    Imported tables reflect state of the workspace and insights in time of import. Any later change to the workspace
+    can result in failing SQL queries against imported tables. The state can be fixed by re-importing the workspace
+    insights and/or compute.
+
+
 Custom Reports as Foreign Tables
 ================================
 
