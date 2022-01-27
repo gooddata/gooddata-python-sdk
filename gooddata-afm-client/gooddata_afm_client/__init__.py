@@ -11,7 +11,7 @@
 """
 
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 # import ApiClient
 from gooddata_afm_client.api_client import ApiClient

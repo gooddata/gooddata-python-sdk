@@ -25,7 +25,7 @@ src_paths = [
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "0.6.0"
+current = "0.7.0"
 regex = '''
   (?P<major>\d+)
   \.
@@ -90,9 +90,8 @@ src="gooddata-*-client/gooddata_*_client/configuration.py"
 src="gooddata-*-client/gooddata_*_client/__init__.py"
 
 [[tool.tbump.file]]
-# clients generator
-src="scripts/generate_*_client.sh"
-search="packageVersion={current_version}"
+# clients generator configs
+src=".openapi-generator/configs/gooddata-*-client.yaml"
 
 # You can specify a list of commands to
 # run after the files have been patched
