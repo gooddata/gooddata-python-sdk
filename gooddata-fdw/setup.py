@@ -7,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-sdk~=0.6.0",
+    "gooddata-sdk~=0.7.0",
     'importlib-metadata >= 1.0 ; python_version < "3.8"',
     #    "multicorn>=1.4.0",
 ]
@@ -18,7 +18,7 @@ setup(
     description="GoodData.CN Foreign Data Wrapper For PostgreSQL",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="0.6.0",
+    version="0.7.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",

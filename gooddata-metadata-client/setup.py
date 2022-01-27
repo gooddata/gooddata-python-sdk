@@ -17,7 +17,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 NAME = "gooddata-metadata-client"
-VERSION = "0.6.0"
+VERSION = "0.7.0"
 # To install the library, run the following
 #
 # python setup.py install
