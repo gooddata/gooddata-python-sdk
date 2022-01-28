@@ -7,7 +7,7 @@ version: '3.7'
 services:
   gooddata-cn-ce:
     # Use stable releases represented by tags like 1.5
-    image: registry.gitlab.com/gooddata/gdc-nas/gooddata-cn-ce:stable
+    image: gooddata/gooddata-cn-ce:1.6
     ports:
       - "3000:3000"
       - "5432:5432"
