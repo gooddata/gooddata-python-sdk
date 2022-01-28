@@ -1,14 +1,15 @@
 # (C) 2022 GoodData Corporation
 # Set of glob-like patterns which defines files and folders to ignore by copyright tool
-# glob pattern documentation https://docs.python.org/3/library/glob.html
+# glob pattern documentation https://en.wikipedia.org/wiki/Glob_(programming)
+# wildcard ** is supported
 
 # files which does not support comments or must be skipped
-*.md
-*.json
+**/*.md
+**/*.json
 
 # git
 .git/**
-*.gitignore
+**/*.gitignore
 
 # github configuration scripts
 .github/**
@@ -18,24 +19,24 @@ gooddata-*-client/**
 
 # IDEA IDE
 .idea/**
-*.iml
+**/*.iml
 
 # Byte-compiled / optimized / DLL files
-__pycache__/**
-*.py[cod]
-*$py.class
+**/__pycache__/**
+**/*.py[cod]
+**/*$py.class
 
 # Unit test / coverage reports
-.tox/**
-*.coverage
-*.cache
-coverage.xml
-*.python-version
-.pytest_cache/**
+**/.tox/**
+**/*.coverage
+**/*.cache
+**/coverage.xml
+**/*.python-version
+**/.pytest_cache/**
 
 # Type support
-.mypy_cache/**
-py.typed
+**/.mypy_cache/**
+**/py.typed
 
 # python venvs
 venv/**
@@ -43,29 +44,29 @@ venv/**
 .python-version
 
 # Distribution / packaging
-.Python
-env/**
-build/**
-develop-eggs/**
-dist/**
-downloads/**
-eggs/**
-.eggs/**
-parts/**
-sdist/**
-var/**
-*.egg-info/**
-.installed.cfg
-*.egg
-*requirements.txt
+**/.Python
+**/env/**
+**/build/**
+**/develop-eggs/**
+**/dist/**
+**/downloads/**
+**/eggs/**
+**/.eggs/**
+**/parts/**
+**/sdist/**
+**/var/**
+**/*.egg-info/**
+**/.installed.cfg
+**/*.egg
+**/*requirements.txt
 
 # Docker
-.dockerignore
+**/.dockerignore
 
 # Sphinx documentation
-docs/_build/**
-docs/_autosummary/**
-*.rst
+**/docs/_build/**
+**/docs/_autosummary/**
+**/*.rst
 
 # PyBuilder
-target/**
+**/target/**

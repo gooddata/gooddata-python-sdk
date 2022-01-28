@@ -1,0 +1,31 @@
+# Keep docs build to verify documentation can be built also on localhost
+name: docs
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      # API documentation is generated from code so build must be triggered also for code changes
+      - 'gooddata-fdw/**'
+      - 'gooddata-pandas/**'
+      - 'gooddata-sdk/**'
+jobs:
+  docs-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+          cache: 'pip'
+          cache-dependency-path: |
+            tox-requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tox-requirements.txt
+      - name: Doc checks
+        run: |
+          make docs

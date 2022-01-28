@@ -5,14 +5,53 @@ from __future__ import annotations
 import argparse
 import fileinput
 import re
+from collections import OrderedDict
 from datetime import date
 from pathlib import Path
-from typing import AnyStr
+from typing import AnyStr, Pattern
 
 COPYRIGHT_RE: re.Pattern[AnyStr] = re.compile(r"GoodData Corporation", re.IGNORECASE)
 
+# see https://stackoverflow.com/questions/27726545/python-glob-but-against-a-list-of-strings-rather-than-the-filesystem
+# answer from Pugsley
 
-def load_ignore_file(ignore_path: Path, verbose: bool) -> list[str]:
+# Order of ``**/`` and ``/**`` in RE tokenization pattern doesn't matter
+# because ``**/`` will be caught first no matter what, making ``/**`` the only option later on.
+# W/o leading or trailing ``/`` two consecutive asterisks will be treated as literals.
+escaped_glob_tokens_to_re = OrderedDict(
+    (
+        # Edge-case #1. Catches recursive globs in the middle of path. Requires edge case #2 handled after this case.
+        (r"/\*\*", r"(?:/.+?)*"),
+        # Edge-case #2. Catches recursive globs at the start of path.
+        # Requires edge case #1 handled before this case. ``^`` is used to ensure proper location for ``**/``.
+        (r"\*\*/", r"(?:^.+?/)*"),
+        # ``[^/]*?`` is used to ensure that ``*`` won't match subdirs, as with naive ``.*?`` solution.
+        (r"\*", r"[^/]*?"),
+        (r"\?", r"."),
+        # Escaped special glob character.
+        (r"\[\*\]", r"\*"),
+        # Escaped special glob character.
+        (r"\[\?\]", r"\?"),
+        # Requires ordered dict, so that ``\[!`` preceded ``\[`` in RE pattern.
+        # Needed mostly to differentiate between ``!`` used within character class ``[]`` and outside of it,
+        # to avoid faulty conversion.
+        (r"\[!", r"[^"),
+        (r"\[", r"["),
+        (r"\]", r"]"),
+    )
+)
+
+# Each glob patters is first transformed by ``re.escape`` so that characters like ``.`` not handled by our glob
+# are correctly represented in final regexp pattern. ``**/*.jpeg`` is changed to ``\*\*/\*\.jpeg``.
+# Regexp to match ``\*`` is ``\\\*``, that is why replacement from \ to \\\ is needed in replacement regexp.
+escaped_glob_replacement = re.compile("({})".format("|".join(escaped_glob_tokens_to_re).replace("\\", "\\\\\\")))
+
+
+def glob_to_re(pattern):
+    return escaped_glob_replacement.sub(lambda match: escaped_glob_tokens_to_re[match.group(0)], re.escape(pattern))
+
+
+def load_ignore_file(ignore_path: Path, verbose: bool) -> list[Pattern[AnyStr]]:
     if not ignore_path.exists() or not ignore_path.is_file():
         print(f"Ignore file {str(ignore_path)} not found")
         return []
@@ -20,7 +59,9 @@ def load_ignore_file(ignore_path: Path, verbose: bool) -> list[str]:
     with open(ignore_path, "rt") as f:
         ignore_lines = f.readlines()
 
-    result = [line.strip() for line in ignore_lines if not line.startswith("#") and len(line.strip())]
+    result = [
+        re.compile(glob_to_re(line.strip())) for line in ignore_lines if not line.startswith("#") and len(line.strip())
+    ]
     if verbose:
         print(f"Ignore file {str(ignore_path)} loaded: {str(len(result))} records")
     return result
@@ -88,15 +129,15 @@ def safe_check_file(file_name: Path, update_file: bool, verbose: bool) -> int:
         return 1
 
 
-def is_ignored_file(ignore_list: list[str], file_name: Path) -> bool:
+def is_ignored_file(ignore_list: list[Pattern[AnyStr]], file_name: Path) -> bool:
     for ignore_item in ignore_list:
-        if file_name.match(ignore_item):
+        if ignore_item.fullmatch(str(file_name)):
             return True
 
     return False
 
 
-def process_files(file_names: list[str], ignore_list: list[str], update_file: bool, verbose: bool) -> int:
+def process_files(file_names: list[str], ignore_list: list[Pattern[AnyStr]], update_file: bool, verbose: bool) -> int:
     ret_val = 0
     for file_name in file_names:
         file_path = Path(file_name)
@@ -106,7 +147,7 @@ def process_files(file_names: list[str], ignore_list: list[str], update_file: bo
     return ret_val
 
 
-def process_folder(folder_path: Path, ignore_list: list[str], update_file: bool, verbose: bool) -> int:
+def process_folder(folder_path: Path, ignore_list: list[Pattern[AnyStr]], update_file: bool, verbose: bool) -> int:
     if not folder_path.is_dir():
         print(f"{str(folder_path)} is not directory")
         return 1
