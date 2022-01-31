@@ -17,99 +17,60 @@ ValidObjects = Dict[str, Set[str]]
 
 
 class CatalogEntry:
-    @property
-    def id(self) -> str:
-        raise NotImplementedError()
-
-    @property
-    def type(self) -> str:
-        raise NotImplementedError()
-
-    @property
-    def obj_id(self) -> ObjId:
-        raise NotImplementedError()
-
-    @property
-    def title(self) -> str:
-        raise NotImplementedError()
-
-    @property
-    def description(self) -> str:
-        raise NotImplementedError()
-
-
-class CatalogLabel(CatalogEntry):
-    def __init__(self, label: dict[str, Any]) -> None:
-        super(CatalogLabel, self).__init__()
-
-        self._l = label["attributes"]
-        self._label = label
-        self._obj_id = ObjId(self._label["id"], type=self._label["type"])
+    def __init__(self, entity: dict[str, Any]) -> None:
+        self._e = entity["attributes"]
+        self._entity = entity
+        self._obj_id = ObjId(self._entity["id"], type=self._entity["type"])
 
     @property
     def id(self) -> str:
-        return self._label["id"]
+        return self._entity["id"]
 
     @property
     def type(self) -> str:
-        return self._label["type"]
+        return self._entity["type"]
 
     @property
-    def title(self) -> str:
-        return self._label["type"]
+    def title(self) -> Optional[str]:
+        # Optional, not all metadata objects contain title
+        return self._e.get("title")
+
+    @property
+    def description(self) -> Optional[str]:
+        # Optional, not all metadata objects contain description
+        return self._e.get("description")
 
     @property
     def obj_id(self) -> ObjId:
         return self._obj_id
 
-    @property
-    def description(self) -> str:
-        return self._l["description"]
-
-    @property
-    def primary(self) -> bool:
-        return "primary" in self._l and self._l["primary"]
-
-    def as_computable(self) -> Attribute:
-        return Attribute(local_id=self.id, label=self.id)
+    @classmethod
+    def class_name(cls) -> str:
+        return cls.__name__
 
     def __str__(self) -> str:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"CatalogLabel(id={self.id}, title={self.title})"
+        return f"{self.class_name()}(id={self.id}, title={self.title})"
+
+
+class CatalogLabel(CatalogEntry):
+    @property
+    def primary(self) -> bool:
+        return "primary" in self._e and self._e["primary"]
+
+    def as_computable(self) -> Attribute:
+        return Attribute(local_id=self.id, label=self.id)
 
 
 class CatalogAttribute(CatalogEntry):
-    def __init__(self, attribute: dict[str, Any], labels: list[CatalogLabel]) -> None:
-        super(CatalogAttribute, self).__init__()
+    def __init__(self, entity: dict[str, Any], labels: list[CatalogLabel]) -> None:
+        super(CatalogAttribute, self).__init__(entity)
 
-        self._a = attribute["attributes"]
-        self._attribute = attribute
         self._labels = labels
         self._labels_idx = dict([(str(label.obj_id), label) for label in labels])
         self._dataset: Optional[CatalogDataset] = None
-        self._obj_id = ObjId(self._attribute["id"], self._attribute["type"])
-
-    @property
-    def id(self) -> str:
-        return self._attribute["id"]
-
-    @property
-    def type(self) -> str:
-        return self._attribute["type"]
-
-    @property
-    def obj_id(self) -> ObjId:
-        return self._obj_id
-
-    @property
-    def title(self) -> str:
-        return self._a["title"]
-
-    @property
-    def description(self) -> str:
-        return self._a["description"]
 
     @property
     def labels(self) -> list[CatalogLabel]:
@@ -130,7 +91,7 @@ class CatalogAttribute(CatalogEntry):
 
     @property
     def granularity(self) -> Union[str, None]:
-        return self._a["granularity"] if "granularity" in self._a else None
+        return self._e["granularity"] if "granularity" in self._e else None
 
     def primary_label(self) -> Union[CatalogLabel, None]:
         # use cast as mypy is not applying next, it claims, type is filter[CatalogLabel]
@@ -150,129 +111,36 @@ class CatalogAttribute(CatalogEntry):
         # cannot even write meaningful error here. cannot create attribute from attribute? :D
         raise ValueError()
 
-    def __str__(self) -> str:
-        return self.__repr__()
-
     def __repr__(self) -> str:
         return f"CatalogAttribute(id={self.id}, title={self.title}, labels={self.labels})"
 
 
 class CatalogFact(CatalogEntry):
-    def __init__(self, fact: dict[str, Any]) -> None:
-        super(CatalogFact, self).__init__()
-
-        self._f = fact["attributes"]
-        self._fact = fact
-        self._obj_id = ObjId(self._fact["id"], self._fact["type"])
-
-    @property
-    def id(self) -> str:
-        return self._fact["id"]
-
-    @property
-    def type(self) -> str:
-        return self._fact["type"]
-
-    @property
-    def obj_id(self) -> ObjId:
-        return self._obj_id
-
-    @property
-    def title(self) -> str:
-        return self._f["title"]
-
-    @property
-    def description(self) -> str:
-        return self._f["description"]
-
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=ObjId(self.id, "fact"))
 
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"CatalogFact(id={self.id}, title={self.title})"
-
 
 class CatalogMetric(CatalogEntry):
-    def __init__(self, metric: dict[str, Any]) -> None:
-        super(CatalogMetric, self).__init__()
-
-        self._m = metric["attributes"]
-        self._metric = metric
-        self._obj_id = ObjId(self._metric["id"], self._metric["type"])
-
-    @property
-    def id(self) -> str:
-        return self._metric["id"]
-
-    @property
-    def type(self) -> str:
-        return self._metric["type"]
-
-    @property
-    def obj_id(self) -> ObjId:
-        return self._obj_id
-
-    @property
-    def title(self) -> str:
-        return self._m["title"]
-
-    @property
-    def description(self) -> str:
-        return self._m["description"]
-
     @property
     def format(self) -> str:
-        return self._m["content"]["format"]
+        return self._e["content"]["format"]
 
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=ObjId(self.id, "metric"))
 
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"CatalogMetric(id={self.id}, title={self.title})"
-
 
 class CatalogDataset(CatalogEntry):
-    def __init__(self, dataset: dict[str, Any], attributes: list[CatalogAttribute], facts: list[CatalogFact]) -> None:
-        super(CatalogDataset, self).__init__()
-
-        self._d = dataset["attributes"]
-        self._dataset = dataset
+    def __init__(self, entity: dict[str, Any], attributes: list[CatalogAttribute], facts: list[CatalogFact]) -> None:
+        super(CatalogDataset, self).__init__(entity)
         self._attributes = attributes
         self._facts = facts
-        self._obj_id = ObjId(self._dataset["id"], self._dataset["type"])
 
         for attr in self.attributes:
             attr.dataset = self
 
     @property
-    def id(self) -> str:
-        return self._dataset["id"]
-
-    @property
-    def type(self) -> str:
-        return self._dataset["type"]
-
-    @property
     def data_type(self) -> str:
-        return self._d["type"]
-
-    @property
-    def obj_id(self) -> ObjId:
-        return self._obj_id
-
-    @property
-    def title(self) -> str:
-        return self._d["title"]
-
-    @property
-    def description(self) -> str:
-        return self._d["description"]
+        return self._e["type"]
 
     @property
     def attributes(self) -> list[CatalogAttribute]:
@@ -304,10 +172,7 @@ class CatalogDataset(CatalogEntry):
         if not len(new_attributes) and not len(new_facts):
             return None
 
-        return CatalogDataset(self._dataset, new_attributes, new_facts)
-
-    def __str__(self) -> str:
-        return self.__repr__()
+        return CatalogDataset(self._entity, new_attributes, new_facts)
 
     def __repr__(self) -> str:
         return f"CatalogDataset(id={self.id}, title={self.title}, facts={self.facts}, attributes={self.attributes})"
