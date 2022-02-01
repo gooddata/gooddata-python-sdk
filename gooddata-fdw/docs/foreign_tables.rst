@@ -28,6 +28,7 @@ You can re-execute the procedure to update foreign tables.
 
    -- This maps all insights stored in GoodData.CN workspace `workspace_id` into the PostgreSQL schema named `workspace_id`
    CALL import_gooddata('workspace_id', 'insights');
+   
    -- By utilizing the third parameter you can override the name of the target PostgreSQL schema
    CALL import_gooddata('workspace_id', 'insights', 'custom_schema');
 
