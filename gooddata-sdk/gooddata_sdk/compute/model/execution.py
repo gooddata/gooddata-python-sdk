@@ -1,12 +1,13 @@
-# (C) 2021 GoodData Corporation
+# (C) 2022 GoodData Corporation
 from __future__ import annotations
 
 from typing import Any, Optional, Union
 
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
-from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute_model import Attribute, Filter, Metric, compute_model_to_api_model
+from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.filter import Filter
+from gooddata_sdk.compute.model.metric import Metric
 
 
 class ExecutionDefinition:
@@ -179,31 +180,22 @@ class ExecutionResponse:
         return f"ExecutionResponse(workspace_id={self.workspace_id}, result_id={self.result_id})"
 
 
-class ComputeService:
+def compute_model_to_api_model(
+    attributes: Optional[list[Attribute]] = None,
+    metrics: Optional[list[Metric]] = None,
+    filters: Optional[list[Filter]] = None,
+) -> models.AFM:
     """
-    Compute service drives computation of analytics for a GoodData.CN workspaces. The prescription of what to compute
-    is encapsulated by the ExecutionDefinition which consists of attributes, metrics, filters and definition of
-    dimensions that influence how to organize the data in the result.
+    Transforms categorized execution model entities (attributes, metrics, facts) into an API model
+    that can be used for computations of data results or computations of object availability.
+
+    :param attributes: optionally specify list of attributes
+    :param metrics: optionally specify list of metrics
+    :param filters: optionally specify list of filters
+    :return:
     """
-
-    def __init__(self, api_client: GoodDataApiClient):
-        self._actions_api = apis.ActionsApi(api_client.afm_client)
-
-    def for_exec_def(self, workspace_id: str, exec_def: ExecutionDefinition) -> ExecutionResponse:
-        """
-        Starts computation in GoodData.CN workspace, using the provided execution definition.
-
-        :param workspace_id: workspace identifier
-        :param exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
-            into dimensions
-
-        :return:
-        """
-        response = self._actions_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
-
-        return ExecutionResponse(
-            actions_api=self._actions_api,
-            workspace_id=workspace_id,
-            exec_def=exec_def,
-            response=response,
-        )
+    return models.AFM(
+        attributes=[a.as_api_model() for a in attributes] if attributes is not None else [],
+        measures=[m.as_api_model() for m in metrics] if metrics is not None else [],
+        filters=[f.as_api_model() for f in filters if not f.is_noop()] if filters is not None else [],
+    )

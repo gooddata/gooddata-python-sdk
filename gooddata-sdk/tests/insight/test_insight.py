@@ -7,7 +7,7 @@ import os
 import pytest
 
 from gooddata_sdk import Insight
-from gooddata_sdk.compute_model import compute_model_to_api_model
+from gooddata_sdk.compute.model.execution import compute_model_to_api_model
 from tests.insight.fixtures import load_vis_obj
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

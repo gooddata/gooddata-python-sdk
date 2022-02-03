@@ -5,37 +5,39 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 """
 
 from gooddata_sdk._version import __version__
-from gooddata_sdk.catalog import (
-    Catalog,
+from gooddata_sdk.catalog.workspace.model.content_objects.dataset import (
     CatalogAttribute,
     CatalogDataset,
     CatalogFact,
     CatalogLabel,
-    CatalogMetric,
-    CatalogService,
 )
+from gooddata_sdk.catalog.workspace.model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute import ComputeService, ExecutionDefinition, ExecutionResponse, ExecutionResult
-from gooddata_sdk.compute_model import (
+from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
+from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllTimeFilter,
-    ArithmeticMetric,
-    Attribute,
-    ExecModelEntity,
+    AttributeFilter,
     Filter,
-    Metric,
     MetricValueFilter,
     NegativeAttributeFilter,
-    ObjId,
+    PositiveAttributeFilter,
+    RankingFilter,
+    RelativeDateFilter,
+)
+from gooddata_sdk.compute.model.metric import (
+    ArithmeticMetric,
+    Metric,
     PopDate,
     PopDateDataset,
     PopDateMetric,
     PopDatesetMetric,
-    PositiveAttributeFilter,
-    RankingFilter,
-    RelativeDateFilter,
     SimpleMetric,
 )
+from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import Insight, InsightAttribute, InsightBucket, InsightMetric, InsightService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService

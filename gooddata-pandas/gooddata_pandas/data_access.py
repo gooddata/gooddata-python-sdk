@@ -12,8 +12,18 @@ from gooddata_pandas.utils import (
     _to_item,
     _typed_attribute_value,
 )
-from gooddata_sdk import Attribute, Catalog, ExecutionDefinition, ExecutionResponse, Filter, GoodDataSdk, Metric, ObjId
-from gooddata_sdk.compute_model import AttributeFilter, MetricValueFilter
+from gooddata_sdk import (
+    Attribute,
+    AttributeFilter,
+    CatalogWorkspaceContent,
+    ExecutionDefinition,
+    ExecutionResponse,
+    Filter,
+    GoodDataSdk,
+    Metric,
+    MetricValueFilter,
+    ObjId,
+)
 
 
 class ExecutionDefinitionBuilder:
@@ -206,7 +216,7 @@ def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_me
     return data
 
 
-def _typed_result(catalog: Catalog, attribute: Attribute, result_values: list[Any]) -> list[Any]:
+def _typed_result(catalog: CatalogWorkspaceContent, attribute: Attribute, result_values: list[Any]) -> list[Any]:
     """Convert result_values to proper data types."""
     catalog_attribute = catalog.find_label_attribute(attribute.label)
     if catalog_attribute is None:
@@ -216,7 +226,7 @@ def _typed_result(catalog: Catalog, attribute: Attribute, result_values: list[An
 
 def _extract_from_attributes_and_maybe_metrics(
     response: ExecutionResponse,
-    catalog: Catalog,
+    catalog: CatalogWorkspaceContent,
     cols: list[str],
     col_to_attr_idx: dict[str, int],
     col_to_metric_idx: dict[str, int],
@@ -292,7 +302,7 @@ def compute_and_extract(
     exec_def = response.exec_def
     cols = list(columns.keys())
 
-    catalog = sdk.catalog.get_full_catalog(workspace_id)
+    catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
 
     if not exec_def.has_attributes():
         return _extract_for_metrics_only(response, cols, col_to_metric_idx), dict()
