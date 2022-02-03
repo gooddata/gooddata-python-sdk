@@ -41,3 +41,22 @@ def test_catalog_availability(test_config):
     # rough initial smoke-test; just do a quick 'rub' that filtered catalog has less entries than full catalog
     assert len(filtered_catalog.metrics) == 24
     assert len(filtered_catalog.datasets) == 3
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_sources.json"))
+def test_catalog_data_source(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_sources = sdk.catalog_data_source.list_data_sources()
+
+    assert len(data_sources) == 1
+    assert data_sources[0].id == "demo-test-ds"
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_source_tables.json"))
+def test_catalog_data_source_table(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_tables = sdk.catalog_data_source.list_data_source_tables("demo-test-ds")
+
+    assert len(data_source_tables) == 5
+    order_lines = next(filter(lambda x: x.id == "order_lines", data_source_tables))
+    assert len(order_lines.columns) == 11

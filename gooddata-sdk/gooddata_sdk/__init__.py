@@ -5,6 +5,8 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 """
 
 from gooddata_sdk._version import __version__
+from gooddata_sdk.catalog.data_source.model.content_objects.table import CatalogDataSourceTable
+from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.workspace.model.content_objects.dataset import (
     CatalogAttribute,
     CatalogDataset,
