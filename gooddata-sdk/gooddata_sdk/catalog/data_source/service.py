@@ -33,6 +33,9 @@ class CatalogDataSourceService:
         data_sources = load_all_entities(get_data_sources)
         return [CatalogDataSource.from_api(ds) for ds in data_sources.data]
 
+    def get_data_source(self, data_source_id: str) -> CatalogDataSource:
+        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id))
+
     def list_data_source_tables(self, data_source: str) -> List[CatalogDataSourceTable]:
         get_data_source_tables = functools.partial(
             self._entities_api.get_all_entities_data_source_tables,
