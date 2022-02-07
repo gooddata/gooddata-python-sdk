@@ -16,11 +16,12 @@ Example of how to create an instance of GoodDataSdk:
     token = "some_user_token"
     sdk = gooddata_sdk.GoodDataSdk.create(host, token)
 
-Catalog Service
-===============
+Catalog Workspace Content Service
+==================================
 
-The ``gooddata_sdk.catalog`` service enables you to list catalog objects from a workspace. It contains all the datasets and
-metrics registered in the workspace.
+The ``gooddata_sdk.catalog_workspace_content`` service enables you to list catalog objects from a workspace. It contains all the datasets and
+metrics registered in the workspace. Each dataset consists of attributes, their labels and facts.
+There is also a special type of dataset - date dataset. It contains attribute(label) for each date granularity (year, month, ...).
 
 Example of how to read all datasets and metrics in a workspace:
 
@@ -29,7 +30,7 @@ Example of how to read all datasets and metrics in a workspace:
     workspace_id = "demo"
 
     # read catalog for demo workspace
-    catalog = sdk.catalog.get_full_catalog(workspace_id)
+    catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
 
     # print all dataset in the workspace
     for dataset in catalog.datasets:
@@ -38,6 +39,47 @@ Example of how to read all datasets and metrics in a workspace:
     # print all metrics in the workspace
     for metric in catalog.metrics:
         print(str(metric))
+
+Catalog Data Source Service
+==================================
+
+The ``gooddata_sdk.catalog_data_source`` service enables you to manage data sources and list their tables.
+Data source object represents your database, which you integrate with GoodData.CN.
+
+Example of how you can manipulate with data sources:
+
+.. code-block:: python
+
+    # create data source using general interface - can be used for any type of data source
+    sdk.catalog_data_source.create_or_update_data_source(
+        gooddata_sdk.CatalogDataSource(
+            id='ds_id', name='DS ID', data_source_type='POSTGRESQL',
+            url='jdbc:postgresql://localhost:5432/demo', schema='demo',
+            username='demouser', password='demopass'
+        )
+    )
+
+    # create Snowflake data source using specialized interface
+    sdk.catalog_data_source.create_or_update_snowflake_data_source(
+        gooddata_sdk.CatalogDataSourceUserPwd(
+            id='ds_id', name='DS ID',
+            username='user', password='pwd',
+            schema='demo',
+        ),
+        account='mycompany', warehouse='mywarehouse', db_name='mydatabase'
+    )
+
+    # Look for other create_or_update methods in the service to find your data source type
+
+    # list data sources
+    data_sources = sdk.catalog_data_source.list_data_sources()
+
+    # get single data source
+    data_sources = sdk.catalog_data_source.get_entity_data_sources('ds_id')
+
+    # delete data source
+    sdk.catalog_data_source.delete_data_source(data_source_id='ds_id')
+
 
 Insights Service
 ================
