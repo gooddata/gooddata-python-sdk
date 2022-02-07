@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import base64
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, List, Optional, Tuple
 
 from gooddata_metadata_client.model.json_api_data_source_in import JsonApiDataSourceIn
@@ -16,9 +16,9 @@ class CatalogDataSource(CatalogNameEntity):
     data_source_type: str
     url: str
     schema: str
-    username: Optional[str] = None
-    password: Optional[str] = None
-    token: Optional[str] = None
+    username: Optional[str] = field(default=None, repr=True)
+    password: Optional[str] = field(default=None, repr=False)
+    token: Optional[str] = field(default=None, repr=False)
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogDataSource:
