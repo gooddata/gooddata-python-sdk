@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Optional
 
 from gooddata_sdk.compute.model.base import ObjId
@@ -39,3 +40,9 @@ class CatalogEntity:
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
+
+
+@dataclass
+class CatalogNameEntity:
+    id: str
+    name: str
