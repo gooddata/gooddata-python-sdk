@@ -50,7 +50,8 @@ Example of how you can manipulate with data sources:
 
 .. code-block:: python
 
-    # create data source using general interface - can be used for any type of data source
+    # create (or update) data source using general interface - can be used for any type of data source
+    # if data source already exists, it is updated
     sdk.catalog_data_source.create_or_update_data_source(
         gooddata_sdk.CatalogDataSource(
             id='ds_id', name='DS ID', data_source_type='POSTGRESQL',
@@ -79,6 +80,9 @@ Example of how you can manipulate with data sources:
 
     # delete data source
     sdk.catalog_data_source.delete_data_source(data_source_id='ds_id')
+
+    # patch data source attribute(s)
+    sdk.catalog_data_source.patch_data_source_attributes(data_source_id="ds_id", attributes={"name": "Name2"})
 
 
 Insights Service
