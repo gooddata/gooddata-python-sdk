@@ -34,7 +34,7 @@ class CatalogDataSourceService:
         return [CatalogDataSource.from_api(ds) for ds in data_sources.data]
 
     def get_data_source(self, data_source_id: str) -> CatalogDataSource:
-        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id))
+        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id).data)
 
     def list_data_source_tables(self, data_source: str) -> List[CatalogDataSourceTable]:
         get_data_source_tables = functools.partial(
@@ -151,3 +151,13 @@ class CatalogDataSourceService:
 
     def delete_data_source(self, data_source_id: str) -> None:
         self._entities_api.delete_entity_data_sources(data_source_id)
+
+    def patch_data_source_attributes(self, data_source_id: str, attributes: dict):
+        # TODO - workaround solution getting data source type from backend
+        #      - once backend accepts empty value in this field (enum), remove this code
+        current_ds = self.get_data_source(data_source_id)
+        attributes["type"] = attributes.get("type", current_ds.data_source_type)
+
+        self._entities_api.patch_entity_data_sources(
+            data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)
+        )

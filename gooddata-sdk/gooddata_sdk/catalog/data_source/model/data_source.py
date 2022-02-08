@@ -8,6 +8,9 @@ from typing import Any, List, Optional, Tuple
 from gooddata_metadata_client.model.json_api_data_source_in import JsonApiDataSourceIn
 from gooddata_metadata_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
 from gooddata_metadata_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
+from gooddata_metadata_client.model.json_api_data_source_patch import JsonApiDataSourcePatch
+from gooddata_metadata_client.model.json_api_data_source_patch_attributes import JsonApiDataSourcePatchAttributes
+from gooddata_metadata_client.model.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
 from gooddata_sdk.catalog.entity import CatalogNameEntity
 
 
@@ -55,6 +58,12 @@ class CatalogDataSource(CatalogNameEntity):
                     **credentials,
                 ),
             )
+        )
+
+    @classmethod
+    def to_api_patch(cls, data_source_id, attributes):
+        return JsonApiDataSourcePatchDocument(
+            data=JsonApiDataSourcePatch(id=data_source_id, attributes=JsonApiDataSourcePatchAttributes(**attributes))
         )
 
 
