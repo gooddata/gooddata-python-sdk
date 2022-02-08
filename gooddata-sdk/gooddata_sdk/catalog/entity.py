@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any, Optional
 
 from gooddata_sdk.compute.model.base import ObjId
@@ -42,7 +41,12 @@ class CatalogEntity:
         return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
 
 
-@dataclass
+# TODO - rewrite to data classes once it is possible
+# 1. Inheritance does not work, if attributes with defaults are used in parents
+#   https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
+#   fixed in Python 3.10, but now we have to support older python versions
+# 2. Generated attributes are not detected consistently in Sphinx, DOC generation fails
 class CatalogNameEntity:
-    id: str
-    name: str
+    def __init__(self, id: str, name: str):
+        self.id = id
+        self.name = name

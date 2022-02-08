@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import base64
-from dataclasses import dataclass, field
 from typing import Any, List, Optional, Tuple
 
 from gooddata_metadata_client.model.json_api_data_source_in import JsonApiDataSourceIn
@@ -14,14 +13,27 @@ from gooddata_metadata_client.model.json_api_data_source_patch_document import J
 from gooddata_sdk.catalog.entity import CatalogNameEntity
 
 
-@dataclass
 class CatalogDataSource(CatalogNameEntity):
-    data_source_type: str
-    url: str
-    schema: str
-    username: Optional[str] = field(default=None, repr=True)
-    password: Optional[str] = field(default=None, repr=False)
-    token: Optional[str] = field(default=None, repr=False)
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        data_source_type: str,
+        url: str,
+        schema: str,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        token: Optional[str] = None,
+        url_params: Optional[List[Tuple[str, str]]] = None,
+    ):
+        super(CatalogDataSource, self).__init__(id, name)
+        self.data_source_type = data_source_type
+        self.url = url
+        self.schema = schema
+        self.username = username
+        self.password = password
+        self.token = token
+        self.url_params = url_params
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogDataSource:
@@ -61,25 +73,37 @@ class CatalogDataSource(CatalogNameEntity):
         )
 
     @classmethod
-    def to_api_patch(cls, data_source_id, attributes):
+    def to_api_patch(cls, data_source_id: str, attributes: dict) -> JsonApiDataSourcePatchDocument:
         return JsonApiDataSourcePatchDocument(
             data=JsonApiDataSourcePatch(id=data_source_id, attributes=JsonApiDataSourcePatchAttributes(**attributes))
         )
 
 
-@dataclass
 class CatalogDataSourceUserPwd(CatalogNameEntity):
-    schema: str
-    username: str
-    password: str
-    url_params: Optional[List[Tuple[str, str]]] = None
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        schema: str,
+        username: str,
+        password: str,
+        url_params: Optional[List[Tuple[str, str]]] = None,
+    ):
+        super(CatalogDataSourceUserPwd, self).__init__(id, name)
+        self.schema = schema
+        self.username = username
+        self.password = password
+        self.url_params = url_params
 
 
-@dataclass
 class CatalogDataSourceToken(CatalogNameEntity):
-    schema: str
-    token_path: str
-    url_params: Optional[List[Tuple[str, str]]] = None
+    def __init__(
+        self, id: str, name: str, schema: str, token_path: str, url_params: Optional[List[Tuple[str, str]]] = None
+    ):
+        super(CatalogDataSourceToken, self).__init__(id, name)
+        self.schema = schema
+        self.token_path = token_path
+        self.url_params = url_params
 
 
 def _join_params(url_params: Optional[List[Tuple[str, str]]], delimiter: str) -> str:

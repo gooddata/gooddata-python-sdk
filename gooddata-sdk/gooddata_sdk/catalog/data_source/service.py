@@ -152,7 +152,7 @@ class CatalogDataSourceService:
     def delete_data_source(self, data_source_id: str) -> None:
         self._entities_api.delete_entity_data_sources(data_source_id)
 
-    def patch_data_source_attributes(self, data_source_id: str, attributes: dict):
+    def patch_data_source_attributes(self, data_source_id: str, attributes: dict) -> None:
         # TODO - workaround solution getting data source type from backend
         #      - once backend accepts empty value in this field (enum), remove this code
         current_ds = self.get_data_source(data_source_id)
