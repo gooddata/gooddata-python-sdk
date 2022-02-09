@@ -12,8 +12,8 @@ Requirements
 Install Using Docker (Recommended)
 ==================================
 
-The GoodData.CN distribution comes with a Dockerfile which, when started, will run PostgreSQL 12 with multicorn
-and ``gooddata-fdw`` pre-installed. For an even better user experience there is a ``docker-compose.yaml`` file which contains 
+The Python SDK comes with a Dockerfile which, when started, will run PostgreSQL 12 with multicorn
+and ``gooddata-fdw`` pre-installed. For an even better user experience there is a ``docker-compose.yaml`` file which contains
 both the ``gooddata-fdw`` and ``gooddata-cn-ce`` services.
 
 Build and Run the Service
@@ -61,6 +61,47 @@ content (LDM, metrics, insights). Follow
 our `Getting Started documentation <https://www.gooddata.com/developers/cloud-native/doc/1.6/getting-started/>`_ if you
 need help with that.
 
+Connect with existing GoddData.CN installation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This use case is for users running a GoodData.CN image who want to connect it to the GoodData Foreign Data Wrapper. For connecting ``gooddata-fdw`` with GoodData.CN image both images have to run on the same network. You can create a new network and run both images there or use the default bridge network.
+
+.. note::
+
+   Default network bridge does not support accessing services by their name. You need to use an IP address in the host when defining the GoodData.CN server. The IP address can be found using command ``docker inspect <GoodData.CN container name>``.
+
+1. Build the ``gooddata-fdw`` service from ``docker-compose.yaml``:
+
+   .. code-block:: shell
+
+      docker-compose build gooddata-fdw
+
+2. Create a new network:
+
+   .. code-block:: shell
+
+      docker network create --driver bridge gd-cn-net
+
+3. Run GoodData.CN on created network and name it ``gooddata-cn-ce``:
+
+   .. code-block:: shell
+
+      docker run --rm --name gooddata-cn-ce -p 3000:3000 -p 5432:5432 -v /data \
+      --network gd-cn-net \
+      -e LICENSE_AND_PRIVACY_POLICY_ACCEPTED=YES \
+      -e APP_LOGLEVEL=INFO \
+      gooddata/gooddata-cn-ce:latest
+
+4. Run the ``gooddata-fdw`` service on created network and name it ``postgres-fdw``:
+
+   .. code-block:: shell
+
+      docker run --rm --name postgres-fdw -p 2543:5432 --network gd-cn-net \
+      -e POSTGRES_DB=gooddata -e POSTGRES_USER=gooddata -e POSTGRES_PASSWORD=gooddata123 \
+      gooddata-python-sdk_gooddata-fdw:latest \
+      postgres -c "shared_preload_libraries=foreign_table_exposer" -c "log_statement=all" -c "client_min_messages=DEBUG1" -c "log_min_messages=DEBUG1"
+
+
 Install Using Pip
 =================
 
@@ -69,3 +110,7 @@ Run the following command to install the ``gooddata-fdw`` package on your system
 .. code-block:: shell
 
     pip install gooddata-fdw
+
+.. warning::
+
+    For this use case, you also need to install and run PostgreSQL together with multicorn.
