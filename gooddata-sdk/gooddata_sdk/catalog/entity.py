@@ -1,7 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional
+import base64
+from pathlib import Path
+from typing import Any, Optional, Type
 
 from gooddata_sdk.compute.model.base import ObjId
 
@@ -50,3 +52,102 @@ class CatalogNameEntity:
     def __init__(self, id: str, name: str):
         self.id = id
         self.name = name
+
+
+class Credentials:
+    def to_api_args(self) -> dict[str, Any]:
+        raise NotImplementedError()
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        raise NotImplementedError()
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> Credentials:
+        raise NotImplementedError()
+
+    @classmethod
+    def create(cls, creds_classes: list[Type[Credentials]], entity: dict[str, Any]) -> Credentials:
+        for creds_class in creds_classes:
+            if creds_class.is_part_of_api(entity):
+                return creds_class.from_api(entity)
+
+        raise ValueError("No supported credentials found")
+
+    @classmethod
+    def validate_instance(cls, creds_classes: list[Type[Credentials]], instance: Credentials) -> None:
+        passed = isinstance(instance, tuple(creds_classes))
+        if not passed:
+            classes_as_str = ",".join([str(creds_class) for creds_class in creds_classes])
+            raise ValueError(f"Unsupported credentials type. Pick one of {classes_as_str}")
+
+
+class TokenCredentials(Credentials):
+    TOKEN_KEY: str = "token"
+    USER_KEY: str = "username"
+
+    def __init__(self, token: str):
+        self.token = token
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {self.TOKEN_KEY: self.token}
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.USER_KEY not in entity
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> TokenCredentials:
+        # Credentials are not returned for security reasons
+        return cls(token="")
+
+
+class TokenCredentialsFromFile(Credentials):
+    TOKEN_KEY: str = "token"
+    USER_KEY: str = "username"
+
+    def __init__(self, file_path: Path):
+        self.token = self.token_from_file(file_path)
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {self.TOKEN_KEY: self.token}
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.USER_KEY not in entity
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> TokenCredentials:
+        # Credentials are not returned for security reasons
+        raise NotImplementedError
+
+    @staticmethod
+    def token_from_file(file_path: Path) -> str:
+        with open(file_path, "rb") as fp:
+            return base64.b64encode(fp.read()).decode("utf-8")
+
+
+class BasicCredentials(Credentials):
+    USER_KEY: str = "username"
+    PASSWORD_KEY: str = "password"
+
+    def __init__(self, username: str, password: str):
+        self.username = username
+        self.password = password
+
+    def to_api_args(self) -> dict[str, Any]:
+        return {self.USER_KEY: self.username, self.PASSWORD_KEY: self.password}
+
+    @classmethod
+    def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
+        return cls.USER_KEY in entity
+
+    @classmethod
+    def from_api(cls, attributes: dict[str, Any]) -> BasicCredentials:
+        # Credentials are not returned from security reasons
+        return cls(
+            username=attributes[cls.USER_KEY],
+            # Password is not returned from API (security)
+            # You have to fill it to keep it or update it
+            password="",
+        )

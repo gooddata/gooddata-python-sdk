@@ -46,6 +46,16 @@ Catalog Data Source Service
 The ``gooddata_sdk.catalog_data_source`` service enables you to manage data sources and list their tables.
 Data source object represents your database, which you integrate with GoodData.CN.
 
+Generally there are two way how to register data sources:
+
+1. Default, works for all data source types.
+
+   - You specify jdbc url, data source type and relevant credentials.
+
+2. Custom per data source types.
+
+   - You specify custom attributes relevant for your data source and data source type and url are set in background.
+
 Example of how you can manipulate with data sources:
 
 .. code-block:: python
@@ -53,24 +63,76 @@ Example of how you can manipulate with data sources:
     # create (or update) data source using general interface - can be used for any type of data source
     # if data source already exists, it is updated
     sdk.catalog_data_source.create_or_update_data_source(
-        gooddata_sdk.CatalogDataSource(
-            id='ds_id', name='DS ID', data_source_type='POSTGRESQL',
-            url='jdbc:postgresql://localhost:5432/demo', schema='demo',
-            username='demouser', password='demopass'
+        CatalogDataSource(
+            id="test",
+            name="Test2",
+            url="jdbc:postgres://localhost:5432/demo",
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("param", "value")]
+        )
+    )
+
+    # use Postgres specific interface
+    sdk.catalog_data_source.create_or_update_data_source(
+        CatalogDataSourcePostgres(
+            id="test",
+            name="Test2",
+            custom_attributes=PostgresAttributes(
+                host="localhost", db_name="demo"
+            ),
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("param", "value")]
         )
     )
 
     # create Snowflake data source using specialized interface
-    sdk.catalog_data_source.create_or_update_snowflake_data_source(
-        gooddata_sdk.CatalogDataSourceUserPwd(
-            id='ds_id', name='DS ID',
-            username='user', password='pwd',
-            schema='demo',
-        ),
-        account='mycompany', warehouse='mywarehouse', db_name='mydatabase'
+    sdk.catalog_data_source.create_or_update_data_source(
+        CatalogDataSourceSnowflake(
+            id="test",
+            name="Test2",
+            custom_attributes=SnowflakeAttributes(
+                account="mycompany", warehouse="MYWAREHOUSE", db_name="MYDATABASE"
+            ),
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("param", "value")]
+        )
     )
 
-    # Look for other create_or_update methods in the service to find your data source type
+    # BigQuery requires path to credentials file, where service account definition is stored
+    sdk.catalog_data_source.create_or_update_data_source(
+        CatalogDataSourceBigQuery(
+            id="test",
+            name="Test",
+            custom_attributes=BigQueryAttributes(
+                project_id="project_id"
+            ),
+            schema="demo",
+            credentials=TokenCredentialsFromFile(
+                file_path=Path("credentials") / "bigquery_service_account.json"
+            ),
+            enable_caching=True,
+            cache_path=["cache_schema"],
+            url_params=[("param", "value")]
+        )
+    )
+
+    # Look for other CatalogDataSource classes to find your data source type
+    #
 
     # list data sources
     data_sources = sdk.catalog_data_source.list_data_sources()
