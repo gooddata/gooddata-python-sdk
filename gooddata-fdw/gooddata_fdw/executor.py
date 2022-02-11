@@ -9,7 +9,7 @@ from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.filter import extract_filters_from_quals
 from gooddata_fdw.options import ServerOptions, TableOptions
 from gooddata_fdw.result_reader import InsightTableResultReader, TableResultReader
-from gooddata_sdk.sdk import GoodDataSdk
+from gooddata_sdk import GoodDataSdk
 
 
 class InitData(NamedTuple):

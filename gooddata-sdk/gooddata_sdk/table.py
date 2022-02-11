@@ -4,8 +4,11 @@ from __future__ import annotations
 from typing import Any, Generator, Optional, Union
 
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute import ComputeService, ExecutionDefinition, ExecutionResponse, ExecutionResult
-from gooddata_sdk.compute_model import Attribute, Filter, Metric
+from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.filter import Filter
+from gooddata_sdk.compute.model.metric import Metric
+from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import Insight
 
 _TABLE_ROW_BATCH_SIZE = 512

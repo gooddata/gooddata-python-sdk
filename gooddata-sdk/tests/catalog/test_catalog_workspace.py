@@ -14,10 +14,10 @@ _fixtures_dir = _current_dir / "fixtures"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "insurance_demo_catalog.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog.json"))
 def test_catalog_load(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    catalog = sdk.catalog.get_full_catalog(test_config["workspace"])
+    catalog = sdk.catalog_workspace_content.get_full_catalog(test_config["workspace"])
 
     # rough initial smoke-test; just do a quick 'rub'
     assert len(catalog.metrics) == 24
@@ -30,10 +30,10 @@ def test_catalog_load(test_config):
     assert catalog.get_dataset("products") is not None
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "insurance_demo_catalog_availability.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_availability.json"))
 def test_catalog_availability(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    catalog = sdk.catalog.get_full_catalog(test_config["workspace"])
+    catalog = sdk.catalog_workspace_content.get_full_catalog(test_config["workspace"])
     claim_count = catalog.get_metric("campaign_spend")
 
     filtered_catalog = catalog.catalog_with_valid_objects(claim_count)

@@ -6,23 +6,25 @@ from typing import Any, Optional, Union, cast
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute_model import (
+from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
     AllTimeFilter,
-    ArithmeticMetric,
-    Attribute,
     Filter,
-    Metric,
     MetricValueFilter,
     NegativeAttributeFilter,
-    ObjId,
+    PositiveAttributeFilter,
+    RankingFilter,
+    RelativeDateFilter,
+)
+from gooddata_sdk.compute.model.metric import (
+    ArithmeticMetric,
+    Metric,
     PopDate,
     PopDateDataset,
     PopDateMetric,
     PopDatesetMetric,
-    PositiveAttributeFilter,
-    RankingFilter,
-    RelativeDateFilter,
     SimpleMetric,
 )
 from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities

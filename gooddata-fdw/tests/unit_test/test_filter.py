@@ -7,7 +7,7 @@ import pytest
 
 from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.filter import MAX_DATE, MIN_DATE, extract_filters_from_quals
-from gooddata_sdk.compute_model import AbsoluteDateFilter, ObjId, PositiveAttributeFilter
+from gooddata_sdk import AbsoluteDateFilter, ObjId, PositiveAttributeFilter
 
 start_date = datetime.date(2021, 1, 1)
 end_date = datetime.date(2021, 2, 1)

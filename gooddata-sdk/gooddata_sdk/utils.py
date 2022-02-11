@@ -5,7 +5,7 @@ import functools
 from typing import Any, Dict, NamedTuple, Union, cast
 
 from gooddata_metadata_client import ApiAttributeError
-from gooddata_sdk.compute_model import ObjId
+from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
 IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]

@@ -5,8 +5,7 @@ from typing import Optional, Union
 
 import gooddata_sdk as sdk
 from gooddata_fdw.environment import ColumnDefinition
-from gooddata_sdk.catalog import CatalogAttribute
-from gooddata_sdk.compute_model import Attribute, Metric
+from gooddata_sdk import Attribute, CatalogAttribute, Metric
 from gooddata_sdk.type_converter import AttributeConverterStore, Converter
 
 
