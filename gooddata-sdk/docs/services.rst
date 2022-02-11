@@ -82,7 +82,7 @@ Example of how you can manipulate with data sources:
         CatalogDataSourcePostgres(
             id="test",
             name="Test2",
-            custom_attributes=PostgresAttributes(
+            db_specific_attributes=PostgresAttributes(
                 host="localhost", db_name="demo"
             ),
             schema="demo",
@@ -100,7 +100,7 @@ Example of how you can manipulate with data sources:
         CatalogDataSourceSnowflake(
             id="test",
             name="Test2",
-            custom_attributes=SnowflakeAttributes(
+            db_specific_attributes=SnowflakeAttributes(
                 account="mycompany", warehouse="MYWAREHOUSE", db_name="MYDATABASE"
             ),
             schema="demo",
@@ -118,7 +118,7 @@ Example of how you can manipulate with data sources:
         CatalogDataSourceBigQuery(
             id="test",
             name="Test",
-            custom_attributes=BigQueryAttributes(
+            db_specific_attributes=BigQueryAttributes(
                 project_id="project_id"
             ),
             schema="demo",

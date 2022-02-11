@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-import base64
 from typing import Any, List, Optional, Tuple, Type
 
 from gooddata_metadata_client.model.json_api_data_source_in import JsonApiDataSourceIn
@@ -33,14 +32,14 @@ class CatalogDataSource(CatalogNameEntity):
         credentials: Credentials,
         url: Optional[str] = None,
         data_source_type: Optional[str] = None,
-        custom_attributes: Optional[BigQueryAttributes | SnowflakeAttributes | PostgresAttributes] = None,
+        db_specific_attributes: Optional[DatabaseAttributes] = None,
         enable_caching: Optional[bool] = None,
         cache_path: Optional[list[str]] = None,
         url_params: Optional[List[Tuple[str, str]]] = None,
     ):
         super(CatalogDataSource, self).__init__(id, name)
         Credentials.validate_instance(self._SUPPORTED_CREDENTIALS, credentials)
-        self.custom_attributes = custom_attributes
+        self.db_specific_attributes = db_specific_attributes
         self.schema = schema
         self.credentials = credentials
         self.enable_caching = enable_caching
@@ -50,7 +49,7 @@ class CatalogDataSource(CatalogNameEntity):
         self.url = url or self._make_url()
 
     def _make_url(self) -> str:
-        if self.custom_attributes and self._URL_TMPL:
+        if self.db_specific_attributes and self._URL_TMPL:
             db_vendor = None
             if self._URL_VENDOR:
                 db_vendor = self._URL_VENDOR
@@ -58,7 +57,7 @@ class CatalogDataSource(CatalogNameEntity):
                 db_vendor = self._DATA_SOURCE_TYPE.lower()
             return (
                 self._URL_TMPL.format(
-                    **self.custom_attributes.attributes,
+                    **self.db_specific_attributes.str_attributes,
                     # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
                     # we inject custom or default (DS_TYPE.lower()) value there
                     db_vendor=db_vendor,
@@ -123,14 +122,20 @@ class CatalogDataSource(CatalogNameEntity):
         )
 
 
-class PostgresAttributes:
-    def __init__(self, host: str, db_name: str, port: int = 5432):
+class DatabaseAttributes:
+    @property
+    def str_attributes(self) -> dict[str, str]:
+        raise NotImplementedError
+
+
+class PostgresAttributes(DatabaseAttributes):
+    def __init__(self, host: str, db_name: str, port: str = "5432"):
         self.host = host
         self.port = port
         self.db_name = db_name
 
     @property
-    def attributes(self) -> dict:
+    def str_attributes(self) -> dict[str, str]:
         return dict(host=self.host, port=self.port, db_name=self.db_name)
 
 
@@ -147,15 +152,15 @@ class CatalogDataSourceVertica(CatalogDataSourcePostgres):
     _DATA_SOURCE_TYPE = "VERTICA"
 
 
-class SnowflakeAttributes:
-    def __init__(self, account: str, warehouse: str, db_name: str, port: int = 443):
+class SnowflakeAttributes(DatabaseAttributes):
+    def __init__(self, account: str, warehouse: str, db_name: str, port: str = "443"):
         self.account = account
         self.port = port
         self.warehouse = warehouse
         self.db_name = db_name
 
     @property
-    def attributes(self) -> dict:
+    def str_attributes(self) -> dict[str, str]:
         return dict(account=self.account, port=self.port, warehouse=self.warehouse, db_name=self.db_name)
 
 
@@ -164,20 +169,16 @@ class CatalogDataSourceSnowflake(CatalogDataSource):
     _DATA_SOURCE_TYPE = "SNOWFLAKE"
 
 
-class BigQueryAttributes:
-    def __init__(self, project_id: str):
+class BigQueryAttributes(DatabaseAttributes):
+    def __init__(self, project_id: str, port: str = "443"):
         self.project_id = project_id
+        self.port = port
 
     @property
-    def attributes(self) -> dict:
-        return dict(project_id=self.project_id)
+    def str_attributes(self) -> dict[str, str]:
+        return dict(project_id=self.project_id, port=self.port)
 
 
 class CatalogDataSourceBigQuery(CatalogDataSource):
-    _URL_TMPL = "jdbc:{db_vendor}://https://www.googleapis.com/bigquery/v2:443;ProjectId={project_id};OAuthType=0"
+    _URL_TMPL = "jdbc:{db_vendor}://https://www.googleapis.com/bigquery/v2:{port};ProjectId={project_id};OAuthType=0"
     _DATA_SOURCE_TYPE = "BIGQUERY"
-
-
-def encode_bigquery_token(file_path: str) -> str:
-    with open(file_path, "rb") as fp:
-        return base64.b64encode(fp.read()).decode("utf-8")

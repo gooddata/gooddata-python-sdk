@@ -42,7 +42,7 @@ def _create_default_data_source(sdk):
         CatalogDataSourcePostgres(
             id="test",
             name="Test",
-            custom_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
@@ -77,7 +77,7 @@ def test_catalog_create_update_list_data_source(test_config):
             CatalogDataSourcePostgres(
                 id="test",
                 name="Test2",
-                custom_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+                db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
                 schema="demo",
                 credentials=BasicCredentials(
                     username="demouser",
@@ -121,7 +121,7 @@ def test_catalog_create_data_source_redshift_spec(test_config):
         data_source=CatalogDataSourceRedshift(
             id="test",
             name="Test2",
-            custom_attributes=PostgresAttributes(host="aws.endpoint", db_name="demo"),
+            db_specific_attributes=PostgresAttributes(host="aws.endpoint", db_name="demo"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
@@ -141,7 +141,7 @@ def test_catalog_create_data_source_vertica_spec(test_config):
         data_source=CatalogDataSourceVertica(
             id="test",
             name="Test2",
-            custom_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
@@ -161,7 +161,7 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
         data_source=CatalogDataSourceSnowflake(
             id="test",
             name="Test",
-            custom_attributes=SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
+            db_specific_attributes=SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
@@ -183,7 +183,7 @@ def test_catalog_create_data_source_bigquery_spec(test_config):
             data_source=CatalogDataSourceBigQuery(
                 id="test",
                 name="Test",
-                custom_attributes=BigQueryAttributes(project_id="gdc-us-dev"),
+                db_specific_attributes=BigQueryAttributes(project_id="gdc-us-dev"),
                 schema="demo",
                 credentials=TokenCredentialsFromFile(file_path=Path("credentials") / "bigquery_service_account.json"),
                 enable_caching=True,
