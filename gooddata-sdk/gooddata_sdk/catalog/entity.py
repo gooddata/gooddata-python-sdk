@@ -53,6 +53,12 @@ class CatalogNameEntity:
         self.id = id
         self.name = name
 
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, name={self.name})"
+
 
 class Credentials:
     def to_api_args(self) -> dict[str, Any]:

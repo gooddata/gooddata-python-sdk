@@ -7,9 +7,11 @@ from typing import List, Union
 import gooddata_afm_client.apis as afm_apis
 import gooddata_afm_client.models as afm_models
 import gooddata_metadata_client.apis as metadata_apis
+from gooddata_metadata_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.model.content_objects.dataset import CatalogFact, CatalogLabel
 from gooddata_sdk.catalog.workspace.model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.model.workspace import CatalogWorkspace
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -22,6 +24,59 @@ ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, C
 
 # Use typing collection types to support python < py3.9
 ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
+
+
+class CatalogWorkspaceService:
+    def __init__(self, api_client: GoodDataApiClient) -> None:
+        self._client = api_client
+        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+
+    def list_workspaces(self) -> List[CatalogWorkspace]:
+        get_workspaces = functools.partial(
+            self._entities_api.get_all_entities_workspaces,
+            include=["workspaces"],
+            _check_return_type=False,
+        )
+        workspaces = load_all_entities(get_workspaces)
+        return [CatalogWorkspace.from_api(w) for w in workspaces.data]
+
+    def create_or_update(self, workspace: CatalogWorkspace) -> None:
+        try:
+            found_workspace = self.get_workspace(workspace.id)
+            # Update of parent is not allowed
+            if found_workspace.parent_id == workspace.parent_id:
+                self._entities_api.update_entity_workspaces(
+                    workspace.id,
+                    workspace.to_api(),
+                )
+            else:
+                raise ValueError(
+                    f"Workspace parent can not be update. "
+                    f"Original parent {found_workspace.parent_id}, wanted parent {workspace.parent_id}."
+                )
+        except NotFoundException:
+            self._entities_api.create_entity_workspaces(workspace.to_api())
+
+    def get_workspace(self, workspace_id: str) -> CatalogWorkspace:
+        return CatalogWorkspace.from_api(
+            self._entities_api.get_entity_workspaces(workspace_id, include=["workspaces"]).data
+        )
+
+    def delete_workspace(self, workspace_id: str) -> None:
+        """
+        This method is implemented according to our implementation of delete workspace,
+        which returns HTTP 204 no matter if the workspace_id exists.
+        """
+        workspaces = self.list_workspaces()
+        if workspace_id not in [w.id for w in workspaces]:
+            raise ValueError(f"Can not delete {workspace_id} workspace. This workspace does not exist.")
+        children = [w.id for w in workspaces if w.parent_id == workspace_id]
+        if children:
+            raise ValueError(
+                f"Can not delete {workspace_id} workspace. "
+                f"This workspace is parent of the following workspaces: {', '.join(children)}. "
+            )
+        self._entities_api.delete_entity_workspaces(workspace_id)
 
 
 class CatalogWorkspaceContentService:

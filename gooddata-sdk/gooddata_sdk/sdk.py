@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
-from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentService
+from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentService, CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import InsightService
@@ -41,11 +41,16 @@ class GoodDataSdk:
         """
         self._client = client
 
+        self._catalog_workspace = CatalogWorkspaceService(self._client)
         self._catalog_workspace_content = CatalogWorkspaceContentService(self._client)
         self._catalog_data_source = CatalogDataSourceService(self._client)
         self._compute = ComputeService(self._client)
         self._insights = InsightService(self._client)
         self._tables = TableService(self._client)
+
+    @property
+    def catalog_workspace(self) -> CatalogWorkspaceService:
+        return self._catalog_workspace
 
     @property
     def catalog_workspace_content(self) -> CatalogWorkspaceContentService:

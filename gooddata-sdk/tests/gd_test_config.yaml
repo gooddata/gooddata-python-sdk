@@ -2,4 +2,7 @@
 host: "http://localhost:3000"
 token: "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
 workspace: "demo"
+workspace_name: "Demo"
+workspace_with_parent: "demo_west"
+workspace_with_parent_name: "Demo West"
 header_host: localhost

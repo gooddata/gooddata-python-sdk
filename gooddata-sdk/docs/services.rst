@@ -16,6 +16,26 @@ Example of how to create an instance of GoodDataSdk:
     token = "some_user_token"
     sdk = gooddata_sdk.GoodDataSdk.create(host, token)
 
+Catalog Workspace Service
+=========================
+
+The ``gooddata_sdk.catalog_workspace`` service enables you to list, create, update and delete workspaces.
+
+.. code-block:: python
+
+    # list workspaces
+    workspaces = sdk.catalog_workspace.list_workspaces()
+
+    # create or update workspace
+    sdk.catalog_workspace.create_or_update(workspace_obj)
+
+    # get workspace
+    workspace = sdk.catalog_workspace.get_workspace("demo")
+
+    # delete workspace
+    sdk.catalog_workspace.delete_workspace("demo")
+
+
 Catalog Workspace Content Service
 ==================================
 
