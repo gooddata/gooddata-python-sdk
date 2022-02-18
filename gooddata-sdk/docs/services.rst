@@ -158,7 +158,7 @@ Example of how you can manipulate with data sources:
     data_sources = sdk.catalog_data_source.list_data_sources()
 
     # get single data source
-    data_sources = sdk.catalog_data_source.get_entity_data_sources('ds_id')
+    data_sources = sdk.catalog_data_source.get_data_source('ds_id')
 
     # delete data source
     sdk.catalog_data_source.delete_data_source(data_source_id='ds_id')
