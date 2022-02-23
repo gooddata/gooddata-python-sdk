@@ -5,13 +5,13 @@ import functools
 from typing import Any, List, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
-from gooddata_sdk.catalog.workspace.model.content_objects.dataset import (
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
     CatalogAttribute,
     CatalogDataset,
     CatalogFact,
     CatalogLabel,
 )
-from gooddata_sdk.catalog.workspace.model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition

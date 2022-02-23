@@ -550,7 +550,6 @@
             {
               "id": "order_amount",
               "title": "Order Amount",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT SUM({fact/order_lines.price}*{fact/order_lines.quantity})"
@@ -559,7 +558,6 @@
             {
               "id": "amount_of_orders",
               "title": "# of Orders",
-              "description": "",
               "content": {
                 "format": "#,##0",
                 "maql": "SELECT COUNT({attribute/order_lines.order_id})"
@@ -568,7 +566,6 @@
             {
               "id": "revenue",
               "title": "Revenue",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
@@ -577,7 +574,6 @@
             {
               "id": "amount_of_valid_orders",
               "title": "# of Valid Orders",
-              "description": "",
               "content": {
                 "format": "#,##0.00",
                 "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
@@ -586,7 +582,6 @@
             {
               "id": "revenue_per_customer",
               "title": "Revenue per Customer",
-              "description": "",
               "content": {
                 "format": "$#,##0.0",
                 "maql": "SELECT AVG(SELECT {metric/revenue} BY {attribute/customers.customer_id})"
@@ -595,7 +590,6 @@
             {
               "id": "amount_of_active_customers",
               "title": "# of Active Customers",
-              "description": "",
               "content": {
                 "format": "#,##0",
                 "maql": "SELECT COUNT({attribute/customers.customer_id},{attribute/order_lines.order_line_id})"
@@ -604,7 +598,6 @@
             {
               "id": "amount_of_top_customers",
               "title": "# of Top Customers",
-              "description": "",
               "content": {
                 "format": "#,##0",
                 "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customers.customer_id}) >  10000 "
@@ -613,7 +606,6 @@
             {
               "id": "total_revenue",
               "title": "Total Revenue",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} BY ALL OTHER"
@@ -622,7 +614,6 @@
             {
               "id": "total_revenue-no_filters",
               "title": "Total Revenue (No Filters)",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/total_revenue} WITHOUT PARENT FILTER"
@@ -631,7 +622,6 @@
             {
               "id": "percent_revenue",
               "title": "% Revenue",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT {metric/revenue} / {metric/total_revenue}"
@@ -640,7 +630,6 @@
             {
               "id": "percent_revenue_per_product",
               "title": "% Revenue per Product",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/products.product_id})"
@@ -649,7 +638,6 @@
             {
               "id": "percent_revenue_in_category",
               "title": "% Revenue in Category",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category}, ALL OTHER)"
@@ -658,7 +646,6 @@
             {
               "id": "revenue_top_10",
               "title": "Revenue / Top 10",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})"
@@ -667,7 +654,6 @@
             {
               "id": "percent_revenue_from_top_10_products",
               "title": "% Revenue from Top 10 Products",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
@@ -676,7 +662,6 @@
             {
               "id": "percent_revenue_from_top_10_customers",
               "title": "% Revenue from Top 10 Customers",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
@@ -685,7 +670,6 @@
             {
               "id": "revenue_top_10_percent",
               "title": "Revenue / Top 10%",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})"
@@ -694,7 +678,6 @@
             {
               "id": "percent_revenue_from_top_10_percent_customers",
               "title": "% Revenue from Top 10% Customers",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
@@ -703,7 +686,6 @@
             {
               "id": "percent_revenue_from_top_10_percent_products",
               "title": "% Revenue from Top 10% Products",
-              "description": "",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
@@ -712,7 +694,6 @@
             {
               "id": "revenue_per_dollar_spent",
               "title": "Revenue per Dollar Spent",
-              "description": "",
               "content": {
                 "format": "$#,##0.0",
                 "maql": "SELECT {metric/revenue} / {metric/campaign_spend}"
@@ -721,7 +702,6 @@
             {
               "id": "campaign_spend",
               "title": "Campaign Spend",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT SUM({fact/campaign_channels.spend})"
@@ -730,7 +710,6 @@
             {
               "id": "revenue-outdoor",
               "title": "Revenue (Outdoor)",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Outdoor\")"
@@ -739,7 +718,6 @@
             {
               "id": "revenue-clothing",
               "title": "Revenue (Clothing)",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Clothing\")"
@@ -748,7 +726,6 @@
             {
               "id": "revenue-home",
               "title": "Revenue (Home)",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Home\")"
@@ -757,7 +734,6 @@
             {
               "id": "revenue-electronic",
               "title": "Revenue (Electronic)",
-              "description": "",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN ( \"Electronics\")"
@@ -768,7 +744,6 @@
             {
               "id": "campaign_spend",
               "title": "Campaign Spend",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -881,7 +856,6 @@
             {
               "id": "customers_trend",
               "title": "Customers Trend",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1006,7 +980,6 @@
             {
               "id": "percent_revenue_per_product_by_customer_and_category",
               "title": "% Revenue per Product by Customer and Category",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1145,7 +1118,6 @@
             {
               "id": "percentage_of_customers_by_region",
               "title": "Percentage of Customers by Region",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1246,7 +1218,6 @@
             {
               "id": "product_breakdown",
               "title": "Product Breakdown",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1346,7 +1317,6 @@
             {
               "id": "product_categories_pie_chart",
               "title": "Product Categories Pie Chart",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1434,7 +1404,6 @@
             {
               "id": "product_revenue_comparison-over_previous_period",
               "title": "Product Revenue Comparison (over previous period)",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1560,7 +1529,6 @@
             {
               "id": "product_saleability",
               "title": "Product Saleability",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1657,7 +1625,6 @@
             {
               "id": "revenue_and_quantity_by_product_and_category",
               "title": "Revenue and Quantity by Product and Category",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1825,7 +1792,6 @@
             {
               "id": "revenue_by_category_trend",
               "title": "Revenue by Category Trend",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1923,7 +1889,6 @@
             {
               "id": "revenue_by_product",
               "title": "Revenue by Product",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -1988,7 +1953,6 @@
             {
               "id": "revenue_per_usd_vs_spend_by_campaign",
               "title": "Revenue per $ vs Spend by Campaign",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -2084,7 +2048,6 @@
             {
               "id": "revenue_trend",
               "title": "Revenue Trend",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -2194,7 +2157,6 @@
             {
               "id": "top_10_customers",
               "title": "Top 10 Customers",
-              "description": "",
               "content": {
                 "buckets": [
                   {
@@ -2294,7 +2256,6 @@
             {
               "id": "top_10_products",
               "title": "Top 10 Products",
-              "description": "",
               "content": {
                 "buckets": [
                   {

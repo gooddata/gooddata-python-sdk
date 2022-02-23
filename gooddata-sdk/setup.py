@@ -12,6 +12,7 @@ REQUIRES = [
     "gooddata-scan-client~=0.7.0",
     'importlib-metadata >= 1.0 ; python_version < "3.8"',
     "python-dateutil>=2.5.3",
+    "pyyaml==6.0",
 ]
 
 

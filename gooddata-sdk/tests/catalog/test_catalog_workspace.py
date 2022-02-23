@@ -1,18 +1,37 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import vcr
 
 from gooddata_sdk import GoodDataSdk
-from gooddata_sdk.catalog.workspace.model.workspace import CatalogWorkspace
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaces
+from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "workspaces"
 
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
+def test_get_declarative_workspaces(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_workspaces.json"
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+
+    # TODO: empty description in dateInstance has to be deleted, because it is wrongly returned by server
+    workspaces_o.workspaces[0].model.ldm.date_instances[0].description = None
+
+    with open(path) as f:
+        data = json.load(f)
+
+    expected_o = CatalogDeclarativeWorkspaces.from_api(data)
+
+    assert workspaces_o == expected_o
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.json"))
