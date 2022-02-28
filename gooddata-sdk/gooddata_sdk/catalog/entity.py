@@ -3,9 +3,12 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, Optional, Type
+from typing import Any, Optional, Type, TypeVar
 
 from gooddata_sdk.compute.model.base import ObjId
+
+T = TypeVar("T", bound="CatalogTypeEntity")
+U = TypeVar("U", bound="CatalogTitleEntity")
 
 
 class CatalogEntity:
@@ -58,6 +61,54 @@ class CatalogNameEntity:
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(id={self.id}, name={self.name})"
+
+
+class CatalogTypeEntity:
+    def __init__(self, id: str, type: str):
+        self.id = id
+        self.type = type
+
+    @classmethod
+    def from_api(cls: Type[T], entity: dict[str, Any]) -> T:
+        return cls(
+            entity["id"],
+            entity["type"],
+        )
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, type={self.type})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return self.id == other.id and self.type == other.type
+
+
+class CatalogTitleEntity:
+    def __init__(self, id: str, title: str):
+        self.id = id
+        self.title = title
+
+    @classmethod
+    def from_api(cls: Type[U], entity: dict[str, Any]) -> U:
+        return cls(
+            entity["id"],
+            entity["title"],
+        )
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return self.id == other.id and self.title == other.title
 
 
 class Credentials:

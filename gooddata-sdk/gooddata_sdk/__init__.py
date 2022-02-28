@@ -19,13 +19,13 @@ from gooddata_sdk.catalog.data_source.model.data_source import (
 )
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
-from gooddata_sdk.catalog.workspace.model.content_objects.dataset import (
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
     CatalogAttribute,
     CatalogDataset,
     CatalogFact,
     CatalogLabel,
 )
-from gooddata_sdk.catalog.workspace.model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute

@@ -1,3 +1,4 @@
 mypy==0.910
 pydantic==1.8.2
 types-python-dateutil >= 2.5.3
+types-pyyaml~=6.0.0
