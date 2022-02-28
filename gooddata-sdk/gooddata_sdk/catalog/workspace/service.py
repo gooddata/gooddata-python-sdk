@@ -20,7 +20,11 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
 )
-from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import CatalogFact, CatalogLabel
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
+    CatalogAttribute,
+    CatalogFact,
+    CatalogLabel,
+)
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
@@ -142,7 +146,7 @@ class CatalogWorkspaceService:
             yaml.safe_dump(declarative_ldm.to_dict(), fp, indent=2, sort_keys=True)
 
     def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
-        with open(path, "r") as f:
+        with open(path / f"declarative_ldm_{workspace_id}.yaml", "r") as f:
             declarative_ldm = CatalogDeclarativeModel.from_api(yaml.safe_load(f))
         self.put_declarative_ldm(workspace_id, declarative_ldm)
 
@@ -161,7 +165,7 @@ class CatalogWorkspaceService:
             yaml.safe_dump(declarative_analytics_model.to_dict(), fp, indent=2, sort_keys=True)
 
     def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
-        with open(path, "r") as f:
+        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "r") as f:
             declarative_analytics_model = CatalogDeclarativeAnalytics.from_api(yaml.safe_load(f))
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
@@ -177,6 +181,41 @@ class CatalogWorkspaceContentService:
         self._client = api_client
         self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
         self._afm_actions_api = afm_apis.ActionsApi(api_client.afm_client)
+
+    def get_attributes_catalog(self, workspace_id: str) -> list[CatalogAttribute]:
+        get_attributes = functools.partial(
+            self._entities_api.get_all_entities_attributes,
+            workspace_id,
+            _check_return_type=False,
+        )
+        attributes = load_all_entities(get_attributes)
+        # Empty labels list is set. It will be changed in the future.
+        catalog_attributes = [CatalogAttribute(attribute, []) for attribute in attributes.data]
+        return catalog_attributes
+
+    def get_labels_catalog(self, workspace_id: str) -> list[CatalogLabel]:
+        get_labels = functools.partial(
+            self._entities_api.get_all_entities_labels,
+            workspace_id,
+            _check_return_type=False,
+        )
+        labels = load_all_entities(get_labels)
+        catalog_labels = [CatalogLabel(label) for label in labels.data]
+        return catalog_labels
+
+    def get_metrics_catalog(self, workspace_id: str) -> list[CatalogMetric]:
+        get_metrics = functools.partial(
+            self._entities_api.get_all_entities_metrics, workspace_id, _check_return_type=False
+        )
+        metrics = load_all_entities(get_metrics)
+        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
+        return catalog_metrics
+
+    def get_facts_catalog(self, workspace_id: str) -> list[CatalogFact]:
+        get_facts = functools.partial(self._entities_api.get_all_entities_facts, workspace_id, _check_return_type=False)
+        facts = load_all_entities(get_facts)
+        catalog_facts = [CatalogFact(fact) for fact in facts.data]
+        return catalog_facts
 
     def get_full_catalog(self, workspace_id: str) -> CatalogWorkspaceContent:
         """

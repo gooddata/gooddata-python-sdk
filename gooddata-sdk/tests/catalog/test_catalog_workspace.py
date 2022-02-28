@@ -17,6 +17,34 @@ _fixtures_dir = _current_dir / "fixtures" / "workspaces"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_labels.json"))
+def test_catalog_list_labels(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    labels_list = sdk.catalog_workspace_content.get_labels_catalog(test_config["workspace"])
+    assert len(labels_list) == 21
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_facts.json"))
+def test_catalog_list_facts(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    facts_list = sdk.catalog_workspace_content.get_facts_catalog(test_config["workspace"])
+    assert len(facts_list) == 4
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_attributes.json"))
+def test_catalog_list_attributes(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    attributes_list = sdk.catalog_workspace_content.get_attributes_catalog(test_config["workspace"])
+    assert len(attributes_list) == 20
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_metrics.json"))
+def test_catalog_list_metrics(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    metrics_list = sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
+    assert len(metrics_list) == 24
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
 def test_get_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
