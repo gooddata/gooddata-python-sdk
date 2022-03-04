@@ -74,6 +74,11 @@ class CatalogWorkspaceService:
             self._entities_api.create_entity_workspaces(workspace.to_api())
 
     def get_workspace(self, workspace_id: str) -> CatalogWorkspace:
+        """
+        Gets workspace content and returns it as CatalogWorkspace object.
+        :param workspace_id: An input string parameter of workspace id.
+        :return: CatalogWorkspace object containing structure of workspace.
+        """
         return CatalogWorkspace.from_api(
             self._entities_api.get_entity_workspaces(workspace_id, include=["workspaces"]).data
         )
