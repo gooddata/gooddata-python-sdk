@@ -1,3 +1,8 @@
+[![Build Python Package and Create Release](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/build-release.yaml/badge.svg)](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/build-release.yaml)
+[![docs](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/docs.yaml/badge.svg)](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/docs.yaml)
+[![tests](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/tests.yaml/badge.svg)](https://github.com/gooddata/gooddata-python-sdk/actions/workflows/tests.yaml)
+[![codecov](https://codecov.io/gh/gooddata/gooddata-python-sdk/branch/master/graph/badge.svg?token=9C602ASR4Q)](https://codecov.io/gh/gooddata/gooddata-python-sdk)
+
 # GoodData.CN Python Foundations
 
 This repository contains Python packages useful for integration with [GoodData.CN](https://www.gooddata.com/developers/cloud-native/).

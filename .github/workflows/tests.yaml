@@ -27,6 +27,12 @@ jobs:
           make test-ci
         env:
           TEST_ENVS: ${{ matrix.python_version }}
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.python_version == 'py39' }}
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml
+          fail_ci_if_error: true
   lint-and-format-check:
     runs-on: ubuntu-latest
     steps:
