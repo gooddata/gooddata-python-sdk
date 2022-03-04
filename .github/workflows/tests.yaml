@@ -13,6 +13,19 @@ on:
       - '!gooddata-sdk/docs/**'
       - '*.mk'
       - 'Makefile'
+  push:
+    branches:
+      - master
+    paths:
+      - '.docker/**'
+      - 'gooddata-fdw/**'
+      - '!gooddata-fdw/docs/**'
+      - 'gooddata-pandas/**'
+      - '!gooddata-pandas/docs/**'
+      - 'gooddata-sdk/**'
+      - '!gooddata-sdk/docs/**'
+      - '*.mk'
+      - 'Makefile'
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
