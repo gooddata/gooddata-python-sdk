@@ -2,3 +2,12 @@
 scan_image: "harbor.intgdc.com/tools/gdc-fossa-cli:latest" # this parameter only used on Jenkins job
 pre_scan_script: /home/fossa/sources/gooddata-python-sdk/.fossa/prepare_and_populate_pipenv.sh
 skip_install_deps: true # skip run cmd install deps defined package_installer_mapping.yaml
+ignored_paths:
+  - gooddata-afm-client
+  - gooddata-metadata-client
+  - gooddata-api-client
+  - gooddata-pandas
+  - gooddata-fdw
+  - gooddata-sdk
+  - tests-support
+  - ".+/docs"
