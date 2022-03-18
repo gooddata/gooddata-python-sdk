@@ -6,3 +6,4 @@ workspace_name: "Demo"
 workspace_with_parent: "demo_west"
 workspace_with_parent_name: "Demo West"
 header_host: localhost
+data_source: "demo-test-ds"

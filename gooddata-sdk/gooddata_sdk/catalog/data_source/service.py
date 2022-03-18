@@ -6,8 +6,10 @@ from typing import List
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_metadata_client.exceptions import NotFoundException
+from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.model.data_source import CatalogDataSource
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities
 
@@ -16,6 +18,7 @@ class CatalogDataSourceService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
         self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        self._actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
 
     def list_data_sources(self) -> List[CatalogDataSource]:
         get_data_sources = functools.partial(
@@ -62,3 +65,13 @@ class CatalogDataSourceService:
         self._entities_api.patch_entity_data_sources(
             data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)
         )
+
+    def generate_logical_model(
+        self, data_source_id: str, generate_ldm_request: CatalogGenerateLdmRequest
+    ) -> CatalogDeclarativeModel:
+        return CatalogDeclarativeModel.from_api(
+            self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
+        )
+
+    def register_upload_notification(self, data_source_id: str) -> None:
+        self._actions_api.register_upload_notification(data_source_id)

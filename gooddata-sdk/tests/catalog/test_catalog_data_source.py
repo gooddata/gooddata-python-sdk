@@ -15,6 +15,8 @@ from gooddata_sdk import (
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    CatalogGenerateLdmRequest,
+    ExecutionDefinition,
     GoodDataSdk,
     PostgresAttributes,
     SnowflakeAttributes,
@@ -28,13 +30,45 @@ _fixtures_dir = _current_dir / "fixtures" / "data_sources"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_register_upload_notification.json"))
+def test_register_upload_notification(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    metrics = sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
+
+    exec_definition = ExecutionDefinition(
+        attributes=None, filters=None, metrics=[metrics[0].as_computable()], dimensions=[["measureGroup"]]
+    )
+    exec_response_1 = sdk.compute.for_exec_def(test_config["workspace"], exec_definition)
+    sdk.catalog_data_source.register_upload_notification(test_config["data_source"])
+    exec_response_2 = sdk.compute.for_exec_def(test_config["workspace"], exec_definition)
+    assert exec_response_1.result_id != exec_response_2.result_id
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model.json"))
+def test_generate_logical_model(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
+    ldm_request = CatalogGenerateLdmRequest(
+        separator="__", generate_long_ids=True, date_granularities="basic", wdf_prefix="wdf"
+    )
+    generated_declarative_model = sdk.catalog_data_source.generate_logical_model(
+        test_config["data_source"], ldm_request
+    )
+    """
+    There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
+    so it can not be compared  declarative_model == generated_declarative_model, because granularities are not the same.
+    """
+    assert declarative_model.ldm.datasets == generated_declarative_model.ldm.datasets
+    assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_sources_list.json"))
 def test_catalog_list_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_sources = sdk.catalog_data_source.list_data_sources()
 
     assert len(data_sources) == 1
-    assert data_sources[0].id == "demo-test-ds"
+    assert data_sources[0].id == test_config["data_source"]
 
 
 def _create_default_data_source(sdk):
@@ -68,7 +102,7 @@ def test_catalog_create_update_list_data_source(test_config):
     try:
         data_sources = sdk.catalog_data_source.list_data_sources()
         assert len(data_sources) == 1
-        assert data_sources[0].id == "demo-test-ds"
+        assert data_sources[0].id == test_config["data_source"]
 
         _create_default_data_source(sdk)
 
@@ -90,9 +124,9 @@ def test_catalog_create_update_list_data_source(test_config):
 
         data_sources = sdk.catalog_data_source.list_data_sources()
         assert len(data_sources) == 2
-        demo_ds = _get_data_source(data_sources, "demo-test-ds")
+        demo_ds = _get_data_source(data_sources, test_config["data_source"])
         assert demo_ds
-        assert demo_ds.id == "demo-test-ds"
+        assert demo_ds.id == test_config["data_source"]
         test_ds = _get_data_source(data_sources, "test")
         assert test_ds
         assert test_ds.id == "test"
@@ -223,7 +257,7 @@ def test_catalog_patch_data_source(test_config):
     try:
         data_sources = sdk.catalog_data_source.list_data_sources()
         assert len(data_sources) == 1
-        assert data_sources[0].id == "demo-test-ds"
+        assert data_sources[0].id == test_config["data_source"]
 
         _create_default_data_source(sdk)
 
@@ -240,7 +274,7 @@ def test_catalog_patch_data_source(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_source_tables.json"))
 def test_catalog_data_source_table(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    data_source_tables = sdk.catalog_data_source.list_data_source_tables("demo-test-ds")
+    data_source_tables = sdk.catalog_data_source.list_data_source_tables(test_config["data_source"])
 
     assert len(data_source_tables) == 5
     order_lines = next(filter(lambda x: x.id == "order_lines", data_source_tables))
