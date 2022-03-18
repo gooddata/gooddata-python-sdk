@@ -142,38 +142,6 @@ class CatalogWorkspaceService:
             )
         )
 
-    def get_declarative_ldm(self, workspace_id: str) -> CatalogDeclarativeModel:
-        return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
-
-    def store_declarative_ldm(self, workspace_id: str, path: Path) -> None:
-        declarative_ldm = self._layout_api.get_logical_model(workspace_id)
-        with open(path / f"declarative_ldm_{workspace_id}.yaml", "w+") as fp:
-            yaml.safe_dump(declarative_ldm.to_dict(), fp, indent=2, sort_keys=True)
-
-    def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
-        with open(path / f"declarative_ldm_{workspace_id}.yaml", "r") as f:
-            declarative_ldm = CatalogDeclarativeModel.from_api(yaml.safe_load(f))
-        self.put_declarative_ldm(workspace_id, declarative_ldm)
-
-    def put_declarative_ldm(self, workspace_id: str, ldm: CatalogDeclarativeModel) -> None:
-        self._layout_api.set_logical_model(workspace_id, ldm.to_api())
-
-    def get_declarative_analytics_model(self, workspace_id: str) -> CatalogDeclarativeAnalytics:
-        return CatalogDeclarativeAnalytics.from_api(self._layout_api.get_analytics_model(workspace_id))
-
-    def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
-        self._layout_api.set_analytics_model(workspace_id, analytics_model.to_api())
-
-    def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
-        declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
-        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "w+") as fp:
-            yaml.safe_dump(declarative_analytics_model.to_dict(), fp, indent=2, sort_keys=True)
-
-    def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
-        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "r") as f:
-            declarative_analytics_model = CatalogDeclarativeAnalytics.from_api(yaml.safe_load(f))
-        self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
-
 
 class CatalogWorkspaceContentService:
     # Note on the disabled checking:
@@ -186,6 +154,7 @@ class CatalogWorkspaceContentService:
         self._client = api_client
         self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
         self._afm_actions_api = afm_apis.ActionsApi(api_client.afm_client)
+        self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
 
     def get_attributes_catalog(self, workspace_id: str) -> list[CatalogAttribute]:
         get_attributes = functools.partial(
@@ -314,3 +283,35 @@ class CatalogWorkspaceContentService:
             items_of_type.add(available["id"])
 
         return by_type
+
+    def get_declarative_ldm(self, workspace_id: str) -> CatalogDeclarativeModel:
+        return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
+
+    def store_declarative_ldm(self, workspace_id: str, path: Path) -> None:
+        declarative_ldm = self._layout_api.get_logical_model(workspace_id)
+        with open(path / f"declarative_ldm_{workspace_id}.yaml", "w+") as fp:
+            yaml.safe_dump(declarative_ldm.to_dict(), fp, indent=2, sort_keys=True)
+
+    def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
+        with open(path / f"declarative_ldm_{workspace_id}.yaml", "r") as f:
+            declarative_ldm = CatalogDeclarativeModel.from_api(yaml.safe_load(f))
+        self.put_declarative_ldm(workspace_id, declarative_ldm)
+
+    def put_declarative_ldm(self, workspace_id: str, ldm: CatalogDeclarativeModel) -> None:
+        self._layout_api.set_logical_model(workspace_id, ldm.to_api())
+
+    def get_declarative_analytics_model(self, workspace_id: str) -> CatalogDeclarativeAnalytics:
+        return CatalogDeclarativeAnalytics.from_api(self._layout_api.get_analytics_model(workspace_id))
+
+    def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
+        self._layout_api.set_analytics_model(workspace_id, analytics_model.to_api())
+
+    def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
+        declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
+        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "w+") as fp:
+            yaml.safe_dump(declarative_analytics_model.to_dict(), fp, indent=2, sort_keys=True)
+
+    def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
+        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "r") as f:
+            declarative_analytics_model = CatalogDeclarativeAnalytics.from_api(yaml.safe_load(f))
+        self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
