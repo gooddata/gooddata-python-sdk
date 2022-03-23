@@ -7,8 +7,8 @@ from typing import List
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_metadata_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
-from gooddata_sdk.catalog.data_source.model.content_objects.table import CatalogDataSourceTable
-from gooddata_sdk.catalog.data_source.model.data_source import CatalogDataSource
+from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
+from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities
