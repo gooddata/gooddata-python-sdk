@@ -279,3 +279,13 @@ def test_catalog_data_source_table(test_config):
     assert len(data_source_tables) == 5
     order_lines = next(filter(lambda x: x.id == "order_lines", data_source_tables))
     assert len(order_lines.columns) == 11
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "declarative_data_sources.json"))
+def test_catalog_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_sources = sdk.catalog_data_source.get_declarative_data_sources().data_sources
+
+    assert len(data_sources) == 1
+    assert data_sources[0].id == test_config["data_source"]
+    assert len(data_sources[0].pdm.tables) == 5
