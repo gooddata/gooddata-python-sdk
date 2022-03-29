@@ -1,0 +1,16 @@
+# (C) 2022 GoodData Corporation
+id: demo_west
+model:
+  analytics:
+    analytical_dashboards: []
+    dashboard_plugins: []
+    filter_contexts: []
+    metrics: []
+    visualization_objects: []
+  ldm:
+    datasets: []
+    date_instances: []
+name: Demo West
+parent:
+  id: demo
+  type: workspace

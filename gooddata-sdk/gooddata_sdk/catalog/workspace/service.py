@@ -121,26 +121,28 @@ class CatalogWorkspaceService:
             with open(workspace_path, "w+") as fp:
                 yaml.safe_dump(workspace.to_dict(), fp, indent=2, sort_keys=True)
 
-    def load_and_put_declarative_workspaces(self, path: Path) -> None:
+    @staticmethod
+    def load_declarative_workspaces(path: Path) -> CatalogDeclarativeWorkspaces:
         workspace_data_filters_path = path / "workspace_data_filters.yaml"
         if not workspace_data_filters_path.is_file():
             raise ValueError(f"Path {workspace_data_filters_path} is not valid.")
-        workspace_files_path = path.glob("*.yaml")
+        workspace_files_path = sorted([p for p in path.glob("*.yaml") if p.stem != "workspace_data_filters"])
         if not workspace_files_path:
             raise ValueError(f"There are no .yaml files in {workspace_files_path}.")
         with open(workspace_data_filters_path, "r") as f:
             workspace_data_filters = yaml.safe_load(f)
         workspaces = []
         for workspace in workspace_files_path:
-            if workspace.stem != "workspace_data_filters":
-                with open(workspace, "r") as f:
-                    workspaces.append(yaml.safe_load(f))
+            with open(workspace, "r") as f:
+                workspaces.append(yaml.safe_load(f))
 
-        self.put_declarative_workspaces(
-            CatalogDeclarativeWorkspaces.from_api(
-                {"workspaces": workspaces, "workspace_data_filters": workspace_data_filters}
-            )
+        return CatalogDeclarativeWorkspaces.from_api(
+            {"workspaces": workspaces, "workspace_data_filters": workspace_data_filters}
         )
+
+    def load_and_put_declarative_workspaces(self, path: Path) -> None:
+        declarative_workspaces = self.load_declarative_workspaces(path)
+        self.put_declarative_workspaces(declarative_workspaces)
 
 
 class CatalogWorkspaceContentService:
@@ -287,14 +289,21 @@ class CatalogWorkspaceContentService:
     def get_declarative_ldm(self, workspace_id: str) -> CatalogDeclarativeModel:
         return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
 
-    def store_declarative_ldm(self, workspace_id: str, path: Path) -> None:
+    def store_declarative_ldm(self, workspace_id: str, path: Path) -> Path:
         declarative_ldm = self._layout_api.get_logical_model(workspace_id)
-        with open(path / f"declarative_ldm_{workspace_id}.yaml", "w+") as fp:
+        file_path = path / f"declarative_ldm_{workspace_id}.yaml"
+        with open(file_path, "w+") as fp:
             yaml.safe_dump(declarative_ldm.to_dict(), fp, indent=2, sort_keys=True)
+        return file_path
+
+    @staticmethod
+    def load_declarative_ldm(path: Path) -> CatalogDeclarativeModel:
+        with open(path, "r") as f:
+            declarative_ldm = CatalogDeclarativeModel.from_api(yaml.safe_load(f))
+        return declarative_ldm
 
     def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
-        with open(path / f"declarative_ldm_{workspace_id}.yaml", "r") as f:
-            declarative_ldm = CatalogDeclarativeModel.from_api(yaml.safe_load(f))
+        declarative_ldm = self.load_declarative_ldm(path)
         self.put_declarative_ldm(workspace_id, declarative_ldm)
 
     def put_declarative_ldm(self, workspace_id: str, ldm: CatalogDeclarativeModel) -> None:
@@ -306,12 +315,19 @@ class CatalogWorkspaceContentService:
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
         self._layout_api.set_analytics_model(workspace_id, analytics_model.to_api())
 
-    def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
+    def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> Path:
         declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
-        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "w+") as fp:
+        file_path = path / f"declarative_analytics_model_{workspace_id}.yaml"
+        with open(file_path, "w+") as fp:
             yaml.safe_dump(declarative_analytics_model.to_dict(), fp, indent=2, sort_keys=True)
+        return file_path
+
+    @staticmethod
+    def load_declarative_analytics_model(path: Path) -> CatalogDeclarativeAnalytics:
+        with open(path, "r") as f:
+            declarative_analytics_model = CatalogDeclarativeAnalytics.from_api(yaml.safe_load(f))
+        return declarative_analytics_model
 
     def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
-        with open(path / f"declarative_analytics_model_{workspace_id}.yaml", "r") as f:
-            declarative_analytics_model = CatalogDeclarativeAnalytics.from_api(yaml.safe_load(f))
+        declarative_analytics_model = self.load_declarative_analytics_model(path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)

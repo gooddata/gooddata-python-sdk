@@ -164,7 +164,7 @@ class CatalogDeclarativeWorkspaceDataFilter:
                 for v in entity["workspace_data_filter_settings"]
             ],
             entity.get("description"),
-            CatalogWorkspaceIdentifier.from_api(entity["workspace"]) if entity.get("") else None,
+            CatalogWorkspaceIdentifier.from_api(entity["workspace"]) if entity.get("workspace") else None,
         )
 
     def to_api(self) -> DeclarativeWorkspaceDataFilter:

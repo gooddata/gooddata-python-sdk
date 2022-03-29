@@ -10,6 +10,7 @@ from gooddata_sdk import GoodDataSdk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaces
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from tests import VCR_MATCH_ON
+from tests.catalog.utils import create_directory
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "workspaces"
@@ -17,32 +18,67 @@ _fixtures_dir = _current_dir / "fixtures" / "workspaces"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_labels.json"))
-def test_catalog_list_labels(test_config):
+def _empty_workspaces(sdk: GoodDataSdk) -> None:
+    empty_workspaces_e = CatalogDeclarativeWorkspaces.from_api({"workspaces": [], "workspace_data_filters": []})
+    sdk.catalog_workspace.put_declarative_workspaces(empty_workspaces_e)
+    empty_workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+    assert empty_workspaces_e == empty_workspaces_o
+    assert empty_workspaces_e.to_api().to_dict() == empty_workspaces_o.to_api().to_dict()
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.json"))
+def test_load_and_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    labels_list = sdk.catalog_workspace_content.get_labels_catalog(test_config["workspace"])
-    assert len(labels_list) == 21
+    path = _current_dir / "load" / "declarative_workspaces"
+    expected_json_path = _current_dir / "expected" / "declarative_workspaces.json"
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
+
+    try:
+        _empty_workspaces(sdk)
+
+        sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
+        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+        assert workspaces_e == workspaces_o
+        assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        workspaces_o = CatalogDeclarativeWorkspaces.from_api(data)
+        sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_facts.json"))
-def test_catalog_list_facts(test_config):
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.json"))
+def test_store_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    facts_list = sdk.catalog_workspace_content.get_facts_catalog(test_config["workspace"])
-    assert len(facts_list) == 4
+    path = _current_dir / "store" / "declarative_workspaces"
+    create_directory(path)
+
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
+    sdk.catalog_workspace.store_declarative_workspaces(path)
+    workspaces_o = sdk.catalog_workspace.load_declarative_workspaces(path)
+
+    assert workspaces_e == workspaces_o
+    assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_attributes.json"))
-def test_catalog_list_attributes(test_config):
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspaces.json"))
+def test_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    attributes_list = sdk.catalog_workspace_content.get_attributes_catalog(test_config["workspace"])
-    assert len(attributes_list) == 20
+    path = _current_dir / "expected" / "declarative_workspaces.json"
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
 
+    try:
+        _empty_workspaces(sdk)
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_metrics.json"))
-def test_catalog_list_metrics(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    metrics_list = sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
-    assert len(metrics_list) == 24
+        sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
+        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+        assert workspaces_e == workspaces_o
+        assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
+    finally:
+        with open(path) as f:
+            data = json.load(f)
+        workspaces_o = CatalogDeclarativeWorkspaces.from_api(data)
+        sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
@@ -51,7 +87,7 @@ def test_get_declarative_workspaces(test_config):
     path = _current_dir / "expected" / "declarative_workspaces.json"
     workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
 
-    # TODO: empty description in dateInstance has to be deleted, because it is wrongly returned by server
+    # empty description in dateInstance has to be deleted, because it is wrongly returned by server
     workspaces_o.workspaces[0].model.ldm.date_instances[0].description = None
 
     with open(path) as f:
@@ -60,6 +96,7 @@ def test_get_declarative_workspaces(test_config):
     expected_o = CatalogDeclarativeWorkspaces.from_api(data)
 
     assert workspaces_o == expected_o
+    assert workspaces_o.to_api().to_dict() == data
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.json"))
@@ -237,32 +274,3 @@ def test_workspace_list(test_config):
     workspaces_parent = {w.id: w.parent_id for w in workspaces}
     workspaces_parent_l = [workspaces_parent[workspace_id] for workspace_id in workspaces_id]
     assert parents == workspaces_parent_l
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog.json"))
-def test_catalog_load(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    catalog = sdk.catalog_workspace_content.get_full_catalog(test_config["workspace"])
-
-    # rough initial smoke-test; just do a quick 'rub'
-    assert len(catalog.metrics) == 24
-    assert len(catalog.datasets) == 6
-
-    assert catalog.get_metric("order_amount") is not None
-    assert catalog.get_metric("revenue") is not None
-    assert catalog.get_dataset("customers") is not None
-    assert catalog.get_dataset("order_lines") is not None
-    assert catalog.get_dataset("products") is not None
-
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_availability.json"))
-def test_catalog_availability(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    catalog = sdk.catalog_workspace_content.get_full_catalog(test_config["workspace"])
-    claim_count = catalog.get_metric("campaign_spend")
-
-    filtered_catalog = catalog.catalog_with_valid_objects(claim_count)
-
-    # rough initial smoke-test; just do a quick 'rub' that filtered catalog has less entries than full catalog
-    assert len(filtered_catalog.metrics) == 24
-    assert len(filtered_catalog.datasets) == 3
