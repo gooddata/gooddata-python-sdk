@@ -1,4 +1,2 @@
-# frozen click version, the latest version is not compatible with black version
-click==8.0.3
-black==21.7b0
+black==22.3.0
 isort==5.10.1

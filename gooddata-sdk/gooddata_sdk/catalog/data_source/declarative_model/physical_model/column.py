@@ -33,11 +33,11 @@ class CatalogDeclarativeColumn:
 
     def to_api(self) -> DeclarativeColumn:
         kwargs: dict[str, Any] = dict()
-        if self.is_primary_key:
+        if self.is_primary_key is not None:
             kwargs["is_primary_key"] = self.is_primary_key
-        if self.referenced_table_id:
+        if self.referenced_table_id is not None:
             kwargs["referenced_table_id"] = self.referenced_table_id
-        if self.referenced_table_column:
+        if self.referenced_table_column is not None:
             kwargs["referenced_table_column"] = self.referenced_table_column
         return DeclarativeColumn(name=self.name, data_type=self.data_type, **kwargs)
 

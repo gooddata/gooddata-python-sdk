@@ -1,0 +1,7 @@
+# (C) 2022 GoodData Corporation
+enable_caching: true
+id: demo-vertica-ds
+name: demo-vertica-ds
+schema: demo
+type: VERTICA
+url: jdbc:vertica://localhost:5434/demo
