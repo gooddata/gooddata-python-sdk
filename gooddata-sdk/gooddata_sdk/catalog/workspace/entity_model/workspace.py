@@ -39,7 +39,7 @@ class CatalogWorkspace(CatalogNameEntity):
                 attributes=JsonApiWorkspaceInAttributes(
                     name=self.name,
                 ),
-                **kwargs
+                **kwargs,
             )
         )
 

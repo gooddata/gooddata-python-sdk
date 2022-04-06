@@ -1,12 +1,15 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import List, Optional
 from unittest import mock
+from unittest.mock import MagicMock
 
 import vcr
 
+import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     BigQueryAttributes,
     CatalogDataSource,
@@ -17,12 +20,15 @@ from gooddata_sdk import (
     CatalogDataSourceVertica,
     CatalogGenerateLdmRequest,
     ExecutionDefinition,
+    GoodDataApiClient,
     GoodDataSdk,
     PostgresAttributes,
     SnowflakeAttributes,
 )
+from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
 from tests import VCR_MATCH_ON
+from tests.catalog.utils import create_directory
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "data_sources"
@@ -284,8 +290,125 @@ def test_catalog_data_source_table(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "declarative_data_sources.json"))
 def test_catalog_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    data_sources = sdk.catalog_data_source.get_declarative_data_sources().data_sources
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+
+    data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
+    data_sources = data_sources_o.data_sources
 
     assert len(data_sources) == 1
     assert data_sources[0].id == test_config["data_source"]
     assert len(data_sources[0].pdm.tables) == 5
+    assert data_sources_o.to_api().to_dict() == layout_api.get_data_sources_layout().to_dict()
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.json"))
+def test_store_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store" / "declarative_data_sources"
+    create_directory(path)
+
+    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+    sdk.catalog_data_source.store_declarative_data_sources(path)
+    data_sources_o = sdk.catalog_data_source.load_declarative_data_sources(path)
+
+    assert data_sources_e == data_sources_o
+    assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.json"))
+def test_delete_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
+
+    try:
+        sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
+        data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
+        assert len(data_sources_o.data_sources) == 0
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.json"))
+def test_load_and_put_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load" / "declarative_data_sources"
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
+
+    try:
+        sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
+        TokenCredentialsFromFile.token_from_file = MagicMock(return_value="c2VjcmV0X3Rva2Vu")
+        sdk.catalog_data_source.load_and_put_declarative_data_sources(path, credentials_path)
+        data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
+        assert len(data_sources_o.data_sources) == 3
+        assert [data_source.id for data_source in data_sources_o.data_sources] == [
+            "demo-bigquery-ds",
+            "demo-test-ds",
+            "demo-vertica-ds",
+        ]
+        assert [data_source.type for data_source in data_sources_o.data_sources] == [
+            "BIGQUERY",
+            "POSTGRESQL",
+            "VERTICA",
+        ]
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources_connection.json"))
+def test_put_declarative_data_sources_connection(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_data_sources.json"
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+
+    try:
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_e, credentials_path, test_data_sources=True)
+        data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
+        assert data_sources_e == data_sources_o
+        assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+    finally:
+        with open(path) as f:
+            data = json.load(f)
+        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources.json"))
+def test_put_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_data_sources.json"
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+
+    try:
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_e, credentials_path)
+        data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
+        assert data_sources_e == data_sources_o
+        assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+    finally:
+        with open(path) as f:
+            data = json.load(f)
+        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources.json"))
+def test_declarative_data_sources(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
+    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+
+    try:
+        sdk.catalog_data_source.test_data_sources_connection(data_sources_e)
+        assert False
+    except ValueError:
+        sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)

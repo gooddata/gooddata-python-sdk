@@ -55,15 +55,12 @@ class CatalogDataSource(CatalogNameEntity):
                 db_vendor = self._URL_VENDOR
             elif self._DATA_SOURCE_TYPE:
                 db_vendor = self._DATA_SOURCE_TYPE.lower()
-            return (
-                self._URL_TMPL.format(
-                    **self.db_specific_attributes.str_attributes,
-                    # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
-                    # we inject custom or default (DS_TYPE.lower()) value there
-                    db_vendor=db_vendor,
-                )
-                + self._join_params(";")
-            )
+            return self._URL_TMPL.format(
+                **self.db_specific_attributes.str_attributes,
+                # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
+                # we inject custom or default (DS_TYPE.lower()) value there
+                db_vendor=db_vendor,
+            ) + self._join_params(";")
         else:
             raise Exception("Neither url(constructor) nor URL_TMPL set, cannot setup final url.")
 
