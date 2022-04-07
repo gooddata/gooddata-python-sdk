@@ -9,6 +9,7 @@ from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentServic
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import InsightService
+from gooddata_sdk.support import SupportService
 from gooddata_sdk.table import TableService
 
 
@@ -49,6 +50,7 @@ class GoodDataSdk:
         self._compute = ComputeService(self._client)
         self._insights = InsightService(self._client)
         self._tables = TableService(self._client)
+        self._support = SupportService(self._client)
 
     @property
     def catalog_workspace(self) -> CatalogWorkspaceService:
@@ -77,3 +79,7 @@ class GoodDataSdk:
     @property
     def tables(self) -> TableService:
         return self._tables
+
+    @property
+    def support(self) -> SupportService:
+        return self._support
