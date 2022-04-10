@@ -34,6 +34,19 @@ class CatalogDeclarativeAnalytics:
             return False
         return self.analytics == other.analytics
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeAnalytics:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeAnalytics object.
+        """
+        declarative_analytics = DeclarativeAnalytics.from_dict(data, camel_case)
+        return cls.from_api(declarative_analytics)
+
 
 class CatalogDeclarativeAnalyticsLayer:
     def __init__(

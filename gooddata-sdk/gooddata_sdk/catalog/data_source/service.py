@@ -104,7 +104,7 @@ class CatalogDataSourceService:
         for data_source in data_sources.data_sources:
             file_path = path / f"{data_source.id}.yaml"
             with open(file_path, "w+", encoding="utf-8") as f:
-                yaml.safe_dump(data_source.to_dict(serialize=True), f, indent=2)
+                yaml.safe_dump(data_source.to_dict(camel_case=True), f, indent=2)
 
     @staticmethod
     def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:

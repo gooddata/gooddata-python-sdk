@@ -329,7 +329,7 @@ def test_delete_declarative_data_sources(test_config):
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)
-        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        data_sources_o = CatalogDeclarativeDataSources.from_dict(data)
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
@@ -359,7 +359,7 @@ def test_load_and_put_declarative_data_sources(test_config):
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)
-        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        data_sources_o = CatalogDeclarativeDataSources.from_dict(data)
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
@@ -378,7 +378,7 @@ def test_put_declarative_data_sources_connection(test_config):
     finally:
         with open(path) as f:
             data = json.load(f)
-        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        data_sources_o = CatalogDeclarativeDataSources.from_dict(data)
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
@@ -397,7 +397,7 @@ def test_put_declarative_data_sources(test_config):
     finally:
         with open(path) as f:
             data = json.load(f)
-        data_sources_o = CatalogDeclarativeDataSources.from_api(data)
+        data_sources_o = CatalogDeclarativeDataSources.from_dict(data)
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 

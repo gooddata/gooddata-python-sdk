@@ -37,9 +37,9 @@ class CatalogDeclarativeDateDataset(CatalogTitleEntity):
 
     def to_api(self) -> DeclarativeDateDataset:
         kwargs: dict[str, Any] = dict()
-        if self.description:
+        if self.description is not None:
             kwargs["description"] = self.description
-        if self.tags:
+        if self.tags is not None:
             kwargs["tags"] = self.tags
         return DeclarativeDateDataset(
             self.id, self.title, self.granularities_formatting.to_api(), self.granularities, **kwargs

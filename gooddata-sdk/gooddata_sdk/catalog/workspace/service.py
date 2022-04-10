@@ -115,11 +115,11 @@ class CatalogWorkspaceService:
         workspaces = self._layout_api.get_workspaces_layout()
         workspace_data_filters = workspaces.workspace_data_filters
         with open(path / "workspace_data_filters.yaml", "w+", encoding="utf-8") as fp:
-            yaml.safe_dump([w.to_dict(serialize=True) for w in workspace_data_filters], fp, indent=2)
+            yaml.safe_dump([w.to_dict(camel_case=True) for w in workspace_data_filters], fp, indent=2)
         for workspace in workspaces.workspaces:
             workspace_path = path / f"{workspace.id}.yaml"
             with open(workspace_path, "w+", encoding="utf-8") as fp:
-                yaml.safe_dump(workspace.to_dict(serialize=True), fp, indent=2)
+                yaml.safe_dump(workspace.to_dict(camel_case=True), fp, indent=2)
 
     @staticmethod
     def load_declarative_workspaces(path: Path) -> CatalogDeclarativeWorkspaces:
@@ -293,7 +293,7 @@ class CatalogWorkspaceContentService:
         declarative_ldm = self._layout_api.get_logical_model(workspace_id)
         file_path = path / f"declarative_ldm_{workspace_id}.yaml"
         with open(file_path, "w+", encoding="utf-8") as fp:
-            yaml.safe_dump(declarative_ldm.to_dict(serialize=True), fp, indent=2)
+            yaml.safe_dump(declarative_ldm.to_dict(camel_case=True), fp, indent=2)
         return file_path
 
     @staticmethod
@@ -319,7 +319,7 @@ class CatalogWorkspaceContentService:
         declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
         file_path = path / f"declarative_analytics_model_{workspace_id}.yaml"
         with open(file_path, "w+", encoding="utf-8") as fp:
-            yaml.safe_dump(declarative_analytics_model.to_dict(serialize=True), fp, indent=2)
+            yaml.safe_dump(declarative_analytics_model.to_dict(camel_case=True), fp, indent=2)
         return file_path
 
     @staticmethod

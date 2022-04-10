@@ -93,7 +93,7 @@ def update_layout():
     user = read_data_from_file(fixtures_dir / "user.json")
     data_sources = read_data_from_file(fixtures_dir / "demo_data_sources.json")
     hierarchy = read_data_from_file(fixtures_dir / "demo_declarative_hierarchy.json")
-    # permissions = read_data_from_file(fixtures_dir / "workspace_permissions.json")
+    permissions = read_data_from_file(fixtures_dir / "workspace_permissions.json")
 
     # TODO: use python-sdk support
     wait_platform_up()
@@ -109,9 +109,8 @@ def update_layout():
     print("Uploading demo workspaces", flush=True)
     rest_op_default("put", "api/layout/workspaces", hierarchy)
 
-    # Uncomment once AIO upgraded to 1.7
-    # print("Uploading permissions for demo workspace", flush=True)
-    # rest_op_default("put", "api/layout/workspaces/demo/permissions", permissions)
+    print("Uploading permissions for demo workspace", flush=True)
+    rest_op_default("put", "api/layout/workspaces/demo/permissions", permissions)
 
     print("Layout configuration done successfully!", flush=True)
 

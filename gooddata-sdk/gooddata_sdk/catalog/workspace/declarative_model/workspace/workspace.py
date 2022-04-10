@@ -12,6 +12,10 @@ from gooddata_metadata_client.model.declarative_workspace_model import Declarati
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk.catalog.entity import CatalogNameEntity, CatalogTitleEntity
 from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.permissions.permission import (
+    CatalogDeclarativeSingleWorkspacePermission,
+    CatalogDeclarativeWorkspaceHierarchyPermission,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalyticsLayer,
 )
@@ -54,30 +58,47 @@ class CatalogDeclarativeWorkspace(CatalogNameEntity):
         compute_client: str = None,
         model: CatalogDeclarativeWorkspaceModel = None,
         parent: CatalogWorkspaceIdentifier = None,
+        permissions: list[CatalogDeclarativeSingleWorkspacePermission] = None,
+        hierarchy_permissions: list[CatalogDeclarativeWorkspaceHierarchyPermission] = None,
     ):
         super(CatalogDeclarativeWorkspace, self).__init__(id, name)
         self.compute_client = compute_client
         self.model = model
         self.parent = parent
+        self.permissions = permissions if permissions is not None else []
+        self.hierarchy_permissions = hierarchy_permissions if hierarchy_permissions is not None else []
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogDeclarativeWorkspace:
         return cls(
-            entity["id"],
-            entity["name"],
-            entity.get("computeClient"),
-            CatalogDeclarativeWorkspaceModel.from_api(entity["model"]) if "model" in entity else None,
-            CatalogWorkspaceIdentifier.from_api(entity["parent"]) if "parent" in entity else None,
+            id=entity["id"],
+            name=entity["name"],
+            compute_client=entity.get("computeClient"),
+            model=CatalogDeclarativeWorkspaceModel.from_api(entity["model"]) if "model" in entity else None,
+            parent=CatalogWorkspaceIdentifier.from_api(entity["parent"]) if "parent" in entity else None,
+            permissions=[
+                CatalogDeclarativeSingleWorkspacePermission.from_api(permission)
+                for permission in entity.get("permissions", [])
+            ],
+            hierarchy_permissions=[
+                CatalogDeclarativeWorkspaceHierarchyPermission.from_api(hierarchy_permission)
+                for hierarchy_permission in entity.get("hierarchy_permissions", [])
+            ],
         )
 
     def to_api(self) -> DeclarativeWorkspace:
-        kwargs = dict()
-        if self.model:
+        kwargs: dict[str, Any] = {
+            "permissions": [permission.to_api() for permission in self.permissions],
+            "hierarchy_permissions": [
+                hierarchy_permission.to_api() for hierarchy_permission in self.hierarchy_permissions
+            ],
+        }
+        if self.model is not None:
             kwargs["model"] = self.model.to_api()
-        if self.parent:
+        if self.parent is not None:
             kwargs["parent"] = self.parent.to_api()
-        if self.compute_client:
-            kwargs["computeClient"] = self.compute_client
+        if self.compute_client is not None:
+            kwargs["compute_client"] = self.compute_client
         return DeclarativeWorkspace(id=self.id, name=self.name, **kwargs)
 
     def __eq__(self, other: object) -> bool:
@@ -215,3 +236,16 @@ class CatalogDeclarativeWorkspaces:
         if not isinstance(other, CatalogDeclarativeWorkspaces):
             return False
         return self.workspaces == other.workspaces and self.workspace_data_filters == other.workspace_data_filters
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeWorkspaces:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeWorkspaces object.
+        """
+        declarative_workspaces = DeclarativeWorkspaces.from_dict(data, camel_case)
+        return cls.from_api(declarative_workspaces)
