@@ -1,16 +1,16 @@
 {
-  "workspaceDataFilters": [
+  "workspace_data_filters": [
     {
-      "columnName": "wdf__region",
+      "column_name": "wdf__region",
       "id": "wdf__region",
       "title": "Customer region",
       "workspace": {
         "id": "demo",
         "type": "workspace"
       },
-      "workspaceDataFilterSettings": [
+      "workspace_data_filter_settings": [
         {
-          "filterValues": [
+          "filter_values": [
             "West"
           ],
           "id": "region_west",
@@ -23,16 +23,16 @@
       ]
     },
     {
-      "columnName": "wdf__state",
+      "column_name": "wdf__state",
       "id": "wdf__state",
       "title": "Customer state",
       "workspace": {
         "id": "demo_west",
         "type": "workspace"
       },
-      "workspaceDataFilterSettings": [
+      "workspace_data_filter_settings": [
         {
-          "filterValues": [
+          "filter_values": [
             "California"
           ],
           "id": "region_west_california",
@@ -47,7 +47,7 @@
   ],
   "workspaces": [
     {
-      "hierarchyPermissions": [
+      "hierarchy_permissions": [
         {
           "assignee": {
             "id": "demo2",
@@ -66,9 +66,9 @@
       "id": "demo",
       "model": {
         "analytics": {
-          "analyticalDashboards": [],
-          "dashboardPlugins": [],
-          "filterContexts": [],
+          "analytical_dashboards": [],
+          "dashboard_plugins": [],
+          "filter_contexts": [],
           "metrics": [
             {
               "content": {
@@ -263,7 +263,7 @@
               "title": "Total Revenue (No Filters)"
             }
           ],
-          "visualizationObjects": [
+          "visualization_objects": [
             {
               "content": {
                 "buckets": [
@@ -1889,7 +1889,7 @@
                       "description": "Campaign channel id",
                       "id": "campaign_channels.campaign_channel_id",
                       "primary": true,
-                      "sourceColumn": "campaign_channel_id",
+                      "source_column": "campaign_channel_id",
                       "tags": [
                         "Campaign channels"
                       ],
@@ -1909,7 +1909,7 @@
                       "description": "Category",
                       "id": "campaign_channels.category",
                       "primary": true,
-                      "sourceColumn": "category",
+                      "source_column": "category",
                       "tags": [
                         "Campaign channels"
                       ],
@@ -1929,7 +1929,7 @@
                       "description": "Type",
                       "id": "campaign_channels.type",
                       "primary": true,
-                      "sourceColumn": "type",
+                      "source_column": "type",
                       "tags": [
                         "Campaign channels"
                       ],
@@ -1942,8 +1942,8 @@
                   "title": "Type"
                 }
               ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
+              "data_source_table_id": {
+                "data_source_id": "demo-test-ds",
                 "id": "campaign_channels",
                 "type": "dataSource"
               },
@@ -1952,7 +1952,7 @@
                 {
                   "description": "Budget",
                   "id": "campaign_channels.budget",
-                  "sourceColumn": "budget",
+                  "source_column": "budget",
                   "tags": [
                     "Campaign channels"
                   ],
@@ -1961,7 +1961,7 @@
                 {
                   "description": "Spend",
                   "id": "campaign_channels.spend",
-                  "sourceColumn": "spend",
+                  "source_column": "spend",
                   "tags": [
                     "Campaign channels"
                   ],
@@ -1982,7 +1982,7 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumns": [
+                  "source_columns": [
                     "campaign_id"
                   ]
                 }
@@ -2002,7 +2002,7 @@
                       "description": "Campaign id",
                       "id": "campaigns.campaign_id",
                       "primary": true,
-                      "sourceColumn": "campaign_id",
+                      "source_column": "campaign_id",
                       "tags": [
                         "Campaigns"
                       ],
@@ -2022,7 +2022,7 @@
                       "description": "Campaign name",
                       "id": "campaigns.campaign_name",
                       "primary": true,
-                      "sourceColumn": "campaign_name",
+                      "source_column": "campaign_name",
                       "tags": [
                         "Campaigns"
                       ],
@@ -2035,8 +2035,8 @@
                   "title": "Campaign name"
                 }
               ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
+              "data_source_table_id": {
+                "data_source_id": "demo-test-ds",
                 "id": "campaigns",
                 "type": "dataSource"
               },
@@ -2065,7 +2065,7 @@
                       "description": "Customer id",
                       "id": "customers.customer_id",
                       "primary": true,
-                      "sourceColumn": "customer_id",
+                      "source_column": "customer_id",
                       "tags": [
                         "Customers"
                       ],
@@ -2085,7 +2085,7 @@
                       "description": "Customer name",
                       "id": "customers.customer_name",
                       "primary": true,
-                      "sourceColumn": "customer_name",
+                      "source_column": "customer_name",
                       "tags": [
                         "Customers"
                       ],
@@ -2105,7 +2105,7 @@
                       "description": "Region",
                       "id": "customers.region",
                       "primary": true,
-                      "sourceColumn": "region",
+                      "source_column": "region",
                       "tags": [
                         "Customers"
                       ],
@@ -2125,7 +2125,7 @@
                       "description": "Location",
                       "id": "customers.geo__state__location",
                       "primary": false,
-                      "sourceColumn": "geo__state__location",
+                      "source_column": "geo__state__location",
                       "tags": [
                         "Customers"
                       ],
@@ -2135,7 +2135,7 @@
                       "description": "State",
                       "id": "customers.state",
                       "primary": true,
-                      "sourceColumn": "state",
+                      "source_column": "state",
                       "tags": [
                         "Customers"
                       ],
@@ -2148,8 +2148,8 @@
                   "title": "State"
                 }
               ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
+              "data_source_table_id": {
+                "data_source_id": "demo-test-ds",
                 "id": "customers",
                 "type": "dataSource"
               },
@@ -2178,7 +2178,7 @@
                       "description": "Order id",
                       "id": "order_lines.order_id",
                       "primary": true,
-                      "sourceColumn": "order_id",
+                      "source_column": "order_id",
                       "tags": [
                         "Order lines"
                       ],
@@ -2198,7 +2198,7 @@
                       "description": "Order line id",
                       "id": "order_lines.order_line_id",
                       "primary": true,
-                      "sourceColumn": "order_line_id",
+                      "source_column": "order_line_id",
                       "tags": [
                         "Order lines"
                       ],
@@ -2218,7 +2218,7 @@
                       "description": "Order status",
                       "id": "order_lines.order_status",
                       "primary": true,
-                      "sourceColumn": "order_status",
+                      "source_column": "order_status",
                       "tags": [
                         "Order lines"
                       ],
@@ -2231,8 +2231,8 @@
                   "title": "Order status"
                 }
               ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
+              "data_source_table_id": {
+                "data_source_id": "demo-test-ds",
                 "id": "order_lines",
                 "type": "dataSource"
               },
@@ -2241,7 +2241,7 @@
                 {
                   "description": "Price",
                   "id": "order_lines.price",
-                  "sourceColumn": "price",
+                  "source_column": "price",
                   "tags": [
                     "Order lines"
                   ],
@@ -2250,7 +2250,7 @@
                 {
                   "description": "Quantity",
                   "id": "order_lines.quantity",
-                  "sourceColumn": "quantity",
+                  "source_column": "quantity",
                   "tags": [
                     "Order lines"
                   ],
@@ -2271,7 +2271,7 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumns": [
+                  "source_columns": [
                     "campaign_id"
                   ]
                 },
@@ -2281,7 +2281,7 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumns": [
+                  "source_columns": [
                     "customer_id"
                   ]
                 },
@@ -2291,7 +2291,7 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumns": [
+                  "source_columns": [
                     "date"
                   ]
                 },
@@ -2301,7 +2301,7 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumns": [
+                  "source_columns": [
                     "product_id"
                   ]
                 }
@@ -2321,7 +2321,7 @@
                       "description": "Category",
                       "id": "products.category",
                       "primary": true,
-                      "sourceColumn": "category",
+                      "source_column": "category",
                       "tags": [
                         "Products"
                       ],
@@ -2341,7 +2341,7 @@
                       "description": "Product id",
                       "id": "products.product_id",
                       "primary": true,
-                      "sourceColumn": "product_id",
+                      "source_column": "product_id",
                       "tags": [
                         "Products"
                       ],
@@ -2361,7 +2361,7 @@
                       "description": "Product name",
                       "id": "products.product_name",
                       "primary": true,
-                      "sourceColumn": "product_name",
+                      "source_column": "product_name",
                       "tags": [
                         "Products"
                       ],
@@ -2374,8 +2374,8 @@
                   "title": "Product name"
                 }
               ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
+              "data_source_table_id": {
+                "data_source_id": "demo-test-ds",
                 "id": "products",
                 "type": "dataSource"
               },
@@ -2395,7 +2395,7 @@
               "title": "Products"
             }
           ],
-          "dateInstances": [
+          "date_instances": [
             {
               "description": "",
               "granularities": [
@@ -2405,9 +2405,9 @@
                 "QUARTER",
                 "YEAR"
               ],
-              "granularitiesFormatting": {
-                "titleBase": "",
-                "titlePattern": "%titleBase - %granularityTitle"
+              "granularities_formatting": {
+                "title_base": "",
+                "title_pattern": "%titleBase - %granularityTitle"
               },
               "id": "date",
               "tags": [
@@ -2437,19 +2437,19 @@
       ]
     },
     {
-      "hierarchyPermissions": [],
+      "hierarchy_permissions": [],
       "id": "demo_west",
       "model": {
         "analytics": {
-          "analyticalDashboards": [],
-          "dashboardPlugins": [],
-          "filterContexts": [],
+          "analytical_dashboards": [],
+          "dashboard_plugins": [],
+          "filter_contexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualization_objects": []
         },
         "ldm": {
           "datasets": [],
-          "dateInstances": []
+          "date_instances": []
         }
       },
       "name": "Demo West",
@@ -2460,19 +2460,19 @@
       "permissions": []
     },
     {
-      "hierarchyPermissions": [],
+      "hierarchy_permissions": [],
       "id": "demo_west_california",
       "model": {
         "analytics": {
-          "analyticalDashboards": [],
-          "dashboardPlugins": [],
-          "filterContexts": [],
+          "analytical_dashboards": [],
+          "dashboard_plugins": [],
+          "filter_contexts": [],
           "metrics": [],
-          "visualizationObjects": []
+          "visualization_objects": []
         },
         "ldm": {
           "datasets": [],
-          "dateInstances": []
+          "date_instances": []
         }
       },
       "name": "Demo West California",
