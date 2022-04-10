@@ -73,6 +73,10 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             'MONTH_OF_YEAR': "MONTH_OF_YEAR",
             'QUARTER_OF_YEAR': "QUARTER_OF_YEAR",
         },
+        ('sort_direction',): {
+            'ASC': "ASC",
+            'DESC': "DESC",
+        },
     }
 
     validations = {
@@ -104,6 +108,8 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             'tags': ([str],),  # noqa: E501
             'granularity': (str,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
+            'sort_column': (str,),  # noqa: E501
+            'sort_direction': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -117,6 +123,8 @@ class JsonApiAttributeOutAttributes(ModelNormal):
         'tags': 'tags',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'sort_column': 'sortColumn',  # noqa: E501
+        'sort_direction': 'sortDirection',  # noqa: E501
     }
 
     read_only_vars = {
@@ -165,6 +173,8 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             tags ([str]): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            sort_column (str): [optional]  # noqa: E501
+            sort_direction (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -251,6 +261,8 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             tags ([str]): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            sort_column (str): [optional]  # noqa: E501
+            sort_direction (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

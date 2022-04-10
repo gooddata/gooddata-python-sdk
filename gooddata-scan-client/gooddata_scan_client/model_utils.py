@@ -17,6 +17,7 @@ import os
 import pprint
 import re
 import tempfile
+import uuid
 
 from dateutil.parser import parse
 
@@ -26,6 +27,8 @@ from gooddata_scan_client.exceptions import (
     ApiTypeError,
     ApiValueError,
 )
+
+from gooddata_scan_client.configuration import ConversionConfiguration
 
 none_type = type(None)
 file_type = io.IOBase
@@ -534,9 +537,14 @@ class ModelNormal(OpenApiModel):
 
         return name in self.__dict__['_data_store']
 
-    def to_dict(self):
+    def to_dict(self, camel_case=False):
         """Returns the model properties as a dict"""
-        return model_to_dict(self, serialize=False)
+        return model_to_dict(self, serialize=camel_case)
+
+    @classmethod
+    def from_dict(cls, dictionary, camel_case=True):
+        dictionary_cpy = deepcopy(dictionary)
+        return validate_and_convert_types(dictionary_cpy, (cls,), ['received_data'], camel_case, True, ConversionConfiguration.get_configuration())
 
     def to_str(self):
         """Returns the string representation of the model"""
@@ -558,6 +566,7 @@ class ModelNormal(OpenApiModel):
             if not vals_equal:
                 return False
         return True
+
 
 
 class ModelComposed(OpenApiModel):
@@ -690,9 +699,14 @@ class ModelComposed(OpenApiModel):
 
         return False
 
-    def to_dict(self):
+    def to_dict(self, camel_case=False):
         """Returns the model properties as a dict"""
-        return model_to_dict(self, serialize=False)
+        return model_to_dict(self, serialize=camel_case)
+
+    @classmethod
+    def from_dict(cls, dictionary, camel_case=True):
+        dictionary_cpy = deepcopy(dictionary)
+        return validate_and_convert_types(dictionary_cpy, (cls,), ['received_data'], camel_case, True, ConversionConfiguration.get_configuration())
 
     def to_str(self):
         """Returns the string representation of the model"""
@@ -714,6 +728,7 @@ class ModelComposed(OpenApiModel):
             if not vals_equal:
                 return False
         return True
+
 
 
 COERCION_INDEX_BY_TYPE = {
@@ -1400,7 +1415,13 @@ def deserialize_file(response_data, configuration, content_disposition=None):
 
     if content_disposition:
         filename = re.search(r'filename=[\'"]?([^\'"\s]+)[\'"]?',
-                             content_disposition).group(1)
+                             content_disposition,
+                             flags=re.I)
+        if filename is not None:
+            filename = filename.group(1)
+        else:
+            filename = "default_" + str(uuid.uuid4())
+
         path = os.path.join(os.path.dirname(path), filename)
 
     with open(path, "wb") as f:
@@ -1565,7 +1586,9 @@ def validate_and_convert_types(input_value, required_types_mixed, path_to_item,
     input_class_simple = get_simple_class(input_value)
     valid_type = is_valid_type(input_class_simple, valid_classes)
     if not valid_type:
-        if configuration:
+        if (configuration 
+                or (input_class_simple == dict 
+                    and not dict in valid_classes)):
             # if input_value is not valid_type try to convert it
             converted_instance = attempt_convert_item(
                 input_value,
@@ -1658,6 +1681,7 @@ def model_to_dict(model_instance, serialize=True):
             attribute_map
     """
     result = {}
+    extract_item = lambda item: (item[0], model_to_dict(item[1], serialize=serialize)) if hasattr(item[1], '_data_store') else item
 
     model_instances = [model_instance]
     if model_instance._composed_schemas:
@@ -1687,14 +1711,17 @@ def model_to_dict(model_instance, serialize=True):
                            res.append(v)
                        elif isinstance(v, ModelSimple):
                            res.append(v.value)
+                       elif isinstance(v, dict):
+                           res.append(dict(map(
+                               extract_item,
+                               v.items()
+                           )))
                        else:
                            res.append(model_to_dict(v, serialize=serialize))
                    result[attr] = res
             elif isinstance(value, dict):
                 result[attr] = dict(map(
-                    lambda item: (item[0],
-                                  model_to_dict(item[1], serialize=serialize))
-                    if hasattr(item[1], '_data_store') else item,
+                    extract_item,
                     value.items()
                 ))
             elif isinstance(value, ModelSimple):

@@ -11,6 +11,7 @@ docs/DeclarativeAttribute.md
 docs/DeclarativeColumn.md
 docs/DeclarativeDashboardPlugin.md
 docs/DeclarativeDataSource.md
+docs/DeclarativeDataSourcePermission.md
 docs/DeclarativeDataSources.md
 docs/DeclarativeDataset.md
 docs/DeclarativeDateDataset.md
@@ -25,6 +26,7 @@ docs/DeclarativeOrganizationInfo.md
 docs/DeclarativeOrganizationPermission.md
 docs/DeclarativePdm.md
 docs/DeclarativeReference.md
+docs/DeclarativeSingleWorkspacePermission.md
 docs/DeclarativeTable.md
 docs/DeclarativeTables.md
 docs/DeclarativeUser.md
@@ -37,7 +39,9 @@ docs/DeclarativeWorkspace.md
 docs/DeclarativeWorkspaceDataFilter.md
 docs/DeclarativeWorkspaceDataFilterSetting.md
 docs/DeclarativeWorkspaceDataFilters.md
+docs/DeclarativeWorkspaceHierarchyPermission.md
 docs/DeclarativeWorkspaceModel.md
+docs/DeclarativeWorkspacePermissions.md
 docs/DeclarativeWorkspaces.md
 docs/EntitiesApi.md
 docs/GenerateLdmRequest.md
@@ -100,6 +104,11 @@ docs/JsonApiDashboardPluginOutWithLinks.md
 docs/JsonApiDashboardPluginPatch.md
 docs/JsonApiDashboardPluginPatchDocument.md
 docs/JsonApiDashboardPluginToManyLinkage.md
+docs/JsonApiDataSourceIdentifierOut.md
+docs/JsonApiDataSourceIdentifierOutAttributes.md
+docs/JsonApiDataSourceIdentifierOutDocument.md
+docs/JsonApiDataSourceIdentifierOutList.md
+docs/JsonApiDataSourceIdentifierOutWithLinks.md
 docs/JsonApiDataSourceIn.md
 docs/JsonApiDataSourceInAttributes.md
 docs/JsonApiDataSourceInDocument.md
@@ -107,6 +116,7 @@ docs/JsonApiDataSourceOut.md
 docs/JsonApiDataSourceOutAttributes.md
 docs/JsonApiDataSourceOutDocument.md
 docs/JsonApiDataSourceOutList.md
+docs/JsonApiDataSourceOutMeta.md
 docs/JsonApiDataSourceOutWithLinks.md
 docs/JsonApiDataSourcePatch.md
 docs/JsonApiDataSourcePatchAttributes.md
@@ -288,6 +298,7 @@ gooddata_metadata_client/model/declarative_attribute.py
 gooddata_metadata_client/model/declarative_column.py
 gooddata_metadata_client/model/declarative_dashboard_plugin.py
 gooddata_metadata_client/model/declarative_data_source.py
+gooddata_metadata_client/model/declarative_data_source_permission.py
 gooddata_metadata_client/model/declarative_data_sources.py
 gooddata_metadata_client/model/declarative_dataset.py
 gooddata_metadata_client/model/declarative_date_dataset.py
@@ -302,6 +313,7 @@ gooddata_metadata_client/model/declarative_organization_info.py
 gooddata_metadata_client/model/declarative_organization_permission.py
 gooddata_metadata_client/model/declarative_pdm.py
 gooddata_metadata_client/model/declarative_reference.py
+gooddata_metadata_client/model/declarative_single_workspace_permission.py
 gooddata_metadata_client/model/declarative_table.py
 gooddata_metadata_client/model/declarative_tables.py
 gooddata_metadata_client/model/declarative_user.py
@@ -314,7 +326,9 @@ gooddata_metadata_client/model/declarative_workspace.py
 gooddata_metadata_client/model/declarative_workspace_data_filter.py
 gooddata_metadata_client/model/declarative_workspace_data_filter_setting.py
 gooddata_metadata_client/model/declarative_workspace_data_filters.py
+gooddata_metadata_client/model/declarative_workspace_hierarchy_permission.py
 gooddata_metadata_client/model/declarative_workspace_model.py
+gooddata_metadata_client/model/declarative_workspace_permissions.py
 gooddata_metadata_client/model/declarative_workspaces.py
 gooddata_metadata_client/model/generate_ldm_request.py
 gooddata_metadata_client/model/grain_identifier.py
@@ -376,6 +390,11 @@ gooddata_metadata_client/model/json_api_dashboard_plugin_out_with_links.py
 gooddata_metadata_client/model/json_api_dashboard_plugin_patch.py
 gooddata_metadata_client/model/json_api_dashboard_plugin_patch_document.py
 gooddata_metadata_client/model/json_api_dashboard_plugin_to_many_linkage.py
+gooddata_metadata_client/model/json_api_data_source_identifier_out.py
+gooddata_metadata_client/model/json_api_data_source_identifier_out_attributes.py
+gooddata_metadata_client/model/json_api_data_source_identifier_out_document.py
+gooddata_metadata_client/model/json_api_data_source_identifier_out_list.py
+gooddata_metadata_client/model/json_api_data_source_identifier_out_with_links.py
 gooddata_metadata_client/model/json_api_data_source_in.py
 gooddata_metadata_client/model/json_api_data_source_in_attributes.py
 gooddata_metadata_client/model/json_api_data_source_in_document.py
@@ -383,6 +402,7 @@ gooddata_metadata_client/model/json_api_data_source_out.py
 gooddata_metadata_client/model/json_api_data_source_out_attributes.py
 gooddata_metadata_client/model/json_api_data_source_out_document.py
 gooddata_metadata_client/model/json_api_data_source_out_list.py
+gooddata_metadata_client/model/json_api_data_source_out_meta.py
 gooddata_metadata_client/model/json_api_data_source_out_with_links.py
 gooddata_metadata_client/model/json_api_data_source_patch.py
 gooddata_metadata_client/model/json_api_data_source_patch_attributes.py

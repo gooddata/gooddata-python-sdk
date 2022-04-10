@@ -37,6 +37,7 @@ docs/Dimension.md
 docs/DimensionHeader.md
 docs/Element.md
 docs/ElementsRequest.md
+docs/ElementsRequestFilterBy.md
 docs/ElementsResponse.md
 docs/ErrorMessage.md
 docs/ExecutionLinks.md
@@ -142,6 +143,7 @@ gooddata_afm_client/model/dimension.py
 gooddata_afm_client/model/dimension_header.py
 gooddata_afm_client/model/element.py
 gooddata_afm_client/model/elements_request.py
+gooddata_afm_client/model/elements_request_filter_by.py
 gooddata_afm_client/model/elements_response.py
 gooddata_afm_client/model/error_message.py
 gooddata_afm_client/model/execution_links.py

@@ -96,10 +96,10 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
+            'permissions': ([DeclarativeOrganizationPermission],),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
-            'permissions': ([DeclarativeOrganizationPermission],),  # noqa: E501
         }
 
     @cached_property
@@ -111,10 +111,10 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
-        'permissions': 'permissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -124,13 +124,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, name, hostname, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, name, hostname, permissions, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationInfo - a model defined in OpenAPI
 
         Args:
             id (str): Identifier of the organization.
             name (str): Formal name of the organization.
             hostname (str): Formal hostname used in deployment.
+            permissions ([DeclarativeOrganizationPermission]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -166,7 +167,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
-            permissions ([DeclarativeOrganizationPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -197,6 +197,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         self.id = id
         self.name = name
         self.hostname = hostname
+        self.permissions = permissions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -217,13 +218,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, hostname, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, name, hostname, permissions, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationInfo - a model defined in OpenAPI
 
         Args:
             id (str): Identifier of the organization.
             name (str): Formal name of the organization.
             hostname (str): Formal hostname used in deployment.
+            permissions ([DeclarativeOrganizationPermission]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -259,7 +261,6 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
-            permissions ([DeclarativeOrganizationPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -288,6 +289,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         self.id = id
         self.name = name
         self.hostname = hostname
+        self.permissions = permissions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -84,6 +84,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         return {
             'name': (str,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
+            'allowed_origins': ([str],),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
         }
@@ -96,6 +97,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
     attribute_map = {
         'name': 'name',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
+        'allowed_origins': 'allowedOrigins',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
     }
@@ -143,6 +145,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             name (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            allowed_origins ([str]): [optional]  # noqa: E501
             oauth_issuer_location (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
         """
@@ -228,6 +231,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             name (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            allowed_origins ([str]): [optional]  # noqa: E501
             oauth_issuer_location (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
         """

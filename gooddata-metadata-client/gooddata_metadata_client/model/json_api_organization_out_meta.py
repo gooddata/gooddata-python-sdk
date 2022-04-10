@@ -57,7 +57,7 @@ class JsonApiOrganizationOutMeta(ModelNormal):
 
     allowed_values = {
         ('permissions',): {
-            'FULL_CONTROL': "FULL_CONTROL",
+            'MANAGE': "MANAGE",
         },
     }
 

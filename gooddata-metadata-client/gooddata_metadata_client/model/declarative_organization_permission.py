@@ -61,7 +61,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
 
     allowed_values = {
         ('name',): {
-            'FULL_CONTROL': "FULL_CONTROL",
+            'MANAGE': "MANAGE",
         },
     }
 
@@ -119,7 +119,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
             assignee (AssigneeIdentifier):
 
         Keyword Args:
-            name (str): Permission name.. defaults to "FULL_CONTROL", must be one of ["FULL_CONTROL", ]  # noqa: E501
+            name (str): Permission name.. defaults to "MANAGE", must be one of ["MANAGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -152,7 +152,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        name = kwargs.get('name', "FULL_CONTROL")
+        name = kwargs.get('name', "MANAGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -207,7 +207,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
             assignee (AssigneeIdentifier):
 
         Keyword Args:
-            name (str): Permission name.. defaults to "FULL_CONTROL", must be one of ["FULL_CONTROL", ]  # noqa: E501
+            name (str): Permission name.. defaults to "MANAGE", must be one of ["MANAGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -240,7 +240,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        name = kwargs.get('name', "FULL_CONTROL")
+        name = kwargs.get('name', "MANAGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

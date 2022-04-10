@@ -123,6 +123,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_api_tokens**](docs/EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/entities/users/{userId}/apiTokens | 
 *EntitiesApi* | [**get_all_entities_attributes**](docs/EntitiesApi.md#get_all_entities_attributes) | **GET** /api/entities/workspaces/{workspaceId}/attributes | 
 *EntitiesApi* | [**get_all_entities_dashboard_plugins**](docs/EntitiesApi.md#get_all_entities_dashboard_plugins) | **GET** /api/entities/workspaces/{workspaceId}/dashboardPlugins | 
+*EntitiesApi* | [**get_all_entities_data_source_identifiers**](docs/EntitiesApi.md#get_all_entities_data_source_identifiers) | **GET** /api/entities/dataSourceIdentifiers | 
 *EntitiesApi* | [**get_all_entities_data_source_tables**](docs/EntitiesApi.md#get_all_entities_data_source_tables) | **GET** /api/entities/dataSources/{dataSourceId}/dataSourceTables | 
 *EntitiesApi* | [**get_all_entities_data_sources**](docs/EntitiesApi.md#get_all_entities_data_sources) | **GET** /api/entities/dataSources | 
 *EntitiesApi* | [**get_all_entities_datasets**](docs/EntitiesApi.md#get_all_entities_datasets) | **GET** /api/entities/workspaces/{workspaceId}/datasets | 
@@ -143,6 +144,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_attributes**](docs/EntitiesApi.md#get_entity_attributes) | **GET** /api/entities/workspaces/{workspaceId}/attributes/{objectId} | 
 *EntitiesApi* | [**get_entity_cookie_security_configurations**](docs/EntitiesApi.md#get_entity_cookie_security_configurations) | **GET** /api/entities/admin/cookieSecurityConfigurations/{id} | 
 *EntitiesApi* | [**get_entity_dashboard_plugins**](docs/EntitiesApi.md#get_entity_dashboard_plugins) | **GET** /api/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
+*EntitiesApi* | [**get_entity_data_source_identifiers**](docs/EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/entities/dataSourceIdentifiers/{id} | 
 *EntitiesApi* | [**get_entity_data_source_tables**](docs/EntitiesApi.md#get_entity_data_source_tables) | **GET** /api/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
 *EntitiesApi* | [**get_entity_data_sources**](docs/EntitiesApi.md#get_entity_data_sources) | **GET** /api/entities/dataSources/{id} | 
 *EntitiesApi* | [**get_entity_datasets**](docs/EntitiesApi.md#get_entity_datasets) | **GET** /api/entities/workspaces/{workspaceId}/datasets/{objectId} | 
@@ -190,6 +192,8 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_users_user_groups_layout**](docs/LayoutApi.md#get_users_user_groups_layout) | **GET** /api/layout/usersAndUserGroups | Get all users and user groups
 *LayoutApi* | [**get_workspace_data_filters_layout**](docs/LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 *LayoutApi* | [**get_workspace_layout**](docs/LayoutApi.md#get_workspace_layout) | **GET** /api/layout/workspaces/{workspaceId} | Get workspace layout
+*LayoutApi* | [**get_workspace_permissions**](docs/LayoutApi.md#get_workspace_permissions) | **PUT** /api/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
+*LayoutApi* | [**get_workspace_permissions1**](docs/LayoutApi.md#get_workspace_permissions1) | **GET** /api/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 *LayoutApi* | [**get_workspaces_layout**](docs/LayoutApi.md#get_workspaces_layout) | **GET** /api/layout/workspaces | Get all workspaces layout
 *LayoutApi* | [**put_data_sources_layout**](docs/LayoutApi.md#put_data_sources_layout) | **PUT** /api/layout/dataSources | Put all data sources
 *LayoutApi* | [**put_user_groups_layout**](docs/LayoutApi.md#put_user_groups_layout) | **PUT** /api/layout/userGroups | Put all user groups
@@ -216,6 +220,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeColumn](docs/DeclarativeColumn.md)
  - [DeclarativeDashboardPlugin](docs/DeclarativeDashboardPlugin.md)
  - [DeclarativeDataSource](docs/DeclarativeDataSource.md)
+ - [DeclarativeDataSourcePermission](docs/DeclarativeDataSourcePermission.md)
  - [DeclarativeDataSources](docs/DeclarativeDataSources.md)
  - [DeclarativeDataset](docs/DeclarativeDataset.md)
  - [DeclarativeDateDataset](docs/DeclarativeDateDataset.md)
@@ -230,6 +235,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeOrganizationPermission](docs/DeclarativeOrganizationPermission.md)
  - [DeclarativePdm](docs/DeclarativePdm.md)
  - [DeclarativeReference](docs/DeclarativeReference.md)
+ - [DeclarativeSingleWorkspacePermission](docs/DeclarativeSingleWorkspacePermission.md)
  - [DeclarativeTable](docs/DeclarativeTable.md)
  - [DeclarativeTables](docs/DeclarativeTables.md)
  - [DeclarativeUser](docs/DeclarativeUser.md)
@@ -242,7 +248,9 @@ Class | Method | HTTP request | Description
  - [DeclarativeWorkspaceDataFilter](docs/DeclarativeWorkspaceDataFilter.md)
  - [DeclarativeWorkspaceDataFilterSetting](docs/DeclarativeWorkspaceDataFilterSetting.md)
  - [DeclarativeWorkspaceDataFilters](docs/DeclarativeWorkspaceDataFilters.md)
+ - [DeclarativeWorkspaceHierarchyPermission](docs/DeclarativeWorkspaceHierarchyPermission.md)
  - [DeclarativeWorkspaceModel](docs/DeclarativeWorkspaceModel.md)
+ - [DeclarativeWorkspacePermissions](docs/DeclarativeWorkspacePermissions.md)
  - [DeclarativeWorkspaces](docs/DeclarativeWorkspaces.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
@@ -304,6 +312,11 @@ Class | Method | HTTP request | Description
  - [JsonApiDashboardPluginPatch](docs/JsonApiDashboardPluginPatch.md)
  - [JsonApiDashboardPluginPatchDocument](docs/JsonApiDashboardPluginPatchDocument.md)
  - [JsonApiDashboardPluginToManyLinkage](docs/JsonApiDashboardPluginToManyLinkage.md)
+ - [JsonApiDataSourceIdentifierOut](docs/JsonApiDataSourceIdentifierOut.md)
+ - [JsonApiDataSourceIdentifierOutAttributes](docs/JsonApiDataSourceIdentifierOutAttributes.md)
+ - [JsonApiDataSourceIdentifierOutDocument](docs/JsonApiDataSourceIdentifierOutDocument.md)
+ - [JsonApiDataSourceIdentifierOutList](docs/JsonApiDataSourceIdentifierOutList.md)
+ - [JsonApiDataSourceIdentifierOutWithLinks](docs/JsonApiDataSourceIdentifierOutWithLinks.md)
  - [JsonApiDataSourceIn](docs/JsonApiDataSourceIn.md)
  - [JsonApiDataSourceInAttributes](docs/JsonApiDataSourceInAttributes.md)
  - [JsonApiDataSourceInDocument](docs/JsonApiDataSourceInDocument.md)
@@ -311,6 +324,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDataSourceOutAttributes](docs/JsonApiDataSourceOutAttributes.md)
  - [JsonApiDataSourceOutDocument](docs/JsonApiDataSourceOutDocument.md)
  - [JsonApiDataSourceOutList](docs/JsonApiDataSourceOutList.md)
+ - [JsonApiDataSourceOutMeta](docs/JsonApiDataSourceOutMeta.md)
  - [JsonApiDataSourceOutWithLinks](docs/JsonApiDataSourceOutWithLinks.md)
  - [JsonApiDataSourcePatch](docs/JsonApiDataSourcePatch.md)
  - [JsonApiDataSourcePatchAttributes](docs/JsonApiDataSourcePatchAttributes.md)

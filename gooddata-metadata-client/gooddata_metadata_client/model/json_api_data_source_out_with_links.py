@@ -33,10 +33,12 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_metadata_client.model.json_api_data_source_out import JsonApiDataSourceOut
     from gooddata_metadata_client.model.json_api_data_source_out_attributes import JsonApiDataSourceOutAttributes
+    from gooddata_metadata_client.model.json_api_data_source_out_meta import JsonApiDataSourceOutMeta
     from gooddata_metadata_client.model.object_links import ObjectLinks
     from gooddata_metadata_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiDataSourceOut'] = JsonApiDataSourceOut
     globals()['JsonApiDataSourceOutAttributes'] = JsonApiDataSourceOutAttributes
+    globals()['JsonApiDataSourceOutMeta'] = JsonApiDataSourceOutMeta
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -105,6 +107,7 @@ class JsonApiDataSourceOutWithLinks(ModelComposed):
             'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'attributes': (JsonApiDataSourceOutAttributes,),  # noqa: E501
+            'meta': (JsonApiDataSourceOutMeta,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -117,6 +120,7 @@ class JsonApiDataSourceOutWithLinks(ModelComposed):
         'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -162,6 +166,7 @@ class JsonApiDataSourceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiDataSourceOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -266,6 +271,7 @@ class JsonApiDataSourceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiDataSourceOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

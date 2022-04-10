@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **str** |  | [optional] 
 **hostname** | **str** |  | [optional] 
+**allowed_origins** | **[str]** |  | [optional] 
 **oauth_issuer_location** | **str** |  | [optional] 
 **oauth_client_id** | **str** |  | [optional] 
 **oauth_client_secret** | **str** |  | [optional] 

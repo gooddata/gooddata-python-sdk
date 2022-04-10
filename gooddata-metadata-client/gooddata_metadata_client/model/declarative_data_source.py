@@ -31,7 +31,9 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
     from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
+    globals()['DeclarativeDataSourcePermission'] = DeclarativeDataSourcePermission
     globals()['DeclarativeTables'] = DeclarativeTables
 
 
@@ -116,6 +118,7 @@ class DeclarativeDataSource(ModelNormal):
             'enable_caching': (bool,),  # noqa: E501
             'cache_path': ([str],),  # noqa: E501
             'pdm': (DeclarativeTables,),  # noqa: E501
+            'permissions': ([DeclarativeDataSourcePermission],),  # noqa: E501
         }
 
     @cached_property
@@ -135,6 +138,7 @@ class DeclarativeDataSource(ModelNormal):
         'enable_caching': 'enableCaching',  # noqa: E501
         'cache_path': 'cachePath',  # noqa: E501
         'pdm': 'pdm',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -191,6 +195,7 @@ class DeclarativeDataSource(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
+            permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -290,6 +295,7 @@ class DeclarativeDataSource(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
+            permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

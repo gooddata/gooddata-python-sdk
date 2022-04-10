@@ -1,4 +1,3 @@
-# (C) 2022 GoodData Corporation
 """
     OpenAPI definition
 

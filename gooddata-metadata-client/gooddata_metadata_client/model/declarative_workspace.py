@@ -31,8 +31,12 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+    from gooddata_metadata_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_metadata_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
     from gooddata_metadata_client.model.workspace_identifier import WorkspaceIdentifier
+    globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
+    globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
     globals()['DeclarativeWorkspaceModel'] = DeclarativeWorkspaceModel
     globals()['WorkspaceIdentifier'] = WorkspaceIdentifier
 
@@ -104,6 +108,8 @@ class DeclarativeWorkspace(ModelNormal):
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
             'compute_client': (str,),  # noqa: E501
+            'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
+            'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
         }
 
     @cached_property
@@ -117,6 +123,8 @@ class DeclarativeWorkspace(ModelNormal):
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
         'compute_client': 'computeClient',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
+        'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -167,6 +175,8 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             compute_client (str): [optional]  # noqa: E501
+            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,6 +267,8 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             compute_client (str): [optional]  # noqa: E501
+            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
