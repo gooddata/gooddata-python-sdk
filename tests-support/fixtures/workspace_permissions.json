@@ -1,0 +1,34 @@
+{
+  "hierarchyPermissions": [
+    {
+      "assignee": {
+        "id": "demo2",
+        "type": "user"
+      },
+      "name": "MANAGE"
+    },
+    {
+      "assignee": {
+        "id": "demoGroup",
+        "type": "userGroup"
+      },
+      "name": "ANALYZE"
+    }
+  ],
+  "permissions": [
+    {
+      "assignee": {
+        "id": "demo2",
+        "type": "user"
+      },
+      "name": "ANALYZE"
+    },
+    {
+      "assignee": {
+        "id": "demoGroup",
+        "type": "userGroup"
+      },
+      "name": "VIEW"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "demo2",
+    "type": "user",
+    "attributes": {
+      "authenticationId": ""
+    },
+    "relationships": {
+      "userGroups": {
+        "data": [
+          {
+            "id": "demoGroup",
+            "type": "userGroup"
+          }
+        ]
+      }
+    }
+  }
+}
