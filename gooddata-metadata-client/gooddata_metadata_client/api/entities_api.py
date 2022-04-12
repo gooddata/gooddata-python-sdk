@@ -38,6 +38,8 @@ from gooddata_metadata_client.model.json_api_dashboard_plugin_in_document import
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
 from gooddata_metadata_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_metadata_client.model.json_api_data_source_identifier_out_document import JsonApiDataSourceIdentifierOutDocument
+from gooddata_metadata_client.model.json_api_data_source_identifier_out_list import JsonApiDataSourceIdentifierOutList
 from gooddata_metadata_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
 from gooddata_metadata_client.model.json_api_data_source_out_document import JsonApiDataSourceOutDocument
 from gooddata_metadata_client.model.json_api_data_source_out_list import JsonApiDataSourceOutList
@@ -1852,6 +1854,91 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_data_source_identifiers_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiDataSourceIdentifierOutList,),
+                'auth': [],
+                'endpoint_path': '/api/entities/dataSourceIdentifiers',
+                'operation_id': 'get_all_entities_data_source_identifiers',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'predicate',
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                    'meta_include',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'predicate':
+                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'predicate': 'predicate',
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'predicate': 'query',
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'sort': 'multi',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_all_entities_data_source_tables_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiDataSourceTableOutList,),
@@ -1943,19 +2030,31 @@ class EntitiesApi(object):
                     'page',
                     'size',
                     'sort',
+                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'predicate':
@@ -1968,6 +2067,8 @@ class EntitiesApi(object):
                         (int,),
                     'sort':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'predicate': 'predicate',
@@ -1975,6 +2076,7 @@ class EntitiesApi(object):
                     'page': 'page',
                     'size': 'size',
                     'sort': 'sort',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'predicate': 'query',
@@ -1982,9 +2084,11 @@ class EntitiesApi(object):
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -2954,7 +3058,9 @@ class EntitiesApi(object):
                     ('meta_include',): {
 
                         "CONFIG": "config",
-                        "ALL": "all"
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -3469,6 +3575,89 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_data_source_identifiers_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiDataSourceIdentifierOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/entities/dataSourceIdentifiers/{id}',
+                'operation_id': 'get_entity_data_source_identifiers',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'predicate',
+                    'filter',
+                    'meta_include',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'meta_include',
+                ],
+                'validation': [
+                    'id',
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'predicate':
+                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                    'filter':
+                        (str,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'predicate': 'predicate',
+                    'filter': 'filter',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'predicate': 'query',
+                    'filter': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_data_source_tables_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiDataSourceTableOutDocument,),
@@ -3555,6 +3744,7 @@ class EntitiesApi(object):
                     'id',
                     'predicate',
                     'filter',
+                    'meta_include',
                 ],
                 'required': [
                     'id',
@@ -3562,9 +3752,11 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
                     'id',
+                    'meta_include',
                 ]
             },
             root_map={
@@ -3575,8 +3767,17 @@ class EntitiesApi(object):
                             'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
                         },
                     },
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'id':
@@ -3585,18 +3786,23 @@ class EntitiesApi(object):
                         ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'id': 'id',
                     'predicate': 'predicate',
                     'filter': 'filter',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'id': 'path',
                     'predicate': 'query',
                     'filter': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4082,7 +4288,8 @@ class EntitiesApi(object):
                     ('meta_include',): {
 
                         "PERMISSIONS": "permissions",
-                        "ALL": "all"
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -4586,7 +4793,9 @@ class EntitiesApi(object):
                     ('meta_include',): {
 
                         "CONFIG": "config",
-                        "ALL": "all"
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -8453,6 +8662,77 @@ class EntitiesApi(object):
             workspace_id
         return self.get_all_entities_dashboard_plugins_endpoint.call_with_http_info(**kwargs)
 
+    def get_all_entities_data_source_identifiers(
+        self,
+        **kwargs
+    ):
+        """get_all_entities_data_source_identifiers  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_data_source_identifiers(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiDataSourceIdentifierOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        return self.get_all_entities_data_source_identifiers_endpoint.call_with_http_info(**kwargs)
+
     def get_all_entities_data_source_tables(
         self,
         data_source_id,
@@ -8547,6 +8827,7 @@ class EntitiesApi(object):
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -9941,6 +10222,79 @@ class EntitiesApi(object):
             object_id
         return self.get_entity_dashboard_plugins_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_data_source_identifiers(
+        self,
+        id,
+        **kwargs
+    ):
+        """get_entity_data_source_identifiers  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_data_source_identifiers(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiDataSourceIdentifierOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['id'] = \
+            id
+        return self.get_entity_data_source_identifiers_endpoint.call_with_http_info(**kwargs)
+
     def get_entity_data_source_tables(
         self,
         data_source_id,
@@ -10036,6 +10390,7 @@ class EntitiesApi(object):
         Keyword Args:
             predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

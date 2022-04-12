@@ -14,6 +14,8 @@ Method | HTTP request | Description
 [**get_users_user_groups_layout**](LayoutApi.md#get_users_user_groups_layout) | **GET** /api/layout/usersAndUserGroups | Get all users and user groups
 [**get_workspace_data_filters_layout**](LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 [**get_workspace_layout**](LayoutApi.md#get_workspace_layout) | **GET** /api/layout/workspaces/{workspaceId} | Get workspace layout
+[**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **PUT** /api/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
+[**get_workspace_permissions1**](LayoutApi.md#get_workspace_permissions1) | **GET** /api/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**get_workspaces_layout**](LayoutApi.md#get_workspaces_layout) | **GET** /api/layout/workspaces | Get all workspaces layout
 [**put_data_sources_layout**](LayoutApi.md#put_data_sources_layout) | **PUT** /api/layout/dataSources | Put all data sources
 [**put_user_groups_layout**](LayoutApi.md#put_user_groups_layout) | **PUT** /api/layout/userGroups | Put all user groups
@@ -674,6 +676,160 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_workspace_permissions**
+> get_workspace_permissions(workspace_id, declarative_workspace_permissions)
+
+Set permissions for the workspace
+
+Set effective permissions for the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import layout_api
+from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost:3000
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost:3000"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    declarative_workspace_permissions = DeclarativeWorkspacePermissions(
+        permissions=[
+            DeclarativeSingleWorkspacePermission(
+                name="MANAGE",
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+            ),
+        ],
+        hierarchy_permissions=[
+            DeclarativeWorkspaceHierarchyPermission(
+                name="MANAGE",
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+            ),
+        ],
+    ) # DeclarativeWorkspacePermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the workspace
+        api_instance.get_workspace_permissions(workspace_id, declarative_workspace_permissions)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_workspace_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **declarative_workspace_permissions** | [**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Workspace permissions successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_workspace_permissions1**
+> DeclarativeWorkspacePermissions get_workspace_permissions1(workspace_id)
+
+Get permissions for the workspace
+
+Retrieve current set of permissions of the workspace in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import layout_api
+from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost:3000
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost:3000"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the workspace
+        api_response = api_instance.get_workspace_permissions1(workspace_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_workspace_permissions1: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_workspaces_layout**
 > DeclarativeWorkspaces get_workspaces_layout()
 
@@ -797,6 +953,15 @@ with gooddata_metadata_client.ApiClient() as api_client:
                         ),
                     ],
                 ),
+                permissions=[
+                    DeclarativeDataSourcePermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
             ),
         ],
     ) # DeclarativeDataSources | 
@@ -1129,7 +1294,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
                     attributes=[
                         DeclarativeAttribute(
                             id="attr.customers.customer_name",
-                            title="Customer name",
+                            title="Customer Name",
                             description="Customer name including first and last name.",
                             labels=[
                                 DeclarativeLabel(
@@ -1143,6 +1308,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                 ),
                             ],
                             tags=["Customers"],
+                            sort_column="customer_name",
+                            sort_direction="ASC" | "DESC",
                         ),
                     ],
                     facts=[
@@ -1435,7 +1602,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
                     attributes=[
                         DeclarativeAttribute(
                             id="attr.customers.customer_name",
-                            title="Customer name",
+                            title="Customer Name",
                             description="Customer name including first and last name.",
                             labels=[
                                 DeclarativeLabel(
@@ -1449,6 +1616,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                 ),
                             ],
                             tags=["Customers"],
+                            sort_column="customer_name",
+                            sort_direction="ASC" | "DESC",
                         ),
                     ],
                     facts=[
@@ -1571,7 +1740,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
             oauth_client_secret="oauth_client_secret_example",
             permissions=[
                 DeclarativeOrganizationPermission(
-                    name="FULL_CONTROL",
+                    name="MANAGE",
                     assignee=AssigneeIdentifier(
                         id="id_example",
                         type="user",
@@ -1634,6 +1803,15 @@ with gooddata_metadata_client.ApiClient() as api_client:
                         ),
                     ],
                 ),
+                permissions=[
+                    DeclarativeDataSourcePermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
             ),
         ],
         workspaces=[
@@ -1656,7 +1834,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                 attributes=[
                                     DeclarativeAttribute(
                                         id="attr.customers.customer_name",
-                                        title="Customer name",
+                                        title="Customer Name",
                                         description="Customer name including first and last name.",
                                         labels=[
                                             DeclarativeLabel(
@@ -1670,6 +1848,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                             ),
                                         ],
                                         tags=["Customers"],
+                                        sort_column="customer_name",
+                                        sort_direction="ASC" | "DESC",
                                     ),
                                 ],
                                 facts=[
@@ -1768,6 +1948,24 @@ with gooddata_metadata_client.ApiClient() as api_client:
                     type="workspace",
                 ),
                 compute_client="AQE",
+                permissions=[
+                    DeclarativeSingleWorkspacePermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
+                hierarchy_permissions=[
+                    DeclarativeWorkspaceHierarchyPermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
             ),
         ],
         workspace_data_filters=[
@@ -2059,7 +2257,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                 attributes=[
                                     DeclarativeAttribute(
                                         id="attr.customers.customer_name",
-                                        title="Customer name",
+                                        title="Customer Name",
                                         description="Customer name including first and last name.",
                                         labels=[
                                             DeclarativeLabel(
@@ -2073,6 +2271,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                             ),
                                         ],
                                         tags=["Customers"],
+                                        sort_column="customer_name",
+                                        sort_direction="ASC" | "DESC",
                                     ),
                                 ],
                                 facts=[
@@ -2171,6 +2371,24 @@ with gooddata_metadata_client.ApiClient() as api_client:
                     type="workspace",
                 ),
                 compute_client="AQE",
+                permissions=[
+                    DeclarativeSingleWorkspacePermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
+                hierarchy_permissions=[
+                    DeclarativeWorkspaceHierarchyPermission(
+                        name="MANAGE",
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                    ),
+                ],
             ),
         ],
         workspace_data_filters=[

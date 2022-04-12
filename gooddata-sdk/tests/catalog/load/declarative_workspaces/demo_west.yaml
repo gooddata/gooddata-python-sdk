@@ -1,16 +1,18 @@
 # (C) 2022 GoodData Corporation
+hierarchyPermissions: []
 id: demo_west
 model:
   analytics:
-    analytical_dashboards: []
-    dashboard_plugins: []
-    filter_contexts: []
+    analyticalDashboards: []
+    dashboardPlugins: []
+    filterContexts: []
     metrics: []
-    visualization_objects: []
+    visualizationObjects: []
   ldm:
     datasets: []
-    date_instances: []
+    dateInstances: []
 name: Demo West
 parent:
   id: demo
   type: workspace
+permissions: []

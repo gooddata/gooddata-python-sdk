@@ -60,6 +60,10 @@ class DeclarativeAttribute(ModelNormal):
     """
 
     allowed_values = {
+        ('sort_direction',): {
+            'ASC': "ASC",
+            'DESC': "DESC",
+        },
     }
 
     validations = {
@@ -100,6 +104,8 @@ class DeclarativeAttribute(ModelNormal):
             'labels': ([DeclarativeLabel],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
+            'sort_column': (str,),  # noqa: E501
+            'sort_direction': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -113,6 +119,8 @@ class DeclarativeAttribute(ModelNormal):
         'labels': 'labels',  # noqa: E501
         'description': 'description',  # noqa: E501
         'tags': 'tags',  # noqa: E501
+        'sort_column': 'sortColumn',  # noqa: E501
+        'sort_direction': 'sortDirection',  # noqa: E501
     }
 
     read_only_vars = {
@@ -163,6 +171,8 @@ class DeclarativeAttribute(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): Attribute description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            sort_column (str): Attribute sort column.. [optional]  # noqa: E501
+            sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +264,8 @@ class DeclarativeAttribute(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): Attribute description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            sort_column (str): Attribute sort column.. [optional]  # noqa: E501
+            sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

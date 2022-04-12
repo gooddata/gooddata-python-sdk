@@ -100,11 +100,11 @@ class CatalogDataSourceService:
         self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials))
 
     def store_declarative_data_sources(self, path: Path) -> None:
-        data_sources = self.get_declarative_data_sources()
+        data_sources = self._layout_api.get_data_sources_layout()
         for data_source in data_sources.data_sources:
             file_path = path / f"{data_source.id}.yaml"
             with open(file_path, "w+", encoding="utf-8") as f:
-                yaml.safe_dump(data_source.to_api().to_dict(), f, indent=2, sort_keys=True)
+                yaml.safe_dump(data_source.to_dict(camel_case=True), f, indent=2)
 
     @staticmethod
     def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:
@@ -159,7 +159,7 @@ class CatalogDataSourceService:
         for data_source_path in data_sources_path:
             with open(data_source_path, "r", encoding="utf-8") as f:
                 data_sources.append(yaml.safe_load(f))
-        return CatalogDeclarativeDataSources.from_api({"data_sources": data_sources})
+        return CatalogDeclarativeDataSources.from_dict({"dataSources": data_sources})
 
     def load_and_put_declarative_data_sources(
         self, path: Path, credentials_path: Optional[Path] = None, test_data_sources: bool = False

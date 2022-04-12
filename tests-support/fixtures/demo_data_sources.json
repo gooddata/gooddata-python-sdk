@@ -204,7 +204,23 @@
             "type": "TABLE"
           }
         ]
-      }
+      },
+      "permissions": [
+        {
+          "assignee": {
+            "id": "demo2",
+            "type": "user"
+          },
+          "name": "MANAGE"
+        },
+        {
+          "assignee": {
+            "id": "demoGroup",
+            "type": "userGroup"
+          },
+          "name": "USE"
+        }
+      ]
     }
   ]
 }

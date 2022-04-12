@@ -4,114 +4,17 @@ All URIs are relative to *http://gooddata-cn-ce:3000*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**compute_label_elements**](ActionsApi.md#compute_label_elements) | **GET** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values.
-[**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values.
+[**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 [**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
 
-# **compute_label_elements**
-> ElementsResponse compute_label_elements(workspace_id, label)
-
-Listing of label values.
-
-Returns paged list of elements (values) of given label satisfying given filtering criteria.
-
-### Example
-
-
-```python
-import time
-import gooddata_afm_client
-from gooddata_afm_client.api import actions_api
-from gooddata_afm_client.model.elements_response import ElementsResponse
-from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_afm_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-    label = "label_example" # str | Requested label.
-    sort_order = "ASC" # str | Sort order of returned items. Items are sorted by ```label``` title. (optional) if omitted the server will use the default value of "ASC"
-    complement_filter = False # bool | Inverse filter: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter``` (optional) if omitted the server will use the default value of False
-    pattern_filter = "patternFilter_example" # str | Return only items, whose ```label``` title case insensitively contains ```filter``` as substring. (optional)
-    exact_filter = [
-        "exactFilter_example",
-    ] # [str] | Return only items, whose ```label``` title exactly matches one of ```filter```. (optional)
-    offset = 0 # int | Request page with this offset. (optional) if omitted the server will use the default value of 0
-    limit = 1000 # int | Return only this number of items. (optional) if omitted the server will use the default value of 1000
-    data_sampling_percentage = 0 # float | Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views. (optional)
-    skip_cache = True # bool | Ignore all caches during execution of current request. (optional)
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Listing of label values.
-        api_response = api_instance.compute_label_elements(workspace_id, label)
-        pprint(api_response)
-    except gooddata_afm_client.ApiException as e:
-        print("Exception when calling ActionsApi->compute_label_elements: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-        # Listing of label values.
-        api_response = api_instance.compute_label_elements(workspace_id, label, sort_order=sort_order, complement_filter=complement_filter, pattern_filter=pattern_filter, exact_filter=exact_filter, offset=offset, limit=limit, data_sampling_percentage=data_sampling_percentage, skip_cache=skip_cache)
-        pprint(api_response)
-    except gooddata_afm_client.ApiException as e:
-        print("Exception when calling ActionsApi->compute_label_elements: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**| Workspace identifier |
- **label** | **str**| Requested label. |
- **sort_order** | **str**| Sort order of returned items. Items are sorted by &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title. | [optional] if omitted the server will use the default value of "ASC"
- **complement_filter** | **bool**| Inverse filter: * &#x60;&#x60;&#x60;false&#x60;&#x60;&#x60; - return items matching &#x60;&#x60;&#x60;patternFilter&#x60;&#x60;&#x60; and &#x60;&#x60;&#x60;exactFilter&#x60;&#x60;&#x60; * &#x60;&#x60;&#x60;true&#x60;&#x60;&#x60; - return items not matching &#x60;&#x60;&#x60;patternFilter&#x60;&#x60;&#x60; and &#x60;&#x60;&#x60;exactFilter&#x60;&#x60;&#x60; | [optional] if omitted the server will use the default value of False
- **pattern_filter** | **str**| Return only items, whose &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title case insensitively contains &#x60;&#x60;&#x60;filter&#x60;&#x60;&#x60; as substring. | [optional]
- **exact_filter** | **[str]**| Return only items, whose &#x60;&#x60;&#x60;label&#x60;&#x60;&#x60; title exactly matches one of &#x60;&#x60;&#x60;filter&#x60;&#x60;&#x60;. | [optional]
- **offset** | **int**| Request page with this offset. | [optional] if omitted the server will use the default value of 0
- **limit** | **int**| Return only this number of items. | [optional] if omitted the server will use the default value of 1000
- **data_sampling_percentage** | **float**| Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views. | [optional]
- **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional]
-
-### Return type
-
-[**ElementsResponse**](ElementsResponse.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: */*
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | List of label values. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **compute_label_elements_post**
 > ElementsResponse compute_label_elements_post(workspace_id, elements_request)
 
-Listing of label values.
+Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 
 Returns paged list of elements (values) of given label satisfying given filtering criteria.
 
@@ -139,6 +42,9 @@ with gooddata_afm_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         label="label_example",
+        filter_by=ElementsRequestFilterBy(
+            label_type="REQUESTED",
+        ),
         sort_order="ASC",
         complement_filter=False,
         pattern_filter="pattern_filter_example",
@@ -147,13 +53,13 @@ with gooddata_afm_client.ApiClient() as api_client:
         ],
         data_sampling_percentage=100,
     ) # ElementsRequest | 
-    offset = 0 # int | Request page with this offset. (optional) if omitted the server will use the default value of 0
-    limit = 1000 # int | Return only this number of items. (optional) if omitted the server will use the default value of 1000
+    offset = 0 # int | Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 0
+    limit = 1000 # int | Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 1000
     skip_cache = True # bool | Ignore all caches during execution of current request. (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        # Listing of label values.
+        # Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
         api_response = api_instance.compute_label_elements_post(workspace_id, elements_request)
         pprint(api_response)
     except gooddata_afm_client.ApiException as e:
@@ -162,7 +68,7 @@ with gooddata_afm_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        # Listing of label values.
+        # Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
         api_response = api_instance.compute_label_elements_post(workspace_id, elements_request, offset=offset, limit=limit, skip_cache=skip_cache)
         pprint(api_response)
     except gooddata_afm_client.ApiException as e:
@@ -176,8 +82,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
  **elements_request** | [**ElementsRequest**](ElementsRequest.md)|  |
- **offset** | **int**| Request page with this offset. | [optional] if omitted the server will use the default value of 0
- **limit** | **int**| Return only this number of items. | [optional] if omitted the server will use the default value of 1000
+ **offset** | **int**| Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. | [optional] if omitted the server will use the default value of 0
+ **limit** | **int**| Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. | [optional] if omitted the server will use the default value of 1000
  **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional]
 
 ### Return type

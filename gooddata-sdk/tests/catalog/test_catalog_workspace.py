@@ -6,7 +6,8 @@ from pathlib import Path
 
 import vcr
 
-from gooddata_sdk import GoodDataSdk
+import gooddata_metadata_client.apis as metadata_apis
+from gooddata_sdk import GoodDataApiClient, GoodDataSdk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaces
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from tests import VCR_MATCH_ON
@@ -43,7 +44,7 @@ def test_load_and_put_declarative_workspaces(test_config):
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)
-        workspaces_o = CatalogDeclarativeWorkspaces.from_api(data)
+        workspaces_o = CatalogDeclarativeWorkspaces.from_dict(data)
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
 
 
@@ -77,8 +78,23 @@ def test_put_declarative_workspaces(test_config):
     finally:
         with open(path) as f:
             data = json.load(f)
-        workspaces_o = CatalogDeclarativeWorkspaces.from_api(data)
+        workspaces_o = CatalogDeclarativeWorkspaces.from_dict(data)
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces_snake_case.json"))
+def test_get_declarative_workspaces_snake_case(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_workspaces_snake_case.json"
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+
+    with open(path) as f:
+        data = json.load(f)
+
+    expected_o = CatalogDeclarativeWorkspaces.from_dict(data, camel_case=False)
+
+    assert workspaces_o == expected_o
+    assert workspaces_o.to_api().to_dict() == data
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
@@ -87,16 +103,27 @@ def test_get_declarative_workspaces(test_config):
     path = _current_dir / "expected" / "declarative_workspaces.json"
     workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
 
-    # empty description in dateInstance has to be deleted, because it is wrongly returned by server
-    workspaces_o.workspaces[0].model.ldm.date_instances[0].description = None
-
     with open(path) as f:
         data = json.load(f)
 
-    expected_o = CatalogDeclarativeWorkspaces.from_api(data)
+    expected_o = CatalogDeclarativeWorkspaces.from_dict(data)
 
     assert workspaces_o == expected_o
-    assert workspaces_o.to_api().to_dict() == data
+    assert workspaces_o.to_api().to_dict(camel_case=True) == data
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_declarative_workspaces.json"))
+def test_declarative_workspaces(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+
+    assert len(workspaces_o.workspaces) == 3
+    assert len(workspaces_o.workspace_data_filters) == 2
+    assert [workspace.id for workspace in workspaces_o.workspaces] == ["demo", "demo_west", "demo_west_california"]
+    assert workspaces_o.to_api().to_dict() == layout_api.get_workspaces_layout().to_dict()
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.json"))

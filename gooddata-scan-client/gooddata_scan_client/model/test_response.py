@@ -140,7 +140,7 @@ class TestResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            error (str): Field containing more details in case of failure.. [optional]  # noqa: E501
+            error (str): Field containing more details in case of a failure. Details are available to a privileged user only.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -226,7 +226,7 @@ class TestResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            error (str): Field containing more details in case of failure.. [optional]  # noqa: E501
+            error (str): Field containing more details in case of a failure. Details are available to a privileged user only.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

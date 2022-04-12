@@ -162,10 +162,10 @@ def test_get_declarative_analytics_model(test_config):
     with open(path) as f:
         data = json.load(f)
 
-    expected_o = CatalogDeclarativeAnalytics.from_api(data)
+    expected_o = CatalogDeclarativeAnalytics.from_dict(data)
 
     assert analytics_model_o == expected_o
-    assert analytics_model_o.to_api().to_dict() == data
+    assert analytics_model_o.to_api().to_dict(camel_case=True) == data
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_ldm.json"))
@@ -177,13 +177,10 @@ def test_get_declarative_ldm(test_config):
     with open(path) as f:
         data = json.load(f)
 
-    expected_o = CatalogDeclarativeModel.from_api(data)
-
-    # empty description in dateInstance has to be deleted, because it is wrongly returned by server
-    ldm_o.ldm.date_instances[0].description = None
+    expected_o = CatalogDeclarativeModel.from_dict(data)
 
     assert ldm_o == expected_o
-    assert ldm_o.to_api().to_dict() == data
+    assert ldm_o.to_api().to_dict(camel_case=True) == data
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog.json"))

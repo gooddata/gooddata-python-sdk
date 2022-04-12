@@ -8,6 +8,7 @@ from gooddata_metadata_client.model.declarative_data_sources import DeclarativeD
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import CatalogTypeEntity, TokenCredentialsFromFile
+from gooddata_sdk.catalog.permissions.permission import CatalogDeclarativeDataSourcePermission
 
 BIGQUERY_TYPE = "BIGQUERY"
 
@@ -35,6 +36,19 @@ class CatalogDeclarativeDataSources:
                 data_sources.append(data_source.to_api())
         return DeclarativeDataSources(data_sources=data_sources)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeDataSources:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeDataSources object.
+        """
+        declarative_data_sources = DeclarativeDataSources.from_dict(data, camel_case)
+        return cls.from_api(declarative_data_sources)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeDataSources):
             return False
@@ -53,6 +67,7 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         pdm: Optional[CatalogDeclarativeTables],
         cache_path: Optional[list[str]] = None,
         username: Optional[str] = None,
+        permissions: list[CatalogDeclarativeDataSourcePermission] = None,
     ):
         super(CatalogDeclarativeDataSource, self).__init__(id, type)
         self.schema = schema
@@ -62,9 +77,13 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         self.url = url
         self.pdm = pdm
         self.username = username
+        self.permissions = permissions if permissions is not None else []
 
     @classmethod
     def from_api(cls, entity: dict[str, Any]) -> CatalogDeclarativeDataSource:
+        permissions = [
+            CatalogDeclarativeDataSourcePermission.from_api(permission) for permission in entity.get("permissions", [])
+        ]
         return cls(
             id=entity["id"],
             name=entity["name"],
@@ -75,6 +94,7 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
             pdm=CatalogDeclarativeTables.from_api(entity["pdm"]) if entity.get("pdm") else None,
             cache_path=entity.get("cache_path"),
             username=entity.get("username"),
+            permissions=permissions,
         )
 
     def to_api(
@@ -82,7 +102,7 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         password: Optional[str] = None,
         token: Optional[str] = None,
     ) -> DeclarativeDataSource:
-        kwargs: dict[str, Any] = {}
+        kwargs: dict[str, Any] = {"permissions": [permission.to_api() for permission in self.permissions]}
         if self.enable_caching is not None:
             kwargs["enable_caching"] = self.enable_caching
         if self.cache_path is not None:

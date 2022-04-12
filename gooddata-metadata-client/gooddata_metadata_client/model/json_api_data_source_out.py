@@ -32,7 +32,9 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_data_source_out_attributes import JsonApiDataSourceOutAttributes
+    from gooddata_metadata_client.model.json_api_data_source_out_meta import JsonApiDataSourceOutMeta
     globals()['JsonApiDataSourceOutAttributes'] = JsonApiDataSourceOutAttributes
+    globals()['JsonApiDataSourceOutMeta'] = JsonApiDataSourceOutMeta
 
 
 class JsonApiDataSourceOut(ModelNormal):
@@ -99,6 +101,7 @@ class JsonApiDataSourceOut(ModelNormal):
             'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'attributes': (JsonApiDataSourceOutAttributes,),  # noqa: E501
+            'meta': (JsonApiDataSourceOutMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +113,7 @@ class JsonApiDataSourceOut(ModelNormal):
         'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,6 +162,7 @@ class JsonApiDataSourceOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiDataSourceOutMeta): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataSource")
@@ -248,6 +253,7 @@ class JsonApiDataSourceOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiDataSourceOutMeta): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataSource")

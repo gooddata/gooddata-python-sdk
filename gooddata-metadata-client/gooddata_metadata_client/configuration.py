@@ -445,3 +445,11 @@ class Configuration(object):
         """Fix base path."""
         self._base_path = value
         self.server_index = None
+
+
+class ConversionConfiguration:
+    _CONFIG: Configuration = Configuration()
+
+    @classmethod
+    def get_configuration(cls):
+        return cls._CONFIG

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import Any, Type, TypeVar
 
+from gooddata_metadata_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_metadata_client.model.grain_identifier import GrainIdentifier
 from gooddata_metadata_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_metadata_client.model.workspace_identifier import WorkspaceIdentifier
@@ -44,3 +45,8 @@ class CatalogReferenceIdentifier(CatalogIdentifierBase):
 class CatalogGrainIdentifier(CatalogTypeEntity):
     def to_api(self) -> GrainIdentifier:
         return GrainIdentifier(self.id, self.type)
+
+
+class CatalogAssigneeIdentifier(CatalogTypeEntity):
+    def to_api(self) -> AssigneeIdentifier:
+        return AssigneeIdentifier(self.id, self.type)

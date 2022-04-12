@@ -71,24 +71,29 @@ with gooddata_afm_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
-label = "label_example" # str | Requested label.
-sort_order = "ASC" # str | Sort order of returned items. Items are sorted by ```label``` title. (optional) (default to "ASC")
-complement_filter = False # bool | Inverse filter: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter``` (optional) (default to False)
-pattern_filter = "patternFilter_example" # str | Return only items, whose ```label``` title case insensitively contains ```filter``` as substring. (optional)
-exact_filter = [
-        "exactFilter_example",
-    ] # [str] | Return only items, whose ```label``` title exactly matches one of ```filter```. (optional)
-offset = 0 # int | Request page with this offset. (optional) (default to 0)
-limit = 1000 # int | Return only this number of items. (optional) (default to 1000)
-data_sampling_percentage = 0 # float | Specifies the percentage of rows from fact datasets to use during computation. This feature is available only for workspaces that use a Vertica Data Source without table views. (optional)
+elements_request = ElementsRequest(
+        label="label_example",
+        filter_by=ElementsRequestFilterBy(
+            label_type="REQUESTED",
+        ),
+        sort_order="ASC",
+        complement_filter=False,
+        pattern_filter="pattern_filter_example",
+        exact_filter=[
+            "exact_filter_example",
+        ],
+        data_sampling_percentage=100,
+    ) # ElementsRequest | 
+offset = 0 # int | Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) (default to 0)
+limit = 1000 # int | Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) (default to 1000)
 skip_cache = True # bool | Ignore all caches during execution of current request. (optional)
 
     try:
-        # Listing of label values.
-        api_response = api_instance.compute_label_elements(workspace_id, label, sort_order=sort_order, complement_filter=complement_filter, pattern_filter=pattern_filter, exact_filter=exact_filter, offset=offset, limit=limit, data_sampling_percentage=data_sampling_percentage, skip_cache=skip_cache)
+        # Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
+        api_response = api_instance.compute_label_elements_post(workspace_id, elements_request, offset=offset, limit=limit, skip_cache=skip_cache)
         pprint(api_response)
     except gooddata_afm_client.ApiException as e:
-        print("Exception when calling ActionsApi->compute_label_elements: %s\n" % e)
+        print("Exception when calling ActionsApi->compute_label_elements_post: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -97,8 +102,7 @@ All URIs are relative to *http://gooddata-cn-ce:3000*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ActionsApi* | [**compute_label_elements**](docs/ActionsApi.md#compute_label_elements) | **GET** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values.
-*ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values.
+*ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
@@ -143,6 +147,7 @@ Class | Method | HTTP request | Description
  - [DimensionHeader](docs/DimensionHeader.md)
  - [Element](docs/Element.md)
  - [ElementsRequest](docs/ElementsRequest.md)
+ - [ElementsRequestFilterBy](docs/ElementsRequestFilterBy.md)
  - [ElementsResponse](docs/ElementsResponse.md)
  - [ErrorMessage](docs/ErrorMessage.md)
  - [ExecutionLinks](docs/ExecutionLinks.md)

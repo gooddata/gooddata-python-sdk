@@ -45,6 +45,7 @@ from gooddata_afm_client.model.dimension import Dimension
 from gooddata_afm_client.model.dimension_header import DimensionHeader
 from gooddata_afm_client.model.element import Element
 from gooddata_afm_client.model.elements_request import ElementsRequest
+from gooddata_afm_client.model.elements_request_filter_by import ElementsRequestFilterBy
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from gooddata_afm_client.model.error_message import ErrorMessage
 from gooddata_afm_client.model.execution_links import ExecutionLinks

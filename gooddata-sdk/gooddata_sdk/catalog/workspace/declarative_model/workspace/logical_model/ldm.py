@@ -28,6 +28,19 @@ class CatalogDeclarativeModel:
             kwargs["ldm"] = self.ldm.to_api()
         return DeclarativeModel(**kwargs)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeModel:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeModel object.
+        """
+        declarative_model = DeclarativeModel.from_dict(data, camel_case)
+        return cls.from_api(declarative_model)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeModel):
             return False

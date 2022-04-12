@@ -60,6 +60,11 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
     """
 
     allowed_values = {
+        ('permissions',): {
+            'MANAGE': "MANAGE",
+            'ANALYZE': "ANALYZE",
+            'VIEW': "VIEW",
+        },
     }
 
     validations = {
@@ -89,6 +94,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
         lazy_import()
         return {
             'config': (JsonApiWorkspaceOutMetaConfig,),  # noqa: E501
+            'permissions': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +104,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
 
     attribute_map = {
         'config': 'config',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -142,6 +149,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
+            permissions ([str]): List of valid permissions for a logged user.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -224,6 +232,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
+            permissions ([str]): List of valid permissions for a logged user.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

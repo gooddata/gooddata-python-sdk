@@ -1,128 +1,137 @@
 # (C) 2022 GoodData Corporation
-enable_caching: false
+enableCaching: false
 id: demo-test-ds
 name: demo-test-ds
 pdm:
   tables:
-  - columns:
-    - data_type: NUMERIC
-      is_primary_key: false
-      name: budget
-    - data_type: STRING
-      is_primary_key: true
-      name: campaign_channel_id
-    - data_type: INT
-      is_primary_key: false
-      name: campaign_id
-      referenced_table_column: campaign_id
-      referenced_table_id: campaigns
-    - data_type: STRING
-      is_primary_key: false
-      name: category
-    - data_type: NUMERIC
-      is_primary_key: false
-      name: spend
-    - data_type: STRING
-      is_primary_key: false
-      name: type
-    id: campaign_channels
-    path:
-    - demo
-    - campaign_channels
-    type: TABLE
-  - columns:
-    - data_type: INT
-      is_primary_key: true
-      name: campaign_id
-    - data_type: STRING
-      is_primary_key: false
-      name: campaign_name
-    id: campaigns
-    path:
-    - demo
-    - campaigns
-    type: TABLE
-  - columns:
-    - data_type: INT
-      is_primary_key: true
-      name: customer_id
-    - data_type: STRING
-      is_primary_key: false
-      name: customer_name
-    - data_type: STRING
-      is_primary_key: false
-      name: geo__state__location
-    - data_type: STRING
-      is_primary_key: false
-      name: region
-    - data_type: STRING
-      is_primary_key: false
-      name: state
-    id: customers
-    path:
-    - demo
-    - customers
-    type: TABLE
-  - columns:
-    - data_type: INT
-      is_primary_key: false
-      name: campaign_id
-      referenced_table_column: campaign_id
-      referenced_table_id: campaigns
-    - data_type: INT
-      is_primary_key: false
-      name: customer_id
-      referenced_table_column: customer_id
-      referenced_table_id: customers
-    - data_type: DATE
-      is_primary_key: false
-      name: date
-    - data_type: STRING
-      is_primary_key: false
-      name: order_id
-    - data_type: STRING
-      is_primary_key: true
-      name: order_line_id
-    - data_type: STRING
-      is_primary_key: false
-      name: order_status
-    - data_type: NUMERIC
-      is_primary_key: false
-      name: price
-    - data_type: INT
-      is_primary_key: false
-      name: product_id
-      referenced_table_column: product_id
-      referenced_table_id: products
-    - data_type: NUMERIC
-      is_primary_key: false
-      name: quantity
-    - data_type: STRING
-      is_primary_key: false
-      name: wdf__region
-    - data_type: STRING
-      is_primary_key: false
-      name: wdf__state
-    id: order_lines
-    path:
-    - demo
-    - order_lines
-    type: TABLE
-  - columns:
-    - data_type: STRING
-      is_primary_key: false
-      name: category
-    - data_type: INT
-      is_primary_key: true
-      name: product_id
-    - data_type: STRING
-      is_primary_key: false
-      name: product_name
-    id: products
-    path:
-    - demo
-    - products
-    type: TABLE
+    - columns:
+        - dataType: NUMERIC
+          isPrimaryKey: false
+          name: budget
+        - dataType: STRING
+          isPrimaryKey: true
+          name: campaign_channel_id
+        - dataType: INT
+          isPrimaryKey: false
+          name: campaign_id
+          referencedTableColumn: campaign_id
+          referencedTableId: campaigns
+        - dataType: STRING
+          isPrimaryKey: false
+          name: category
+        - dataType: NUMERIC
+          isPrimaryKey: false
+          name: spend
+        - dataType: STRING
+          isPrimaryKey: false
+          name: type
+      id: campaign_channels
+      path:
+        - demo
+        - campaign_channels
+      type: TABLE
+    - columns:
+        - dataType: INT
+          isPrimaryKey: true
+          name: campaign_id
+        - dataType: STRING
+          isPrimaryKey: false
+          name: campaign_name
+      id: campaigns
+      path:
+        - demo
+        - campaigns
+      type: TABLE
+    - columns:
+        - dataType: INT
+          isPrimaryKey: true
+          name: customer_id
+        - dataType: STRING
+          isPrimaryKey: false
+          name: customer_name
+        - dataType: STRING
+          isPrimaryKey: false
+          name: geo__state__location
+        - dataType: STRING
+          isPrimaryKey: false
+          name: region
+        - dataType: STRING
+          isPrimaryKey: false
+          name: state
+      id: customers
+      path:
+        - demo
+        - customers
+      type: TABLE
+    - columns:
+        - dataType: INT
+          isPrimaryKey: false
+          name: campaign_id
+          referencedTableColumn: campaign_id
+          referencedTableId: campaigns
+        - dataType: INT
+          isPrimaryKey: false
+          name: customer_id
+          referencedTableColumn: customer_id
+          referencedTableId: customers
+        - dataType: DATE
+          isPrimaryKey: false
+          name: date
+        - dataType: STRING
+          isPrimaryKey: false
+          name: order_id
+        - dataType: STRING
+          isPrimaryKey: true
+          name: order_line_id
+        - dataType: STRING
+          isPrimaryKey: false
+          name: order_status
+        - dataType: NUMERIC
+          isPrimaryKey: false
+          name: price
+        - dataType: INT
+          isPrimaryKey: false
+          name: product_id
+          referencedTableColumn: product_id
+          referencedTableId: products
+        - dataType: NUMERIC
+          isPrimaryKey: false
+          name: quantity
+        - dataType: STRING
+          isPrimaryKey: false
+          name: wdf__region
+        - dataType: STRING
+          isPrimaryKey: false
+          name: wdf__state
+      id: order_lines
+      path:
+        - demo
+        - order_lines
+      type: TABLE
+    - columns:
+        - dataType: STRING
+          isPrimaryKey: false
+          name: category
+        - dataType: INT
+          isPrimaryKey: true
+          name: product_id
+        - dataType: STRING
+          isPrimaryKey: false
+          name: product_name
+      id: products
+      path:
+        - demo
+        - products
+      type: TABLE
+permissions:
+  - assignee:
+      id: demo2
+      type: user
+    name: MANAGE
+  - assignee:
+      id: demoGroup
+      type: userGroup
+    name: USE
 schema: demo
 type: POSTGRESQL
 url: jdbc:postgresql://localhost:5432/demo
