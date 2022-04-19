@@ -20,6 +20,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 )
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
+from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,

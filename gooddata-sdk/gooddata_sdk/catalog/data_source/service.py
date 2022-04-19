@@ -16,6 +16,7 @@ from gooddata_sdk.catalog.data_source.declarative_model.data_source import BIGQU
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
+from gooddata_sdk.catalog.organization.service import LAYOUT_ROOT_FOLDER, CatalogOrganizationService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import load_all_entities
@@ -28,6 +29,7 @@ class CatalogDataSourceService:
         self._actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
         self._scan_api = scan_client_apis.ActionsApi(api_client.scan_client)
         self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
+        self.organization_service = CatalogOrganizationService(api_client)
 
     def list_data_sources(self) -> List[CatalogDataSource]:
         get_data_sources = functools.partial(
@@ -99,13 +101,6 @@ class CatalogDataSourceService:
         credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
         self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials))
 
-    def store_declarative_data_sources(self, path: Path) -> None:
-        data_sources = self._layout_api.get_data_sources_layout()
-        for data_source in data_sources.data_sources:
-            file_path = path / f"{data_source.id}.yaml"
-            with open(file_path, "w+", encoding="utf-8") as f:
-                yaml.safe_dump(data_source.to_dict(camel_case=True), f, indent=2)
-
     @staticmethod
     def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:
         if not os.path.isfile(credentials_path):
@@ -150,19 +145,22 @@ class CatalogDataSourceService:
                 message.append(f"Test connection for data source id {k} ended with the following error {v}.")
             raise ValueError("\n".join(message))
 
-    @staticmethod
-    def load_declarative_data_sources(path: Path) -> CatalogDeclarativeDataSources:
-        data_sources_path = sorted([p for p in path.glob("*.yaml")])
-        if not data_sources_path:
-            raise ValueError(f"There are no .yaml files in {path}.")
-        data_sources = []
-        for data_source_path in data_sources_path:
-            with open(data_source_path, "r", encoding="utf-8") as f:
-                data_sources.append(yaml.safe_load(f))
-        return CatalogDeclarativeDataSources.from_dict({"dataSources": data_sources})
+    def layout_organization_folder(self, layout_root_path: Path) -> Path:
+        return layout_root_path / LAYOUT_ROOT_FOLDER / self.organization_service.organization_id
+
+    def store_declarative_data_sources(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+        self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_declarative_data_sources(
+        self, layout_root_path: Path = Path(os.path.curdir)
+    ) -> CatalogDeclarativeDataSources:
+        return CatalogDeclarativeDataSources.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_data_sources(
-        self, path: Path, credentials_path: Optional[Path] = None, test_data_sources: bool = False
+        self,
+        layout_root_path: Path = Path(os.path.curdir),
+        credentials_path: Optional[Path] = None,
+        test_data_sources: bool = False,
     ) -> None:
-        data_sources = self.load_declarative_data_sources(path)
+        data_sources = self.load_declarative_data_sources(layout_root_path)
         self.put_declarative_data_sources(data_sources, credentials_path, test_data_sources)

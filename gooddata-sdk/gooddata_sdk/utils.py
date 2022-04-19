@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import functools
+import os
+from pathlib import Path
 from typing import Any, Dict, NamedTuple, Union, cast
 
 from gooddata_metadata_client import ApiAttributeError
@@ -120,3 +122,8 @@ class SideLoads:
 
     def __len__(self) -> int:
         return len(self._objects)
+
+
+def create_directory(path: Path) -> None:
+    if not os.path.exists(path):
+        os.makedirs(path)

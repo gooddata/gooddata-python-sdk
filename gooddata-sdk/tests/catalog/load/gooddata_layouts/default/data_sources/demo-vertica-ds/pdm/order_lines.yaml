@@ -1,0 +1,46 @@
+# (C) 2022 GoodData Corporation
+columns:
+- dataType: INT
+  isPrimaryKey: false
+  name: campaign_id
+  referencedTableColumn: campaign_id
+  referencedTableId: campaigns
+- dataType: INT
+  isPrimaryKey: false
+  name: customer_id
+  referencedTableColumn: customer_id
+  referencedTableId: customers
+- dataType: DATE
+  isPrimaryKey: false
+  name: date
+- dataType: STRING
+  isPrimaryKey: false
+  name: order_id
+- dataType: STRING
+  isPrimaryKey: true
+  name: order_line_id
+- dataType: STRING
+  isPrimaryKey: false
+  name: order_status
+- dataType: NUMERIC
+  isPrimaryKey: false
+  name: price
+- dataType: INT
+  isPrimaryKey: false
+  name: product_id
+  referencedTableColumn: product_id
+  referencedTableId: products
+- dataType: NUMERIC
+  isPrimaryKey: false
+  name: quantity
+- dataType: STRING
+  isPrimaryKey: false
+  name: wdf__region
+- dataType: STRING
+  isPrimaryKey: false
+  name: wdf__state
+id: order_lines
+path:
+- demo
+- order_lines
+type: TABLE
