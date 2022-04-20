@@ -4,11 +4,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from gooddata_metadata_client.model.declarative_table import DeclarativeTable
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.column import CatalogDeclarativeColumn
 from gooddata_sdk.catalog.entity import CatalogTypeEntity
+from gooddata_sdk.utils import write_layout_to_file
 
 
 class CatalogDeclarativeTable(CatalogTypeEntity):
@@ -40,8 +39,7 @@ class CatalogDeclarativeTable(CatalogTypeEntity):
     def store_to_disk(self, pdm_folder: Path) -> None:
         table_dict = self.to_api().to_dict(camel_case=True)
         table_file_path = pdm_folder / f"{self.id}.yaml"
-        with open(table_file_path, "w+", encoding="utf-8") as f:
-            yaml.safe_dump(table_dict, f, indent=2)
+        write_layout_to_file(table_file_path, table_dict)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeTable):

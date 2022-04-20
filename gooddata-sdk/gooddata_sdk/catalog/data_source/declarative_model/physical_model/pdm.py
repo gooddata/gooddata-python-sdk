@@ -4,11 +4,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-import yaml
-
 from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable
-from gooddata_sdk.utils import create_directory
+from gooddata_sdk.utils import create_directory, read_layout_from_file
 
 LAYOUT_PDM_DIR = "pdm"
 
@@ -44,8 +42,7 @@ class CatalogDeclarativeTables:
         table_files = sorted([p for p in pdm_folder.glob("*.yaml")])
         tables = []
         for table_file in table_files:
-            with open(table_file, "r", encoding="utf-8") as f:
-                tables.append(yaml.safe_load(f))
+            tables.append(read_layout_from_file(table_file))
         return {"tables": tables}
 
     def __eq__(self, other: object) -> bool:

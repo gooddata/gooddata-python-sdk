@@ -4,15 +4,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Optional
 
-import yaml
-
 from gooddata_metadata_client.model.declarative_data_source import DeclarativeDataSource
 from gooddata_metadata_client.model.declarative_data_sources import DeclarativeDataSources
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import CatalogTypeEntity, TokenCredentialsFromFile
 from gooddata_sdk.catalog.permissions.permission import CatalogDeclarativeDataSourcePermission
-from gooddata_sdk.utils import create_directory
+from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
 BIGQUERY_TYPE = "BIGQUERY"
 LAYOUT_DATA_SOURCES_DIR = "data_sources"
@@ -170,8 +168,7 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         create_directory(data_source_folder)
         data_source_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
 
-        with open(file_path, "w+", encoding="utf-8") as f:
-            yaml.safe_dump(data_source_dict, f, indent=2)
+        write_layout_to_file(file_path, data_source_dict)
 
         if self.pdm is not None:
             self.pdm.store_to_disk(data_source_folder)
@@ -181,8 +178,7 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         data_source_file_path = data_sources_folder / f"{data_source_id}.yaml"
         data_source_folder = data_sources_folder / data_source_id
         pdm = CatalogDeclarativeTables.load_from_disk(data_source_folder)
-        with open(data_source_file_path, "r", encoding="utf-8") as f:
-            data_source = yaml.safe_load(f)
+        data_source = read_layout_from_file(data_source_file_path)
         data_source["pdm"] = pdm
         return data_source
 

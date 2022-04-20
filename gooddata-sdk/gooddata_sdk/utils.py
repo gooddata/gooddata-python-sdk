@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 from typing import Any, Dict, NamedTuple, Union, cast
 
+import yaml
+
 from gooddata_metadata_client import ApiAttributeError
 from gooddata_sdk.compute.model.base import ObjId
 
@@ -127,3 +129,13 @@ class SideLoads:
 def create_directory(path: Path) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
+
+
+def write_layout_to_file(path: Path, content: Any) -> None:
+    with open(path, "w", encoding="utf-8") as fp:
+        yaml.safe_dump(content, fp, indent=2)
+
+
+def read_layout_from_file(path: Path) -> Any:
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
