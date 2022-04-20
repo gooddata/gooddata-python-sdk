@@ -1,0 +1,66 @@
+# (C) 2022 GoodData Corporation
+from __future__ import annotations
+
+import time
+
+import urllib3.exceptions as urllib3_ex
+
+import gooddata_metadata_client.apis as metadata_apis
+import gooddata_metadata_client.exceptions as metadata_ex
+from gooddata_sdk.client import GoodDataApiClient
+
+
+class SupportService:
+    def __init__(self, api_client: GoodDataApiClient) -> None:
+        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+
+    @property
+    def is_available(self) -> bool:
+        """
+        Checks if GD.CN is available.
+        Can raise exceptions in case of authentication or authorization failure.
+        :return: True - available, False - not available
+        """
+        try:
+            self._entities_api.get_all_options()
+            return True
+        except (metadata_ex.ForbiddenException, metadata_ex.UnauthorizedException):
+            # do not consider invalid credentials or missing rights "not available" state
+            raise
+        except metadata_ex.ApiException:
+            # invalid response from GD.CN - GD.CN is still booting but endpoint is receiving connections already
+            return False
+        except urllib3_ex.MaxRetryError:
+            # endpoint inactive - cannot connect
+            return False
+
+    def wait_till_available(self, timeout: int, sleep_time: float = 2.0) -> None:
+        """
+        Wait till GD.CN service is available. When timeout is:
+          - > 0 exception is raised after given number of seconds.
+          - = 0 exception is raised whe service is not available immediately
+          - < 0 no timeout
+
+        Method propagates is_available exceptions.
+        :param timeout: seconds to wait to service to be available (see method description for details)
+        :param sleep_time: seconds to wait between GD.CN availability tests
+        """
+        start_time_sec = time.time()
+        while True:
+            if self.is_available:
+                return
+
+            if timeout < 0:
+                time.sleep(sleep_time)
+            else:
+                to_timeout_sec = timeout - (time.time() - start_time_sec)
+                # to_timeout_sec is a float number which can be close to zero but not zero because float cannot
+                # represent some numbers exactly. This way, sleep method does not have to wait ridiculously small
+                # timespan
+                if to_timeout_sec < 0.0001:
+                    raise TimeoutError(f"Timeout after {timeout} seconds waiting")
+
+                if to_timeout_sec < sleep_time:
+                    time.sleep(to_timeout_sec)
+                else:
+                    time.sleep(sleep_time)
