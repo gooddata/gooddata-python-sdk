@@ -5,8 +5,6 @@ import functools
 from pathlib import Path
 from typing import List, Union
 
-import yaml
-
 import gooddata_afm_client.apis as afm_apis
 import gooddata_afm_client.models as afm_models
 import gooddata_metadata_client.apis as metadata_apis
@@ -33,7 +31,7 @@ from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.execution import ExecutionDefinition, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
-from gooddata_sdk.utils import load_all_entities
+from gooddata_sdk.utils import load_all_entities, read_layout_from_file, write_layout_to_file
 
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
@@ -114,12 +112,11 @@ class CatalogWorkspaceService:
     def store_declarative_workspaces(self, path: Path) -> None:
         workspaces = self._layout_api.get_workspaces_layout()
         workspace_data_filters = workspaces.workspace_data_filters
-        with open(path / "workspace_data_filters.yaml", "w+", encoding="utf-8") as fp:
-            yaml.safe_dump([w.to_dict(camel_case=True) for w in workspace_data_filters], fp, indent=2)
+        content = [w.to_dict(camel_case=True) for w in workspace_data_filters]
+        write_layout_to_file(path / "workspace_data_filters.yaml", content)
         for workspace in workspaces.workspaces:
             workspace_path = path / f"{workspace.id}.yaml"
-            with open(workspace_path, "w+", encoding="utf-8") as fp:
-                yaml.safe_dump(workspace.to_dict(camel_case=True), fp, indent=2)
+            write_layout_to_file(workspace_path, workspace.to_dict(camel_case=True))
 
     @staticmethod
     def load_declarative_workspaces(path: Path) -> CatalogDeclarativeWorkspaces:
@@ -129,12 +126,10 @@ class CatalogWorkspaceService:
         workspace_files_path = sorted([p for p in path.glob("*.yaml") if p.stem != "workspace_data_filters"])
         if not workspace_files_path:
             raise ValueError(f"There are no .yaml files in {workspace_files_path}.")
-        with open(workspace_data_filters_path, "r", encoding="utf-8") as f:
-            workspace_data_filters = yaml.safe_load(f)
+        workspace_data_filters = read_layout_from_file(workspace_data_filters_path)
         workspaces = []
-        for workspace in workspace_files_path:
-            with open(workspace, "r", encoding="utf-8") as f:
-                workspaces.append(yaml.safe_load(f))
+        for workspace_file_path in workspace_files_path:
+            workspaces.append(read_layout_from_file(workspace_file_path))
 
         return CatalogDeclarativeWorkspaces.from_dict(
             {"workspaces": workspaces, "workspaceDataFilters": workspace_data_filters}
@@ -292,14 +287,12 @@ class CatalogWorkspaceContentService:
     def store_declarative_ldm(self, workspace_id: str, path: Path) -> Path:
         declarative_ldm = self._layout_api.get_logical_model(workspace_id)
         file_path = path / f"declarative_ldm_{workspace_id}.yaml"
-        with open(file_path, "w+", encoding="utf-8") as fp:
-            yaml.safe_dump(declarative_ldm.to_dict(camel_case=True), fp, indent=2)
+        write_layout_to_file(file_path, declarative_ldm.to_dict(camel_case=True))
         return file_path
 
     @staticmethod
     def load_declarative_ldm(path: Path) -> CatalogDeclarativeModel:
-        with open(path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+        data = read_layout_from_file(path)
         return CatalogDeclarativeModel.from_dict(data)
 
     def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
@@ -318,14 +311,12 @@ class CatalogWorkspaceContentService:
     def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> Path:
         declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
         file_path = path / f"declarative_analytics_model_{workspace_id}.yaml"
-        with open(file_path, "w+", encoding="utf-8") as fp:
-            yaml.safe_dump(declarative_analytics_model.to_dict(camel_case=True), fp, indent=2)
+        write_layout_to_file(file_path, declarative_analytics_model.to_dict(camel_case=True))
         return file_path
 
     @staticmethod
     def load_declarative_analytics_model(path: Path) -> CatalogDeclarativeAnalytics:
-        with open(path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+        data = read_layout_from_file(path)
         return CatalogDeclarativeAnalytics.from_dict(data)
 
     def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:

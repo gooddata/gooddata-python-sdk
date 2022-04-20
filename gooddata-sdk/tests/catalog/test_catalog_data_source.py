@@ -28,7 +28,6 @@ from gooddata_sdk import (
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
 from tests import VCR_MATCH_ON
-from tests.catalog.utils import create_directory
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "data_sources"
@@ -302,20 +301,6 @@ def test_catalog_declarative_data_sources(test_config):
     assert data_sources_o.to_api().to_dict() == layout_api.get_data_sources_layout().to_dict()
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.json"))
-def test_store_declarative_data_sources(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "store" / "declarative_data_sources"
-    create_directory(path)
-
-    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
-    sdk.catalog_data_source.store_declarative_data_sources(path)
-    data_sources_o = sdk.catalog_data_source.load_declarative_data_sources(path)
-
-    assert data_sources_e == data_sources_o
-    assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
-
-
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.json"))
 def test_delete_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -333,17 +318,29 @@ def test_delete_declarative_data_sources(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.json"))
+def test_store_declarative_data_sources(test_config):
+    store_folder = _current_dir / "store"
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    data_sources_e = sdk.catalog_data_source.get_declarative_data_sources()
+    sdk.catalog_data_source.store_declarative_data_sources(store_folder)
+    data_sources_o = sdk.catalog_data_source.load_declarative_data_sources(store_folder)
+
+    assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+    assert data_sources_e == data_sources_o
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.json"))
 def test_load_and_put_declarative_data_sources(test_config):
+    load_folder = _current_dir / "load"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load" / "declarative_data_sources"
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
-
     try:
         sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
         TokenCredentialsFromFile.token_from_file = MagicMock(return_value="c2VjcmV0X3Rva2Vu")
-        sdk.catalog_data_source.load_and_put_declarative_data_sources(path, credentials_path)
+        sdk.catalog_data_source.load_and_put_declarative_data_sources(load_folder, credentials_path)
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
         assert len(data_sources_o.data_sources) == 3
         assert [data_source.id for data_source in data_sources_o.data_sources] == [
@@ -360,7 +357,8 @@ def test_load_and_put_declarative_data_sources(test_config):
         with open(expected_json_path) as f:
             data = json.load(f)
         data_sources_o = CatalogDeclarativeDataSources.from_dict(data)
-        sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
+        sdk2 = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+        sdk2.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources_connection.json"))

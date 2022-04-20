@@ -10,8 +10,8 @@ import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import GoodDataApiClient, GoodDataSdk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaces
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
+from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
-from tests.catalog.utils import create_directory
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "workspaces"
