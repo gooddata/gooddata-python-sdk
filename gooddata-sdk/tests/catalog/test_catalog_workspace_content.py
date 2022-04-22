@@ -59,12 +59,13 @@ def test_catalog_list_metrics(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_ldm.json"))
 def test_store_declarative_ldm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "store" / "declarative_ldm"
+    path = _current_dir / "store" / "workspace_content"
+    workspace_id = test_config["workspace"]
     create_directory(path)
 
-    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
-    file_path = sdk.catalog_workspace_content.store_declarative_ldm(test_config["workspace"], path)
-    ldm_o = sdk.catalog_workspace_content.load_declarative_ldm(file_path)
+    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+    sdk.catalog_workspace_content.store_declarative_ldm(workspace_id, path)
+    ldm_o = sdk.catalog_workspace_content.load_declarative_ldm(workspace_id, path)
 
     assert ldm_e == ldm_o
     assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
@@ -73,12 +74,13 @@ def test_store_declarative_ldm(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_ldm.json"))
 def test_load_and_put_declarative_ldm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load" / "declarative_ldm" / "declarative_ldm_demo.yaml"
-    identifier = test_load_and_put_declarative_ldm.__name__
+    path = _current_dir / "load" / "workspace_content"
+    workspace_id = test_config["workspace"]
+    identifier = test_config["workspace_test"]
     workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
     sdk.catalog_workspace.create_or_update(workspace)
 
-    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
+    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
 
     try:
         sdk.catalog_workspace_content.load_and_put_declarative_ldm(identifier, path)
@@ -92,12 +94,13 @@ def test_load_and_put_declarative_ldm(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_analytics_model.json"))
 def test_store_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "store" / "declarative_analytics_model"
+    path = _current_dir / "store" / "workspace_content"
+    workspace_id = test_config["workspace"]
     create_directory(path)
 
-    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(test_config["workspace"])
-    file_path = sdk.catalog_workspace_content.store_declarative_analytics_model(test_config["workspace"], path)
-    analytics_model_o = sdk.catalog_workspace_content.load_declarative_analytics_model(file_path)
+    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id)
+    sdk.catalog_workspace_content.store_declarative_analytics_model(workspace_id, path)
+    analytics_model_o = sdk.catalog_workspace_content.load_declarative_analytics_model(workspace_id, path)
 
     assert analytics_model_e == analytics_model_o
     assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
@@ -106,10 +109,11 @@ def test_store_declarative_analytics_model(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_analytics_model.json"))
 def test_load_and_put_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load" / "declarative_analytics_model" / "declarative_analytics_model_demo.yaml"
-    identifier = test_load_and_put_declarative_analytics_model.__name__
-    _set_up_workspace_ldm(sdk, test_config["workspace"], identifier)
-    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(test_config["workspace"])
+    path = _current_dir / "load" / "workspace_content"
+    workspace_id = test_config["workspace"]
+    identifier = test_config["workspace_test"]
+    _set_up_workspace_ldm(sdk, workspace_id, identifier)
+    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id)
 
     try:
         sdk.catalog_workspace_content.load_and_put_declarative_analytics_model(identifier, path)

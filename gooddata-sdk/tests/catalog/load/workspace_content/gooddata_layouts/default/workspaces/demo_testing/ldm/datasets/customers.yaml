@@ -1,0 +1,75 @@
+# (C) 2022 GoodData Corporation
+attributes:
+- description: Customer id
+  id: customers.customer_id
+  labels:
+  - description: Customer id
+    id: customers.customer_id
+    primary: true
+    sourceColumn: customer_id
+    tags:
+    - Customers
+    title: Customer id
+  tags:
+  - Customers
+  title: Customer id
+- description: Customer name
+  id: customers.customer_name
+  labels:
+  - description: Customer name
+    id: customers.customer_name
+    primary: true
+    sourceColumn: customer_name
+    tags:
+    - Customers
+    title: Customer name
+  tags:
+  - Customers
+  title: Customer name
+- description: Region
+  id: customers.region
+  labels:
+  - description: Region
+    id: customers.region
+    primary: true
+    sourceColumn: region
+    tags:
+    - Customers
+    title: Region
+  tags:
+  - Customers
+  title: Region
+- description: State
+  id: customers.state
+  labels:
+  - description: Location
+    id: customers.geo__state__location
+    primary: false
+    sourceColumn: geo__state__location
+    tags:
+    - Customers
+    title: Location
+  - description: State
+    id: customers.state
+    primary: true
+    sourceColumn: state
+    tags:
+    - Customers
+    title: State
+  tags:
+  - Customers
+  title: State
+dataSourceTableId:
+  dataSourceId: demo-test-ds
+  id: customers
+  type: dataSource
+description: Customers
+facts: []
+grain:
+- id: customers.customer_id
+  type: attribute
+id: customers
+references: []
+tags:
+- Customers
+title: Customers
