@@ -2,19 +2,21 @@
 from __future__ import annotations
 
 import functools
+import os
 from pathlib import Path
 from typing import List, Union
 
 import gooddata_afm_client.apis as afm_apis
 import gooddata_afm_client.models as afm_models
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_metadata_client.exceptions import NotFoundException
+from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    LAYOUT_WORKSPACES_DIR,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
 )
@@ -31,7 +33,7 @@ from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.execution import ExecutionDefinition, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
-from gooddata_sdk.utils import load_all_entities, read_layout_from_file, write_layout_to_file
+from gooddata_sdk.utils import load_all_entities
 
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
@@ -39,11 +41,9 @@ ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, C
 ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
 
 
-class CatalogWorkspaceService:
+class CatalogWorkspaceService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._client = api_client
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
-        self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
+        super(CatalogWorkspaceService, self).__init__(api_client)
 
     def list_workspaces(self) -> List[CatalogWorkspace]:
         get_workspaces = functools.partial(
@@ -109,38 +109,20 @@ class CatalogWorkspaceService:
     def put_declarative_workspaces(self, workspace: CatalogDeclarativeWorkspaces) -> None:
         self._layout_api.set_workspaces_layout(workspace.to_api())
 
-    def store_declarative_workspaces(self, path: Path) -> None:
-        workspaces = self._layout_api.get_workspaces_layout()
-        workspace_data_filters = workspaces.workspace_data_filters
-        content = [w.to_dict(camel_case=True) for w in workspace_data_filters]
-        write_layout_to_file(path / "workspace_data_filters.yaml", content)
-        for workspace in workspaces.workspaces:
-            workspace_path = path / f"{workspace.id}.yaml"
-            write_layout_to_file(workspace_path, workspace.to_dict(camel_case=True))
+    def store_declarative_workspaces(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+        self.get_declarative_workspaces().store_to_disk(self.layout_organization_folder(layout_root_path))
 
-    @staticmethod
-    def load_declarative_workspaces(path: Path) -> CatalogDeclarativeWorkspaces:
-        workspace_data_filters_path = path / "workspace_data_filters.yaml"
-        if not workspace_data_filters_path.is_file():
-            raise ValueError(f"Path {workspace_data_filters_path} is not valid.")
-        workspace_files_path = sorted([p for p in path.glob("*.yaml") if p.stem != "workspace_data_filters"])
-        if not workspace_files_path:
-            raise ValueError(f"There are no .yaml files in {workspace_files_path}.")
-        workspace_data_filters = read_layout_from_file(workspace_data_filters_path)
-        workspaces = []
-        for workspace_file_path in workspace_files_path:
-            workspaces.append(read_layout_from_file(workspace_file_path))
+    def load_declarative_workspaces(
+        self, layout_root_path: Path = Path(os.path.curdir)
+    ) -> CatalogDeclarativeWorkspaces:
+        return CatalogDeclarativeWorkspaces.load_from_disk(self.layout_organization_folder(layout_root_path))
 
-        return CatalogDeclarativeWorkspaces.from_dict(
-            {"workspaces": workspaces, "workspaceDataFilters": workspace_data_filters}
-        )
-
-    def load_and_put_declarative_workspaces(self, path: Path) -> None:
-        declarative_workspaces = self.load_declarative_workspaces(path)
+    def load_and_put_declarative_workspaces(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+        declarative_workspaces = self.load_declarative_workspaces(layout_root_path)
         self.put_declarative_workspaces(declarative_workspaces)
 
 
-class CatalogWorkspaceContentService:
+class CatalogWorkspaceContentService(CatalogServiceBase):
     # Note on the disabled checking:
     # generated client has issues parsing the vis objects; .. have to avoid return type checks
     #
@@ -148,10 +130,8 @@ class CatalogWorkspaceContentService:
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._client = api_client
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        super(CatalogWorkspaceContentService, self).__init__(api_client)
         self._afm_actions_api = afm_apis.ActionsApi(api_client.afm_client)
-        self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
 
     def get_attributes_catalog(self, workspace_id: str) -> list[CatalogAttribute]:
         get_attributes = functools.partial(
@@ -284,19 +264,21 @@ class CatalogWorkspaceContentService:
     def get_declarative_ldm(self, workspace_id: str) -> CatalogDeclarativeModel:
         return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
 
-    def store_declarative_ldm(self, workspace_id: str, path: Path) -> Path:
-        declarative_ldm = self._layout_api.get_logical_model(workspace_id)
-        file_path = path / f"declarative_ldm_{workspace_id}.yaml"
-        write_layout_to_file(file_path, declarative_ldm.to_dict(camel_case=True))
-        return file_path
+    def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)) -> None:
+        workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
+        self.get_declarative_ldm(workspace_id).store_to_disk(workspace_folder)
 
-    @staticmethod
-    def load_declarative_ldm(path: Path) -> CatalogDeclarativeModel:
-        data = read_layout_from_file(path)
-        return CatalogDeclarativeModel.from_dict(data)
+    def layout_workspace_folder(self, workspace_id: str, layout_root_path: Path) -> Path:
+        return self.layout_organization_folder(layout_root_path) / LAYOUT_WORKSPACES_DIR / workspace_id
 
-    def load_and_put_declarative_ldm(self, workspace_id: str, path: Path) -> None:
-        declarative_ldm = self.load_declarative_ldm(path)
+    def load_declarative_ldm(
+        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
+    ) -> CatalogDeclarativeModel:
+        workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
+        return CatalogDeclarativeModel.load_from_disk(workspace_folder)
+
+    def load_and_put_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)) -> None:
+        declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
         self.put_declarative_ldm(workspace_id, declarative_ldm)
 
     def put_declarative_ldm(self, workspace_id: str, ldm: CatalogDeclarativeModel) -> None:
@@ -308,17 +290,21 @@ class CatalogWorkspaceContentService:
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
         self._layout_api.set_analytics_model(workspace_id, analytics_model.to_api())
 
-    def store_declarative_analytics_model(self, workspace_id: str, path: Path) -> Path:
-        declarative_analytics_model = self._layout_api.get_analytics_model(workspace_id)
-        file_path = path / f"declarative_analytics_model_{workspace_id}.yaml"
-        write_layout_to_file(file_path, declarative_analytics_model.to_dict(camel_case=True))
-        return file_path
+    def store_declarative_analytics_model(
+        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
+    ) -> None:
+        workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
+        declarative_analytics_model = self.get_declarative_analytics_model(workspace_id)
+        declarative_analytics_model.store_to_disk(workspace_folder)
 
-    @staticmethod
-    def load_declarative_analytics_model(path: Path) -> CatalogDeclarativeAnalytics:
-        data = read_layout_from_file(path)
-        return CatalogDeclarativeAnalytics.from_dict(data)
+    def load_declarative_analytics_model(
+        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
+    ) -> CatalogDeclarativeAnalytics:
+        workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
+        return CatalogDeclarativeAnalytics.load_from_disk(workspace_folder)
 
-    def load_and_put_declarative_analytics_model(self, workspace_id: str, path: Path) -> None:
-        declarative_analytics_model = self.load_declarative_analytics_model(path)
+    def load_and_put_declarative_analytics_model(
+        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
+    ) -> None:
+        declarative_analytics_model = self.load_declarative_analytics_model(workspace_id, layout_root_path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)

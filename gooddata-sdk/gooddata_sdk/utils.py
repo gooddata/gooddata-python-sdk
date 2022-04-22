@@ -126,16 +126,25 @@ class SideLoads:
         return len(self._objects)
 
 
+def get_sorted_yaml_files(folder: Path) -> list[Path]:
+    return sorted([p for p in folder.glob("*.yaml")], key=lambda x: x.stem)
+
+
 def create_directory(path: Path) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
 
 
-def write_layout_to_file(path: Path, content: Any) -> None:
+def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
     with open(path, "w", encoding="utf-8") as fp:
         yaml.safe_dump(content, fp, indent=2)
 
 
 def read_layout_from_file(path: Path) -> Any:
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+    if not os.path.isfile(path):
+        raise ValueError(f"There is no file in the given path {path}")
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    except yaml.YAMLError as exc:
+        raise ValueError(f"File [{path}] has wrong yaml format. Following exception was raised during loading: {exc}")

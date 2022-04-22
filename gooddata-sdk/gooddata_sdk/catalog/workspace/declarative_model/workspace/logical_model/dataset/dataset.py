@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 
 from gooddata_metadata_client.model.data_source_table_identifier import DataSourceTableIdentifier
@@ -11,6 +12,9 @@ from gooddata_metadata_client.model.declarative_label import DeclarativeLabel
 from gooddata_metadata_client.model.declarative_reference import DeclarativeReference
 from gooddata_sdk.catalog.entity import CatalogTitleEntity
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogReferenceIdentifier
+from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
+
+LAYOUT_DATASETS_DIR = "datasets"
 
 
 class CatalogDeclarativeDataset(CatalogTitleEntity):
@@ -72,6 +76,28 @@ class CatalogDeclarativeDataset(CatalogTitleEntity):
         return DeclarativeDataset(
             self.id, self.title, [v.to_api() for v in self.grain], [v.to_api() for v in self.references], **kwargs
         )
+
+    def store_to_disk(self, datasets_folder: Path) -> None:
+        dataset_file = datasets_folder / f"{self.id}.yaml"
+        write_layout_to_file(dataset_file, self.to_api().to_dict(camel_case=True))
+
+    @classmethod
+    def load_from_disk(cls, dataset_file: Path) -> CatalogDeclarativeDataset:
+        dataset_layout = read_layout_from_file(dataset_file)
+        return cls.from_dict(dataset_layout, camel_case=True)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeDataset:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeDataset object.
+        """
+        declarative_dataset = DeclarativeDataset.from_dict(data, camel_case)
+        return cls.from_api(declarative_dataset)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeDataset):

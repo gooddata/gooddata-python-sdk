@@ -1,0 +1,42 @@
+# (C) 2022 GoodData Corporation
+attributes:
+- description: Campaign id
+  id: campaigns.campaign_id
+  labels:
+  - description: Campaign id
+    id: campaigns.campaign_id
+    primary: true
+    sourceColumn: campaign_id
+    tags:
+    - Campaigns
+    title: Campaign id
+  tags:
+  - Campaigns
+  title: Campaign id
+- description: Campaign name
+  id: campaigns.campaign_name
+  labels:
+  - description: Campaign name
+    id: campaigns.campaign_name
+    primary: true
+    sourceColumn: campaign_name
+    tags:
+    - Campaigns
+    title: Campaign name
+  tags:
+  - Campaigns
+  title: Campaign name
+dataSourceTableId:
+  dataSourceId: demo-test-ds
+  id: campaigns
+  type: dataSource
+description: Campaigns
+facts: []
+grain:
+- id: campaigns.campaign_id
+  type: attribute
+id: campaigns
+references: []
+tags:
+- Campaigns
+title: Campaigns

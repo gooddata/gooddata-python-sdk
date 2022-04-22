@@ -6,30 +6,25 @@ import os.path
 from pathlib import Path
 from typing import Any, List, Optional
 
-import yaml
-
 import gooddata_metadata_client.apis as metadata_apis
 import gooddata_scan_client.apis as scan_client_apis
 from gooddata_metadata_client.exceptions import NotFoundException
+from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import BIGQUERY_TYPE, CatalogDeclarativeDataSources
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
-from gooddata_sdk.catalog.organization.service import LAYOUT_ROOT_FOLDER, CatalogOrganizationService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities
+from gooddata_sdk.utils import load_all_entities, read_layout_from_file
 
 
-class CatalogDataSourceService:
+class CatalogDataSourceService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._client = api_client
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        super(CatalogDataSourceService, self).__init__(api_client)
         self._actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
         self._scan_api = scan_client_apis.ActionsApi(api_client.scan_client)
-        self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
-        self.organization_service = CatalogOrganizationService(api_client)
 
     def list_data_sources(self) -> List[CatalogDataSource]:
         get_data_sources = functools.partial(
@@ -103,15 +98,7 @@ class CatalogDataSourceService:
 
     @staticmethod
     def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:
-        if not os.path.isfile(credentials_path):
-            raise ValueError(f"There is no given file in the given path {credentials_path}")
-        try:
-            with open(credentials_path, "r", encoding="utf-8") as f:
-                data = yaml.safe_load(f)
-        except yaml.YAMLError as exc:
-            raise ValueError(
-                f"You credentials file has wrong yaml format. Following exception was raised during loading: {exc}"
-            )
+        data = read_layout_from_file(credentials_path)
         if data.get("data_sources") is None:
             raise ValueError("The file has a wrong structure. There should be a root key 'data_sources'.")
         if len(data["data_sources"]) == 0:
@@ -144,9 +131,6 @@ class CatalogDataSourceService:
             for k, v in errors.items():
                 message.append(f"Test connection for data source id {k} ended with the following error {v}.")
             raise ValueError("\n".join(message))
-
-    def layout_organization_folder(self, layout_root_path: Path) -> Path:
-        return layout_root_path / LAYOUT_ROOT_FOLDER / self.organization_service.organization_id
 
     def store_declarative_data_sources(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
         self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
