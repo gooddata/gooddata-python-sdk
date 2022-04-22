@@ -91,6 +91,29 @@ def test_load_and_put_declarative_ldm(test_config):
         sdk.catalog_workspace.delete_workspace(identifier)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_modify_ds_and_put_declarative_ldm.json"))
+def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+    identifier = test_config["workspace_test"]
+    workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
+    sdk.catalog_workspace.create_or_update(workspace)
+
+    try:
+        ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+        ds_e = list(set([d.data_source_table_id.data_source_id for d in ldm_e.ldm.datasets]))
+        assert ds_e == [test_config["data_source"]]
+
+        ldm_e.modify_mapped_data_source({test_config["data_source"]: test_config["data_source2"]})
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e)
+
+        ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
+        ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
+        assert ds_o == [test_config["data_source2"]]
+    finally:
+        sdk.catalog_workspace.delete_workspace(identifier)
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_analytics_model.json"))
 def test_store_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
