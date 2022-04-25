@@ -353,6 +353,11 @@ def test_load_and_put_declarative_data_sources(test_config):
             "POSTGRESQL",
             "VERTICA",
         ]
+        assert [len(data_source.pdm.tables) for data_source in data_sources_o.data_sources] == [
+            0,
+            5,
+            5,
+        ]
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)
