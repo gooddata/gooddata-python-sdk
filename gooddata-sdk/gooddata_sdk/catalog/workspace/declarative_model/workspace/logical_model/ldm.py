@@ -51,6 +51,14 @@ class CatalogDeclarativeModel:
         if self.ldm is not None:
             self.ldm.store_to_disk(workspace_folder)
 
+    def modify_mapped_data_source(self, data_source_mapping: dict) -> None:
+        if self.ldm is not None:
+            for dataset in self.ldm.datasets:
+                if dataset.data_source_table_id is not None:
+                    data_source_id = dataset.data_source_table_id.data_source_id
+                    if data_source_id in data_source_mapping:
+                        dataset.data_source_table_id.data_source_id = data_source_mapping[data_source_id]
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:
         ldm = CatalogDeclarativeLdm.load_from_disk(workspace_folder)

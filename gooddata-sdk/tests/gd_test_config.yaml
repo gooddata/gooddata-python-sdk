@@ -7,4 +7,5 @@ workspace_with_parent: "demo_west"
 workspace_with_parent_name: "Demo West"
 header_host: localhost
 data_source: "demo-test-ds"
+data_source2: "demo-bigquery-ds"
 workspace_test: "demo_testing"
