@@ -65,7 +65,7 @@ class CatalogDeclarativeDataSources:
     @classmethod
     def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeDataSources:
         data_sources_folder = cls.data_sources_folder(layout_organization_folder)
-        data_source_ids = sorted([p.stem for p in data_sources_folder.glob("*.yaml")])
+        data_source_ids = sorted([p.stem for p in data_sources_folder.iterdir() if p.is_dir()])
         data_sources = []
         for data_source_id in data_source_ids:
             data_sources.append(CatalogDeclarativeDataSource.load_from_disk(data_sources_folder, data_source_id))
@@ -163,8 +163,8 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
 
     def store_to_disk(self, data_sources_folder: Path) -> None:
-        file_path = data_sources_folder / f"{self.id}.yaml"
         data_source_folder = data_sources_folder / self.id
+        file_path = data_source_folder / f"{self.id}.yaml"
         create_directory(data_source_folder)
         data_source_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
 
@@ -175,8 +175,8 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
 
     @staticmethod
     def load_from_disk(data_sources_folder: Path, data_source_id: str) -> dict:
-        data_source_file_path = data_sources_folder / f"{data_source_id}.yaml"
         data_source_folder = data_sources_folder / data_source_id
+        data_source_file_path = data_source_folder / f"{data_source_id}.yaml"
         pdm = CatalogDeclarativeTables.load_from_disk(data_source_folder)
         data_source = read_layout_from_file(data_source_file_path)
         data_source["pdm"] = pdm
