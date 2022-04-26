@@ -10,5 +10,5 @@ At the moment the SDK provides services to inspect and interact with the semanti
    :caption: Contents:
 
    installation
-   services
+   services/index
    api
