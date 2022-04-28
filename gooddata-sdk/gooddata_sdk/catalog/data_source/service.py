@@ -2,16 +2,25 @@
 from __future__ import annotations
 
 import functools
-import os.path
 from pathlib import Path
 from typing import Any, List, Optional
 
 import gooddata_metadata_client.apis as metadata_apis
 import gooddata_scan_client.apis as scan_client_apis
 from gooddata_metadata_client.exceptions import NotFoundException
+from gooddata_metadata_client.model.declarative_pdm import DeclarativePdm
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
-from gooddata_sdk.catalog.data_source.declarative_model.data_source import BIGQUERY_TYPE, CatalogDeclarativeDataSources
+from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
+from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
+    BIGQUERY_TYPE,
+    CatalogDeclarativeDataSource,
+    CatalogDeclarativeDataSources,
+)
+from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import (
+    CatalogDeclarativeTables,
+    CatalogScanResultPdm,
+)
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDataSource
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
@@ -132,19 +141,77 @@ class CatalogDataSourceService(CatalogServiceBase):
                 message.append(f"Test connection for data source id {k} ended with the following error {v}.")
             raise ValueError("\n".join(message))
 
-    def store_declarative_data_sources(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+    def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
         self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
 
-    def load_declarative_data_sources(
-        self, layout_root_path: Path = Path(os.path.curdir)
-    ) -> CatalogDeclarativeDataSources:
+    def load_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeDataSources:
         return CatalogDeclarativeDataSources.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_data_sources(
         self,
-        layout_root_path: Path = Path(os.path.curdir),
+        layout_root_path: Path = Path.cwd(),
         credentials_path: Optional[Path] = None,
         test_data_sources: bool = False,
     ) -> None:
         data_sources = self.load_declarative_data_sources(layout_root_path)
         self.put_declarative_data_sources(data_sources, credentials_path, test_data_sources)
+
+    def get_declarative_pdm(self, data_source_id: str) -> CatalogDeclarativeTables:
+        return CatalogDeclarativeTables.from_api(self._layout_api.get_pdm_layout(data_source_id).get("pdm"))
+
+    def put_declarative_pdm(self, data_source_id: str, declarative_tables: CatalogDeclarativeTables) -> None:
+        declarative_pdm = DeclarativePdm(pdm=declarative_tables.to_api())
+        self._layout_api.set_pdm_layout(data_source_id, declarative_pdm)
+
+    @staticmethod
+    def report_warnings(warnings: list[dict]) -> None:
+        if warnings:
+            print("Scan produced the following warnings: ")
+            for warning in warnings:
+                table_name = warning["name"]
+                table_message = warning["message"]
+                if "columns" in warning:
+                    for column_warning in warning["columns"]:
+                        column_name = column_warning["name"]
+                        column_message = column_warning["message"]
+                        print(f"table_name={table_name} column_name={column_name} column_message={column_message}")
+                else:
+                    print(f"table_name={table_name} table_message={table_message}")
+
+    def scan_data_source(
+        self,
+        data_source_id: str,
+        scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
+        report_warnings: bool = False,
+    ) -> CatalogScanResultPdm:
+        scan_result = CatalogScanResultPdm.from_api(self._scan_api.scan_pdm(data_source_id, scan_request.to_api()))
+        if report_warnings:
+            self.report_warnings(scan_result.warnings)
+        return scan_result
+
+    def scan_and_put_pdm(
+        self, data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest()
+    ) -> None:
+        self.put_declarative_pdm(data_source_id, self.scan_data_source(data_source_id, scan_request).pdm)
+
+    def data_source_folder(self, data_source_id: str, layout_root_path: Path) -> Path:
+        layout_organization_folder = self.layout_organization_folder(layout_root_path)
+        data_sources_folder = CatalogDeclarativeDataSources.data_sources_folder(layout_organization_folder)
+        return CatalogDeclarativeDataSource.data_source_folder(data_sources_folder, data_source_id)
+
+    def store_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
+        self.get_declarative_pdm(data_source_id).store_to_disk(data_source_folder)
+
+    def load_declarative_pdm(
+        self, data_source_id: str, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeTables:
+        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
+        return CatalogDeclarativeTables.from_dict(CatalogDeclarativeTables.load_from_disk(data_source_folder))
+
+    def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))
+
+    def scan_schemata(self, data_source_id: str) -> list[str]:
+        response = self._scan_api.schemata(data_source_id)
+        return response.get("schema_names", [])

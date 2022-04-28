@@ -36,6 +36,19 @@ class CatalogDeclarativeTables:
         for table in self.tables:
             table.store_to_disk(pdm_folder)
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeTables:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    DeclarativeTables object.
+        """
+        declarative_data_sources = DeclarativeTables.from_dict(data, camel_case)
+        return cls.from_api(declarative_data_sources)
+
     @staticmethod
     def load_from_disk(data_source_folder: Path) -> dict:
         pdm_folder = get_pdm_folder(data_source_folder)
@@ -49,3 +62,20 @@ class CatalogDeclarativeTables:
         if not isinstance(other, CatalogDeclarativeTables):
             return False
         return self.tables == other.tables
+
+
+class CatalogScanResultPdm:
+    def __init__(
+        self,
+        pdm: CatalogDeclarativeTables,
+        # Just informative hints. Create appropriate classes later if needed.
+        warnings: list[dict],
+    ):
+        self.pdm = pdm
+        self.warnings = warnings
+
+    @classmethod
+    def from_api(cls, entity: dict[str, Any]) -> CatalogScanResultPdm:
+        tables = CatalogDeclarativeTables.from_api(entity.get("pdm", {"tables": []}))
+        warnings = entity.get("warnings", [])
+        return cls(pdm=tables, warnings=warnings)

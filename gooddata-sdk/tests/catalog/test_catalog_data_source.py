@@ -7,6 +7,7 @@ from typing import List, Optional
 from unittest import mock
 from unittest.mock import MagicMock
 
+import pytest
 import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
@@ -19,6 +20,7 @@ from gooddata_sdk import (
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
     CatalogGenerateLdmRequest,
+    CatalogScanModelRequest,
     ExecutionDefinition,
     GoodDataApiClient,
     GoodDataSdk,
@@ -415,3 +417,94 @@ def test_declarative_data_sources(test_config):
         assert False
     except ValueError:
         sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_get_declarative_pdm.json"))
+def test_get_declarative_pdm(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    pdm = sdk.catalog_data_source.get_declarative_pdm(test_config["data_source"])
+    assert len(pdm.tables) == 5
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_put_declarative_pdm.json"))
+def test_put_declarative_pdm(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    pdm = sdk.catalog_data_source.get_declarative_pdm(data_source_id)
+    pdm_deleted_table = [table for table in pdm.tables if table.id == "order_lines"]
+
+    try:
+        pdm.tables = [table for table in pdm.tables if table.id != "order_lines"]
+        sdk.catalog_data_source.put_declarative_pdm(data_source_id, pdm)
+        assert len(pdm.tables) == 4
+    finally:
+        pdm.tables = pdm.tables + pdm_deleted_table
+        sdk.catalog_data_source.put_declarative_pdm(data_source_id, pdm)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.json"))
+def test_scan_model(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+
+    scan_result = sdk.catalog_data_source.scan_data_source(data_source_id)
+    assert len(scan_result.pdm.tables) == 5
+
+    scan_request = CatalogScanModelRequest(scan_tables=False, scan_views=True)
+    scan_result = sdk.catalog_data_source.scan_data_source(data_source_id, scan_request)
+    assert len(scan_result.pdm.tables) == 0
+
+    with pytest.raises(ValueError):
+        CatalogScanModelRequest(scan_tables=False, scan_views=False)
+        CatalogScanModelRequest(scan_tables=False, scan_views=False)
+
+    # TODO - how to simulate warnings in AIO?
+    assert len(scan_result.warnings) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_and_put_declarative_pdm.json"))
+def test_scan_and_put_declarative_pdm(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+
+    pdm = sdk.catalog_data_source.get_declarative_pdm(data_source_id)
+    assert len(pdm.tables) == 5
+
+    try:
+        scan_request = CatalogScanModelRequest(scan_tables=False, scan_views=True)
+        sdk.catalog_data_source.scan_and_put_pdm(data_source_id, scan_request)
+        pdm = sdk.catalog_data_source.get_declarative_pdm(data_source_id)
+        assert len(pdm.tables) == 0
+    finally:
+        sdk.catalog_data_source.scan_and_put_pdm(data_source_id)
+        pdm = sdk.catalog_data_source.get_declarative_pdm(data_source_id)
+        assert len(pdm.tables) == 5
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_and_load_and_put_declarative_pdm.json"))
+def test_store_and_load_and_put_declarative_pdm(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    store_folder = _current_dir / "store"
+    load_folder = _current_dir / "load"
+
+    pdm = sdk.catalog_data_source.get_declarative_pdm(data_source_id)
+    sdk.catalog_data_source.store_declarative_pdm(data_source_id, store_folder)
+    pdm_loaded = sdk.catalog_data_source.load_declarative_pdm(data_source_id, load_folder)
+    assert pdm == pdm_loaded
+    assert pdm.to_api().to_dict() == pdm_loaded.to_api().to_dict()
+
+    sdk.catalog_data_source.load_and_put_declarative_pdm(data_source_id, load_folder)
+    pdm_loaded = sdk.catalog_data_source.load_declarative_pdm(data_source_id, load_folder)
+    assert pdm == pdm_loaded
+    assert pdm.to_api().to_dict() == pdm_loaded.to_api().to_dict()
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_scan_schemata.json"))
+def test_scan_schemata(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+
+    schemata = sdk.catalog_data_source.scan_schemata(data_source_id)
+    assert len(schemata) == 1
+    assert "demo" in schemata
