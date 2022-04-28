@@ -162,10 +162,15 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
             kwargs["username"] = self.username
         return TestDefinitionRequest(type=self.type, url=self.url, **kwargs)
 
-    def store_to_disk(self, data_sources_folder: Path) -> None:
-        data_source_folder = data_sources_folder / self.id
-        file_path = data_source_folder / f"{self.id}.yaml"
+    @staticmethod
+    def data_source_folder(data_sources_folder: Path, data_source_id: str) -> Path:
+        data_source_folder = data_sources_folder / data_source_id
         create_directory(data_source_folder)
+        return data_source_folder
+
+    def store_to_disk(self, data_sources_folder: Path) -> None:
+        data_source_folder = self.data_source_folder(data_sources_folder, self.id)
+        file_path = data_source_folder / f"{self.id}.yaml"
         data_source_dict = self.to_api(include_nested_structures=False).to_dict(camel_case=True)
 
         write_layout_to_file(file_path, data_source_dict)
