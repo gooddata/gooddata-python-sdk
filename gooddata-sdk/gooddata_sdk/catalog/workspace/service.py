@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 import functools
-import os
 from pathlib import Path
-from typing import List, Union
+from typing import List, Optional, Union
 
 import gooddata_afm_client.apis as afm_apis
 import gooddata_afm_client.models as afm_models
 from gooddata_metadata_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
@@ -109,15 +109,13 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def put_declarative_workspaces(self, workspace: CatalogDeclarativeWorkspaces) -> None:
         self._layout_api.set_workspaces_layout(workspace.to_api())
 
-    def store_declarative_workspaces(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+    def store_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> None:
         self.get_declarative_workspaces().store_to_disk(self.layout_organization_folder(layout_root_path))
 
-    def load_declarative_workspaces(
-        self, layout_root_path: Path = Path(os.path.curdir)
-    ) -> CatalogDeclarativeWorkspaces:
+    def load_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeWorkspaces:
         return CatalogDeclarativeWorkspaces.load_from_disk(self.layout_organization_folder(layout_root_path))
 
-    def load_and_put_declarative_workspaces(self, layout_root_path: Path = Path(os.path.curdir)) -> None:
+    def load_and_put_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> None:
         declarative_workspaces = self.load_declarative_workspaces(layout_root_path)
         self.put_declarative_workspaces(declarative_workspaces)
 
@@ -264,24 +262,31 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     def get_declarative_ldm(self, workspace_id: str) -> CatalogDeclarativeModel:
         return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
 
-    def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)) -> None:
+    def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
         self.get_declarative_ldm(workspace_id).store_to_disk(workspace_folder)
 
     def layout_workspace_folder(self, workspace_id: str, layout_root_path: Path) -> Path:
         return self.layout_organization_folder(layout_root_path) / LAYOUT_WORKSPACES_DIR / workspace_id
 
-    def load_declarative_ldm(
-        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
-    ) -> CatalogDeclarativeModel:
+    def load_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeModel:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
         return CatalogDeclarativeModel.load_from_disk(workspace_folder)
 
-    def load_and_put_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)) -> None:
+    def load_and_put_declarative_ldm(
+        self,
+        workspace_id: str,
+        layout_root_path: Path = Path.cwd(),
+        validator: Optional[DataSourceValidator] = None,
+    ) -> None:
         declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
-        self.put_declarative_ldm(workspace_id, declarative_ldm)
+        self.put_declarative_ldm(workspace_id, declarative_ldm, validator)
 
-    def put_declarative_ldm(self, workspace_id: str, ldm: CatalogDeclarativeModel) -> None:
+    def put_declarative_ldm(
+        self, workspace_id: str, ldm: CatalogDeclarativeModel, validator: Optional[DataSourceValidator] = None
+    ) -> None:
+        if validator is not None:
+            validator.validate_ldm(ldm)
         self._layout_api.set_logical_model(workspace_id, ldm.to_api())
 
     def get_declarative_analytics_model(self, workspace_id: str) -> CatalogDeclarativeAnalytics:
@@ -290,21 +295,17 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
         self._layout_api.set_analytics_model(workspace_id, analytics_model.to_api())
 
-    def store_declarative_analytics_model(
-        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
-    ) -> None:
+    def store_declarative_analytics_model(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
         declarative_analytics_model = self.get_declarative_analytics_model(workspace_id)
         declarative_analytics_model.store_to_disk(workspace_folder)
 
     def load_declarative_analytics_model(
-        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
+        self, workspace_id: str, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeAnalytics:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
         return CatalogDeclarativeAnalytics.load_from_disk(workspace_folder)
 
-    def load_and_put_declarative_analytics_model(
-        self, workspace_id: str, layout_root_path: Path = Path(os.path.curdir)
-    ) -> None:
+    def load_and_put_declarative_analytics_model(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         declarative_analytics_model = self.load_declarative_analytics_model(workspace_id, layout_root_path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
