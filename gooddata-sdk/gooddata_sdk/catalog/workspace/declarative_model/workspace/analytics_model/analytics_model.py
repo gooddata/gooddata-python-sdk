@@ -163,7 +163,7 @@ class CatalogDeclarativeAnalyticsLayer:
     def store_to_disk(self, workspace_folder: Path) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
-        analytical_dashboards_folder = self.get_analytics_model_folder(analytics_model_folder)
+        analytical_dashboards_folder = self.get_analytical_dashboards_folder(analytics_model_folder)
         dashboard_plugins_folder = self.get_dashboard_plugins_folder(analytics_model_folder)
         filter_contexts_folder = self.get_filter_contexts_folder(analytics_model_folder)
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
