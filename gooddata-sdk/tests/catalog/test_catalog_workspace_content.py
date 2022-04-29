@@ -3,10 +3,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import vcr
 
-from gooddata_sdk import CatalogWorkspace, GoodDataSdk
+from gooddata_sdk import CatalogWorkspace, DataSourceValidator, GoodDataSdk
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
 )
@@ -97,16 +98,26 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
     workspace_id = test_config["workspace"]
     identifier = test_config["workspace_test"]
     workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
+    validator = DataSourceValidator(sdk.catalog_data_source)
+    data_source_mapping = {test_config["data_source"]: test_config["data_source2"]}
     sdk.catalog_workspace.create_or_update(workspace)
 
+    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+    ds_e = list(set([d.data_source_table_id.data_source_id for d in ldm_e.ldm.datasets]))
+    assert ds_e == [test_config["data_source"]]
+
     try:
-        ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-        ds_e = list(set([d.data_source_table_id.data_source_id for d in ldm_e.ldm.datasets]))
-        assert ds_e == [test_config["data_source"]]
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
+        assert True
+        ldm_e.modify_mapped_data_source(data_source_mapping=data_source_mapping)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
+        assert False
+    except ValueError:
+        DataSourceValidator.validate_ldm = MagicMock(return_value=None)
+        DataSourceValidator.validate_data_source_ids = MagicMock(return_value=None)
 
-        ldm_e.modify_mapped_data_source({test_config["data_source"]: test_config["data_source2"]})
-        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e)
-
+        ldm_e.modify_mapped_data_source(data_source_mapping=data_source_mapping)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
         ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
         assert ds_o == [test_config["data_source2"]]
