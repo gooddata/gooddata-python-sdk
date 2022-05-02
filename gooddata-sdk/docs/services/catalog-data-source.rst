@@ -159,7 +159,7 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
 
     Set all data sources, including their related physical model.
 
-* ``store_declarative_data_sources(layout_root_path: Path = Path(os.path.curdir))``
+* ``store_declarative_data_sources(layout_root_path: Path = Path.cwd())``
 
     Store data sources layouts in directory hierarchy.
 
@@ -179,13 +179,13 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
                                 │   └── table_Y.yaml
                                 └── data_source_b.yaml
 
-* ``load_declarative_data_sources(layout_root_path: Path = Path(os.path.curdir))``
+* ``load_declarative_data_sources(layout_root_path: Path = Path.cwd())``
 
     Returns *CatalogDeclarativeDataSources*.
 
     Load declarative data sources layout, which was stored using *store_declarative_data_sources*.
 
-* ``load_and_put_declarative_data_sources(layout_root_path: Path = Path(os.path.curdir), credentials_path: Optional[Path] = None, test_data_sources: bool = False)``
+* ``load_and_put_declarative_data_sources(layout_root_path: Path = Path.cwd(), credentials_path: Optional[Path] = None, test_data_sources: bool = False)``
 
     This method combines *load_declarative_data_sources* and
     *put_declarative_data_sources* methods to load and set
@@ -228,6 +228,22 @@ The *gooddata_sdk.catalog_data_source* supports the following action API calls:
 
     Invalidate cache of your computed reports to force your analytics to be recomputed.
 
+* ``scan_data_source(data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest(), report_warnings: bool = False)``
+
+    Returns *CatalogScanResultPdm*.
+
+    Scan data source specified by its id and optionally by specified scan request. *CatalogScanResultPdm* contains PDM and warnings. Warnings contain information about columns which were not added to the PDM because their data types are not supported. Additional parameter report_warnings can be passed to suppress or to report warnings. By default warnings are returned but not reported to STDOUT. If you set report_warnings to True, warnings are reported to STDOUT.
+
+* ``scan_and_put_pdm(data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest())``
+
+    This method combines *scan_data_source* and *put_declarative_pdm* methods.
+
+* ``scan_schemata(data_source_id: str)``
+
+    Returns *list[str]*.
+
+    Returns a list of schemas that exist in the database and can be configured in the data source entity. Data source managers like Dremio or Drill can work with multiple schemas and schema names can be injected into scan_request to filter out tables stored in the different schemas.
+
 **Example usage:**
 
 .. code-block:: python
@@ -239,6 +255,14 @@ The *gooddata_sdk.catalog_data_source* supports the following action API calls:
     # GoodData.CN user token
     token = "some_user_token"
     sdk = GoodDataSdk.create(host, token)
+
+    # Scan schemata of the data source
+    schemata = sdk.catalog_data_source.scan_schemata("demo-test-ds")
+    print(schemata)
+    # ['demo']
+
+    # Scan and put pdm
+    sdk.catalog_data_source.scan_and_put_pdm("demo-test-ds")
 
     # Define request for generating ldm
     generate_ldm_request = CatalogGenerateLdmRequest(separator="__")
