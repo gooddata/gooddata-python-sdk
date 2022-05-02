@@ -12,7 +12,7 @@ on workspaces:
 The service supports two types of methods:
 
 * Entity methods let you work with workspaces on a high level using simplified *CatalogWorkspace* entities.
-* Declarative methods allow you to work with workpaces on a more granular level by fetching entire workspace layouts, including all of their nested objects.
+* Declarative methods allow you to work with workspaces on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 
 Entity methods
 ^^^^^^^^^^^^^^
@@ -67,7 +67,7 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
     # Create workspace
     sdk.catalog_workspace.create_or_update(my_workspace_object)
 
-    # Edit locak workspace entity
+    # Edit local workspace entity
     my_workspace_object.name = "Test"
 
     # Update workspace
@@ -107,7 +107,7 @@ The *gooddata_sdk.catalog_workspace* supports the following declarative API call
 
     Set layout of all workspaces and their hierarchy.
 
-* ``store_declarative_workspaces(layout_root_path: Path = Path(os.path.curdir))``
+* ``store_declarative_workspaces(layout_root_path: Path = Path.cwd())``
 
     Store workspaces layouts in directory hierarchy.
 
@@ -131,8 +131,8 @@ The *gooddata_sdk.catalog_workspace* supports the following declarative API call
                 │       │       ├── ldm
                 │       │       │   ├── datasets
                 │       │       │   │       └── dataset.yaml
-                │       │       │   └── date_instaces
-                │       │       │           └── date_instace.yaml
+                │       │       │   └── date_instances
+                │       │       │           └── date_instance.yaml
                 │       │       └── workspace_a.yaml
                 │       └── workspace_b
                 │               └── ...
@@ -142,13 +142,13 @@ The *gooddata_sdk.catalog_workspace* supports the following declarative API call
                         └── filter_2.yaml
 
 
-* ``load_declarative_workspaces(layout_root_path: Path = Path(os.path.curdir))``
+* ``load_declarative_workspaces(layout_root_path: Path = Path.cwd())``
 
     Returns *CatalogDeclarativeWorkspaces*.
 
     Load declarative workspaces layout, which was stored using *store_declarative_workspaces*.
 
-* ``load_and_put_declarative_workspaces(layout_root_path: Path = Path(os.path.curdir))``
+* ``load_and_put_declarative_workspaces(layout_root_path: Path = Path.cwd())``
 
     This method combines *load_declarative_workspaces* and *put_declarative_workspaces* methods to load and
     set layouts stored using *store_declarative_workspaces*.

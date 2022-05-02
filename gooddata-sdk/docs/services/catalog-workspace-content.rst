@@ -69,13 +69,13 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
 
     Returns *CatalogDeclarativeModel*.
 
-    Retrieve a logical model layout. On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitues data source id in datasets.
+    Retrieve a logical model layout. On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitutes data source id in datasets.
 
-* ``put_declarative_ldm(workspace_id: str, ldm: CatalogDeclarativeModel)``
+* ``put_declarative_ldm(workspace_id: str, ldm: CatalogDeclarativeModel, validator: Optional[DataSourceValidator])``
 
-    Set a logical model layout.
+    Put a logical data model into a given workspace. You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
-* ``store_declarative_ldm(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``store_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     Store logical data model layout in directory hierarchy.
 
@@ -86,22 +86,22 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
                 └── workspaces
                         └── workspace_id
                                 └── analytics_model
-                                        ├── ldm
-                                        │    └── datasets
-                                        │           └── dataset.yaml
-                                        └── date_instaces
-                                                    └── date_instace.yaml
+                                        └── ldm
+                                            ├── datasets
+                                            │       └── dataset.yaml
+                                            └── date_instances
+                                                    └── date_instance.yaml
 
-* ``load_declarative_ldm(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``load_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     Returns *CatalogDeclarativeModel*.
 
     Load declarative LDM layout, which was stored using *store_declarative_ldm*.
 
-* ``load_and_put_declarative_ldm(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``load_and_put_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd(), validator: Optional[DataSourceValidator])``
 
     This method combines *load_declarative_ldm* and *put_declarative_ldm*
-    methods to load and set layouts stored using *store_declarative_ldm*.
+    methods to load and set layouts stored using *store_declarative_ldm*. You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
 **Analytics Model:**
 
@@ -113,9 +113,9 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
 
 * ``put_declarative_analytics_model(workspace_id: str, analytics_model: CatalogDeclarativeAnalytics)``
 
-    Set an analytics model layout.
+    Put an analytics model into a given workspace.
 
-* ``store_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``store_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     Store declarative analytics model layout in directory hierarchy.
 
@@ -139,13 +139,13 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
 
 
 
-* ``load_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``load_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     Returns *CatalogDeclarativeAnalytics*.
 
     Load declarative LDM layout, which was stored using *store_declarative_analytics_model*.
 
-* ``load_and_put_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path(os.path.curdir))``
+* ``load_and_put_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     This method combines *load_declarative_analytics_model* and
     *put_declarative_analytics_model* methods to load and set
