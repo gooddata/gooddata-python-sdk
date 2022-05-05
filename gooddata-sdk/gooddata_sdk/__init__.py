@@ -17,6 +17,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
     PostgresAttributes,
+    RedshiftAttributes,
     SnowflakeAttributes,
 )
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService

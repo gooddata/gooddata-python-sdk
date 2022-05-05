@@ -25,6 +25,7 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
     PostgresAttributes,
+    RedshiftAttributes,
     SnowflakeAttributes,
 )
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
@@ -162,7 +163,7 @@ def test_catalog_create_data_source_redshift_spec(test_config):
         data_source=CatalogDataSourceRedshift(
             id="test",
             name="Test2",
-            db_specific_attributes=PostgresAttributes(host="aws.endpoint", db_name="demo"),
+            db_specific_attributes=RedshiftAttributes(host="aws.endpoint", db_name="demo"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
