@@ -141,6 +141,11 @@ class RedshiftAttributes(PostgresAttributes):
         super(RedshiftAttributes, self).__init__(host, db_name, port)
 
 
+class VerticaAttributes(PostgresAttributes):
+    def __init__(self, host: str, db_name: str, port: str = "5433"):
+        super(VerticaAttributes, self).__init__(host, db_name, port)
+
+
 class CatalogDataSourcePostgres(CatalogDataSource):
     _URL_TMPL = "jdbc:{db_vendor}://{host}:{port}/{db_name}"
     _DATA_SOURCE_TYPE = "POSTGRESQL"
