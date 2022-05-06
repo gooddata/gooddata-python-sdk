@@ -27,6 +27,7 @@ from gooddata_sdk import (
     PostgresAttributes,
     RedshiftAttributes,
     SnowflakeAttributes,
+    VerticaAttributes,
 )
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
@@ -183,7 +184,7 @@ def test_catalog_create_data_source_vertica_spec(test_config):
         data_source=CatalogDataSourceVertica(
             id="test",
             name="Test2",
-            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+            db_specific_attributes=VerticaAttributes(host="localhost", db_name="demo"),
             schema="demo",
             credentials=BasicCredentials(
                 username="demouser",
