@@ -6,7 +6,7 @@ from typing import Any
 
 from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable
-from gooddata_sdk.utils import create_directory, read_layout_from_file
+from gooddata_sdk.utils import create_directory
 
 LAYOUT_PDM_DIR = "pdm"
 
@@ -49,14 +49,14 @@ class CatalogDeclarativeTables:
         declarative_data_sources = DeclarativeTables.from_dict(data, camel_case)
         return cls.from_api(declarative_data_sources)
 
-    @staticmethod
-    def load_from_disk(data_source_folder: Path) -> dict:
+    @classmethod
+    def load_from_disk(cls, data_source_folder: Path) -> CatalogDeclarativeTables:
         pdm_folder = get_pdm_folder(data_source_folder)
         table_files = sorted([p for p in pdm_folder.glob("*.yaml")])
         tables = []
         for table_file in table_files:
-            tables.append(read_layout_from_file(table_file))
-        return {"tables": tables}
+            tables.append(CatalogDeclarativeTable.load_from_disk(table_file))
+        return cls(tables=tables)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeTables):

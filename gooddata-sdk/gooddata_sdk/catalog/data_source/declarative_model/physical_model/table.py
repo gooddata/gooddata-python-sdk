@@ -7,7 +7,7 @@ from typing import Any
 from gooddata_metadata_client.model.declarative_table import DeclarativeTable
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.column import CatalogDeclarativeColumn
 from gooddata_sdk.catalog.entity import CatalogTypeEntity
-from gooddata_sdk.utils import write_layout_to_file
+from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 
 
 class CatalogDeclarativeTable(CatalogTypeEntity):
@@ -40,6 +40,24 @@ class CatalogDeclarativeTable(CatalogTypeEntity):
         table_dict = self.to_api().to_dict(camel_case=True)
         table_file_path = pdm_folder / f"{self.id}.yaml"
         write_layout_to_file(table_file_path, table_dict)
+
+    @classmethod
+    def load_from_disk(cls, table_file_path: Path) -> CatalogDeclarativeTable:
+        table_data = read_layout_from_file(table_file_path)
+        return CatalogDeclarativeTable.from_dict(table_data)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeTable:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeTable object.
+        """
+        declarative_table = DeclarativeTable.from_dict(data, camel_case)
+        return cls.from_api(declarative_table)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeTable):

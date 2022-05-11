@@ -16,7 +16,7 @@ gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="jso
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series.json"))
 def test_not_indexed_metric_series(gds: SeriesFactory):
-    series = gds.not_indexed(data_by="fact/order_lines.price")
+    series = gds.not_indexed(data_by="fact/price")
 
     # having metric with no granularity will return series with single item
     assert len(series) == 1
@@ -25,7 +25,7 @@ def test_not_indexed_metric_series(gds: SeriesFactory):
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series.json"))
 def test_not_index_label_series(gds: SeriesFactory):
-    series = gds.not_indexed(data_by="label/customers.region")
+    series = gds.not_indexed(data_by="label/region")
 
     assert len(series) == 5
     assert series[0] == "Midwest"
@@ -35,8 +35,8 @@ def test_not_index_label_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_metric_series_with_granularity.json"))
 def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/customers.region"),
-        data_by="fact/order_lines.price",
+        granularity=dict(reg="label/region"),
+        data_by="fact/price",
     )
 
     assert len(series) == 5
@@ -46,7 +46,7 @@ def test_not_indexed_metric_series_with_granularity(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_label_series_with_granularity.json"))
 def test_not_index_label_series_with_granularity(gds: SeriesFactory):
     series = gds.not_indexed(
-        granularity=dict(reg="label/customers.region"),
+        granularity=dict(reg="label/region"),
         data_by="label/products.category",
     )
 
@@ -58,11 +58,11 @@ def test_not_index_label_series_with_granularity(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "not_indexed_filtered_metric_series.json"))
 def test_not_indexed_filtered_metric_series(gds: SeriesFactory):
     # price across all regions
-    not_filtered_series = gds.not_indexed(data_by="fact/order_lines.price")
+    not_filtered_series = gds.not_indexed(data_by="fact/price")
     # price just in Unknown
     filtered_series = gds.not_indexed(
-        data_by="fact/order_lines.price",
-        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="customers.region"), values=["Unknown"]),
+        data_by="fact/price",
+        filter_by=PositiveAttributeFilter(label=ObjId(type="label", id="region"), values=["Unknown"]),
     )
 
     # having metric with no granularity will return series with single item

@@ -7,101 +7,14 @@
         "ldm": {
           "datasets": [
             {
-              "attributes": [
-                {
-                  "description": "Campaign channel id",
-                  "id": "campaign_channels.campaign_channel_id",
-                  "labels": [
-                    {
-                      "description": "Campaign channel id",
-                      "id": "campaign_channels.campaign_channel_id",
-                      "primary": true,
-                      "sourceColumn": "campaign_channel_id",
-                      "tags": [
-                        "Campaign channels"
-                      ],
-                      "title": "Campaign channel id"
-                    }
-                  ],
-                  "tags": [
-                    "Campaign channels"
-                  ],
-                  "title": "Campaign channel id"
-                },
-                {
-                  "description": "Category",
-                  "id": "campaign_channels.category",
-                  "labels": [
-                    {
-                      "description": "Category",
-                      "id": "campaign_channels.category",
-                      "primary": true,
-                      "sourceColumn": "category",
-                      "tags": [
-                        "Campaign channels"
-                      ],
-                      "title": "Category"
-                    }
-                  ],
-                  "tags": [
-                    "Campaign channels"
-                  ],
-                  "title": "Category"
-                },
-                {
-                  "description": "Type",
-                  "id": "campaign_channels.type",
-                  "labels": [
-                    {
-                      "description": "Type",
-                      "id": "campaign_channels.type",
-                      "primary": true,
-                      "sourceColumn": "type",
-                      "tags": [
-                        "Campaign channels"
-                      ],
-                      "title": "Type"
-                    }
-                  ],
-                  "tags": [
-                    "Campaign channels"
-                  ],
-                  "title": "Type"
-                }
-              ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
-                "id": "campaign_channels",
-                "type": "dataSource"
-              },
-              "description": "Campaign channels",
-              "facts": [
-                {
-                  "description": "Budget",
-                  "id": "campaign_channels.budget",
-                  "sourceColumn": "budget",
-                  "tags": [
-                    "Campaign channels"
-                  ],
-                  "title": "Budget"
-                },
-                {
-                  "description": "Spend",
-                  "id": "campaign_channels.spend",
-                  "sourceColumn": "spend",
-                  "tags": [
-                    "Campaign channels"
-                  ],
-                  "title": "Spend"
-                }
-              ],
+              "id": "campaign_channels",
+              "title": "Campaign channels",
               "grain": [
                 {
-                  "id": "campaign_channels.campaign_channel_id",
+                  "id": "campaign_channel_id",
                   "type": "attribute"
                 }
               ],
-              "id": "campaign_channels",
               "references": [
                 {
                   "identifier": {
@@ -114,283 +27,283 @@
                   ]
                 }
               ],
-              "tags": [
-                "Campaign channels"
-              ],
-              "title": "Campaign channels"
-            },
-            {
-              "attributes": [
-                {
-                  "description": "Campaign id",
-                  "id": "campaigns.campaign_id",
-                  "labels": [
-                    {
-                      "description": "Campaign id",
-                      "id": "campaigns.campaign_id",
-                      "primary": true,
-                      "sourceColumn": "campaign_id",
-                      "tags": [
-                        "Campaigns"
-                      ],
-                      "title": "Campaign id"
-                    }
-                  ],
-                  "tags": [
-                    "Campaigns"
-                  ],
-                  "title": "Campaign id"
-                },
-                {
-                  "description": "Campaign name",
-                  "id": "campaigns.campaign_name",
-                  "labels": [
-                    {
-                      "description": "Campaign name",
-                      "id": "campaigns.campaign_name",
-                      "primary": true,
-                      "sourceColumn": "campaign_name",
-                      "tags": [
-                        "Campaigns"
-                      ],
-                      "title": "Campaign name"
-                    }
-                  ],
-                  "tags": [
-                    "Campaigns"
-                  ],
-                  "title": "Campaign name"
-                }
-              ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
-                "id": "campaigns",
-                "type": "dataSource"
-              },
-              "description": "Campaigns",
-              "facts": [],
-              "grain": [
-                {
-                  "id": "campaigns.campaign_id",
-                  "type": "attribute"
-                }
-              ],
-              "id": "campaigns",
-              "references": [],
-              "tags": [
-                "Campaigns"
-              ],
-              "title": "Campaigns"
-            },
-            {
-              "attributes": [
-                {
-                  "description": "Customer id",
-                  "id": "customers.customer_id",
-                  "labels": [
-                    {
-                      "description": "Customer id",
-                      "id": "customers.customer_id",
-                      "primary": true,
-                      "sourceColumn": "customer_id",
-                      "tags": [
-                        "Customers"
-                      ],
-                      "title": "Customer id"
-                    }
-                  ],
-                  "tags": [
-                    "Customers"
-                  ],
-                  "title": "Customer id"
-                },
-                {
-                  "description": "Customer name",
-                  "id": "customers.customer_name",
-                  "labels": [
-                    {
-                      "description": "Customer name",
-                      "id": "customers.customer_name",
-                      "primary": true,
-                      "sourceColumn": "customer_name",
-                      "tags": [
-                        "Customers"
-                      ],
-                      "title": "Customer name"
-                    }
-                  ],
-                  "tags": [
-                    "Customers"
-                  ],
-                  "title": "Customer name"
-                },
-                {
-                  "description": "Region",
-                  "id": "customers.region",
-                  "labels": [
-                    {
-                      "description": "Region",
-                      "id": "customers.region",
-                      "primary": true,
-                      "sourceColumn": "region",
-                      "tags": [
-                        "Customers"
-                      ],
-                      "title": "Region"
-                    }
-                  ],
-                  "tags": [
-                    "Customers"
-                  ],
-                  "title": "Region"
-                },
-                {
-                  "description": "State",
-                  "id": "customers.state",
-                  "labels": [
-                    {
-                      "description": "Location",
-                      "id": "customers.geo__state__location",
-                      "primary": false,
-                      "sourceColumn": "geo__state__location",
-                      "tags": [
-                        "Customers"
-                      ],
-                      "title": "Location"
-                    },
-                    {
-                      "description": "State",
-                      "id": "customers.state",
-                      "primary": true,
-                      "sourceColumn": "state",
-                      "tags": [
-                        "Customers"
-                      ],
-                      "title": "State"
-                    }
-                  ],
-                  "tags": [
-                    "Customers"
-                  ],
-                  "title": "State"
-                }
-              ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
-                "id": "customers",
-                "type": "dataSource"
-              },
-              "description": "Customers",
-              "facts": [],
-              "grain": [
-                {
-                  "id": "customers.customer_id",
-                  "type": "attribute"
-                }
-              ],
-              "id": "customers",
-              "references": [],
-              "tags": [
-                "Customers"
-              ],
-              "title": "Customers"
-            },
-            {
-              "attributes": [
-                {
-                  "description": "Order id",
-                  "id": "order_lines.order_id",
-                  "labels": [
-                    {
-                      "description": "Order id",
-                      "id": "order_lines.order_id",
-                      "primary": true,
-                      "sourceColumn": "order_id",
-                      "tags": [
-                        "Order lines"
-                      ],
-                      "title": "Order id"
-                    }
-                  ],
-                  "tags": [
-                    "Order lines"
-                  ],
-                  "title": "Order id"
-                },
-                {
-                  "description": "Order line id",
-                  "id": "order_lines.order_line_id",
-                  "labels": [
-                    {
-                      "description": "Order line id",
-                      "id": "order_lines.order_line_id",
-                      "primary": true,
-                      "sourceColumn": "order_line_id",
-                      "tags": [
-                        "Order lines"
-                      ],
-                      "title": "Order line id"
-                    }
-                  ],
-                  "tags": [
-                    "Order lines"
-                  ],
-                  "title": "Order line id"
-                },
-                {
-                  "description": "Order status",
-                  "id": "order_lines.order_status",
-                  "labels": [
-                    {
-                      "description": "Order status",
-                      "id": "order_lines.order_status",
-                      "primary": true,
-                      "sourceColumn": "order_status",
-                      "tags": [
-                        "Order lines"
-                      ],
-                      "title": "Order status"
-                    }
-                  ],
-                  "tags": [
-                    "Order lines"
-                  ],
-                  "title": "Order status"
-                }
-              ],
-              "dataSourceTableId": {
-                "dataSourceId": "demo-test-ds",
-                "id": "order_lines",
-                "type": "dataSource"
-              },
-              "description": "Order lines",
               "facts": [
                 {
-                  "description": "Price",
-                  "id": "order_lines.price",
-                  "sourceColumn": "price",
+                  "id": "budget",
+                  "title": "Budget",
+                  "sourceColumn": "budget",
+                  "description": "Budget",
                   "tags": [
-                    "Order lines"
-                  ],
-                  "title": "Price"
+                    "Campaign channels"
+                  ]
                 },
                 {
-                  "description": "Quantity",
-                  "id": "order_lines.quantity",
-                  "sourceColumn": "quantity",
+                  "id": "spend",
+                  "title": "Spend",
+                  "sourceColumn": "spend",
+                  "description": "Spend",
                   "tags": [
-                    "Order lines"
-                  ],
-                  "title": "Quantity"
+                    "Campaign channels"
+                  ]
                 }
               ],
+              "attributes": [
+                {
+                  "id": "campaign_channel_id",
+                  "title": "Campaign channel id",
+                  "labels": [
+                    {
+                      "id": "campaign_channel_id",
+                      "title": "Campaign channel id",
+                      "primary": true,
+                      "sourceColumn": "campaign_channel_id",
+                      "description": "Campaign channel id",
+                      "tags": [
+                        "Campaign channels"
+                      ]
+                    }
+                  ],
+                  "description": "Campaign channel id",
+                  "tags": [
+                    "Campaign channels"
+                  ]
+                },
+                {
+                  "id": "campaign_channels.category",
+                  "title": "Category",
+                  "labels": [
+                    {
+                      "id": "campaign_channels.category",
+                      "title": "Category",
+                      "primary": true,
+                      "sourceColumn": "category",
+                      "description": "Category",
+                      "tags": [
+                        "Campaign channels"
+                      ]
+                    }
+                  ],
+                  "description": "Category",
+                  "tags": [
+                    "Campaign channels"
+                  ]
+                },
+                {
+                  "id": "type",
+                  "title": "Type",
+                  "labels": [
+                    {
+                      "id": "type",
+                      "title": "Type",
+                      "primary": true,
+                      "sourceColumn": "type",
+                      "description": "Type",
+                      "tags": [
+                        "Campaign channels"
+                      ]
+                    }
+                  ],
+                  "description": "Type",
+                  "tags": [
+                    "Campaign channels"
+                  ]
+                }
+              ],
+              "description": "Campaign channels",
+              "dataSourceTableId": {
+                "id": "campaign_channels",
+                "dataSourceId": "demo-test-ds",
+                "type": "dataSource"
+              },
+              "tags": [
+                "Campaign channels"
+              ]
+            },
+            {
+              "id": "campaigns",
+              "title": "Campaigns",
               "grain": [
                 {
-                  "id": "order_lines.order_line_id",
+                  "id": "campaign_id",
                   "type": "attribute"
                 }
               ],
+              "references": [],
+              "facts": [],
+              "attributes": [
+                {
+                  "id": "campaign_id",
+                  "title": "Campaign id",
+                  "labels": [
+                    {
+                      "id": "campaign_id",
+                      "title": "Campaign id",
+                      "primary": true,
+                      "sourceColumn": "campaign_id",
+                      "description": "Campaign id",
+                      "tags": [
+                        "Campaigns"
+                      ]
+                    }
+                  ],
+                  "description": "Campaign id",
+                  "tags": [
+                    "Campaigns"
+                  ]
+                },
+                {
+                  "id": "campaign_name",
+                  "title": "Campaign name",
+                  "labels": [
+                    {
+                      "id": "campaign_name",
+                      "title": "Campaign name",
+                      "primary": true,
+                      "sourceColumn": "campaign_name",
+                      "description": "Campaign name",
+                      "tags": [
+                        "Campaigns"
+                      ]
+                    }
+                  ],
+                  "description": "Campaign name",
+                  "tags": [
+                    "Campaigns"
+                  ]
+                }
+              ],
+              "description": "Campaigns",
+              "dataSourceTableId": {
+                "id": "campaigns",
+                "dataSourceId": "demo-test-ds",
+                "type": "dataSource"
+              },
+              "tags": [
+                "Campaigns"
+              ]
+            },
+            {
+              "id": "customers",
+              "title": "Customers",
+              "grain": [
+                {
+                  "id": "customer_id",
+                  "type": "attribute"
+                }
+              ],
+              "references": [],
+              "facts": [],
+              "attributes": [
+                {
+                  "id": "customer_id",
+                  "title": "Customer id",
+                  "labels": [
+                    {
+                      "id": "customer_id",
+                      "title": "Customer id",
+                      "primary": true,
+                      "sourceColumn": "customer_id",
+                      "description": "Customer id",
+                      "tags": [
+                        "Customers"
+                      ]
+                    }
+                  ],
+                  "description": "Customer id",
+                  "tags": [
+                    "Customers"
+                  ]
+                },
+                {
+                  "id": "customer_name",
+                  "title": "Customer name",
+                  "labels": [
+                    {
+                      "id": "customer_name",
+                      "title": "Customer name",
+                      "primary": true,
+                      "sourceColumn": "customer_name",
+                      "description": "Customer name",
+                      "tags": [
+                        "Customers"
+                      ]
+                    }
+                  ],
+                  "description": "Customer name",
+                  "tags": [
+                    "Customers"
+                  ]
+                },
+                {
+                  "id": "region",
+                  "title": "Region",
+                  "labels": [
+                    {
+                      "id": "region",
+                      "title": "Region",
+                      "primary": true,
+                      "sourceColumn": "region",
+                      "description": "Region",
+                      "tags": [
+                        "Customers"
+                      ]
+                    }
+                  ],
+                  "description": "Region",
+                  "tags": [
+                    "Customers"
+                  ]
+                },
+                {
+                  "id": "state",
+                  "title": "State",
+                  "labels": [
+                    {
+                      "id": "geo__state__location",
+                      "title": "Location",
+                      "primary": false,
+                      "sourceColumn": "geo__state__location",
+                      "description": "Location",
+                      "tags": [
+                        "Customers"
+                      ]
+                    },
+                    {
+                      "id": "state",
+                      "title": "State",
+                      "primary": true,
+                      "sourceColumn": "state",
+                      "description": "State",
+                      "tags": [
+                        "Customers"
+                      ]
+                    }
+                  ],
+                  "description": "State",
+                  "tags": [
+                    "Customers"
+                  ]
+                }
+              ],
+              "description": "Customers",
+              "dataSourceTableId": {
+                "id": "customers",
+                "dataSourceId": "demo-test-ds",
+                "type": "dataSource"
+              },
+              "tags": [
+                "Customers"
+              ]
+            },
+            {
               "id": "order_lines",
+              "title": "Order lines",
+              "grain": [
+                {
+                  "id": "order_line_id",
+                  "type": "attribute"
+                }
+              ],
               "references": [
                 {
                   "identifier": {
@@ -433,317 +346,841 @@
                   ]
                 }
               ],
-              "tags": [
-                "Order lines"
-              ],
-              "title": "Order lines"
-            },
-            {
-              "attributes": [
+              "facts": [
                 {
-                  "description": "Category",
-                  "id": "products.category",
-                  "labels": [
-                    {
-                      "description": "Category",
-                      "id": "products.category",
-                      "primary": true,
-                      "sourceColumn": "category",
-                      "tags": [
-                        "Products"
-                      ],
-                      "title": "Category"
-                    }
-                  ],
+                  "id": "price",
+                  "title": "Price",
+                  "sourceColumn": "price",
+                  "description": "Price",
                   "tags": [
-                    "Products"
-                  ],
-                  "title": "Category"
+                    "Order lines"
+                  ]
                 },
                 {
-                  "description": "Product id",
-                  "id": "products.product_id",
-                  "labels": [
-                    {
-                      "description": "Product id",
-                      "id": "products.product_id",
-                      "primary": true,
-                      "sourceColumn": "product_id",
-                      "tags": [
-                        "Products"
-                      ],
-                      "title": "Product id"
-                    }
-                  ],
+                  "id": "quantity",
+                  "title": "Quantity",
+                  "sourceColumn": "quantity",
+                  "description": "Quantity",
                   "tags": [
-                    "Products"
-                  ],
-                  "title": "Product id"
-                },
-                {
-                  "description": "Product name",
-                  "id": "products.product_name",
-                  "labels": [
-                    {
-                      "description": "Product name",
-                      "id": "products.product_name",
-                      "primary": true,
-                      "sourceColumn": "product_name",
-                      "tags": [
-                        "Products"
-                      ],
-                      "title": "Product name"
-                    }
-                  ],
-                  "tags": [
-                    "Products"
-                  ],
-                  "title": "Product name"
+                    "Order lines"
+                  ]
                 }
               ],
+              "attributes": [
+                {
+                  "id": "order_id",
+                  "title": "Order id",
+                  "labels": [
+                    {
+                      "id": "order_id",
+                      "title": "Order id",
+                      "primary": true,
+                      "sourceColumn": "order_id",
+                      "description": "Order id",
+                      "tags": [
+                        "Order lines"
+                      ]
+                    }
+                  ],
+                  "description": "Order id",
+                  "tags": [
+                    "Order lines"
+                  ]
+                },
+                {
+                  "id": "order_line_id",
+                  "title": "Order line id",
+                  "labels": [
+                    {
+                      "id": "order_line_id",
+                      "title": "Order line id",
+                      "primary": true,
+                      "sourceColumn": "order_line_id",
+                      "description": "Order line id",
+                      "tags": [
+                        "Order lines"
+                      ]
+                    }
+                  ],
+                  "description": "Order line id",
+                  "tags": [
+                    "Order lines"
+                  ]
+                },
+                {
+                  "id": "order_status",
+                  "title": "Order status",
+                  "labels": [
+                    {
+                      "id": "order_status",
+                      "title": "Order status",
+                      "primary": true,
+                      "sourceColumn": "order_status",
+                      "description": "Order status",
+                      "tags": [
+                        "Order lines"
+                      ]
+                    }
+                  ],
+                  "description": "Order status",
+                  "tags": [
+                    "Order lines"
+                  ]
+                }
+              ],
+              "description": "Order lines",
               "dataSourceTableId": {
+                "id": "order_lines",
                 "dataSourceId": "demo-test-ds",
-                "id": "products",
                 "type": "dataSource"
               },
-              "description": "Products",
-              "facts": [],
+              "tags": [
+                "Order lines"
+              ]
+            },
+            {
+              "id": "products",
+              "title": "Products",
               "grain": [
                 {
-                  "id": "products.product_id",
+                  "id": "product_id",
                   "type": "attribute"
                 }
               ],
-              "id": "products",
               "references": [],
+              "facts": [],
+              "attributes": [
+                {
+                  "id": "product_id",
+                  "title": "Product id",
+                  "labels": [
+                    {
+                      "id": "product_id",
+                      "title": "Product id",
+                      "primary": true,
+                      "sourceColumn": "product_id",
+                      "description": "Product id",
+                      "tags": [
+                        "Products"
+                      ]
+                    }
+                  ],
+                  "description": "Product id",
+                  "tags": [
+                    "Products"
+                  ]
+                },
+                {
+                  "id": "product_name",
+                  "title": "Product name",
+                  "labels": [
+                    {
+                      "id": "product_name",
+                      "title": "Product name",
+                      "primary": true,
+                      "sourceColumn": "product_name",
+                      "description": "Product name",
+                      "tags": [
+                        "Products"
+                      ]
+                    }
+                  ],
+                  "description": "Product name",
+                  "tags": [
+                    "Products"
+                  ]
+                },
+                {
+                  "id": "products.category",
+                  "title": "Category",
+                  "labels": [
+                    {
+                      "id": "products.category",
+                      "title": "Category",
+                      "primary": true,
+                      "sourceColumn": "category",
+                      "description": "Category",
+                      "tags": [
+                        "Products"
+                      ]
+                    }
+                  ],
+                  "description": "Category",
+                  "tags": [
+                    "Products"
+                  ]
+                }
+              ],
+              "description": "Products",
+              "dataSourceTableId": {
+                "id": "products",
+                "dataSourceId": "demo-test-ds",
+                "type": "dataSource"
+              },
               "tags": [
                 "Products"
-              ],
-              "title": "Products"
+              ]
             }
           ],
           "dateInstances": [
             {
-              "granularities": [
-                "DAY",
-                "MONTH",
-                "QUARTER",
-                "WEEK",
-                "YEAR"
-              ],
+              "id": "date",
+              "title": "Date",
               "granularitiesFormatting": {
                 "titleBase": "",
                 "titlePattern": "%titleBase - %granularityTitle"
               },
-              "id": "date",
+              "granularities": [
+                "MINUTE",
+                "HOUR",
+                "DAY",
+                "WEEK",
+                "MONTH",
+                "QUARTER",
+                "YEAR",
+                "MINUTE_OF_HOUR",
+                "HOUR_OF_DAY",
+                "DAY_OF_WEEK",
+                "DAY_OF_MONTH",
+                "DAY_OF_YEAR",
+                "WEEK_OF_YEAR",
+                "MONTH_OF_YEAR",
+                "QUARTER_OF_YEAR"
+              ],
+              "description": "",
               "tags": [
                 "Date"
-              ],
-              "title": "Date"
+              ]
             }
           ]
         },
         "analytics": {
-          "analyticalDashboards": [],
-          "filterContexts": [],
+          "analyticalDashboards": [
+            {
+              "content": {
+                "filterContextRef": {
+                  "identifier": {
+                    "id": "campaign_name_filter",
+                    "type": "filterContext"
+                  }
+                },
+                "layout": {
+                  "type": "IDashboardLayout",
+                  "sections": [
+                    {
+                      "type": "IDashboardLayoutSection",
+                      "items": [
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Campaign Spend",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "insight": {
+                              "identifier": {
+                                "id": "campaign_spend",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Revenue per $ vs Spend by Campaign",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "insight": {
+                              "identifier": {
+                                "id": "revenue_per_usd_vs_spend_by_campaign",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "version": "2"
+              },
+              "description": "",
+              "id": "campaign",
+              "title": "Campaign"
+            },
+            {
+              "content": {
+                "filterContextRef": {
+                  "identifier": {
+                    "id": "campaign_name_filter",
+                    "type": "filterContext"
+                  }
+                },
+                "layout": {
+                  "sections": [
+                    {
+                      "items": [
+                        {
+                          "size": {
+                            "xl": {
+                              "gridWidth": 12
+                            }
+                          },
+                          "type": "IDashboardLayoutItem",
+                          "widget": {
+                            "description": "",
+                            "drills": [],
+                            "ignoreDashboardFilters": [],
+                            "insight": {
+                              "identifier": {
+                                "id": "top_10_products",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "properties": {},
+                            "title": "DHO simple",
+                            "type": "insight"
+                          }
+                        }
+                      ],
+                      "type": "IDashboardLayoutSection"
+                    }
+                  ],
+                  "type": "IDashboardLayout"
+                },
+                "plugins": [
+                  {
+                    "plugin": {
+                      "identifier": {
+                        "id": "dashboard_plugin_1",
+                        "type": "dashboardPlugin"
+                      }
+                    },
+                    "version": "2"
+                  }
+                ],
+                "version": "2"
+              },
+              "id": "dashboard_plugin",
+              "title": "Dashboard plugin"
+            },
+            {
+              "content": {
+                "filterContextRef": {
+                  "identifier": {
+                    "id": "region_filter",
+                    "type": "filterContext"
+                  }
+                },
+                "layout": {
+                  "type": "IDashboardLayout",
+                  "sections": [
+                    {
+                      "type": "IDashboardLayoutSection",
+                      "items": [
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Top 10 Products",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "top_10_products",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Revenue Trend",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "revenue_trend",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Customers Trend",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "customers_trend",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Product Categories Pie Chart",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "product_categories_pie_chart",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Product Breakdown",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "product_breakdown",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 6
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "Product Saleability",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "product_saleability",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        },
+                        {
+                          "type": "IDashboardLayoutItem",
+                          "size": {
+                            "xl": {
+                              "gridWidth": 12
+                            }
+                          },
+                          "widget": {
+                            "type": "insight",
+                            "title": "% Revenue per Product by Customer and Category",
+                            "description": "",
+                            "ignoreDashboardFilters": [],
+                            "dateDataSet": {
+                              "identifier": {
+                                "id": "date",
+                                "type": "dataset"
+                              }
+                            },
+                            "insight": {
+                              "identifier": {
+                                "id": "percent_revenue_per_product_by_customer_and_category",
+                                "type": "visualizationObject"
+                              }
+                            },
+                            "drills": [],
+                            "properties": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "version": "2"
+              },
+              "description": "",
+              "id": "product_and_category",
+              "title": "Product & Category"
+            }
+          ],
+          "dashboardPlugins": [
+            {
+              "content": {
+                "url": "https://www.example.com",
+                "version": "2"
+              },
+              "description": "Testing record dashboard_plugin_1",
+              "id": "dashboard_plugin_1",
+              "title": "dashboard_plugin_1"
+            },
+            {
+              "content": {
+                "url": "https://www.example.com",
+                "version": "2"
+              },
+              "description": "Testing record dashboard_plugin_2",
+              "id": "dashboard_plugin_2",
+              "title": "dashboard_plugin_2"
+            }
+          ],
+          "filterContexts": [
+            {
+              "content": {
+                "filters": [
+                  {
+                    "dateFilter": {
+                      "from": "0",
+                      "to": "0",
+                      "granularity": "GDC.time.month",
+                      "type": "relative"
+                    }
+                  },
+                  {
+                    "attributeFilter": {
+                      "displayForm": {
+                        "identifier": {
+                          "id": "campaign_name",
+                          "type": "label"
+                        }
+                      },
+                      "negativeSelection": true,
+                      "attributeElements": {
+                        "uris": []
+                      },
+                      "localIdentifier": "14b0807447ef4bc28f43e4fc5c337d1d",
+                      "filterElementsBy": []
+                    }
+                  }
+                ],
+                "version": "2"
+              },
+              "description": "",
+              "id": "campaign_name_filter",
+              "title": "filterContext"
+            },
+            {
+              "content": {
+                "filters": [
+                  {
+                    "attributeFilter": {
+                      "displayForm": {
+                        "identifier": {
+                          "id": "region",
+                          "type": "label"
+                        }
+                      },
+                      "negativeSelection": true,
+                      "attributeElements": {
+                        "uris": []
+                      },
+                      "localIdentifier": "2d5ef8df82444f6ba27b45f0990ee6af",
+                      "filterElementsBy": []
+                    }
+                  }
+                ],
+                "version": "2"
+              },
+              "description": "",
+              "id": "region_filter",
+              "title": "filterContext"
+            }
+          ],
           "metrics": [
             {
-              "id": "order_amount",
-              "title": "Order Amount",
-              "content": {
-                "format": "$#,##0",
-                "maql": "SELECT SUM({fact/order_lines.price}*{fact/order_lines.quantity})"
-              }
-            },
-            {
-              "id": "amount_of_orders",
-              "title": "# of Orders",
               "content": {
                 "format": "#,##0",
-                "maql": "SELECT COUNT({attribute/order_lines.order_id})"
-              }
+                "maql": "SELECT COUNT({attribute/customer_id},{attribute/order_line_id})"
+              },
+              "id": "amount_of_active_customers",
+              "title": "# of Active Customers"
             },
             {
-              "id": "revenue",
-              "title": "Revenue",
               "content": {
-                "format": "$#,##0",
-                "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
-              }
+                "format": "#,##0",
+                "maql": "SELECT COUNT({attribute/order_id})"
+              },
+              "id": "amount_of_orders",
+              "title": "# of Orders"
             },
             {
-              "id": "amount_of_valid_orders",
-              "title": "# of Valid Orders",
+              "content": {
+                "format": "#,##0",
+                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) >  10000 "
+              },
+              "id": "amount_of_top_customers",
+              "title": "# of Top Customers"
+            },
+            {
               "content": {
                 "format": "#,##0.00",
-                "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
-              }
+                "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
+              },
+              "description": "",
+              "id": "amount_of_valid_orders",
+              "title": "# of Valid Orders"
             },
             {
-              "id": "revenue_per_customer",
-              "title": "Revenue per Customer",
-              "content": {
-                "format": "$#,##0.0",
-                "maql": "SELECT AVG(SELECT {metric/revenue} BY {attribute/customers.customer_id})"
-              }
-            },
-            {
-              "id": "amount_of_active_customers",
-              "title": "# of Active Customers",
-              "content": {
-                "format": "#,##0",
-                "maql": "SELECT COUNT({attribute/customers.customer_id},{attribute/order_lines.order_line_id})"
-              }
-            },
-            {
-              "id": "amount_of_top_customers",
-              "title": "# of Top Customers",
-              "content": {
-                "format": "#,##0",
-                "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customers.customer_id}) >  10000 "
-              }
-            },
-            {
-              "id": "total_revenue",
-              "title": "Total Revenue",
               "content": {
                 "format": "$#,##0",
-                "maql": "SELECT {metric/revenue} BY ALL OTHER"
-              }
+                "maql": "SELECT SUM({fact/spend})"
+              },
+              "id": "campaign_spend",
+              "title": "Campaign Spend"
             },
             {
-              "id": "total_revenue-no_filters",
-              "title": "Total Revenue (No Filters)",
               "content": {
                 "format": "$#,##0",
-                "maql": "SELECT {metric/total_revenue} WITHOUT PARENT FILTER"
-              }
+                "maql": "SELECT SUM({fact/price}*{fact/quantity})"
+              },
+              "id": "order_amount",
+              "title": "Order Amount"
             },
             {
-              "id": "percent_revenue",
-              "title": "% Revenue",
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT {metric/revenue} / {metric/total_revenue}"
-              }
+              },
+              "id": "percent_revenue",
+              "title": "% Revenue"
             },
             {
-              "id": "percent_revenue_per_product",
-              "title": "% Revenue per Product",
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/products.product_id})"
-              }
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+              },
+              "id": "percent_revenue_from_top_10_customers",
+              "title": "% Revenue from Top 10 Customers"
             },
             {
-              "id": "percent_revenue_in_category",
-              "title": "% Revenue in Category",
+              "content": {
+                "format": "#,##0.0%",
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+              },
+              "id": "percent_revenue_from_top_10_percent_customers",
+              "title": "% Revenue from Top 10% Customers"
+            },
+            {
+              "content": {
+                "format": "#,##0.0%",
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+              },
+              "id": "percent_revenue_from_top_10_percent_products",
+              "title": "% Revenue from Top 10% Products"
+            },
+            {
+              "content": {
+                "format": "#,##0.0%",
+                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+              },
+              "id": "percent_revenue_from_top_10_products",
+              "title": "% Revenue from Top 10 Products"
+            },
+            {
               "content": {
                 "format": "#,##0.0%",
                 "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category}, ALL OTHER)"
-              }
+              },
+              "id": "percent_revenue_in_category",
+              "title": "% Revenue in Category"
             },
             {
-              "id": "revenue_top_10",
-              "title": "Revenue / Top 10",
-              "content": {
-                "format": "$#,##0",
-                "maql": "SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})"
-              }
-            },
-            {
-              "id": "percent_revenue_from_top_10_products",
-              "title": "% Revenue from Top 10 Products",
               "content": {
                 "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
-              }
+                "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})"
+              },
+              "id": "percent_revenue_per_product",
+              "title": "% Revenue per Product"
             },
             {
-              "id": "percent_revenue_from_top_10_customers",
-              "title": "% Revenue from Top 10 Customers",
-              "content": {
-                "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
-              }
-            },
-            {
-              "id": "revenue_top_10_percent",
-              "title": "Revenue / Top 10%",
               "content": {
                 "format": "$#,##0",
-                "maql": "SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})"
-              }
+                "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
+              },
+              "description": "",
+              "id": "revenue",
+              "title": "Revenue"
             },
             {
-              "id": "percent_revenue_from_top_10_percent_customers",
-              "title": "% Revenue from Top 10% Customers",
-              "content": {
-                "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
-              }
-            },
-            {
-              "id": "percent_revenue_from_top_10_percent_products",
-              "title": "% Revenue from Top 10% Products",
-              "content": {
-                "format": "#,##0.0%",
-                "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
-              }
-            },
-            {
-              "id": "revenue_per_dollar_spent",
-              "title": "Revenue per Dollar Spent",
-              "content": {
-                "format": "$#,##0.0",
-                "maql": "SELECT {metric/revenue} / {metric/campaign_spend}"
-              }
-            },
-            {
-              "id": "campaign_spend",
-              "title": "Campaign Spend",
-              "content": {
-                "format": "$#,##0",
-                "maql": "SELECT SUM({fact/campaign_channels.spend})"
-              }
-            },
-            {
-              "id": "revenue-outdoor",
-              "title": "Revenue (Outdoor)",
-              "content": {
-                "format": "$#,##0",
-                "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Outdoor\")"
-              }
-            },
-            {
-              "id": "revenue-clothing",
-              "title": "Revenue (Clothing)",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Clothing\")"
-              }
+              },
+              "id": "revenue-clothing",
+              "title": "Revenue (Clothing)"
             },
             {
-              "id": "revenue-home",
-              "title": "Revenue (Home)",
-              "content": {
-                "format": "$#,##0",
-                "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Home\")"
-              }
-            },
-            {
-              "id": "revenue-electronic",
-              "title": "Revenue (Electronic)",
               "content": {
                 "format": "$#,##0",
                 "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN ( \"Electronics\")"
-              }
+              },
+              "id": "revenue-electronic",
+              "title": "Revenue (Electronic)"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Home\")"
+              },
+              "id": "revenue-home",
+              "title": "Revenue (Home)"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/revenue} WHERE {label/products.category} IN (\"Outdoor\")"
+              },
+              "id": "revenue-outdoor",
+              "title": "Revenue (Outdoor)"
+            },
+            {
+              "content": {
+                "format": "$#,##0.0",
+                "maql": "SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})"
+              },
+              "id": "revenue_per_customer",
+              "title": "Revenue per Customer"
+            },
+            {
+              "content": {
+                "format": "$#,##0.0",
+                "maql": "SELECT {metric/revenue} / {metric/campaign_spend}"
+              },
+              "id": "revenue_per_dollar_spent",
+              "title": "Revenue per Dollar Spent"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})"
+              },
+              "id": "revenue_top_10",
+              "title": "Revenue / Top 10"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})"
+              },
+              "id": "revenue_top_10_percent",
+              "title": "Revenue / Top 10%"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/revenue} BY ALL OTHER"
+              },
+              "id": "total_revenue",
+              "title": "Total Revenue"
+            },
+            {
+              "content": {
+                "format": "$#,##0",
+                "maql": "SELECT {metric/total_revenue} WITHOUT PARENT FILTER"
+              },
+              "id": "total_revenue-no_filters",
+              "title": "Total Revenue (No Filters)"
             }
           ],
           "visualizationObjects": [
             {
-              "id": "campaign_spend",
-              "title": "Campaign Spend",
               "content": {
                 "buckets": [
                   {
@@ -790,7 +1227,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "campaigns.campaign_name",
+                              "id": "campaign_name",
                               "type": "label"
                             }
                           },
@@ -806,7 +1243,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "campaign_channels.type",
+                          "id": "type",
                           "type": "label"
                         }
                       },
@@ -832,7 +1269,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "campaigns.campaign_name",
+                          "id": "campaign_name",
                           "type": "label"
                         }
                       },
@@ -851,11 +1288,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:treemap"
-              }
+              },
+              "id": "campaign_spend",
+              "title": "Campaign Spend"
             },
             {
-              "id": "customers_trend",
-              "title": "Customers Trend",
               "content": {
                 "buckets": [
                   {
@@ -975,11 +1412,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:combo2"
-              }
+              },
+              "id": "customers_trend",
+              "title": "Customers Trend"
             },
             {
-              "id": "percent_revenue_per_product_by_customer_and_category",
-              "title": "% Revenue per Product by Customer and Category",
               "content": {
                 "buckets": [
                   {
@@ -1027,7 +1464,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "customers.customer_name",
+                              "id": "customer_name",
                               "type": "label"
                             }
                           },
@@ -1049,7 +1486,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -1065,7 +1502,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "customers.customer_name",
+                          "id": "customer_name",
                           "type": "label"
                         }
                       },
@@ -1091,7 +1528,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1113,11 +1550,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:table"
-              }
+              },
+              "id": "percent_revenue_per_product_by_customer_and_category",
+              "title": "% Revenue per Product by Customer and Category"
             },
             {
-              "id": "percentage_of_customers_by_region",
-              "title": "Percentage of Customers by Region",
               "content": {
                 "buckets": [
                   {
@@ -1164,7 +1601,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "customers.region",
+                              "id": "region",
                               "type": "label"
                             }
                           },
@@ -1180,7 +1617,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "customers.region",
+                          "id": "region",
                           "type": "label"
                         }
                       },
@@ -1213,11 +1650,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:area"
-              }
+              },
+              "id": "percentage_of_customers_by_region",
+              "title": "Percentage of Customers by Region"
             },
             {
-              "id": "product_breakdown",
-              "title": "Product Breakdown",
               "content": {
                 "buckets": [
                   {
@@ -1264,7 +1701,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -1293,7 +1730,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1312,11 +1749,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:treemap"
-              }
+              },
+              "id": "product_breakdown",
+              "title": "Product Breakdown"
             },
             {
-              "id": "product_categories_pie_chart",
-              "title": "Product Categories Pie Chart",
               "content": {
                 "buckets": [
                   {
@@ -1336,7 +1773,8 @@
                             }
                           },
                           "localIdentifier": "162b857af49d45769bc12604a5c192b9",
-                          "title": "% Revenue"
+                          "title": "% Revenue",
+                          "format": "#,##0.00%"
                         }
                       }
                     ],
@@ -1364,7 +1802,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1399,11 +1837,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:donut"
-              }
+              },
+              "id": "product_categories_pie_chart",
+              "title": "Product Categories Pie Chart"
             },
             {
-              "id": "product_revenue_comparison-over_previous_period",
-              "title": "Product Revenue Comparison (over previous period)",
               "content": {
                 "buckets": [
                   {
@@ -1468,7 +1906,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1524,11 +1962,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:column"
-              }
+              },
+              "id": "product_revenue_comparison-over_previous_period",
+              "title": "Product Revenue Comparison (over previous period)"
             },
             {
-              "id": "product_saleability",
-              "title": "Product Saleability",
               "content": {
                 "buckets": [
                   {
@@ -1582,7 +2020,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -1598,7 +2036,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1620,11 +2058,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:scatter"
-              }
+              },
+              "id": "product_saleability",
+              "title": "Product Saleability"
             },
             {
-              "id": "revenue_and_quantity_by_product_and_category",
-              "title": "Revenue and Quantity by Product and Category",
               "content": {
                 "buckets": [
                   {
@@ -1638,7 +2076,7 @@
                               "filters": [],
                               "item": {
                                 "identifier": {
-                                  "id": "order_lines.quantity",
+                                  "id": "quantity",
                                   "type": "fact"
                                 }
                               }
@@ -1657,7 +2095,7 @@
                               "filters": [],
                               "item": {
                                 "identifier": {
-                                  "id": "order_lines.price",
+                                  "id": "price",
                                   "type": "fact"
                                 }
                               }
@@ -1723,7 +2161,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -1739,7 +2177,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "customers.customer_name",
+                          "id": "customer_name",
                           "type": "label"
                         }
                       },
@@ -1752,7 +2190,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1787,11 +2225,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:table"
-              }
+              },
+              "id": "revenue_and_quantity_by_product_and_category",
+              "title": "Revenue and Quantity by Product and Category"
             },
             {
-              "id": "revenue_by_category_trend",
-              "title": "Revenue by Category Trend",
               "content": {
                 "buckets": [
                   {
@@ -1884,11 +2322,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:line"
-              }
+              },
+              "id": "revenue_by_category_trend",
+              "title": "Revenue by Category Trend"
             },
             {
-              "id": "revenue_by_product",
-              "title": "Revenue by Product",
               "content": {
                 "buckets": [
                   {
@@ -1919,7 +2357,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -1935,7 +2373,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -1948,11 +2386,11 @@
                 "properties": {},
                 "version": "2",
                 "visualizationUrl": "local:bar"
-              }
+              },
+              "id": "revenue_by_product",
+              "title": "Revenue by Product"
             },
             {
-              "id": "revenue_per_usd_vs_spend_by_campaign",
-              "title": "Revenue per $ vs Spend by Campaign",
               "content": {
                 "buckets": [
                   {
@@ -2005,7 +2443,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "campaigns.campaign_name",
+                              "id": "campaign_name",
                               "type": "label"
                             }
                           },
@@ -2021,7 +2459,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "campaigns.campaign_name",
+                          "id": "campaign_name",
                           "type": "label"
                         }
                       },
@@ -2043,11 +2481,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:scatter"
-              }
+              },
+              "id": "revenue_per_usd_vs_spend_by_campaign",
+              "title": "Revenue per $ vs Spend by Campaign"
             },
             {
-              "id": "revenue_trend",
-              "title": "Revenue Trend",
               "content": {
                 "buckets": [
                   {
@@ -2152,11 +2590,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:combo2"
-              }
+              },
+              "id": "revenue_trend",
+              "title": "Revenue Trend"
             },
             {
-              "id": "top_10_customers",
-              "title": "Top 10 Customers",
               "content": {
                 "buckets": [
                   {
@@ -2187,7 +2625,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "customers.customer_name",
+                              "id": "customer_name",
                               "type": "label"
                             }
                           },
@@ -2203,7 +2641,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "customers.state",
+                              "id": "state",
                               "type": "label"
                             }
                           },
@@ -2219,7 +2657,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "customers.customer_name",
+                          "id": "customer_name",
                           "type": "label"
                         }
                       },
@@ -2232,7 +2670,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "customers.state",
+                          "id": "state",
                           "type": "label"
                         }
                       },
@@ -2251,11 +2689,11 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:bar"
-              }
+              },
+              "id": "top_10_customers",
+              "title": "Top 10 Customers"
             },
             {
-              "id": "top_10_products",
-              "title": "Top 10 Products",
               "content": {
                 "buckets": [
                   {
@@ -2286,7 +2724,7 @@
                         "attribute": {
                           "displayForm": {
                             "identifier": {
-                              "id": "products.product_name",
+                              "id": "product_name",
                               "type": "label"
                             }
                           },
@@ -2318,7 +2756,7 @@
                     "negativeAttributeFilter": {
                       "displayForm": {
                         "identifier": {
-                          "id": "products.product_name",
+                          "id": "product_name",
                           "type": "label"
                         }
                       },
@@ -2350,7 +2788,9 @@
                 },
                 "version": "2",
                 "visualizationUrl": "local:bar"
-              }
+              },
+              "id": "top_10_products",
+              "title": "Top 10 Products"
             }
           ]
         }
@@ -2359,6 +2799,8 @@
     {
       "id": "demo_west",
       "name": "Demo West",
+      "permissions": [],
+      "hierarchyPermissions": [],
       "model": {
         "ldm": {
           "datasets": [],
@@ -2366,6 +2808,7 @@
         },
         "analytics": {
           "analyticalDashboards": [],
+          "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
           "visualizationObjects": []
@@ -2379,6 +2822,8 @@
     {
       "id": "demo_west_california",
       "name": "Demo West California",
+      "permissions": [],
+      "hierarchyPermissions": [],
       "model": {
         "ldm": {
           "datasets": [],
@@ -2386,6 +2831,7 @@
         },
         "analytics": {
           "analyticalDashboards": [],
+          "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
           "visualizationObjects": []
@@ -2402,7 +2848,6 @@
       "id": "wdf__region",
       "title": "Customer region",
       "columnName": "wdf__region",
-      "dataSourceId": "demo-test-ds",
       "workspaceDataFilterSettings": [
         {
           "id": "region_west",
@@ -2425,7 +2870,6 @@
       "id": "wdf__state",
       "title": "Customer state",
       "columnName": "wdf__state",
-      "dataSourceId": "demo-test-ds",
       "workspaceDataFilterSettings": [
         {
           "id": "region_west_california",

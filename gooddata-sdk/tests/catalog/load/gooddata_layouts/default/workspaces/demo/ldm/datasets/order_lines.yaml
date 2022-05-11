@@ -1,10 +1,10 @@
 # (C) 2022 GoodData Corporation
 attributes:
 - description: Order id
-  id: order_lines.order_id
+  id: order_id
   labels:
   - description: Order id
-    id: order_lines.order_id
+    id: order_id
     primary: true
     sourceColumn: order_id
     tags:
@@ -14,10 +14,10 @@ attributes:
   - Order lines
   title: Order id
 - description: Order line id
-  id: order_lines.order_line_id
+  id: order_line_id
   labels:
   - description: Order line id
-    id: order_lines.order_line_id
+    id: order_line_id
     primary: true
     sourceColumn: order_line_id
     tags:
@@ -27,10 +27,10 @@ attributes:
   - Order lines
   title: Order line id
 - description: Order status
-  id: order_lines.order_status
+  id: order_status
   labels:
   - description: Order status
-    id: order_lines.order_status
+    id: order_status
     primary: true
     sourceColumn: order_status
     tags:
@@ -46,19 +46,19 @@ dataSourceTableId:
 description: Order lines
 facts:
 - description: Price
-  id: order_lines.price
+  id: price
   sourceColumn: price
   tags:
   - Order lines
   title: Price
 - description: Quantity
-  id: order_lines.quantity
+  id: quantity
   sourceColumn: quantity
   tags:
   - Order lines
   title: Quantity
 grain:
-- id: order_lines.order_line_id
+- id: order_line_id
   type: attribute
 id: order_lines
 references:

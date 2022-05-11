@@ -33,9 +33,9 @@ def test_dataframe_for_insight(gdf: DataFrameFactory):
     df = gdf.for_insight(insight_id="revenue_and_quantity_by_product_and_category")
 
     assert df.index.names[0] == "products.category"
-    assert df.index.names[1] == "products.product_name"
-    assert df.columns[0] == "order_lines.quantity"
-    assert df.columns[1] == "order_lines.price"
+    assert df.index.names[1] == "product_name"
+    assert df.columns[0] == "quantity"
+    assert df.columns[1] == "price"
     assert df.columns[2] == "percent_revenue_in_category"
     assert df.columns[3] == "revenue"
 
@@ -46,8 +46,8 @@ def test_dataframe_for_insight_no_index(gdf: DataFrameFactory):
     df = gdf.for_insight(insight_id="revenue_and_quantity_by_product_and_category", auto_index=False)
 
     assert df.columns[0] == "products.category"
-    assert df.columns[1] == "products.product_name"
-    assert df.columns[2] == "order_lines.quantity"
-    assert df.columns[3] == "order_lines.price"
+    assert df.columns[1] == "product_name"
+    assert df.columns[2] == "quantity"
+    assert df.columns[3] == "price"
     assert df.columns[4] == "percent_revenue_in_category"
     assert df.columns[5] == "revenue"

@@ -17,8 +17,8 @@ gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="jso
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metric_series.json"))
 def test_simple_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(reg="label/customers.region"),
-        data_by="fact/order_lines.price",
+        index_by=dict(reg="label/region"),
+        data_by="fact/price",
     )
 
     assert len(series) == 5
@@ -28,8 +28,8 @@ def test_simple_index_metric_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_label_series.json"))
 def test_simple_index_label_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(reg="label/customers.region"),
-        data_by="label/customers.region",
+        index_by=dict(reg="label/region"),
+        data_by="label/region",
     )
 
     assert len(series) == 5
@@ -39,10 +39,10 @@ def test_simple_index_label_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_series.json"))
 def test_simple_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(reg="label/customers.region"),
+        index_by=dict(reg="label/region"),
         data_by="label/products.category",
         filter_by=[
-            PositiveAttributeFilter(label="label/customers.region", values=["Midwest"]),
+            PositiveAttributeFilter(label="label/region", values=["Midwest"]),
             PositiveAttributeFilter(label="label/products.category", values=["Clothing"]),
         ],
     )
@@ -54,8 +54,8 @@ def test_simple_index_filtered_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metric_series.json"))
 def test_multi_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
-        data_by="fact/order_lines.price",
+        index_by=dict(reg="label/region", category="label/products.category"),
+        data_by="fact/price",
     )
 
     assert len(series) == 17
@@ -67,8 +67,8 @@ def test_multi_index_metric_series(gds: SeriesFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_series.json"))
 def test_multi_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
-        data_by="fact/order_lines.price",
+        index_by=dict(reg="label/region", category="label/products.category"),
+        data_by="fact/price",
         filter_by=PositiveAttributeFilter(label="category", values=["Clothing"]),
     )
 

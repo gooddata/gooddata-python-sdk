@@ -18,17 +18,17 @@ index_types = [
     "region",
     dict(reg="region"),
     # label_id, i.e. obj id without "label/" prefix - index can reference only attributes
-    "customers.region",
-    dict(region="customers.region"),
+    "region",
+    dict(region="region"),
     # object identifier in string form
-    "label/customers.region",
-    dict(reg="label/customers.region"),
+    "label/region",
+    dict(reg="label/region"),
     # Attribute instance
-    Attribute(local_id="abcd", label=ObjId(id="customers.region", type="label")),
-    dict(region=Attribute(local_id="abcd", label=ObjId(id="customers.region", type="label"))),
+    Attribute(local_id="abcd", label=ObjId(id="region", type="label")),
+    dict(region=Attribute(local_id="abcd", label=ObjId(id="region", type="label"))),
     # ObjId instance
-    ObjId(id="customers.region", type="label"),
-    dict(region=ObjId(id="customers.region", type="label")),
+    ObjId(id="region", type="label"),
+    dict(region=ObjId(id="region", type="label")),
 ]
 
 
@@ -38,9 +38,9 @@ def test_simple_index_metrics(gdf: DataFrameFactory, index):
     df = gdf.indexed(
         index_by=index,
         columns=dict(
-            region="label/customers.region",
+            region="label/region",
             category="label/products.category",
-            price="fact/order_lines.price",
+            price="fact/price",
         ),
     )
 
@@ -54,10 +54,10 @@ def test_simple_index_metrics(gdf: DataFrameFactory, index):
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_no_duplicate.json"))
 def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by="label/customers.region",
+        index_by="label/region",
         columns=dict(
-            price="fact/order_lines.price",
-            quantity="fact/order_lines.quantity",
+            price="fact/price",
+            quantity="fact/quantity",
         ),
     )
 
@@ -70,12 +70,12 @@ def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_and_label.json"))
 def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
     columns = {
-        "Price": "fact/order_lines.price",
-        "Quantity ($special$%^&)": "fact/order_lines.quantity",
-        "Region code ($special$%^&)": "label/customers.region",
+        "Price": "fact/price",
+        "Quantity ($special$%^&)": "fact/quantity",
+        "Region code ($special$%^&)": "label/region",
     }
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region"),
+        index_by=dict(reg="label/region"),
         columns=columns,
     )
 
@@ -88,19 +88,19 @@ def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_metrics_and_label.json"))
 def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region"),
+        index_by=dict(reg="label/region"),
         columns=dict(
-            price="fact/order_lines.price",
-            quantity="fact/order_lines.quantity",
+            price="fact/price",
+            quantity="fact/quantity",
             category="label/products.category",
         ),
         filter_by=[
             # Label referenced by localIdentifier
             PositiveAttributeFilter(label="reg", values=["Midwest"]),
             # Label referenced by full ID
-            PositiveAttributeFilter(label="label/customers.region", values=["Midwest"]),
+            PositiveAttributeFilter(label="label/region", values=["Midwest"]),
             # Label referenced by ObjId
-            PositiveAttributeFilter(label=ObjId(id="customers.region", type="label"), values=["Midwest"]),
+            PositiveAttributeFilter(label=ObjId(id="region", type="label"), values=["Midwest"]),
             # label referenced by index in columns
             PositiveAttributeFilter(label="category", values=["Clothing"]),
             MetricValueFilter(metric="price", operator="GREATER_THAN", values=100),
@@ -117,7 +117,7 @@ def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics.json"))
 def test_multi_index_metrics(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
+        index_by=dict(reg="label/region", category="label/products.category"),
         columns=dict(order_amount="metric/order_amount", order_count="metric/amount_of_orders"),
     )
 
@@ -132,11 +132,11 @@ def test_multi_index_metrics(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics_and_label.json"))
 def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
+        index_by=dict(reg="label/region", category="label/products.category"),
         columns=dict(
             order_amount="metric/order_amount",
             order_count="metric/amount_of_orders",
-            state="label/customers.state",
+            state="label/state",
         ),
     )
 
@@ -152,11 +152,11 @@ def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
 @gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label.json"))
 def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
+        index_by=dict(reg="label/region", category="label/products.category"),
         columns=dict(
             order_amount="metric/order_amount",
             order_count="metric/amount_of_orders",
-            state="label/customers.state",
+            state="label/state",
         ),
         filter_by=[
             PositiveAttributeFilter(label="reg", values=["Northeast"]),
@@ -181,11 +181,11 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     #
     # this has implications when referencing label by local id
     df = gdf.indexed(
-        index_by=dict(reg="label/customers.region", category="label/products.category"),
+        index_by=dict(reg="label/region", category="label/products.category"),
         columns=dict(
             order_amount="metric/order_amount",
             order_count="metric/amount_of_orders",
-            reg="label/customers.region",
+            reg="label/region",
         ),
         filter_by=[PositiveAttributeFilter(label="reg", values=["Midwest"])],
     )

@@ -6,7 +6,7 @@
 * Create pull request with the latest commit with bumped versions
 * Ask for merge of pull request. Once it is merged:
 * Checkout latest master tag it vX.Y.Z
-* Push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> v.X.Y.Z`)
+* Push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
 ### Errors that may appear
 

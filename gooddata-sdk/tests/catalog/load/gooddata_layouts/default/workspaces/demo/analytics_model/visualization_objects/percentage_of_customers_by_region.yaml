@@ -25,7 +25,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: customers.region
+            id: region
             type: label
         localIdentifier: 530cddbd7ca04d039e73462d81ed44d5
     localIdentifier: stack
@@ -33,7 +33,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: customers.region
+          id: region
           type: label
       notIn:
         values: []

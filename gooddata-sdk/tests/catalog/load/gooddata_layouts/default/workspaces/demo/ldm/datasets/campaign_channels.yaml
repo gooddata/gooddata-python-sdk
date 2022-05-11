@@ -1,10 +1,10 @@
 # (C) 2022 GoodData Corporation
 attributes:
 - description: Campaign channel id
-  id: campaign_channels.campaign_channel_id
+  id: campaign_channel_id
   labels:
   - description: Campaign channel id
-    id: campaign_channels.campaign_channel_id
+    id: campaign_channel_id
     primary: true
     sourceColumn: campaign_channel_id
     tags:
@@ -27,10 +27,10 @@ attributes:
   - Campaign channels
   title: Category
 - description: Type
-  id: campaign_channels.type
+  id: type
   labels:
   - description: Type
-    id: campaign_channels.type
+    id: type
     primary: true
     sourceColumn: type
     tags:
@@ -46,19 +46,19 @@ dataSourceTableId:
 description: Campaign channels
 facts:
 - description: Budget
-  id: campaign_channels.budget
+  id: budget
   sourceColumn: budget
   tags:
   - Campaign channels
   title: Budget
 - description: Spend
-  id: campaign_channels.spend
+  id: spend
   sourceColumn: spend
   tags:
   - Campaign channels
   title: Spend
 grain:
-- id: campaign_channels.campaign_channel_id
+- id: campaign_channel_id
   type: attribute
 id: campaign_channels
 references:

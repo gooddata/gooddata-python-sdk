@@ -5,11 +5,11 @@
         "attributes": [
           {
             "description": "Campaign channel id",
-            "id": "campaign_channels.campaign_channel_id",
+            "id": "campaign_channel_id",
             "labels": [
               {
                 "description": "Campaign channel id",
-                "id": "campaign_channels.campaign_channel_id",
+                "id": "campaign_channel_id",
                 "primary": true,
                 "sourceColumn": "campaign_channel_id",
                 "tags": [
@@ -45,11 +45,11 @@
           },
           {
             "description": "Type",
-            "id": "campaign_channels.type",
+            "id": "type",
             "labels": [
               {
                 "description": "Type",
-                "id": "campaign_channels.type",
+                "id": "type",
                 "primary": true,
                 "sourceColumn": "type",
                 "tags": [
@@ -73,7 +73,7 @@
         "facts": [
           {
             "description": "Budget",
-            "id": "campaign_channels.budget",
+            "id": "budget",
             "sourceColumn": "budget",
             "tags": [
               "Campaign channels"
@@ -82,7 +82,7 @@
           },
           {
             "description": "Spend",
-            "id": "campaign_channels.spend",
+            "id": "spend",
             "sourceColumn": "spend",
             "tags": [
               "Campaign channels"
@@ -92,7 +92,7 @@
         ],
         "grain": [
           {
-            "id": "campaign_channels.campaign_channel_id",
+            "id": "campaign_channel_id",
             "type": "attribute"
           }
         ],
@@ -118,11 +118,11 @@
         "attributes": [
           {
             "description": "Campaign id",
-            "id": "campaigns.campaign_id",
+            "id": "campaign_id",
             "labels": [
               {
                 "description": "Campaign id",
-                "id": "campaigns.campaign_id",
+                "id": "campaign_id",
                 "primary": true,
                 "sourceColumn": "campaign_id",
                 "tags": [
@@ -138,11 +138,11 @@
           },
           {
             "description": "Campaign name",
-            "id": "campaigns.campaign_name",
+            "id": "campaign_name",
             "labels": [
               {
                 "description": "Campaign name",
-                "id": "campaigns.campaign_name",
+                "id": "campaign_name",
                 "primary": true,
                 "sourceColumn": "campaign_name",
                 "tags": [
@@ -166,7 +166,7 @@
         "facts": [],
         "grain": [
           {
-            "id": "campaigns.campaign_id",
+            "id": "campaign_id",
             "type": "attribute"
           }
         ],
@@ -181,11 +181,11 @@
         "attributes": [
           {
             "description": "Customer id",
-            "id": "customers.customer_id",
+            "id": "customer_id",
             "labels": [
               {
                 "description": "Customer id",
-                "id": "customers.customer_id",
+                "id": "customer_id",
                 "primary": true,
                 "sourceColumn": "customer_id",
                 "tags": [
@@ -201,11 +201,11 @@
           },
           {
             "description": "Customer name",
-            "id": "customers.customer_name",
+            "id": "customer_name",
             "labels": [
               {
                 "description": "Customer name",
-                "id": "customers.customer_name",
+                "id": "customer_name",
                 "primary": true,
                 "sourceColumn": "customer_name",
                 "tags": [
@@ -221,11 +221,11 @@
           },
           {
             "description": "Region",
-            "id": "customers.region",
+            "id": "region",
             "labels": [
               {
                 "description": "Region",
-                "id": "customers.region",
+                "id": "region",
                 "primary": true,
                 "sourceColumn": "region",
                 "tags": [
@@ -241,11 +241,11 @@
           },
           {
             "description": "State",
-            "id": "customers.state",
+            "id": "state",
             "labels": [
               {
                 "description": "Location",
-                "id": "customers.geo__state__location",
+                "id": "geo__state__location",
                 "primary": false,
                 "sourceColumn": "geo__state__location",
                 "tags": [
@@ -255,7 +255,7 @@
               },
               {
                 "description": "State",
-                "id": "customers.state",
+                "id": "state",
                 "primary": true,
                 "sourceColumn": "state",
                 "tags": [
@@ -279,7 +279,7 @@
         "facts": [],
         "grain": [
           {
-            "id": "customers.customer_id",
+            "id": "customer_id",
             "type": "attribute"
           }
         ],
@@ -294,11 +294,11 @@
         "attributes": [
           {
             "description": "Order id",
-            "id": "order_lines.order_id",
+            "id": "order_id",
             "labels": [
               {
                 "description": "Order id",
-                "id": "order_lines.order_id",
+                "id": "order_id",
                 "primary": true,
                 "sourceColumn": "order_id",
                 "tags": [
@@ -314,11 +314,11 @@
           },
           {
             "description": "Order line id",
-            "id": "order_lines.order_line_id",
+            "id": "order_line_id",
             "labels": [
               {
                 "description": "Order line id",
-                "id": "order_lines.order_line_id",
+                "id": "order_line_id",
                 "primary": true,
                 "sourceColumn": "order_line_id",
                 "tags": [
@@ -334,11 +334,11 @@
           },
           {
             "description": "Order status",
-            "id": "order_lines.order_status",
+            "id": "order_status",
             "labels": [
               {
                 "description": "Order status",
-                "id": "order_lines.order_status",
+                "id": "order_status",
                 "primary": true,
                 "sourceColumn": "order_status",
                 "tags": [
@@ -362,7 +362,7 @@
         "facts": [
           {
             "description": "Price",
-            "id": "order_lines.price",
+            "id": "price",
             "sourceColumn": "price",
             "tags": [
               "Order lines"
@@ -371,7 +371,7 @@
           },
           {
             "description": "Quantity",
-            "id": "order_lines.quantity",
+            "id": "quantity",
             "sourceColumn": "quantity",
             "tags": [
               "Order lines"
@@ -381,7 +381,7 @@
         ],
         "grain": [
           {
-            "id": "order_lines.order_line_id",
+            "id": "order_line_id",
             "type": "attribute"
           }
         ],
@@ -436,6 +436,46 @@
       {
         "attributes": [
           {
+            "description": "Product id",
+            "id": "product_id",
+            "labels": [
+              {
+                "description": "Product id",
+                "id": "product_id",
+                "primary": true,
+                "sourceColumn": "product_id",
+                "tags": [
+                  "Products"
+                ],
+                "title": "Product id"
+              }
+            ],
+            "tags": [
+              "Products"
+            ],
+            "title": "Product id"
+          },
+          {
+            "description": "Product name",
+            "id": "product_name",
+            "labels": [
+              {
+                "description": "Product name",
+                "id": "product_name",
+                "primary": true,
+                "sourceColumn": "product_name",
+                "tags": [
+                  "Products"
+                ],
+                "title": "Product name"
+              }
+            ],
+            "tags": [
+              "Products"
+            ],
+            "title": "Product name"
+          },
+          {
             "description": "Category",
             "id": "products.category",
             "labels": [
@@ -454,46 +494,6 @@
               "Products"
             ],
             "title": "Category"
-          },
-          {
-            "description": "Product id",
-            "id": "products.product_id",
-            "labels": [
-              {
-                "description": "Product id",
-                "id": "products.product_id",
-                "primary": true,
-                "sourceColumn": "product_id",
-                "tags": [
-                  "Products"
-                ],
-                "title": "Product id"
-              }
-            ],
-            "tags": [
-              "Products"
-            ],
-            "title": "Product id"
-          },
-          {
-            "description": "Product name",
-            "id": "products.product_name",
-            "labels": [
-              {
-                "description": "Product name",
-                "id": "products.product_name",
-                "primary": true,
-                "sourceColumn": "product_name",
-                "tags": [
-                  "Products"
-                ],
-                "title": "Product name"
-              }
-            ],
-            "tags": [
-              "Products"
-            ],
-            "title": "Product name"
           }
         ],
         "dataSourceTableId": {
@@ -505,7 +505,7 @@
         "facts": [],
         "grain": [
           {
-            "id": "products.product_id",
+            "id": "product_id",
             "type": "attribute"
           }
         ],
@@ -521,11 +521,21 @@
       {
         "description": "",
         "granularities": [
+          "MINUTE",
+          "HOUR",
           "DAY",
           "WEEK",
           "MONTH",
           "QUARTER",
-          "YEAR"
+          "YEAR",
+          "MINUTE_OF_HOUR",
+          "HOUR_OF_DAY",
+          "DAY_OF_WEEK",
+          "DAY_OF_MONTH",
+          "DAY_OF_YEAR",
+          "WEEK_OF_YEAR",
+          "MONTH_OF_YEAR",
+          "QUARTER_OF_YEAR"
         ],
         "granularitiesFormatting": {
           "titleBase": "",

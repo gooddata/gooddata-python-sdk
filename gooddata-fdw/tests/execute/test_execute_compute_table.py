@@ -30,7 +30,7 @@ def test_execute_compute_table_all_columns(fdw_options_for_compute_table, test_c
 def test_execute_compute_table_metrics_only(fdw_options_for_compute_table, test_compute_table_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
 
-    fact_metric_columns = ["order_lines_quantity", "order_lines_price", "percent_revenue_in_category", "revenue"]
+    fact_metric_columns = ["quantity", "price", "percent_revenue_in_category", "revenue"]
     results = list(row for row in fdw.execute([], fact_metric_columns))
 
     # selecting just metrics means no granularity and full aggregation of the metric values
@@ -45,7 +45,7 @@ def test_execute_compute_table_metrics_only(fdw_options_for_compute_table, test_
 def test_execute_compute_table_with_reduced_granularity(fdw_options_for_compute_table, test_compute_table_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
 
-    test_columns = ["products_category", "order_lines_quantity", "revenue"]
+    test_columns = ["products_category", "quantity", "revenue"]
     results = list(row for row in fdw.execute([], test_columns))
 
     # selecting on reduced granularity (1 label instead of both) means the metric values are aggregated for

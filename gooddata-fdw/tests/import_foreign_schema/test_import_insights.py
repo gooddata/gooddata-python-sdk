@@ -36,9 +36,9 @@ def test_import_insights_without_restrictions(test_config):
     assert campaign_spend.col_idx["campaign_channels_category"].type_name == "VARCHAR(255)"
     assert "local_id" in campaign_spend.col_idx["campaign_channels_category"].options
 
-    assert "campaigns_campaign_name" in campaign_spend.col_idx
-    assert campaign_spend.col_idx["campaigns_campaign_name"].type_name == "VARCHAR(255)"
-    assert "local_id" in campaign_spend.col_idx["campaigns_campaign_name"].options
+    assert "campaign_name" in campaign_spend.col_idx
+    assert campaign_spend.col_idx["campaign_name"].type_name == "VARCHAR(255)"
+    assert "local_id" in campaign_spend.col_idx["campaign_name"].options
 
     assert "campaign_spend" in campaign_spend.col_idx
     assert campaign_spend.col_idx["campaign_spend"].type_name == "DECIMAL(18, 2)"

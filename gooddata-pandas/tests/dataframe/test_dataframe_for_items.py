@@ -16,9 +16,9 @@ gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="jso
 def test_dataframe_for_items(gdf: DataFrameFactory):
     df = gdf.for_items(
         items=dict(
-            reg="label/customers.region",
+            reg="label/region",
             category="label/products.category",
-            price="fact/order_lines.price",
+            price="fact/price",
             order_amount="metric/order_amount",
         )
     )
@@ -35,9 +35,9 @@ def test_dataframe_for_items(gdf: DataFrameFactory):
 def test_dataframe_for_items_no_index(gdf: DataFrameFactory):
     df = gdf.for_items(
         items=dict(
-            reg="label/customers.region",
+            reg="label/region",
             category="label/products.category",
-            price="fact/order_lines.price",
+            price="fact/price",
             order_amount="metric/order_amount",
         ),
         auto_index=False,

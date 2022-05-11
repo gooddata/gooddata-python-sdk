@@ -32,7 +32,7 @@ def test_not_indexed_metrics(gdf: DataFrameFactory):
 def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
-            reg="label/customers.region",
+            reg="label/region",
             order_amount="metric/order_amount",
             order_count="metric/amount_of_orders",
         )
@@ -49,7 +49,7 @@ def test_not_indexed_metrics_and_labels(gdf: DataFrameFactory):
 def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
     df = gdf.not_indexed(
         columns=dict(
-            reg="label/customers.region",
+            reg="label/region",
             order_amount="metric/order_amount",
             order_count="metric/amount_of_orders",
         ),

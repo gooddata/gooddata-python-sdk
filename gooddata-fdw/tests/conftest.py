@@ -47,20 +47,20 @@ def test_insight_columns():
         options=dict(local_id="06bc6b3b9949466494e4f594c11f1bff"),
     )
     # attribute
-    columns["products_product_name"] = ColumnDefinition(
-        column_name="products_product_name",
+    columns["product_name"] = ColumnDefinition(
+        column_name="product_name",
         type_name="VARCHAR(255)",
         options=dict(local_id="192668bfb6a74e9ab7b5d1ce7cb68ea3"),
     )
     # fact
-    columns["order_lines_quantity"] = ColumnDefinition(
-        column_name="order_lines_quantity",
+    columns["quantity"] = ColumnDefinition(
+        column_name="quantity",
         type_name="DECIMAL(18,2)",
         options=dict(local_id="29486504dd0e4a36a18b0b2f792d3a46"),
     )
     # fact
-    columns["order_lines_price"] = ColumnDefinition(
-        column_name="order_lines_price",
+    columns["price"] = ColumnDefinition(
+        column_name="price",
         type_name="DECIMAL(18,2)",
         options=dict(local_id="aa6391acccf1452f8011201aef9af492"),
     )
@@ -103,19 +103,19 @@ def test_compute_table_columns():
     columns["products_product_name"] = ColumnDefinition(
         column_name="products_product_name",
         type_name="VARCHAR(255)",
-        options=dict(id="label/products.product_name"),
+        options=dict(id="label/product_name"),
     )
     # fact
-    columns["order_lines_quantity"] = ColumnDefinition(
-        column_name="order_lines_quantity",
+    columns["quantity"] = ColumnDefinition(
+        column_name="quantity",
         type_name="DECIMAL(18,2)",
-        options=dict(id="fact/order_lines.quantity"),
+        options=dict(id="fact/quantity"),
     )
     # fact
-    columns["order_lines_price"] = ColumnDefinition(
-        column_name="order_lines_price",
+    columns["price"] = ColumnDefinition(
+        column_name="price",
         type_name="DECIMAL(18,2)",
-        options=dict(id="fact/order_lines.price"),
+        options=dict(id="fact/price"),
     )
     # metric
     columns["percent_revenue_in_category"] = ColumnDefinition(

@@ -82,7 +82,9 @@ class CatalogDataSourceService(CatalogServiceBase):
         )
 
     def generate_logical_model(
-        self, data_source_id: str, generate_ldm_request: CatalogGenerateLdmRequest
+        self,
+        data_source_id: str,
+        generate_ldm_request: CatalogGenerateLdmRequest = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf"),
     ) -> CatalogDeclarativeModel:
         return CatalogDeclarativeModel.from_api(
             self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
@@ -207,7 +209,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self, data_source_id: str, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeTables:
         data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
-        return CatalogDeclarativeTables.from_dict(CatalogDeclarativeTables.load_from_disk(data_source_folder))
+        return CatalogDeclarativeTables.load_from_disk(data_source_folder)
 
     def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
         self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))

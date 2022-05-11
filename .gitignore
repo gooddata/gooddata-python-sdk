@@ -5,3 +5,4 @@
 .venv
 test_clients.py
 gooddata-sdk/tests/catalog/store
+.DS_Store

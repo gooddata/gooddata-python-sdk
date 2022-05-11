@@ -29,7 +29,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: campaigns.campaign_name
+            id: campaign_name
             type: label
         localIdentifier: 1d9fa968bafb423eb29c938dfb1207ff
     localIdentifier: attribute
@@ -37,7 +37,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: campaigns.campaign_name
+          id: campaign_name
           type: label
       notIn:
         values: []

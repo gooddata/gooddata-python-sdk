@@ -69,7 +69,7 @@ class CatalogDeclarativeDataSources:
         data_sources = []
         for data_source_id in data_source_ids:
             data_sources.append(CatalogDeclarativeDataSource.load_from_disk(data_sources_folder, data_source_id))
-        return cls.from_dict({"dataSources": data_sources})
+        return cls(data_sources=data_sources)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeDataSources):
@@ -178,14 +178,28 @@ class CatalogDeclarativeDataSource(CatalogTypeEntity):
         if self.pdm is not None:
             self.pdm.store_to_disk(data_source_folder)
 
-    @staticmethod
-    def load_from_disk(data_sources_folder: Path, data_source_id: str) -> dict:
+    @classmethod
+    def load_from_disk(cls, data_sources_folder: Path, data_source_id: str) -> CatalogDeclarativeDataSource:
         data_source_folder = data_sources_folder / data_source_id
         data_source_file_path = data_source_folder / f"{data_source_id}.yaml"
         pdm = CatalogDeclarativeTables.load_from_disk(data_source_folder)
-        data_source = read_layout_from_file(data_source_file_path)
-        data_source["pdm"] = pdm
+        data_source_dict = read_layout_from_file(data_source_file_path)
+        data_source = CatalogDeclarativeDataSource.from_dict(data_source_dict)
+        data_source.pdm = pdm
         return data_source
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeDataSource:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeDataSource object.
+        """
+        declarative_data_source = DeclarativeDataSource.from_dict(data, camel_case)
+        return cls.from_api(declarative_data_source)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, CatalogDeclarativeDataSource):

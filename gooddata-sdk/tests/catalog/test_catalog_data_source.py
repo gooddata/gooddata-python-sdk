@@ -19,7 +19,6 @@ from gooddata_sdk import (
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
-    CatalogGenerateLdmRequest,
     CatalogScanModelRequest,
     ExecutionDefinition,
     GoodDataApiClient,
@@ -57,12 +56,8 @@ def test_register_upload_notification(test_config):
 def test_generate_logical_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
-    ldm_request = CatalogGenerateLdmRequest(
-        separator="__", generate_long_ids=True, date_granularities="basic", wdf_prefix="wdf"
-    )
-    generated_declarative_model = sdk.catalog_data_source.generate_logical_model(
-        test_config["data_source"], ldm_request
-    )
+    generated_declarative_model = sdk.catalog_data_source.generate_logical_model(test_config["data_source"])
+
     """
     There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
     so it can not be compared  declarative_model == generated_declarative_model, because granularities are not the same.
