@@ -10,7 +10,7 @@ REQUIRES = [
     "gooddata-afm-client~=0.8.0",
     "gooddata-metadata-client~=0.8.0",
     "gooddata-scan-client~=0.8.0",
-    'importlib-metadata >= 1.0 ; python_version < "3.8"',
+    'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     "python-dateutil>=2.5.3",
     "pyyaml==6.0",
 ]
@@ -41,6 +41,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Database",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",
