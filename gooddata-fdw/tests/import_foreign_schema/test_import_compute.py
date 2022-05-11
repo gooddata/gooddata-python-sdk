@@ -31,7 +31,7 @@ def test_import_compute_without_restrictions(test_config):
     assert "order_amount" in compute_table.col_idx
     assert "percent_revenue" in compute_table.col_idx
     # fact
-    assert "campaign_channels_budget" in compute_table.col_idx
+    assert "budget" in compute_table.col_idx
     # date attribute label
     assert "date_day" in compute_table.col_idx
     # normal label
@@ -43,8 +43,8 @@ def test_import_compute_without_restrictions(test_config):
     assert compute_table.col_idx["percent_revenue"].type_name == "DECIMAL(24, 1)"
     assert compute_table.col_idx["percent_revenue"].options["id"] == "metric/percent_revenue"
 
-    assert compute_table.col_idx["campaign_channels_budget"].type_name == "DECIMAL(24, 2)"
-    assert compute_table.col_idx["campaign_channels_budget"].options["id"] == "fact/campaign_channels.budget"
+    assert compute_table.col_idx["budget"].type_name == "DECIMAL(24, 2)"
+    assert compute_table.col_idx["budget"].options["id"] == "fact/budget"
 
     assert compute_table.col_idx["date_day"].type_name == "DATE"
     assert compute_table.col_idx["date_day"].options["id"] == "label/date.day"

@@ -33,7 +33,7 @@ def _set_up_workspace_ldm(sdk: GoodDataSdk, workspace_id: str, identifier: str) 
 def test_catalog_list_labels(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     labels_list = sdk.catalog_workspace_content.get_labels_catalog(test_config["workspace"])
-    assert len(labels_list) == 21
+    assert len(labels_list) == 31
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_facts.json"))
@@ -47,7 +47,7 @@ def test_catalog_list_facts(test_config):
 def test_catalog_list_attributes(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     attributes_list = sdk.catalog_workspace_content.get_attributes_catalog(test_config["workspace"])
-    assert len(attributes_list) == 20
+    assert len(attributes_list) == 30
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_metrics.json"))
