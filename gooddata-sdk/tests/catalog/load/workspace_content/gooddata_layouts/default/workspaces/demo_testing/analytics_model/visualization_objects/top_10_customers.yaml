@@ -17,7 +17,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: customers.customer_name
+            id: customer_name
             type: label
         localIdentifier: f4e39e24f11e4827a191c30d65c89d2c
     localIdentifier: view
@@ -25,7 +25,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: customers.state
+            id: state
             type: label
         localIdentifier: bbccd430176d428caed54c99afc9589e
     localIdentifier: stack
@@ -33,14 +33,14 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: customers.customer_name
+          id: customer_name
           type: label
       notIn:
         values: []
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: customers.state
+          id: state
           type: label
       notIn:
         values: []

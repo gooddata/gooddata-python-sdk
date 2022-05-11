@@ -26,7 +26,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: products.product_name
+          id: product_name
           type: label
       notIn:
         values: []

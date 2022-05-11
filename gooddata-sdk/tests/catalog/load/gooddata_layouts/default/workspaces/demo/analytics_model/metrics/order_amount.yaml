@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 content:
   format: $#,##0
-  maql: SELECT SUM({fact/order_lines.price}*{fact/order_lines.quantity})
+  maql: SELECT SUM({fact/price}*{fact/quantity})
 id: order_amount
 title: Order Amount

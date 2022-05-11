@@ -1,10 +1,10 @@
 # (C) 2022 GoodData Corporation
 attributes:
 - description: Campaign id
-  id: campaigns.campaign_id
+  id: campaign_id
   labels:
   - description: Campaign id
-    id: campaigns.campaign_id
+    id: campaign_id
     primary: true
     sourceColumn: campaign_id
     tags:
@@ -14,10 +14,10 @@ attributes:
   - Campaigns
   title: Campaign id
 - description: Campaign name
-  id: campaigns.campaign_name
+  id: campaign_name
   labels:
   - description: Campaign name
-    id: campaigns.campaign_name
+    id: campaign_name
     primary: true
     sourceColumn: campaign_name
     tags:
@@ -33,7 +33,7 @@ dataSourceTableId:
 description: Campaigns
 facts: []
 grain:
-- id: campaigns.campaign_id
+- id: campaign_id
   type: attribute
 id: campaigns
 references: []

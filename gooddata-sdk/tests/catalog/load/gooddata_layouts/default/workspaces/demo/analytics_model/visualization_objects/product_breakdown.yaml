@@ -25,7 +25,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: products.product_name
+            id: product_name
             type: label
         localIdentifier: e920a50e0bbb49788df0aac53634c1cd
     localIdentifier: segment
@@ -40,7 +40,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: products.product_name
+          id: product_name
           type: label
       notIn:
         values: []

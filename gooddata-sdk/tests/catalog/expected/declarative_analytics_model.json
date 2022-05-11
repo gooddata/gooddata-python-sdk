@@ -1,13 +1,432 @@
 {
   "analytics": {
-    "analyticalDashboards": [],
-    "dashboardPlugins": [],
-    "filterContexts": [],
+    "analyticalDashboards": [
+      {
+        "content": {
+          "filterContextRef": {
+            "identifier": {
+              "id": "56201528-be44-4058-8c16-2814db2e3346",
+              "type": "filterContext"
+            }
+          },
+          "layout": {
+            "sections": [
+              {
+                "items": [
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "campaign_spend",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Campaign Spend",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "revenue_per_usd_vs_spend_by_campaign",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Revenue per $ vs Spend by Campaign",
+                      "type": "insight"
+                    }
+                  }
+                ],
+                "type": "IDashboardLayoutSection"
+              }
+            ],
+            "type": "IDashboardLayout"
+          },
+          "version": "2"
+        },
+        "id": "campaign",
+        "title": "Campaign"
+      },
+      {
+        "content": {
+          "filterContextRef": {
+            "identifier": {
+              "id": "56201528-be44-4058-8c16-2814db2e3346",
+              "type": "filterContext"
+            }
+          },
+          "layout": {
+            "sections": [
+              {
+                "items": [
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 12
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "top_10_products",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "DHO simple",
+                      "type": "insight"
+                    }
+                  }
+                ],
+                "type": "IDashboardLayoutSection"
+              }
+            ],
+            "type": "IDashboardLayout"
+          },
+          "plugins": [
+            {
+              "plugin": {
+                "identifier": {
+                  "id": "dashboard_plugin_1",
+                  "type": "dashboardPlugin"
+                }
+              },
+              "version": "2"
+            }
+          ],
+          "version": "2"
+        },
+        "id": "dashboard_plugin",
+        "title": "Dashboard plugin"
+      },
+      {
+        "content": {
+          "filterContextRef": {
+            "identifier": {
+              "id": "7e2e2638-fd5d-4c3c-ab6d-608ee8fcee57",
+              "type": "filterContext"
+            }
+          },
+          "layout": {
+            "sections": [
+              {
+                "items": [
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "top_10_products",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Top 10 Products",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "revenue_trend",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Revenue Trend",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "customers_trend",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Customers Trend",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "product_categories_pie_chart",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Product Categories Pie Chart",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "product_breakdown",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Product Breakdown",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 6
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "product_saleability",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "Product Saleability",
+                      "type": "insight"
+                    }
+                  },
+                  {
+                    "size": {
+                      "xl": {
+                        "gridWidth": 12
+                      }
+                    },
+                    "type": "IDashboardLayoutItem",
+                    "widget": {
+                      "dateDataSet": {
+                        "identifier": {
+                          "id": "date",
+                          "type": "dataset"
+                        }
+                      },
+                      "drills": [],
+                      "ignoreDashboardFilters": [],
+                      "insight": {
+                        "identifier": {
+                          "id": "percent_revenue_per_product_by_customer_and_category",
+                          "type": "visualizationObject"
+                        }
+                      },
+                      "properties": {},
+                      "title": "% Revenue per Product by Customer and Category",
+                      "type": "insight"
+                    }
+                  }
+                ],
+                "type": "IDashboardLayoutSection"
+              }
+            ],
+            "type": "IDashboardLayout"
+          },
+          "version": "2"
+        },
+        "id": "product_and_category",
+        "title": "Product & Category"
+      }
+    ],
+    "dashboardPlugins": [
+      {
+        "content": {
+          "url": "https://www.example.com",
+          "version": "2"
+        },
+        "description": "Testing record dashboard_plugin_1",
+        "id": "dashboard_plugin_1",
+        "title": "dashboard_plugin_1"
+      },
+      {
+        "content": {
+          "url": "https://www.example.com",
+          "version": "2"
+        },
+        "description": "Testing record dashboard_plugin_2",
+        "id": "dashboard_plugin_2",
+        "title": "dashboard_plugin_2"
+      }
+    ],
+    "filterContexts": [
+      {
+        "content": {
+          "filters": [
+            {
+              "dateFilter": {
+                "from": "0",
+                "granularity": "GDC.time.month",
+                "to": "0",
+                "type": "relative"
+              }
+            },
+            {
+              "attributeFilter": {
+                "attributeElements": {
+                  "uris": []
+                },
+                "displayForm": {
+                  "identifier": {
+                    "id": "campaign_name",
+                    "type": "label"
+                  }
+                },
+                "filterElementsBy": [],
+                "localIdentifier": "14b0807447ef4bc28f43e4fc5c337d1d",
+                "negativeSelection": true
+              }
+            }
+          ],
+          "version": "2"
+        },
+        "id": "56201528-be44-4058-8c16-2814db2e3346",
+        "title": "filterContext"
+      },
+      {
+        "content": {
+          "filters": [
+            {
+              "dateFilter": {
+                "from": "0",
+                "granularity": "GDC.time.month",
+                "to": "0",
+                "type": "relative"
+              }
+            },
+            {
+              "attributeFilter": {
+                "attributeElements": {
+                  "uris": []
+                },
+                "displayForm": {
+                  "identifier": {
+                    "id": "region",
+                    "type": "label"
+                  }
+                },
+                "filterElementsBy": [],
+                "localIdentifier": "2d5ef8df82444f6ba27b45f0990ee6af",
+                "negativeSelection": true
+              }
+            }
+          ],
+          "version": "2"
+        },
+        "id": "7e2e2638-fd5d-4c3c-ab6d-608ee8fcee57",
+        "title": "filterContext"
+      }
+    ],
     "metrics": [
       {
         "content": {
           "format": "#,##0",
-          "maql": "SELECT COUNT({attribute/customers.customer_id},{attribute/order_lines.order_line_id})"
+          "maql": "SELECT COUNT({attribute/customer_id},{attribute/order_line_id})"
         },
         "id": "amount_of_active_customers",
         "title": "# of Active Customers"
@@ -15,7 +434,7 @@
       {
         "content": {
           "format": "#,##0",
-          "maql": "SELECT COUNT({attribute/order_lines.order_id})"
+          "maql": "SELECT COUNT({attribute/order_id})"
         },
         "id": "amount_of_orders",
         "title": "# of Orders"
@@ -23,7 +442,7 @@
       {
         "content": {
           "format": "#,##0",
-          "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customers.customer_id}) >  10000 "
+          "maql": "SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue} BY {attribute/customer_id}) >  10000 "
         },
         "id": "amount_of_top_customers",
         "title": "# of Top Customers"
@@ -31,7 +450,7 @@
       {
         "content": {
           "format": "#,##0.00",
-          "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
+          "maql": "SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
         },
         "id": "amount_of_valid_orders",
         "title": "# of Valid Orders"
@@ -39,7 +458,7 @@
       {
         "content": {
           "format": "$#,##0",
-          "maql": "SELECT SUM({fact/campaign_channels.spend})"
+          "maql": "SELECT SUM({fact/spend})"
         },
         "id": "campaign_spend",
         "title": "Campaign Spend"
@@ -47,7 +466,7 @@
       {
         "content": {
           "format": "$#,##0",
-          "maql": "SELECT SUM({fact/order_lines.price}*{fact/order_lines.quantity})"
+          "maql": "SELECT SUM({fact/price}*{fact/quantity})"
         },
         "id": "order_amount",
         "title": "Order Amount"
@@ -63,7 +482,7 @@
       {
         "content": {
           "format": "#,##0.0%",
-          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
+          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
         },
         "id": "percent_revenue_from_top_10_customers",
         "title": "% Revenue from Top 10 Customers"
@@ -71,7 +490,7 @@
       {
         "content": {
           "format": "#,##0.0%",
-          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customers.customer_id}) > 0)\n  /\n {metric/revenue}"
+          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
         },
         "id": "percent_revenue_from_top_10_percent_customers",
         "title": "% Revenue from Top 10% Customers"
@@ -79,7 +498,7 @@
       {
         "content": {
           "format": "#,##0.0%",
-          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
+          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
         },
         "id": "percent_revenue_from_top_10_percent_products",
         "title": "% Revenue from Top 10% Products"
@@ -87,7 +506,7 @@
       {
         "content": {
           "format": "#,##0.0%",
-          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/products.product_id}) > 0)\n  /\n {metric/revenue}"
+          "maql": "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10} BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
         },
         "id": "percent_revenue_from_top_10_products",
         "title": "% Revenue from Top 10 Products"
@@ -103,7 +522,7 @@
       {
         "content": {
           "format": "#,##0.0%",
-          "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/products.product_id})"
+          "maql": "SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})"
         },
         "id": "percent_revenue_per_product",
         "title": "% Revenue per Product"
@@ -111,7 +530,7 @@
       {
         "content": {
           "format": "$#,##0",
-          "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_lines.order_status} IN (\"null\", \"Returned\", \"Canceled\"))"
+          "maql": "SELECT {metric/order_amount} WHERE NOT ({label/order_status} IN (\"Returned\", \"Canceled\"))"
         },
         "id": "revenue",
         "title": "Revenue"
@@ -151,7 +570,7 @@
       {
         "content": {
           "format": "$#,##0.0",
-          "maql": "SELECT AVG(SELECT {metric/revenue} BY {attribute/customers.customer_id})"
+          "maql": "SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})"
         },
         "id": "revenue_per_customer",
         "title": "Revenue per Customer"
@@ -245,7 +664,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "campaigns.campaign_name",
+                        "id": "campaign_name",
                         "type": "label"
                       }
                     },
@@ -261,7 +680,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "campaign_channels.type",
+                    "id": "type",
                     "type": "label"
                   }
                 },
@@ -287,7 +706,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "campaigns.campaign_name",
+                    "id": "campaign_name",
                     "type": "label"
                   }
                 },
@@ -482,7 +901,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "customers.customer_name",
+                        "id": "customer_name",
                         "type": "label"
                       }
                     },
@@ -504,7 +923,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -520,7 +939,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "customers.customer_name",
+                    "id": "customer_name",
                     "type": "label"
                   }
                 },
@@ -546,7 +965,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -619,7 +1038,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "customers.region",
+                        "id": "region",
                         "type": "label"
                       }
                     },
@@ -635,7 +1054,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "customers.region",
+                    "id": "region",
                     "type": "label"
                   }
                 },
@@ -719,7 +1138,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -748,7 +1167,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -819,7 +1238,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -923,7 +1342,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -1037,7 +1456,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -1053,7 +1472,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -1093,7 +1512,7 @@
                         "filters": [],
                         "item": {
                           "identifier": {
-                            "id": "order_lines.quantity",
+                            "id": "quantity",
                             "type": "fact"
                           }
                         }
@@ -1112,7 +1531,7 @@
                         "filters": [],
                         "item": {
                           "identifier": {
-                            "id": "order_lines.price",
+                            "id": "price",
                             "type": "fact"
                           }
                         }
@@ -1178,7 +1597,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -1194,7 +1613,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "customers.customer_name",
+                    "id": "customer_name",
                     "type": "label"
                   }
                 },
@@ -1207,7 +1626,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -1374,7 +1793,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -1390,7 +1809,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },
@@ -1460,7 +1879,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "campaigns.campaign_name",
+                        "id": "campaign_name",
                         "type": "label"
                       }
                     },
@@ -1476,7 +1895,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "campaigns.campaign_name",
+                    "id": "campaign_name",
                     "type": "label"
                   }
                 },
@@ -1642,7 +2061,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "customers.customer_name",
+                        "id": "customer_name",
                         "type": "label"
                       }
                     },
@@ -1658,7 +2077,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "customers.state",
+                        "id": "state",
                         "type": "label"
                       }
                     },
@@ -1674,7 +2093,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "customers.customer_name",
+                    "id": "customer_name",
                     "type": "label"
                   }
                 },
@@ -1687,7 +2106,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "customers.state",
+                    "id": "state",
                     "type": "label"
                   }
                 },
@@ -1741,7 +2160,7 @@
                   "attribute": {
                     "displayForm": {
                       "identifier": {
-                        "id": "products.product_name",
+                        "id": "product_name",
                         "type": "label"
                       }
                     },
@@ -1773,7 +2192,7 @@
               "negativeAttributeFilter": {
                 "displayForm": {
                   "identifier": {
-                    "id": "products.product_name",
+                    "id": "product_name",
                     "type": "label"
                   }
                 },

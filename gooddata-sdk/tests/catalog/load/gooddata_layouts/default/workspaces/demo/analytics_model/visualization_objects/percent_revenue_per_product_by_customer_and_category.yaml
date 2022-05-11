@@ -27,7 +27,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: customers.customer_name
+            id: customer_name
             type: label
         localIdentifier: 7a4045fd00ac44579f52406df679435f
     - attribute:
@@ -39,7 +39,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: products.product_name
+            id: product_name
             type: label
         localIdentifier: 75ea396d0c8b48098e31dccf8b5801d3
     localIdentifier: attribute
@@ -47,7 +47,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: customers.customer_name
+          id: customer_name
           type: label
       notIn:
         values: []
@@ -61,7 +61,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: products.product_name
+          id: product_name
           type: label
       notIn:
         values: []

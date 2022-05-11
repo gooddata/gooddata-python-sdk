@@ -1,10 +1,10 @@
 # (C) 2022 GoodData Corporation
 attributes:
 - description: Customer id
-  id: customers.customer_id
+  id: customer_id
   labels:
   - description: Customer id
-    id: customers.customer_id
+    id: customer_id
     primary: true
     sourceColumn: customer_id
     tags:
@@ -14,10 +14,10 @@ attributes:
   - Customers
   title: Customer id
 - description: Customer name
-  id: customers.customer_name
+  id: customer_name
   labels:
   - description: Customer name
-    id: customers.customer_name
+    id: customer_name
     primary: true
     sourceColumn: customer_name
     tags:
@@ -27,10 +27,10 @@ attributes:
   - Customers
   title: Customer name
 - description: Region
-  id: customers.region
+  id: region
   labels:
   - description: Region
-    id: customers.region
+    id: region
     primary: true
     sourceColumn: region
     tags:
@@ -40,17 +40,17 @@ attributes:
   - Customers
   title: Region
 - description: State
-  id: customers.state
+  id: state
   labels:
   - description: Location
-    id: customers.geo__state__location
+    id: geo__state__location
     primary: false
     sourceColumn: geo__state__location
     tags:
     - Customers
     title: Location
   - description: State
-    id: customers.state
+    id: state
     primary: true
     sourceColumn: state
     tags:
@@ -66,7 +66,7 @@ dataSourceTableId:
 description: Customers
 facts: []
 grain:
-- id: customers.customer_id
+- id: customer_id
   type: attribute
 id: customers
 references: []

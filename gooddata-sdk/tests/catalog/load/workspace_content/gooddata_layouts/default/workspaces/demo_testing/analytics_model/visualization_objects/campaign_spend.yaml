@@ -25,7 +25,7 @@ content:
     - attribute:
         displayForm:
           identifier:
-            id: campaigns.campaign_name
+            id: campaign_name
             type: label
         localIdentifier: d9dd143d647d4d148405a60ec2cf59bc
     localIdentifier: segment
@@ -33,7 +33,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: campaign_channels.type
+          id: type
           type: label
       notIn:
         values: []
@@ -47,7 +47,7 @@ content:
   - negativeAttributeFilter:
       displayForm:
         identifier:
-          id: campaigns.campaign_name
+          id: campaign_name
           type: label
       notIn:
         values: []

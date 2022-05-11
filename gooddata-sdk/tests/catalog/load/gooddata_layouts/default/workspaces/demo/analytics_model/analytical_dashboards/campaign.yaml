@@ -1,0 +1,42 @@
+# (C) 2022 GoodData Corporation
+content:
+  filterContextRef:
+    identifier:
+      id: 56201528-be44-4058-8c16-2814db2e3346
+      type: filterContext
+  layout:
+    sections:
+    - items:
+      - size:
+          xl:
+            gridWidth: 6
+        type: IDashboardLayoutItem
+        widget:
+          drills: []
+          ignoreDashboardFilters: []
+          insight:
+            identifier:
+              id: campaign_spend
+              type: visualizationObject
+          properties: {}
+          title: Campaign Spend
+          type: insight
+      - size:
+          xl:
+            gridWidth: 6
+        type: IDashboardLayoutItem
+        widget:
+          drills: []
+          ignoreDashboardFilters: []
+          insight:
+            identifier:
+              id: revenue_per_usd_vs_spend_by_campaign
+              type: visualizationObject
+          properties: {}
+          title: Revenue per $ vs Spend by Campaign
+          type: insight
+      type: IDashboardLayoutSection
+    type: IDashboardLayout
+  version: '2'
+id: campaign
+title: Campaign
