@@ -289,9 +289,9 @@ class CatalogAnalyticsBase:
 
     def get_kwargs(self) -> dict[str, Any]:
         kwargs: dict[str, Any] = dict()
-        if self.description:
+        if self.description is not None:
             kwargs["description"] = self.description
-        if self.tags:
+        if self.tags is not None:
             kwargs["tags"] = self.tags
         return kwargs
 
