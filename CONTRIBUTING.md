@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.9 installed; Python 3.8 and 3.7 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.10 installed; Python 3.9, 3.8 and 3.7 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -87,7 +87,7 @@ Tests triggered by make can be controlled via these environment variables:
 - `TEST_ENVS` - define tox test environments (targets) as comma-separated list, by default all tox default targets are
   executed
   ```bash
-  TEST_ENVS=py39,py37 make test
+  TEST_ENVS=py310,py39 make test
   ```
 - `ADD_ARGS` - send additional arguments to pytest tool, useful for pin-pointing just part of tests
   ```bash

@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "gooddata-sdk~=0.8.0",
-    'importlib-metadata >= 1.0 ; python_version < "3.8"',
+    'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     #    "multicorn>=1.4.0",
 ]
 
@@ -38,6 +38,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Database",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",
