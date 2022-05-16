@@ -2,10 +2,13 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import List, Optional, Type
+
+import attr
 
 from gooddata_metadata_client.model.declarative_ldm import DeclarativeLdm
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
+from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
     LAYOUT_DATASETS_DIR,
     CatalogDeclarativeDataset,
@@ -19,33 +22,13 @@ from gooddata_sdk.utils import create_directory, get_sorted_yaml_files
 LAYOUT_LDM_DIR = "ldm"
 
 
-class CatalogDeclarativeModel:
-    def __init__(self, ldm: CatalogDeclarativeLdm = None):
-        self.ldm = ldm
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeModel(Base):
+    ldm: Optional[CatalogDeclarativeLdm] = None
 
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> CatalogDeclarativeModel:
-        ldm = CatalogDeclarativeLdm.from_api(entity["ldm"]) if entity.get("ldm") else None
-        return cls(ldm)
-
-    def to_api(self) -> DeclarativeModel:
-        kwargs: dict[str, Any] = dict()
-        if self.ldm:
-            kwargs["ldm"] = self.ldm.to_api()
-        return DeclarativeModel(**kwargs)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeModel:
-        """
-        :param data:    Data loaded for example from the file.
-        :param camel_case:  True if the variable names in the input
-                        data are serialized names as specified in the OpenAPI document.
-                        False if the variables names in the input data are python
-                        variable names in PEP-8 snake case.
-        :return:    CatalogDeclarativeModel object.
-        """
-        declarative_model = DeclarativeModel.from_dict(data, camel_case)
-        return cls.from_api(declarative_model)
+    @staticmethod
+    def client_class() -> Type[DeclarativeModel]:
+        return DeclarativeModel
 
     def store_to_disk(self, workspace_folder: Path) -> None:
         if self.ldm is not None:
@@ -64,37 +47,15 @@ class CatalogDeclarativeModel:
         ldm = CatalogDeclarativeLdm.load_from_disk(workspace_folder)
         return cls(ldm=ldm)
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, CatalogDeclarativeModel):
-            return False
-        return self.ldm == other.ldm
 
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeLdm(Base):
+    datasets: List[CatalogDeclarativeDataset] = []
+    date_instances: List[CatalogDeclarativeDateDataset] = []
 
-class CatalogDeclarativeLdm:
-    def __init__(
-        self,
-        datasets: list[CatalogDeclarativeDataset] = None,
-        date_instances: list[CatalogDeclarativeDateDataset] = None,
-    ):
-        self.datasets = datasets or []
-        self.date_instances = date_instances or []
-
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> CatalogDeclarativeLdm:
-        datasets = [CatalogDeclarativeDataset.from_api(v) for v in entity["datasets"]] if entity.get("datasets") else []
-        date_instances = (
-            [CatalogDeclarativeDateDataset.from_api(v) for v in entity["date_instances"]]
-            if entity.get("date_instances")
-            else []
-        )
-        return cls(datasets, date_instances)
-
-    def to_api(self) -> DeclarativeLdm:
-        kwargs: dict[str, Any] = {
-            "datasets": [v.to_api() for v in self.datasets],
-            "date_instances": [v.to_api() for v in self.date_instances],
-        }
-        return DeclarativeLdm(**kwargs)
+    @staticmethod
+    def client_class() -> Type[DeclarativeLdm]:
+        return DeclarativeLdm
 
     @staticmethod
     def get_ldm_folder(workspace_folder: Path) -> Path:
@@ -139,8 +100,3 @@ class CatalogDeclarativeLdm:
             for date_instance_file in date_instance_files
         ]
         return cls(datasets=datasets, date_instances=date_instances)
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, CatalogDeclarativeLdm):
-            return False
-        return self.datasets == other.datasets and self.date_instances == other.date_instances

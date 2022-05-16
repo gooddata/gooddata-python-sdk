@@ -2,9 +2,12 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Dict, List, Type
+
+import attr
 
 from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
+from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable
 from gooddata_sdk.utils import create_directory
 
@@ -15,39 +18,19 @@ def get_pdm_folder(data_source_folder: Path) -> Path:
     return data_source_folder / LAYOUT_PDM_DIR
 
 
-class CatalogDeclarativeTables:
-    def __init__(
-        self,
-        tables: list[CatalogDeclarativeTable],
-    ):
-        self.tables = tables
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeTables(Base):
+    tables: List[CatalogDeclarativeTable] = []
 
-    @classmethod
-    def from_api(cls, entity: dict[str, list[Any]]) -> CatalogDeclarativeTables:
-        tables = [CatalogDeclarativeTable.from_api(v) for v in entity["tables"]] if entity.get("tables") else []
-        return cls(tables)
-
-    def to_api(self) -> DeclarativeTables:
-        return DeclarativeTables(tables=[v.to_api() for v in self.tables])
+    @staticmethod
+    def client_class() -> Type[DeclarativeTables]:
+        return DeclarativeTables
 
     def store_to_disk(self, data_source_folder: Path) -> None:
         pdm_folder = get_pdm_folder(data_source_folder)
         create_directory(pdm_folder)
         for table in self.tables:
             table.store_to_disk(pdm_folder)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeTables:
-        """
-        :param data:    Data loaded for example from the file.
-        :param camel_case:  True if the variable names in the input
-                        data are serialized names as specified in the OpenAPI document.
-                        False if the variables names in the input data are python
-                        variable names in PEP-8 snake case.
-        :return:    DeclarativeTables object.
-        """
-        declarative_data_sources = DeclarativeTables.from_dict(data, camel_case)
-        return cls.from_api(declarative_data_sources)
 
     @classmethod
     def load_from_disk(cls, data_source_folder: Path) -> CatalogDeclarativeTables:
@@ -58,24 +41,9 @@ class CatalogDeclarativeTables:
             tables.append(CatalogDeclarativeTable.load_from_disk(table_file))
         return cls(tables=tables)
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, CatalogDeclarativeTables):
-            return False
-        return self.tables == other.tables
 
-
-class CatalogScanResultPdm:
-    def __init__(
-        self,
-        pdm: CatalogDeclarativeTables,
-        # Just informative hints. Create appropriate classes later if needed.
-        warnings: list[dict],
-    ):
-        self.pdm = pdm
-        self.warnings = warnings
-
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> CatalogScanResultPdm:
-        tables = CatalogDeclarativeTables.from_api(entity.get("pdm", {"tables": []}))
-        warnings = entity.get("warnings", [])
-        return cls(pdm=tables, warnings=warnings)
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogScanResultPdm(Base):
+    pdm: CatalogDeclarativeTables = CatalogDeclarativeTables()
+    # Just informative hints. Create appropriate classes later if needed.
+    warnings: List[Dict] = []
