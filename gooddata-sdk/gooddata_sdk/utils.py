@@ -3,8 +3,9 @@ from __future__ import annotations
 
 import functools
 import os
+import re
 from pathlib import Path
-from typing import Any, Dict, NamedTuple, Union, cast
+from typing import Any, Callable, Dict, NamedTuple, Union, cast
 
 import yaml
 
@@ -101,6 +102,14 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
     return all_paged_entities
 
 
+def load_all_entities_dict(
+    get_page_func: functools.partial[Any], page_size: int = 500, camel_case: bool = False
+) -> dict[str, Any]:
+    all_entities = load_all_entities(get_page_func, page_size)
+    all_entities_dict = {"data": all_entities.data, "included": all_entities.included}
+    return all_entities_dict if camel_case else change_case(all_entities_dict, camel_to_snake)
+
+
 class SideLoads:
     def __init__(self, objs: list[Any]) -> None:
         self._objects = dict([(f"{o['type']}/{o['id']}", o) for o in objs])
@@ -148,3 +157,28 @@ def read_layout_from_file(path: Path) -> Any:
             return yaml.safe_load(f)
     except yaml.YAMLError as exc:
         raise ValueError(f"File [{path}] has wrong yaml format. Following exception was raised during loading: {exc}")
+
+
+def camel_to_snake(camel_case_str: str) -> str:
+    return re.sub(r"([A-Z]+)", r"_\1", camel_case_str).lower()
+
+
+def snake_to_camel(snake_case_str: str) -> str:
+    components = snake_case_str.split("_")
+    return components[0] + "".join(x.title() for x in components[1:])
+
+
+def change_case_helper(value: Union[list, dict, str], case: Callable[[str], str]) -> Union[list, dict, str]:
+    if isinstance(value, list):
+        return [change_case_helper(v, case) for v in value]
+    elif isinstance(value, dict):
+        return change_case(value, case)
+    else:
+        return value
+
+
+def change_case(dictionary: dict, case: Callable[[str], str]) -> dict:
+    temp = dict()
+    for k, v in dictionary.items():
+        temp[case(k)] = change_case_helper(v, case)
+    return temp

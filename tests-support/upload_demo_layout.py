@@ -88,7 +88,7 @@ def create_entity(entity_id, entity_data, entity_type, api_path, action):
 
 def update_layout():
 
-    user_group = read_data_from_file(fixtures_dir / "user_group.json")
+    user_groups = read_data_from_file(fixtures_dir / "user_groups.json")
     user_auth = read_data_from_file(fixtures_dir / "user_auth.json")
     user = read_data_from_file(fixtures_dir / "user.json")
     data_sources = read_data_from_file(fixtures_dir / "demo_data_sources.json")
@@ -98,7 +98,9 @@ def update_layout():
     # TODO: use python-sdk support
     wait_platform_up()
 
-    create_entity(user_group["data"]["id"], user_group, "userGroups", "api/entities/userGroups", rest_op_jsonapi)
+    print("Uploading userGroups", flush=True)
+    rest_op_default("put", "api/layout/userGroups", user_groups)
+
     response = create_entity(user_auth["email"], user_auth, "user auth", "api/auth/users", rest_op_default)
     user["data"]["attributes"]["authenticationId"] = response["authenticationId"]
     create_entity(user["data"]["id"], user, "user", "api/entities/users", rest_op_jsonapi)

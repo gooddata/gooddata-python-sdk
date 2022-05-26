@@ -1,0 +1,28 @@
+{
+  "userGroups": [
+    {
+      "id": "adminGroup"
+    },
+    {
+      "id": "demoGroup"
+    },
+    {
+      "id": "adminQA1Group",
+      "parents": [
+        {
+          "id": "adminGroup",
+          "type": "userGroup"
+        }
+      ]
+    },
+    {
+      "id": "visitorsGroup",
+      "parents": [
+        {
+          "id": "demoGroup",
+          "type": "userGroup"
+        }
+      ]
+    }
+  ]
+}

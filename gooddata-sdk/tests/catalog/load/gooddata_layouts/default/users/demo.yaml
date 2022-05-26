@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+authId: CiRiYWNhZjYxYS00Y2NmLTQxODEtOWE5OC05ZTI5YjExYTBhMDASBWxvY2Fs
+id: demo
+userGroups:
+- id: adminGroup
+  type: userGroup
