@@ -6,7 +6,7 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 import pandas
-from pandas.core.index import Index, MultiIndex
+from pandas import Index, MultiIndex
 
 from gooddata_sdk import Attribute, CatalogAttribute, InsightAttribute, InsightMetric, Metric, ObjId, SimpleMetric
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
