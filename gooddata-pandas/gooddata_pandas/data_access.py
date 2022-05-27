@@ -258,7 +258,7 @@ def _extract_from_attributes_and_maybe_metrics(
                 rs = result.get_all_header_values(attribute_dim, col_to_attr_idx[col])
                 attribute = col_to_attribute[col]
                 data[col] += _typed_result(catalog, attribute, rs)
-            else:
+            elif col_to_metric_idx[col] < len(result.data):
                 data[col] += result.data[col_to_metric_idx[col]]
         if result.is_complete(attribute_dim):
             break

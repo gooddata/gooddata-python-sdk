@@ -61,3 +61,19 @@ def test_not_indexed_filtered_metrics_and_labels(gdf: DataFrameFactory):
     assert df.columns[0] == "reg"
     assert df.columns[1] == "order_amount"
     assert df.columns[2] == "order_count"
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "empty_not_indexed_dataframe.json"))
+def test_empty_not_indexed_dataframe(gdf: DataFrameFactory):
+    df = gdf.not_indexed(
+        columns=dict(
+            product_name="label/product_name",
+            amount_of_top_customers="metric/amount_of_top_customers",
+            total_revenue="metric/total_revenue-no_filters",
+        ),
+    )
+
+    assert df.empty
+    assert df.columns[0] == "product_name"
+    assert df.columns[1] == "amount_of_top_customers"
+    assert df.columns[2] == "total_revenue"

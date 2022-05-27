@@ -197,3 +197,18 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     assert df.columns[0] == "order_amount"
     assert df.columns[1] == "order_count"
     assert df.columns[2] == "reg"
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "empty_indexed_dataframe.json"))
+def test_empty_indexed_dataframe(gdf: DataFrameFactory):
+    df = gdf.indexed(
+        index_by="label/product_name",
+        columns=dict(
+            amount_of_top_customers="metric/amount_of_top_customers",
+            total_revenue="metric/total_revenue-no_filters",
+        ),
+    )
+
+    assert df.empty
+    assert df.columns[0] == "amount_of_top_customers"
+    assert df.columns[1] == "total_revenue"
