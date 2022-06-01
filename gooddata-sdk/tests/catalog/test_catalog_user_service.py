@@ -51,7 +51,9 @@ def test_create_delete_user(test_config):
 
     try:
         assert len(sdk.catalog_user.list_users()) == 3
-        sdk.catalog_user.create_user(user_id=user_id, authentication_id=authentication_id, user_groups=user_groups)
+        sdk.catalog_user.create_or_update_user(
+            user_id=user_id, authentication_id=authentication_id, user_groups=user_groups
+        )
         user = sdk.catalog_user.get_user(user_id)
         assert len(sdk.catalog_user.list_users()) == 4
         assert user.id == user_id
@@ -59,6 +61,26 @@ def test_create_delete_user(test_config):
         assert user.attributes.authentication_id == authentication_id
     finally:
         sdk.catalog_user.delete_user(user_id)
+        assert len(sdk.catalog_user.list_users()) == 3
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_user.json"))
+def test_update_user(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["test_user"]
+    user = sdk.catalog_user.get_user(user_id)
+    new_auth_id = f"{user_id}_123"
+    new_user_groups = ["demoGroup", "visitorsGroup"]
+    try:
+        sdk.catalog_user.create_or_update_user(user_id, new_auth_id, new_user_groups)
+        updated_user = sdk.catalog_user.get_user(user_id)
+        assert updated_user.attributes.authentication_id == new_auth_id
+        assert len(updated_user.get_user_groups) == len(new_user_groups)
+        assert set(updated_user.get_user_groups) == set(new_user_groups)
+
+    finally:
+        sdk.catalog_user.delete_user(user_id)
+        sdk.catalog_user.create_or_update_user(user.id, user.attributes.authentication_id, user.get_user_groups)
         assert len(sdk.catalog_user.list_users()) == 3
 
 
@@ -93,13 +115,34 @@ def test_create_delete_user_group(test_config):
 
     try:
         assert len(sdk.catalog_user.list_user_groups()) == 4
-        sdk.catalog_user.create_user_group(user_group_id=user_group_id, user_group_parents_id=user_group_parents_id)
+        sdk.catalog_user.create_or_update_user_group(
+            user_group_id=user_group_id, user_group_parents_id=user_group_parents_id
+        )
         user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert len(sdk.catalog_user.list_user_groups()) == 5
         assert user_group.id == user_group_id
         assert [p.id for p in user_group.relationships.parents.data] == user_group_parents_id
     finally:
         sdk.catalog_user.delete_user_group(user_group_id)
+        assert len(sdk.catalog_user.list_user_groups()) == 4
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_user_group.json"))
+def test_update_user_group(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_group_id = test_config["test_user_group"]
+    user_group = sdk.catalog_user.get_user_group(user_group_id)
+    user_group_parent_ids = []
+
+    try:
+        sdk.catalog_user.create_or_update_user_group(user_group_id, user_group_parent_ids)
+        updated_user_group = sdk.catalog_user.get_user_group(user_group_id)
+        assert user_group.id == updated_user_group.id
+        assert len(updated_user_group.get_parents) == len(user_group_parent_ids)
+        assert set(updated_user_group.get_parents) == set(user_group_parent_ids)
+    finally:
+        sdk.catalog_user.delete_user(user_group_id)
+        sdk.catalog_user.create_or_update_user_group(user_group_id, user_group.get_parents)
         assert len(sdk.catalog_user.list_user_groups()) == 4
 
 
