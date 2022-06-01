@@ -5,6 +5,7 @@ import functools
 from pathlib import Path
 from typing import List, Optional
 
+from gooddata_metadata_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
@@ -38,11 +39,17 @@ class CatalogUserService(CatalogServiceBase):
         )
         return CatalogUser.from_dict(user_dict, camel_case=False)
 
-    def create_user(
+    def create_or_update_user(
         self, user_id: str, authentication_id: Optional[str] = None, user_groups: Optional[list[str]] = None
     ) -> None:
-        user_document = CatalogUserDocument.create_user(user_id, authentication_id, user_groups)
-        self._entities_api.create_entity_users(json_api_user_in_document=user_document.to_api())
+        try:
+            user = self.get_user(user_id=user_id)
+            user_document = CatalogUserDocument(data=user)
+            user_document.update_user(authentication_id=authentication_id, user_group_ids=user_groups)
+            self._entities_api.update_entity_users(id=user_id, json_api_user_in_document=user_document.to_api())
+        except NotFoundException:
+            user_document = CatalogUserDocument.create_user(user_id, authentication_id, user_groups)
+            self._entities_api.create_entity_users(json_api_user_in_document=user_document.to_api())
 
     def delete_user(self, user_id: str) -> None:
         self._entities_api.delete_entity_users(id=user_id)
@@ -53,11 +60,21 @@ class CatalogUserService(CatalogServiceBase):
         )
         return CatalogUserGroup.from_dict(user_group, camel_case=False)
 
-    def create_user_group(self, user_group_id: str, user_group_parents_id: Optional[List[str]] = None) -> None:
-        user_group_document = CatalogUserGroupDocument.create_user_group(
-            user_group_id=user_group_id, user_group_parents_id=user_group_parents_id
-        )
-        self._entities_api.create_entity_user_groups(user_group_document.to_api())
+    def create_or_update_user_group(
+        self, user_group_id: str, user_group_parents_id: Optional[List[str]] = None
+    ) -> None:
+        try:
+            user_group = self.get_user_group(user_group_id=user_group_id)
+            user_group_document = CatalogUserGroupDocument(data=user_group)
+            user_group_document.update_user_group(user_group_parents_id=user_group_parents_id)
+            self._entities_api.update_entity_user_groups(
+                id=user_group_id, json_api_user_group_in_document=user_group_document.to_api()
+            )
+        except NotFoundException:
+            user_group_document = CatalogUserGroupDocument.create_user_group(
+                user_group_id=user_group_id, user_group_parents_id=user_group_parents_id
+            )
+            self._entities_api.create_entity_user_groups(user_group_document.to_api())
 
     def delete_user_group(self, user_group_id: str) -> None:
         self._entities_api.delete_entity_user_groups(id=user_group_id)
