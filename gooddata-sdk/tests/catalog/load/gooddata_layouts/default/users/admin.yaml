@@ -1,5 +1,0 @@
-# (C) 2022 GoodData Corporation
-id: admin
-userGroups:
-- id: adminGroup
-  type: userGroup

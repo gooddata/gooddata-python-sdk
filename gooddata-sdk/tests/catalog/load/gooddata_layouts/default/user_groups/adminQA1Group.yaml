@@ -1,5 +1,0 @@
-# (C) 2022 GoodData Corporation
-id: adminQA1Group
-parents:
-- id: adminGroup
-  type: userGroup

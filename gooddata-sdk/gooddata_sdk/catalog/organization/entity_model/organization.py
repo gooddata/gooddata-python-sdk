@@ -1,33 +1,49 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any
+from typing import List, Optional, Type
+
+import attr
 
 from gooddata_metadata_client.model.json_api_organization_in import JsonApiOrganizationIn
 from gooddata_metadata_client.model.json_api_organization_in_attributes import JsonApiOrganizationInAttributes
 from gooddata_metadata_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
-from gooddata_sdk.catalog.entity import CatalogNameEntity
+from gooddata_sdk.catalog.base import Base
 
 
-class CatalogOrganization(CatalogNameEntity):
-    def __init__(self, organization_id: str, name: str, hostname: str) -> None:
-        super(CatalogOrganization, self).__init__(organization_id, name)
-        self.hostname = hostname
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogOrganizationDocument(Base):
+    data: CatalogOrganization
 
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> CatalogOrganization:
-        ea = entity["attributes"]
-        return cls(organization_id=entity["id"], name=ea["name"], hostname=ea["hostname"])
+    @staticmethod
+    def client_class() -> Type[JsonApiOrganizationInDocument]:
+        return JsonApiOrganizationInDocument
 
-    def to_api(self) -> JsonApiOrganizationInDocument:
-        return JsonApiOrganizationInDocument(
-            data=JsonApiOrganizationIn(
-                id=self.id,
-                attributes=JsonApiOrganizationInAttributes(name=self.name, hostname=self.hostname),
-            )
-        )
+    def to_api(self, oauth_client_secret: Optional[str] = None) -> JsonApiOrganizationInDocument:
+        dictionary = self._get_snake_dict()
+        if oauth_client_secret is not None:
+            dictionary["data"]["attributes"]["oauth_client_secret"] = oauth_client_secret
+        return self.client_class().from_dict(dictionary, camel_case=False)
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, CatalogOrganization):
-            return False
-        return self.id == other.id and self.name == other.name and self.hostname == other.hostname
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogOrganization(Base):
+    id: str
+    attributes: CatalogOrganizationAttributes
+
+    @staticmethod
+    def client_class() -> Type[JsonApiOrganizationIn]:
+        return JsonApiOrganizationIn
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogOrganizationAttributes(Base):
+    name: Optional[str] = None
+    hostname: Optional[str] = None
+    allowed_origins: Optional[List[str]] = None
+    oauth_issuer_location: Optional[str] = None
+    oauth_client_id: Optional[str] = None
+
+    @staticmethod
+    def client_class() -> Type[JsonApiOrganizationInAttributes]:
+        return JsonApiOrganizationInAttributes

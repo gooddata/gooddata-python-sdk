@@ -10,9 +10,10 @@ from gooddata_metadata_client.model.declarative_user import DeclarativeUser
 from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserGroupIdentifier
-from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
+from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
 LAYOUT_USERS_DIR = "users"
+LAYOUT_USERS_FILE = "users.yaml"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -26,17 +27,19 @@ class CatalogDeclarativeUsers(Base):
     @classmethod
     def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeUsers:
         users_directory = layout_organization_folder / LAYOUT_USERS_DIR
-        user_files = get_sorted_yaml_files(users_directory)
+        users_file = users_directory / LAYOUT_USERS_FILE
+        data = read_layout_from_file(users_file)
         users = []
-        for user_file in user_files:
-            users.append(CatalogDeclarativeUser.load_from_disk(user_file))
+        for record in data:
+            users.append(CatalogDeclarativeUser.from_dict(record, camel_case=True))
         return cls(users=users)
 
     def store_to_disk(self, layout_organization_folder: Path) -> None:
         users_directory = layout_organization_folder / LAYOUT_USERS_DIR
+        users_file = users_directory / LAYOUT_USERS_FILE
         create_directory(users_directory)
-        for user in self.users:
-            user.store_to_disk(users_directory)
+        users = [user.to_dict(camel_case=True) for user in self.users]
+        write_layout_to_file(users_file, users)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -48,13 +51,3 @@ class CatalogDeclarativeUser(Base):
     @staticmethod
     def client_class() -> Type[DeclarativeUser]:
         return DeclarativeUser
-
-    def store_to_disk(self, users_directory: Path) -> None:
-        user_path = users_directory / f"{self.id}.yaml"
-        user_data = self.to_dict(camel_case=True)
-        write_layout_to_file(user_path, user_data)
-
-    @classmethod
-    def load_from_disk(cls, users_directory: Path) -> CatalogDeclarativeUser:
-        data = read_layout_from_file(users_directory)
-        return cls.from_dict(data, camel_case=True)
