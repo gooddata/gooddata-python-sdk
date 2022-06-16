@@ -2,40 +2,22 @@
 attributes:
 - description: Order id
   id: order_id
-  labels:
-  - description: Order id
-    id: order_id
-    primary: true
-    sourceColumn: order_id
-    tags:
-    - Order lines
-    title: Order id
+  labels: []
+  sourceColumn: order_id
   tags:
   - Order lines
   title: Order id
 - description: Order line id
   id: order_line_id
-  labels:
-  - description: Order line id
-    id: order_line_id
-    primary: true
-    sourceColumn: order_line_id
-    tags:
-    - Order lines
-    title: Order line id
+  labels: []
+  sourceColumn: order_line_id
   tags:
   - Order lines
   title: Order line id
 - description: Order status
   id: order_status
-  labels:
-  - description: Order status
-    id: order_status
-    primary: true
-    sourceColumn: order_status
-    tags:
-    - Order lines
-    title: Order status
+  labels: []
+  sourceColumn: order_status
   tags:
   - Order lines
   title: Order status

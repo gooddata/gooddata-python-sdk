@@ -26,14 +26,14 @@
         },
         {
             "absolute_date_filter": {
-                "_from": "2021/1/1",
+                "_from": "2021-07-01 18:23",
                 "dataset": {
                     "identifier": {
                         "id": "closed.dt",
                         "type": "dataset"
                     }
                 },
-                "to": "2021/1/2"
+                "to": "2021-07-16 18:23"
             }
         }
     ],

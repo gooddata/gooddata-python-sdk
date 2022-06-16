@@ -17,5 +17,6 @@ content:
       localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
       negativeSelection: true
   version: '2'
-id: 56201528-be44-4058-8c16-2814db2e3346
+description: ''
+id: campaign_name_filter
 title: filterContext

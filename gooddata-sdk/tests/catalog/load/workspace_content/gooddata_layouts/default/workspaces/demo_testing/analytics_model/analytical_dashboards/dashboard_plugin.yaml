@@ -2,7 +2,7 @@
 content:
   filterContextRef:
     identifier:
-      id: 56201528-be44-4058-8c16-2814db2e3346
+      id: campaign_name_filter
       type: filterContext
   layout:
     sections:
@@ -12,6 +12,7 @@ content:
             gridWidth: 12
         type: IDashboardLayoutItem
         widget:
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:

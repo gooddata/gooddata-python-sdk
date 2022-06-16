@@ -3,12 +3,12 @@
   userGroups:
   - id: adminGroup
     type: userGroup
-- authId: CiRiYWNhZjYxYS00Y2NmLTQxODEtOWE5OC05ZTI5YjExYTBhMDASBWxvY2Fs
+- authId: CiRjZTY0OTFiNy0yMDc1LTRiOGQtYWNhOC1jZDY1MmUwNDdkNjISBWxvY2Fs
   id: demo
   userGroups:
   - id: adminGroup
     type: userGroup
-- authId: CiQzNzAzYzg1Ni0xNTU0LTRjNjEtOTU1Mi1lMWRjNjliNmIyN2USBWxvY2Fs
+- authId: CiRmOTBmYjg4Mi1lMmRmLTRlODAtOTNhNy02ZWIxNjc3OTM2MjkSBWxvY2Fs
   id: demo2
   userGroups:
   - id: demoGroup

@@ -6,18 +6,8 @@
           {
             "description": "Campaign channel id",
             "id": "campaign_channel_id",
-            "labels": [
-              {
-                "description": "Campaign channel id",
-                "id": "campaign_channel_id",
-                "primary": true,
-                "sourceColumn": "campaign_channel_id",
-                "tags": [
-                  "Campaign channels"
-                ],
-                "title": "Campaign channel id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "campaign_channel_id",
             "tags": [
               "Campaign channels"
             ],
@@ -26,18 +16,8 @@
           {
             "description": "Category",
             "id": "campaign_channels.category",
-            "labels": [
-              {
-                "description": "Category",
-                "id": "campaign_channels.category",
-                "primary": true,
-                "sourceColumn": "category",
-                "tags": [
-                  "Campaign channels"
-                ],
-                "title": "Category"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "category",
             "tags": [
               "Campaign channels"
             ],
@@ -46,18 +26,8 @@
           {
             "description": "Type",
             "id": "type",
-            "labels": [
-              {
-                "description": "Type",
-                "id": "type",
-                "primary": true,
-                "sourceColumn": "type",
-                "tags": [
-                  "Campaign channels"
-                ],
-                "title": "Type"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "type",
             "tags": [
               "Campaign channels"
             ],
@@ -119,18 +89,8 @@
           {
             "description": "Campaign id",
             "id": "campaign_id",
-            "labels": [
-              {
-                "description": "Campaign id",
-                "id": "campaign_id",
-                "primary": true,
-                "sourceColumn": "campaign_id",
-                "tags": [
-                  "Campaigns"
-                ],
-                "title": "Campaign id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "campaign_id",
             "tags": [
               "Campaigns"
             ],
@@ -139,18 +99,8 @@
           {
             "description": "Campaign name",
             "id": "campaign_name",
-            "labels": [
-              {
-                "description": "Campaign name",
-                "id": "campaign_name",
-                "primary": true,
-                "sourceColumn": "campaign_name",
-                "tags": [
-                  "Campaigns"
-                ],
-                "title": "Campaign name"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "campaign_name",
             "tags": [
               "Campaigns"
             ],
@@ -182,18 +132,8 @@
           {
             "description": "Customer id",
             "id": "customer_id",
-            "labels": [
-              {
-                "description": "Customer id",
-                "id": "customer_id",
-                "primary": true,
-                "sourceColumn": "customer_id",
-                "tags": [
-                  "Customers"
-                ],
-                "title": "Customer id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "customer_id",
             "tags": [
               "Customers"
             ],
@@ -202,18 +142,8 @@
           {
             "description": "Customer name",
             "id": "customer_name",
-            "labels": [
-              {
-                "description": "Customer name",
-                "id": "customer_name",
-                "primary": true,
-                "sourceColumn": "customer_name",
-                "tags": [
-                  "Customers"
-                ],
-                "title": "Customer name"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "customer_name",
             "tags": [
               "Customers"
             ],
@@ -222,18 +152,8 @@
           {
             "description": "Region",
             "id": "region",
-            "labels": [
-              {
-                "description": "Region",
-                "id": "region",
-                "primary": true,
-                "sourceColumn": "region",
-                "tags": [
-                  "Customers"
-                ],
-                "title": "Region"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "region",
             "tags": [
               "Customers"
             ],
@@ -246,24 +166,14 @@
               {
                 "description": "Location",
                 "id": "geo__state__location",
-                "primary": false,
                 "sourceColumn": "geo__state__location",
                 "tags": [
                   "Customers"
                 ],
                 "title": "Location"
-              },
-              {
-                "description": "State",
-                "id": "state",
-                "primary": true,
-                "sourceColumn": "state",
-                "tags": [
-                  "Customers"
-                ],
-                "title": "State"
               }
             ],
+            "sourceColumn": "state",
             "tags": [
               "Customers"
             ],
@@ -295,18 +205,8 @@
           {
             "description": "Order id",
             "id": "order_id",
-            "labels": [
-              {
-                "description": "Order id",
-                "id": "order_id",
-                "primary": true,
-                "sourceColumn": "order_id",
-                "tags": [
-                  "Order lines"
-                ],
-                "title": "Order id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "order_id",
             "tags": [
               "Order lines"
             ],
@@ -315,18 +215,8 @@
           {
             "description": "Order line id",
             "id": "order_line_id",
-            "labels": [
-              {
-                "description": "Order line id",
-                "id": "order_line_id",
-                "primary": true,
-                "sourceColumn": "order_line_id",
-                "tags": [
-                  "Order lines"
-                ],
-                "title": "Order line id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "order_line_id",
             "tags": [
               "Order lines"
             ],
@@ -335,18 +225,8 @@
           {
             "description": "Order status",
             "id": "order_status",
-            "labels": [
-              {
-                "description": "Order status",
-                "id": "order_status",
-                "primary": true,
-                "sourceColumn": "order_status",
-                "tags": [
-                  "Order lines"
-                ],
-                "title": "Order status"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "order_status",
             "tags": [
               "Order lines"
             ],
@@ -438,18 +318,8 @@
           {
             "description": "Product id",
             "id": "product_id",
-            "labels": [
-              {
-                "description": "Product id",
-                "id": "product_id",
-                "primary": true,
-                "sourceColumn": "product_id",
-                "tags": [
-                  "Products"
-                ],
-                "title": "Product id"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "product_id",
             "tags": [
               "Products"
             ],
@@ -458,18 +328,8 @@
           {
             "description": "Product name",
             "id": "product_name",
-            "labels": [
-              {
-                "description": "Product name",
-                "id": "product_name",
-                "primary": true,
-                "sourceColumn": "product_name",
-                "tags": [
-                  "Products"
-                ],
-                "title": "Product name"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "product_name",
             "tags": [
               "Products"
             ],
@@ -478,18 +338,8 @@
           {
             "description": "Category",
             "id": "products.category",
-            "labels": [
-              {
-                "description": "Category",
-                "id": "products.category",
-                "primary": true,
-                "sourceColumn": "category",
-                "tags": [
-                  "Products"
-                ],
-                "title": "Category"
-              }
-            ],
+            "labels": [],
+            "sourceColumn": "category",
             "tags": [
               "Products"
             ],

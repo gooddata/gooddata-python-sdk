@@ -6,7 +6,7 @@
                     "attribute": {
                         "identifier": {
                             "id": "label1.id",
-                            "type": "label"
+                            "type": "attribute"
                         }
                     },
                     "periods_ago": 1
@@ -15,7 +15,7 @@
                     "attribute": {
                         "identifier": {
                             "id": "label2.id",
-                            "type": "label"
+                            "type": "attribute"
                         }
                     },
                     "periods_ago": 2

@@ -2,40 +2,22 @@
 attributes:
 - description: Customer id
   id: customer_id
-  labels:
-  - description: Customer id
-    id: customer_id
-    primary: true
-    sourceColumn: customer_id
-    tags:
-    - Customers
-    title: Customer id
+  labels: []
+  sourceColumn: customer_id
   tags:
   - Customers
   title: Customer id
 - description: Customer name
   id: customer_name
-  labels:
-  - description: Customer name
-    id: customer_name
-    primary: true
-    sourceColumn: customer_name
-    tags:
-    - Customers
-    title: Customer name
+  labels: []
+  sourceColumn: customer_name
   tags:
   - Customers
   title: Customer name
 - description: Region
   id: region
-  labels:
-  - description: Region
-    id: region
-    primary: true
-    sourceColumn: region
-    tags:
-    - Customers
-    title: Region
+  labels: []
+  sourceColumn: region
   tags:
   - Customers
   title: Region
@@ -44,18 +26,11 @@ attributes:
   labels:
   - description: Location
     id: geo__state__location
-    primary: false
     sourceColumn: geo__state__location
     tags:
     - Customers
     title: Location
-  - description: State
-    id: state
-    primary: true
-    sourceColumn: state
-    tags:
-    - Customers
-    title: State
+  sourceColumn: state
   tags:
   - Customers
   title: State
