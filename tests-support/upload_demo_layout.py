@@ -13,6 +13,7 @@ header_host = os.environ.get("HEADER_HOST", None)
 content_type_jsonapi = "application/vnd.gooddata.api+json"
 content_type_default = "application/json"
 headers = {"Host": header_host}
+api_version = "v1"
 
 
 def rest_op(op, url_path, data=None, raise_ex=True):
@@ -66,7 +67,7 @@ def wait_platform_up():
     print("Waiting till AIO GD.CN is up", flush=True)
     while True:
         try:
-            result = rest_op_jsonapi("get", "api/entities/admin/organizations/default", raise_ex=False)
+            result = rest_op_jsonapi("get", f"api/{api_version}/entities/admin/organizations/default", raise_ex=False)
             if result is not None:
                 print("AIO GD.CN is up", flush=True)
                 break
@@ -99,20 +100,22 @@ def update_layout():
     wait_platform_up()
 
     print("Uploading userGroups", flush=True)
-    rest_op_default("put", "api/layout/userGroups", user_groups)
+    rest_op_default("put", f"api/{api_version}/layout/userGroups", user_groups)
 
-    response = create_entity(user_auth["email"], user_auth, "user auth", "api/auth/users", rest_op_default)
+    response = create_entity(
+        user_auth["email"], user_auth, "user auth", f"api/{api_version}/auth/users", rest_op_default
+    )
     user["data"]["attributes"]["authenticationId"] = response["authenticationId"]
-    create_entity(user["data"]["id"], user, "user", "api/entities/users", rest_op_jsonapi)
+    create_entity(user["data"]["id"], user, "user", f"api/{api_version}/entities/users", rest_op_jsonapi)
 
     print("Uploading test DS with physical model for demo", flush=True)
-    rest_op_default("put", "api/layout/dataSources", data_sources)
+    rest_op_default("put", f"api/{api_version}/layout/dataSources", data_sources)
 
     print("Uploading demo workspaces", flush=True)
-    rest_op_default("put", "api/layout/workspaces", hierarchy)
+    rest_op_default("put", f"api/{api_version}/layout/workspaces", hierarchy)
 
     print("Uploading permissions for demo workspace", flush=True)
-    rest_op_default("put", "api/layout/workspaces/demo/permissions", permissions)
+    rest_op_default("put", f"api/{api_version}/layout/workspaces/demo/permissions", permissions)
 
     print("Layout configuration done successfully!", flush=True)
 
