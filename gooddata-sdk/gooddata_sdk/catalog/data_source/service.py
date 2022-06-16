@@ -186,7 +186,9 @@ class CatalogDataSourceService(CatalogServiceBase):
         scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
         report_warnings: bool = False,
     ) -> CatalogScanResultPdm:
-        scan_result = CatalogScanResultPdm.from_api(self._scan_api.scan_pdm(data_source_id, scan_request.to_api()))
+        scan_result = CatalogScanResultPdm.from_api(
+            self._scan_api.scan_data_source(data_source_id, scan_request.to_api())
+        )
         if report_warnings:
             self.report_warnings(scan_result.warnings)
         return scan_result
@@ -215,5 +217,5 @@ class CatalogDataSourceService(CatalogServiceBase):
         self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))
 
     def scan_schemata(self, data_source_id: str) -> list[str]:
-        response = self._scan_api.schemata(data_source_id)
+        response = self._scan_api.get_data_source_schemata(data_source_id)
         return response.get("schema_names", [])

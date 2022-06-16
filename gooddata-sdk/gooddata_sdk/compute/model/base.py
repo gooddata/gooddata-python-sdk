@@ -21,11 +21,28 @@ class ObjId:
         return self._type
 
     def as_afm_id(self) -> afm_models.AfmObjectIdentifier:
-        return afm_models.AfmObjectIdentifier(identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type))
+        return afm_models.AfmObjectIdentifier(
+            identifier=afm_models.AfmObjectIdentifierIdentifier(id=self._id, type=self._type)
+        )
 
-    def as_identifier(self) -> afm_models.Identifier:
-        return afm_models.Identifier(
-            identifier=afm_models.ObjectIdentifier(id=self._id, type=self._type),
+    def as_afm_id_label(self) -> afm_models.AfmObjectIdentifierLabel:
+        return afm_models.AfmObjectIdentifierLabel(
+            identifier=afm_models.AfmObjectIdentifierLabelIdentifier(id=self._id)
+        )
+
+    def as_afm_id_dataset(self) -> afm_models.AfmObjectIdentifierDataset:
+        return afm_models.AfmObjectIdentifierDataset(
+            identifier=afm_models.AfmObjectIdentifierDatasetIdentifier(id=self._id)
+        )
+
+    def as_afm_id_attribute(self) -> afm_models.AfmObjectIdentifierAttribute:
+        return afm_models.AfmObjectIdentifierAttribute(
+            identifier=afm_models.AfmObjectIdentifierAttributeIdentifier(id=self._id)
+        )
+
+    def as_identifier(self) -> afm_models.AfmIdentifier:
+        return afm_models.AfmIdentifier(
+            identifier=afm_models.AfmObjectIdentifierIdentifier(id=self._id, type=self._type),
             _check_type=False,
         )
 

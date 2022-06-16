@@ -5,6 +5,15 @@ from typing import Optional, Union
 
 import gooddata_afm_client.models as afm_models
 from gooddata_afm_client.model_utils import OpenApiModel
+from gooddata_afm_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
+from gooddata_afm_client.models import (
+    ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
+)
+from gooddata_afm_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
+from gooddata_afm_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
+from gooddata_afm_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
+from gooddata_afm_client.models import RankingFilterRankingFilter as RankingFilterBody
+from gooddata_afm_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.metric import Metric
@@ -18,9 +27,9 @@ def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[
         return val.local_id
 
 
-def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.LocalIdentifier, afm_models.Identifier]:
+def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.AfmLocalIdentifier, afm_models.AfmIdentifier]:
     if isinstance(val, str):
-        return afm_models.LocalIdentifier(local_identifier=val)
+        return afm_models.AfmLocalIdentifier(local_identifier=val)
 
     return val.as_identifier()
 
@@ -58,7 +67,7 @@ class PositiveAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.PositiveAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = afm_models.PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
+        body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
 
@@ -69,7 +78,7 @@ class NegativeAttributeFilter(AttributeFilter):
     def as_api_model(self) -> afm_models.NegativeAttributeFilter:
         label_id = _to_identifier(self._label)
         elements = afm_models.AttributeFilterElements(values=self.values)
-        body = afm_models.NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
+        body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
 
 
@@ -128,7 +137,7 @@ class RelativeDateFilter(Filter):
         return False
 
     def as_api_model(self) -> afm_models.RelativeDateFilter:
-        body = afm_models.RelativeDateFilterBody(
+        body = RelativeDateFilterBody(
             dataset=self.dataset.as_afm_id(),
             granularity=self.granularity,
             _from=self.from_shift,
@@ -178,7 +187,7 @@ class AbsoluteDateFilter(Filter):
         return False
 
     def as_api_model(self) -> afm_models.AbsoluteDateFilter:
-        body = afm_models.AbsoluteDateFilterBody(
+        body = AbsoluteDateFilterBody(
             dataset=self.dataset.as_afm_id(),
             _from=self._from_date,
             to=self._to_date,
@@ -278,13 +287,13 @@ class MetricValueFilter(Filter):
         if _METRIC_VALUE_FILTER_OPERATORS[self.operator] == "comparison":
             kwargs["value"] = self.values[0]
 
-            body = afm_models.ComparisonMeasureValueFilterBody(**kwargs)
+            body = ComparisonMeasureValueFilterBody(**kwargs)
             return afm_models.ComparisonMeasureValueFilter(body)
         else:
             kwargs["_from"] = min(self.values)
             kwargs["to"] = max(self.values)
 
-            body = afm_models.RangeMeasureValueFilterBody(**kwargs)
+            body = RangeMeasureValueFilterBody(**kwargs)
             return afm_models.RangeMeasureValueFilter(body)
 
 
@@ -336,7 +345,7 @@ class RankingFilter(Filter):
         dimensionality = {}
         if self.dimensionality:
             dimensionality["dimensionality"] = [_to_identifier(d) for d in self.dimensionality]
-        body = afm_models.RankingFilterBody(
+        body = RankingFilterBody(
             measures=measures, operator=self.operator, value=self.value, _check_type=False, **dimensionality
         )
         return afm_models.RankingFilter(body)

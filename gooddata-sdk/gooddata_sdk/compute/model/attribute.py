@@ -33,7 +33,7 @@ class Attribute(ExecModelEntity):
         return isinstance(other, Attribute) and other.label == self.label
 
     def as_api_model(self) -> afm_models.AttributeItem:
-        return afm_models.AttributeItem(local_identifier=self.local_id, label=self.label.as_afm_id())
+        return afm_models.AttributeItem(local_identifier=self.local_id, label=self.label.as_afm_id_label())
 
     def __repr__(self) -> str:
         return f"compute_model.Attribute(local_id='{self.local_id}', label='{self.label}')"
