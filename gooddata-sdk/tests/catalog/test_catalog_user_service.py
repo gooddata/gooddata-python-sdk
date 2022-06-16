@@ -8,8 +8,6 @@ import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import GoodDataApiClient, GoodDataSdk
-from gooddata_sdk.catalog.identifier import CatalogUserGroupIdentifier
-from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_group import (
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
@@ -179,42 +177,34 @@ def test_store_declarative_users(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users.json"))
 def test_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "expected" / "declarative_users.json"
     users_e = sdk.catalog_user.get_declarative_users()
 
     try:
-        _empty_users(sdk, test_config)
+        _clear_users(sdk)
 
         sdk.catalog_user.put_declarative_users(users_e)
         users_o = sdk.catalog_user.get_declarative_users()
         assert users_e == users_o
         assert users_e.to_dict(camel_case=True) == users_o.to_dict(camel_case=True)
     finally:
-        with open(path) as f:
-            data = json.load(f)
-        users_o = CatalogDeclarativeUsers.from_dict(data, camel_case=True)
-        sdk.catalog_user.put_declarative_users(users_o)
+        sdk.catalog_user.put_declarative_users(users_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users.json"))
 def test_load_and_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_users.json"
     users_e = sdk.catalog_user.get_declarative_users()
 
     try:
-        _empty_users(sdk, test_config)
+        _clear_users(sdk)
 
         sdk.catalog_user.load_and_put_declarative_users(path)
         users_o = sdk.catalog_user.get_declarative_users()
-        assert users_e == users_o
-        assert users_e.to_dict(camel_case=True) == users_o.to_dict(camel_case=True)
+        assert set(user.id for user in users_e.users) == set(user.id for user in users_o.users)
+        assert [user.user_groups for user in users_e.users] == [user.user_groups for user in users_o.users]
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        users_o = CatalogDeclarativeUsers.from_dict(data, camel_case=True)
-        sdk.catalog_user.put_declarative_users(users_o)
+        sdk.catalog_user.put_declarative_users(users_e)
 
 
 # DECLARATIVE USER GROUPS
@@ -256,12 +246,12 @@ def test_store_declarative_user_groups(test_config):
 def test_put_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_groups_path = _current_dir / "expected" / "declarative_user_groups.json"
-    users_path = _current_dir / "expected" / "declarative_users.json"
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
+    users_e = sdk.catalog_user.get_declarative_users()
 
     try:
-        _empty_users(sdk, test_config)
-        _empty_user_groups(sdk, test_config)
+        _clear_users(sdk)
+        _clear_user_groups(sdk)
 
         sdk.catalog_user.put_declarative_user_groups(user_groups_e)
         user_groups_o = sdk.catalog_user.get_declarative_user_groups()
@@ -273,10 +263,7 @@ def test_put_declarative_user_groups(test_config):
         user_groups_o = CatalogDeclarativeUserGroups.from_dict(data, camel_case=True)
         sdk.catalog_user.put_declarative_user_groups(user_groups_o)
 
-        with open(users_path) as f:
-            data = json.load(f)
-        users_o = CatalogDeclarativeUsers.from_dict(data, camel_case=True)
-        sdk.catalog_user.put_declarative_users(users_o)
+        sdk.catalog_user.put_declarative_users(users_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_user_groups.json"))
@@ -284,10 +271,12 @@ def test_load_and_put_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
     expected_json_path = _current_dir / "expected" / "declarative_user_groups.json"
+    users_e = sdk.catalog_user.get_declarative_users()
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
 
     try:
-        _empty_user_groups(sdk, test_config)
+        _clear_users(sdk)
+        _clear_user_groups(sdk)
 
         sdk.catalog_user.load_and_put_declarative_user_groups(path)
         user_groups_o = sdk.catalog_user.get_declarative_user_groups()
@@ -299,24 +288,20 @@ def test_load_and_put_declarative_user_groups(test_config):
         user_groups_o = CatalogDeclarativeUserGroups.from_dict(data, camel_case=True)
         sdk.catalog_user.put_declarative_user_groups(user_groups_o)
 
+        sdk.catalog_user.put_declarative_users(users_e)
+
 
 # Help functions
 
 
-def _empty_users(sdk: GoodDataSdk, test_config) -> None:
-    # There has to be always admin + demo user
-    admin_user = CatalogDeclarativeUser(
-        id="admin", user_groups=[CatalogUserGroupIdentifier(id=test_config["admin_user_group"])]
-    )
-    demo_user = CatalogDeclarativeUser(
-        id=test_config["demo_user"],
-        auth_id=test_config["demo_user_auth_id"],
-        user_groups=[CatalogUserGroupIdentifier(id=test_config["admin_user_group"])],
-    )
-    sdk.catalog_user.put_declarative_users(CatalogDeclarativeUsers(users=[admin_user, demo_user]))
+def _clear_users(sdk: GoodDataSdk) -> None:
+    users = sdk.catalog_user.list_users()
+    for user in users:
+        if user.id not in ["admin", "demo"]:
+            sdk.catalog_user.delete_user(user.id)
 
 
-def _empty_user_groups(sdk: GoodDataSdk, test_config) -> None:
+def _clear_user_groups(sdk: GoodDataSdk) -> None:
     sdk.catalog_user.put_declarative_user_groups(
-        CatalogDeclarativeUserGroups(user_groups=[CatalogDeclarativeUserGroup(id=test_config["admin_user_group"])])
+        CatalogDeclarativeUserGroups(user_groups=[CatalogDeclarativeUserGroup(id="adminGroup")])
     )
