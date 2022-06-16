@@ -31,8 +31,8 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.local_identifier import LocalIdentifier
-    globals()['LocalIdentifier'] = LocalIdentifier
+    from gooddata_afm_client.model.afm_local_identifier import AfmLocalIdentifier
+    globals()['AfmLocalIdentifier'] = AfmLocalIdentifier
 
 
 class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
@@ -95,7 +95,7 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         """
         lazy_import()
         return {
-            'measure_identifiers': ([LocalIdentifier],),  # noqa: E501
+            'measure_identifiers': ([AfmLocalIdentifier],),  # noqa: E501
             'operator': (str,),  # noqa: E501
         }
 
@@ -120,7 +120,7 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         """ArithmeticMeasureDefinitionArithmeticMeasure - a model defined in OpenAPI
 
         Args:
-            measure_identifiers ([LocalIdentifier]): List of metrics to apply arithmetic operation by chosen operator.
+            measure_identifiers ([AfmLocalIdentifier]): List of metrics to apply arithmetic operation by chosen operator.
             operator (str): Arithmetic operator describing operation between metrics.
 
         Keyword Args:
@@ -157,7 +157,7 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -165,14 +165,18 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -207,7 +211,7 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         """ArithmeticMeasureDefinitionArithmeticMeasure - a model defined in OpenAPI
 
         Args:
-            measure_identifiers ([LocalIdentifier]): List of metrics to apply arithmetic operation by chosen operator.
+            measure_identifiers ([AfmLocalIdentifier]): List of metrics to apply arithmetic operation by chosen operator.
             operator (str): Arithmetic operator describing operation between metrics.
 
         Keyword Args:
@@ -250,14 +254,18 @@ class ArithmeticMeasureDefinitionArithmeticMeasure(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

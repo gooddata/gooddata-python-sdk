@@ -66,10 +66,6 @@ class DeclarativeWorkspace(ModelNormal):
     """
 
     allowed_values = {
-        ('compute_client',): {
-            'AQE': "AQE",
-            'CALCIQUE': "CALCIQUE",
-        },
     }
 
     validations = {
@@ -105,11 +101,11 @@ class DeclarativeWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'early_access': (str,),  # noqa: E501
+            'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
-            'compute_client': (str,),  # noqa: E501
             'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
-            'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
         }
 
     @cached_property
@@ -120,11 +116,11 @@ class DeclarativeWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'early_access': 'earlyAccess',  # noqa: E501
+        'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
-        'compute_client': 'computeClient',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
-        'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -172,15 +168,15 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
+            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
-            compute_client (str): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
-            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -188,14 +184,18 @@ class DeclarativeWorkspace(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -264,11 +264,11 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
+            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
-            compute_client (str): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
-            hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -278,14 +278,18 @@ class DeclarativeWorkspace(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

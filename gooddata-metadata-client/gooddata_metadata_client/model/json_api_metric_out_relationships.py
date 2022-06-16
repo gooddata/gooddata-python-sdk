@@ -31,14 +31,16 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_metadata_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
     from gooddata_metadata_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
-    from gooddata_metadata_client.model.json_api_filter_context_out_relationships_attributes import JsonApiFilterContextOutRelationshipsAttributes
-    from gooddata_metadata_client.model.json_api_metric_out_relationships_facts import JsonApiMetricOutRelationshipsFacts
+    from gooddata_metadata_client.model.json_api_dataset_out_relationships_attributes import JsonApiDatasetOutRelationshipsAttributes
+    from gooddata_metadata_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
     globals()['JsonApiAnalyticalDashboardOutRelationshipsMetrics'] = JsonApiAnalyticalDashboardOutRelationshipsMetrics
-    globals()['JsonApiFilterContextOutRelationshipsAttributes'] = JsonApiFilterContextOutRelationshipsAttributes
-    globals()['JsonApiMetricOutRelationshipsFacts'] = JsonApiMetricOutRelationshipsFacts
+    globals()['JsonApiDatasetOutRelationshipsAttributes'] = JsonApiDatasetOutRelationshipsAttributes
+    globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
 
 
 class JsonApiMetricOutRelationships(ModelNormal):
@@ -94,8 +96,9 @@ class JsonApiMetricOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'facts': (JsonApiMetricOutRelationshipsFacts,),  # noqa: E501
-            'attributes': (JsonApiFilterContextOutRelationshipsAttributes,),  # noqa: E501
+            'attributes': (JsonApiDatasetOutRelationshipsAttributes,),  # noqa: E501
+            'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
+            'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
         }
@@ -106,8 +109,9 @@ class JsonApiMetricOutRelationships(ModelNormal):
 
 
     attribute_map = {
-        'facts': 'facts',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'datasets': 'datasets',  # noqa: E501
+        'facts': 'facts',  # noqa: E501
         'labels': 'labels',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
     }
@@ -153,14 +157,15 @@ class JsonApiMetricOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            facts (JsonApiMetricOutRelationshipsFacts): [optional]  # noqa: E501
-            attributes (JsonApiFilterContextOutRelationshipsAttributes): [optional]  # noqa: E501
+            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -168,14 +173,18 @@ class JsonApiMetricOutRelationships(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -238,8 +247,9 @@ class JsonApiMetricOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            facts (JsonApiMetricOutRelationshipsFacts): [optional]  # noqa: E501
-            attributes (JsonApiFilterContextOutRelationshipsAttributes): [optional]  # noqa: E501
+            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
         """
@@ -251,14 +261,18 @@ class JsonApiMetricOutRelationships(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

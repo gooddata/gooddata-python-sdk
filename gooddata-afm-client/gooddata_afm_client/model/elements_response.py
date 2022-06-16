@@ -32,11 +32,11 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_afm_client.model.element import Element
-    from gooddata_afm_client.model.object_identifier import ObjectIdentifier
     from gooddata_afm_client.model.paging import Paging
+    from gooddata_afm_client.model.rest_api_identifier import RestApiIdentifier
     globals()['Element'] = Element
-    globals()['ObjectIdentifier'] = ObjectIdentifier
     globals()['Paging'] = Paging
+    globals()['RestApiIdentifier'] = RestApiIdentifier
 
 
 class ElementsResponse(ModelNormal):
@@ -92,9 +92,9 @@ class ElementsResponse(ModelNormal):
         """
         lazy_import()
         return {
-            'primary_label': (ObjectIdentifier,),  # noqa: E501
             'elements': ([Element],),  # noqa: E501
             'paging': (Paging,),  # noqa: E501
+            'primary_label': (RestApiIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -103,9 +103,9 @@ class ElementsResponse(ModelNormal):
 
 
     attribute_map = {
-        'primary_label': 'primaryLabel',  # noqa: E501
         'elements': 'elements',  # noqa: E501
         'paging': 'paging',  # noqa: E501
+        'primary_label': 'primaryLabel',  # noqa: E501
     }
 
     read_only_vars = {
@@ -115,13 +115,13 @@ class ElementsResponse(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, primary_label, elements, paging, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, elements, paging, primary_label, *args, **kwargs):  # noqa: E501
         """ElementsResponse - a model defined in OpenAPI
 
         Args:
-            primary_label (ObjectIdentifier):
             elements ([Element]): List of returned elements.
             paging (Paging):
+            primary_label (RestApiIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -157,7 +157,7 @@ class ElementsResponse(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -165,14 +165,18 @@ class ElementsResponse(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -181,9 +185,9 @@ class ElementsResponse(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.primary_label = primary_label
         self.elements = elements
         self.paging = paging
+        self.primary_label = primary_label
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -204,13 +208,13 @@ class ElementsResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, primary_label, elements, paging, *args, **kwargs):  # noqa: E501
+    def __init__(self, elements, paging, primary_label, *args, **kwargs):  # noqa: E501
         """ElementsResponse - a model defined in OpenAPI
 
         Args:
-            primary_label (ObjectIdentifier):
             elements ([Element]): List of returned elements.
             paging (Paging):
+            primary_label (RestApiIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -252,14 +256,18 @@ class ElementsResponse(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -268,9 +276,9 @@ class ElementsResponse(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.primary_label = primary_label
         self.elements = elements
         self.paging = paging
+        self.primary_label = primary_label
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

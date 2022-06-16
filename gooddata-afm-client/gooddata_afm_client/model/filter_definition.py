@@ -31,32 +31,38 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.absolute_date_filter_body import AbsoluteDateFilterBody
-    from gooddata_afm_client.model.attribute_filter import AttributeFilter
-    from gooddata_afm_client.model.comparison_measure_value_filter_body import ComparisonMeasureValueFilterBody
-    from gooddata_afm_client.model.date_filter import DateFilter
+    from gooddata_afm_client.model.absolute_date_filter import AbsoluteDateFilter
+    from gooddata_afm_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
+    from gooddata_afm_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
+    from gooddata_afm_client.model.comparison_measure_value_filter_comparison_measure_value_filter import ComparisonMeasureValueFilterComparisonMeasureValueFilter
     from gooddata_afm_client.model.inline_filter_definition import InlineFilterDefinition
-    from gooddata_afm_client.model.inline_filter_definition_body import InlineFilterDefinitionBody
-    from gooddata_afm_client.model.measure_value_filter import MeasureValueFilter
-    from gooddata_afm_client.model.negative_attribute_filter_body import NegativeAttributeFilterBody
-    from gooddata_afm_client.model.positive_attribute_filter_body import PositiveAttributeFilterBody
-    from gooddata_afm_client.model.range_measure_value_filter_body import RangeMeasureValueFilterBody
+    from gooddata_afm_client.model.inline_filter_definition_inline import InlineFilterDefinitionInline
+    from gooddata_afm_client.model.negative_attribute_filter import NegativeAttributeFilter
+    from gooddata_afm_client.model.negative_attribute_filter_negative_attribute_filter import NegativeAttributeFilterNegativeAttributeFilter
+    from gooddata_afm_client.model.positive_attribute_filter import PositiveAttributeFilter
+    from gooddata_afm_client.model.positive_attribute_filter_positive_attribute_filter import PositiveAttributeFilterPositiveAttributeFilter
+    from gooddata_afm_client.model.range_measure_value_filter import RangeMeasureValueFilter
+    from gooddata_afm_client.model.range_measure_value_filter_range_measure_value_filter import RangeMeasureValueFilterRangeMeasureValueFilter
     from gooddata_afm_client.model.ranking_filter import RankingFilter
-    from gooddata_afm_client.model.ranking_filter_body import RankingFilterBody
-    from gooddata_afm_client.model.relative_date_filter_body import RelativeDateFilterBody
-    globals()['AbsoluteDateFilterBody'] = AbsoluteDateFilterBody
-    globals()['AttributeFilter'] = AttributeFilter
-    globals()['ComparisonMeasureValueFilterBody'] = ComparisonMeasureValueFilterBody
-    globals()['DateFilter'] = DateFilter
+    from gooddata_afm_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
+    from gooddata_afm_client.model.relative_date_filter import RelativeDateFilter
+    from gooddata_afm_client.model.relative_date_filter_relative_date_filter import RelativeDateFilterRelativeDateFilter
+    globals()['AbsoluteDateFilter'] = AbsoluteDateFilter
+    globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
+    globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
+    globals()['ComparisonMeasureValueFilterComparisonMeasureValueFilter'] = ComparisonMeasureValueFilterComparisonMeasureValueFilter
     globals()['InlineFilterDefinition'] = InlineFilterDefinition
-    globals()['InlineFilterDefinitionBody'] = InlineFilterDefinitionBody
-    globals()['MeasureValueFilter'] = MeasureValueFilter
-    globals()['NegativeAttributeFilterBody'] = NegativeAttributeFilterBody
-    globals()['PositiveAttributeFilterBody'] = PositiveAttributeFilterBody
-    globals()['RangeMeasureValueFilterBody'] = RangeMeasureValueFilterBody
+    globals()['InlineFilterDefinitionInline'] = InlineFilterDefinitionInline
+    globals()['NegativeAttributeFilter'] = NegativeAttributeFilter
+    globals()['NegativeAttributeFilterNegativeAttributeFilter'] = NegativeAttributeFilterNegativeAttributeFilter
+    globals()['PositiveAttributeFilter'] = PositiveAttributeFilter
+    globals()['PositiveAttributeFilterPositiveAttributeFilter'] = PositiveAttributeFilterPositiveAttributeFilter
+    globals()['RangeMeasureValueFilter'] = RangeMeasureValueFilter
+    globals()['RangeMeasureValueFilterRangeMeasureValueFilter'] = RangeMeasureValueFilterRangeMeasureValueFilter
     globals()['RankingFilter'] = RankingFilter
-    globals()['RankingFilterBody'] = RankingFilterBody
-    globals()['RelativeDateFilterBody'] = RelativeDateFilterBody
+    globals()['RankingFilterRankingFilter'] = RankingFilterRankingFilter
+    globals()['RelativeDateFilter'] = RelativeDateFilter
+    globals()['RelativeDateFilterRelativeDateFilter'] = RelativeDateFilterRelativeDateFilter
 
 
 class FilterDefinition(ModelComposed):
@@ -112,14 +118,14 @@ class FilterDefinition(ModelComposed):
         """
         lazy_import()
         return {
-            'positive_attribute_filter': (PositiveAttributeFilterBody,),  # noqa: E501
-            'negative_attribute_filter': (NegativeAttributeFilterBody,),  # noqa: E501
-            'comparison_measure_value_filter': (ComparisonMeasureValueFilterBody,),  # noqa: E501
-            'range_measure_value_filter': (RangeMeasureValueFilterBody,),  # noqa: E501
-            'ranking_filter': (RankingFilterBody,),  # noqa: E501
-            'absolute_date_filter': (AbsoluteDateFilterBody,),  # noqa: E501
-            'relative_date_filter': (RelativeDateFilterBody,),  # noqa: E501
-            'inline': (InlineFilterDefinitionBody,),  # noqa: E501
+            'inline': (InlineFilterDefinitionInline,),  # noqa: E501
+            'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
+            'comparison_measure_value_filter': (ComparisonMeasureValueFilterComparisonMeasureValueFilter,),  # noqa: E501
+            'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
+            'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
+            'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
+            'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
+            'positive_attribute_filter': (PositiveAttributeFilterPositiveAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -128,14 +134,14 @@ class FilterDefinition(ModelComposed):
 
 
     attribute_map = {
-        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
-        'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
+        'inline': 'inline',  # noqa: E501
+        'ranking_filter': 'rankingFilter',  # noqa: E501
         'comparison_measure_value_filter': 'comparisonMeasureValueFilter',  # noqa: E501
         'range_measure_value_filter': 'rangeMeasureValueFilter',  # noqa: E501
-        'ranking_filter': 'rankingFilter',  # noqa: E501
         'absolute_date_filter': 'absoluteDateFilter',  # noqa: E501
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
-        'inline': 'inline',  # noqa: E501
+        'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
+        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -177,14 +183,14 @@ class FilterDefinition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
-            comparison_measure_value_filter (ComparisonMeasureValueFilterBody): [optional]  # noqa: E501
-            range_measure_value_filter (RangeMeasureValueFilterBody): [optional]  # noqa: E501
-            ranking_filter (RankingFilterBody): [optional]  # noqa: E501
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
-            inline (InlineFilterDefinitionBody): [optional]  # noqa: E501
+            inline (InlineFilterDefinitionInline): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -196,14 +202,18 @@ class FilterDefinition(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -284,14 +294,14 @@ class FilterDefinition(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
-            comparison_measure_value_filter (ComparisonMeasureValueFilterBody): [optional]  # noqa: E501
-            range_measure_value_filter (RangeMeasureValueFilterBody): [optional]  # noqa: E501
-            ranking_filter (RankingFilterBody): [optional]  # noqa: E501
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
-            inline (InlineFilterDefinitionBody): [optional]  # noqa: E501
+            inline (InlineFilterDefinitionInline): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -301,14 +311,18 @@ class FilterDefinition(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -359,10 +373,13 @@ class FilterDefinition(ModelComposed):
           'allOf': [
           ],
           'oneOf': [
-              AttributeFilter,
-              DateFilter,
+              AbsoluteDateFilter,
+              ComparisonMeasureValueFilter,
               InlineFilterDefinition,
-              MeasureValueFilter,
+              NegativeAttributeFilter,
+              PositiveAttributeFilter,
+              RangeMeasureValueFilter,
               RankingFilter,
+              RelativeDateFilter,
           ],
         }

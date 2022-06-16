@@ -31,9 +31,9 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.afm_object_identifier import AfmObjectIdentifier
+    from gooddata_afm_client.model.afm_object_identifier_core import AfmObjectIdentifierCore
     from gooddata_afm_client.model.filter_definition_for_simple_measure import FilterDefinitionForSimpleMeasure
-    globals()['AfmObjectIdentifier'] = AfmObjectIdentifier
+    globals()['AfmObjectIdentifierCore'] = AfmObjectIdentifierCore
     globals()['FilterDefinitionForSimpleMeasure'] = FilterDefinitionForSimpleMeasure
 
 
@@ -65,12 +65,12 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         ('aggregation',): {
             'SUM': "SUM",
             'COUNT': "COUNT",
-            'APPROXIMATE_COUNT': "APPROXIMATE_COUNT",
             'AVG': "AVG",
             'MIN': "MIN",
             'MAX': "MAX",
             'MEDIAN': "MEDIAN",
             'RUNSUM': "RUNSUM",
+            'APPROXIMATE_COUNT': "APPROXIMATE_COUNT",
         },
     }
 
@@ -100,7 +100,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         """
         lazy_import()
         return {
-            'item': (AfmObjectIdentifier,),  # noqa: E501
+            'item': (AfmObjectIdentifierCore,),  # noqa: E501
             'aggregation': (str,),  # noqa: E501
             'compute_ratio': (bool,),  # noqa: E501
             'filters': ([FilterDefinitionForSimpleMeasure],),  # noqa: E501
@@ -129,7 +129,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         """SimpleMeasureDefinitionMeasure - a model defined in OpenAPI
 
         Args:
-            item (AfmObjectIdentifier):
+            item (AfmObjectIdentifierCore):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -168,7 +168,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -176,14 +176,18 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -217,7 +221,7 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         """SimpleMeasureDefinitionMeasure - a model defined in OpenAPI
 
         Args:
-            item (AfmObjectIdentifier):
+            item (AfmObjectIdentifierCore):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -262,14 +266,18 @@ class SimpleMeasureDefinitionMeasure(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

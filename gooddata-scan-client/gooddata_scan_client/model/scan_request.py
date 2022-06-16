@@ -82,9 +82,9 @@ class ScanRequest(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'separator': (str,),  # noqa: E501
             'scan_tables': (bool,),  # noqa: E501
             'scan_views': (bool,),  # noqa: E501
+            'separator': (str,),  # noqa: E501
             'schemata': ([str],),  # noqa: E501
             'table_prefix': (str,),  # noqa: E501
             'view_prefix': (str,),  # noqa: E501
@@ -96,9 +96,9 @@ class ScanRequest(ModelNormal):
 
 
     attribute_map = {
-        'separator': 'separator',  # noqa: E501
         'scan_tables': 'scanTables',  # noqa: E501
         'scan_views': 'scanViews',  # noqa: E501
+        'separator': 'separator',  # noqa: E501
         'schemata': 'schemata',  # noqa: E501
         'table_prefix': 'tablePrefix',  # noqa: E501
         'view_prefix': 'viewPrefix',  # noqa: E501
@@ -111,13 +111,13 @@ class ScanRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, separator, scan_tables, scan_views, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, scan_tables, scan_views, separator, *args, **kwargs):  # noqa: E501
         """ScanRequest - a model defined in OpenAPI
 
         Args:
-            separator (str): A separator between prefixes and the names.
             scan_tables (bool): A flag indicating whether the tables should be scanned.
             scan_views (bool): A flag indicating whether the views should be scanned.
+            separator (str): A separator between prefixes and the names.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -156,7 +156,7 @@ class ScanRequest(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -164,14 +164,18 @@ class ScanRequest(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -180,9 +184,9 @@ class ScanRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.separator = separator
         self.scan_tables = scan_tables
         self.scan_views = scan_views
+        self.separator = separator
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -203,13 +207,13 @@ class ScanRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, separator, scan_tables, scan_views, *args, **kwargs):  # noqa: E501
+    def __init__(self, scan_tables, scan_views, separator, *args, **kwargs):  # noqa: E501
         """ScanRequest - a model defined in OpenAPI
 
         Args:
-            separator (str): A separator between prefixes and the names.
             scan_tables (bool): A flag indicating whether the tables should be scanned.
             scan_views (bool): A flag indicating whether the views should be scanned.
+            separator (str): A separator between prefixes and the names.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -254,14 +258,18 @@ class ScanRequest(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -270,9 +278,9 @@ class ScanRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.separator = separator
         self.scan_tables = scan_tables
         self.scan_views = scan_views
+        self.separator = separator
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

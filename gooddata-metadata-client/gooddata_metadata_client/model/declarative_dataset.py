@@ -103,14 +103,14 @@ class DeclarativeDataset(ModelNormal):
         """
         lazy_import()
         return {
-            'id': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
             'grain': ([GrainIdentifier],),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'references': ([DeclarativeReference],),  # noqa: E501
-            'description': (str,),  # noqa: E501
+            'title': (str,),  # noqa: E501
             'attributes': ([DeclarativeAttribute],),  # noqa: E501
-            'facts': ([DeclarativeFact],),  # noqa: E501
             'data_source_table_id': (DataSourceTableIdentifier,),  # noqa: E501
+            'description': (str,),  # noqa: E501
+            'facts': ([DeclarativeFact],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -120,14 +120,14 @@ class DeclarativeDataset(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
-        'title': 'title',  # noqa: E501
         'grain': 'grain',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'references': 'references',  # noqa: E501
-        'description': 'description',  # noqa: E501
+        'title': 'title',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
-        'facts': 'facts',  # noqa: E501
         'data_source_table_id': 'dataSourceTableId',  # noqa: E501
+        'description': 'description',  # noqa: E501
+        'facts': 'facts',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -138,14 +138,14 @@ class DeclarativeDataset(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, title, grain, references, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, grain, id, references, title, *args, **kwargs):  # noqa: E501
         """DeclarativeDataset - a model defined in OpenAPI
 
         Args:
-            id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
-            title (str): A dataset title.
             grain ([GrainIdentifier]): An array of grain identifiers.
+            id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
             references ([DeclarativeReference]): An array of references.
+            title (str): A dataset title.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -178,15 +178,15 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            description (str): A dataset description.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
-            facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
+            description (str): A dataset description.. [optional]  # noqa: E501
+            facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -194,14 +194,18 @@ class DeclarativeDataset(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -210,10 +214,10 @@ class DeclarativeDataset(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
-        self.title = title
         self.grain = grain
+        self.id = id
         self.references = references
+        self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -234,14 +238,14 @@ class DeclarativeDataset(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, title, grain, references, *args, **kwargs):  # noqa: E501
+    def __init__(self, grain, id, references, title, *args, **kwargs):  # noqa: E501
         """DeclarativeDataset - a model defined in OpenAPI
 
         Args:
-            id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
-            title (str): A dataset title.
             grain ([GrainIdentifier]): An array of grain identifiers.
+            id (str): The Dataset ID. This ID is further used to refer to this instance of dataset.
             references ([DeclarativeReference]): An array of references.
+            title (str): A dataset title.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -274,10 +278,10 @@ class DeclarativeDataset(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            description (str): A dataset description.. [optional]  # noqa: E501
             attributes ([DeclarativeAttribute]): An array of attributes.. [optional]  # noqa: E501
-            facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
+            description (str): A dataset description.. [optional]  # noqa: E501
+            facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -288,14 +292,18 @@ class DeclarativeDataset(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -304,10 +312,10 @@ class DeclarativeDataset(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
-        self.title = title
         self.grain = grain
+        self.id = id
         self.references = references
+        self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

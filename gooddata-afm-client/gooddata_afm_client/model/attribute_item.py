@@ -31,8 +31,8 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.afm_object_identifier import AfmObjectIdentifier
-    globals()['AfmObjectIdentifier'] = AfmObjectIdentifier
+    from gooddata_afm_client.model.afm_object_identifier_label import AfmObjectIdentifierLabel
+    globals()['AfmObjectIdentifierLabel'] = AfmObjectIdentifierLabel
 
 
 class AttributeItem(ModelNormal):
@@ -65,7 +65,7 @@ class AttributeItem(ModelNormal):
     validations = {
         ('local_identifier',): {
             'regex': {
-                'pattern': r'^[.A-Za-z0-9_-]+$',  # noqa: E501
+                'pattern': r'^[.a-zA-Z0-9_-]+$',  # noqa: E501
             },
         },
     }
@@ -93,8 +93,8 @@ class AttributeItem(ModelNormal):
         """
         lazy_import()
         return {
+            'label': (AfmObjectIdentifierLabel,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
-            'label': (AfmObjectIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -103,8 +103,8 @@ class AttributeItem(ModelNormal):
 
 
     attribute_map = {
-        'local_identifier': 'localIdentifier',  # noqa: E501
         'label': 'label',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -114,12 +114,12 @@ class AttributeItem(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, local_identifier, label, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, label, local_identifier, *args, **kwargs):  # noqa: E501
         """AttributeItem - a model defined in OpenAPI
 
         Args:
+            label (AfmObjectIdentifierLabel):
             local_identifier (str):
-            label (AfmObjectIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -155,7 +155,7 @@ class AttributeItem(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -163,14 +163,18 @@ class AttributeItem(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -179,8 +183,8 @@ class AttributeItem(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.local_identifier = local_identifier
         self.label = label
+        self.local_identifier = local_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -201,12 +205,12 @@ class AttributeItem(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, local_identifier, label, *args, **kwargs):  # noqa: E501
+    def __init__(self, label, local_identifier, *args, **kwargs):  # noqa: E501
         """AttributeItem - a model defined in OpenAPI
 
         Args:
+            label (AfmObjectIdentifierLabel):
             local_identifier (str):
-            label (AfmObjectIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -248,14 +252,18 @@ class AttributeItem(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -264,8 +272,8 @@ class AttributeItem(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.local_identifier = local_identifier
         self.label = label
+        self.local_identifier = local_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

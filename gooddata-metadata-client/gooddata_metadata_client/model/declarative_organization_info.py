@@ -93,13 +93,15 @@ class DeclarativeOrganizationInfo(ModelNormal):
         """
         lazy_import()
         return {
+            'hostname': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'hostname': (str,),  # noqa: E501
             'permissions': ([DeclarativeOrganizationPermission],),  # noqa: E501
-            'oauth_issuer_location': (str,),  # noqa: E501
+            'early_access': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
+            'oauth_issuer_id': (str,),  # noqa: E501
+            'oauth_issuer_location': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -108,13 +110,15 @@ class DeclarativeOrganizationInfo(ModelNormal):
 
 
     attribute_map = {
+        'hostname': 'hostname',  # noqa: E501
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
-        'hostname': 'hostname',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
-        'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'early_access': 'earlyAccess',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
+        'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
+        'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
     }
 
     read_only_vars = {
@@ -124,13 +128,13 @@ class DeclarativeOrganizationInfo(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, name, hostname, permissions, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, hostname, id, name, permissions, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationInfo - a model defined in OpenAPI
 
         Args:
+            hostname (str): Formal hostname used in deployment.
             id (str): Identifier of the organization.
             name (str): Formal name of the organization.
-            hostname (str): Formal hostname used in deployment.
             permissions ([DeclarativeOrganizationPermission]):
 
         Keyword Args:
@@ -164,13 +168,15 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
+            oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -178,14 +184,18 @@ class DeclarativeOrganizationInfo(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -194,9 +204,9 @@ class DeclarativeOrganizationInfo(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.hostname = hostname
         self.id = id
         self.name = name
-        self.hostname = hostname
         self.permissions = permissions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -218,13 +228,13 @@ class DeclarativeOrganizationInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, hostname, permissions, *args, **kwargs):  # noqa: E501
+    def __init__(self, hostname, id, name, permissions, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationInfo - a model defined in OpenAPI
 
         Args:
+            hostname (str): Formal hostname used in deployment.
             id (str): Identifier of the organization.
             name (str): Formal name of the organization.
-            hostname (str): Formal hostname used in deployment.
             permissions ([DeclarativeOrganizationPermission]):
 
         Keyword Args:
@@ -258,9 +268,11 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
+            oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -270,14 +282,18 @@ class DeclarativeOrganizationInfo(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -286,9 +302,9 @@ class DeclarativeOrganizationInfo(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.hostname = hostname
         self.id = id
         self.name = name
-        self.hostname = hostname
         self.permissions = permissions
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

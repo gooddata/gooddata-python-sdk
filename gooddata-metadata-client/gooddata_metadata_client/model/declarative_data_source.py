@@ -109,16 +109,16 @@ class DeclarativeDataSource(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'url': (str,),  # noqa: E501
-            'schema': (str,),  # noqa: E501
-            'username': (str,),  # noqa: E501
-            'password': (str,),  # noqa: E501
-            'token': (str,),  # noqa: E501
-            'enable_caching': (bool,),  # noqa: E501
             'cache_path': ([str],),  # noqa: E501
+            'enable_caching': (bool,),  # noqa: E501
+            'password': (str,),  # noqa: E501
             'pdm': (DeclarativeTables,),  # noqa: E501
             'permissions': ([DeclarativeDataSourcePermission],),  # noqa: E501
+            'token': (str,),  # noqa: E501
+            'username': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -129,16 +129,16 @@ class DeclarativeDataSource(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
         'url': 'url',  # noqa: E501
-        'schema': 'schema',  # noqa: E501
-        'username': 'username',  # noqa: E501
-        'password': 'password',  # noqa: E501
-        'token': 'token',  # noqa: E501
-        'enable_caching': 'enableCaching',  # noqa: E501
         'cache_path': 'cachePath',  # noqa: E501
+        'enable_caching': 'enableCaching',  # noqa: E501
+        'password': 'password',  # noqa: E501
         'pdm': 'pdm',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'token': 'token',  # noqa: E501
+        'username': 'username',  # noqa: E501
     }
 
     read_only_vars = {
@@ -148,15 +148,15 @@ class DeclarativeDataSource(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, name, type, url, schema, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, name, schema, type, url, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSource - a model defined in OpenAPI
 
         Args:
             id (str): Data source ID.
             name (str): Name of the data source.
+            schema (str): A scheme/database with the data.
             type (str): Type of database.
             url (str): An connection string relevant to type of database.
-            schema (str): A scheme/database with the data.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -189,17 +189,17 @@ class DeclarativeDataSource(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
-            password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
-            token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
+            password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
+            token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
+            username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -207,14 +207,18 @@ class DeclarativeDataSource(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -225,9 +229,9 @@ class DeclarativeDataSource(ModelNormal):
 
         self.id = id
         self.name = name
+        self.schema = schema
         self.type = type
         self.url = url
-        self.schema = schema
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -248,15 +252,15 @@ class DeclarativeDataSource(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, type, url, schema, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, name, schema, type, url, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSource - a model defined in OpenAPI
 
         Args:
             id (str): Data source ID.
             name (str): Name of the data source.
+            schema (str): A scheme/database with the data.
             type (str): Type of database.
             url (str): An connection string relevant to type of database.
-            schema (str): A scheme/database with the data.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -289,13 +293,13 @@ class DeclarativeDataSource(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
-            password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
-            token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
+            password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
+            token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
+            username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -305,14 +309,18 @@ class DeclarativeDataSource(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -323,9 +331,9 @@ class DeclarativeDataSource(ModelNormal):
 
         self.id = id
         self.name = name
+        self.schema = schema
         self.type = type
         self.url = url
-        self.schema = schema
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

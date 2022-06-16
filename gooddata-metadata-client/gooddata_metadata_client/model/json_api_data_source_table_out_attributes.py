@@ -31,8 +31,8 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_metadata_client.model.json_api_data_source_table_out_attributes_columns import JsonApiDataSourceTableOutAttributesColumns
-    globals()['JsonApiDataSourceTableOutAttributesColumns'] = JsonApiDataSourceTableOutAttributesColumns
+    from gooddata_metadata_client.model.json_api_data_source_table_out_attributes_columns_inner import JsonApiDataSourceTableOutAttributesColumnsInner
+    globals()['JsonApiDataSourceTableOutAttributesColumnsInner'] = JsonApiDataSourceTableOutAttributesColumnsInner
 
 
 class JsonApiDataSourceTableOutAttributes(ModelNormal):
@@ -92,7 +92,8 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
         """
         lazy_import()
         return {
-            'columns': ([JsonApiDataSourceTableOutAttributesColumns],),  # noqa: E501
+            'columns': ([JsonApiDataSourceTableOutAttributesColumnsInner],),  # noqa: E501
+            'name_prefix': (str,),  # noqa: E501
             'path': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
@@ -104,6 +105,7 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
 
     attribute_map = {
         'columns': 'columns',  # noqa: E501
+        'name_prefix': 'namePrefix',  # noqa: E501
         'path': 'path',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
@@ -119,7 +121,7 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
         """JsonApiDataSourceTableOutAttributes - a model defined in OpenAPI
 
         Args:
-            columns ([JsonApiDataSourceTableOutAttributesColumns]):
+            columns ([JsonApiDataSourceTableOutAttributesColumnsInner]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -152,12 +154,13 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name_prefix (str): [optional]  # noqa: E501
             path ([str]): Path to table.. [optional]  # noqa: E501
             type (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -165,14 +168,18 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -206,7 +213,7 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
         """JsonApiDataSourceTableOutAttributes - a model defined in OpenAPI
 
         Args:
-            columns ([JsonApiDataSourceTableOutAttributesColumns]):
+            columns ([JsonApiDataSourceTableOutAttributesColumnsInner]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -239,6 +246,7 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name_prefix (str): [optional]  # noqa: E501
             path ([str]): Path to table.. [optional]  # noqa: E501
             type (str): [optional]  # noqa: E501
         """
@@ -250,14 +258,18 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

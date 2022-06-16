@@ -102,9 +102,9 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
-            'id': (str,),  # noqa: E501
             'attributes': (JsonApiDataSourceTableOutAttributes,),  # noqa: E501
+            'id': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -114,9 +114,9 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
-        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'id': 'id',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -129,9 +129,9 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
         """JsonApiDataSourceTableOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "dataSourceTable", must be one of ["dataSourceTable", ]  # noqa: E501
-            id (str): API identifier of an object
             attributes (JsonApiDataSourceTableOutAttributes):
+            id (str): API identifier of an object
+            type (str): Object type. defaults to "dataSourceTable", must be one of ["dataSourceTable", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -175,14 +175,18 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -233,9 +237,9 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
         """JsonApiDataSourceTableOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "dataSourceTable", must be one of ["dataSourceTable", ]  # noqa: E501
-            id (str): API identifier of an object
             attributes (JsonApiDataSourceTableOutAttributes):
+            id (str): API identifier of an object
+            type (str): Object type. defaults to "dataSourceTable", must be one of ["dataSourceTable", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -277,14 +281,18 @@ class JsonApiDataSourceTableOutWithLinks(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

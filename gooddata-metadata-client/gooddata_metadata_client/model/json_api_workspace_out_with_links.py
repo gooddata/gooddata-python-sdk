@@ -106,10 +106,10 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
-            'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'attributes': (JsonApiWorkspaceInAttributes,),  # noqa: E501
+            'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -120,10 +120,10 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
-        'meta': 'meta',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -137,8 +137,8 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         """JsonApiWorkspaceOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "workspace", must be one of ["workspace", ]  # noqa: E501
             id (str): API identifier of an object
+            type (str): Object type. defaults to "workspace", must be one of ["workspace", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -169,8 +169,8 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -185,14 +185,18 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -243,8 +247,8 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         """JsonApiWorkspaceOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "workspace", must be one of ["workspace", ]  # noqa: E501
             id (str): API identifier of an object
+            type (str): Object type. defaults to "workspace", must be one of ["workspace", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -275,8 +279,8 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -289,14 +293,18 @@ class JsonApiWorkspaceOutWithLinks(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

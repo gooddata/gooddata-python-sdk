@@ -56,10 +56,6 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
     """
 
     allowed_values = {
-        ('compute_client',): {
-            'AQE': "AQE",
-            'CALCIQUE': "CALCIQUE",
-        },
     }
 
     validations = {
@@ -86,8 +82,8 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'early_access': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'compute_client': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -96,8 +92,8 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
 
 
     attribute_map = {
+        'early_access': 'earlyAccess',  # noqa: E501
         'name': 'name',  # noqa: E501
-        'compute_client': 'computeClient',  # noqa: E501
     }
 
     read_only_vars = {
@@ -141,12 +137,12 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
-            compute_client (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -154,14 +150,18 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -224,8 +224,8 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
-            compute_client (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -235,14 +235,18 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

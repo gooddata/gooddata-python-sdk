@@ -90,8 +90,8 @@ class DeclarativeWorkspacePermissions(ModelNormal):
         """
         lazy_import()
         return {
-            'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
+            'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
         }
 
     @cached_property
@@ -100,8 +100,8 @@ class DeclarativeWorkspacePermissions(ModelNormal):
 
 
     attribute_map = {
-        'permissions': 'permissions',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -145,12 +145,12 @@ class DeclarativeWorkspacePermissions(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
+            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -158,14 +158,18 @@ class DeclarativeWorkspacePermissions(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -228,8 +232,8 @@ class DeclarativeWorkspacePermissions(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
+            permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,14 +243,18 @@ class DeclarativeWorkspacePermissions(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

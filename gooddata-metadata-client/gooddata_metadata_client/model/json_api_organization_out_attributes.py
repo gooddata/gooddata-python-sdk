@@ -82,11 +82,13 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
-            'hostname': (str,),  # noqa: E501
             'allowed_origins': ([str],),  # noqa: E501
-            'oauth_issuer_location': (str,),  # noqa: E501
+            'early_access': (str,),  # noqa: E501
+            'hostname': (str,),  # noqa: E501
+            'name': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
+            'oauth_issuer_id': (str,),  # noqa: E501
+            'oauth_issuer_location': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -95,11 +97,13 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
 
 
     attribute_map = {
-        'name': 'name',  # noqa: E501
-        'hostname': 'hostname',  # noqa: E501
         'allowed_origins': 'allowedOrigins',  # noqa: E501
-        'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'early_access': 'earlyAccess',  # noqa: E501
+        'hostname': 'hostname',  # noqa: E501
+        'name': 'name',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
+        'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
+        'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
     }
 
     read_only_vars = {
@@ -143,15 +147,17 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            name (str): [optional]  # noqa: E501
-            hostname (str): [optional]  # noqa: E501
             allowed_origins ([str]): [optional]  # noqa: E501
-            oauth_issuer_location (str): [optional]  # noqa: E501
+            early_access (str): [optional]  # noqa: E501
+            hostname (str): [optional]  # noqa: E501
+            name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
+            oauth_issuer_location (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -159,14 +165,18 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -229,11 +239,13 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            name (str): [optional]  # noqa: E501
-            hostname (str): [optional]  # noqa: E501
             allowed_origins ([str]): [optional]  # noqa: E501
-            oauth_issuer_location (str): [optional]  # noqa: E501
+            early_access (str): [optional]  # noqa: E501
+            hostname (str): [optional]  # noqa: E501
+            name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
+            oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
+            oauth_issuer_location (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -243,14 +255,18 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

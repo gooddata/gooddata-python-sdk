@@ -93,9 +93,9 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         """
         lazy_import()
         return {
+            'filter_values': ([str],),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
-            'filter_values': ([str],),  # noqa: E501
             'workspace': (WorkspaceIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
         }
@@ -106,9 +106,9 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
 
 
     attribute_map = {
+        'filter_values': 'filterValues',  # noqa: E501
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
-        'filter_values': 'filterValues',  # noqa: E501
         'workspace': 'workspace',  # noqa: E501
         'description': 'description',  # noqa: E501
     }
@@ -120,13 +120,13 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, title, filter_values, workspace, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, filter_values, id, title, workspace, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilterSetting - a model defined in OpenAPI
 
         Args:
+            filter_values ([str]): Only those rows are returned, where columnName from filter matches those values.
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters setting title.
-            filter_values ([str]): Only those rows are returned, where columnName from filter matches those values.
             workspace (WorkspaceIdentifier):
 
         Keyword Args:
@@ -164,7 +164,7 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -172,14 +172,18 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -188,9 +192,9 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.filter_values = filter_values
         self.id = id
         self.title = title
-        self.filter_values = filter_values
         self.workspace = workspace
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -212,13 +216,13 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, title, filter_values, workspace, *args, **kwargs):  # noqa: E501
+    def __init__(self, filter_values, id, title, workspace, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaceDataFilterSetting - a model defined in OpenAPI
 
         Args:
+            filter_values ([str]): Only those rows are returned, where columnName from filter matches those values.
             id (str): Workspace Data Filters ID. This ID is further used to refer to this instance.
             title (str): Workspace Data Filters setting title.
-            filter_values ([str]): Only those rows are returned, where columnName from filter matches those values.
             workspace (WorkspaceIdentifier):
 
         Keyword Args:
@@ -262,14 +266,18 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -278,9 +286,9 @@ class DeclarativeWorkspaceDataFilterSetting(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.filter_values = filter_values
         self.id = id
         self.title = title
-        self.filter_values = filter_values
         self.workspace = workspace
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

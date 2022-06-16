@@ -28,8 +28,8 @@ from gooddata_afm_client.model.afm_valid_objects_query import AfmValidObjectsQue
 from gooddata_afm_client.model.afm_valid_objects_response import AfmValidObjectsResponse
 from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
-from gooddata_afm_client.model.error_message import ErrorMessage
 from gooddata_afm_client.model.execution_result import ExecutionResult
+from gooddata_afm_client.model.problem import Problem
 
 
 class ActionsApi(object):
@@ -47,7 +47,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (ElementsResponse,),
                 'auth': [],
-                'endpoint_path': '/api/actions/workspaces/{workspaceId}/execution/collectLabelElements',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements',
                 'operation_id': 'compute_label_elements_post',
                 'http_method': 'POST',
                 'servers': None,
@@ -125,7 +125,7 @@ class ActionsApi(object):
             },
             headers_map={
                 'accept': [
-                    '*/*'
+                    'application/json'
                 ],
                 'content_type': [
                     'application/json'
@@ -137,7 +137,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (AfmExecutionResponse,),
                 'auth': [],
-                'endpoint_path': '/api/actions/workspaces/{workspaceId}/execution/afm/execute',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute',
                 'operation_id': 'compute_report',
                 'http_method': 'POST',
                 'servers': None,
@@ -210,7 +210,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (AfmValidObjectsResponse,),
                 'auth': [],
-                'endpoint_path': '/api/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects',
                 'operation_id': 'compute_valid_objects',
                 'http_method': 'POST',
                 'servers': None,
@@ -261,7 +261,7 @@ class ActionsApi(object):
             },
             headers_map={
                 'accept': [
-                    '*/*'
+                    'application/json'
                 ],
                 'content_type': [
                     'application/json'
@@ -271,9 +271,9 @@ class ActionsApi(object):
         )
         self.explain_afm_endpoint = _Endpoint(
             settings={
-                'response_type': (file_type,),
+                'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/actions/workspaces/{workspaceId}/execution/afm/explain',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/explain',
                 'operation_id': 'explain_afm',
                 'http_method': 'POST',
                 'servers': None,
@@ -291,6 +291,7 @@ class ActionsApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'explain_type',
                 ],
                 'validation': [
                     'workspace_id',
@@ -306,6 +307,19 @@ class ActionsApi(object):
                     },
                 },
                 'allowed_values': {
+                    ('explain_type',): {
+
+                        "LDM": "LDM",
+                        "PDM": "PDM",
+                        "MAQL": "MAQL",
+                        "GRPC_MODEL": "GRPC_MODEL",
+                        "WDF": "WDF",
+                        "QT": "QT",
+                        "QT_SVG": "QT_SVG",
+                        "OPT_QT": "OPT_QT",
+                        "OPT_QT_SVG": "OPT_QT_SVG",
+                        "SQL": "SQL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -329,7 +343,10 @@ class ActionsApi(object):
             },
             headers_map={
                 'accept': [
-                    'application/zip'
+                    'application/json',
+                    'application/sql',
+                    'application/zip',
+                    'image/svg+xml'
                 ],
                 'content_type': [
                     'application/json'
@@ -341,7 +358,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (ExecutionResult,),
                 'auth': [],
-                'endpoint_path': '/api/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}',
                 'operation_id': 'retrieve_result',
                 'http_method': 'GET',
                 'servers': None,
@@ -405,7 +422,7 @@ class ActionsApi(object):
             },
             headers_map={
                 'accept': [
-                    '*/*'
+                    'application/json'
                 ],
                 'content_type': [],
             },
@@ -434,7 +451,7 @@ class ActionsApi(object):
         Keyword Args:
             offset (int): Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well.. [optional] if omitted the server will use the default value of 0
             limit (int): Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well.. [optional] if omitted the server will use the default value of 1000
-            skip_cache (bool): Ignore all caches during execution of current request.. [optional]
+            skip_cache (bool): Ignore all caches during execution of current request.. [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -450,12 +467,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -481,9 +506,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['elements_request'] = \
@@ -527,12 +556,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -558,9 +595,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['afm_execution'] = \
@@ -602,12 +643,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -633,9 +682,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['afm_valid_objects_query'] = \
@@ -650,7 +703,7 @@ class ActionsApi(object):
     ):
         """AFM explain resource.  # noqa: E501
 
-        The resource provides static structures needed for investigation of a problem with given AFM. The structures differs for AQE and for Calcique. They are either MAQL (internal form of AFM) and logical and physical models (LDM and PDM) of corresponding workspace or MAQL and GRPC and WDF models.  # noqa: E501
+        The resource provides static structures needed for investigation of a problem with given AFM. The structures are MAQL (internal form of AFM) and GRPC and WDF models.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -662,7 +715,7 @@ class ActionsApi(object):
             afm_execution (AfmExecution):
 
         Keyword Args:
-            explain_type (str): Requested explain type (LDM, PDM, GRPC_MODEL, WDF or MAQL). If not specified all types are bundled in a ZIP archive.. [optional]
+            explain_type (str): Requested explain type (LDM, PDM, GRPC_MODEL, WDF, MAQL, QT, QT_SVG, OPT_QT, OPT_QT_SVG or SQL). If not specified all types are bundled in a ZIP archive.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -678,16 +731,24 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
-            file_type
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -709,9 +770,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['afm_execution'] = \
@@ -755,12 +820,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -786,9 +859,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['result_id'] = \

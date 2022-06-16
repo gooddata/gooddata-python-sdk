@@ -32,13 +32,13 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_afm_client.model.negative_attribute_filter import NegativeAttributeFilter
-    from gooddata_afm_client.model.negative_attribute_filter_body import NegativeAttributeFilterBody
+    from gooddata_afm_client.model.negative_attribute_filter_negative_attribute_filter import NegativeAttributeFilterNegativeAttributeFilter
     from gooddata_afm_client.model.positive_attribute_filter import PositiveAttributeFilter
-    from gooddata_afm_client.model.positive_attribute_filter_body import PositiveAttributeFilterBody
+    from gooddata_afm_client.model.positive_attribute_filter_positive_attribute_filter import PositiveAttributeFilterPositiveAttributeFilter
     globals()['NegativeAttributeFilter'] = NegativeAttributeFilter
-    globals()['NegativeAttributeFilterBody'] = NegativeAttributeFilterBody
+    globals()['NegativeAttributeFilterNegativeAttributeFilter'] = NegativeAttributeFilterNegativeAttributeFilter
     globals()['PositiveAttributeFilter'] = PositiveAttributeFilter
-    globals()['PositiveAttributeFilterBody'] = PositiveAttributeFilterBody
+    globals()['PositiveAttributeFilterPositiveAttributeFilter'] = PositiveAttributeFilterPositiveAttributeFilter
 
 
 class AttributeFilter(ModelComposed):
@@ -94,8 +94,8 @@ class AttributeFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'positive_attribute_filter': (PositiveAttributeFilterBody,),  # noqa: E501
-            'negative_attribute_filter': (NegativeAttributeFilterBody,),  # noqa: E501
+            'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
+            'positive_attribute_filter': (PositiveAttributeFilterPositiveAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -104,8 +104,8 @@ class AttributeFilter(ModelComposed):
 
 
     attribute_map = {
-        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
+        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -147,8 +147,8 @@ class AttributeFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -160,14 +160,18 @@ class AttributeFilter(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -248,8 +252,8 @@ class AttributeFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,14 +263,18 @@ class AttributeFilter(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

@@ -99,11 +99,11 @@ class DeclarativeOrganization(ModelNormal):
         lazy_import()
         return {
             'organization': (DeclarativeOrganizationInfo,),  # noqa: E501
-            'users': ([DeclarativeUser],),  # noqa: E501
-            'user_groups': ([DeclarativeUserGroup],),  # noqa: E501
             'data_sources': ([DeclarativeDataSource],),  # noqa: E501
-            'workspaces': ([DeclarativeWorkspace],),  # noqa: E501
+            'user_groups': ([DeclarativeUserGroup],),  # noqa: E501
+            'users': ([DeclarativeUser],),  # noqa: E501
             'workspace_data_filters': ([DeclarativeWorkspaceDataFilter],),  # noqa: E501
+            'workspaces': ([DeclarativeWorkspace],),  # noqa: E501
         }
 
     @cached_property
@@ -113,11 +113,11 @@ class DeclarativeOrganization(ModelNormal):
 
     attribute_map = {
         'organization': 'organization',  # noqa: E501
-        'users': 'users',  # noqa: E501
-        'user_groups': 'userGroups',  # noqa: E501
         'data_sources': 'dataSources',  # noqa: E501
-        'workspaces': 'workspaces',  # noqa: E501
+        'user_groups': 'userGroups',  # noqa: E501
+        'users': 'users',  # noqa: E501
         'workspace_data_filters': 'workspaceDataFilters',  # noqa: E501
+        'workspaces': 'workspaces',  # noqa: E501
     }
 
     read_only_vars = {
@@ -164,15 +164,15 @@ class DeclarativeOrganization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            users ([DeclarativeUser]): [optional]  # noqa: E501
-            user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
-            workspaces ([DeclarativeWorkspace]): [optional]  # noqa: E501
+            user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
+            users ([DeclarativeUser]): [optional]  # noqa: E501
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]): [optional]  # noqa: E501
+            workspaces ([DeclarativeWorkspace]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -180,14 +180,18 @@ class DeclarativeOrganization(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -254,11 +258,11 @@ class DeclarativeOrganization(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            users ([DeclarativeUser]): [optional]  # noqa: E501
-            user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
             data_sources ([DeclarativeDataSource]): [optional]  # noqa: E501
-            workspaces ([DeclarativeWorkspace]): [optional]  # noqa: E501
+            user_groups ([DeclarativeUserGroup]): [optional]  # noqa: E501
+            users ([DeclarativeUser]): [optional]  # noqa: E501
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]): [optional]  # noqa: E501
+            workspaces ([DeclarativeWorkspace]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -268,14 +272,18 @@ class DeclarativeOrganization(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

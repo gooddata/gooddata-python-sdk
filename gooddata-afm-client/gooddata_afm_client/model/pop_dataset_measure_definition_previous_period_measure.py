@@ -31,9 +31,9 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.local_identifier import LocalIdentifier
+    from gooddata_afm_client.model.afm_local_identifier import AfmLocalIdentifier
     from gooddata_afm_client.model.pop_dataset import PopDataset
-    globals()['LocalIdentifier'] = LocalIdentifier
+    globals()['AfmLocalIdentifier'] = AfmLocalIdentifier
     globals()['PopDataset'] = PopDataset
 
 
@@ -90,8 +90,8 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         """
         lazy_import()
         return {
-            'measure_identifier': (LocalIdentifier,),  # noqa: E501
             'date_datasets': ([PopDataset],),  # noqa: E501
+            'measure_identifier': (AfmLocalIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -100,8 +100,8 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
 
 
     attribute_map = {
-        'measure_identifier': 'measureIdentifier',  # noqa: E501
         'date_datasets': 'dateDatasets',  # noqa: E501
+        'measure_identifier': 'measureIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -111,12 +111,12 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, measure_identifier, date_datasets, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, date_datasets, measure_identifier, *args, **kwargs):  # noqa: E501
         """PopDatasetMeasureDefinitionPreviousPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            measure_identifier (LocalIdentifier):
             date_datasets ([PopDataset]):
+            measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -152,7 +152,7 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -160,14 +160,18 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -176,8 +180,8 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.measure_identifier = measure_identifier
         self.date_datasets = date_datasets
+        self.measure_identifier = measure_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -198,12 +202,12 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, measure_identifier, date_datasets, *args, **kwargs):  # noqa: E501
+    def __init__(self, date_datasets, measure_identifier, *args, **kwargs):  # noqa: E501
         """PopDatasetMeasureDefinitionPreviousPeriodMeasure - a model defined in OpenAPI
 
         Args:
-            measure_identifier (LocalIdentifier):
             date_datasets ([PopDataset]):
+            measure_identifier (AfmLocalIdentifier):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -245,14 +249,18 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -261,8 +269,8 @@ class PopDatasetMeasureDefinitionPreviousPeriodMeasure(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.measure_identifier = measure_identifier
         self.date_datasets = date_datasets
+        self.measure_identifier = measure_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

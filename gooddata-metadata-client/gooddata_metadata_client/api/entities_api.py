@@ -22,7 +22,6 @@ from gooddata_metadata_client.model_utils import (  # noqa: F401
     none_type,
     validate_and_convert_types
 )
-from gooddata_metadata_client.model.inline_response200 import InlineResponse200
 from gooddata_metadata_client.model.json_api_analytical_dashboard_in_document import JsonApiAnalyticalDashboardInDocument
 from gooddata_metadata_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from gooddata_metadata_client.model.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
@@ -34,6 +33,7 @@ from gooddata_metadata_client.model.json_api_attribute_out_document import JsonA
 from gooddata_metadata_client.model.json_api_attribute_out_list import JsonApiAttributeOutList
 from gooddata_metadata_client.model.json_api_cookie_security_configuration_in_document import JsonApiCookieSecurityConfigurationInDocument
 from gooddata_metadata_client.model.json_api_cookie_security_configuration_out_document import JsonApiCookieSecurityConfigurationOutDocument
+from gooddata_metadata_client.model.json_api_cookie_security_configuration_patch_document import JsonApiCookieSecurityConfigurationPatchDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
@@ -48,6 +48,8 @@ from gooddata_metadata_client.model.json_api_data_source_table_out_document impo
 from gooddata_metadata_client.model.json_api_data_source_table_out_list import JsonApiDataSourceTableOutList
 from gooddata_metadata_client.model.json_api_dataset_out_document import JsonApiDatasetOutDocument
 from gooddata_metadata_client.model.json_api_dataset_out_list import JsonApiDatasetOutList
+from gooddata_metadata_client.model.json_api_entitlement_out_document import JsonApiEntitlementOutDocument
+from gooddata_metadata_client.model.json_api_entitlement_out_list import JsonApiEntitlementOutList
 from gooddata_metadata_client.model.json_api_fact_out_document import JsonApiFactOutDocument
 from gooddata_metadata_client.model.json_api_fact_out_list import JsonApiFactOutList
 from gooddata_metadata_client.model.json_api_filter_context_in_document import JsonApiFilterContextInDocument
@@ -62,6 +64,7 @@ from gooddata_metadata_client.model.json_api_metric_out_list import JsonApiMetri
 from gooddata_metadata_client.model.json_api_metric_patch_document import JsonApiMetricPatchDocument
 from gooddata_metadata_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
 from gooddata_metadata_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
+from gooddata_metadata_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
 from gooddata_metadata_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
 from gooddata_metadata_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
 from gooddata_metadata_client.model.json_api_user_group_out_list import JsonApiUserGroupOutList
@@ -101,7 +104,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAnalyticalDashboardOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards',
                 'operation_id': 'create_entity_analytical_dashboards',
                 'http_method': 'POST',
                 'servers': None,
@@ -175,7 +178,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiApiTokenOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{userId}/apiTokens',
+                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens',
                 'operation_id': 'create_entity_api_tokens',
                 'http_method': 'POST',
                 'servers': None,
@@ -231,7 +234,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDashboardPluginOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins',
                 'operation_id': 'create_entity_dashboard_plugins',
                 'http_method': 'POST',
                 'servers': None,
@@ -287,7 +290,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources',
+                'endpoint_path': '/api/v1/entities/dataSources',
                 'operation_id': 'create_entity_data_sources',
                 'http_method': 'POST',
                 'servers': None,
@@ -337,7 +340,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiFilterContextOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts',
                 'operation_id': 'create_entity_filter_contexts',
                 'http_method': 'POST',
                 'servers': None,
@@ -407,7 +410,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics',
                 'operation_id': 'create_entity_metrics',
                 'http_method': 'POST',
                 'servers': None,
@@ -440,6 +443,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
+                        "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
                 },
@@ -478,7 +482,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/userGroups',
+                'endpoint_path': '/api/v1/entities/userGroups',
                 'operation_id': 'create_entity_user_groups',
                 'http_method': 'POST',
                 'servers': None,
@@ -541,7 +545,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users',
+                'endpoint_path': '/api/v1/entities/users',
                 'operation_id': 'create_entity_users',
                 'http_method': 'POST',
                 'servers': None,
@@ -603,7 +607,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiVisualizationObjectOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects',
                 'operation_id': 'create_entity_visualization_objects',
                 'http_method': 'POST',
                 'servers': None,
@@ -675,7 +679,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters',
                 'operation_id': 'create_entity_workspace_data_filters',
                 'http_method': 'POST',
                 'servers': None,
@@ -744,7 +748,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces',
+                'endpoint_path': '/api/v1/entities/workspaces',
                 'operation_id': 'create_entity_workspaces',
                 'http_method': 'POST',
                 'servers': None,
@@ -807,7 +811,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
                 'operation_id': 'delete_entity_analytical_dashboards',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -816,7 +820,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -840,21 +843,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -870,7 +869,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{userId}/apiTokens/{id}',
+                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens/{id}',
                 'operation_id': 'delete_entity_api_tokens',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -879,7 +878,6 @@ class EntitiesApi(object):
                 'all': [
                     'user_id',
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -910,21 +908,17 @@ class EntitiesApi(object):
                         (str,),
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'user_id': 'userId',
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'user_id': 'path',
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -940,7 +934,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
                 'operation_id': 'delete_entity_dashboard_plugins',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -949,7 +943,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -973,21 +966,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1003,7 +992,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{id}',
+                'endpoint_path': '/api/v1/entities/dataSources/{id}',
                 'operation_id': 'delete_entity_data_sources',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1011,7 +1000,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1039,19 +1027,15 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1067,7 +1051,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
                 'operation_id': 'delete_entity_filter_contexts',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1076,7 +1060,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1100,21 +1083,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1130,7 +1109,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics/{objectId}',
                 'operation_id': 'delete_entity_metrics',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1139,7 +1118,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1163,21 +1141,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1193,7 +1167,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/userGroups/{id}',
+                'endpoint_path': '/api/v1/entities/userGroups/{id}',
                 'operation_id': 'delete_entity_user_groups',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1201,7 +1175,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1229,19 +1202,15 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1257,7 +1226,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{id}',
+                'endpoint_path': '/api/v1/entities/users/{id}',
                 'operation_id': 'delete_entity_users',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1265,7 +1234,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1293,19 +1261,15 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1321,7 +1285,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
                 'operation_id': 'delete_entity_visualization_objects',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1330,7 +1294,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1354,21 +1317,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1384,7 +1343,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
                 'operation_id': 'delete_entity_workspace_data_filters',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1393,7 +1352,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1417,21 +1375,17 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1447,7 +1401,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{id}',
+                'endpoint_path': '/api/v1/entities/workspaces/{id}',
                 'operation_id': 'delete_entity_workspaces',
                 'http_method': 'DELETE',
                 'servers': None,
@@ -1455,7 +1409,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -1483,19 +1436,15 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1511,7 +1460,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAnalyticalDashboardOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards',
                 'operation_id': 'get_all_entities_analytical_dashboards',
                 'http_method': 'GET',
                 'servers': None,
@@ -1519,7 +1468,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -1557,8 +1505,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -1574,7 +1520,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -1584,7 +1529,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -1609,7 +1553,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiApiTokenOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{userId}/apiTokens',
+                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens',
                 'operation_id': 'get_all_entities_api_tokens',
                 'http_method': 'GET',
                 'servers': None,
@@ -1617,7 +1561,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'user_id',
-                    'predicate',
                     'filter',
                     'page',
                     'size',
@@ -1641,8 +1584,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'user_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'page':
@@ -1654,7 +1595,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'user_id': 'userId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
@@ -1662,7 +1602,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'user_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
@@ -1684,7 +1623,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAttributeOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/attributes',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributes',
                 'operation_id': 'get_all_entities_attributes',
                 'http_method': 'GET',
                 'servers': None,
@@ -1692,7 +1631,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -1720,14 +1658,13 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "LABELS": "labels",
                         "DATASET": "dataset",
+                        "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -1743,7 +1680,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -1753,7 +1689,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -1778,7 +1713,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDashboardPluginOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins',
                 'operation_id': 'get_all_entities_dashboard_plugins',
                 'http_method': 'GET',
                 'servers': None,
@@ -1786,7 +1721,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'page',
                     'size',
@@ -1811,8 +1745,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'page':
@@ -1826,7 +1758,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
@@ -1835,7 +1766,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
@@ -1858,14 +1788,13 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceIdentifierOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSourceIdentifiers',
+                'endpoint_path': '/api/v1/entities/dataSourceIdentifiers',
                 'operation_id': 'get_all_entities_data_source_identifiers',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'predicate',
                     'filter',
                     'page',
                     'size',
@@ -1897,8 +1826,6 @@ class EntitiesApi(object):
                     },
                 },
                 'openapi_types': {
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'page':
@@ -1911,7 +1838,6 @@ class EntitiesApi(object):
                         ([str],),
                 },
                 'attribute_map': {
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
@@ -1919,7 +1845,6 @@ class EntitiesApi(object):
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
-                    'predicate': 'query',
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
@@ -1943,7 +1868,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceTableOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{dataSourceId}/dataSourceTables',
+                'endpoint_path': '/api/v1/entities/dataSources/{dataSourceId}/dataSourceTables',
                 'operation_id': 'get_all_entities_data_source_tables',
                 'http_method': 'GET',
                 'servers': None,
@@ -1951,7 +1876,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'data_source_id',
-                    'predicate',
                     'filter',
                     'page',
                     'size',
@@ -1975,8 +1899,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'data_source_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'page':
@@ -1988,7 +1910,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'data_source_id': 'dataSourceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
@@ -1996,7 +1917,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'data_source_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
@@ -2018,14 +1938,13 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources',
+                'endpoint_path': '/api/v1/entities/dataSources',
                 'operation_id': 'get_all_entities_data_sources',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'predicate',
                     'filter',
                     'page',
                     'size',
@@ -2057,8 +1976,6 @@ class EntitiesApi(object):
                     },
                 },
                 'openapi_types': {
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'page':
@@ -2071,7 +1988,6 @@ class EntitiesApi(object):
                         ([str],),
                 },
                 'attribute_map': {
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
@@ -2079,7 +1995,6 @@ class EntitiesApi(object):
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
-                    'predicate': 'query',
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
@@ -2103,7 +2018,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDatasetOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/datasets',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/datasets',
                 'operation_id': 'get_all_entities_datasets',
                 'http_method': 'GET',
                 'servers': None,
@@ -2111,7 +2026,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2146,8 +2060,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2163,7 +2075,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2173,7 +2084,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2194,11 +2104,74 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_entitlements_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiEntitlementOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/entitlements',
+                'operation_id': 'get_all_entities_entitlements',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_all_entities_facts_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiFactOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/facts',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/facts',
                 'operation_id': 'get_all_entities_facts',
                 'http_method': 'GET',
                 'servers': None,
@@ -2206,7 +2179,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2239,8 +2211,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2256,7 +2226,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2266,7 +2235,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2291,7 +2259,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiFilterContextOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts',
                 'operation_id': 'get_all_entities_filter_contexts',
                 'http_method': 'GET',
                 'servers': None,
@@ -2299,7 +2267,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2333,8 +2300,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2350,7 +2315,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2360,7 +2324,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2385,7 +2348,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiLabelOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/labels',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/labels',
                 'operation_id': 'get_all_entities_labels',
                 'http_method': 'GET',
                 'servers': None,
@@ -2393,7 +2356,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2426,8 +2388,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2443,7 +2403,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2453,7 +2412,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2478,7 +2436,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiMetricOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics',
                 'operation_id': 'get_all_entities_metrics',
                 'http_method': 'GET',
                 'servers': None,
@@ -2486,263 +2444,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
-                    'filter',
-                    'include',
-                    'page',
-                    'size',
-                    'sort',
-                    'x_gdc_validate_relations',
-                ],
-                'required': [
-                    'workspace_id',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                    'include',
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                    ('include',): {
-
-                        "FACTS": "facts",
-                        "ATTRIBUTES": "attributes",
-                        "LABELS": "labels",
-                        "METRICS": "metrics",
-                        "ALL": "ALL"
-                    },
-                },
-                'openapi_types': {
-                    'workspace_id':
-                        (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
-                    'include':
-                        ([str],),
-                    'page':
-                        (int,),
-                    'size':
-                        (int,),
-                    'sort':
-                        ([str],),
-                    'x_gdc_validate_relations':
-                        (bool,),
-                },
-                'attribute_map': {
-                    'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
-                    'filter': 'filter',
-                    'include': 'include',
-                    'page': 'page',
-                    'size': 'size',
-                    'sort': 'sort',
-                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
-                },
-                'location_map': {
-                    'workspace_id': 'path',
-                    'predicate': 'query',
-                    'filter': 'query',
-                    'include': 'query',
-                    'page': 'query',
-                    'size': 'query',
-                    'sort': 'query',
-                    'x_gdc_validate_relations': 'header',
-                },
-                'collection_format_map': {
-                    'include': 'csv',
-                    'sort': 'multi',
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
-        self.get_all_entities_user_groups_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiUserGroupOutList,),
-                'auth': [],
-                'endpoint_path': '/api/entities/userGroups',
-                'operation_id': 'get_all_entities_user_groups',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'predicate',
-                    'filter',
-                    'include',
-                    'page',
-                    'size',
-                    'sort',
-                ],
-                'required': [],
-                'nullable': [
-                ],
-                'enum': [
-                    'include',
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                    ('include',): {
-
-                        "USERGROUPS": "userGroups",
-                        "PARENTS": "parents",
-                        "ALL": "ALL"
-                    },
-                },
-                'openapi_types': {
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
-                    'include':
-                        ([str],),
-                    'page':
-                        (int,),
-                    'size':
-                        (int,),
-                    'sort':
-                        ([str],),
-                },
-                'attribute_map': {
-                    'predicate': 'predicate',
-                    'filter': 'filter',
-                    'include': 'include',
-                    'page': 'page',
-                    'size': 'size',
-                    'sort': 'sort',
-                },
-                'location_map': {
-                    'predicate': 'query',
-                    'filter': 'query',
-                    'include': 'query',
-                    'page': 'query',
-                    'size': 'query',
-                    'sort': 'query',
-                },
-                'collection_format_map': {
-                    'include': 'csv',
-                    'sort': 'multi',
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
-        self.get_all_entities_users_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiUserOutList,),
-                'auth': [],
-                'endpoint_path': '/api/entities/users',
-                'operation_id': 'get_all_entities_users',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'predicate',
-                    'filter',
-                    'include',
-                    'page',
-                    'size',
-                    'sort',
-                ],
-                'required': [],
-                'nullable': [
-                ],
-                'enum': [
-                    'include',
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                    ('include',): {
-
-                        "USERGROUPS": "userGroups",
-                        "ALL": "ALL"
-                    },
-                },
-                'openapi_types': {
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                    'filter':
-                        (str,),
-                    'include':
-                        ([str],),
-                    'page':
-                        (int,),
-                    'size':
-                        (int,),
-                    'sort':
-                        ([str],),
-                },
-                'attribute_map': {
-                    'predicate': 'predicate',
-                    'filter': 'filter',
-                    'include': 'include',
-                    'page': 'page',
-                    'size': 'size',
-                    'sort': 'sort',
-                },
-                'location_map': {
-                    'predicate': 'query',
-                    'filter': 'query',
-                    'include': 'query',
-                    'page': 'query',
-                    'size': 'query',
-                    'sort': 'query',
-                },
-                'collection_format_map': {
-                    'include': 'csv',
-                    'sort': 'multi',
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
-        self.get_all_entities_visualization_objects_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiVisualizationObjectOutList,),
-                'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects',
-                'operation_id': 'get_all_entities_visualization_objects',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2778,8 +2479,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2795,7 +2494,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2805,7 +2503,248 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'x_gdc_validate_relations': 'header',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_user_groups_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserGroupOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/userGroups',
+                'operation_id': 'get_all_entities_user_groups',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERGROUPS": "userGroups",
+                        "PARENTS": "parents",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_users_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/users',
+                'operation_id': 'get_all_entities_users',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERGROUPS": "userGroups",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_visualization_objects_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiVisualizationObjectOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects',
+                'operation_id': 'get_all_entities_visualization_objects',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                    'x_gdc_validate_relations',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2830,7 +2769,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterSettingOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilterSettings',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings',
                 'operation_id': 'get_all_entities_workspace_data_filter_settings',
                 'http_method': 'GET',
                 'servers': None,
@@ -2838,7 +2777,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2871,8 +2809,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2888,7 +2824,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2898,7 +2833,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -2923,7 +2857,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters',
                 'operation_id': 'get_all_entities_workspace_data_filters',
                 'http_method': 'GET',
                 'servers': None,
@@ -2931,7 +2865,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -2964,8 +2897,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -2981,7 +2912,6 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -2991,7 +2921,6 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -3016,14 +2945,13 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceOutList,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces',
+                'endpoint_path': '/api/v1/entities/workspaces',
                 'operation_id': 'get_all_entities_workspaces',
                 'http_method': 'GET',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'predicate',
                     'filter',
                     'include',
                     'page',
@@ -3064,8 +2992,6 @@ class EntitiesApi(object):
                     },
                 },
                 'openapi_types': {
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -3080,7 +3006,6 @@ class EntitiesApi(object):
                         ([str],),
                 },
                 'attribute_map': {
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'page': 'page',
@@ -3089,7 +3014,6 @@ class EntitiesApi(object):
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'page': 'query',
@@ -3113,9 +3037,9 @@ class EntitiesApi(object):
         )
         self.get_all_options_endpoint = _Endpoint(
             settings={
-                'response_type': (InlineResponse200,),
+                'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/options',
+                'endpoint_path': '/api/v1/options',
                 'operation_id': 'get_all_options',
                 'http_method': 'GET',
                 'servers': None,
@@ -3155,9 +3079,9 @@ class EntitiesApi(object):
         )
         self.get_data_source_drivers_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (str,)},),
+                'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/options/availableDrivers',
+                'endpoint_path': '/api/v1/options/availableDrivers',
                 'operation_id': 'get_data_source_drivers',
                 'http_method': 'GET',
                 'servers': None,
@@ -3199,7 +3123,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAnalyticalDashboardOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
                 'operation_id': 'get_entity_analytical_dashboards',
                 'http_method': 'GET',
                 'servers': None,
@@ -3208,7 +3132,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -3246,8 +3169,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -3258,7 +3179,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -3266,7 +3186,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -3287,7 +3206,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiApiTokenOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{userId}/apiTokens/{id}',
+                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens/{id}',
                 'operation_id': 'get_entity_api_tokens',
                 'http_method': 'GET',
                 'servers': None,
@@ -3296,7 +3215,6 @@ class EntitiesApi(object):
                 'all': [
                     'user_id',
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -3327,21 +3245,17 @@ class EntitiesApi(object):
                         (str,),
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'user_id': 'userId',
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'user_id': 'path',
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -3359,7 +3273,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAttributeOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/attributes/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributes/{objectId}',
                 'operation_id': 'get_entity_attributes',
                 'http_method': 'GET',
                 'servers': None,
@@ -3368,7 +3282,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -3394,6 +3307,7 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "LABELS": "labels",
                         "DATASET": "dataset",
+                        "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
                     },
                 },
@@ -3402,8 +3316,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -3414,7 +3326,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -3422,7 +3333,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -3443,7 +3353,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiCookieSecurityConfigurationOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/admin/cookieSecurityConfigurations/{id}',
+                'endpoint_path': '/api/v1/entities/admin/cookieSecurityConfigurations/{id}',
                 'operation_id': 'get_entity_cookie_security_configurations',
                 'http_method': 'GET',
                 'servers': None,
@@ -3451,7 +3361,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -3479,19 +3388,15 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -3509,7 +3414,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDashboardPluginOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
                 'operation_id': 'get_entity_dashboard_plugins',
                 'http_method': 'GET',
                 'servers': None,
@@ -3518,7 +3423,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'x_gdc_validate_relations',
                 ],
@@ -3543,8 +3447,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'x_gdc_validate_relations':
@@ -3553,14 +3455,12 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'x_gdc_validate_relations': 'header',
                 },
@@ -3579,7 +3479,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceIdentifierOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSourceIdentifiers/{id}',
+                'endpoint_path': '/api/v1/entities/dataSourceIdentifiers/{id}',
                 'operation_id': 'get_entity_data_source_identifiers',
                 'http_method': 'GET',
                 'servers': None,
@@ -3587,7 +3487,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'meta_include',
                 ],
@@ -3627,8 +3526,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'meta_include':
@@ -3636,13 +3533,11 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'meta_include': 'query',
                 },
@@ -3662,7 +3557,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceTableOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{dataSourceId}/dataSourceTables/{id}',
+                'endpoint_path': '/api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id}',
                 'operation_id': 'get_entity_data_source_tables',
                 'http_method': 'GET',
                 'servers': None,
@@ -3671,7 +3566,6 @@ class EntitiesApi(object):
                 'all': [
                     'data_source_id',
                     'id',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -3702,21 +3596,17 @@ class EntitiesApi(object):
                         (str,),
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'data_source_id': 'dataSourceId',
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'data_source_id': 'path',
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -3734,7 +3624,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{id}',
+                'endpoint_path': '/api/v1/entities/dataSources/{id}',
                 'operation_id': 'get_entity_data_sources',
                 'http_method': 'GET',
                 'servers': None,
@@ -3742,7 +3632,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'meta_include',
                 ],
@@ -3782,8 +3671,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'meta_include':
@@ -3791,13 +3678,11 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'meta_include': 'query',
                 },
@@ -3817,7 +3702,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDatasetOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/datasets/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/datasets/{objectId}',
                 'operation_id': 'get_entity_datasets',
                 'http_method': 'GET',
                 'servers': None,
@@ -3826,7 +3711,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -3861,8 +3745,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -3873,7 +3755,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -3881,7 +3762,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -3898,11 +3778,72 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_entitlements_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiEntitlementOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/entitlements/{id}',
+                'operation_id': 'get_entity_entitlements',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_facts_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiFactOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/facts/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/facts/{objectId}',
                 'operation_id': 'get_entity_facts',
                 'http_method': 'GET',
                 'servers': None,
@@ -3911,7 +3852,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -3944,8 +3884,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -3956,7 +3894,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -3964,7 +3901,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -3985,7 +3921,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiFilterContextOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
                 'operation_id': 'get_entity_filter_contexts',
                 'http_method': 'GET',
                 'servers': None,
@@ -3994,7 +3930,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4028,8 +3963,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4040,7 +3973,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4048,7 +3980,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4069,7 +4000,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiLabelOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/labels/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/labels/{objectId}',
                 'operation_id': 'get_entity_labels',
                 'http_method': 'GET',
                 'servers': None,
@@ -4078,7 +4009,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4111,8 +4041,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4123,7 +4051,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4131,7 +4058,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4152,7 +4078,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics/{objectId}',
                 'operation_id': 'get_entity_metrics',
                 'http_method': 'GET',
                 'servers': None,
@@ -4161,7 +4087,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4188,6 +4113,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
+                        "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
                 },
@@ -4196,8 +4122,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4208,7 +4132,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4216,7 +4139,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4237,7 +4159,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiOrganizationOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/admin/organizations/{id}',
+                'endpoint_path': '/api/v1/entities/admin/organizations/{id}',
                 'operation_id': 'get_entity_organizations',
                 'http_method': 'GET',
                 'servers': None,
@@ -4245,7 +4167,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'include',
                     'meta_include',
@@ -4295,8 +4216,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4306,14 +4225,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'meta_include': 'query',
@@ -4335,7 +4252,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/userGroups/{id}',
+                'endpoint_path': '/api/v1/entities/userGroups/{id}',
                 'operation_id': 'get_entity_user_groups',
                 'http_method': 'GET',
                 'servers': None,
@@ -4343,7 +4260,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -4379,8 +4295,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4388,13 +4302,11 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -4414,7 +4326,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{id}',
+                'endpoint_path': '/api/v1/entities/users/{id}',
                 'operation_id': 'get_entity_users',
                 'http_method': 'GET',
                 'servers': None,
@@ -4422,7 +4334,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -4457,8 +4368,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4466,13 +4375,11 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -4492,7 +4399,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiVisualizationObjectOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
                 'operation_id': 'get_entity_visualization_objects',
                 'http_method': 'GET',
                 'servers': None,
@@ -4501,7 +4408,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4537,8 +4443,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4549,7 +4453,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4557,7 +4460,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4578,7 +4480,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterSettingOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}',
                 'operation_id': 'get_entity_workspace_data_filter_settings',
                 'http_method': 'GET',
                 'servers': None,
@@ -4587,7 +4489,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4620,8 +4521,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4632,7 +4531,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4640,7 +4538,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4661,7 +4558,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
                 'operation_id': 'get_entity_workspace_data_filters',
                 'http_method': 'GET',
                 'servers': None,
@@ -4670,7 +4567,6 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'object_id',
-                    'predicate',
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
@@ -4703,8 +4599,6 @@ class EntitiesApi(object):
                         (str,),
                     'object_id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4715,7 +4609,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
@@ -4723,7 +4616,6 @@ class EntitiesApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
@@ -4744,7 +4636,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{id}',
+                'endpoint_path': '/api/v1/entities/workspaces/{id}',
                 'operation_id': 'get_entity_workspaces',
                 'http_method': 'GET',
                 'servers': None,
@@ -4752,7 +4644,6 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'id',
-                    'predicate',
                     'filter',
                     'include',
                     'meta_include',
@@ -4801,8 +4692,6 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4812,14 +4701,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'id': 'path',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                     'meta_include': 'query',
@@ -4841,7 +4728,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/entities/organization',
+                'endpoint_path': '/api/v1/entities/organization',
                 'operation_id': 'get_organization',
                 'http_method': 'GET',
                 'servers': None,
@@ -4897,7 +4784,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAnalyticalDashboardOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
                 'operation_id': 'patch_entity_analytical_dashboards',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -4907,7 +4794,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_analytical_dashboard_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -4947,8 +4833,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_analytical_dashboard_patch_document':
                         (JsonApiAnalyticalDashboardPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -4957,7 +4841,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -4965,7 +4848,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_analytical_dashboard_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -4983,11 +4865,79 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.patch_entity_cookie_security_configurations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCookieSecurityConfigurationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/admin/cookieSecurityConfigurations/{id}',
+                'operation_id': 'patch_entity_cookie_security_configurations',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_cookie_security_configuration_patch_document',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                    'json_api_cookie_security_configuration_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_cookie_security_configuration_patch_document':
+                        (JsonApiCookieSecurityConfigurationPatchDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_cookie_security_configuration_patch_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.patch_entity_dashboard_plugins_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiDashboardPluginOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
                 'operation_id': 'patch_entity_dashboard_plugins',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -4997,7 +4947,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_dashboard_plugin_patch_document',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -5024,22 +4973,18 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_dashboard_plugin_patch_document':
                         (JsonApiDashboardPluginPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -5059,7 +5004,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{id}',
+                'endpoint_path': '/api/v1/entities/dataSources/{id}',
                 'operation_id': 'patch_entity_data_sources',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5068,7 +5013,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_data_source_patch_document',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -5099,20 +5043,16 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_data_source_patch_document':
                         (JsonApiDataSourcePatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_data_source_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -5132,7 +5072,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiFilterContextOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
                 'operation_id': 'patch_entity_filter_contexts',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5142,7 +5082,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_filter_context_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5178,8 +5117,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_filter_context_patch_document':
                         (JsonApiFilterContextPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5188,7 +5125,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -5196,7 +5132,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_filter_context_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5218,7 +5153,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics/{objectId}',
                 'operation_id': 'patch_entity_metrics',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5228,7 +5163,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_metric_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5255,6 +5189,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
+                        "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
                 },
@@ -5265,8 +5200,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_metric_patch_document':
                         (JsonApiMetricPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5275,7 +5208,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -5283,7 +5215,89 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_metric_patch_document': 'body',
-                    'predicate': 'query',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.patch_entity_organizations_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiOrganizationOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/admin/organizations/{id}',
+                'operation_id': 'patch_entity_organizations',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_organization_patch_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'id',
+                    'json_api_organization_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "BOOTSTRAPUSER": "bootstrapUser",
+                        "BOOTSTRAPUSERGROUP": "bootstrapUserGroup",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_organization_patch_document':
+                        (JsonApiOrganizationPatchDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_organization_patch_document': 'body',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5305,7 +5319,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/userGroups/{id}',
+                'endpoint_path': '/api/v1/entities/userGroups/{id}',
                 'operation_id': 'patch_entity_user_groups',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5314,7 +5328,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_user_group_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5353,8 +5366,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_user_group_patch_document':
                         (JsonApiUserGroupPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5362,14 +5373,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_user_group_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5391,7 +5400,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{id}',
+                'endpoint_path': '/api/v1/entities/users/{id}',
                 'operation_id': 'patch_entity_users',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5400,7 +5409,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_user_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5438,8 +5446,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_user_patch_document':
                         (JsonApiUserPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5447,14 +5453,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_user_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5476,7 +5480,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiVisualizationObjectOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
                 'operation_id': 'patch_entity_visualization_objects',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5486,7 +5490,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_visualization_object_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5524,8 +5527,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_visualization_object_patch_document':
                         (JsonApiVisualizationObjectPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5534,7 +5535,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -5542,7 +5542,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_visualization_object_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5564,7 +5563,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
                 'operation_id': 'patch_entity_workspace_data_filters',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5574,7 +5573,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_workspace_data_filter_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5609,8 +5607,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_workspace_data_filter_patch_document':
                         (JsonApiWorkspaceDataFilterPatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5619,7 +5615,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -5627,7 +5622,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_workspace_data_filter_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5649,7 +5643,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{id}',
+                'endpoint_path': '/api/v1/entities/workspaces/{id}',
                 'operation_id': 'patch_entity_workspaces',
                 'http_method': 'PATCH',
                 'servers': None,
@@ -5658,7 +5652,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_workspace_patch_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5697,8 +5690,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_workspace_patch_document':
                         (JsonApiWorkspacePatchDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5706,14 +5697,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_workspace_patch_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5735,7 +5724,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiAnalyticalDashboardOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId}',
                 'operation_id': 'update_entity_analytical_dashboards',
                 'http_method': 'PUT',
                 'servers': None,
@@ -5745,7 +5734,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_analytical_dashboard_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -5785,8 +5773,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_analytical_dashboard_in_document':
                         (JsonApiAnalyticalDashboardInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -5795,7 +5781,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -5803,7 +5788,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_analytical_dashboard_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -5825,7 +5809,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiCookieSecurityConfigurationOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/admin/cookieSecurityConfigurations/{id}',
+                'endpoint_path': '/api/v1/entities/admin/cookieSecurityConfigurations/{id}',
                 'operation_id': 'update_entity_cookie_security_configurations',
                 'http_method': 'PUT',
                 'servers': None,
@@ -5834,7 +5818,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_cookie_security_configuration_in_document',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -5865,20 +5848,16 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_cookie_security_configuration_in_document':
                         (JsonApiCookieSecurityConfigurationInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_cookie_security_configuration_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -5898,7 +5877,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDashboardPluginOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId}',
                 'operation_id': 'update_entity_dashboard_plugins',
                 'http_method': 'PUT',
                 'servers': None,
@@ -5908,7 +5887,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_dashboard_plugin_in_document',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -5935,22 +5913,18 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_dashboard_plugin_in_document':
                         (JsonApiDashboardPluginInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -5970,7 +5944,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiDataSourceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/dataSources/{id}',
+                'endpoint_path': '/api/v1/entities/dataSources/{id}',
                 'operation_id': 'update_entity_data_sources',
                 'http_method': 'PUT',
                 'servers': None,
@@ -5979,7 +5953,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_data_source_in_document',
-                    'predicate',
                     'filter',
                 ],
                 'required': [
@@ -6010,20 +5983,16 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_data_source_in_document':
                         (JsonApiDataSourceInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_data_source_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -6043,7 +6012,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiFilterContextOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId}',
                 'operation_id': 'update_entity_filter_contexts',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6053,7 +6022,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_filter_context_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6089,8 +6057,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_filter_context_in_document':
                         (JsonApiFilterContextInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6099,7 +6065,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -6107,7 +6072,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_filter_context_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6129,7 +6093,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/metrics/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/metrics/{objectId}',
                 'operation_id': 'update_entity_metrics',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6139,7 +6103,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_metric_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6166,6 +6129,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
+                        "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
                 },
@@ -6176,8 +6140,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_metric_in_document':
                         (JsonApiMetricInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6186,7 +6148,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -6194,7 +6155,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_metric_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6216,7 +6176,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiOrganizationOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/admin/organizations/{id}',
+                'endpoint_path': '/api/v1/entities/admin/organizations/{id}',
                 'operation_id': 'update_entity_organizations',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6225,7 +6185,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_organization_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6266,8 +6225,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_organization_in_document':
                         (JsonApiOrganizationInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6275,14 +6232,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_organization_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6304,7 +6259,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/userGroups/{id}',
+                'endpoint_path': '/api/v1/entities/userGroups/{id}',
                 'operation_id': 'update_entity_user_groups',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6313,7 +6268,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_user_group_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6352,8 +6306,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_user_group_in_document':
                         (JsonApiUserGroupInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6361,14 +6313,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_user_group_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6390,7 +6340,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiUserOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/users/{id}',
+                'endpoint_path': '/api/v1/entities/users/{id}',
                 'operation_id': 'update_entity_users',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6399,7 +6349,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_user_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6437,8 +6386,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_user_in_document':
                         (JsonApiUserInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6446,14 +6393,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_user_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6475,7 +6420,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiVisualizationObjectOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
                 'operation_id': 'update_entity_visualization_objects',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6485,7 +6430,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_visualization_object_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6523,8 +6467,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_visualization_object_in_document':
                         (JsonApiVisualizationObjectInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6533,7 +6475,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -6541,7 +6482,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_visualization_object_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6563,7 +6503,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceDataFilterOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId}',
                 'operation_id': 'update_entity_workspace_data_filters',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6573,7 +6513,6 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'json_api_workspace_data_filter_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6608,8 +6547,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_workspace_data_filter_in_document':
                         (JsonApiWorkspaceDataFilterInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6618,7 +6555,6 @@ class EntitiesApi(object):
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
@@ -6626,7 +6562,6 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_workspace_data_filter_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6648,7 +6583,7 @@ class EntitiesApi(object):
             settings={
                 'response_type': (JsonApiWorkspaceOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/entities/workspaces/{id}',
+                'endpoint_path': '/api/v1/entities/workspaces/{id}',
                 'operation_id': 'update_entity_workspaces',
                 'http_method': 'PUT',
                 'servers': None,
@@ -6657,7 +6592,6 @@ class EntitiesApi(object):
                 'all': [
                     'id',
                     'json_api_workspace_in_document',
-                    'predicate',
                     'filter',
                     'include',
                 ],
@@ -6696,8 +6630,6 @@ class EntitiesApi(object):
                         (str,),
                     'json_api_workspace_in_document':
                         (JsonApiWorkspaceInDocument,),
-                    'predicate':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                     'filter':
                         (str,),
                     'include':
@@ -6705,14 +6637,12 @@ class EntitiesApi(object):
                 },
                 'attribute_map': {
                     'id': 'id',
-                    'predicate': 'predicate',
                     'filter': 'filter',
                     'include': 'include',
                 },
                 'location_map': {
                     'id': 'path',
                     'json_api_workspace_in_document': 'body',
-                    'predicate': 'query',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -6766,12 +6696,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -6797,9 +6735,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_analytical_dashboard_in_document'] = \
@@ -6840,12 +6782,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -6871,9 +6821,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['user_id'] = \
             user_id
         kwargs['json_api_api_token_in_document'] = \
@@ -6914,12 +6868,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -6945,9 +6907,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_dashboard_plugin_in_document'] = \
@@ -6986,12 +6952,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7017,9 +6991,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['json_api_data_source_in_document'] = \
             json_api_data_source_in_document
         return self.create_entity_data_sources_endpoint.call_with_http_info(**kwargs)
@@ -7059,12 +7037,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7090,9 +7076,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_filter_context_in_document'] = \
@@ -7134,12 +7124,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7165,9 +7163,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_metric_in_document'] = \
@@ -7207,12 +7209,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7238,9 +7248,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['json_api_user_group_in_document'] = \
             json_api_user_group_in_document
         return self.create_entity_user_groups_endpoint.call_with_http_info(**kwargs)
@@ -7278,12 +7292,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7309,9 +7331,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['json_api_user_in_document'] = \
             json_api_user_in_document
         return self.create_entity_users_endpoint.call_with_http_info(**kwargs)
@@ -7351,12 +7377,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7382,9 +7416,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_visualization_object_in_document'] = \
@@ -7426,12 +7464,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7457,9 +7503,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['json_api_workspace_data_filter_in_document'] = \
@@ -7499,12 +7549,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7530,9 +7588,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['json_api_workspace_in_document'] = \
             json_api_workspace_in_document
         return self.create_entity_workspaces_endpoint.call_with_http_info(**kwargs)
@@ -7556,7 +7618,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7573,12 +7634,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7604,9 +7673,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -7632,7 +7705,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7649,12 +7721,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7680,9 +7760,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['user_id'] = \
             user_id
         kwargs['id'] = \
@@ -7708,7 +7792,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7725,12 +7808,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7756,9 +7847,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -7782,7 +7877,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7799,12 +7893,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7830,9 +7932,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.delete_entity_data_sources_endpoint.call_with_http_info(**kwargs)
@@ -7856,7 +7962,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7873,12 +7978,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7904,9 +8017,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -7932,7 +8049,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7949,12 +8065,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -7980,9 +8104,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -8006,7 +8134,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -8023,12 +8150,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8054,9 +8189,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.delete_entity_user_groups_endpoint.call_with_http_info(**kwargs)
@@ -8078,7 +8217,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -8095,12 +8233,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8126,9 +8272,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.delete_entity_users_endpoint.call_with_http_info(**kwargs)
@@ -8152,7 +8302,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -8169,12 +8318,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8200,9 +8357,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -8228,7 +8389,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -8245,12 +8405,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8276,9 +8444,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -8302,7 +8474,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -8319,12 +8490,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8350,9 +8529,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.delete_entity_workspaces_endpoint.call_with_http_info(**kwargs)
@@ -8374,7 +8557,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -8396,12 +8578,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8427,9 +8617,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
@@ -8451,7 +8645,6 @@ class EntitiesApi(object):
             user_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
@@ -8471,12 +8664,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8502,9 +8703,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['user_id'] = \
             user_id
         return self.get_all_entities_api_tokens_endpoint.call_with_http_info(**kwargs)
@@ -8526,7 +8731,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -8548,12 +8752,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8579,9 +8791,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_attributes_endpoint.call_with_http_info(**kwargs)
@@ -8603,7 +8819,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
@@ -8624,12 +8839,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8655,9 +8878,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_dashboard_plugins_endpoint.call_with_http_info(**kwargs)
@@ -8676,7 +8903,6 @@ class EntitiesApi(object):
 
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
@@ -8697,12 +8923,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8728,9 +8962,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_data_source_identifiers_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_data_source_tables(
@@ -8750,7 +8988,6 @@ class EntitiesApi(object):
             data_source_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
@@ -8770,12 +9007,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8801,9 +9046,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         return self.get_all_entities_data_source_tables_endpoint.call_with_http_info(**kwargs)
@@ -8822,7 +9071,6 @@ class EntitiesApi(object):
 
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
@@ -8843,12 +9091,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8874,9 +9130,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_data_sources_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_datasets(
@@ -8896,7 +9156,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -8918,12 +9177,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -8949,12 +9216,97 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_datasets_endpoint.call_with_http_info(**kwargs)
+
+    def get_all_entities_entitlements(
+        self,
+        **kwargs
+    ):
+        """get_all_entities_entitlements  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_entitlements(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiEntitlementOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.get_all_entities_entitlements_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_facts(
         self,
@@ -8973,7 +9325,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -8995,12 +9346,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9026,9 +9385,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_facts_endpoint.call_with_http_info(**kwargs)
@@ -9050,7 +9413,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9072,12 +9434,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9103,9 +9473,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_filter_contexts_endpoint.call_with_http_info(**kwargs)
@@ -9127,7 +9501,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9149,12 +9522,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9180,9 +9561,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_labels_endpoint.call_with_http_info(**kwargs)
@@ -9204,7 +9589,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9226,12 +9610,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9257,9 +9649,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_metrics_endpoint.call_with_http_info(**kwargs)
@@ -9278,7 +9674,6 @@ class EntitiesApi(object):
 
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9299,12 +9694,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9330,9 +9733,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_user_groups_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_users(
@@ -9349,7 +9756,6 @@ class EntitiesApi(object):
 
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9370,12 +9776,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9401,9 +9815,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_users_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_visualization_objects(
@@ -9423,7 +9841,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9445,12 +9862,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9476,9 +9901,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_visualization_objects_endpoint.call_with_http_info(**kwargs)
@@ -9500,7 +9929,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9522,12 +9950,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9553,9 +9989,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_workspace_data_filter_settings_endpoint.call_with_http_info(**kwargs)
@@ -9577,7 +10017,6 @@ class EntitiesApi(object):
             workspace_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9599,12 +10038,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9630,9 +10077,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_all_entities_workspace_data_filters_endpoint.call_with_http_info(**kwargs)
@@ -9651,7 +10102,6 @@ class EntitiesApi(object):
 
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
@@ -9673,12 +10123,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9704,9 +10162,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_workspaces_endpoint.call_with_http_info(**kwargs)
 
     def get_all_options(
@@ -9739,16 +10201,24 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
-            InlineResponse200
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -9770,9 +10240,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_options_endpoint.call_with_http_info(**kwargs)
 
     def get_data_source_drivers(
@@ -9805,16 +10279,24 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (str,)}
+            None
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -9836,9 +10318,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_data_source_drivers_endpoint.call_with_http_info(**kwargs)
 
     def get_entity_analytical_dashboards(
@@ -9860,7 +10346,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -9879,12 +10364,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9910,9 +10403,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -9938,7 +10435,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -9955,12 +10451,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -9986,9 +10490,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['user_id'] = \
             user_id
         kwargs['id'] = \
@@ -10014,7 +10522,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10033,12 +10540,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10064,9 +10579,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10090,7 +10609,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -10107,12 +10625,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10138,9 +10664,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_cookie_security_configurations_endpoint.call_with_http_info(**kwargs)
@@ -10164,7 +10694,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
             _return_http_data_only (bool): response data without head status
@@ -10182,12 +10711,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10213,9 +10750,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10239,7 +10780,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -10257,12 +10797,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10288,9 +10836,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_data_source_identifiers_endpoint.call_with_http_info(**kwargs)
@@ -10314,7 +10866,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -10331,12 +10882,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10362,9 +10921,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         kwargs['id'] = \
@@ -10388,7 +10951,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -10406,12 +10968,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10437,9 +11007,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_data_sources_endpoint.call_with_http_info(**kwargs)
@@ -10463,7 +11037,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10482,12 +11055,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10513,14 +11094,101 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
             object_id
         return self.get_entity_datasets_endpoint.call_with_http_info(**kwargs)
+
+    def get_entity_entitlements(
+        self,
+        id,
+        **kwargs
+    ):
+        """get_entity_entitlements  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_entitlements(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiEntitlementOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.get_entity_entitlements_endpoint.call_with_http_info(**kwargs)
 
     def get_entity_facts(
         self,
@@ -10541,7 +11209,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10560,12 +11227,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10591,9 +11266,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10619,7 +11298,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10638,12 +11316,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10669,9 +11355,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10697,7 +11387,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10716,12 +11405,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10747,9 +11444,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10775,7 +11476,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -10794,12 +11494,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10825,9 +11533,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -10851,7 +11563,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
@@ -10870,12 +11581,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10901,9 +11620,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_organizations_endpoint.call_with_http_info(**kwargs)
@@ -10925,7 +11648,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -10943,12 +11665,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -10974,9 +11704,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_user_groups_endpoint.call_with_http_info(**kwargs)
@@ -10998,7 +11732,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11016,12 +11749,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11047,9 +11788,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_users_endpoint.call_with_http_info(**kwargs)
@@ -11073,7 +11818,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -11092,12 +11836,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11123,9 +11875,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11151,7 +11907,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -11170,12 +11925,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11201,9 +11964,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11229,7 +11996,6 @@ class EntitiesApi(object):
             object_id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
@@ -11248,12 +12014,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11279,9 +12053,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11305,7 +12083,6 @@ class EntitiesApi(object):
             id (str):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
@@ -11324,12 +12101,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11355,9 +12140,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         return self.get_entity_workspaces_endpoint.call_with_http_info(**kwargs)
@@ -11393,12 +12182,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11424,9 +12221,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_organization_endpoint.call_with_http_info(**kwargs)
 
     def patch_entity_analytical_dashboards(
@@ -11450,7 +12251,6 @@ class EntitiesApi(object):
             json_api_analytical_dashboard_patch_document (JsonApiAnalyticalDashboardPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11468,12 +12268,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11499,9 +12307,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11509,6 +12321,93 @@ class EntitiesApi(object):
         kwargs['json_api_analytical_dashboard_patch_document'] = \
             json_api_analytical_dashboard_patch_document
         return self.patch_entity_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
+
+    def patch_entity_cookie_security_configurations(
+        self,
+        id,
+        json_api_cookie_security_configuration_patch_document,
+        **kwargs
+    ):
+        """patch_entity_cookie_security_configurations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_cookie_security_configuration_patch_document (JsonApiCookieSecurityConfigurationPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCookieSecurityConfigurationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_cookie_security_configuration_patch_document'] = \
+            json_api_cookie_security_configuration_patch_document
+        return self.patch_entity_cookie_security_configurations_endpoint.call_with_http_info(**kwargs)
 
     def patch_entity_dashboard_plugins(
         self,
@@ -11531,7 +12430,6 @@ class EntitiesApi(object):
             json_api_dashboard_plugin_patch_document (JsonApiDashboardPluginPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -11548,12 +12446,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11579,9 +12485,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11609,7 +12519,6 @@ class EntitiesApi(object):
             json_api_data_source_patch_document (JsonApiDataSourcePatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -11626,12 +12535,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11657,9 +12574,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_data_source_patch_document'] = \
@@ -11687,7 +12608,6 @@ class EntitiesApi(object):
             json_api_filter_context_patch_document (JsonApiFilterContextPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11705,12 +12625,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11736,9 +12664,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11768,7 +12700,6 @@ class EntitiesApi(object):
             json_api_metric_patch_document (JsonApiMetricPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11786,12 +12717,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11817,9 +12756,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -11827,6 +12770,94 @@ class EntitiesApi(object):
         kwargs['json_api_metric_patch_document'] = \
             json_api_metric_patch_document
         return self.patch_entity_metrics_endpoint.call_with_http_info(**kwargs)
+
+    def patch_entity_organizations(
+        self,
+        id,
+        json_api_organization_patch_document,
+        **kwargs
+    ):
+        """patch_entity_organizations  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_organizations(id, json_api_organization_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_organization_patch_document (JsonApiOrganizationPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiOrganizationOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_organization_patch_document'] = \
+            json_api_organization_patch_document
+        return self.patch_entity_organizations_endpoint.call_with_http_info(**kwargs)
 
     def patch_entity_user_groups(
         self,
@@ -11847,7 +12878,6 @@ class EntitiesApi(object):
             json_api_user_group_patch_document (JsonApiUserGroupPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11865,12 +12895,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11896,9 +12934,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_user_group_patch_document'] = \
@@ -11924,7 +12966,6 @@ class EntitiesApi(object):
             json_api_user_patch_document (JsonApiUserPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -11942,12 +12983,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -11973,9 +13022,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_user_patch_document'] = \
@@ -12003,7 +13056,6 @@ class EntitiesApi(object):
             json_api_visualization_object_patch_document (JsonApiVisualizationObjectPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12021,12 +13073,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12052,9 +13112,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12084,7 +13148,6 @@ class EntitiesApi(object):
             json_api_workspace_data_filter_patch_document (JsonApiWorkspaceDataFilterPatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12102,12 +13165,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12133,9 +13204,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12163,7 +13238,6 @@ class EntitiesApi(object):
             json_api_workspace_patch_document (JsonApiWorkspacePatchDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12181,12 +13255,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12212,9 +13294,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_workspace_patch_document'] = \
@@ -12242,7 +13328,6 @@ class EntitiesApi(object):
             json_api_analytical_dashboard_in_document (JsonApiAnalyticalDashboardInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12260,12 +13345,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12291,9 +13384,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12321,7 +13418,6 @@ class EntitiesApi(object):
             json_api_cookie_security_configuration_in_document (JsonApiCookieSecurityConfigurationInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -12338,12 +13434,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12369,9 +13473,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_cookie_security_configuration_in_document'] = \
@@ -12399,7 +13507,6 @@ class EntitiesApi(object):
             json_api_dashboard_plugin_in_document (JsonApiDashboardPluginInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -12416,12 +13523,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12447,9 +13562,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12477,7 +13596,6 @@ class EntitiesApi(object):
             json_api_data_source_in_document (JsonApiDataSourceInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -12494,12 +13612,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12525,9 +13651,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_data_source_in_document'] = \
@@ -12555,7 +13685,6 @@ class EntitiesApi(object):
             json_api_filter_context_in_document (JsonApiFilterContextInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12573,12 +13702,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12604,9 +13741,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12636,7 +13777,6 @@ class EntitiesApi(object):
             json_api_metric_in_document (JsonApiMetricInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12654,12 +13794,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12685,9 +13833,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -12715,7 +13867,6 @@ class EntitiesApi(object):
             json_api_organization_in_document (JsonApiOrganizationInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12733,12 +13884,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12764,9 +13923,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_organization_in_document'] = \
@@ -12792,7 +13955,6 @@ class EntitiesApi(object):
             json_api_user_group_in_document (JsonApiUserGroupInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12810,12 +13972,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12841,9 +14011,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_user_group_in_document'] = \
@@ -12869,7 +14043,6 @@ class EntitiesApi(object):
             json_api_user_in_document (JsonApiUserInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12887,12 +14060,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12918,9 +14099,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_user_in_document'] = \
@@ -12948,7 +14133,6 @@ class EntitiesApi(object):
             json_api_visualization_object_in_document (JsonApiVisualizationObjectInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -12966,12 +14150,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -12997,9 +14189,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -13029,7 +14225,6 @@ class EntitiesApi(object):
             json_api_workspace_data_filter_in_document (JsonApiWorkspaceDataFilterInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -13047,12 +14242,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -13078,9 +14281,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['object_id'] = \
@@ -13108,7 +14315,6 @@ class EntitiesApi(object):
             json_api_workspace_in_document (JsonApiWorkspaceInDocument):
 
         Keyword Args:
-            predicate ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Composed query parameters used for filtering. 'id' parameter can be used for all objects. Other parameters are present according to object type (title, description,...). You can specify any object parameter and parameter of related entity up to 2nd level (for example name=John&language=english,czech&address.city=London&father.id=123).. [optional]
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -13126,12 +14332,20 @@ class EntitiesApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -13157,9 +14371,13 @@ class EntitiesApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['id'] = \
             id
         kwargs['json_api_workspace_in_document'] = \

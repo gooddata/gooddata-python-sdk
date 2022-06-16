@@ -100,13 +100,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'visualization_objects': (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects,),  # noqa: E501
             'analytical_dashboards': (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards,),  # noqa: E501
-            'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
-            'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
+            'dashboard_plugins': (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'filter_contexts': (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts,),  # noqa: E501
-            'dashboard_plugins': (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins,),  # noqa: E501
+            'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
+            'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
+            'visualization_objects': (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects,),  # noqa: E501
         }
 
     @cached_property
@@ -115,13 +115,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
 
 
     attribute_map = {
-        'visualization_objects': 'visualizationObjects',  # noqa: E501
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
-        'labels': 'labels',  # noqa: E501
-        'metrics': 'metrics',  # noqa: E501
+        'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'datasets': 'datasets',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
-        'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
+        'labels': 'labels',  # noqa: E501
+        'metrics': 'metrics',  # noqa: E501
+        'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
     read_only_vars = {
@@ -165,17 +165,17 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
-            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
-            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
-            dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
+            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -183,14 +183,18 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -253,13 +257,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
-            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
-            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
-            dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
+            labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
+            metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -269,14 +273,18 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

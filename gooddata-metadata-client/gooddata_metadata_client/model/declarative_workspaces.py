@@ -90,8 +90,8 @@ class DeclarativeWorkspaces(ModelNormal):
         """
         lazy_import()
         return {
-            'workspaces': ([DeclarativeWorkspace],),  # noqa: E501
             'workspace_data_filters': ([DeclarativeWorkspaceDataFilter],),  # noqa: E501
+            'workspaces': ([DeclarativeWorkspace],),  # noqa: E501
         }
 
     @cached_property
@@ -100,8 +100,8 @@ class DeclarativeWorkspaces(ModelNormal):
 
 
     attribute_map = {
-        'workspaces': 'workspaces',  # noqa: E501
         'workspace_data_filters': 'workspaceDataFilters',  # noqa: E501
+        'workspaces': 'workspaces',  # noqa: E501
     }
 
     read_only_vars = {
@@ -111,12 +111,12 @@ class DeclarativeWorkspaces(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, workspaces, workspace_data_filters, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, workspace_data_filters, workspaces, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaces - a model defined in OpenAPI
 
         Args:
-            workspaces ([DeclarativeWorkspace]):
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]):
+            workspaces ([DeclarativeWorkspace]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -152,7 +152,7 @@ class DeclarativeWorkspaces(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -160,14 +160,18 @@ class DeclarativeWorkspaces(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -176,8 +180,8 @@ class DeclarativeWorkspaces(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.workspaces = workspaces
         self.workspace_data_filters = workspace_data_filters
+        self.workspaces = workspaces
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -198,12 +202,12 @@ class DeclarativeWorkspaces(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, workspaces, workspace_data_filters, *args, **kwargs):  # noqa: E501
+    def __init__(self, workspace_data_filters, workspaces, *args, **kwargs):  # noqa: E501
         """DeclarativeWorkspaces - a model defined in OpenAPI
 
         Args:
-            workspaces ([DeclarativeWorkspace]):
             workspace_data_filters ([DeclarativeWorkspaceDataFilter]):
+            workspaces ([DeclarativeWorkspace]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -245,14 +249,18 @@ class DeclarativeWorkspaces(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -261,8 +269,8 @@ class DeclarativeWorkspaces(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.workspaces = workspaces
         self.workspace_data_filters = workspace_data_filters
+        self.workspaces = workspaces
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

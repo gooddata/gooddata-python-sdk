@@ -112,10 +112,10 @@ class DeclarativeDateDataset(ModelNormal):
         """
         lazy_import()
         return {
+            'granularities': ([str],),  # noqa: E501
+            'granularities_formatting': (GranularitiesFormatting,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'title': (str,),  # noqa: E501
-            'granularities_formatting': (GranularitiesFormatting,),  # noqa: E501
-            'granularities': ([str],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
@@ -126,10 +126,10 @@ class DeclarativeDateDataset(ModelNormal):
 
 
     attribute_map = {
+        'granularities': 'granularities',  # noqa: E501
+        'granularities_formatting': 'granularitiesFormatting',  # noqa: E501
         'id': 'id',  # noqa: E501
         'title': 'title',  # noqa: E501
-        'granularities_formatting': 'granularitiesFormatting',  # noqa: E501
-        'granularities': 'granularities',  # noqa: E501
         'description': 'description',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
@@ -141,14 +141,14 @@ class DeclarativeDateDataset(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, title, granularities_formatting, granularities, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, granularities, granularities_formatting, id, title, *args, **kwargs):  # noqa: E501
         """DeclarativeDateDataset - a model defined in OpenAPI
 
         Args:
+            granularities ([str]): An array of date granularities. All listed granularities will be available for date dataset.
+            granularities_formatting (GranularitiesFormatting):
             id (str): Date dataset ID.
             title (str): Date dataset title.
-            granularities_formatting (GranularitiesFormatting):
-            granularities ([str]): An array of date granularities. All listed granularities will be available for date dataset.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -186,7 +186,7 @@ class DeclarativeDateDataset(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -194,14 +194,18 @@ class DeclarativeDateDataset(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -210,10 +214,10 @@ class DeclarativeDateDataset(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.granularities = granularities
+        self.granularities_formatting = granularities_formatting
         self.id = id
         self.title = title
-        self.granularities_formatting = granularities_formatting
-        self.granularities = granularities
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -234,14 +238,14 @@ class DeclarativeDateDataset(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, title, granularities_formatting, granularities, *args, **kwargs):  # noqa: E501
+    def __init__(self, granularities, granularities_formatting, id, title, *args, **kwargs):  # noqa: E501
         """DeclarativeDateDataset - a model defined in OpenAPI
 
         Args:
+            granularities ([str]): An array of date granularities. All listed granularities will be available for date dataset.
+            granularities_formatting (GranularitiesFormatting):
             id (str): Date dataset ID.
             title (str): Date dataset title.
-            granularities_formatting (GranularitiesFormatting):
-            granularities ([str]): An array of date granularities. All listed granularities will be available for date dataset.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -285,14 +289,18 @@ class DeclarativeDateDataset(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -301,10 +309,10 @@ class DeclarativeDateDataset(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.granularities = granularities
+        self.granularities_formatting = granularities_formatting
         self.id = id
         self.title = title
-        self.granularities_formatting = granularities_formatting
-        self.granularities = granularities
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

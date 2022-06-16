@@ -32,13 +32,13 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_afm_client.model.absolute_date_filter import AbsoluteDateFilter
-    from gooddata_afm_client.model.absolute_date_filter_body import AbsoluteDateFilterBody
+    from gooddata_afm_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
     from gooddata_afm_client.model.relative_date_filter import RelativeDateFilter
-    from gooddata_afm_client.model.relative_date_filter_body import RelativeDateFilterBody
+    from gooddata_afm_client.model.relative_date_filter_relative_date_filter import RelativeDateFilterRelativeDateFilter
     globals()['AbsoluteDateFilter'] = AbsoluteDateFilter
-    globals()['AbsoluteDateFilterBody'] = AbsoluteDateFilterBody
+    globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
     globals()['RelativeDateFilter'] = RelativeDateFilter
-    globals()['RelativeDateFilterBody'] = RelativeDateFilterBody
+    globals()['RelativeDateFilterRelativeDateFilter'] = RelativeDateFilterRelativeDateFilter
 
 
 class DateFilter(ModelComposed):
@@ -94,8 +94,8 @@ class DateFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'absolute_date_filter': (AbsoluteDateFilterBody,),  # noqa: E501
-            'relative_date_filter': (RelativeDateFilterBody,),  # noqa: E501
+            'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
+            'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -147,8 +147,8 @@ class DateFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -160,14 +160,18 @@ class DateFilter(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -248,8 +252,8 @@ class DateFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,14 +263,18 @@ class DateFilter(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

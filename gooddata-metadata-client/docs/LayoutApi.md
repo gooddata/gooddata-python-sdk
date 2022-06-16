@@ -1,33 +1,33 @@
 # gooddata_metadata_client.LayoutApi
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
-[**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/layout/dataSources | Get all data sources
-[**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/layout/workspaces/{workspaceId}/logicalModel | Get logical model
-[**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/layout/organization | Get organization layout
-[**get_pdm_layout**](LayoutApi.md#get_pdm_layout) | **GET** /api/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
-[**get_user_groups_layout**](LayoutApi.md#get_user_groups_layout) | **GET** /api/layout/userGroups | Get all user groups
-[**get_users_layout**](LayoutApi.md#get_users_layout) | **GET** /api/layout/users | Get all users
-[**get_users_user_groups_layout**](LayoutApi.md#get_users_user_groups_layout) | **GET** /api/layout/usersAndUserGroups | Get all users and user groups
-[**get_workspace_data_filters_layout**](LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/layout/workspaceDataFilters | Get workspace data filters for all workspaces
-[**get_workspace_layout**](LayoutApi.md#get_workspace_layout) | **GET** /api/layout/workspaces/{workspaceId} | Get workspace layout
-[**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **PUT** /api/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
-[**get_workspace_permissions1**](LayoutApi.md#get_workspace_permissions1) | **GET** /api/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
-[**get_workspaces_layout**](LayoutApi.md#get_workspaces_layout) | **GET** /api/layout/workspaces | Get all workspaces layout
-[**put_data_sources_layout**](LayoutApi.md#put_data_sources_layout) | **PUT** /api/layout/dataSources | Put all data sources
-[**put_user_groups_layout**](LayoutApi.md#put_user_groups_layout) | **PUT** /api/layout/userGroups | Put all user groups
-[**put_users_layout**](LayoutApi.md#put_users_layout) | **PUT** /api/layout/users | Put all users
-[**put_users_user_groups_layout**](LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/layout/usersAndUserGroups | Put all users and user groups
-[**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/layout/workspaces/{workspaceId} | Set workspace layout
-[**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
-[**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/layout/workspaces/{workspaceId}/logicalModel | Set logical model
-[**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/layout/organization | Set organization layout
-[**set_pdm_layout**](LayoutApi.md#set_pdm_layout) | **PUT** /api/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
-[**set_workspace_data_filters_layout**](LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/layout/workspaceDataFilters | Set all workspace data filters
-[**set_workspaces_layout**](LayoutApi.md#set_workspaces_layout) | **PUT** /api/layout/workspaces | Set all workspaces layout
+[**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
+[**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
+[**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
+[**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
+[**get_pdm_layout**](LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+[**get_user_groups_layout**](LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
+[**get_users_layout**](LayoutApi.md#get_users_layout) | **GET** /api/v1/layout/users | Get all users
+[**get_users_user_groups_layout**](LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
+[**get_workspace_data_filters_layout**](LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
+[**get_workspace_layout**](LayoutApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
+[**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
+[**get_workspace_permissions1**](LayoutApi.md#get_workspace_permissions1) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
+[**get_workspaces_layout**](LayoutApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
+[**put_data_sources_layout**](LayoutApi.md#put_data_sources_layout) | **PUT** /api/v1/layout/dataSources | Put all data sources
+[**put_user_groups_layout**](LayoutApi.md#put_user_groups_layout) | **PUT** /api/v1/layout/userGroups | Put all user groups
+[**put_users_layout**](LayoutApi.md#put_users_layout) | **PUT** /api/v1/layout/users | Put all users
+[**put_users_user_groups_layout**](LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/v1/layout/usersAndUserGroups | Put all users and user groups
+[**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
+[**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
+[**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
+[**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
+[**set_pdm_layout**](LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+[**set_workspace_data_filters_layout**](LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
+[**set_workspaces_layout**](LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
 
 
 # **get_analytics_model**
@@ -46,10 +46,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_analytics import DeclarativeAnalytics
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -113,10 +113,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -176,10 +176,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -188,11 +188,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    include_parents = True # bool |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Get logical model
         api_response = api_instance.get_logical_model(workspace_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_logical_model: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get logical model
+        api_response = api_instance.get_logical_model(workspace_id, include_parents=include_parents)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling LayoutApi->get_logical_model: %s\n" % e)
@@ -204,6 +214,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **include_parents** | **bool**|  | [optional]
 
 ### Return type
 
@@ -243,10 +254,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_organization import DeclarativeOrganization
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -306,10 +317,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_pdm import DeclarativePdm
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -373,10 +384,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_user_groups import DeclarativeUserGroups
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -436,10 +447,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -499,10 +510,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -562,10 +573,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -625,10 +636,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -692,10 +703,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -705,22 +716,22 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = layout_api.LayoutApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     declarative_workspace_permissions = DeclarativeWorkspacePermissions(
-        permissions=[
-            DeclarativeSingleWorkspacePermission(
-                name="MANAGE",
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-            ),
-        ],
         hierarchy_permissions=[
             DeclarativeWorkspaceHierarchyPermission(
-                name="MANAGE",
                 assignee=AssigneeIdentifier(
                     id="id_example",
                     type="user",
                 ),
+                name="MANAGE",
+            ),
+        ],
+        permissions=[
+            DeclarativeSingleWorkspacePermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="MANAGE",
             ),
         ],
     ) # DeclarativeWorkspacePermissions | 
@@ -779,10 +790,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -846,10 +857,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -909,10 +920,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_data_sources import DeclarativeDataSources
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -923,45 +934,46 @@ with gooddata_metadata_client.ApiClient() as api_client:
     declarative_data_sources = DeclarativeDataSources(
         data_sources=[
             DeclarativeDataSource(
-                id="pg_local_docker-demo",
-                name="postgres demo",
-                type="POSTGRESQL",
-                url="jdbc:postgresql://postgres:5432/gooddata",
-                schema="demo",
-                username="demo",
-                password="*****",
-                token="Bigquery service account JSON. Encode it using base64!",
-                enable_caching=False,
                 cache_path=[
                     "[ "dfs", "data" ]. Example used in Apache Drill.",
                 ],
+                enable_caching=False,
+                id="pg_local_docker-demo",
+                name="postgres demo",
+                password="*****",
                 pdm=DeclarativeTables(
                     tables=[
                         DeclarativeTable(
-                            id="customers",
-                            path=["table_schema","table_name"],
-                            type="VIEW",
                             columns=[
                                 DeclarativeColumn(
-                                    name="customer_id",
                                     data_type="INT",
                                     is_primary_key=True,
-                                    referenced_table_id="customers",
+                                    name="customer_id",
                                     referenced_table_column="customer_id",
+                                    referenced_table_id="customers",
                                 ),
                             ],
+                            id="customers",
+                            name_prefix="out_gooddata",
+                            path=["table_schema","table_name"],
+                            type="VIEW",
                         ),
                     ],
                 ),
                 permissions=[
                     DeclarativeDataSourcePermission(
-                        name="MANAGE",
                         assignee=AssigneeIdentifier(
                             id="id_example",
                             type="user",
                         ),
+                        name="MANAGE",
                     ),
                 ],
+                schema="demo",
+                token="Bigquery service account JSON. Encode it using base64!",
+                type="POSTGRESQL",
+                url="jdbc:postgresql://postgres:5432/gooddata",
+                username="demo",
             ),
         ],
     ) # DeclarativeDataSources | 
@@ -1019,10 +1031,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_user_groups import DeclarativeUserGroups
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1097,10 +1109,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1111,8 +1123,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     declarative_users = DeclarativeUsers(
         users=[
             DeclarativeUser(
-                id="employee123",
                 auth_id="auth_id_example",
+                id="employee123",
                 user_groups=[
                     UserGroupIdentifier(
                         id="group.admins",
@@ -1176,10 +1188,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1188,11 +1200,10 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     declarative_users_user_groups = DeclarativeUsersUserGroups(
-        users=[
-            DeclarativeUser(
-                id="employee123",
-                auth_id="auth_id_example",
-                user_groups=[
+        user_groups=[
+            DeclarativeUserGroup(
+                id="employees.all",
+                parents=[
                     UserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
@@ -1200,10 +1211,11 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 ],
             ),
         ],
-        user_groups=[
-            DeclarativeUserGroup(
-                id="employees.all",
-                parents=[
+        users=[
+            DeclarativeUser(
+                auth_id="auth_id_example",
+                id="employee123",
+                user_groups=[
                     UserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
@@ -1266,10 +1278,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1279,48 +1291,103 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = layout_api.LayoutApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     declarative_workspace_model = DeclarativeWorkspaceModel(
+        analytics=DeclarativeAnalyticsLayer(
+            analytical_dashboards=[
+                DeclarativeAnalyticalDashboard(
+                    content={},
+                    description="Period to period comparison of revenues in main sectors.",
+                    id="revenues-analysis",
+                    tags=["Revenues"],
+                    title="Revenues analysis",
+                ),
+            ],
+            dashboard_plugins=[
+                DeclarativeDashboardPlugin(
+                    content={},
+                    description="Three dimensional view of data.",
+                    id="dashboard-plugin-1",
+                    tags=["Revenues"],
+                    title="3D map renderer",
+                ),
+            ],
+            filter_contexts=[
+                DeclarativeFilterContext(
+                    content={},
+                    description="Filter Context for Sales team.",
+                    id="filter-sales",
+                    tags=["Revenues"],
+                    title="Filter Context for Sales team",
+                ),
+            ],
+            metrics=[
+                DeclarativeMetric(
+                    content={},
+                    description="Sales for all the data available.",
+                    id="total-sales",
+                    tags=["Revenues"],
+                    title="Total sales",
+                ),
+            ],
+            visualization_objects=[
+                DeclarativeVisualizationObject(
+                    content={},
+                    description="Simple number for total goods in current production.",
+                    id="visualization-1",
+                    tags=["Revenues"],
+                    title="Count of goods",
+                ),
+            ],
+        ),
         ldm=DeclarativeLdm(
             datasets=[
                 DeclarativeDataset(
-                    id="customers",
-                    title="Customers",
+                    attributes=[
+                        DeclarativeAttribute(
+                            default_view=LabelIdentifier(
+                                id="label_id",
+                                type="label",
+                            ),
+                            description="Customer name including first and last name.",
+                            id="attr.customers.customer_name",
+                            labels=[
+                                DeclarativeLabel(
+                                    description="Customer name",
+                                    id="label.customer_name",
+                                    source_column="customer_name",
+                                    tags=["Customers"],
+                                    title="Customer name",
+                                    value_type="TEXT" | "HYPERLINK" | "GEO",
+                                ),
+                            ],
+                            sort_column="customer_name",
+                            sort_direction="ASC" | "DESC",
+                            source_column="customer_name",
+                            tags=["Customers"],
+                            title="Customer Name",
+                        ),
+                    ],
+                    data_source_table_id=DataSourceTableIdentifier(
+                        data_source_id="my-postgres",
+                        id="customers",
+                        type="dataSource",
+                    ),
                     description="The customers of ours.",
+                    facts=[
+                        DeclarativeFact(
+                            description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
+                            id="fact.customer_order_count",
+                            source_column="customer_order_count",
+                            tags=["Customers"],
+                            title="Customer order count",
+                        ),
+                    ],
                     grain=[
                         GrainIdentifier(
                             id="attr.customers.customer_name",
                             type="ATTRIBUTE",
                         ),
                     ],
-                    attributes=[
-                        DeclarativeAttribute(
-                            id="attr.customers.customer_name",
-                            title="Customer Name",
-                            description="Customer name including first and last name.",
-                            labels=[
-                                DeclarativeLabel(
-                                    id="label.customer_name",
-                                    title="Customer name",
-                                    description="Customer name",
-                                    primary=False,
-                                    source_column="customer_name",
-                                    tags=["Customers"],
-                                    value_type="TEXT" | "HYPERLINK" | "GEO",
-                                ),
-                            ],
-                            tags=["Customers"],
-                            sort_column="customer_name",
-                            sort_direction="ASC" | "DESC",
-                        ),
-                    ],
-                    facts=[
-                        DeclarativeFact(
-                            id="fact.customer_order_count",
-                            title="Customer order count",
-                            description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
-                            source_column="customer_order_count",
-                            tags=["Customers"],
-                        ),
-                    ],
+                    id="customers",
                     references=[
                         DeclarativeReference(
                             identifier=ReferenceIdentifier(
@@ -1331,74 +1398,23 @@ with gooddata_metadata_client.ApiClient() as api_client:
                             source_columns=["customer_id"],
                         ),
                     ],
-                    data_source_table_id=DataSourceTableIdentifier(
-                        id="customers",
-                        data_source_id="my-postgres",
-                        type="dataSource",
-                    ),
                     tags=["Customers"],
+                    title="Customers",
                 ),
             ],
             date_instances=[
                 DeclarativeDateDataset(
-                    id="date",
-                    title="Date",
                     description="A customer order date",
+                    granularities=[
+                        "MINUTE",
+                    ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",
                         title_pattern="%titleBase - %granularityTitle",
                     ),
-                    granularities=[
-                        "MINUTE",
-                    ],
+                    id="date",
                     tags=["Customer dates"],
-                ),
-            ],
-        ),
-        analytics=DeclarativeAnalyticsLayer(
-            analytical_dashboards=[
-                DeclarativeAnalyticalDashboard(
-                    id="revenues-analysis",
-                    title="Revenues analysis",
-                    description="Period to period comparison of revenues in main sectors.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            filter_contexts=[
-                DeclarativeFilterContext(
-                    id="filter-sales",
-                    title="Filter Context for Sales team",
-                    description="Filter Context for Sales team.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            metrics=[
-                DeclarativeMetric(
-                    id="total-sales",
-                    title="Total sales",
-                    description="Sales for all the data available.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            visualization_objects=[
-                DeclarativeVisualizationObject(
-                    id="visualization-1",
-                    title="Count of goods",
-                    description="Simple number for total goods in current production.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            dashboard_plugins=[
-                DeclarativeDashboardPlugin(
-                    id="dashboard-plugin-1",
-                    title="3D map renderer",
-                    description="Three dimensional view of data.",
-                    content={},
-                    tags=["Revenues"],
+                    title="Date",
                 ),
             ],
         ),
@@ -1458,10 +1474,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_analytics import DeclarativeAnalytics
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1474,47 +1490,47 @@ with gooddata_metadata_client.ApiClient() as api_client:
         analytics=DeclarativeAnalyticsLayer(
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
-                    id="revenues-analysis",
-                    title="Revenues analysis",
+                    content={},
                     description="Period to period comparison of revenues in main sectors.",
-                    content={},
+                    id="revenues-analysis",
                     tags=["Revenues"],
-                ),
-            ],
-            filter_contexts=[
-                DeclarativeFilterContext(
-                    id="filter-sales",
-                    title="Filter Context for Sales team",
-                    description="Filter Context for Sales team.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            metrics=[
-                DeclarativeMetric(
-                    id="total-sales",
-                    title="Total sales",
-                    description="Sales for all the data available.",
-                    content={},
-                    tags=["Revenues"],
-                ),
-            ],
-            visualization_objects=[
-                DeclarativeVisualizationObject(
-                    id="visualization-1",
-                    title="Count of goods",
-                    description="Simple number for total goods in current production.",
-                    content={},
-                    tags=["Revenues"],
+                    title="Revenues analysis",
                 ),
             ],
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
-                    id="dashboard-plugin-1",
-                    title="3D map renderer",
-                    description="Three dimensional view of data.",
                     content={},
+                    description="Three dimensional view of data.",
+                    id="dashboard-plugin-1",
                     tags=["Revenues"],
+                    title="3D map renderer",
+                ),
+            ],
+            filter_contexts=[
+                DeclarativeFilterContext(
+                    content={},
+                    description="Filter Context for Sales team.",
+                    id="filter-sales",
+                    tags=["Revenues"],
+                    title="Filter Context for Sales team",
+                ),
+            ],
+            metrics=[
+                DeclarativeMetric(
+                    content={},
+                    description="Sales for all the data available.",
+                    id="total-sales",
+                    tags=["Revenues"],
+                    title="Total sales",
+                ),
+            ],
+            visualization_objects=[
+                DeclarativeVisualizationObject(
+                    content={},
+                    description="Simple number for total goods in current production.",
+                    id="visualization-1",
+                    tags=["Revenues"],
+                    title="Count of goods",
                 ),
             ],
         ),
@@ -1574,10 +1590,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1590,45 +1606,53 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ldm=DeclarativeLdm(
             datasets=[
                 DeclarativeDataset(
-                    id="customers",
-                    title="Customers",
+                    attributes=[
+                        DeclarativeAttribute(
+                            default_view=LabelIdentifier(
+                                id="label_id",
+                                type="label",
+                            ),
+                            description="Customer name including first and last name.",
+                            id="attr.customers.customer_name",
+                            labels=[
+                                DeclarativeLabel(
+                                    description="Customer name",
+                                    id="label.customer_name",
+                                    source_column="customer_name",
+                                    tags=["Customers"],
+                                    title="Customer name",
+                                    value_type="TEXT" | "HYPERLINK" | "GEO",
+                                ),
+                            ],
+                            sort_column="customer_name",
+                            sort_direction="ASC" | "DESC",
+                            source_column="customer_name",
+                            tags=["Customers"],
+                            title="Customer Name",
+                        ),
+                    ],
+                    data_source_table_id=DataSourceTableIdentifier(
+                        data_source_id="my-postgres",
+                        id="customers",
+                        type="dataSource",
+                    ),
                     description="The customers of ours.",
+                    facts=[
+                        DeclarativeFact(
+                            description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
+                            id="fact.customer_order_count",
+                            source_column="customer_order_count",
+                            tags=["Customers"],
+                            title="Customer order count",
+                        ),
+                    ],
                     grain=[
                         GrainIdentifier(
                             id="attr.customers.customer_name",
                             type="ATTRIBUTE",
                         ),
                     ],
-                    attributes=[
-                        DeclarativeAttribute(
-                            id="attr.customers.customer_name",
-                            title="Customer Name",
-                            description="Customer name including first and last name.",
-                            labels=[
-                                DeclarativeLabel(
-                                    id="label.customer_name",
-                                    title="Customer name",
-                                    description="Customer name",
-                                    primary=False,
-                                    source_column="customer_name",
-                                    tags=["Customers"],
-                                    value_type="TEXT" | "HYPERLINK" | "GEO",
-                                ),
-                            ],
-                            tags=["Customers"],
-                            sort_column="customer_name",
-                            sort_direction="ASC" | "DESC",
-                        ),
-                    ],
-                    facts=[
-                        DeclarativeFact(
-                            id="fact.customer_order_count",
-                            title="Customer order count",
-                            description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
-                            source_column="customer_order_count",
-                            tags=["Customers"],
-                        ),
-                    ],
+                    id="customers",
                     references=[
                         DeclarativeReference(
                             identifier=ReferenceIdentifier(
@@ -1639,27 +1663,23 @@ with gooddata_metadata_client.ApiClient() as api_client:
                             source_columns=["customer_id"],
                         ),
                     ],
-                    data_source_table_id=DataSourceTableIdentifier(
-                        id="customers",
-                        data_source_id="my-postgres",
-                        type="dataSource",
-                    ),
                     tags=["Customers"],
+                    title="Customers",
                 ),
             ],
             date_instances=[
                 DeclarativeDateDataset(
-                    id="date",
-                    title="Date",
                     description="A customer order date",
+                    granularities=[
+                        "MINUTE",
+                    ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",
                         title_pattern="%titleBase - %granularityTitle",
                     ),
-                    granularities=[
-                        "MINUTE",
-                    ],
+                    id="date",
                     tags=["Customer dates"],
+                    title="Date",
                 ),
             ],
         ),
@@ -1719,10 +1739,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_organization import DeclarativeOrganization
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -1731,35 +1751,69 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     declarative_organization = DeclarativeOrganization(
+        data_sources=[
+            DeclarativeDataSource(
+                cache_path=[
+                    "[ "dfs", "data" ]. Example used in Apache Drill.",
+                ],
+                enable_caching=False,
+                id="pg_local_docker-demo",
+                name="postgres demo",
+                password="*****",
+                pdm=DeclarativeTables(
+                    tables=[
+                        DeclarativeTable(
+                            columns=[
+                                DeclarativeColumn(
+                                    data_type="INT",
+                                    is_primary_key=True,
+                                    name="customer_id",
+                                    referenced_table_column="customer_id",
+                                    referenced_table_id="customers",
+                                ),
+                            ],
+                            id="customers",
+                            name_prefix="out_gooddata",
+                            path=["table_schema","table_name"],
+                            type="VIEW",
+                        ),
+                    ],
+                ),
+                permissions=[
+                    DeclarativeDataSourcePermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="MANAGE",
+                    ),
+                ],
+                schema="demo",
+                token="Bigquery service account JSON. Encode it using base64!",
+                type="POSTGRESQL",
+                url="jdbc:postgresql://postgres:5432/gooddata",
+                username="demo",
+            ),
+        ],
         organization=DeclarativeOrganizationInfo(
+            early_access="early_access_example",
+            hostname="alpha.com",
             id="Alpha corporation",
             name="Alpha corporation",
-            hostname="alpha.com",
-            oauth_issuer_location="oauth_issuer_location_example",
             oauth_client_id="oauth_client_id_example",
             oauth_client_secret="oauth_client_secret_example",
+            oauth_issuer_id="myOidcProvider",
+            oauth_issuer_location="oauth_issuer_location_example",
             permissions=[
                 DeclarativeOrganizationPermission(
-                    name="MANAGE",
                     assignee=AssigneeIdentifier(
                         id="id_example",
                         type="user",
                     ),
+                    name="MANAGE",
                 ),
             ],
         ),
-        users=[
-            DeclarativeUser(
-                id="employee123",
-                auth_id="auth_id_example",
-                user_groups=[
-                    UserGroupIdentifier(
-                        id="group.admins",
-                        type="userGroup",
-                    ),
-                ],
-            ),
-        ],
         user_groups=[
             DeclarativeUserGroup(
                 id="employees.all",
@@ -1771,44 +1825,37 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 ],
             ),
         ],
-        data_sources=[
-            DeclarativeDataSource(
-                id="pg_local_docker-demo",
-                name="postgres demo",
-                type="POSTGRESQL",
-                url="jdbc:postgresql://postgres:5432/gooddata",
-                schema="demo",
-                username="demo",
-                password="*****",
-                token="Bigquery service account JSON. Encode it using base64!",
-                enable_caching=False,
-                cache_path=[
-                    "[ "dfs", "data" ]. Example used in Apache Drill.",
+        users=[
+            DeclarativeUser(
+                auth_id="auth_id_example",
+                id="employee123",
+                user_groups=[
+                    UserGroupIdentifier(
+                        id="group.admins",
+                        type="userGroup",
+                    ),
                 ],
-                pdm=DeclarativeTables(
-                    tables=[
-                        DeclarativeTable(
-                            id="customers",
-                            path=["table_schema","table_name"],
-                            type="VIEW",
-                            columns=[
-                                DeclarativeColumn(
-                                    name="customer_id",
-                                    data_type="INT",
-                                    is_primary_key=True,
-                                    referenced_table_id="customers",
-                                    referenced_table_column="customer_id",
-                                ),
-                            ],
-                        ),
-                    ],
+            ),
+        ],
+        workspace_data_filters=[
+            DeclarativeWorkspaceDataFilter(
+                column_name="country_id",
+                description="ID of country",
+                id="country_id",
+                title="Country ID",
+                workspace=WorkspaceIdentifier(
+                    id="alpha.sales",
+                    type="workspace",
                 ),
-                permissions=[
-                    DeclarativeDataSourcePermission(
-                        name="MANAGE",
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
+                workspace_data_filter_settings=[
+                    DeclarativeWorkspaceDataFilterSetting(
+                        description="ID of country setting",
+                        filter_values=["US"],
+                        id="country_id_setting",
+                        title="Country ID setting",
+                        workspace=WorkspaceIdentifier(
+                            id="alpha.sales",
+                            type="workspace",
                         ),
                     ),
                 ],
@@ -1816,51 +1863,115 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                early_access="early_access_example",
+                hierarchy_permissions=[
+                    DeclarativeWorkspaceHierarchyPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="MANAGE",
+                    ),
+                ],
                 id="alpha.sales",
-                name="Alpha Sales",
                 model=DeclarativeWorkspaceModel(
+                    analytics=DeclarativeAnalyticsLayer(
+                        analytical_dashboards=[
+                            DeclarativeAnalyticalDashboard(
+                                content={},
+                                description="Period to period comparison of revenues in main sectors.",
+                                id="revenues-analysis",
+                                tags=["Revenues"],
+                                title="Revenues analysis",
+                            ),
+                        ],
+                        dashboard_plugins=[
+                            DeclarativeDashboardPlugin(
+                                content={},
+                                description="Three dimensional view of data.",
+                                id="dashboard-plugin-1",
+                                tags=["Revenues"],
+                                title="3D map renderer",
+                            ),
+                        ],
+                        filter_contexts=[
+                            DeclarativeFilterContext(
+                                content={},
+                                description="Filter Context for Sales team.",
+                                id="filter-sales",
+                                tags=["Revenues"],
+                                title="Filter Context for Sales team",
+                            ),
+                        ],
+                        metrics=[
+                            DeclarativeMetric(
+                                content={},
+                                description="Sales for all the data available.",
+                                id="total-sales",
+                                tags=["Revenues"],
+                                title="Total sales",
+                            ),
+                        ],
+                        visualization_objects=[
+                            DeclarativeVisualizationObject(
+                                content={},
+                                description="Simple number for total goods in current production.",
+                                id="visualization-1",
+                                tags=["Revenues"],
+                                title="Count of goods",
+                            ),
+                        ],
+                    ),
                     ldm=DeclarativeLdm(
                         datasets=[
                             DeclarativeDataset(
-                                id="customers",
-                                title="Customers",
+                                attributes=[
+                                    DeclarativeAttribute(
+                                        default_view=LabelIdentifier(
+                                            id="label_id",
+                                            type="label",
+                                        ),
+                                        description="Customer name including first and last name.",
+                                        id="attr.customers.customer_name",
+                                        labels=[
+                                            DeclarativeLabel(
+                                                description="Customer name",
+                                                id="label.customer_name",
+                                                source_column="customer_name",
+                                                tags=["Customers"],
+                                                title="Customer name",
+                                                value_type="TEXT" | "HYPERLINK" | "GEO",
+                                            ),
+                                        ],
+                                        sort_column="customer_name",
+                                        sort_direction="ASC" | "DESC",
+                                        source_column="customer_name",
+                                        tags=["Customers"],
+                                        title="Customer Name",
+                                    ),
+                                ],
+                                data_source_table_id=DataSourceTableIdentifier(
+                                    data_source_id="my-postgres",
+                                    id="customers",
+                                    type="dataSource",
+                                ),
                                 description="The customers of ours.",
+                                facts=[
+                                    DeclarativeFact(
+                                        description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
+                                        id="fact.customer_order_count",
+                                        source_column="customer_order_count",
+                                        tags=["Customers"],
+                                        title="Customer order count",
+                                    ),
+                                ],
                                 grain=[
                                     GrainIdentifier(
                                         id="attr.customers.customer_name",
                                         type="ATTRIBUTE",
                                     ),
                                 ],
-                                attributes=[
-                                    DeclarativeAttribute(
-                                        id="attr.customers.customer_name",
-                                        title="Customer Name",
-                                        description="Customer name including first and last name.",
-                                        labels=[
-                                            DeclarativeLabel(
-                                                id="label.customer_name",
-                                                title="Customer name",
-                                                description="Customer name",
-                                                primary=False,
-                                                source_column="customer_name",
-                                                tags=["Customers"],
-                                                value_type="TEXT" | "HYPERLINK" | "GEO",
-                                            ),
-                                        ],
-                                        tags=["Customers"],
-                                        sort_column="customer_name",
-                                        sort_direction="ASC" | "DESC",
-                                    ),
-                                ],
-                                facts=[
-                                    DeclarativeFact(
-                                        id="fact.customer_order_count",
-                                        title="Customer order count",
-                                        description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
-                                        source_column="customer_order_count",
-                                        tags=["Customers"],
-                                    ),
-                                ],
+                                id="customers",
                                 references=[
                                     DeclarativeReference(
                                         identifier=ReferenceIdentifier(
@@ -1871,125 +1982,41 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                         source_columns=["customer_id"],
                                     ),
                                 ],
-                                data_source_table_id=DataSourceTableIdentifier(
-                                    id="customers",
-                                    data_source_id="my-postgres",
-                                    type="dataSource",
-                                ),
                                 tags=["Customers"],
+                                title="Customers",
                             ),
                         ],
                         date_instances=[
                             DeclarativeDateDataset(
-                                id="date",
-                                title="Date",
                                 description="A customer order date",
+                                granularities=[
+                                    "MINUTE",
+                                ],
                                 granularities_formatting=GranularitiesFormatting(
                                     title_base="title_base_example",
                                     title_pattern="%titleBase - %granularityTitle",
                                 ),
-                                granularities=[
-                                    "MINUTE",
-                                ],
+                                id="date",
                                 tags=["Customer dates"],
-                            ),
-                        ],
-                    ),
-                    analytics=DeclarativeAnalyticsLayer(
-                        analytical_dashboards=[
-                            DeclarativeAnalyticalDashboard(
-                                id="revenues-analysis",
-                                title="Revenues analysis",
-                                description="Period to period comparison of revenues in main sectors.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        filter_contexts=[
-                            DeclarativeFilterContext(
-                                id="filter-sales",
-                                title="Filter Context for Sales team",
-                                description="Filter Context for Sales team.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        metrics=[
-                            DeclarativeMetric(
-                                id="total-sales",
-                                title="Total sales",
-                                description="Sales for all the data available.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        visualization_objects=[
-                            DeclarativeVisualizationObject(
-                                id="visualization-1",
-                                title="Count of goods",
-                                description="Simple number for total goods in current production.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        dashboard_plugins=[
-                            DeclarativeDashboardPlugin(
-                                id="dashboard-plugin-1",
-                                title="3D map renderer",
-                                description="Three dimensional view of data.",
-                                content={},
-                                tags=["Revenues"],
+                                title="Date",
                             ),
                         ],
                     ),
                 ),
+                name="Alpha Sales",
                 parent=WorkspaceIdentifier(
                     id="alpha.sales",
                     type="workspace",
                 ),
-                compute_client="AQE",
                 permissions=[
                     DeclarativeSingleWorkspacePermission(
-                        name="MANAGE",
                         assignee=AssigneeIdentifier(
                             id="id_example",
                             type="user",
                         ),
-                    ),
-                ],
-                hierarchy_permissions=[
-                    DeclarativeWorkspaceHierarchyPermission(
                         name="MANAGE",
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
                     ),
                 ],
-            ),
-        ],
-        workspace_data_filters=[
-            DeclarativeWorkspaceDataFilter(
-                id="country_id",
-                title="Country ID",
-                description="ID of country",
-                column_name="country_id",
-                workspace_data_filter_settings=[
-                    DeclarativeWorkspaceDataFilterSetting(
-                        id="country_id_setting",
-                        title="Country ID setting",
-                        description="ID of country setting",
-                        filter_values=["US"],
-                        workspace=WorkspaceIdentifier(
-                            id="alpha.sales",
-                            type="workspace",
-                        ),
-                    ),
-                ],
-                workspace=WorkspaceIdentifier(
-                    id="alpha.sales",
-                    type="workspace",
-                ),
             ),
         ],
     ) # DeclarativeOrganization | 
@@ -2047,10 +2074,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_pdm import DeclarativePdm
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -2063,18 +2090,19 @@ with gooddata_metadata_client.ApiClient() as api_client:
         pdm=DeclarativeTables(
             tables=[
                 DeclarativeTable(
-                    id="customers",
-                    path=["table_schema","table_name"],
-                    type="VIEW",
                     columns=[
                         DeclarativeColumn(
-                            name="customer_id",
                             data_type="INT",
                             is_primary_key=True,
-                            referenced_table_id="customers",
+                            name="customer_id",
                             referenced_table_column="customer_id",
+                            referenced_table_id="customers",
                         ),
                     ],
+                    id="customers",
+                    name_prefix="out_gooddata",
+                    path=["table_schema","table_name"],
+                    type="VIEW",
                 ),
             ],
         ),
@@ -2134,10 +2162,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -2148,26 +2176,26 @@ with gooddata_metadata_client.ApiClient() as api_client:
     declarative_workspace_data_filters = DeclarativeWorkspaceDataFilters(
         workspace_data_filters=[
             DeclarativeWorkspaceDataFilter(
+                column_name="country_id",
+                description="ID of country",
                 id="country_id",
                 title="Country ID",
-                description="ID of country",
-                column_name="country_id",
+                workspace=WorkspaceIdentifier(
+                    id="alpha.sales",
+                    type="workspace",
+                ),
                 workspace_data_filter_settings=[
                     DeclarativeWorkspaceDataFilterSetting(
-                        id="country_id_setting",
-                        title="Country ID setting",
                         description="ID of country setting",
                         filter_values=["US"],
+                        id="country_id_setting",
+                        title="Country ID setting",
                         workspace=WorkspaceIdentifier(
                             id="alpha.sales",
                             type="workspace",
                         ),
                     ),
                 ],
-                workspace=WorkspaceIdentifier(
-                    id="alpha.sales",
-                    type="workspace",
-                ),
             ),
         ],
     ) # DeclarativeWorkspaceDataFilters | 
@@ -2225,10 +2253,10 @@ import gooddata_metadata_client
 from gooddata_metadata_client.api import layout_api
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -2237,53 +2265,141 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     declarative_workspaces = DeclarativeWorkspaces(
+        workspace_data_filters=[
+            DeclarativeWorkspaceDataFilter(
+                column_name="country_id",
+                description="ID of country",
+                id="country_id",
+                title="Country ID",
+                workspace=WorkspaceIdentifier(
+                    id="alpha.sales",
+                    type="workspace",
+                ),
+                workspace_data_filter_settings=[
+                    DeclarativeWorkspaceDataFilterSetting(
+                        description="ID of country setting",
+                        filter_values=["US"],
+                        id="country_id_setting",
+                        title="Country ID setting",
+                        workspace=WorkspaceIdentifier(
+                            id="alpha.sales",
+                            type="workspace",
+                        ),
+                    ),
+                ],
+            ),
+        ],
         workspaces=[
             DeclarativeWorkspace(
+                early_access="early_access_example",
+                hierarchy_permissions=[
+                    DeclarativeWorkspaceHierarchyPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="MANAGE",
+                    ),
+                ],
                 id="alpha.sales",
-                name="Alpha Sales",
                 model=DeclarativeWorkspaceModel(
+                    analytics=DeclarativeAnalyticsLayer(
+                        analytical_dashboards=[
+                            DeclarativeAnalyticalDashboard(
+                                content={},
+                                description="Period to period comparison of revenues in main sectors.",
+                                id="revenues-analysis",
+                                tags=["Revenues"],
+                                title="Revenues analysis",
+                            ),
+                        ],
+                        dashboard_plugins=[
+                            DeclarativeDashboardPlugin(
+                                content={},
+                                description="Three dimensional view of data.",
+                                id="dashboard-plugin-1",
+                                tags=["Revenues"],
+                                title="3D map renderer",
+                            ),
+                        ],
+                        filter_contexts=[
+                            DeclarativeFilterContext(
+                                content={},
+                                description="Filter Context for Sales team.",
+                                id="filter-sales",
+                                tags=["Revenues"],
+                                title="Filter Context for Sales team",
+                            ),
+                        ],
+                        metrics=[
+                            DeclarativeMetric(
+                                content={},
+                                description="Sales for all the data available.",
+                                id="total-sales",
+                                tags=["Revenues"],
+                                title="Total sales",
+                            ),
+                        ],
+                        visualization_objects=[
+                            DeclarativeVisualizationObject(
+                                content={},
+                                description="Simple number for total goods in current production.",
+                                id="visualization-1",
+                                tags=["Revenues"],
+                                title="Count of goods",
+                            ),
+                        ],
+                    ),
                     ldm=DeclarativeLdm(
                         datasets=[
                             DeclarativeDataset(
-                                id="customers",
-                                title="Customers",
+                                attributes=[
+                                    DeclarativeAttribute(
+                                        default_view=LabelIdentifier(
+                                            id="label_id",
+                                            type="label",
+                                        ),
+                                        description="Customer name including first and last name.",
+                                        id="attr.customers.customer_name",
+                                        labels=[
+                                            DeclarativeLabel(
+                                                description="Customer name",
+                                                id="label.customer_name",
+                                                source_column="customer_name",
+                                                tags=["Customers"],
+                                                title="Customer name",
+                                                value_type="TEXT" | "HYPERLINK" | "GEO",
+                                            ),
+                                        ],
+                                        sort_column="customer_name",
+                                        sort_direction="ASC" | "DESC",
+                                        source_column="customer_name",
+                                        tags=["Customers"],
+                                        title="Customer Name",
+                                    ),
+                                ],
+                                data_source_table_id=DataSourceTableIdentifier(
+                                    data_source_id="my-postgres",
+                                    id="customers",
+                                    type="dataSource",
+                                ),
                                 description="The customers of ours.",
+                                facts=[
+                                    DeclarativeFact(
+                                        description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
+                                        id="fact.customer_order_count",
+                                        source_column="customer_order_count",
+                                        tags=["Customers"],
+                                        title="Customer order count",
+                                    ),
+                                ],
                                 grain=[
                                     GrainIdentifier(
                                         id="attr.customers.customer_name",
                                         type="ATTRIBUTE",
                                     ),
                                 ],
-                                attributes=[
-                                    DeclarativeAttribute(
-                                        id="attr.customers.customer_name",
-                                        title="Customer Name",
-                                        description="Customer name including first and last name.",
-                                        labels=[
-                                            DeclarativeLabel(
-                                                id="label.customer_name",
-                                                title="Customer name",
-                                                description="Customer name",
-                                                primary=False,
-                                                source_column="customer_name",
-                                                tags=["Customers"],
-                                                value_type="TEXT" | "HYPERLINK" | "GEO",
-                                            ),
-                                        ],
-                                        tags=["Customers"],
-                                        sort_column="customer_name",
-                                        sort_direction="ASC" | "DESC",
-                                    ),
-                                ],
-                                facts=[
-                                    DeclarativeFact(
-                                        id="fact.customer_order_count",
-                                        title="Customer order count",
-                                        description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
-                                        source_column="customer_order_count",
-                                        tags=["Customers"],
-                                    ),
-                                ],
+                                id="customers",
                                 references=[
                                     DeclarativeReference(
                                         identifier=ReferenceIdentifier(
@@ -2294,125 +2410,41 @@ with gooddata_metadata_client.ApiClient() as api_client:
                                         source_columns=["customer_id"],
                                     ),
                                 ],
-                                data_source_table_id=DataSourceTableIdentifier(
-                                    id="customers",
-                                    data_source_id="my-postgres",
-                                    type="dataSource",
-                                ),
                                 tags=["Customers"],
+                                title="Customers",
                             ),
                         ],
                         date_instances=[
                             DeclarativeDateDataset(
-                                id="date",
-                                title="Date",
                                 description="A customer order date",
+                                granularities=[
+                                    "MINUTE",
+                                ],
                                 granularities_formatting=GranularitiesFormatting(
                                     title_base="title_base_example",
                                     title_pattern="%titleBase - %granularityTitle",
                                 ),
-                                granularities=[
-                                    "MINUTE",
-                                ],
+                                id="date",
                                 tags=["Customer dates"],
-                            ),
-                        ],
-                    ),
-                    analytics=DeclarativeAnalyticsLayer(
-                        analytical_dashboards=[
-                            DeclarativeAnalyticalDashboard(
-                                id="revenues-analysis",
-                                title="Revenues analysis",
-                                description="Period to period comparison of revenues in main sectors.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        filter_contexts=[
-                            DeclarativeFilterContext(
-                                id="filter-sales",
-                                title="Filter Context for Sales team",
-                                description="Filter Context for Sales team.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        metrics=[
-                            DeclarativeMetric(
-                                id="total-sales",
-                                title="Total sales",
-                                description="Sales for all the data available.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        visualization_objects=[
-                            DeclarativeVisualizationObject(
-                                id="visualization-1",
-                                title="Count of goods",
-                                description="Simple number for total goods in current production.",
-                                content={},
-                                tags=["Revenues"],
-                            ),
-                        ],
-                        dashboard_plugins=[
-                            DeclarativeDashboardPlugin(
-                                id="dashboard-plugin-1",
-                                title="3D map renderer",
-                                description="Three dimensional view of data.",
-                                content={},
-                                tags=["Revenues"],
+                                title="Date",
                             ),
                         ],
                     ),
                 ),
+                name="Alpha Sales",
                 parent=WorkspaceIdentifier(
                     id="alpha.sales",
                     type="workspace",
                 ),
-                compute_client="AQE",
                 permissions=[
                     DeclarativeSingleWorkspacePermission(
-                        name="MANAGE",
                         assignee=AssigneeIdentifier(
                             id="id_example",
                             type="user",
                         ),
-                    ),
-                ],
-                hierarchy_permissions=[
-                    DeclarativeWorkspaceHierarchyPermission(
                         name="MANAGE",
-                        assignee=AssigneeIdentifier(
-                            id="id_example",
-                            type="user",
-                        ),
                     ),
                 ],
-            ),
-        ],
-        workspace_data_filters=[
-            DeclarativeWorkspaceDataFilter(
-                id="country_id",
-                title="Country ID",
-                description="ID of country",
-                column_name="country_id",
-                workspace_data_filter_settings=[
-                    DeclarativeWorkspaceDataFilterSetting(
-                        id="country_id_setting",
-                        title="Country ID setting",
-                        description="ID of country setting",
-                        filter_values=["US"],
-                        workspace=WorkspaceIdentifier(
-                            id="alpha.sales",
-                            type="workspace",
-                        ),
-                    ),
-                ],
-                workspace=WorkspaceIdentifier(
-                    id="alpha.sales",
-                    type="workspace",
-                ),
             ),
         ],
     ) # DeclarativeWorkspaces | 

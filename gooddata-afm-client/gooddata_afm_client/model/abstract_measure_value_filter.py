@@ -31,12 +31,18 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.abstract_measure_value_filter_all_of import AbstractMeasureValueFilterAllOf
-    from gooddata_afm_client.model.common_filter import CommonFilter
-    from gooddata_afm_client.model.identifier import Identifier
-    globals()['AbstractMeasureValueFilterAllOf'] = AbstractMeasureValueFilterAllOf
-    globals()['CommonFilter'] = CommonFilter
-    globals()['Identifier'] = Identifier
+    from gooddata_afm_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
+    from gooddata_afm_client.model.comparison_measure_value_filter_comparison_measure_value_filter import ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    from gooddata_afm_client.model.range_measure_value_filter import RangeMeasureValueFilter
+    from gooddata_afm_client.model.range_measure_value_filter_range_measure_value_filter import RangeMeasureValueFilterRangeMeasureValueFilter
+    from gooddata_afm_client.model.ranking_filter import RankingFilter
+    from gooddata_afm_client.model.ranking_filter_ranking_filter import RankingFilterRankingFilter
+    globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
+    globals()['ComparisonMeasureValueFilterComparisonMeasureValueFilter'] = ComparisonMeasureValueFilterComparisonMeasureValueFilter
+    globals()['RangeMeasureValueFilter'] = RangeMeasureValueFilter
+    globals()['RangeMeasureValueFilterRangeMeasureValueFilter'] = RangeMeasureValueFilterRangeMeasureValueFilter
+    globals()['RankingFilter'] = RankingFilter
+    globals()['RankingFilterRankingFilter'] = RankingFilterRankingFilter
 
 
 class AbstractMeasureValueFilter(ModelComposed):
@@ -92,8 +98,9 @@ class AbstractMeasureValueFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'apply_on_result': (bool,),  # noqa: E501
-            'dimensionality': ([Identifier],),  # noqa: E501
+            'comparison_measure_value_filter': (ComparisonMeasureValueFilterComparisonMeasureValueFilter,),  # noqa: E501
+            'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
+            'ranking_filter': (RankingFilterRankingFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -102,8 +109,9 @@ class AbstractMeasureValueFilter(ModelComposed):
 
 
     attribute_map = {
-        'apply_on_result': 'applyOnResult',  # noqa: E501
-        'dimensionality': 'dimensionality',  # noqa: E501
+        'comparison_measure_value_filter': 'comparisonMeasureValueFilter',  # noqa: E501
+        'range_measure_value_filter': 'rangeMeasureValueFilter',  # noqa: E501
+        'ranking_filter': 'rankingFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -145,8 +153,9 @@ class AbstractMeasureValueFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            apply_on_result (bool): Force the filter to be applied on the result (true) or source data (false). If not specified at all the default behaviour specific to each type of filter is used.. [optional]  # noqa: E501
-            dimensionality ([Identifier]): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -158,14 +167,18 @@ class AbstractMeasureValueFilter(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -246,8 +259,9 @@ class AbstractMeasureValueFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            apply_on_result (bool): Force the filter to be applied on the result (true) or source data (false). If not specified at all the default behaviour specific to each type of filter is used.. [optional]  # noqa: E501
-            dimensionality ([Identifier]): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
+            ranking_filter (RankingFilterRankingFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,14 +271,18 @@ class AbstractMeasureValueFilter(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -313,9 +331,10 @@ class AbstractMeasureValueFilter(ModelComposed):
           'anyOf': [
           ],
           'allOf': [
-              AbstractMeasureValueFilterAllOf,
-              CommonFilter,
           ],
           'oneOf': [
+              ComparisonMeasureValueFilter,
+              RangeMeasureValueFilter,
+              RankingFilter,
           ],
         }

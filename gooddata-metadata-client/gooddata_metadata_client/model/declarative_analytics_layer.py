@@ -97,10 +97,10 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         lazy_import()
         return {
             'analytical_dashboards': ([DeclarativeAnalyticalDashboard],),  # noqa: E501
+            'dashboard_plugins': ([DeclarativeDashboardPlugin],),  # noqa: E501
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
             'metrics': ([DeclarativeMetric],),  # noqa: E501
             'visualization_objects': ([DeclarativeVisualizationObject],),  # noqa: E501
-            'dashboard_plugins': ([DeclarativeDashboardPlugin],),  # noqa: E501
         }
 
     @cached_property
@@ -110,10 +110,10 @@ class DeclarativeAnalyticsLayer(ModelNormal):
 
     attribute_map = {
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
+        'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
-        'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,14 +158,14 @@ class DeclarativeAnalyticsLayer(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
+            dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
-            dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -173,14 +173,18 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -244,10 +248,10 @@ class DeclarativeAnalyticsLayer(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
+            dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
             metrics ([DeclarativeMetric]): A list of metrics available in the model.. [optional]  # noqa: E501
             visualization_objects ([DeclarativeVisualizationObject]): A list of visualization objects available in the model.. [optional]  # noqa: E501
-            dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,14 +261,18 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

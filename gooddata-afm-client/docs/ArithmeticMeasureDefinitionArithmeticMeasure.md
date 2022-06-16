@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**measure_identifiers** | [**[LocalIdentifier]**](LocalIdentifier.md) | List of metrics to apply arithmetic operation by chosen operator. | 
+**measure_identifiers** | [**[AfmLocalIdentifier]**](AfmLocalIdentifier.md) | List of metrics to apply arithmetic operation by chosen operator. | 
 **operator** | **str** | Arithmetic operator describing operation between metrics. | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -32,7 +32,9 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.declarative_label import DeclarativeLabel
+    from gooddata_metadata_client.model.label_identifier import LabelIdentifier
     globals()['DeclarativeLabel'] = DeclarativeLabel
+    globals()['LabelIdentifier'] = LabelIdentifier
 
 
 class DeclarativeAttribute(ModelNormal):
@@ -100,12 +102,14 @@ class DeclarativeAttribute(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
             'labels': ([DeclarativeLabel],),  # noqa: E501
+            'source_column': (str,),  # noqa: E501
+            'title': (str,),  # noqa: E501
+            'default_view': (LabelIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
-            'tags': ([str],),  # noqa: E501
             'sort_column': (str,),  # noqa: E501
             'sort_direction': (str,),  # noqa: E501
+            'tags': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -115,12 +119,14 @@ class DeclarativeAttribute(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
-        'title': 'title',  # noqa: E501
         'labels': 'labels',  # noqa: E501
+        'source_column': 'sourceColumn',  # noqa: E501
+        'title': 'title',  # noqa: E501
+        'default_view': 'defaultView',  # noqa: E501
         'description': 'description',  # noqa: E501
-        'tags': 'tags',  # noqa: E501
         'sort_column': 'sortColumn',  # noqa: E501
         'sort_direction': 'sortDirection',  # noqa: E501
+        'tags': 'tags',  # noqa: E501
     }
 
     read_only_vars = {
@@ -130,13 +136,14 @@ class DeclarativeAttribute(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, title, labels, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, labels, source_column, title, *args, **kwargs):  # noqa: E501
         """DeclarativeAttribute - a model defined in OpenAPI
 
         Args:
             id (str): Attribute ID.
-            title (str): Attribute title.
             labels ([DeclarativeLabel]): An array of attribute labels.
+            source_column (str): A name of the source column that is the primary label
+            title (str): Attribute title.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -169,14 +176,15 @@ class DeclarativeAttribute(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
-            tags ([str]): A list of tags.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -184,14 +192,18 @@ class DeclarativeAttribute(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -201,8 +213,9 @@ class DeclarativeAttribute(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.title = title
         self.labels = labels
+        self.source_column = source_column
+        self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -223,13 +236,14 @@ class DeclarativeAttribute(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, title, labels, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, labels, source_column, title, *args, **kwargs):  # noqa: E501
         """DeclarativeAttribute - a model defined in OpenAPI
 
         Args:
             id (str): Attribute ID.
-            title (str): Attribute title.
             labels ([DeclarativeLabel]): An array of attribute labels.
+            source_column (str): A name of the source column that is the primary label
+            title (str): Attribute title.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -262,10 +276,11 @@ class DeclarativeAttribute(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            default_view (LabelIdentifier): [optional]  # noqa: E501
             description (str): Attribute description.. [optional]  # noqa: E501
-            tags ([str]): A list of tags.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -275,14 +290,18 @@ class DeclarativeAttribute(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -292,8 +311,9 @@ class DeclarativeAttribute(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
-        self.title = title
         self.labels = labels
+        self.source_column = source_column
+        self.title = title
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

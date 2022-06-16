@@ -96,8 +96,8 @@ class AfmValidObjectsQuery(ModelNormal):
         """
         lazy_import()
         return {
-            'types': ([str],),  # noqa: E501
             'afm': (AFM,),  # noqa: E501
+            'types': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -106,8 +106,8 @@ class AfmValidObjectsQuery(ModelNormal):
 
 
     attribute_map = {
-        'types': 'types',  # noqa: E501
         'afm': 'afm',  # noqa: E501
+        'types': 'types',  # noqa: E501
     }
 
     read_only_vars = {
@@ -117,12 +117,12 @@ class AfmValidObjectsQuery(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, types, afm, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, afm, types, *args, **kwargs):  # noqa: E501
         """AfmValidObjectsQuery - a model defined in OpenAPI
 
         Args:
-            types ([str]):
             afm (AFM):
+            types ([str]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -158,7 +158,7 @@ class AfmValidObjectsQuery(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -166,14 +166,18 @@ class AfmValidObjectsQuery(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -182,8 +186,8 @@ class AfmValidObjectsQuery(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.types = types
         self.afm = afm
+        self.types = types
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -204,12 +208,12 @@ class AfmValidObjectsQuery(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, types, afm, *args, **kwargs):  # noqa: E501
+    def __init__(self, afm, types, *args, **kwargs):  # noqa: E501
         """AfmValidObjectsQuery - a model defined in OpenAPI
 
         Args:
-            types ([str]):
             afm (AFM):
+            types ([str]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -251,14 +255,18 @@ class AfmValidObjectsQuery(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -267,8 +275,8 @@ class AfmValidObjectsQuery(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.types = types
         self.afm = afm
+        self.types = types
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

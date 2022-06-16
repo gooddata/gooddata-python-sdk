@@ -35,10 +35,14 @@ def lazy_import():
     from gooddata_afm_client.model.attribute_result_header import AttributeResultHeader
     from gooddata_afm_client.model.measure_execution_result_header import MeasureExecutionResultHeader
     from gooddata_afm_client.model.measure_result_header import MeasureResultHeader
+    from gooddata_afm_client.model.total_execution_result_header import TotalExecutionResultHeader
+    from gooddata_afm_client.model.total_result_header import TotalResultHeader
     globals()['AttributeExecutionResultHeader'] = AttributeExecutionResultHeader
     globals()['AttributeResultHeader'] = AttributeResultHeader
     globals()['MeasureExecutionResultHeader'] = MeasureExecutionResultHeader
     globals()['MeasureResultHeader'] = MeasureResultHeader
+    globals()['TotalExecutionResultHeader'] = TotalExecutionResultHeader
+    globals()['TotalResultHeader'] = TotalResultHeader
 
 
 class ExecutionResultHeader(ModelComposed):
@@ -96,6 +100,7 @@ class ExecutionResultHeader(ModelComposed):
         return {
             'attribute_header': (AttributeResultHeader,),  # noqa: E501
             'measure_header': (MeasureResultHeader,),  # noqa: E501
+            'total_header': (TotalResultHeader,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +111,7 @@ class ExecutionResultHeader(ModelComposed):
     attribute_map = {
         'attribute_header': 'attributeHeader',  # noqa: E501
         'measure_header': 'measureHeader',  # noqa: E501
+        'total_header': 'totalHeader',  # noqa: E501
     }
 
     read_only_vars = {
@@ -149,6 +155,7 @@ class ExecutionResultHeader(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_header (AttributeResultHeader): [optional]  # noqa: E501
             measure_header (MeasureResultHeader): [optional]  # noqa: E501
+            total_header (TotalResultHeader): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -160,14 +167,18 @@ class ExecutionResultHeader(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -250,6 +261,7 @@ class ExecutionResultHeader(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute_header (AttributeResultHeader): [optional]  # noqa: E501
             measure_header (MeasureResultHeader): [optional]  # noqa: E501
+            total_header (TotalResultHeader): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,14 +271,18 @@ class ExecutionResultHeader(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -319,5 +335,6 @@ class ExecutionResultHeader(ModelComposed):
           'oneOf': [
               AttributeExecutionResultHeader,
               MeasureExecutionResultHeader,
+              TotalExecutionResultHeader,
           ],
         }

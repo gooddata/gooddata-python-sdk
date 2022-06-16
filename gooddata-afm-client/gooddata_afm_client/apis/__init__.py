@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from .api.actions_api import ActionsApi
+#   from gooddata_afm_client.api.actions_api import ActionsApi
 #
 # or import this package, but before doing it, use:
 #

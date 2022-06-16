@@ -1,14 +1,14 @@
 # gooddata_afm_client.ActionsApi
 
-All URIs are relative to *http://gooddata-cn-ce:3000*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
-[**compute_report**](ActionsApi.md#compute_report) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
-[**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
-[**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
-[**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
+[**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
+[**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
+[**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+[**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+[**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
 
 # **compute_label_elements_post**
@@ -28,10 +28,10 @@ from gooddata_afm_client.api import actions_api
 from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
+    host = "http://localhost"
 )
 
 
@@ -41,21 +41,22 @@ with gooddata_afm_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
-        label="label_example",
-        filter_by=ElementsRequestFilterBy(
-            label_type="REQUESTED",
-        ),
-        sort_order="ASC",
         complement_filter=False,
-        pattern_filter="pattern_filter_example",
+        data_sampling_percentage=100,
         exact_filter=[
             "exact_filter_example",
         ],
-        data_sampling_percentage=100,
+        exclude_primary_label=False,
+        filter_by=FilterBy(
+            label_type="REQUESTED",
+        ),
+        label="label_example",
+        pattern_filter="pattern_filter_example",
+        sort_order="ASC",
     ) # ElementsRequest | 
     offset = 0 # int | Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 0
     limit = 1000 # int | Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 1000
-    skip_cache = True # bool | Ignore all caches during execution of current request. (optional)
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
 
     # example passing only required values which don't have defaults set
     try:
@@ -84,7 +85,7 @@ Name | Type | Description  | Notes
  **elements_request** | [**ElementsRequest**](ElementsRequest.md)|  |
  **offset** | **int**| Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. | [optional] if omitted the server will use the default value of 0
  **limit** | **int**| Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. | [optional] if omitted the server will use the default value of 1000
- **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional]
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
 
 ### Return type
 
@@ -97,7 +98,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -125,10 +126,10 @@ from gooddata_afm_client.api import actions_api
 from gooddata_afm_client.model.afm_execution_response import AfmExecutionResponse
 from gooddata_afm_client.model.afm_execution import AfmExecution
 from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
+    host = "http://localhost"
 )
 
 
@@ -141,13 +142,19 @@ with gooddata_afm_client.ApiClient() as api_client:
         execution=AFM(
             attributes=[
                 AttributeItem(
-                    local_identifier="2",
-                    label=AfmObjectIdentifier(
-                        identifier=ObjectIdentifier(
+                    label=AfmObjectIdentifierLabel(
+                        identifier=AfmObjectIdentifierLabelIdentifier(
                             id="sample_item.price",
-                            type="fact",
+                            type="label",
                         ),
                     ),
+                    local_identifier="2",
+                ),
+            ],
+            aux_measures=[
+                MeasureItem(
+                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
             filters=[
@@ -155,42 +162,32 @@ with gooddata_afm_client.ApiClient() as api_client:
             ],
             measures=[
                 MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
                     definition=MeasureDefinition(),
-                ),
-            ],
-            aux_measures=[
-                MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
-                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
         ),
         result_spec=ResultSpec(
             dimensions=[
                 Dimension(
-                    item_identifiers=[
-                        "[ "attribute1", "measureGroup"]",
-                    ],
+                    item_identifiers=["attribute_1","measureGroup"],
                     local_identifier="firstDimension",
                     sorting=[
-                        None,
+                        SortKey(),
                     ],
                 ),
             ],
-            grand_totals=[
-                GrandTotal(
-                    local_identifier="firstGrandTotal",
+            totals=[
+                Total(
                     function="SUM",
-                    included_dimensions={
-                        "key": IncludedDimensionProps(
-                            dimension_attributes_values={
-                                "key": [
-                                    "key_example",
-                                ],
-                            },
+                    local_identifier="firstTotal",
+                    metric="metric_1",
+                    total_dimensions=[
+                        TotalDimension(
+                            dimension_identifier="firstDimension",
+                            total_dimension_items=["measureGroup"],
                         ),
-                    },
+                    ],
                 ),
             ],
         ),
@@ -268,10 +265,10 @@ from gooddata_afm_client.api import actions_api
 from gooddata_afm_client.model.afm_valid_objects_query import AfmValidObjectsQuery
 from gooddata_afm_client.model.afm_valid_objects_response import AfmValidObjectsResponse
 from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
+    host = "http://localhost"
 )
 
 
@@ -281,19 +278,22 @@ with gooddata_afm_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     afm_valid_objects_query = AfmValidObjectsQuery(
-        types=[
-            "facts",
-        ],
         afm=AFM(
             attributes=[
                 AttributeItem(
-                    local_identifier="2",
-                    label=AfmObjectIdentifier(
-                        identifier=ObjectIdentifier(
+                    label=AfmObjectIdentifierLabel(
+                        identifier=AfmObjectIdentifierLabelIdentifier(
                             id="sample_item.price",
-                            type="fact",
+                            type="label",
                         ),
                     ),
+                    local_identifier="2",
+                ),
+            ],
+            aux_measures=[
+                MeasureItem(
+                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
             filters=[
@@ -301,17 +301,14 @@ with gooddata_afm_client.ApiClient() as api_client:
             ],
             measures=[
                 MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
                     definition=MeasureDefinition(),
-                ),
-            ],
-            aux_measures=[
-                MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
-                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
         ),
+        types=[
+            "facts",
+        ],
     ) # AfmValidObjectsQuery | 
 
     # example passing only required values which don't have defaults set
@@ -342,7 +339,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: */*
+ - **Accept**: application/json
 
 
 ### HTTP response details
@@ -354,11 +351,11 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **explain_afm**
-> file_type explain_afm(workspace_id, afm_execution)
+> explain_afm(workspace_id, afm_execution)
 
 AFM explain resource.
 
-The resource provides static structures needed for investigation of a problem with given AFM. The structures differs for AQE and for Calcique. They are either MAQL (internal form of AFM) and logical and physical models (LDM and PDM) of corresponding workspace or MAQL and GRPC and WDF models.
+The resource provides static structures needed for investigation of a problem with given AFM. The structures are MAQL (internal form of AFM) and GRPC and WDF models.
 
 ### Example
 
@@ -369,10 +366,10 @@ import gooddata_afm_client
 from gooddata_afm_client.api import actions_api
 from gooddata_afm_client.model.afm_execution import AfmExecution
 from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
+    host = "http://localhost"
 )
 
 
@@ -385,13 +382,19 @@ with gooddata_afm_client.ApiClient() as api_client:
         execution=AFM(
             attributes=[
                 AttributeItem(
-                    local_identifier="2",
-                    label=AfmObjectIdentifier(
-                        identifier=ObjectIdentifier(
+                    label=AfmObjectIdentifierLabel(
+                        identifier=AfmObjectIdentifierLabelIdentifier(
                             id="sample_item.price",
-                            type="fact",
+                            type="label",
                         ),
                     ),
+                    local_identifier="2",
+                ),
+            ],
+            aux_measures=[
+                MeasureItem(
+                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
             filters=[
@@ -399,42 +402,32 @@ with gooddata_afm_client.ApiClient() as api_client:
             ],
             measures=[
                 MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
                     definition=MeasureDefinition(),
-                ),
-            ],
-            aux_measures=[
-                MeasureItem(
-                    local_identifier="sampleAutoGenerated0123_ID",
-                    definition=MeasureDefinition(),
+                    local_identifier="metric_1",
                 ),
             ],
         ),
         result_spec=ResultSpec(
             dimensions=[
                 Dimension(
-                    item_identifiers=[
-                        "[ "attribute1", "measureGroup"]",
-                    ],
+                    item_identifiers=["attribute_1","measureGroup"],
                     local_identifier="firstDimension",
                     sorting=[
-                        None,
+                        SortKey(),
                     ],
                 ),
             ],
-            grand_totals=[
-                GrandTotal(
-                    local_identifier="firstGrandTotal",
+            totals=[
+                Total(
                     function="SUM",
-                    included_dimensions={
-                        "key": IncludedDimensionProps(
-                            dimension_attributes_values={
-                                "key": [
-                                    "key_example",
-                                ],
-                            },
+                    local_identifier="firstTotal",
+                    metric="metric_1",
+                    total_dimensions=[
+                        TotalDimension(
+                            dimension_identifier="firstDimension",
+                            total_dimension_items=["measureGroup"],
                         ),
-                    },
+                    ],
                 ),
             ],
         ),
@@ -442,13 +435,12 @@ with gooddata_afm_client.ApiClient() as api_client:
             data_sampling_percentage=0,
         ),
     ) # AfmExecution | 
-    explain_type = "explainType_example" # str | Requested explain type (LDM, PDM, GRPC_MODEL, WDF or MAQL). If not specified all types are bundled in a ZIP archive. (optional)
+    explain_type = "LDM" # str | Requested explain type (LDM, PDM, GRPC_MODEL, WDF, MAQL, QT, QT_SVG, OPT_QT, OPT_QT_SVG or SQL). If not specified all types are bundled in a ZIP archive. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # AFM explain resource.
-        api_response = api_instance.explain_afm(workspace_id, afm_execution)
-        pprint(api_response)
+        api_instance.explain_afm(workspace_id, afm_execution)
     except gooddata_afm_client.ApiException as e:
         print("Exception when calling ActionsApi->explain_afm: %s\n" % e)
 
@@ -456,8 +448,7 @@ with gooddata_afm_client.ApiClient() as api_client:
     # and optional values
     try:
         # AFM explain resource.
-        api_response = api_instance.explain_afm(workspace_id, afm_execution, explain_type=explain_type)
-        pprint(api_response)
+        api_instance.explain_afm(workspace_id, afm_execution, explain_type=explain_type)
     except gooddata_afm_client.ApiException as e:
         print("Exception when calling ActionsApi->explain_afm: %s\n" % e)
 ```
@@ -469,11 +460,11 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**| Workspace identifier |
  **afm_execution** | [**AfmExecution**](AfmExecution.md)|  |
- **explain_type** | **str**| Requested explain type (LDM, PDM, GRPC_MODEL, WDF or MAQL). If not specified all types are bundled in a ZIP archive. | [optional]
+ **explain_type** | **str**| Requested explain type (LDM, PDM, GRPC_MODEL, WDF, MAQL, QT, QT_SVG, OPT_QT, OPT_QT_SVG or SQL). If not specified all types are bundled in a ZIP archive. | [optional]
 
 ### Return type
 
-**file_type**
+void (empty response body)
 
 ### Authorization
 
@@ -482,14 +473,14 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/zip
+ - **Accept**: application/json, application/sql, application/zip, image/svg+xml
 
 
 ### HTTP response details
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | ZIP archive with MAQL, LDM and PDM files; or with MAQL, GRPC_MODEL and WDF files |  -  |
+**200** | ZIP archive with MAQL, LDM and PDM files; or with MAQL, GRPC_MODEL, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -508,12 +499,12 @@ import time
 import gooddata_afm_client
 from gooddata_afm_client.api import actions_api
 from gooddata_afm_client.model.execution_result import ExecutionResult
-from gooddata_afm_client.model.error_message import ErrorMessage
+from gooddata_afm_client.model.problem import Problem
 from pprint import pprint
-# Defining the host is optional and defaults to http://gooddata-cn-ce:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
-    host = "http://gooddata-cn-ce:3000"
+    host = "http://localhost"
 )
 
 
@@ -569,7 +560,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: */*
+ - **Accept**: application/json
 
 
 ### HTTP response details

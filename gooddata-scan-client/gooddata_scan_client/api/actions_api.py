@@ -40,12 +40,68 @@ class ActionsApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-        self.scan_pdm_endpoint = _Endpoint(
+        self.get_data_source_schemata_endpoint = _Endpoint(
+            settings={
+                'response_type': (DataSourceSchemata,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/scanSchemata',
+                'operation_id': 'get_data_source_schemata',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'data_source_id',
+                ],
+                'required': [
+                    'data_source_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'data_source_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('data_source_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'data_source_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'data_source_id': 'dataSourceId',
+                },
+                'location_map': {
+                    'data_source_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.scan_data_source_endpoint = _Endpoint(
             settings={
                 'response_type': (ScanResultPdm,),
                 'auth': [],
-                'endpoint_path': '/api/actions/dataSources/{dataSourceId}/scan',
-                'operation_id': 'scan_pdm',
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/scan',
+                'operation_id': 'scan_data_source',
                 'http_method': 'POST',
                 'servers': None,
             },
@@ -103,67 +159,11 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
-        self.schemata_endpoint = _Endpoint(
-            settings={
-                'response_type': (DataSourceSchemata,),
-                'auth': [],
-                'endpoint_path': '/api/actions/dataSources/{dataSourceId}/scanSchemata',
-                'operation_id': 'schemata',
-                'http_method': 'GET',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'data_source_id',
-                ],
-                'required': [
-                    'data_source_id',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                    'data_source_id',
-                ]
-            },
-            root_map={
-                'validations': {
-                    ('data_source_id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'data_source_id':
-                        (str,),
-                },
-                'attribute_map': {
-                    'data_source_id': 'dataSourceId',
-                },
-                'location_map': {
-                    'data_source_id': 'path',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [],
-            },
-            api_client=api_client
-        )
         self.test_data_source_endpoint = _Endpoint(
             settings={
                 'response_type': (TestResponse,),
                 'auth': [],
-                'endpoint_path': '/api/actions/dataSources/{dataSourceId}/test',
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/test',
                 'operation_id': 'test_data_source',
                 'http_method': 'POST',
                 'servers': None,
@@ -226,7 +226,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (TestResponse,),
                 'auth': [],
-                'endpoint_path': '/api/actions/dataSource/test',
+                'endpoint_path': '/api/v1/actions/dataSource/test',
                 'operation_id': 'test_data_source_definition',
                 'http_method': 'POST',
                 'servers': None,
@@ -273,91 +273,18 @@ class ActionsApi(object):
             api_client=api_client
         )
 
-    def scan_pdm(
-        self,
-        data_source_id,
-        scan_request,
-        **kwargs
-    ):
-        """scan_pdm  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.scan_pdm(data_source_id, scan_request, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            data_source_id (str): Data source id
-            scan_request (ScanRequest):
-
-        Keyword Args:
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            ScanResultPdm
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['data_source_id'] = \
-            data_source_id
-        kwargs['scan_request'] = \
-            scan_request
-        return self.scan_pdm_endpoint.call_with_http_info(**kwargs)
-
-    def schemata(
+    def get_data_source_schemata(
         self,
         data_source_id,
         **kwargs
     ):
-        """schemata  # noqa: E501
+        """Get a list of schema names of a database  # noqa: E501
 
+        It scans a database and reads metadata. The result of the request contains a list of schema names of a database.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.schemata(data_source_id, async_req=True)
+        >>> thread = api.get_data_source_schemata(data_source_id, async_req=True)
         >>> result = thread.get()
 
         Args:
@@ -379,12 +306,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -410,12 +345,103 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
-        return self.schemata_endpoint.call_with_http_info(**kwargs)
+        return self.get_data_source_schemata_endpoint.call_with_http_info(**kwargs)
+
+    def scan_data_source(
+        self,
+        data_source_id,
+        scan_request,
+        **kwargs
+    ):
+        """Scan a database to get a physical data model (PDM)  # noqa: E501
+
+        It scans a database and transforms its metadata to a declarative definition of the physical data model (PDM). The result of the request contains the mentioned physical data model (PDM) of a database within warning, for example, about unsupported columns.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.scan_data_source(data_source_id, scan_request, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            data_source_id (str): Data source id
+            scan_request (ScanRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ScanResultPdm
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['data_source_id'] = \
+            data_source_id
+        kwargs['scan_request'] = \
+            scan_request
+        return self.scan_data_source_endpoint.call_with_http_info(**kwargs)
 
     def test_data_source(
         self,
@@ -423,9 +449,9 @@ class ActionsApi(object):
         body,
         **kwargs
     ):
-        """Test data source connection  # noqa: E501
+        """Test data source connection by data source id  # noqa: E501
 
-        Test if it is possible to connect to database using connection provided by data source.  # noqa: E501
+        Test if it is possible to connect to a database using an existing data source definition.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -452,12 +478,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -483,9 +517,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         kwargs['body'] = \
@@ -499,7 +537,7 @@ class ActionsApi(object):
     ):
         """Test connection by data source definition  # noqa: E501
 
-        Test if it is possible to connect to database using connection provided by data source definition.  # noqa: E501
+        Test if it is possible to connect to a database using a connection provided by the data source definition in the request body.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -525,12 +563,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -556,9 +602,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['test_definition_request'] = \
             test_definition_request
         return self.test_data_source_definition_endpoint.call_with_http_info(**kwargs)
