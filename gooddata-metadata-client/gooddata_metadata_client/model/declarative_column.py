@@ -90,11 +90,11 @@ class DeclarativeColumn(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
             'data_type': (str,),  # noqa: E501
+            'name': (str,),  # noqa: E501
             'is_primary_key': (bool,),  # noqa: E501
-            'referenced_table_id': (str,),  # noqa: E501
             'referenced_table_column': (str,),  # noqa: E501
+            'referenced_table_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -103,11 +103,11 @@ class DeclarativeColumn(ModelNormal):
 
 
     attribute_map = {
-        'name': 'name',  # noqa: E501
         'data_type': 'dataType',  # noqa: E501
+        'name': 'name',  # noqa: E501
         'is_primary_key': 'isPrimaryKey',  # noqa: E501
-        'referenced_table_id': 'referencedTableId',  # noqa: E501
         'referenced_table_column': 'referencedTableColumn',  # noqa: E501
+        'referenced_table_id': 'referencedTableId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -117,12 +117,12 @@ class DeclarativeColumn(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, name, data_type, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data_type, name, *args, **kwargs):  # noqa: E501
         """DeclarativeColumn - a model defined in OpenAPI
 
         Args:
-            name (str): Column name
             data_type (str): Column type
+            name (str): Column name
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -156,12 +156,12 @@ class DeclarativeColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
-            referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
+            referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -169,14 +169,18 @@ class DeclarativeColumn(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -185,8 +189,8 @@ class DeclarativeColumn(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.data_type = data_type
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -207,12 +211,12 @@ class DeclarativeColumn(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, data_type, *args, **kwargs):  # noqa: E501
+    def __init__(self, data_type, name, *args, **kwargs):  # noqa: E501
         """DeclarativeColumn - a model defined in OpenAPI
 
         Args:
-            name (str): Column name
             data_type (str): Column type
+            name (str): Column name
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -246,8 +250,8 @@ class DeclarativeColumn(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             is_primary_key (bool): Is column part of primary key?. [optional]  # noqa: E501
-            referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
             referenced_table_column (str): Referenced table (Foreign key). [optional]  # noqa: E501
+            referenced_table_id (str): Referenced table (Foreign key). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -257,14 +261,18 @@ class DeclarativeColumn(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -273,8 +281,8 @@ class DeclarativeColumn(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.data_type = data_type
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

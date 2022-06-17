@@ -82,9 +82,9 @@ class Paging(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'total': (int,),  # noqa: E501
             'count': (int,),  # noqa: E501
             'offset': (int,),  # noqa: E501
+            'total': (int,),  # noqa: E501
             'next': (str,),  # noqa: E501
         }
 
@@ -94,9 +94,9 @@ class Paging(ModelNormal):
 
 
     attribute_map = {
-        'total': 'total',  # noqa: E501
         'count': 'count',  # noqa: E501
         'offset': 'offset',  # noqa: E501
+        'total': 'total',  # noqa: E501
         'next': 'next',  # noqa: E501
     }
 
@@ -107,13 +107,13 @@ class Paging(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, total, count, offset, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, count, offset, total, *args, **kwargs):  # noqa: E501
         """Paging - a model defined in OpenAPI
 
         Args:
-            total (int): Count of returnable items ignoring paging.
             count (int): Count of items in this page.
             offset (int): Offset of this page.
+            total (int): Count of returnable items ignoring paging.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -150,7 +150,7 @@ class Paging(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -158,14 +158,18 @@ class Paging(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -174,9 +178,9 @@ class Paging(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.total = total
         self.count = count
         self.offset = offset
+        self.total = total
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -197,13 +201,13 @@ class Paging(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, total, count, offset, *args, **kwargs):  # noqa: E501
+    def __init__(self, count, offset, total, *args, **kwargs):  # noqa: E501
         """Paging - a model defined in OpenAPI
 
         Args:
-            total (int): Count of returnable items ignoring paging.
             count (int): Count of items in this page.
             offset (int): Offset of this page.
+            total (int): Count of returnable items ignoring paging.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -246,14 +250,18 @@ class Paging(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -262,9 +270,9 @@ class Paging(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.total = total
         self.count = count
         self.offset = offset
+        self.total = total
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

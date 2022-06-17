@@ -31,11 +31,11 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
     from gooddata_metadata_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
-    from gooddata_metadata_client.model.json_api_visualization_object_out_includes import JsonApiVisualizationObjectOutIncludes
     from gooddata_metadata_client.model.object_links import ObjectLinks
+    globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
-    globals()['JsonApiVisualizationObjectOutIncludes'] = JsonApiVisualizationObjectOutIncludes
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -95,8 +95,8 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiVisualizationObjectOut,),  # noqa: E501
+            'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'included': ([JsonApiVisualizationObjectOutIncludes],),  # noqa: E501
         }
 
     @cached_property
@@ -106,8 +106,8 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
 
     attribute_map = {
         'data': 'data',  # noqa: E501
-        'links': 'links',  # noqa: E501
         'included': 'included',  # noqa: E501
+        'links': 'links',  # noqa: E501
     }
 
     read_only_vars = {
@@ -154,12 +154,12 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -167,14 +167,18 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -241,8 +245,8 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            included ([JsonApiVisualizationObjectOutIncludes]): Included resources. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -252,14 +256,18 @@ class JsonApiVisualizationObjectOutDocument(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

@@ -4,9 +4,6 @@
       "id": "adminGroup"
     },
     {
-      "id": "demoGroup"
-    },
-    {
       "id": "adminQA1Group",
       "parents": [
         {
@@ -14,6 +11,9 @@
           "type": "userGroup"
         }
       ]
+    },
+    {
+      "id": "demoGroup"
     },
     {
       "id": "visitorsGroup",

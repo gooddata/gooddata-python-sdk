@@ -5,14 +5,14 @@ A dataset defined by its properties.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The Dataset ID. This ID is further used to refer to this instance of dataset. | 
-**title** | **str** | A dataset title. | 
 **grain** | [**[GrainIdentifier]**](GrainIdentifier.md) | An array of grain identifiers. | 
+**id** | **str** | The Dataset ID. This ID is further used to refer to this instance of dataset. | 
 **references** | [**[DeclarativeReference]**](DeclarativeReference.md) | An array of references. | 
-**description** | **str** | A dataset description. | [optional] 
+**title** | **str** | A dataset title. | 
 **attributes** | [**[DeclarativeAttribute]**](DeclarativeAttribute.md) | An array of attributes. | [optional] 
-**facts** | [**[DeclarativeFact]**](DeclarativeFact.md) | An array of facts. | [optional] 
 **data_source_table_id** | [**DataSourceTableIdentifier**](DataSourceTableIdentifier.md) |  | [optional] 
+**description** | **str** | A dataset description. | [optional] 
+**facts** | [**[DeclarativeFact]**](DeclarativeFact.md) | An array of facts. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

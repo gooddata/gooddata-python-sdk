@@ -24,7 +24,7 @@ def _empty_workspaces(sdk: GoodDataSdk) -> None:
     sdk.catalog_workspace.put_declarative_workspaces(empty_workspaces_e)
     empty_workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
     assert empty_workspaces_e == empty_workspaces_o
-    assert empty_workspaces_e.to_api().to_dict() == empty_workspaces_o.to_api().to_dict()
+    assert empty_workspaces_e.to_dict(camel_case=True) == empty_workspaces_o.to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.json"))
@@ -40,7 +40,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
         workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
         assert workspaces_e == workspaces_o
-        assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
+        assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)
@@ -59,7 +59,7 @@ def test_store_declarative_workspaces(test_config):
     workspaces_o = sdk.catalog_workspace.load_declarative_workspaces(path)
 
     assert workspaces_e == workspaces_o
-    assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
+    assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspaces.json"))
@@ -74,7 +74,7 @@ def test_put_declarative_workspaces(test_config):
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
         workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
         assert workspaces_e == workspaces_o
-        assert workspaces_e.to_api().to_dict() == workspaces_o.to_api().to_dict()
+        assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
         with open(path) as f:
             data = json.load(f)
@@ -94,7 +94,7 @@ def test_get_declarative_workspaces_snake_case(test_config):
     expected_o = CatalogDeclarativeWorkspaces.from_dict(data, camel_case=False)
 
     assert workspaces_o == expected_o
-    assert workspaces_o.to_api().to_dict() == data
+    assert workspaces_o.to_dict(camel_case=False) == data
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
@@ -123,7 +123,7 @@ def test_declarative_workspaces(test_config):
     assert len(workspaces_o.workspaces) == 3
     assert len(workspaces_o.workspace_data_filters) == 2
     assert [workspace.id for workspace in workspaces_o.workspaces] == ["demo", "demo_west", "demo_west_california"]
-    assert workspaces_o.to_api().to_dict() == layout_api.get_workspaces_layout().to_dict()
+    assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout().to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.json"))

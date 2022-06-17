@@ -1,559 +1,9 @@
 {
   "workspaces": [
     {
+      "hierarchyPermissions": [],
       "id": "demo",
-      "name": "Demo",
       "model": {
-        "ldm": {
-          "datasets": [
-            {
-              "id": "campaign_channels",
-              "title": "Campaign channels",
-              "grain": [
-                {
-                  "id": "campaign_channel_id",
-                  "type": "attribute"
-                }
-              ],
-              "references": [
-                {
-                  "identifier": {
-                    "id": "campaigns",
-                    "type": "dataset"
-                  },
-                  "multivalue": false,
-                  "sourceColumns": [
-                    "campaign_id"
-                  ]
-                }
-              ],
-              "facts": [
-                {
-                  "id": "budget",
-                  "title": "Budget",
-                  "sourceColumn": "budget",
-                  "description": "Budget",
-                  "tags": [
-                    "Campaign channels"
-                  ]
-                },
-                {
-                  "id": "spend",
-                  "title": "Spend",
-                  "sourceColumn": "spend",
-                  "description": "Spend",
-                  "tags": [
-                    "Campaign channels"
-                  ]
-                }
-              ],
-              "attributes": [
-                {
-                  "id": "campaign_channel_id",
-                  "title": "Campaign channel id",
-                  "labels": [
-                    {
-                      "id": "campaign_channel_id",
-                      "title": "Campaign channel id",
-                      "primary": true,
-                      "sourceColumn": "campaign_channel_id",
-                      "description": "Campaign channel id",
-                      "tags": [
-                        "Campaign channels"
-                      ]
-                    }
-                  ],
-                  "description": "Campaign channel id",
-                  "tags": [
-                    "Campaign channels"
-                  ]
-                },
-                {
-                  "id": "campaign_channels.category",
-                  "title": "Category",
-                  "labels": [
-                    {
-                      "id": "campaign_channels.category",
-                      "title": "Category",
-                      "primary": true,
-                      "sourceColumn": "category",
-                      "description": "Category",
-                      "tags": [
-                        "Campaign channels"
-                      ]
-                    }
-                  ],
-                  "description": "Category",
-                  "tags": [
-                    "Campaign channels"
-                  ]
-                },
-                {
-                  "id": "type",
-                  "title": "Type",
-                  "labels": [
-                    {
-                      "id": "type",
-                      "title": "Type",
-                      "primary": true,
-                      "sourceColumn": "type",
-                      "description": "Type",
-                      "tags": [
-                        "Campaign channels"
-                      ]
-                    }
-                  ],
-                  "description": "Type",
-                  "tags": [
-                    "Campaign channels"
-                  ]
-                }
-              ],
-              "description": "Campaign channels",
-              "dataSourceTableId": {
-                "id": "campaign_channels",
-                "dataSourceId": "demo-test-ds",
-                "type": "dataSource"
-              },
-              "tags": [
-                "Campaign channels"
-              ]
-            },
-            {
-              "id": "campaigns",
-              "title": "Campaigns",
-              "grain": [
-                {
-                  "id": "campaign_id",
-                  "type": "attribute"
-                }
-              ],
-              "references": [],
-              "facts": [],
-              "attributes": [
-                {
-                  "id": "campaign_id",
-                  "title": "Campaign id",
-                  "labels": [
-                    {
-                      "id": "campaign_id",
-                      "title": "Campaign id",
-                      "primary": true,
-                      "sourceColumn": "campaign_id",
-                      "description": "Campaign id",
-                      "tags": [
-                        "Campaigns"
-                      ]
-                    }
-                  ],
-                  "description": "Campaign id",
-                  "tags": [
-                    "Campaigns"
-                  ]
-                },
-                {
-                  "id": "campaign_name",
-                  "title": "Campaign name",
-                  "labels": [
-                    {
-                      "id": "campaign_name",
-                      "title": "Campaign name",
-                      "primary": true,
-                      "sourceColumn": "campaign_name",
-                      "description": "Campaign name",
-                      "tags": [
-                        "Campaigns"
-                      ]
-                    }
-                  ],
-                  "description": "Campaign name",
-                  "tags": [
-                    "Campaigns"
-                  ]
-                }
-              ],
-              "description": "Campaigns",
-              "dataSourceTableId": {
-                "id": "campaigns",
-                "dataSourceId": "demo-test-ds",
-                "type": "dataSource"
-              },
-              "tags": [
-                "Campaigns"
-              ]
-            },
-            {
-              "id": "customers",
-              "title": "Customers",
-              "grain": [
-                {
-                  "id": "customer_id",
-                  "type": "attribute"
-                }
-              ],
-              "references": [],
-              "facts": [],
-              "attributes": [
-                {
-                  "id": "customer_id",
-                  "title": "Customer id",
-                  "labels": [
-                    {
-                      "id": "customer_id",
-                      "title": "Customer id",
-                      "primary": true,
-                      "sourceColumn": "customer_id",
-                      "description": "Customer id",
-                      "tags": [
-                        "Customers"
-                      ]
-                    }
-                  ],
-                  "description": "Customer id",
-                  "tags": [
-                    "Customers"
-                  ]
-                },
-                {
-                  "id": "customer_name",
-                  "title": "Customer name",
-                  "labels": [
-                    {
-                      "id": "customer_name",
-                      "title": "Customer name",
-                      "primary": true,
-                      "sourceColumn": "customer_name",
-                      "description": "Customer name",
-                      "tags": [
-                        "Customers"
-                      ]
-                    }
-                  ],
-                  "description": "Customer name",
-                  "tags": [
-                    "Customers"
-                  ]
-                },
-                {
-                  "id": "region",
-                  "title": "Region",
-                  "labels": [
-                    {
-                      "id": "region",
-                      "title": "Region",
-                      "primary": true,
-                      "sourceColumn": "region",
-                      "description": "Region",
-                      "tags": [
-                        "Customers"
-                      ]
-                    }
-                  ],
-                  "description": "Region",
-                  "tags": [
-                    "Customers"
-                  ]
-                },
-                {
-                  "id": "state",
-                  "title": "State",
-                  "labels": [
-                    {
-                      "id": "geo__state__location",
-                      "title": "Location",
-                      "primary": false,
-                      "sourceColumn": "geo__state__location",
-                      "description": "Location",
-                      "tags": [
-                        "Customers"
-                      ]
-                    },
-                    {
-                      "id": "state",
-                      "title": "State",
-                      "primary": true,
-                      "sourceColumn": "state",
-                      "description": "State",
-                      "tags": [
-                        "Customers"
-                      ]
-                    }
-                  ],
-                  "description": "State",
-                  "tags": [
-                    "Customers"
-                  ]
-                }
-              ],
-              "description": "Customers",
-              "dataSourceTableId": {
-                "id": "customers",
-                "dataSourceId": "demo-test-ds",
-                "type": "dataSource"
-              },
-              "tags": [
-                "Customers"
-              ]
-            },
-            {
-              "id": "order_lines",
-              "title": "Order lines",
-              "grain": [
-                {
-                  "id": "order_line_id",
-                  "type": "attribute"
-                }
-              ],
-              "references": [
-                {
-                  "identifier": {
-                    "id": "campaigns",
-                    "type": "dataset"
-                  },
-                  "multivalue": false,
-                  "sourceColumns": [
-                    "campaign_id"
-                  ]
-                },
-                {
-                  "identifier": {
-                    "id": "customers",
-                    "type": "dataset"
-                  },
-                  "multivalue": false,
-                  "sourceColumns": [
-                    "customer_id"
-                  ]
-                },
-                {
-                  "identifier": {
-                    "id": "date",
-                    "type": "dataset"
-                  },
-                  "multivalue": false,
-                  "sourceColumns": [
-                    "date"
-                  ]
-                },
-                {
-                  "identifier": {
-                    "id": "products",
-                    "type": "dataset"
-                  },
-                  "multivalue": false,
-                  "sourceColumns": [
-                    "product_id"
-                  ]
-                }
-              ],
-              "facts": [
-                {
-                  "id": "price",
-                  "title": "Price",
-                  "sourceColumn": "price",
-                  "description": "Price",
-                  "tags": [
-                    "Order lines"
-                  ]
-                },
-                {
-                  "id": "quantity",
-                  "title": "Quantity",
-                  "sourceColumn": "quantity",
-                  "description": "Quantity",
-                  "tags": [
-                    "Order lines"
-                  ]
-                }
-              ],
-              "attributes": [
-                {
-                  "id": "order_id",
-                  "title": "Order id",
-                  "labels": [
-                    {
-                      "id": "order_id",
-                      "title": "Order id",
-                      "primary": true,
-                      "sourceColumn": "order_id",
-                      "description": "Order id",
-                      "tags": [
-                        "Order lines"
-                      ]
-                    }
-                  ],
-                  "description": "Order id",
-                  "tags": [
-                    "Order lines"
-                  ]
-                },
-                {
-                  "id": "order_line_id",
-                  "title": "Order line id",
-                  "labels": [
-                    {
-                      "id": "order_line_id",
-                      "title": "Order line id",
-                      "primary": true,
-                      "sourceColumn": "order_line_id",
-                      "description": "Order line id",
-                      "tags": [
-                        "Order lines"
-                      ]
-                    }
-                  ],
-                  "description": "Order line id",
-                  "tags": [
-                    "Order lines"
-                  ]
-                },
-                {
-                  "id": "order_status",
-                  "title": "Order status",
-                  "labels": [
-                    {
-                      "id": "order_status",
-                      "title": "Order status",
-                      "primary": true,
-                      "sourceColumn": "order_status",
-                      "description": "Order status",
-                      "tags": [
-                        "Order lines"
-                      ]
-                    }
-                  ],
-                  "description": "Order status",
-                  "tags": [
-                    "Order lines"
-                  ]
-                }
-              ],
-              "description": "Order lines",
-              "dataSourceTableId": {
-                "id": "order_lines",
-                "dataSourceId": "demo-test-ds",
-                "type": "dataSource"
-              },
-              "tags": [
-                "Order lines"
-              ]
-            },
-            {
-              "id": "products",
-              "title": "Products",
-              "grain": [
-                {
-                  "id": "product_id",
-                  "type": "attribute"
-                }
-              ],
-              "references": [],
-              "facts": [],
-              "attributes": [
-                {
-                  "id": "product_id",
-                  "title": "Product id",
-                  "labels": [
-                    {
-                      "id": "product_id",
-                      "title": "Product id",
-                      "primary": true,
-                      "sourceColumn": "product_id",
-                      "description": "Product id",
-                      "tags": [
-                        "Products"
-                      ]
-                    }
-                  ],
-                  "description": "Product id",
-                  "tags": [
-                    "Products"
-                  ]
-                },
-                {
-                  "id": "product_name",
-                  "title": "Product name",
-                  "labels": [
-                    {
-                      "id": "product_name",
-                      "title": "Product name",
-                      "primary": true,
-                      "sourceColumn": "product_name",
-                      "description": "Product name",
-                      "tags": [
-                        "Products"
-                      ]
-                    }
-                  ],
-                  "description": "Product name",
-                  "tags": [
-                    "Products"
-                  ]
-                },
-                {
-                  "id": "products.category",
-                  "title": "Category",
-                  "labels": [
-                    {
-                      "id": "products.category",
-                      "title": "Category",
-                      "primary": true,
-                      "sourceColumn": "category",
-                      "description": "Category",
-                      "tags": [
-                        "Products"
-                      ]
-                    }
-                  ],
-                  "description": "Category",
-                  "tags": [
-                    "Products"
-                  ]
-                }
-              ],
-              "description": "Products",
-              "dataSourceTableId": {
-                "id": "products",
-                "dataSourceId": "demo-test-ds",
-                "type": "dataSource"
-              },
-              "tags": [
-                "Products"
-              ]
-            }
-          ],
-          "dateInstances": [
-            {
-              "id": "date",
-              "title": "Date",
-              "granularitiesFormatting": {
-                "titleBase": "",
-                "titlePattern": "%titleBase - %granularityTitle"
-              },
-              "granularities": [
-                "MINUTE",
-                "HOUR",
-                "DAY",
-                "WEEK",
-                "MONTH",
-                "QUARTER",
-                "YEAR",
-                "MINUTE_OF_HOUR",
-                "HOUR_OF_DAY",
-                "DAY_OF_WEEK",
-                "DAY_OF_MONTH",
-                "DAY_OF_YEAR",
-                "WEEK_OF_YEAR",
-                "MONTH_OF_YEAR",
-                "QUARTER_OF_YEAR"
-              ],
-              "description": "",
-              "tags": [
-                "Date"
-              ]
-            }
-          ]
-        },
         "analytics": {
           "analyticalDashboards": [
             {
@@ -2793,100 +2243,502 @@
               "title": "Top 10 Products"
             }
           ]
+        },
+        "ldm": {
+          "datasets": [
+            {
+              "attributes": [
+                {
+                  "description": "Campaign channel id",
+                  "id": "campaign_channel_id",
+                  "labels": [],
+                  "sourceColumn": "campaign_channel_id",
+                  "tags": [
+                    "Campaign channels"
+                  ],
+                  "title": "Campaign channel id"
+                },
+                {
+                  "description": "Category",
+                  "id": "campaign_channels.category",
+                  "labels": [],
+                  "sourceColumn": "category",
+                  "tags": [
+                    "Campaign channels"
+                  ],
+                  "title": "Category"
+                },
+                {
+                  "description": "Type",
+                  "id": "type",
+                  "labels": [],
+                  "sourceColumn": "type",
+                  "tags": [
+                    "Campaign channels"
+                  ],
+                  "title": "Type"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "demo-test-ds",
+                "id": "campaign_channels",
+                "type": "dataSource"
+              },
+              "description": "Campaign channels",
+              "facts": [
+                {
+                  "description": "Budget",
+                  "id": "budget",
+                  "sourceColumn": "budget",
+                  "tags": [
+                    "Campaign channels"
+                  ],
+                  "title": "Budget"
+                },
+                {
+                  "description": "Spend",
+                  "id": "spend",
+                  "sourceColumn": "spend",
+                  "tags": [
+                    "Campaign channels"
+                  ],
+                  "title": "Spend"
+                }
+              ],
+              "grain": [
+                {
+                  "id": "campaign_channel_id",
+                  "type": "attribute"
+                }
+              ],
+              "id": "campaign_channels",
+              "references": [
+                {
+                  "identifier": {
+                    "id": "campaigns",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sourceColumns": [
+                    "campaign_id"
+                  ]
+                }
+              ],
+              "tags": [
+                "Campaign channels"
+              ],
+              "title": "Campaign channels"
+            },
+            {
+              "attributes": [
+                {
+                  "description": "Campaign id",
+                  "id": "campaign_id",
+                  "labels": [],
+                  "sourceColumn": "campaign_id",
+                  "tags": [
+                    "Campaigns"
+                  ],
+                  "title": "Campaign id"
+                },
+                {
+                  "description": "Campaign name",
+                  "id": "campaign_name",
+                  "labels": [],
+                  "sourceColumn": "campaign_name",
+                  "tags": [
+                    "Campaigns"
+                  ],
+                  "title": "Campaign name"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "demo-test-ds",
+                "id": "campaigns",
+                "type": "dataSource"
+              },
+              "description": "Campaigns",
+              "facts": [],
+              "grain": [
+                {
+                  "id": "campaign_id",
+                  "type": "attribute"
+                }
+              ],
+              "id": "campaigns",
+              "references": [],
+              "tags": [
+                "Campaigns"
+              ],
+              "title": "Campaigns"
+            },
+            {
+              "attributes": [
+                {
+                  "description": "Customer id",
+                  "id": "customer_id",
+                  "labels": [],
+                  "sourceColumn": "customer_id",
+                  "tags": [
+                    "Customers"
+                  ],
+                  "title": "Customer id"
+                },
+                {
+                  "description": "Customer name",
+                  "id": "customer_name",
+                  "labels": [],
+                  "sourceColumn": "customer_name",
+                  "tags": [
+                    "Customers"
+                  ],
+                  "title": "Customer name"
+                },
+                {
+                  "description": "Region",
+                  "id": "region",
+                  "labels": [],
+                  "sourceColumn": "region",
+                  "tags": [
+                    "Customers"
+                  ],
+                  "title": "Region"
+                },
+                {
+                  "description": "State",
+                  "id": "state",
+                  "labels": [
+                    {
+                      "description": "Location",
+                      "id": "geo__state__location",
+                      "sourceColumn": "geo__state__location",
+                      "tags": [
+                        "Customers"
+                      ],
+                      "title": "Location"
+                    }
+                  ],
+                  "sourceColumn": "state",
+                  "tags": [
+                    "Customers"
+                  ],
+                  "title": "State"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "demo-test-ds",
+                "id": "customers",
+                "type": "dataSource"
+              },
+              "description": "Customers",
+              "facts": [],
+              "grain": [
+                {
+                  "id": "customer_id",
+                  "type": "attribute"
+                }
+              ],
+              "id": "customers",
+              "references": [],
+              "tags": [
+                "Customers"
+              ],
+              "title": "Customers"
+            },
+            {
+              "attributes": [
+                {
+                  "description": "Order id",
+                  "id": "order_id",
+                  "labels": [],
+                  "sourceColumn": "order_id",
+                  "tags": [
+                    "Order lines"
+                  ],
+                  "title": "Order id"
+                },
+                {
+                  "description": "Order line id",
+                  "id": "order_line_id",
+                  "labels": [],
+                  "sourceColumn": "order_line_id",
+                  "tags": [
+                    "Order lines"
+                  ],
+                  "title": "Order line id"
+                },
+                {
+                  "description": "Order status",
+                  "id": "order_status",
+                  "labels": [],
+                  "sourceColumn": "order_status",
+                  "tags": [
+                    "Order lines"
+                  ],
+                  "title": "Order status"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "demo-test-ds",
+                "id": "order_lines",
+                "type": "dataSource"
+              },
+              "description": "Order lines",
+              "facts": [
+                {
+                  "description": "Price",
+                  "id": "price",
+                  "sourceColumn": "price",
+                  "tags": [
+                    "Order lines"
+                  ],
+                  "title": "Price"
+                },
+                {
+                  "description": "Quantity",
+                  "id": "quantity",
+                  "sourceColumn": "quantity",
+                  "tags": [
+                    "Order lines"
+                  ],
+                  "title": "Quantity"
+                }
+              ],
+              "grain": [
+                {
+                  "id": "order_line_id",
+                  "type": "attribute"
+                }
+              ],
+              "id": "order_lines",
+              "references": [
+                {
+                  "identifier": {
+                    "id": "campaigns",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sourceColumns": [
+                    "campaign_id"
+                  ]
+                },
+                {
+                  "identifier": {
+                    "id": "customers",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sourceColumns": [
+                    "customer_id"
+                  ]
+                },
+                {
+                  "identifier": {
+                    "id": "date",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sourceColumns": [
+                    "date"
+                  ]
+                },
+                {
+                  "identifier": {
+                    "id": "products",
+                    "type": "dataset"
+                  },
+                  "multivalue": false,
+                  "sourceColumns": [
+                    "product_id"
+                  ]
+                }
+              ],
+              "tags": [
+                "Order lines"
+              ],
+              "title": "Order lines"
+            },
+            {
+              "attributes": [
+                {
+                  "description": "Product id",
+                  "id": "product_id",
+                  "labels": [],
+                  "sourceColumn": "product_id",
+                  "tags": [
+                    "Products"
+                  ],
+                  "title": "Product id"
+                },
+                {
+                  "description": "Product name",
+                  "id": "product_name",
+                  "labels": [],
+                  "sourceColumn": "product_name",
+                  "tags": [
+                    "Products"
+                  ],
+                  "title": "Product name"
+                },
+                {
+                  "description": "Category",
+                  "id": "products.category",
+                  "labels": [],
+                  "sourceColumn": "category",
+                  "tags": [
+                    "Products"
+                  ],
+                  "title": "Category"
+                }
+              ],
+              "dataSourceTableId": {
+                "dataSourceId": "demo-test-ds",
+                "id": "products",
+                "type": "dataSource"
+              },
+              "description": "Products",
+              "facts": [],
+              "grain": [
+                {
+                  "id": "product_id",
+                  "type": "attribute"
+                }
+              ],
+              "id": "products",
+              "references": [],
+              "tags": [
+                "Products"
+              ],
+              "title": "Products"
+            }
+          ],
+          "dateInstances": [
+            {
+              "description": "",
+              "granularities": [
+                "MINUTE",
+                "HOUR",
+                "DAY",
+                "WEEK",
+                "MONTH",
+                "QUARTER",
+                "YEAR",
+                "MINUTE_OF_HOUR",
+                "HOUR_OF_DAY",
+                "DAY_OF_WEEK",
+                "DAY_OF_MONTH",
+                "DAY_OF_YEAR",
+                "WEEK_OF_YEAR",
+                "MONTH_OF_YEAR",
+                "QUARTER_OF_YEAR"
+              ],
+              "granularitiesFormatting": {
+                "titleBase": "",
+                "titlePattern": "%titleBase - %granularityTitle"
+              },
+              "id": "date",
+              "tags": [
+                "Date"
+              ],
+              "title": "Date"
+            }
+          ]
         }
-      }
+      },
+      "name": "Demo",
+      "permissions": []
     },
     {
-      "id": "demo_west",
-      "name": "Demo West",
-      "permissions": [],
       "hierarchyPermissions": [],
+      "id": "demo_west",
       "model": {
-        "ldm": {
-          "datasets": [],
-          "dateInstances": []
-        },
         "analytics": {
           "analyticalDashboards": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
           "visualizationObjects": []
+        },
+        "ldm": {
+          "datasets": [],
+          "dateInstances": []
         }
       },
+      "name": "Demo West",
       "parent": {
         "id": "demo",
         "type": "workspace"
-      }
+      },
+      "permissions": []
     },
     {
-      "id": "demo_west_california",
-      "name": "Demo West California",
-      "permissions": [],
       "hierarchyPermissions": [],
+      "id": "demo_west_california",
       "model": {
-        "ldm": {
-          "datasets": [],
-          "dateInstances": []
-        },
         "analytics": {
           "analyticalDashboards": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
           "visualizationObjects": []
+        },
+        "ldm": {
+          "datasets": [],
+          "dateInstances": []
         }
       },
+      "name": "Demo West California",
       "parent": {
         "id": "demo_west",
         "type": "workspace"
-      }
+      },
+      "permissions": []
     }
   ],
   "workspaceDataFilters": [
     {
+      "columnName": "wdf__region",
       "id": "wdf__region",
       "title": "Customer region",
-      "columnName": "wdf__region",
+      "workspace": {
+        "id": "demo",
+        "type": "workspace"
+      },
       "workspaceDataFilterSettings": [
         {
-          "id": "region_west",
-          "title": "Region West",
           "filterValues": [
             "West"
           ],
+          "id": "region_west",
+          "title": "Region West",
           "workspace": {
             "id": "demo_west",
             "type": "workspace"
           }
         }
-      ],
-      "workspace": {
-        "id": "demo",
-        "type": "workspace"
-      }
+      ]
     },
     {
+      "columnName": "wdf__state",
       "id": "wdf__state",
       "title": "Customer state",
-      "columnName": "wdf__state",
+      "workspace": {
+        "id": "demo_west",
+        "type": "workspace"
+      },
       "workspaceDataFilterSettings": [
         {
-          "id": "region_west_california",
-          "title": "Region West California",
           "filterValues": [
             "California"
           ],
+          "id": "region_west_california",
+          "title": "Region West California",
           "workspace": {
             "id": "demo_west_california",
             "type": "workspace"
           }
         }
-      ],
-      "workspace": {
-        "id": "demo_west",
-        "type": "workspace"
-      }
+      ]
     }
   ]
 }

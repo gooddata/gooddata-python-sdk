@@ -20,8 +20,8 @@ test_filters = [
         "absolute date filter",
         AbsoluteDateFilter(
             dataset=ObjId(type="dataset", id="dataset.id"),
-            from_date="2021/1/1",
-            to_date="2021/1/2",
+            from_date="2021-07-01 18:23",
+            to_date="2021-07-16 18:23",
         ),
     ],
     [

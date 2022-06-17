@@ -11,6 +11,7 @@ content:
               identifier:
                 id: revenue
                 type: metric
+        format: '#,##0.00%'
         localIdentifier: 162b857af49d45769bc12604a5c192b9
         title: '% Revenue'
     localIdentifier: measures

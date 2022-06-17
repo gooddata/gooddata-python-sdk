@@ -92,8 +92,8 @@ class DeclarativeDataSourcePermission(ModelNormal):
         """
         lazy_import()
         return {
-            'name': (str,),  # noqa: E501
             'assignee': (AssigneeIdentifier,),  # noqa: E501
+            'name': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -102,8 +102,8 @@ class DeclarativeDataSourcePermission(ModelNormal):
 
 
     attribute_map = {
-        'name': 'name',  # noqa: E501
         'assignee': 'assignee',  # noqa: E501
+        'name': 'name',  # noqa: E501
     }
 
     read_only_vars = {
@@ -113,12 +113,12 @@ class DeclarativeDataSourcePermission(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, name, assignee, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, assignee, name, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSourcePermission - a model defined in OpenAPI
 
         Args:
-            name (str): Permission name.
             assignee (AssigneeIdentifier):
+            name (str): Permission name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -154,7 +154,7 @@ class DeclarativeDataSourcePermission(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -162,14 +162,18 @@ class DeclarativeDataSourcePermission(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -178,8 +182,8 @@ class DeclarativeDataSourcePermission(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.assignee = assignee
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -200,12 +204,12 @@ class DeclarativeDataSourcePermission(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, assignee, *args, **kwargs):  # noqa: E501
+    def __init__(self, assignee, name, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSourcePermission - a model defined in OpenAPI
 
         Args:
-            name (str): Permission name.
             assignee (AssigneeIdentifier):
+            name (str): Permission name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -247,14 +251,18 @@ class DeclarativeDataSourcePermission(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -263,8 +271,8 @@ class DeclarativeDataSourcePermission(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.assignee = assignee
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

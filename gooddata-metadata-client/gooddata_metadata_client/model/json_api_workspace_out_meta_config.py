@@ -82,8 +82,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data_sampling_available': (bool,),  # noqa: E501
             'approximate_count_available': (bool,),  # noqa: E501
+            'data_sampling_available': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -92,8 +92,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
 
 
     attribute_map = {
-        'data_sampling_available': 'dataSamplingAvailable',  # noqa: E501
         'approximate_count_available': 'approximateCountAvailable',  # noqa: E501
+        'data_sampling_available': 'dataSamplingAvailable',  # noqa: E501
     }
 
     read_only_vars = {
@@ -109,8 +109,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         Args:
 
         Keyword Args:
-            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
+            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -143,10 +143,10 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        data_sampling_available = kwargs.get('data_sampling_available', False)
         approximate_count_available = kwargs.get('approximate_count_available', False)
+        data_sampling_available = kwargs.get('data_sampling_available', False)
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -154,14 +154,18 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -170,8 +174,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.data_sampling_available = data_sampling_available
         self.approximate_count_available = approximate_count_available
+        self.data_sampling_available = data_sampling_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -198,8 +202,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         Args:
 
         Keyword Args:
-            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
+            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -232,8 +236,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        data_sampling_available = kwargs.get('data_sampling_available', False)
         approximate_count_available = kwargs.get('approximate_count_available', False)
+        data_sampling_available = kwargs.get('data_sampling_available', False)
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -241,14 +245,18 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -257,8 +265,8 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.data_sampling_available = data_sampling_available
         self.approximate_count_available = approximate_count_available
+        self.data_sampling_available = data_sampling_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

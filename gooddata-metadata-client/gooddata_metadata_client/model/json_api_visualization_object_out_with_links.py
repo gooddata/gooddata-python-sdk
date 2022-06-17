@@ -32,13 +32,13 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_metadata_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_metadata_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
-    from gooddata_metadata_client.model.json_api_visualization_object_out_relationships import JsonApiVisualizationObjectOutRelationships
     from gooddata_metadata_client.model.object_links import ObjectLinks
     from gooddata_metadata_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
-    globals()['JsonApiVisualizationObjectOutRelationships'] = JsonApiVisualizationObjectOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -104,10 +104,10 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
-            'relationships': (JsonApiVisualizationObjectOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -117,8 +117,8 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
@@ -133,8 +133,8 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             id (str): API identifier of an object
+            type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -166,7 +166,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            relationships (JsonApiVisualizationObjectOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -180,14 +180,18 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -238,8 +242,8 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             id (str): API identifier of an object
+            type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -271,7 +275,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            relationships (JsonApiVisualizationObjectOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -283,14 +287,18 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

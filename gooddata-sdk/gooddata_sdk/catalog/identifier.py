@@ -7,6 +7,7 @@ import attr
 
 from gooddata_metadata_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_metadata_client.model.grain_identifier import GrainIdentifier
+from gooddata_metadata_client.model.label_identifier import LabelIdentifier
 from gooddata_metadata_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_metadata_client.model.user_group_identifier import UserGroupIdentifier
 from gooddata_metadata_client.model.workspace_identifier import WorkspaceIdentifier
@@ -59,3 +60,13 @@ class CatalogUserGroupIdentifier(Base):
     @staticmethod
     def client_class() -> Type[UserGroupIdentifier]:
         return UserGroupIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogLabelIdentifier(Base):
+    id: str
+    type: str = "label"
+
+    @staticmethod
+    def client_class() -> Type[LabelIdentifier]:
+        return LabelIdentifier

@@ -82,8 +82,8 @@ class ColumnWarning(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': ([str],),  # noqa: E501
             'message': ([str],),  # noqa: E501
+            'name': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -92,8 +92,8 @@ class ColumnWarning(ModelNormal):
 
 
     attribute_map = {
-        'name': 'name',  # noqa: E501
         'message': 'message',  # noqa: E501
+        'name': 'name',  # noqa: E501
     }
 
     read_only_vars = {
@@ -103,12 +103,12 @@ class ColumnWarning(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, name, message, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, message, name, *args, **kwargs):  # noqa: E501
         """ColumnWarning - a model defined in OpenAPI
 
         Args:
-            name ([str]): Column name.
             message ([str]): Warning message related to the column.
+            name ([str]): Column name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -144,7 +144,7 @@ class ColumnWarning(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -152,14 +152,18 @@ class ColumnWarning(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -168,8 +172,8 @@ class ColumnWarning(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.message = message
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -190,12 +194,12 @@ class ColumnWarning(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, message, *args, **kwargs):  # noqa: E501
+    def __init__(self, message, name, *args, **kwargs):  # noqa: E501
         """ColumnWarning - a model defined in OpenAPI
 
         Args:
-            name ([str]): Column name.
             message ([str]): Warning message related to the column.
+            name ([str]): Column name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -237,14 +241,18 @@ class ColumnWarning(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -253,8 +261,8 @@ class ColumnWarning(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
         self.message = message
+        self.name = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

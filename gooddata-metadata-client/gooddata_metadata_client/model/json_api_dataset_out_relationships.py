@@ -32,11 +32,11 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
-    from gooddata_metadata_client.model.json_api_filter_context_out_relationships_attributes import JsonApiFilterContextOutRelationshipsAttributes
-    from gooddata_metadata_client.model.json_api_metric_out_relationships_facts import JsonApiMetricOutRelationshipsFacts
+    from gooddata_metadata_client.model.json_api_dataset_out_relationships_attributes import JsonApiDatasetOutRelationshipsAttributes
+    from gooddata_metadata_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
-    globals()['JsonApiFilterContextOutRelationshipsAttributes'] = JsonApiFilterContextOutRelationshipsAttributes
-    globals()['JsonApiMetricOutRelationshipsFacts'] = JsonApiMetricOutRelationshipsFacts
+    globals()['JsonApiDatasetOutRelationshipsAttributes'] = JsonApiDatasetOutRelationshipsAttributes
+    globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
 
 
 class JsonApiDatasetOutRelationships(ModelNormal):
@@ -92,8 +92,8 @@ class JsonApiDatasetOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiFilterContextOutRelationshipsAttributes,),  # noqa: E501
-            'facts': (JsonApiMetricOutRelationshipsFacts,),  # noqa: E501
+            'attributes': (JsonApiDatasetOutRelationshipsAttributes,),  # noqa: E501
+            'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'references': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
         }
 
@@ -149,13 +149,13 @@ class JsonApiDatasetOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiFilterContextOutRelationshipsAttributes): [optional]  # noqa: E501
-            facts (JsonApiMetricOutRelationshipsFacts): [optional]  # noqa: E501
+            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -163,14 +163,18 @@ class JsonApiDatasetOutRelationships(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -233,8 +237,8 @@ class JsonApiDatasetOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiFilterContextOutRelationshipsAttributes): [optional]  # noqa: E501
-            facts (JsonApiMetricOutRelationshipsFacts): [optional]  # noqa: E501
+            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
         """
 
@@ -245,14 +249,18 @@ class JsonApiDatasetOutRelationships(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

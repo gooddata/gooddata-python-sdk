@@ -297,7 +297,7 @@ def test_catalog_declarative_data_sources(test_config):
     assert len(data_sources) == 1
     assert data_sources[0].id == test_config["data_source"]
     assert len(data_sources[0].pdm.tables) == 5
-    assert data_sources_o.to_api().to_dict() == layout_api.get_data_sources_layout().to_dict()
+    assert data_sources_o.to_dict(camel_case=True) == layout_api.get_data_sources_layout().to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.json"))
@@ -326,7 +326,7 @@ def test_store_declarative_data_sources(test_config):
     sdk.catalog_data_source.store_declarative_data_sources(store_folder)
     data_sources_o = sdk.catalog_data_source.load_declarative_data_sources(store_folder)
 
-    assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+    assert data_sources_e.to_dict(camel_case=True) == data_sources_o.to_dict(camel_case=True)
     assert data_sources_e == data_sources_o
 
 
@@ -376,7 +376,7 @@ def test_put_declarative_data_sources_connection(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_e, credentials_path, test_data_sources=True)
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
         assert data_sources_e == data_sources_o
-        assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+        assert data_sources_e.to_dict(camel_case=True) == data_sources_o.to_dict(camel_case=True)
     finally:
         with open(path) as f:
             data = json.load(f)
@@ -395,7 +395,7 @@ def test_put_declarative_data_sources(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_e, credentials_path)
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
         assert data_sources_e == data_sources_o
-        assert data_sources_e.to_api().to_dict() == data_sources_o.to_api().to_dict()
+        assert data_sources_e.to_dict(camel_case=True) == data_sources_o.to_dict(camel_case=True)
     finally:
         with open(path) as f:
             data = json.load(f)
@@ -489,12 +489,12 @@ def test_store_and_load_and_put_declarative_pdm(test_config):
     sdk.catalog_data_source.store_declarative_pdm(data_source_id, store_folder)
     pdm_loaded = sdk.catalog_data_source.load_declarative_pdm(data_source_id, load_folder)
     assert pdm == pdm_loaded
-    assert pdm.to_api().to_dict() == pdm_loaded.to_api().to_dict()
+    assert pdm.to_dict(camel_case=True) == pdm_loaded.to_dict(camel_case=True)
 
     sdk.catalog_data_source.load_and_put_declarative_pdm(data_source_id, load_folder)
     pdm_loaded = sdk.catalog_data_source.load_declarative_pdm(data_source_id, load_folder)
     assert pdm == pdm_loaded
-    assert pdm.to_api().to_dict() == pdm_loaded.to_api().to_dict()
+    assert pdm.to_dict(camel_case=True) == pdm_loaded.to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_scan_schemata.json"))

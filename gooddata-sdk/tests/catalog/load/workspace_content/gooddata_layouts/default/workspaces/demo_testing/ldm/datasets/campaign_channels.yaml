@@ -2,40 +2,22 @@
 attributes:
 - description: Campaign channel id
   id: campaign_channel_id
-  labels:
-  - description: Campaign channel id
-    id: campaign_channel_id
-    primary: true
-    sourceColumn: campaign_channel_id
-    tags:
-    - Campaign channels
-    title: Campaign channel id
+  labels: []
+  sourceColumn: campaign_channel_id
   tags:
   - Campaign channels
   title: Campaign channel id
 - description: Category
   id: campaign_channels.category
-  labels:
-  - description: Category
-    id: campaign_channels.category
-    primary: true
-    sourceColumn: category
-    tags:
-    - Campaign channels
-    title: Category
+  labels: []
+  sourceColumn: category
   tags:
   - Campaign channels
   title: Category
 - description: Type
   id: type
-  labels:
-  - description: Type
-    id: type
-    primary: true
-    sourceColumn: type
-    tags:
-    - Campaign channels
-    title: Type
+  labels: []
+  sourceColumn: type
   tags:
   - Campaign channels
   title: Type

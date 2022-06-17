@@ -2,7 +2,7 @@
 content:
   filterContextRef:
     identifier:
-      id: 7e2e2638-fd5d-4c3c-ab6d-608ee8fcee57
+      id: region_filter
       type: filterContext
   layout:
     sections:
@@ -16,6 +16,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -34,6 +35,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -52,6 +54,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -70,6 +73,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -88,6 +92,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -106,6 +111,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -124,6 +130,7 @@ content:
             identifier:
               id: date
               type: dataset
+          description: ''
           drills: []
           ignoreDashboardFilters: []
           insight:
@@ -136,5 +143,6 @@ content:
       type: IDashboardLayoutSection
     type: IDashboardLayout
   version: '2'
+description: ''
 id: product_and_category
 title: Product & Category

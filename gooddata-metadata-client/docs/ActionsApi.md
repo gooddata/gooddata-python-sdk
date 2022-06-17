@@ -1,19 +1,19 @@
 # gooddata_metadata_client.ActionsApi
 
-All URIs are relative to *http://localhost:3000*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate LDM from PDM
-[**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+[**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
+[**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 
 
 # **generate_logical_model**
 > DeclarativeModel generate_logical_model(data_source_id, generate_ldm_request)
 
-Generate LDM from PDM
+Generate logical data model (LDM) from physical data model (PDM)
 
-Generate LDM from PDM stored in data source.
+Generate logical data model (LDM) from physical data model (PDM) stored in data source.
 
 ### Example
 
@@ -25,10 +25,10 @@ from gooddata_metadata_client.api import actions_api
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
 from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 
@@ -38,24 +38,24 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "dataSourceId_example" # str | 
     generate_ldm_request = GenerateLdmRequest(
+        date_granularities="all",
+        denorm_prefix="dr",
+        fact_prefix="f",
         generate_long_ids=True,
+        grain_prefix="g",
+        grain_reference_prefix="gr",
+        primary_label_prefix="pl",
+        reference_prefix="r",
+        secondary_label_prefix="sl",
         separator="__",
         table_prefix="out_table",
         view_prefix="out_view",
-        primary_label_prefix="pl",
-        secondary_label_prefix="sl",
-        fact_prefix="f",
-        date_granularities="all",
-        grain_prefix="g",
-        reference_prefix="r",
-        grain_reference_prefix="gr",
-        denorm_prefix="dr",
         wdf_prefix="wdf",
     ) # GenerateLdmRequest | 
 
     # example passing only required values which don't have defaults set
     try:
-        # Generate LDM from PDM
+        # Generate logical data model (LDM) from physical data model (PDM)
         api_response = api_instance.generate_logical_model(data_source_id, generate_ldm_request)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
@@ -108,10 +108,10 @@ import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import actions_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost:3000
+# Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost:3000"
+    host = "http://localhost"
 )
 
 

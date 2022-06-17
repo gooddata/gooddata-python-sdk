@@ -100,10 +100,10 @@ class JsonApiWorkspaceOut(ModelNormal):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
-            'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'attributes': (JsonApiWorkspaceInAttributes,),  # noqa: E501
+            'meta': (JsonApiWorkspaceOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceInRelationships,),  # noqa: E501
         }
 
@@ -113,10 +113,10 @@ class JsonApiWorkspaceOut(ModelNormal):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
-        'meta': 'meta',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
 
@@ -165,14 +165,14 @@ class JsonApiWorkspaceOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspace")
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -180,14 +180,18 @@ class JsonApiWorkspaceOut(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -196,8 +200,8 @@ class JsonApiWorkspaceOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.type = type
         self.id = id
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -256,8 +260,8 @@ class JsonApiWorkspaceOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             attributes (JsonApiWorkspaceInAttributes): [optional]  # noqa: E501
+            meta (JsonApiWorkspaceOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceInRelationships): [optional]  # noqa: E501
         """
 
@@ -269,14 +273,18 @@ class JsonApiWorkspaceOut(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -285,8 +293,8 @@ class JsonApiWorkspaceOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.type = type
         self.id = id
+        self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

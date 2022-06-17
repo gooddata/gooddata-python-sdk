@@ -41,7 +41,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (DeclarativeModel,),
                 'auth': [],
-                'endpoint_path': '/api/actions/dataSources/{dataSourceId}/generateLogicalModel',
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel',
                 'operation_id': 'generate_logical_model',
                 'http_method': 'POST',
                 'servers': None,
@@ -97,7 +97,7 @@ class ActionsApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/actions/dataSources/{dataSourceId}/uploadNotification',
+                'endpoint_path': '/api/v1/actions/dataSources/{dataSourceId}/uploadNotification',
                 'operation_id': 'register_upload_notification',
                 'http_method': 'POST',
                 'servers': None,
@@ -147,9 +147,9 @@ class ActionsApi(object):
         generate_ldm_request,
         **kwargs
     ):
-        """Generate LDM from PDM  # noqa: E501
+        """Generate logical data model (LDM) from physical data model (PDM)  # noqa: E501
 
-        Generate LDM from PDM stored in data source.  # noqa: E501
+        Generate logical data model (LDM) from physical data model (PDM) stored in data source.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -176,12 +176,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -207,9 +215,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         kwargs['generate_ldm_request'] = \
@@ -249,12 +261,20 @@ class ActionsApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -280,9 +300,13 @@ class ActionsApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         return self.register_upload_notification_endpoint.call_with_http_info(**kwargs)

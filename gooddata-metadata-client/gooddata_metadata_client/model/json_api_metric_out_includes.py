@@ -32,17 +32,19 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
+    from gooddata_metadata_client.model.json_api_dataset_out_attributes import JsonApiDatasetOutAttributes
+    from gooddata_metadata_client.model.json_api_dataset_out_relationships import JsonApiDatasetOutRelationships
+    from gooddata_metadata_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_metadata_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_metadata_client.model.json_api_label_out_with_links import JsonApiLabelOutWithLinks
-    from gooddata_metadata_client.model.json_api_metric_in_attributes import JsonApiMetricInAttributes
-    from gooddata_metadata_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_metadata_client.model.json_api_metric_out_with_links import JsonApiMetricOutWithLinks
     from gooddata_metadata_client.model.object_links import ObjectLinks
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
+    globals()['JsonApiDatasetOutAttributes'] = JsonApiDatasetOutAttributes
+    globals()['JsonApiDatasetOutRelationships'] = JsonApiDatasetOutRelationships
+    globals()['JsonApiDatasetOutWithLinks'] = JsonApiDatasetOutWithLinks
     globals()['JsonApiFactOutWithLinks'] = JsonApiFactOutWithLinks
     globals()['JsonApiLabelOutWithLinks'] = JsonApiLabelOutWithLinks
-    globals()['JsonApiMetricInAttributes'] = JsonApiMetricInAttributes
-    globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiMetricOutWithLinks'] = JsonApiMetricOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
@@ -73,7 +75,7 @@ class JsonApiMetricOutIncludes(ModelComposed):
 
     allowed_values = {
         ('type',): {
-            'METRIC': "metric",
+            'DATASET': "dataset",
         },
     }
 
@@ -108,11 +110,11 @@ class JsonApiMetricOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
-            'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
+            'relationships': (JsonApiDatasetOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'type': (str,),  # noqa: E501
+            'attributes': (JsonApiDatasetOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
-            'attributes': (JsonApiMetricInAttributes,),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -123,9 +125,9 @@ class JsonApiMetricOutIncludes(ModelComposed):
     attribute_map = {
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
-        'type': 'type',  # noqa: E501
-        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'id': 'id',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -167,11 +169,11 @@ class JsonApiMetricOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
+            attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            attributes (JsonApiMetricInAttributes): [optional]  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -183,14 +185,18 @@ class JsonApiMetricOutIncludes(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -271,11 +277,11 @@ class JsonApiMetricOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
+            relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "metric"  # noqa: E501
+            attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
-            attributes (JsonApiMetricInAttributes): [optional]  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -285,14 +291,18 @@ class JsonApiMetricOutIncludes(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -344,6 +354,7 @@ class JsonApiMetricOutIncludes(ModelComposed):
           ],
           'oneOf': [
               JsonApiAttributeOutWithLinks,
+              JsonApiDatasetOutWithLinks,
               JsonApiFactOutWithLinks,
               JsonApiLabelOutWithLinks,
               JsonApiMetricOutWithLinks,

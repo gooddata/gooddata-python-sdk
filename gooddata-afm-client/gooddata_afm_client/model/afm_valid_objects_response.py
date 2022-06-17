@@ -31,8 +31,8 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.object_identifier import ObjectIdentifier
-    globals()['ObjectIdentifier'] = ObjectIdentifier
+    from gooddata_afm_client.model.rest_api_identifier import RestApiIdentifier
+    globals()['RestApiIdentifier'] = RestApiIdentifier
 
 
 class AfmValidObjectsResponse(ModelNormal):
@@ -88,7 +88,7 @@ class AfmValidObjectsResponse(ModelNormal):
         """
         lazy_import()
         return {
-            'items': ([ObjectIdentifier],),  # noqa: E501
+            'items': ([RestApiIdentifier],),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +111,7 @@ class AfmValidObjectsResponse(ModelNormal):
         """AfmValidObjectsResponse - a model defined in OpenAPI
 
         Args:
-            items ([ObjectIdentifier]):
+            items ([RestApiIdentifier]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -147,7 +147,7 @@ class AfmValidObjectsResponse(ModelNormal):
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -155,14 +155,18 @@ class AfmValidObjectsResponse(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -196,7 +200,7 @@ class AfmValidObjectsResponse(ModelNormal):
         """AfmValidObjectsResponse - a model defined in OpenAPI
 
         Args:
-            items ([ObjectIdentifier]):
+            items ([RestApiIdentifier]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -238,14 +242,18 @@ class AfmValidObjectsResponse(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

@@ -90,8 +90,8 @@ class DataSourceTableIdentifier(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
             'data_source_id': (str,),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
 
@@ -101,8 +101,8 @@ class DataSourceTableIdentifier(ModelNormal):
 
 
     attribute_map = {
-        'id': 'id',  # noqa: E501
         'data_source_id': 'dataSourceId',  # noqa: E501
+        'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
 
@@ -113,12 +113,12 @@ class DataSourceTableIdentifier(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, data_source_id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, data_source_id, id, *args, **kwargs):  # noqa: E501
         """DataSourceTableIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str): ID of table.
             data_source_id (str): Data source ID.
+            id (str): ID of table.
 
         Keyword Args:
             type (str): Data source entity type.. defaults to "dataSource", must be one of ["dataSource", ]  # noqa: E501
@@ -156,7 +156,7 @@ class DataSourceTableIdentifier(ModelNormal):
 
         type = kwargs.get('type', "dataSource")
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -164,14 +164,18 @@ class DataSourceTableIdentifier(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -180,8 +184,8 @@ class DataSourceTableIdentifier(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.data_source_id = data_source_id
+        self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -203,12 +207,12 @@ class DataSourceTableIdentifier(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, data_source_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, data_source_id, id, *args, **kwargs):  # noqa: E501
         """DataSourceTableIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str): ID of table.
             data_source_id (str): Data source ID.
+            id (str): ID of table.
 
         Keyword Args:
             type (str): Data source entity type.. defaults to "dataSource", must be one of ["dataSource", ]  # noqa: E501
@@ -252,14 +256,18 @@ class DataSourceTableIdentifier(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -268,8 +276,8 @@ class DataSourceTableIdentifier(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
         self.data_source_id = data_source_id
+        self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

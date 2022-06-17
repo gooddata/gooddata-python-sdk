@@ -32,13 +32,13 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_afm_client.model.comparison_measure_value_filter import ComparisonMeasureValueFilter
-    from gooddata_afm_client.model.comparison_measure_value_filter_body import ComparisonMeasureValueFilterBody
+    from gooddata_afm_client.model.comparison_measure_value_filter_comparison_measure_value_filter import ComparisonMeasureValueFilterComparisonMeasureValueFilter
     from gooddata_afm_client.model.range_measure_value_filter import RangeMeasureValueFilter
-    from gooddata_afm_client.model.range_measure_value_filter_body import RangeMeasureValueFilterBody
+    from gooddata_afm_client.model.range_measure_value_filter_range_measure_value_filter import RangeMeasureValueFilterRangeMeasureValueFilter
     globals()['ComparisonMeasureValueFilter'] = ComparisonMeasureValueFilter
-    globals()['ComparisonMeasureValueFilterBody'] = ComparisonMeasureValueFilterBody
+    globals()['ComparisonMeasureValueFilterComparisonMeasureValueFilter'] = ComparisonMeasureValueFilterComparisonMeasureValueFilter
     globals()['RangeMeasureValueFilter'] = RangeMeasureValueFilter
-    globals()['RangeMeasureValueFilterBody'] = RangeMeasureValueFilterBody
+    globals()['RangeMeasureValueFilterRangeMeasureValueFilter'] = RangeMeasureValueFilterRangeMeasureValueFilter
 
 
 class MeasureValueFilter(ModelComposed):
@@ -94,8 +94,8 @@ class MeasureValueFilter(ModelComposed):
         """
         lazy_import()
         return {
-            'comparison_measure_value_filter': (ComparisonMeasureValueFilterBody,),  # noqa: E501
-            'range_measure_value_filter': (RangeMeasureValueFilterBody,),  # noqa: E501
+            'comparison_measure_value_filter': (ComparisonMeasureValueFilterComparisonMeasureValueFilter,),  # noqa: E501
+            'range_measure_value_filter': (RangeMeasureValueFilterRangeMeasureValueFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -147,8 +147,8 @@ class MeasureValueFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            comparison_measure_value_filter (ComparisonMeasureValueFilterBody): [optional]  # noqa: E501
-            range_measure_value_filter (RangeMeasureValueFilterBody): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -160,14 +160,18 @@ class MeasureValueFilter(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -248,8 +252,8 @@ class MeasureValueFilter(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            comparison_measure_value_filter (ComparisonMeasureValueFilterBody): [optional]  # noqa: E501
-            range_measure_value_filter (RangeMeasureValueFilterBody): [optional]  # noqa: E501
+            comparison_measure_value_filter (ComparisonMeasureValueFilterComparisonMeasureValueFilter): [optional]  # noqa: E501
+            range_measure_value_filter (RangeMeasureValueFilterRangeMeasureValueFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -259,14 +263,18 @@ class MeasureValueFilter(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

@@ -31,18 +31,18 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.absolute_date_filter_body import AbsoluteDateFilterBody
+    from gooddata_afm_client.model.absolute_date_filter_absolute_date_filter import AbsoluteDateFilterAbsoluteDateFilter
     from gooddata_afm_client.model.attribute_filter import AttributeFilter
     from gooddata_afm_client.model.date_filter import DateFilter
-    from gooddata_afm_client.model.negative_attribute_filter_body import NegativeAttributeFilterBody
-    from gooddata_afm_client.model.positive_attribute_filter_body import PositiveAttributeFilterBody
-    from gooddata_afm_client.model.relative_date_filter_body import RelativeDateFilterBody
-    globals()['AbsoluteDateFilterBody'] = AbsoluteDateFilterBody
+    from gooddata_afm_client.model.negative_attribute_filter_negative_attribute_filter import NegativeAttributeFilterNegativeAttributeFilter
+    from gooddata_afm_client.model.positive_attribute_filter_positive_attribute_filter import PositiveAttributeFilterPositiveAttributeFilter
+    from gooddata_afm_client.model.relative_date_filter_relative_date_filter import RelativeDateFilterRelativeDateFilter
+    globals()['AbsoluteDateFilterAbsoluteDateFilter'] = AbsoluteDateFilterAbsoluteDateFilter
     globals()['AttributeFilter'] = AttributeFilter
     globals()['DateFilter'] = DateFilter
-    globals()['NegativeAttributeFilterBody'] = NegativeAttributeFilterBody
-    globals()['PositiveAttributeFilterBody'] = PositiveAttributeFilterBody
-    globals()['RelativeDateFilterBody'] = RelativeDateFilterBody
+    globals()['NegativeAttributeFilterNegativeAttributeFilter'] = NegativeAttributeFilterNegativeAttributeFilter
+    globals()['PositiveAttributeFilterPositiveAttributeFilter'] = PositiveAttributeFilterPositiveAttributeFilter
+    globals()['RelativeDateFilterRelativeDateFilter'] = RelativeDateFilterRelativeDateFilter
 
 
 class FilterDefinitionForSimpleMeasure(ModelComposed):
@@ -98,10 +98,10 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
         """
         lazy_import()
         return {
-            'absolute_date_filter': (AbsoluteDateFilterBody,),  # noqa: E501
-            'relative_date_filter': (RelativeDateFilterBody,),  # noqa: E501
-            'positive_attribute_filter': (PositiveAttributeFilterBody,),  # noqa: E501
-            'negative_attribute_filter': (NegativeAttributeFilterBody,),  # noqa: E501
+            'absolute_date_filter': (AbsoluteDateFilterAbsoluteDateFilter,),  # noqa: E501
+            'relative_date_filter': (RelativeDateFilterRelativeDateFilter,),  # noqa: E501
+            'negative_attribute_filter': (NegativeAttributeFilterNegativeAttributeFilter,),  # noqa: E501
+            'positive_attribute_filter': (PositiveAttributeFilterPositiveAttributeFilter,),  # noqa: E501
         }
 
     @cached_property
@@ -112,8 +112,8 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
     attribute_map = {
         'absolute_date_filter': 'absoluteDateFilter',  # noqa: E501
         'relative_date_filter': 'relativeDateFilter',  # noqa: E501
-        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
         'negative_attribute_filter': 'negativeAttributeFilter',  # noqa: E501
+        'positive_attribute_filter': 'positiveAttributeFilter',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,10 +155,10 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -170,14 +170,18 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -258,10 +262,10 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            absolute_date_filter (AbsoluteDateFilterBody): [optional]  # noqa: E501
-            relative_date_filter (RelativeDateFilterBody): [optional]  # noqa: E501
-            positive_attribute_filter (PositiveAttributeFilterBody): [optional]  # noqa: E501
-            negative_attribute_filter (NegativeAttributeFilterBody): [optional]  # noqa: E501
+            absolute_date_filter (AbsoluteDateFilterAbsoluteDateFilter): [optional]  # noqa: E501
+            relative_date_filter (RelativeDateFilterRelativeDateFilter): [optional]  # noqa: E501
+            negative_attribute_filter (NegativeAttributeFilterNegativeAttributeFilter): [optional]  # noqa: E501
+            positive_attribute_filter (PositiveAttributeFilterPositiveAttributeFilter): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -271,14 +275,18 @@ class FilterDefinitionForSimpleMeasure(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

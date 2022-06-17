@@ -31,8 +31,8 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.elements_request_filter_by import ElementsRequestFilterBy
-    globals()['ElementsRequestFilterBy'] = ElementsRequestFilterBy
+    from gooddata_afm_client.model.filter_by import FilterBy
+    globals()['FilterBy'] = FilterBy
 
 
 class ElementsRequest(ModelNormal):
@@ -93,12 +93,13 @@ class ElementsRequest(ModelNormal):
         lazy_import()
         return {
             'label': (str,),  # noqa: E501
-            'filter_by': (ElementsRequestFilterBy,),  # noqa: E501
-            'sort_order': (str,),  # noqa: E501
             'complement_filter': (bool,),  # noqa: E501
-            'pattern_filter': (str,),  # noqa: E501
-            'exact_filter': ([str],),  # noqa: E501
             'data_sampling_percentage': (float,),  # noqa: E501
+            'exact_filter': ([str],),  # noqa: E501
+            'exclude_primary_label': (bool,),  # noqa: E501
+            'filter_by': (FilterBy,),  # noqa: E501
+            'pattern_filter': (str,),  # noqa: E501
+            'sort_order': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -108,12 +109,13 @@ class ElementsRequest(ModelNormal):
 
     attribute_map = {
         'label': 'label',  # noqa: E501
-        'filter_by': 'filterBy',  # noqa: E501
-        'sort_order': 'sortOrder',  # noqa: E501
         'complement_filter': 'complementFilter',  # noqa: E501
-        'pattern_filter': 'patternFilter',  # noqa: E501
-        'exact_filter': 'exactFilter',  # noqa: E501
         'data_sampling_percentage': 'dataSamplingPercentage',  # noqa: E501
+        'exact_filter': 'exactFilter',  # noqa: E501
+        'exclude_primary_label': 'excludePrimaryLabel',  # noqa: E501
+        'filter_by': 'filterBy',  # noqa: E501
+        'pattern_filter': 'patternFilter',  # noqa: E501
+        'sort_order': 'sortOrder',  # noqa: E501
     }
 
     read_only_vars = {
@@ -160,16 +162,17 @@ class ElementsRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filter_by (ElementsRequestFilterBy): [optional]  # noqa: E501
-            sort_order (str): Sort order of returned items. Items are sorted by ```label``` title.. [optional] if omitted the server will use the default value of "ASC"  # noqa: E501
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
-            exact_filter ([str]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
+            exact_filter ([str]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
+            exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
+            filter_by (FilterBy): [optional]  # noqa: E501
+            pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
+            sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -177,14 +180,18 @@ class ElementsRequest(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -251,12 +258,13 @@ class ElementsRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filter_by (ElementsRequestFilterBy): [optional]  # noqa: E501
-            sort_order (str): Sort order of returned items. Items are sorted by ```label``` title.. [optional] if omitted the server will use the default value of "ASC"  # noqa: E501
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
-            exact_filter ([str]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
+            exact_filter ([str]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
+            exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
+            filter_by (FilterBy): [optional]  # noqa: E501
+            pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
+            sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -266,14 +274,18 @@ class ElementsRequest(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

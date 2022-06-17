@@ -17,9 +17,7 @@ gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="jso
 @gd_vcr.use_cassette(str(_fixtures_dir / "table_with_just_attribute.json"))
 def test_table_with_just_attribute(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    table = sdk.tables.for_items(
-        test_config["workspace"], items=[Attribute(local_id="attr1", label="customers.region")]
-    )
+    table = sdk.tables.for_items(test_config["workspace"], items=[Attribute(local_id="attr1", label="region")])
 
     values = list(result["attr1"] for result in table.read_all())
 
@@ -46,7 +44,7 @@ def test_table_with_attribute_and_metric(test_config):
     table = sdk.tables.for_items(
         test_config["workspace"],
         items=[
-            Attribute(local_id="attr1", label="customers.region"),
+            Attribute(local_id="attr1", label="region"),
             SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount")),
         ],
     )
@@ -61,7 +59,7 @@ def test_table_with_attribute_metric_and_filter(test_config):
     table = sdk.tables.for_items(
         test_config["workspace"],
         items=[
-            Attribute(local_id="attr1", label="customers.region"),
+            Attribute(local_id="attr1", label="region"),
             SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount")),
         ],
         filters=[PositiveAttributeFilter(label="attr1", values=["Unknown", "Northeast"])],

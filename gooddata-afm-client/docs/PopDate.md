@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attribute** | [**AfmObjectIdentifier**](AfmObjectIdentifier.md) |  | 
+**attribute** | [**AfmObjectIdentifierAttribute**](AfmObjectIdentifierAttribute.md) |  | 
 **periods_ago** | **int** |  | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

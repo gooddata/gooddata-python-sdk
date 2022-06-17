@@ -83,17 +83,17 @@ class GenerateLdmRequest(ModelNormal):
         """
         return {
             'separator': (str,),  # noqa: E501
+            'date_granularities': (str,),  # noqa: E501
+            'denorm_prefix': (str,),  # noqa: E501
+            'fact_prefix': (str,),  # noqa: E501
             'generate_long_ids': (bool,),  # noqa: E501
+            'grain_prefix': (str,),  # noqa: E501
+            'grain_reference_prefix': (str,),  # noqa: E501
+            'primary_label_prefix': (str,),  # noqa: E501
+            'reference_prefix': (str,),  # noqa: E501
+            'secondary_label_prefix': (str,),  # noqa: E501
             'table_prefix': (str,),  # noqa: E501
             'view_prefix': (str,),  # noqa: E501
-            'primary_label_prefix': (str,),  # noqa: E501
-            'secondary_label_prefix': (str,),  # noqa: E501
-            'fact_prefix': (str,),  # noqa: E501
-            'date_granularities': (str,),  # noqa: E501
-            'grain_prefix': (str,),  # noqa: E501
-            'reference_prefix': (str,),  # noqa: E501
-            'grain_reference_prefix': (str,),  # noqa: E501
-            'denorm_prefix': (str,),  # noqa: E501
             'wdf_prefix': (str,),  # noqa: E501
         }
 
@@ -104,17 +104,17 @@ class GenerateLdmRequest(ModelNormal):
 
     attribute_map = {
         'separator': 'separator',  # noqa: E501
+        'date_granularities': 'dateGranularities',  # noqa: E501
+        'denorm_prefix': 'denormPrefix',  # noqa: E501
+        'fact_prefix': 'factPrefix',  # noqa: E501
         'generate_long_ids': 'generateLongIds',  # noqa: E501
+        'grain_prefix': 'grainPrefix',  # noqa: E501
+        'grain_reference_prefix': 'grainReferencePrefix',  # noqa: E501
+        'primary_label_prefix': 'primaryLabelPrefix',  # noqa: E501
+        'reference_prefix': 'referencePrefix',  # noqa: E501
+        'secondary_label_prefix': 'secondaryLabelPrefix',  # noqa: E501
         'table_prefix': 'tablePrefix',  # noqa: E501
         'view_prefix': 'viewPrefix',  # noqa: E501
-        'primary_label_prefix': 'primaryLabelPrefix',  # noqa: E501
-        'secondary_label_prefix': 'secondaryLabelPrefix',  # noqa: E501
-        'fact_prefix': 'factPrefix',  # noqa: E501
-        'date_granularities': 'dateGranularities',  # noqa: E501
-        'grain_prefix': 'grainPrefix',  # noqa: E501
-        'reference_prefix': 'referencePrefix',  # noqa: E501
-        'grain_reference_prefix': 'grainReferencePrefix',  # noqa: E501
-        'denorm_prefix': 'denormPrefix',  # noqa: E501
         'wdf_prefix': 'wdfPrefix',  # noqa: E501
     }
 
@@ -162,22 +162,22 @@ class GenerateLdmRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
+            denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
+            fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
             generate_long_ids (bool): A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.. [optional]  # noqa: E501
+            grain_prefix (str): Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `g` and separator is `__`, the columns with name like `g__name` will be considered as grains.. [optional]  # noqa: E501
+            grain_reference_prefix (str): Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `gr` and separator is `__`, the columns with name like `gr__customer_name` will be considered as grain references.. [optional]  # noqa: E501
+            primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
+            reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
+            secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
-            primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
-            secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
-            fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
-            date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
-            grain_prefix (str): Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `g` and separator is `__`, the columns with name like `g__name` will be considered as grains.. [optional]  # noqa: E501
-            reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
-            grain_reference_prefix (str): Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `gr` and separator is `__`, the columns with name like `gr__customer_name` will be considered as grain references.. [optional]  # noqa: E501
-            denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -185,14 +185,18 @@ class GenerateLdmRequest(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -259,17 +263,17 @@ class GenerateLdmRequest(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
+            denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
+            fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
             generate_long_ids (bool): A flag dictating how the attribute, fact and label ids are generated. By default their ids are derived only from the column name, unless there would be a conflict (e.g. category coming from two different tables). In that case a long id format of `<table>.<column>` is used. If the flag is set to true, then all ids will be generated in the long form.. [optional]  # noqa: E501
+            grain_prefix (str): Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `g` and separator is `__`, the columns with name like `g__name` will be considered as grains.. [optional]  # noqa: E501
+            grain_reference_prefix (str): Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `gr` and separator is `__`, the columns with name like `gr__customer_name` will be considered as grain references.. [optional]  # noqa: E501
+            primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
+            reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
+            secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
-            primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
-            secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
-            fact_prefix (str): Columns starting with this prefix will be considered as facts. The prefix is then followed by the value of `separator` parameter. Given the fact prefix is `f` and separator is `__`, the columns with name like `f__sold` will be considered as facts.. [optional]  # noqa: E501
-            date_granularities (str): Option to control date granularities for date datasets. Empty value enables common date granularities (DAY, WEEK, MONTH, QUARTER, YEAR). Default value is `all` which enables all available date granularities, including time granularities (like hours, minutes).. [optional]  # noqa: E501
-            grain_prefix (str): Columns starting with this prefix will be considered as grains. The prefix is then followed by the value of `separator` parameter. Given the grain prefix is `g` and separator is `__`, the columns with name like `g__name` will be considered as grains.. [optional]  # noqa: E501
-            reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
-            grain_reference_prefix (str): Columns starting with this prefix will be considered as grain references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `gr` and separator is `__`, the columns with name like `gr__customer_name` will be considered as grain references.. [optional]  # noqa: E501
-            denorm_prefix (str): Columns starting with this prefix will be considered as denormalization references. The prefix is then followed by the value of `separator` parameter. Given the denormalization reference prefix is `dr` and separator is `__`, the columns with name like `dr__customer_name` will be considered as denormalization references.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
         """
 
@@ -280,14 +284,18 @@ class GenerateLdmRequest(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

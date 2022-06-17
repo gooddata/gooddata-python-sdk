@@ -116,9 +116,9 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         return {
             'relationships': (JsonApiFilterContextOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'id': (str,),  # noqa: E501
             'attributes': (JsonApiDashboardPluginInAttributes,),  # noqa: E501
+            'id': (str,),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -129,9 +129,9 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
     attribute_map = {
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
-        'type': 'type',  # noqa: E501
-        'id': 'id',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'id': 'id',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -175,9 +175,9 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             relationships (JsonApiFilterContextOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
-            id (str): API identifier of an object. [optional]  # noqa: E501
             attributes (JsonApiDashboardPluginInAttributes): [optional]  # noqa: E501
+            id (str): API identifier of an object. [optional]  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -189,14 +189,18 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -279,9 +283,9 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             relationships (JsonApiFilterContextOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
-            id (str): API identifier of an object. [optional]  # noqa: E501
             attributes (JsonApiDashboardPluginInAttributes): [optional]  # noqa: E501
+            id (str): API identifier of an object. [optional]  # noqa: E501
+            type (str): Object type. [optional] if omitted the server will use the default value of "dashboardPlugin"  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -291,14 +295,18 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

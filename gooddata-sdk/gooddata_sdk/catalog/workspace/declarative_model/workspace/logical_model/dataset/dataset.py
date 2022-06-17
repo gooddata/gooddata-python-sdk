@@ -13,7 +13,7 @@ from gooddata_metadata_client.model.declarative_fact import DeclarativeFact
 from gooddata_metadata_client.model.declarative_label import DeclarativeLabel
 from gooddata_metadata_client.model.declarative_reference import DeclarativeReference
 from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogReferenceIdentifier
+from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 
 LAYOUT_DATASETS_DIR = "datasets"
@@ -49,7 +49,11 @@ class CatalogDeclarativeDataset(Base):
 class CatalogDeclarativeAttribute(Base):
     id: str
     title: str
+    source_column: str
     labels: List[CatalogDeclarativeLabel]
+    default_view: Optional[CatalogLabelIdentifier] = None
+    sort_column: Optional[str] = None
+    sort_direction: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[List[str]] = None
 
@@ -85,7 +89,6 @@ class CatalogDataSourceTableIdentifier(Base):
 class CatalogDeclarativeLabel(Base):
     id: str
     title: str
-    primary: bool
     source_column: str
     description: Optional[str] = None
     tags: Optional[List[str]] = None

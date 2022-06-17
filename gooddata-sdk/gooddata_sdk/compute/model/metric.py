@@ -147,7 +147,7 @@ class PopDate:
         return self._periods_ago
 
     def as_api_model(self) -> afm_models.PopDate:
-        return afm_models.PopDate(attribute=self.attribute.as_afm_id(), periods_ago=self.periods_ago)
+        return afm_models.PopDate(attribute=self.attribute.as_afm_id_attribute(), periods_ago=self.periods_ago)
 
 
 class PopDateMetric(Metric):
@@ -171,7 +171,7 @@ class PopDateMetric(Metric):
         return self._date_attributes
 
     def _body_as_api_model(self) -> afm_models.PopDateMeasureDefinition:
-        measure_identifier = afm_models.LocalIdentifier(local_identifier=self.metric_local_id)
+        measure_identifier = afm_models.AfmLocalIdentifier(local_identifier=self.metric_local_id)
         date_attributes = list([a.as_api_model() for a in self.date_attributes])
 
         return afm_models.PopDateMeasureDefinition(
@@ -195,7 +195,7 @@ class PopDateDataset:
         return self._periods_ago
 
     def as_api_model(self) -> afm_models.PopDataset:
-        return afm_models.PopDataset(dataset=self.dataset.as_afm_id(), periods_ago=self.periods_ago)
+        return afm_models.PopDataset(dataset=self.dataset.as_afm_id_dataset(), periods_ago=self.periods_ago)
 
 
 class PopDatesetMetric(Metric):
@@ -219,7 +219,7 @@ class PopDatesetMetric(Metric):
         return self._date_datasets
 
     def _body_as_api_model(self) -> afm_models.PopDatasetMeasureDefinition:
-        measure_identifier = afm_models.LocalIdentifier(local_identifier=self.metric_local_id)
+        measure_identifier = afm_models.AfmLocalIdentifier(local_identifier=self.metric_local_id)
         date_datasets = list([d.as_api_model() for d in self.date_datasets])
 
         return afm_models.PopDatasetMeasureDefinition(
@@ -259,7 +259,7 @@ class ArithmeticMetric(Metric):
         return self._operands
 
     def _body_as_api_model(self) -> afm_models.ArithmeticMeasureDefinition:
-        measure_identifiers = [afm_models.LocalIdentifier(local_identifier=local_d) for local_d in self._operands]
+        measure_identifiers = [afm_models.AfmLocalIdentifier(local_identifier=local_d) for local_d in self._operands]
 
         return afm_models.ArithmeticMeasureDefinition(
             afm_models.ArithmeticMeasureDefinitionArithmeticMeasure(

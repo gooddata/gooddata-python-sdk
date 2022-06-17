@@ -51,7 +51,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeAnalytics,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/analyticsModel',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/analyticsModel',
                 'operation_id': 'get_analytics_model',
                 'http_method': 'GET',
                 'servers': None,
@@ -100,7 +100,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeDataSources,),
                 'auth': [],
-                'endpoint_path': '/api/layout/dataSources',
+                'endpoint_path': '/api/v1/layout/dataSources',
                 'operation_id': 'get_data_sources_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -142,7 +142,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeModel,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/logicalModel',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/logicalModel',
                 'operation_id': 'get_logical_model',
                 'http_method': 'GET',
                 'servers': None,
@@ -150,6 +150,7 @@ class LayoutApi(object):
             params_map={
                 'all': [
                     'workspace_id',
+                    'include_parents',
                 ],
                 'required': [
                     'workspace_id',
@@ -169,12 +170,16 @@ class LayoutApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
+                    'include_parents':
+                        (bool,),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'include_parents': 'includeParents',
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                    'include_parents': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -191,7 +196,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeOrganization,),
                 'auth': [],
-                'endpoint_path': '/api/layout/organization',
+                'endpoint_path': '/api/v1/layout/organization',
                 'operation_id': 'get_organization_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -233,7 +238,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativePdm,),
                 'auth': [],
-                'endpoint_path': '/api/layout/dataSources/{dataSourceId}/physicalModel',
+                'endpoint_path': '/api/v1/layout/dataSources/{dataSourceId}/physicalModel',
                 'operation_id': 'get_pdm_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -282,7 +287,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeUserGroups,),
                 'auth': [],
-                'endpoint_path': '/api/layout/userGroups',
+                'endpoint_path': '/api/v1/layout/userGroups',
                 'operation_id': 'get_user_groups_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -324,7 +329,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeUsers,),
                 'auth': [],
-                'endpoint_path': '/api/layout/users',
+                'endpoint_path': '/api/v1/layout/users',
                 'operation_id': 'get_users_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -366,7 +371,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeUsersUserGroups,),
                 'auth': [],
-                'endpoint_path': '/api/layout/usersAndUserGroups',
+                'endpoint_path': '/api/v1/layout/usersAndUserGroups',
                 'operation_id': 'get_users_user_groups_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -408,7 +413,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeWorkspaceDataFilters,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaceDataFilters',
+                'endpoint_path': '/api/v1/layout/workspaceDataFilters',
                 'operation_id': 'get_workspace_data_filters_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -450,7 +455,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeWorkspaceModel,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}',
                 'operation_id': 'get_workspace_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -499,7 +504,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/permissions',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/permissions',
                 'operation_id': 'get_workspace_permissions',
                 'http_method': 'PUT',
                 'servers': None,
@@ -553,7 +558,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeWorkspacePermissions,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/permissions',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/permissions',
                 'operation_id': 'get_workspace_permissions1',
                 'http_method': 'GET',
                 'servers': None,
@@ -602,7 +607,7 @@ class LayoutApi(object):
             settings={
                 'response_type': (DeclarativeWorkspaces,),
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces',
+                'endpoint_path': '/api/v1/layout/workspaces',
                 'operation_id': 'get_workspaces_layout',
                 'http_method': 'GET',
                 'servers': None,
@@ -644,7 +649,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/dataSources',
+                'endpoint_path': '/api/v1/layout/dataSources',
                 'operation_id': 'put_data_sources_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -692,7 +697,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/userGroups',
+                'endpoint_path': '/api/v1/layout/userGroups',
                 'operation_id': 'put_user_groups_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -740,7 +745,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/users',
+                'endpoint_path': '/api/v1/layout/users',
                 'operation_id': 'put_users_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -788,7 +793,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/usersAndUserGroups',
+                'endpoint_path': '/api/v1/layout/usersAndUserGroups',
                 'operation_id': 'put_users_user_groups_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -836,7 +841,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}',
                 'operation_id': 'put_workspace_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -890,7 +895,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/analyticsModel',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/analyticsModel',
                 'operation_id': 'set_analytics_model',
                 'http_method': 'PUT',
                 'servers': None,
@@ -944,7 +949,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces/{workspaceId}/logicalModel',
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/logicalModel',
                 'operation_id': 'set_logical_model',
                 'http_method': 'PUT',
                 'servers': None,
@@ -998,7 +1003,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/organization',
+                'endpoint_path': '/api/v1/layout/organization',
                 'operation_id': 'set_organization_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -1046,7 +1051,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/dataSources/{dataSourceId}/physicalModel',
+                'endpoint_path': '/api/v1/layout/dataSources/{dataSourceId}/physicalModel',
                 'operation_id': 'set_pdm_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -1100,7 +1105,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaceDataFilters',
+                'endpoint_path': '/api/v1/layout/workspaceDataFilters',
                 'operation_id': 'set_workspace_data_filters_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -1148,7 +1153,7 @@ class LayoutApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/layout/workspaces',
+                'endpoint_path': '/api/v1/layout/workspaces',
                 'operation_id': 'set_workspaces_layout',
                 'http_method': 'PUT',
                 'servers': None,
@@ -1226,12 +1231,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1257,9 +1270,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_analytics_model_endpoint.call_with_http_info(**kwargs)
@@ -1294,12 +1311,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1325,9 +1350,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_data_sources_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_logical_model(
@@ -1348,6 +1377,7 @@ class LayoutApi(object):
             workspace_id (str):
 
         Keyword Args:
+            include_parents (bool): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1363,12 +1393,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1394,9 +1432,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_logical_model_endpoint.call_with_http_info(**kwargs)
@@ -1431,12 +1473,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1462,9 +1512,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_organization_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_pdm_layout(
@@ -1500,12 +1554,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1531,9 +1593,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         return self.get_pdm_layout_endpoint.call_with_http_info(**kwargs)
@@ -1568,12 +1634,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1599,9 +1673,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_user_groups_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_users_layout(
@@ -1634,12 +1712,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1665,9 +1751,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_users_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_users_user_groups_layout(
@@ -1700,12 +1790,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1731,9 +1829,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_users_user_groups_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_workspace_data_filters_layout(
@@ -1766,12 +1868,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1797,9 +1907,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_workspace_data_filters_layout_endpoint.call_with_http_info(**kwargs)
 
     def get_workspace_layout(
@@ -1835,12 +1949,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1866,9 +1988,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_workspace_layout_endpoint.call_with_http_info(**kwargs)
@@ -1908,12 +2034,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -1939,9 +2073,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['declarative_workspace_permissions'] = \
@@ -1981,12 +2119,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2012,9 +2158,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         return self.get_workspace_permissions1_endpoint.call_with_http_info(**kwargs)
@@ -2049,12 +2199,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2080,9 +2238,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_workspaces_layout_endpoint.call_with_http_info(**kwargs)
 
     def put_data_sources_layout(
@@ -2118,12 +2280,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2149,9 +2319,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_data_sources'] = \
             declarative_data_sources
         return self.put_data_sources_layout_endpoint.call_with_http_info(**kwargs)
@@ -2189,12 +2363,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2220,9 +2402,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_user_groups'] = \
             declarative_user_groups
         return self.put_user_groups_layout_endpoint.call_with_http_info(**kwargs)
@@ -2260,12 +2446,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2291,9 +2485,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_users'] = \
             declarative_users
         return self.put_users_layout_endpoint.call_with_http_info(**kwargs)
@@ -2331,12 +2529,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2362,9 +2568,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_users_user_groups'] = \
             declarative_users_user_groups
         return self.put_users_user_groups_layout_endpoint.call_with_http_info(**kwargs)
@@ -2404,12 +2614,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2435,9 +2653,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['declarative_workspace_model'] = \
@@ -2479,12 +2701,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2510,9 +2740,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['declarative_analytics'] = \
@@ -2554,12 +2788,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2585,9 +2827,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
         kwargs['declarative_model'] = \
@@ -2627,12 +2873,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2658,9 +2912,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_organization'] = \
             declarative_organization
         return self.set_organization_layout_endpoint.call_with_http_info(**kwargs)
@@ -2700,12 +2958,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2731,9 +2997,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
         kwargs['declarative_pdm'] = \
@@ -2773,12 +3043,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2804,9 +3082,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_workspace_data_filters'] = \
             declarative_workspace_data_filters
         return self.set_workspace_data_filters_layout_endpoint.call_with_http_info(**kwargs)
@@ -2844,12 +3126,20 @@ class LayoutApi(object):
             _check_return_type (bool): specifies if type checking
                 should be done one the data received from the server.
                 Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
             _content_type (str/None): force body content-type.
                 Default is None and content-type will be predicted by allowed
                 content-types and body.
             _host_index (int/None): specifies the index of the server
                 that we want to use.
                 Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
             async_req (bool): execute request asynchronously
 
         Returns:
@@ -2875,9 +3165,13 @@ class LayoutApi(object):
         kwargs['_check_return_type'] = kwargs.get(
             '_check_return_type', True
         )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
         kwargs['_content_type'] = kwargs.get(
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['declarative_workspaces'] = \
             declarative_workspaces
         return self.set_workspaces_layout_endpoint.call_with_http_info(**kwargs)

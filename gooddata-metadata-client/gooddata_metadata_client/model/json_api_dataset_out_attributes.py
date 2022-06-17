@@ -31,10 +31,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_metadata_client.model.json_api_dataset_out_attributes_grain import JsonApiDatasetOutAttributesGrain
-    from gooddata_metadata_client.model.json_api_dataset_out_attributes_reference_properties import JsonApiDatasetOutAttributesReferenceProperties
-    globals()['JsonApiDatasetOutAttributesGrain'] = JsonApiDatasetOutAttributesGrain
-    globals()['JsonApiDatasetOutAttributesReferenceProperties'] = JsonApiDatasetOutAttributesReferenceProperties
+    from gooddata_metadata_client.model.json_api_dataset_out_attributes_grain_inner import JsonApiDatasetOutAttributesGrainInner
+    from gooddata_metadata_client.model.json_api_dataset_out_attributes_reference_properties_inner import JsonApiDatasetOutAttributesReferencePropertiesInner
+    globals()['JsonApiDatasetOutAttributesGrainInner'] = JsonApiDatasetOutAttributesGrainInner
+    globals()['JsonApiDatasetOutAttributesReferencePropertiesInner'] = JsonApiDatasetOutAttributesReferencePropertiesInner
 
 
 class JsonApiDatasetOutAttributes(ModelNormal):
@@ -95,13 +95,13 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
-            'description': (str,),  # noqa: E501
-            'tags': ([str],),  # noqa: E501
-            'grain': ([JsonApiDatasetOutAttributesGrain],),  # noqa: E501
-            'reference_properties': ([JsonApiDatasetOutAttributesReferenceProperties],),  # noqa: E501
-            'data_source_table_id': (str,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
+            'data_source_table_id': (str,),  # noqa: E501
+            'description': (str,),  # noqa: E501
+            'grain': ([JsonApiDatasetOutAttributesGrainInner],),  # noqa: E501
+            'reference_properties': ([JsonApiDatasetOutAttributesReferencePropertiesInner],),  # noqa: E501
+            'tags': ([str],),  # noqa: E501
+            'title': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -111,13 +111,13 @@ class JsonApiDatasetOutAttributes(ModelNormal):
 
     attribute_map = {
         'type': 'type',  # noqa: E501
-        'title': 'title',  # noqa: E501
+        'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'data_source_table_id': 'dataSourceTableId',  # noqa: E501
         'description': 'description',  # noqa: E501
-        'tags': 'tags',  # noqa: E501
         'grain': 'grain',  # noqa: E501
         'reference_properties': 'referenceProperties',  # noqa: E501
-        'data_source_table_id': 'dataSourceTableId',  # noqa: E501
-        'are_relations_valid': 'areRelationsValid',  # noqa: E501
+        'tags': 'tags',  # noqa: E501
+        'title': 'title',  # noqa: E501
     }
 
     read_only_vars = {
@@ -164,17 +164,17 @@ class JsonApiDatasetOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            title (str): [optional]  # noqa: E501
-            description (str): [optional]  # noqa: E501
-            tags ([str]): [optional]  # noqa: E501
-            grain ([JsonApiDatasetOutAttributesGrain]): [optional]  # noqa: E501
-            reference_properties ([JsonApiDatasetOutAttributesReferenceProperties]): [optional]  # noqa: E501
-            data_source_table_id (str): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            data_source_table_id (str): [optional]  # noqa: E501
+            description (str): [optional]  # noqa: E501
+            grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
+            reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
+            tags ([str]): [optional]  # noqa: E501
+            title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
-        _spec_property_naming = kwargs.pop('_spec_property_naming', False)
+        _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
@@ -182,14 +182,18 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -256,13 +260,13 @@ class JsonApiDatasetOutAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            title (str): [optional]  # noqa: E501
-            description (str): [optional]  # noqa: E501
-            tags ([str]): [optional]  # noqa: E501
-            grain ([JsonApiDatasetOutAttributesGrain]): [optional]  # noqa: E501
-            reference_properties ([JsonApiDatasetOutAttributesReferenceProperties]): [optional]  # noqa: E501
-            data_source_table_id (str): [optional]  # noqa: E501
             are_relations_valid (bool): [optional]  # noqa: E501
+            data_source_table_id (str): [optional]  # noqa: E501
+            description (str): [optional]  # noqa: E501
+            grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
+            reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
+            tags ([str]): [optional]  # noqa: E501
+            title (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -272,14 +276,18 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type

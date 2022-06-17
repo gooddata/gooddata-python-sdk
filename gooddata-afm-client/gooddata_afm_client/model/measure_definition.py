@@ -35,20 +35,18 @@ def lazy_import():
     from gooddata_afm_client.model.arithmetic_measure_definition_arithmetic_measure import ArithmeticMeasureDefinitionArithmeticMeasure
     from gooddata_afm_client.model.inline_measure_definition import InlineMeasureDefinition
     from gooddata_afm_client.model.inline_measure_definition_inline import InlineMeasureDefinitionInline
-    from gooddata_afm_client.model.pop_dataset_measure_definition import PopDatasetMeasureDefinition
     from gooddata_afm_client.model.pop_dataset_measure_definition_previous_period_measure import PopDatasetMeasureDefinitionPreviousPeriodMeasure
-    from gooddata_afm_client.model.pop_date_measure_definition import PopDateMeasureDefinition
     from gooddata_afm_client.model.pop_date_measure_definition_over_period_measure import PopDateMeasureDefinitionOverPeriodMeasure
+    from gooddata_afm_client.model.pop_measure_definition import PopMeasureDefinition
     from gooddata_afm_client.model.simple_measure_definition import SimpleMeasureDefinition
     from gooddata_afm_client.model.simple_measure_definition_measure import SimpleMeasureDefinitionMeasure
     globals()['ArithmeticMeasureDefinition'] = ArithmeticMeasureDefinition
     globals()['ArithmeticMeasureDefinitionArithmeticMeasure'] = ArithmeticMeasureDefinitionArithmeticMeasure
     globals()['InlineMeasureDefinition'] = InlineMeasureDefinition
     globals()['InlineMeasureDefinitionInline'] = InlineMeasureDefinitionInline
-    globals()['PopDatasetMeasureDefinition'] = PopDatasetMeasureDefinition
     globals()['PopDatasetMeasureDefinitionPreviousPeriodMeasure'] = PopDatasetMeasureDefinitionPreviousPeriodMeasure
-    globals()['PopDateMeasureDefinition'] = PopDateMeasureDefinition
     globals()['PopDateMeasureDefinitionOverPeriodMeasure'] = PopDateMeasureDefinitionOverPeriodMeasure
+    globals()['PopMeasureDefinition'] = PopMeasureDefinition
     globals()['SimpleMeasureDefinition'] = SimpleMeasureDefinition
     globals()['SimpleMeasureDefinitionMeasure'] = SimpleMeasureDefinitionMeasure
 
@@ -109,8 +107,8 @@ class MeasureDefinition(ModelComposed):
             'inline': (InlineMeasureDefinitionInline,),  # noqa: E501
             'arithmetic_measure': (ArithmeticMeasureDefinitionArithmeticMeasure,),  # noqa: E501
             'measure': (SimpleMeasureDefinitionMeasure,),  # noqa: E501
-            'over_period_measure': (PopDateMeasureDefinitionOverPeriodMeasure,),  # noqa: E501
             'previous_period_measure': (PopDatasetMeasureDefinitionPreviousPeriodMeasure,),  # noqa: E501
+            'over_period_measure': (PopDateMeasureDefinitionOverPeriodMeasure,),  # noqa: E501
         }
 
     @cached_property
@@ -122,8 +120,8 @@ class MeasureDefinition(ModelComposed):
         'inline': 'inline',  # noqa: E501
         'arithmetic_measure': 'arithmeticMeasure',  # noqa: E501
         'measure': 'measure',  # noqa: E501
-        'over_period_measure': 'overPeriodMeasure',  # noqa: E501
         'previous_period_measure': 'previousPeriodMeasure',  # noqa: E501
+        'over_period_measure': 'overPeriodMeasure',  # noqa: E501
     }
 
     read_only_vars = {
@@ -168,8 +166,8 @@ class MeasureDefinition(ModelComposed):
             inline (InlineMeasureDefinitionInline): [optional]  # noqa: E501
             arithmetic_measure (ArithmeticMeasureDefinitionArithmeticMeasure): [optional]  # noqa: E501
             measure (SimpleMeasureDefinitionMeasure): [optional]  # noqa: E501
-            over_period_measure (PopDateMeasureDefinitionOverPeriodMeasure): [optional]  # noqa: E501
             previous_period_measure (PopDatasetMeasureDefinitionPreviousPeriodMeasure): [optional]  # noqa: E501
+            over_period_measure (PopDateMeasureDefinitionOverPeriodMeasure): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -181,14 +179,18 @@ class MeasureDefinition(ModelComposed):
         self = super(OpenApiModel, cls).__new__(cls)
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -272,8 +274,8 @@ class MeasureDefinition(ModelComposed):
             inline (InlineMeasureDefinitionInline): [optional]  # noqa: E501
             arithmetic_measure (ArithmeticMeasureDefinitionArithmeticMeasure): [optional]  # noqa: E501
             measure (SimpleMeasureDefinitionMeasure): [optional]  # noqa: E501
-            over_period_measure (PopDateMeasureDefinitionOverPeriodMeasure): [optional]  # noqa: E501
             previous_period_measure (PopDatasetMeasureDefinitionPreviousPeriodMeasure): [optional]  # noqa: E501
+            over_period_measure (PopDateMeasureDefinitionOverPeriodMeasure): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -283,14 +285,18 @@ class MeasureDefinition(ModelComposed):
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
         if args:
-            raise ApiTypeError(
-                "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
-                    args,
-                    self.__class__.__name__,
-                ),
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+            for arg in args:
+                if isinstance(arg, dict):
+                    kwargs.update(arg)
+                else:
+                    raise ApiTypeError(
+                        "Invalid positional arguments=%s passed to %s. Remove those invalid positional arguments." % (
+                            args,
+                            self.__class__.__name__,
+                        ),
+                        path_to_item=_path_to_item,
+                        valid_classes=(self.__class__,),
+                    )
 
         self._data_store = {}
         self._check_type = _check_type
@@ -343,8 +349,7 @@ class MeasureDefinition(ModelComposed):
           'oneOf': [
               ArithmeticMeasureDefinition,
               InlineMeasureDefinition,
-              PopDatasetMeasureDefinition,
-              PopDateMeasureDefinition,
+              PopMeasureDefinition,
               SimpleMeasureDefinition,
           ],
         }

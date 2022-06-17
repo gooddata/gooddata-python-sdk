@@ -1,5 +1,6 @@
 # SortKeyValue
 
+Sorting rule for sorting by measure value.
 
 ## Properties
 Name | Type | Description | Notes

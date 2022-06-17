@@ -7,6 +7,7 @@ DIR=$(echo $(cd $(dirname "${BASH_SOURCE[0]}") && pwd -P))
 ROOT_DIR="${DIR}/.."
 GD_SCHEMA_URL="http://localhost:3000"
 GD_SCHEMA_FILE=""
+API_VERSION="v1"
 
 function usage() {
   cat >/dev/stderr <<-EOT
@@ -71,15 +72,15 @@ CLIENT_DIR="${ROOT_DIR}/${GD_API_CLIENT}"
 
 case "$GD_API_CLIENT" in
   gooddata-scan-client)
-    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/schemas/scan"
+    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/${API_VERSION}/schemas/scan"
     CLIENT_SRC_ROOT="${CLIENT_DIR}/gooddata_scan_client"
     ;;
   gooddata-metadata-client)
-    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/schemas/metadata"
+    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/${API_VERSION}/schemas/metadata"
     CLIENT_SRC_ROOT="${CLIENT_DIR}/gooddata_metadata_client"
     ;;
   gooddata-afm-client)
-    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/schemas/afm"
+    GD_API_URI_PATH="${GD_SCHEMA_URL}/api/${API_VERSION}/schemas/afm"
     CLIENT_SRC_ROOT="${CLIENT_DIR}/gooddata_afm_client"
     ;;
   *)
@@ -125,7 +126,7 @@ docker run --rm \
     -v "${ROOT_DIR}:/local" \
     -u $(id -u ${USER}):$(id -g ${USER}) \
     ${CONN_NETWORK_ARG} \
-    openapitools/openapi-generator-cli:v5.3.1 generate \
+    openapitools/openapi-generator-cli:v6.0.0 generate \
     -c "/local/.openapi-generator/configs/${GD_API_CLIENT}.yaml" \
     -i "${GD_API_URI_PATH}" \
     -o "/local/${GD_API_CLIENT}"

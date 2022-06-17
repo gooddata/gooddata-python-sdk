@@ -4,7 +4,7 @@
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/entities/dataSources?page=0&size=500",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources?page=0&size=500",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -24,22 +24,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -47,17 +33,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -65,34 +54,45 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "ce45541a5eaf63c4"
+                        "4b0bcff29ba0c8a2"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/dataSources?page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/dataSources?page=1&size=500\"}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/entities/dataSources/test",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources/test",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -112,22 +112,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/problem+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -135,17 +121,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -153,35 +142,46 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "ad9efe45d8dda18f"
+                        "86618198838c42c7"
+                    ],
+                    "Content-Type": [
+                        "application/problem+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"detail\":\"The requested endpoint does not exist or you do not have permission to access it.\",\"status\":404,\"title\":\"Not Found\",\"traceId\":\"ad9efe45d8dda18f\"}"
+                    "string": "{\"detail\":\"The requested endpoint does not exist or you do not have permission to access it.\",\"status\":404,\"title\":\"Not Found\",\"traceId\":\"86618198838c42c7\"}"
                 }
             }
         },
         {
             "request": {
                 "method": "POST",
-                "uri": "http://localhost:3000/api/entities/dataSources",
-                "body": "{\"data\": {\"type\": \"dataSource\", \"id\": \"test\", \"attributes\": {\"name\": \"Test\", \"type\": \"POSTGRESQL\", \"url\": \"jdbc:postgresql://localhost:5432/demoparam=value\", \"schema\": \"demo\", \"username\": \"demouser\", \"password\": \"demopass\", \"enableCaching\": true, \"cachePath\": [\"cache_schema\"]}}}",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources",
+                "body": "{\"data\": {\"attributes\": {\"name\": \"Test\", \"schema\": \"demo\", \"type\": \"POSTGRESQL\", \"url\": \"jdbc:postgresql://localhost:5432/demoparam=value\", \"username\": \"demouser\", \"password\": \"demopass\", \"enableCaching\": true, \"cachePath\": [\"cache_schema\"]}, \"id\": \"test\", \"type\": \"dataSource\"}}",
                 "headers": {
                     "Accept": [
                         "application/vnd.gooddata.api+json"
@@ -203,22 +203,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -226,17 +212,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -244,34 +233,45 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "13159c61dd0be8e7"
+                        "4cb6a21d5dc72219"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":true,\"cachePath\":[\"cache_schema\"],\"name\":\"Test\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/test\"}}"
+                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":true,\"cachePath\":[\"cache_schema\"],\"name\":\"Test\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/test\"}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/entities/dataSources/test",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources/test",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -291,22 +291,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -314,17 +300,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -332,35 +321,46 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "4e9ff05792767393"
+                        "5446a58363b7a280"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":true,\"cachePath\":[\"cache_schema\"],\"name\":\"Test\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/test\"}}"
+                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":true,\"cachePath\":[\"cache_schema\"],\"name\":\"Test\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/test\"}}"
                 }
             }
         },
         {
             "request": {
                 "method": "PUT",
-                "uri": "http://localhost:3000/api/entities/dataSources/test",
-                "body": "{\"data\": {\"type\": \"dataSource\", \"id\": \"test\", \"attributes\": {\"name\": \"Test2\", \"type\": \"POSTGRESQL\", \"url\": \"jdbc:postgresql://localhost:5432/demoparam=value\", \"schema\": \"demo\", \"username\": \"demouser\", \"password\": \"demopass\", \"enableCaching\": false}}}",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources/test",
+                "body": "{\"data\": {\"attributes\": {\"name\": \"Test2\", \"schema\": \"demo\", \"type\": \"POSTGRESQL\", \"url\": \"jdbc:postgresql://localhost:5432/demoparam=value\", \"username\": \"demouser\", \"password\": \"demopass\", \"enableCaching\": false}, \"id\": \"test\", \"type\": \"dataSource\"}}",
                 "headers": {
                     "Accept": [
                         "application/vnd.gooddata.api+json"
@@ -382,22 +382,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -405,17 +391,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -423,34 +412,45 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "605ed4beaf2f5356"
+                        "c9dfaf1b48827dbf"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"Test2\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/test\"}}"
+                    "string": "{\"data\":{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"Test2\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"type\":\"dataSource\"},\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/test\"}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/entities/dataSources?page=0&size=500",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources?page=0&size=500",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -470,22 +470,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -493,17 +479,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -511,34 +500,45 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "39c483b533e9ca12"
+                        "3246d9853521226c"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"},{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"Test2\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/test\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/dataSources?page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"},{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"Test2\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demoparam=value\",\"schema\":\"demo\"},\"id\":\"test\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/test\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/dataSources?page=1&size=500\"}}"
                 }
             }
         },
         {
             "request": {
                 "method": "DELETE",
-                "uri": "http://localhost:3000/api/entities/dataSources/test",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources/test",
                 "body": null,
                 "headers": {
                     "X-Requested-With": [
@@ -555,58 +555,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Expires": [
-                        "0"
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
                     ],
                     "Set-Cookie": [
                         "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
-                    "Connection": [
-                        "keep-alive"
-                    ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
                     "GoodData-Deployment": [
                         "aio"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:46 GMT"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "X-GDC-TRACE-ID": [
-                        "b3165748aba5530a"
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "X-GDC-TRACE-ID": [
+                        "4b250619534d106c"
                     ],
-                    "Server": [
-                        "nginx"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "Expires": [
+                        "0"
                     ],
                     "Cache-Control": [
                         "no-cache, no-store, max-age=0, must-revalidate"
                     ],
+                    "Server": [
+                        "nginx"
+                    ],
                     "X-Frame-Options": [
                         "DENY"
                     ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
+                    "Connection": [
+                        "keep-alive"
                     ],
                     "X-XSS-Protection": [
                         "1; mode=block"
+                    ],
+                    "Pragma": [
+                        "no-cache"
                     ]
                 },
                 "body": {
@@ -617,7 +617,7 @@
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/entities/dataSources?page=0&size=500",
+                "uri": "http://localhost:3000/api/v1/entities/dataSources?page=0&size=500",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -637,22 +637,8 @@
                     "message": ""
                 },
                 "headers": {
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Vary": [
-                        "Origin",
-                        "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers"
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ],
                     "Server": [
                         "nginx"
@@ -660,17 +646,20 @@
                     "Access-Control-Expose-Headers": [
                         "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Date": [
+                        "Thu, 16 Jun 2022 16:04:35 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ],
                     "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "GoodData-Deployment": [
+                        "aio"
                     ],
                     "Transfer-Encoding": [
                         "chunked"
@@ -678,27 +667,38 @@
                     "Access-Control-Allow-Credentials": [
                         "true"
                     ],
-                    "Date": [
-                        "Mon, 11 Apr 2022 18:00:47 GMT"
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
                     ],
                     "X-GDC-TRACE-ID": [
-                        "55c83ea8f270c8cd"
+                        "6745987cde7849b1"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
                     ],
                     "Pragma": [
                         "no-cache"
                     ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "GoodData-Deployment": [
-                        "aio"
+                    "Expires": [
+                        "0"
                     ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
+                    "Connection": [
+                        "keep-alive"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/entities/dataSources?page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"username\":\"demouser\",\"enableCaching\":false,\"name\":\"demo-test-ds\",\"type\":\"POSTGRESQL\",\"url\":\"jdbc:postgresql://localhost:5432/demo\",\"schema\":\"demo\"},\"id\":\"demo-test-ds\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources/demo-test-ds\"},\"type\":\"dataSource\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/dataSources?page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/dataSources?page=1&size=500\"}}"
                 }
             }
         }

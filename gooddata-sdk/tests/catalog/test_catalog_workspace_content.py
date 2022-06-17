@@ -116,11 +116,13 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
         DataSourceValidator.validate_ldm = MagicMock(return_value=None)
         DataSourceValidator.validate_data_source_ids = MagicMock(return_value=None)
 
-        ldm_e.modify_mapped_data_source(data_source_mapping=data_source_mapping)
+        reverse_data_source_mapping = {v: k for k, v in data_source_mapping.items()}
+
+        ldm_e.modify_mapped_data_source(data_source_mapping=reverse_data_source_mapping)
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
         ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
-        assert ds_o == [test_config["data_source2"]]
+        assert ds_o == [test_config["data_source"]]
     finally:
         sdk.catalog_workspace.delete_workspace(identifier)
 
