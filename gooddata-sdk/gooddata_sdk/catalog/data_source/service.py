@@ -26,7 +26,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import CatalogDat
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities, read_layout_from_file
+from gooddata_sdk.utils import load_all_entities, load_all_entities_dict, read_layout_from_file
 
 
 class CatalogDataSourceService(CatalogServiceBase):
@@ -52,8 +52,8 @@ class CatalogDataSourceService(CatalogServiceBase):
             data_source_id,
             _check_return_type=False,
         )
-        data_source_tables = load_all_entities(get_data_source_tables)
-        return [CatalogDataSourceTable(dst) for dst in data_source_tables.data]
+        data_source_tables = load_all_entities_dict(get_data_source_tables, camel_case=False)
+        return [CatalogDataSourceTable.from_dict(dst, camel_case=False) for dst in data_source_tables["data"]]
 
     def create_or_update_data_source(
         self,
