@@ -17,6 +17,7 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     LAYOUT_WORKSPACES_DIR,
+    CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
 )
@@ -118,6 +119,30 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def load_and_put_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> None:
         declarative_workspaces = self.load_declarative_workspaces(layout_root_path)
         self.put_declarative_workspaces(declarative_workspaces)
+
+    def get_declarative_workspace_data_filters(self) -> CatalogDeclarativeWorkspaceDataFilters:
+        return CatalogDeclarativeWorkspaceDataFilters.from_api(self._layout_api.get_workspace_data_filters_layout())
+
+    def put_declarative_workspace_data_filters(
+        self, workspace_data_filters: CatalogDeclarativeWorkspaceDataFilters
+    ) -> None:
+        self._layout_api.set_workspace_data_filters_layout(
+            declarative_workspace_data_filters=workspace_data_filters.to_api()
+        )
+
+    def store_declarative_workspace_data_filters(self, layout_root_path: Path = Path.cwd()) -> None:
+        self.get_declarative_workspace_data_filters().store_to_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_declarative_workspace_data_filters(
+        self, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeWorkspaceDataFilters:
+        return CatalogDeclarativeWorkspaceDataFilters.load_from_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_and_put_declarative_workspace_data_filters(self, layout_root_path: Path = Path.cwd()) -> None:
+        declarative_workspace_data_filters = CatalogDeclarativeWorkspaceDataFilters.load_from_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+        self.put_declarative_workspace_data_filters(declarative_workspace_data_filters)
 
 
 class CatalogWorkspaceContentService(CatalogServiceBase):

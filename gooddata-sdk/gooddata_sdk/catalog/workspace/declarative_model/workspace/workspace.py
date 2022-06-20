@@ -11,6 +11,7 @@ from gooddata_metadata_client.model.declarative_workspace_data_filter import Dec
 from gooddata_metadata_client.model.declarative_workspace_data_filter_setting import (
     DeclarativeWorkspaceDataFilterSetting,
 )
+from gooddata_metadata_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from gooddata_metadata_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk.catalog.base import Base
@@ -105,6 +106,33 @@ class CatalogDeclarativeWorkspaceDataFilterSetting(Base):
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspaceDataFilterSetting]:
         return DeclarativeWorkspaceDataFilterSetting
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeWorkspaceDataFilters(Base):
+    workspace_data_filters: List[CatalogDeclarativeWorkspaceDataFilter]
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeWorkspaceDataFilters]:
+        return DeclarativeWorkspaceDataFilters
+
+    def store_to_disk(self, layout_organization_folder: Path) -> None:
+        for workspace_data_filter in self.workspace_data_filters:
+            workspace_data_filter.store_to_disk(
+                CatalogDeclarativeWorkspaces.workspace_data_filters_folder(layout_organization_folder)
+            )
+
+    @classmethod
+    def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeWorkspaceDataFilters:
+        workspace_data_filters_files = get_sorted_yaml_files(
+            CatalogDeclarativeWorkspaces.workspace_data_filters_folder(layout_organization_folder)
+        )
+        workspace_data_filters = []
+        for workspace_data_filters_file in workspace_data_filters_files:
+            workspace_data_filters.append(
+                CatalogDeclarativeWorkspaceDataFilter.load_from_disk(workspace_data_filters_file)
+            )
+        return cls(workspace_data_filters=workspace_data_filters)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
