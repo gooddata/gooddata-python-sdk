@@ -6,6 +6,7 @@ from typing import Optional, Union
 import pandas
 
 from gooddata_pandas.data_access import compute_and_extract
+from gooddata_pandas.result_convertor import convert_result_to_dataframe
 from gooddata_pandas.utils import (
     ColumnsDef,
     DefaultInsightColumnNaming,
@@ -14,7 +15,7 @@ from gooddata_pandas.utils import (
     _to_item,
     make_pandas_index,
 )
-from gooddata_sdk import Attribute, Filter, GoodDataSdk
+from gooddata_sdk import Attribute, ExecutionDefinition, Filter, GoodDataSdk
 
 
 class DataFrameFactory:
@@ -225,3 +226,18 @@ class DataFrameFactory:
         }
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
+
+    def for_exec_def(self, exec_def: ExecutionDefinition) -> pandas.DataFrame:
+        """
+        Creates a data frame using an execution definition. The data frame will respect the dimensionality
+        specified in execution definition's result spec.
+
+        Each dimension may be sliced by multiple labels. The factory will create MultiIndex for the dataframe's
+        row index and the columns.
+
+        :param exec_def: execution definition
+        :return: a new dataframe
+        """
+        response = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
+
+        return convert_result_to_dataframe(response=response)
