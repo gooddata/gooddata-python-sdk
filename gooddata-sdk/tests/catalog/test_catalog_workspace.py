@@ -8,7 +8,10 @@ import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import GoodDataApiClient, GoodDataSdk
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import CatalogDeclarativeWorkspaces
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeWorkspaceDataFilters,
+    CatalogDeclarativeWorkspaces,
+)
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
@@ -25,6 +28,18 @@ def _empty_workspaces(sdk: GoodDataSdk) -> None:
     empty_workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
     assert empty_workspaces_e == empty_workspaces_o
     assert empty_workspaces_e.to_dict(camel_case=True) == empty_workspaces_o.to_dict(camel_case=True)
+
+
+def _empty_workspace_data_filters(sdk: GoodDataSdk) -> None:
+    empty_workspace_data_filters_e = CatalogDeclarativeWorkspaceDataFilters.from_dict(
+        {"workspace_data_filters": []}, camel_case=False
+    )
+    sdk.catalog_workspace.put_declarative_workspace_data_filters(empty_workspace_data_filters_e)
+    empty_workspace_data_filters_o = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+    assert empty_workspace_data_filters_e == empty_workspace_data_filters_o
+    assert empty_workspace_data_filters_e.to_dict(camel_case=True) == empty_workspace_data_filters_o.to_dict(
+        camel_case=True
+    )
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.json"))
@@ -301,3 +316,82 @@ def test_workspace_list(test_config):
     workspaces_parent = {w.id: w.parent_id for w in workspaces}
     workspaces_parent_l = [workspaces_parent[workspace_id] for workspace_id in workspaces_id]
     assert parents == workspaces_parent_l
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace_data_filters.json"))
+def test_get_declarative_workspace_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+
+    declarative_workspace_data_filters = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+    workspace_data_filters = declarative_workspace_data_filters.workspace_data_filters
+
+    assert len(workspace_data_filters) == 2
+    assert set(workspace_data_filter.id for workspace_data_filter in workspace_data_filters) == {
+        "wdf__region",
+        "wdf__state",
+    }
+
+    assert declarative_workspace_data_filters.to_dict(
+        camel_case=True
+    ) == layout_api.get_workspace_data_filters_layout().to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace_data_filters.json"))
+def test_store_declarative_workspace_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    create_directory(path)
+
+    declarative_workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+    sdk.catalog_workspace.store_declarative_workspace_data_filters(path)
+    declarative_workspace_data_filters_o = sdk.catalog_workspace.load_declarative_workspace_data_filters(path)
+
+    assert declarative_workspace_data_filters_e == declarative_workspace_data_filters_o
+    assert declarative_workspace_data_filters_e.to_dict(
+        camel_case=True
+    ) == declarative_workspace_data_filters_o.to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace_data_filters.json"))
+def test_load_and_put_declarative_workspace_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load"
+    expected_json_path = _current_dir / "expected" / "declarative_workspace_data_filters.json"
+    workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+
+    try:
+        _empty_workspace_data_filters(sdk)
+
+        sdk.catalog_workspace.load_and_put_declarative_workspace_data_filters(path)
+        workspace_data_filters_o = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+        assert workspace_data_filters_e == workspace_data_filters_o
+        assert workspace_data_filters_e.to_dict(camel_case=True) == workspace_data_filters_o.to_dict(camel_case=True)
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data, camel_case=True)
+        sdk.catalog_workspace.put_declarative_workspace_data_filters(workspace_data_filters_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace_data_filters.json"))
+def test_put_declarative_workspace_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_workspace_data_filters.json"
+    declarative_workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+
+    try:
+        _empty_workspace_data_filters(sdk)
+
+        sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_e)
+        declarative_workspace_data_filters_o = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+        assert declarative_workspace_data_filters_e == declarative_workspace_data_filters_o
+        assert declarative_workspace_data_filters_e.to_dict(
+            camel_case=True
+        ) == declarative_workspace_data_filters_o.to_dict(camel_case=True)
+    finally:
+        with open(path) as f:
+            data = json.load(f)
+        declarative_workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data)
+        sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
