@@ -108,6 +108,11 @@ class ExecutionResult:
     def next_page_start(self, dim: int = 0) -> int:
         return self.paging_offset[dim] + self.paging_count[dim]
 
+    def get_all_headers(self, dim: int) -> list[list[Any]]:
+        header_groups = self.headers[dim]["headerGroups"]
+
+        return [[header for header in header_groups[idx]["headers"]] for idx in range(len(header_groups))]
+
     def get_all_header_values(self, dim: int, header_idx: int) -> list[str]:
         return [
             header["attributeHeader"]["labelValue"]
@@ -147,6 +152,10 @@ class ExecutionResponse:
     @property
     def result_id(self) -> str:
         return self._r["links"]["executionResult"]
+
+    @property
+    def dimensions(self) -> Any:
+        return self._r["dimensions"]
 
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         """
