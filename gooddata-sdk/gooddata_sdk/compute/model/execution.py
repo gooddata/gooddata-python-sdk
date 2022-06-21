@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
 import gooddata_afm_client.apis as apis
@@ -10,6 +11,29 @@ from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 
 
+@dataclass
+class TotalDimension:
+    idx: int
+    """index of dimension in which to calculate the total"""
+
+    items: list[str] = field(default_factory=list)
+    """items to use during total calculation"""
+
+
+@dataclass
+class TotalDefinition:
+    local_id: str
+    """total's local identifier"""
+
+    aggregation: str
+    """aggregation function; case insensitive; one of SUM, MIN, MAX, MED, AVG"""
+
+    metric_local_id: str
+    """local identifier of the measure to calculate total for"""
+
+    total_dims: list[TotalDimension]
+
+
 class ExecutionDefinition:
     def __init__(
         self,
@@ -17,11 +41,13 @@ class ExecutionDefinition:
         metrics: Optional[list[Metric]],
         filters: Optional[list[Filter]],
         dimensions: list[Optional[list[str]]],
+        totals: Optional[list[TotalDefinition]] = None,
     ) -> None:
         self._attributes = attributes or []
         self._metrics = metrics or []
         self._filters = filters or []
         self._dimensions = [dim for dim in dimensions if dim is not None]
+        self._totals = totals
 
     @property
     def attributes(self) -> list[Attribute]:
@@ -54,15 +80,50 @@ class ExecutionDefinition:
     def is_two_dim(self) -> bool:
         return len(self.dimensions) == 2
 
-    def as_api_model(self) -> models.AfmExecution:
+    def _create_dimensions(self) -> list[models.Dimension]:
         dimensions = []
-
         for idx, dim in enumerate(self._dimensions):
             dimensions.append(models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim))
 
-        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
+        return dimensions
 
-        result_spec = models.ResultSpec(dimensions=dimensions)
+    def _create_totals(self) -> Optional[list[models.Total]]:
+        if not self._totals:
+            return None
+
+        totals = []
+        for total in self._totals:
+            total_dims = [
+                models.TotalDimension(
+                    dimension_identifier=f"dim_{total_dim.idx}", total_dimension_items=total_dim.items
+                )
+                for total_dim in total.total_dims
+            ]
+
+            totals.append(
+                models.Total(
+                    local_identifier=total.local_id,
+                    metric=total.metric_local_id,
+                    function=total.aggregation.upper(),
+                    total_dimensions=total_dims,
+                )
+            )
+
+        return totals
+
+    def _create_result_spec(self) -> models.ResultSpec:
+        dimensions = self._create_dimensions()
+        totals = self._create_totals()
+
+        if totals is None:
+            # creating model with totals=None bombs, even if the totals is optional in the definition
+            return models.ResultSpec(dimensions=dimensions)
+
+        return models.ResultSpec(dimensions=dimensions, totals=totals)
+
+    def as_api_model(self) -> models.AfmExecution:
+        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
+        result_spec = self._create_result_spec()
 
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
