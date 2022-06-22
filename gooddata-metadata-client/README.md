@@ -196,8 +196,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_users_user_groups_layout**](docs/LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
 *LayoutApi* | [**get_workspace_data_filters_layout**](docs/LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 *LayoutApi* | [**get_workspace_layout**](docs/LayoutApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
-*LayoutApi* | [**get_workspace_permissions**](docs/LayoutApi.md#get_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
-*LayoutApi* | [**get_workspace_permissions1**](docs/LayoutApi.md#get_workspace_permissions1) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
+*LayoutApi* | [**get_workspace_permissions**](docs/LayoutApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 *LayoutApi* | [**get_workspaces_layout**](docs/LayoutApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
 *LayoutApi* | [**put_data_sources_layout**](docs/LayoutApi.md#put_data_sources_layout) | **PUT** /api/v1/layout/dataSources | Put all data sources
 *LayoutApi* | [**put_user_groups_layout**](docs/LayoutApi.md#put_user_groups_layout) | **PUT** /api/v1/layout/userGroups | Put all user groups
@@ -209,6 +208,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 *LayoutApi* | [**set_workspace_data_filters_layout**](docs/LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
+*LayoutApi* | [**set_workspace_permissions**](docs/LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *LayoutApi* | [**set_workspaces_layout**](docs/LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
 
 
