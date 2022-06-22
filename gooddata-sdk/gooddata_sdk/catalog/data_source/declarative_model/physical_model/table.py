@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Type
+from typing import List, Optional, Type
 
 import attr
 
@@ -18,6 +18,7 @@ class CatalogDeclarativeTable(Base):
     type: str
     path: List[str]
     columns: List[CatalogDeclarativeColumn]
+    name_prefix: Optional[str] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeTable]:

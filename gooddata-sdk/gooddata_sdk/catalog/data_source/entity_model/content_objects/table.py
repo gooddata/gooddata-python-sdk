@@ -1,52 +1,32 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, List
+from typing import List, Optional
 
-from gooddata_sdk.catalog.entity import CatalogEntity
+import attr
 
-
-class CatalogDataSourceTable(CatalogEntity):
-    @property
-    def table_type(self) -> str:
-        return self._e["type"]
-
-    @property
-    def path(self) -> List[str]:
-        return self._e["path"]
-
-    @property
-    def columns(self) -> List[CatalogDataSourceTableColumn]:
-        return [CatalogDataSourceTableColumn(c) for c in self._e["columns"]]
-
-    @property
-    def username(self) -> str:
-        return self._e["username"]
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, path={str(self.path)})"
+from gooddata_sdk.catalog.base import Base
 
 
-class CatalogDataSourceTableColumn:
-    def __init__(self, column: dict[str, Any]) -> None:
-        self._c = column
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceTable(Base):
+    id: str
+    type: str
+    attributes: CatalogDataSourceTableAttributes
 
-    @property
-    def name(self) -> str:
-        return self._c["name"]
 
-    @property
-    def data_type(self) -> str:
-        return self._c["dataType"]
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceTableAttributes(Base):
+    columns: List[CatalogDataSourceTableColumn]
+    name_prefix: Optional[str] = None
+    path: Optional[List[str]] = None
+    type: Optional[str] = None
 
-    @property
-    def referenced_table_id(self) -> str:
-        return self._c["referencedTableId"]
 
-    @property
-    def referenced_table_column(self) -> str:
-        return self._c["referencedTableColumn"]
-
-    @property
-    def primary_key(self) -> str:
-        return self._c["primaryKey"]
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceTableColumn(Base):
+    name: str
+    data_type: str
+    is_primary_key: Optional[bool] = None
+    referenced_table_column: Optional[str] = None
+    referenced_table_id: Optional[str] = None
