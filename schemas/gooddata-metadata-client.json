@@ -12895,7 +12895,7 @@
     "/api/v1/layout/workspaces/{workspaceId}/permissions": {
       "get": {
         "description": "Retrieve current set of permissions of the workspace in a declarative form.",
-        "operationId": "getWorkspacePermissions_1",
+        "operationId": "getWorkspacePermissions",
         "parameters": [
           {
             "in": "path",
@@ -12931,7 +12931,7 @@
       },
       "put": {
         "description": "Set effective permissions for the workspace",
-        "operationId": "getWorkspacePermissions",
+        "operationId": "setWorkspacePermissions",
         "parameters": [
           {
             "in": "path",

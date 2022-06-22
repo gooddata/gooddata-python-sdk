@@ -14,8 +14,7 @@ Method | HTTP request | Description
 [**get_users_user_groups_layout**](LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
 [**get_workspace_data_filters_layout**](LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
 [**get_workspace_layout**](LayoutApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
-[**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
-[**get_workspace_permissions1**](LayoutApi.md#get_workspace_permissions1) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
+[**get_workspace_permissions**](LayoutApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**get_workspaces_layout**](LayoutApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
 [**put_data_sources_layout**](LayoutApi.md#put_data_sources_layout) | **PUT** /api/v1/layout/dataSources | Put all data sources
 [**put_user_groups_layout**](LayoutApi.md#put_user_groups_layout) | **PUT** /api/v1/layout/userGroups | Put all user groups
@@ -27,6 +26,7 @@ Method | HTTP request | Description
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 [**set_pdm_layout**](LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 [**set_workspace_data_filters_layout**](LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
+[**set_workspace_permissions**](LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 [**set_workspaces_layout**](LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
 
 
@@ -688,94 +688,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_workspace_permissions**
-> get_workspace_permissions(workspace_id, declarative_workspace_permissions)
-
-Set permissions for the workspace
-
-Set effective permissions for the workspace
-
-### Example
-
-
-```python
-import time
-import gooddata_metadata_client
-from gooddata_metadata_client.api import layout_api
-from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_metadata_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_metadata_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = layout_api.LayoutApi(api_client)
-    workspace_id = "workspaceId_example" # str | 
-    declarative_workspace_permissions = DeclarativeWorkspacePermissions(
-        hierarchy_permissions=[
-            DeclarativeWorkspaceHierarchyPermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="MANAGE",
-            ),
-        ],
-        permissions=[
-            DeclarativeSingleWorkspacePermission(
-                assignee=AssigneeIdentifier(
-                    id="id_example",
-                    type="user",
-                ),
-                name="MANAGE",
-            ),
-        ],
-    ) # DeclarativeWorkspacePermissions | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Set permissions for the workspace
-        api_instance.get_workspace_permissions(workspace_id, declarative_workspace_permissions)
-    except gooddata_metadata_client.ApiException as e:
-        print("Exception when calling LayoutApi->get_workspace_permissions: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **workspace_id** | **str**|  |
- **declarative_workspace_permissions** | [**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Workspace permissions successfully set. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_workspace_permissions1**
-> DeclarativeWorkspacePermissions get_workspace_permissions1(workspace_id)
+> DeclarativeWorkspacePermissions get_workspace_permissions(workspace_id)
 
 Get permissions for the workspace
 
@@ -806,10 +719,10 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     try:
         # Get permissions for the workspace
-        api_response = api_instance.get_workspace_permissions1(workspace_id)
+        api_response = api_instance.get_workspace_permissions(workspace_id)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
-        print("Exception when calling LayoutApi->get_workspace_permissions1: %s\n" % e)
+        print("Exception when calling LayoutApi->get_workspace_permissions: %s\n" % e)
 ```
 
 
@@ -2234,6 +2147,93 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | All workspace data filters set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_workspace_permissions**
+> set_workspace_permissions(workspace_id, declarative_workspace_permissions)
+
+Set permissions for the workspace
+
+Set effective permissions for the workspace
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import layout_api
+from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    declarative_workspace_permissions = DeclarativeWorkspacePermissions(
+        hierarchy_permissions=[
+            DeclarativeWorkspaceHierarchyPermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="MANAGE",
+            ),
+        ],
+        permissions=[
+            DeclarativeSingleWorkspacePermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="MANAGE",
+            ),
+        ],
+    ) # DeclarativeWorkspacePermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the workspace
+        api_instance.set_workspace_permissions(workspace_id, declarative_workspace_permissions)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_workspace_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **declarative_workspace_permissions** | [**DeclarativeWorkspacePermissions**](DeclarativeWorkspacePermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Workspace permissions successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
