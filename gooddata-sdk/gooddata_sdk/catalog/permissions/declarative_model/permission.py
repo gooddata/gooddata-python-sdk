@@ -11,13 +11,13 @@ from gooddata_metadata_client.model.declarative_workspace_hierarchy_permission i
     DeclarativeWorkspaceHierarchyPermission,
 )
 from gooddata_metadata_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeSingleWorkspacePermission(Base):
-    name: str
+    name: str = attr.field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -27,7 +27,7 @@ class CatalogDeclarativeSingleWorkspacePermission(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeWorkspaceHierarchyPermission(Base):
-    name: str
+    name: str = attr.field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod
@@ -37,7 +37,7 @@ class CatalogDeclarativeWorkspaceHierarchyPermission(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDataSourcePermission(Base):
-    name: str
+    name: str = attr.field(validator=value_in_allowed)
     assignee: CatalogAssigneeIdentifier
 
     @staticmethod

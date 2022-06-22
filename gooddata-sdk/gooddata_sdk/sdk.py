@@ -5,6 +5,7 @@ from typing import Optional
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
+from gooddata_sdk.catalog.permissions.service import CatalogPermissionService
 from gooddata_sdk.catalog.user.service import CatalogUserService
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentService, CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient
@@ -53,6 +54,7 @@ class GoodDataSdk:
         self._insights = InsightService(self._client)
         self._tables = TableService(self._client)
         self._support = SupportService(self._client)
+        self._catalog_permission = CatalogPermissionService(self._client)
 
     @property
     def catalog_workspace(self) -> CatalogWorkspaceService:
@@ -89,3 +91,7 @@ class GoodDataSdk:
     @property
     def catalog_user(self) -> CatalogUserService:
         return self._catalog_user
+
+    @property
+    def catalog_permission(self) -> CatalogPermissionService:
+        return self._catalog_permission
