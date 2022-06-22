@@ -9,6 +9,16 @@ from cattrs import structure
 T = TypeVar("T", bound="Base")
 
 
+def value_in_allowed(instance: Type[Base], attribute: attr.Attribute, value: str) -> None:
+    client_class = instance.client_class()
+    allowed_values = client_class.allowed_values.get((attribute.name,))
+    if allowed_values is not None and value not in list(allowed_values.values()):
+        raise ValueError(
+            f"Allowed values for attribute {attribute.name} are: {', '.join(list(allowed_values.values()))}. "
+            f"But value {value} was passed."
+        )
+
+
 @attr.s
 class Base:
     @classmethod

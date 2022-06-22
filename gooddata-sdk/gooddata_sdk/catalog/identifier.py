@@ -11,7 +11,7 @@ from gooddata_metadata_client.model.label_identifier import LabelIdentifier
 from gooddata_metadata_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_metadata_client.model.user_group_identifier import UserGroupIdentifier
 from gooddata_metadata_client.model.workspace_identifier import WorkspaceIdentifier
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -35,7 +35,7 @@ class CatalogReferenceIdentifier(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogGrainIdentifier(Base):
     id: str
-    type: str
+    type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
     def client_class() -> Type[GrainIdentifier]:
@@ -45,7 +45,7 @@ class CatalogGrainIdentifier(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogAssigneeIdentifier(Base):
     id: str
-    type: str
+    type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
     def client_class() -> Type[AssigneeIdentifier]:
@@ -55,7 +55,7 @@ class CatalogAssigneeIdentifier(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupIdentifier(Base):
     id: str
-    type: str = "userGroup"
+    type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
     def client_class() -> Type[UserGroupIdentifier]:
@@ -65,7 +65,7 @@ class CatalogUserGroupIdentifier(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogLabelIdentifier(Base):
     id: str
-    type: str = "label"
+    type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
     def client_class() -> Type[LabelIdentifier]:
