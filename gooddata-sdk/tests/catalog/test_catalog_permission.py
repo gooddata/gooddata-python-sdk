@@ -10,7 +10,7 @@ import vcr
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import GoodDataApiClient, GoodDataSdk
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
-from gooddata_sdk.catalog.permissions.declarative_model.permission import (
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDataSourcePermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
@@ -26,7 +26,7 @@ gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="jso
 
 def _empty_permissions(sdk: GoodDataSdk, workspace_id: str) -> None:
     empty_permissions_e = CatalogDeclarativeWorkspacePermissions(permissions=[], hierarchy_permissions=[])
-    sdk.catalog_permission.set_declarative_permissions(
+    sdk.catalog_permission.put_declarative_permissions(
         workspace_id=workspace_id, declarative_workspace_permissions=empty_permissions_e
     )
     empty_permissions_o = sdk.catalog_permission.get_declarative_permissions(workspace_id=workspace_id)
@@ -102,7 +102,7 @@ def test_put_declarative_permissions(test_config):
     declarative_workspace_permissions = CatalogDeclarativeWorkspacePermissions.from_dict(data, camel_case=True)
 
     try:
-        sdk.catalog_permission.set_declarative_permissions(
+        sdk.catalog_permission.put_declarative_permissions(
             workspace_id=workspace_id, declarative_workspace_permissions=declarative_workspace_permissions
         )
         declarative_permissions_o = sdk.catalog_permission.get_declarative_permissions(workspace_id=workspace_id)

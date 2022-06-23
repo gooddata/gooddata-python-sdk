@@ -20,12 +20,10 @@ class CatalogUserDocument(Base):
         return JsonApiUserInDocument
 
     @classmethod
-    def create_user(
+    def init(
         cls, user_id: str, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None
     ) -> CatalogUserDocument:
-        attributes = CatalogUserAttributes(authentication_id=authentication_id)
-        relationships = CatalogUserRelationships.create_user_relationships(user_group_ids=user_group_ids)
-        user = CatalogUser(id=user_id, attributes=attributes, relationships=relationships)
+        user = CatalogUser.init(user_id=user_id, authentication_id=authentication_id, user_group_ids=user_group_ids)
         return cls(data=user)
 
     def update_user(self, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None) -> None:
@@ -44,6 +42,14 @@ class CatalogUser(Base):
     @staticmethod
     def client_class() -> Type[JsonApiUserIn]:
         return JsonApiUserIn
+
+    @classmethod
+    def init(
+        cls, user_id: str, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None
+    ) -> CatalogUser:
+        attributes = CatalogUserAttributes(authentication_id=authentication_id)
+        relationships = CatalogUserRelationships.create_user_relationships(user_group_ids=user_group_ids)
+        return cls(id=user_id, attributes=attributes, relationships=relationships)
 
     @property
     def get_user_groups(self) -> List[str]:

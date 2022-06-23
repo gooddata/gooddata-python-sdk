@@ -19,11 +19,8 @@ class CatalogUserGroupDocument(Base):
         return JsonApiUserGroupInDocument
 
     @classmethod
-    def create_user_group(
-        cls, user_group_id: str, user_group_parents_id: Optional[List[str]] = None
-    ) -> CatalogUserGroupDocument:
-        relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parents_id)
-        return cls(data=CatalogUserGroup(id=user_group_id, relationships=relationships))
+    def init(cls, user_group_id: str, user_group_parent_ids: Optional[List[str]] = None) -> CatalogUserGroupDocument:
+        return cls(data=CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids))
 
     def update_user_group(self, user_group_parents_id: Optional[List[str]] = None) -> None:
         relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parents_id)
@@ -39,6 +36,11 @@ class CatalogUserGroup(Base):
     def client_class() -> Type[JsonApiUserGroupIn]:
         return JsonApiUserGroupIn
 
+    @classmethod
+    def init(cls, user_group_id: str, user_group_parent_ids: Optional[List[str]] = None) -> CatalogUserGroup:
+        relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parent_ids)
+        return cls(id=user_group_id, relationships=relationships)
+
     @property
     def get_parents(self) -> List[str]:
         return self.relationships.get_parents if self.relationships is not None else []
@@ -50,12 +52,12 @@ class CatalogUserGroupRelationships(Base):
 
     @classmethod
     def create_user_group_relationships(
-        cls, user_group_parents_id: Optional[List[str]]
+        cls, user_group_parent_ids: Optional[List[str]]
     ) -> CatalogUserGroupRelationships:
         parents = None
-        if user_group_parents_id is not None:
+        if user_group_parent_ids is not None:
             parents = CatalogUserGroupParents(
-                data=[CatalogUserGroup(id=user_group_parent_id) for user_group_parent_id in user_group_parents_id]
+                data=[CatalogUserGroup(id=user_group_parent_id) for user_group_parent_id in user_group_parent_ids]
             )
         return cls(parents=parents)
 
