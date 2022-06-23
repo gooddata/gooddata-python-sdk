@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from gooddata_sdk import GoodDataApiClient
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
-from gooddata_sdk.catalog.permissions.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
+from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
 
 
 class CatalogPermissionService(CatalogServiceBase):
@@ -11,7 +11,7 @@ class CatalogPermissionService(CatalogServiceBase):
     def get_declarative_permissions(self, workspace_id: str) -> CatalogDeclarativeWorkspacePermissions:
         return CatalogDeclarativeWorkspacePermissions.from_api(self._layout_api.get_workspace_permissions(workspace_id))
 
-    def set_declarative_permissions(
+    def put_declarative_permissions(
         self, workspace_id: str, declarative_workspace_permissions: CatalogDeclarativeWorkspacePermissions
     ) -> None:
         self._layout_api.set_workspace_permissions(

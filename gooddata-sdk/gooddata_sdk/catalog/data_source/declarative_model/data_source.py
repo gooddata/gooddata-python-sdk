@@ -12,7 +12,7 @@ from gooddata_scan_client.model.test_definition_request import TestDefinitionReq
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
-from gooddata_sdk.catalog.permissions.declarative_model.permission import CatalogDeclarativeDataSourcePermission
+from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeDataSourcePermission
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
 BIGQUERY_TYPE = "BIGQUERY"

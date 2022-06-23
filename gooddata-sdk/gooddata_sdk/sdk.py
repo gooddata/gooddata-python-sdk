@@ -5,7 +5,7 @@ from typing import Optional
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
-from gooddata_sdk.catalog.permissions.service import CatalogPermissionService
+from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.user.service import CatalogUserService
 from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentService, CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient

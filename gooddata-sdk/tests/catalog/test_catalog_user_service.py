@@ -12,6 +12,8 @@ from gooddata_sdk.catalog.user.declarative_model.user_group import (
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
 )
+from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
+from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
 
@@ -45,17 +47,16 @@ def test_create_delete_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_new_user"]
     authentication_id = f"{user_id}_auth_id"
-    user_groups = [test_config["test_user_group"]]
+    user_group_ids = [test_config["test_user_group"]]
 
     try:
         assert len(sdk.catalog_user.list_users()) == 3
-        sdk.catalog_user.create_or_update_user(
-            user_id=user_id, authentication_id=authentication_id, user_groups=user_groups
-        )
+        user_e = CatalogUser.init(user_id=user_id, authentication_id=authentication_id, user_group_ids=user_group_ids)
+        sdk.catalog_user.create_or_update_user(user_e)
         user = sdk.catalog_user.get_user(user_id)
         assert len(sdk.catalog_user.list_users()) == 4
         assert user.id == user_id
-        assert user.get_user_groups == user_groups
+        assert user.get_user_groups == user_group_ids
         assert user.attributes.authentication_id == authentication_id
     finally:
         sdk.catalog_user.delete_user(user_id)
@@ -68,17 +69,18 @@ def test_update_user(test_config):
     user_id = test_config["test_user"]
     user = sdk.catalog_user.get_user(user_id)
     new_auth_id = f"{user_id}_123"
-    new_user_groups = ["demoGroup", "visitorsGroup"]
+    user_group_ids = ["demoGroup", "visitorsGroup"]
     try:
-        sdk.catalog_user.create_or_update_user(user_id, new_auth_id, new_user_groups)
+        user_e = CatalogUser.init(user_id=user_id, authentication_id=new_auth_id, user_group_ids=user_group_ids)
+        sdk.catalog_user.create_or_update_user(user_e)
         updated_user = sdk.catalog_user.get_user(user_id)
         assert updated_user.attributes.authentication_id == new_auth_id
-        assert len(updated_user.get_user_groups) == len(new_user_groups)
-        assert set(updated_user.get_user_groups) == set(new_user_groups)
+        assert len(updated_user.get_user_groups) == len(user_group_ids)
+        assert set(updated_user.get_user_groups) == set(user_group_ids)
 
     finally:
         sdk.catalog_user.delete_user(user_id)
-        sdk.catalog_user.create_or_update_user(user.id, user.attributes.authentication_id, user.get_user_groups)
+        sdk.catalog_user.create_or_update_user(user)
         assert len(sdk.catalog_user.list_users()) == 3
 
 
@@ -109,17 +111,16 @@ def test_get_user_group(test_config):
 def test_create_delete_user_group(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_group_id = test_config["test_new_user_group"]
-    user_group_parents_id = [test_config["test_user_group"]]
+    user_group_parent_ids = [test_config["test_user_group"]]
 
     try:
         assert len(sdk.catalog_user.list_user_groups()) == 4
-        sdk.catalog_user.create_or_update_user_group(
-            user_group_id=user_group_id, user_group_parents_id=user_group_parents_id
-        )
+        user_group_e = CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids)
+        sdk.catalog_user.create_or_update_user_group(user_group_e)
         user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert len(sdk.catalog_user.list_user_groups()) == 5
         assert user_group.id == user_group_id
-        assert [p.id for p in user_group.relationships.parents.data] == user_group_parents_id
+        assert [p.id for p in user_group.relationships.parents.data] == user_group_parent_ids
     finally:
         sdk.catalog_user.delete_user_group(user_group_id)
         assert len(sdk.catalog_user.list_user_groups()) == 4
@@ -131,16 +132,17 @@ def test_update_user_group(test_config):
     user_group_id = test_config["test_user_group"]
     user_group = sdk.catalog_user.get_user_group(user_group_id)
     user_group_parent_ids = []
+    assert len(sdk.catalog_user.list_user_groups()) == 4
 
     try:
-        sdk.catalog_user.create_or_update_user_group(user_group_id, user_group_parent_ids)
+        user_group_e = CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids)
+        sdk.catalog_user.create_or_update_user_group(user_group_e)
         updated_user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert user_group.id == updated_user_group.id
         assert len(updated_user_group.get_parents) == len(user_group_parent_ids)
         assert set(updated_user_group.get_parents) == set(user_group_parent_ids)
     finally:
-        sdk.catalog_user.delete_user(user_group_id)
-        sdk.catalog_user.create_or_update_user_group(user_group_id, user_group.get_parents)
+        sdk.catalog_user.create_or_update_user_group(user_group)
         assert len(sdk.catalog_user.list_user_groups()) == 4
 
 

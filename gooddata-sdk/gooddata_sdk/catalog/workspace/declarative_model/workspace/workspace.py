@@ -16,7 +16,7 @@ from gooddata_metadata_client.model.declarative_workspace_model import Declarati
 from gooddata_metadata_client.model.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
-from gooddata_sdk.catalog.permissions.declarative_model.permission import (
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
 )
