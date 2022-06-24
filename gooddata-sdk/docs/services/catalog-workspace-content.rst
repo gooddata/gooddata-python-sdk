@@ -1,3 +1,5 @@
+:orphan:
+
 Catalog Workspace Content Service
 *********************************
 
@@ -15,6 +17,8 @@ The service supports two types of methods:
 
 * Entity methods let you work with workspace content on a high level using simplified entities.
 * Declarative methods allow you to work with workspace content on a more granular level by fetching entire workspace content layouts, including all of their nested objects.
+
+.. _wc entity methods:
 
 Entity methods
 ^^^^^^^^^^^^^^
@@ -57,6 +61,8 @@ The *gooddata_sdk.catalog_workspace_content* supports the following entity API c
 
     # Read list of facts for demo workspace
     facts = sdk.catalog_workspace_content.get_facts_catalog(workspace_id)
+
+.. _wc declarative methods:
 
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^
@@ -163,17 +169,20 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
     token = "some_user_token"
     sdk = GoodDataSdk.create(host, token)
 
+    workspace_id = "demo"
+
     # Get ldm object afterward you can modify it
-    ldm = sdk.catalog_workspace_content.get_declarative_ldm("demo")
+    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id=workspace_id)
 
     # Modify data source id for datasets
     ldm.modify_mapped_data_source({"demo-test-ds": "demo-prod-ds"})
 
     # Put ldm object back to server
-    sdk.catalog_workspace_content.put_declarative_ldm("demo", ldm)
+    sdk.catalog_workspace_content.put_declarative_ldm(workspace_id=workspace_id, ldm=ldm)
 
     # Get analytics model object afterward you can modify it
-    analytics_model = sdk.catalog_workspace_content.get_declarative_analytics_model("demo")
+    analytics_model = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id=workspace_id)
 
     # Put analytics model object back to server
-    sdk.catalog_workspace_content.put_declarative_analytics_model("demo", analytics_model)
+    sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id=workspace_id,
+                                                                  analytics_model=analytics_model)

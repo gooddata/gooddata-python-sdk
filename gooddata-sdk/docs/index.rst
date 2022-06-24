@@ -1,7 +1,7 @@
 GoodData Python SDK Documentation
 *********************************
 
-GoodData Python SDK provides a clean and convenient Python API to interact with GoodData.CN.
+GoodData Python SDK provides a clean and convenient Python API to interact with GoodData.CN and GoodData Cloud.
 
 At the moment the SDK provides services to inspect and interact with the semantic layer and to consume analytics.
 

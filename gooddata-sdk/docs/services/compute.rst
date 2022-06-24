@@ -1,3 +1,5 @@
+:orphan:
+
 Compute Service
 ***************
 
@@ -7,6 +9,8 @@ dimensions that influence how to organize the data in the result.
 
 Higher level services like Table service use Compute service to execute computation in GoodData.CN.
 Higher level service is also responsible for results presentation to the user e.g. in tabular form.
+
+.. _c entity methods:
 
 Entity methods
 ^^^^^^^^^^^^^^

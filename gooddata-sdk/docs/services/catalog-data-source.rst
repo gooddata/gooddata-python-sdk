@@ -1,3 +1,5 @@
+:orphan:
+
 Catalog Data Source Service
 ***************************
 
@@ -16,6 +18,8 @@ The service supports three types of methods:
 * Entity methods let you work with data sources on a high level using simplified *CatalogDataSource* entities.
 * Declarative methods allow you to work with data sources on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 * Action methods let you perform an execution of some form of computation.
+
+.. _ds entity methods:
 
 Entity methods
 ^^^^^^^^^^^^^^
@@ -51,6 +55,17 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
 .. code-block:: python
 
     from gooddata_sdk import GoodDataSdk
+    from gooddata_sdk import (
+        CatalogDataSource,
+        BasicCredentials,
+        CatalogDataSourcePostgres,
+        PostgresAttributes,
+        CatalogDataSourceSnowflake,
+        SnowflakeAttributes,
+        CatalogDataSourceBigQuery,
+        BigQueryAttributes,
+        TokenCredentialsFromFile
+    )
 
     # GoodData.CN host in the form of uri eg. "http://localhost:3000"
     host = "http://localhost:3000"
@@ -136,13 +151,16 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
     data_sources = sdk.catalog_data_source.list_data_sources()
 
     # Get single data source
-    data_sources = sdk.catalog_data_source.get_data_source('ds_id')
-
-    # Delete data source
-    sdk.catalog_data_source.delete_data_source(data_source_id='ds_id')
+    data_sources = sdk.catalog_data_source.get_data_source(data_source_id='test')
 
     # Patch data source attribute(s)
-    sdk.catalog_data_source.patch_data_source_attributes(data_source_id="ds_id", attributes={"name": "Name2"})
+    sdk.catalog_data_source.patch_data_source_attributes(data_source_id="test",
+                                                         attributes={"name": "Name2"})
+
+    # Delete data source
+    sdk.catalog_data_source.delete_data_source(data_source_id='test')
+
+.. _ds declarative methods:
 
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^
@@ -211,7 +229,11 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
     # CatalogDeclarativeDataSource(id=demo-test-ds, type=POSTGRESQL)
 
     # Put data sources with credentials and test data source connection before put
-    sdk.catalog_data_source.put_declarative_data_sources(data_sources, Path("credentials"), True)
+    sdk.catalog_data_source.put_declarative_data_sources(declarative_data_sources=ds_objects,
+                                                        credentials_path=Path("credentials"),
+                                                        test_data_sources=True)
+
+.. _ds action methods:
 
 Action methods
 ^^^^^^^^^^^^^^
@@ -256,19 +278,22 @@ The *gooddata_sdk.catalog_data_source* supports the following action API calls:
     token = "some_user_token"
     sdk = GoodDataSdk.create(host, token)
 
+    data_source_id = "demo-test-ds"
+
     # Scan schemata of the data source
-    schemata = sdk.catalog_data_source.scan_schemata("demo-test-ds")
+    schemata = sdk.catalog_data_source.scan_schemata(data_source_id=data_source_id)
     print(schemata)
     # ['demo']
 
     # Scan and put pdm
-    sdk.catalog_data_source.scan_and_put_pdm("demo-test-ds")
+    sdk.catalog_data_source.scan_and_put_pdm(data_source_id=data_source_id)
 
     # Define request for generating ldm
     generate_ldm_request = CatalogGenerateLdmRequest(separator="__")
 
     # Generate ldm
-    declarative_model = sdk.catalog_data_source.generate_logical_model("demo-test-ds", generate_ldm_request)
+    declarative_model = sdk.catalog_data_source.generate_logical_model(data_source_id=data_source_id,
+                                                                       generate_ldm_request=generate_ldm_request)
 
     # Invalidate cache of your computed reports
-    sdk.catalog_data_source.register_upload_notification("demo-test-ds")
+    sdk.catalog_data_source.register_upload_notification(data_source_id=data_source_id)
