@@ -6,8 +6,8 @@ You can build and run it as a service in your Docker environment (recommended) o
 Requirements
 =============
 
--  Python 3.7 or newer
--  GoodData.CN installation; either running on your cloud infrastructure or the free Community Edition running on your workstation
+- Python 3.7 or newer
+- GoodData.CN or GoodData Cloud
 
 Install Using Docker (Recommended)
 ==================================

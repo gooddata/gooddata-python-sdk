@@ -12,7 +12,6 @@ REQUIRES = [
     'importlib-metadata >= 1.0 ; python_version >= "3.7"',
 ]
 
-
 setup(
     name="gooddata-pandas",
     description="GoodData.CN to pandas",
