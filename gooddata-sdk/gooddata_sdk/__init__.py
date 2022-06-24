@@ -29,6 +29,8 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import Catalog
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
+from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
+from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
