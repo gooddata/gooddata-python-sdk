@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import List
 
 import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
-from gooddata_sdk import GoodDataApiClient, GoodDataSdk
+from gooddata_sdk import CatalogDeclarativeUsersUserGroups, GoodDataApiClient, GoodDataSdk
+from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser
 from gooddata_sdk.catalog.user.declarative_model.user_group import (
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
@@ -157,8 +159,7 @@ def test_get_declarative_users(test_config):
 
     users = sdk.catalog_user.get_declarative_users()
 
-    assert len(users.users) == 3
-    assert [user.id for user in users.users] == ["admin", "demo", "demo2"]
+    _assert_users_default(users.users)
     assert users.to_dict(camel_case=True) == layout_api.get_users_layout().to_dict(camel_case=True)
 
 
@@ -169,6 +170,8 @@ def test_store_declarative_users(test_config):
     create_directory(path)
 
     users_e = sdk.catalog_user.get_declarative_users()
+    _assert_users_default(users_e.users)
+
     sdk.catalog_user.store_declarative_users(path)
     users_o = sdk.catalog_user.load_declarative_users(path)
 
@@ -180,6 +183,7 @@ def test_store_declarative_users(test_config):
 def test_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users_e = sdk.catalog_user.get_declarative_users()
+    _assert_users_default(users_e.users)
 
     try:
         _clear_users(sdk)
@@ -197,6 +201,7 @@ def test_load_and_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
     users_e = sdk.catalog_user.get_declarative_users()
+    _assert_users_default(users_e.users)
 
     try:
         _clear_users(sdk)
@@ -220,13 +225,7 @@ def test_get_declarative_user_groups(test_config):
 
     user_groups = sdk.catalog_user.get_declarative_user_groups()
 
-    assert len(user_groups.user_groups) == 4
-    assert set(user_group.id for user_group in user_groups.user_groups) == {
-        "adminGroup",
-        "demoGroup",
-        "adminQA1Group",
-        "visitorsGroup",
-    }
+    _assert_user_groups_default(user_groups.user_groups)
     assert user_groups.to_dict(camel_case=True) == layout_api.get_user_groups_layout().to_dict(camel_case=True)
 
 
@@ -237,6 +236,8 @@ def test_store_declarative_user_groups(test_config):
     create_directory(path)
 
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
+    _assert_user_groups_default(user_groups_e.user_groups)
+
     sdk.catalog_user.store_declarative_user_groups(path)
     user_groups_o = sdk.catalog_user.load_declarative_user_groups(path)
 
@@ -250,6 +251,9 @@ def test_put_declarative_user_groups(test_config):
     user_groups_path = _current_dir / "expected" / "declarative_user_groups.json"
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
     users_e = sdk.catalog_user.get_declarative_users()
+
+    _assert_user_groups_default(user_groups_e.user_groups)
+    _assert_users_default(users_e.users)
 
     try:
         _clear_users(sdk)
@@ -276,6 +280,9 @@ def test_load_and_put_declarative_user_groups(test_config):
     users_e = sdk.catalog_user.get_declarative_users()
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
 
+    _assert_user_groups_default(user_groups_e.user_groups)
+    _assert_users_default(users_e.users)
+
     try:
         _clear_users(sdk)
         _clear_user_groups(sdk)
@@ -293,7 +300,94 @@ def test_load_and_put_declarative_user_groups(test_config):
         sdk.catalog_user.put_declarative_users(users_e)
 
 
+# DECLARATIVE USERS AND USER GROUPS
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_users_user_groups.json"))
+def test_get_declarative_users_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+
+    users_user_groups = sdk.catalog_user.get_declarative_users_user_groups()
+
+    _assert_users_user_groups_default(users_user_groups)
+    assert users_user_groups.to_dict(camel_case=True) == layout_api.get_users_user_groups_layout().to_dict(
+        camel_case=True
+    )
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_users_user_groups.json"))
+def test_store_declarative_users_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    create_directory(path)
+
+    users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
+    _assert_users_user_groups_default(users_user_groups_e)
+
+    sdk.catalog_user.store_declarative_users_user_groups(path)
+    users_user_groups_o = sdk.catalog_user.load_declarative_users_user_groups(path)
+
+    assert users_user_groups_e == users_user_groups_o
+    assert users_user_groups_e.to_dict(camel_case=True) == users_user_groups_o.to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users_user_groups.json"))
+def test_put_declarative_users_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
+    _assert_users_user_groups_default(users_user_groups_e)
+
+    try:
+        _clear_users(sdk)
+        _clear_user_groups(sdk)
+
+        sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+        users_user_groups_o = sdk.catalog_user.get_declarative_users_user_groups()
+        assert users_user_groups_e == users_user_groups_o
+        assert users_user_groups_e.to_dict(camel_case=True) == users_user_groups_o.to_dict(camel_case=True)
+    finally:
+        sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users_user_groups.json"))
+def test_load_and_put_declarative_users_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load"
+    users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
+    _assert_users_user_groups_default(users_user_groups_e)
+
+    try:
+        _clear_users(sdk)
+        _clear_user_groups(sdk)
+
+        sdk.catalog_user.load_and_put_declarative_users_user_groups(path)
+        users_user_groups_o = sdk.catalog_user.get_declarative_users_user_groups()
+        _assert_users_user_groups_default(users_user_groups_o)
+    finally:
+        sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+
+
 # Help functions
+
+
+def _assert_users_default(users: List[CatalogDeclarativeUser]):
+    assert len(users) == 3
+    assert [user.id for user in users] == ["admin", "demo", "demo2"]
+
+
+def _assert_user_groups_default(user_groups: List[CatalogDeclarativeUserGroup]):
+    assert len(user_groups) == 4
+    assert set(user_group.id for user_group in user_groups) == {
+        "adminGroup",
+        "demoGroup",
+        "adminQA1Group",
+        "visitorsGroup",
+    }
+
+
+def _assert_users_user_groups_default(users_user_groups: CatalogDeclarativeUsersUserGroups):
+    _assert_users_default(users_user_groups.users)
+    _assert_user_groups_default(users_user_groups.user_groups)
 
 
 def _clear_users(sdk: GoodDataSdk) -> None:

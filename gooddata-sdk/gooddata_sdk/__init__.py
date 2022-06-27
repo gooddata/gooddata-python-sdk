@@ -26,6 +26,9 @@ from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceVa
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
+from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
+from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
+from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,

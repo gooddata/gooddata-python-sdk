@@ -8,6 +8,7 @@ from typing import List
 from gooddata_metadata_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
+from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser, CatalogUserDocument
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup, CatalogUserGroupDocument
@@ -107,3 +108,23 @@ class CatalogUserService(CatalogServiceBase):
     def load_and_put_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
         declarative_user_groups = self.load_declarative_user_groups(layout_root_path)
         self.put_declarative_user_groups(declarative_user_groups)
+
+    def get_declarative_users_user_groups(self) -> CatalogDeclarativeUsersUserGroups:
+        return CatalogDeclarativeUsersUserGroups.from_api(self._layout_api.get_users_user_groups_layout())
+
+    def put_declarative_users_user_groups(self, users_user_groups: CatalogDeclarativeUsersUserGroups) -> None:
+        self._layout_api.put_users_user_groups_layout(declarative_users_user_groups=users_user_groups.to_api())
+
+    def load_declarative_users_user_groups(
+        self, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeUsersUserGroups:
+        return CatalogDeclarativeUsersUserGroups.load_from_disk(
+            layout_organization_folder=self.layout_organization_folder(layout_root_path)
+        )
+
+    def store_declarative_users_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        self.get_declarative_users_user_groups().store_to_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_and_put_declarative_users_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        declarative_users_user_groups = self.load_declarative_users_user_groups(layout_root_path)
+        self.put_declarative_users_user_groups(declarative_users_user_groups)
