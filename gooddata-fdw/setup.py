@@ -32,7 +32,7 @@ setup(
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.7",
