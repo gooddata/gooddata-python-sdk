@@ -17,6 +17,8 @@ The service supports three types of methods:
 * Declarative methods allow you to work with data sources on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 * Action methods let you perform an execution of some form of computation.
 
+.. _ds entity Methods:
+
 Entity methods
 ^^^^^^^^^^^^^^
 
@@ -144,6 +146,8 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
     # Patch data source attribute(s)
     sdk.catalog_data_source.patch_data_source_attributes(data_source_id="ds_id", attributes={"name": "Name2"})
 
+.. _ds declarative methods:
+
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^
 
@@ -212,6 +216,8 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
 
     # Put data sources with credentials and test data source connection before put
     sdk.catalog_data_source.put_declarative_data_sources(data_sources, Path("credentials"), True)
+
+.. _ds action methods:
 
 Action methods
 ^^^^^^^^^^^^^^

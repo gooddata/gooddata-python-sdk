@@ -14,6 +14,8 @@ The service supports two types of methods:
 * Entity methods let you work with workspaces on a high level using simplified *CatalogWorkspace* entities.
 * Declarative methods allow you to work with workspaces on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 
+.. _w entity methods:
+
 Entity methods
 ^^^^^^^^^^^^^^
 
@@ -81,6 +83,8 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
 
     # Delete workspace
     sdk.catalog_workspace.delete_workspace("demo")
+
+.. _w declarative methods:
 
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^

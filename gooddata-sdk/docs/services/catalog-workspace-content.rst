@@ -16,6 +16,8 @@ The service supports two types of methods:
 * Entity methods let you work with workspace content on a high level using simplified entities.
 * Declarative methods allow you to work with workspace content on a more granular level by fetching entire workspace content layouts, including all of their nested objects.
 
+.. _wc entity methods:
+
 Entity methods
 ^^^^^^^^^^^^^^
 
@@ -57,6 +59,8 @@ The *gooddata_sdk.catalog_workspace_content* supports the following entity API c
 
     # Read list of facts for demo workspace
     facts = sdk.catalog_workspace_content.get_facts_catalog(workspace_id)
+
+.. _wc declarative methods:
 
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^

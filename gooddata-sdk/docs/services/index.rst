@@ -22,38 +22,30 @@ To create an instance of GoodDataSdk:
 
 **Supported services:**
 
-* :doc:`Catalog Workspace <catalog-workspace>`: ``gooddata_sdk.catalog_workspace``
+* :doc:`Catalog Workspace <catalog-workspace>`: Read, update, create and delete workspaces.
 
-   Read, update, create and delete workspaces.
+   * :ref:`w entity methods`
+   * :ref:`w declarative methods`
 
-* :doc:`Catalog Workspace Content <catalog-workspace-content>`: ``gooddata_sdk.catalog_workspace_content``
+* :doc:`Catalog Workspace Content <catalog-workspace-content>`: Read catalog objects (datasets and metrics) from a workspace.
 
-   Read catalog objects (datasets and metrics) from a workspace.
+   * :ref:`wc entity methods`
+   * :ref:`wc declarative methods`
 
-* :doc:`Catalog Data Source <catalog-data-source>`: ``gooddata_sdk.catalog_data_source``
+* :doc:`Catalog Data Source <catalog-data-source>`: Read, update, create and delete data sources and read their tables.
 
-   Read, update, create and delete data sources and read their tables.
+   * :ref:`ds entity methods`
+   * :ref:`ds declarative methods`
+   * :ref:`ds action methods`
 
-* :doc:`Insights <insight>`: ``gooddata_sdk.insights``
+* :doc:`Insights <insight>`: Read insights stored in a workspace.
 
-   Read insights stored in a workspace.
+   * :ref:`i entity methods`
 
-* :doc:`Compute <compute>`: ``gooddata_sdk.compute``
+* :doc:`Compute <compute>`: Drives computation of analytics for GoodData.CN workspaces. Used by higher level services such as the Table service.
 
-    Drives computation of analytics for GoodData.CN workspaces. Used by higher level services such as the Table service.
+   * :ref:`c entity methods`
 
-* :doc:`Table <table>`: ``gooddata_sdk.table``
+* :doc:`Table <table>`: Compute and read analytics in typical tabular format.
 
-   Compute and read analytics in typical tabular format.
-
-**All service-related articles:**
-
-.. toctree::
-   :maxdepth: 2
-
-   catalog-workspace
-   catalog-workspace-content
-   catalog-data-source
-   insight
-   compute
-   table
+   * :ref:`t entity methods`
