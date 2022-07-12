@@ -22,38 +22,46 @@ To create an instance of GoodDataSdk:
 
 **Supported services:**
 
-* :doc:`Catalog Workspace <catalog-workspace>`: ``gooddata_sdk.catalog_workspace``
+* :doc:`Catalog Workspace <catalog-workspace>`: Read, update, create and delete workspaces.
 
-   Read, update, create and delete workspaces.
+   * :ref:`w entity methods`
+   * :ref:`w declarative methods`
 
-* :doc:`Catalog Workspace Content <catalog-workspace-content>`: ``gooddata_sdk.catalog_workspace_content``
+* :doc:`Catalog Workspace Content <catalog-workspace-content>`: Read catalog objects (datasets and metrics) from a workspace.
 
-   Read catalog objects (datasets and metrics) from a workspace.
+   * :ref:`wc entity methods`
+   * :ref:`wc declarative methods`
 
-* :doc:`Catalog Data Source <catalog-data-source>`: ``gooddata_sdk.catalog_data_source``
+* :doc:`Catalog Data Source <catalog-data-source>`: Read, update, create and delete data sources and read their tables.
 
-   Read, update, create and delete data sources and read their tables.
+   * :ref:`ds entity methods`
+   * :ref:`ds declarative methods`
+   * :ref:`ds action methods`
 
-* :doc:`Insights <insight>`: ``gooddata_sdk.insights``
+* :doc:`Catalog User <catalog-user>`: Read, update, create and delete user and user groups.
 
-   Read insights stored in a workspace.
+   * :ref:`u entity methods`
+   * :ref:`ug entity methods`
+   * :ref:`u declarative methods`
+   * :ref:`ug declarative methods`
+   * :ref:`uug declarative methods`
 
-* :doc:`Compute <compute>`: ``gooddata_sdk.compute``
+* :doc:`Catalog Permission <catalog-permission>`: Read, update workspace permissions.
 
-    Drives computation of analytics for GoodData.CN workspaces. Used by higher level services such as the Table service.
+   * :ref:`p declarative methods`
 
-* :doc:`Table <table>`: ``gooddata_sdk.table``
+* :doc:`Catalog Organization <catalog-organization>`: Update organization name, OIDC parameters.
 
-   Compute and read analytics in typical tabular format.
+   * :ref:`o entity methods`
 
-**All service-related articles:**
+* :doc:`Insights <insight>`: Read insights stored in a workspace.
 
-.. toctree::
-   :maxdepth: 2
+   * :ref:`i entity methods`
 
-   catalog-workspace
-   catalog-workspace-content
-   catalog-data-source
-   insight
-   compute
-   table
+* :doc:`Compute <compute>`: Drives computation of analytics for GoodData.CN workspaces. Used by higher level services such as the Table service.
+
+   * :ref:`c entity methods`
+
+* :doc:`Table <table>`: Compute and read analytics in typical tabular format.
+
+   * :ref:`t entity methods`

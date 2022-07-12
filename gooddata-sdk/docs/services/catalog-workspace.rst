@@ -1,3 +1,5 @@
+:orphan:
+
 Catalog Workspace Service
 *************************
 
@@ -7,12 +9,14 @@ on workspaces:
 * Get and list existing workspaces
 * Update or delete existing workspaces
 * Create new workspaces
-* Store and restore workspaces from yaml files
+* Store and restore workspaces from directory layout structure
 
 The service supports two types of methods:
 
 * Entity methods let you work with workspaces on a high level using simplified *CatalogWorkspace* entities.
 * Declarative methods allow you to work with workspaces on a more granular level by fetching entire workspace layouts, including all of their nested objects.
+
+.. _w entity methods:
 
 Entity methods
 ^^^^^^^^^^^^^^
@@ -33,17 +37,17 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
 
 * ``create_or_update(workspace: CatalogWorkspace)``
 
-    Create a new workspace or overwrite an existing workspace with the same id
+    Create a new workspace or overwrite an existing workspace with the same id.
 
 * ``delete_workspace(workspace_id: str)``
 
-    Delete a workspace
+    Delete a workspace.
 
 **Example Usage**
 
 .. code-block:: python
 
-    from gooddata_sdk import GoodDataSdk
+    from gooddata_sdk import GoodDataSdk, CatalogWorkspace
 
     # GoodData.CN host in the form of uri eg. "http://localhost:3000"
     host = "http://localhost:3000"
@@ -62,25 +66,29 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
     # ]
 
     # Create new workspace entity locally
-    my_workspace_object = CatalogWorkspace(id="test_demo", name="Test demo", parent_id="demo")
+    my_workspace_object = CatalogWorkspace(workspace_id="test_demo",
+                                           name="Test demo",
+                                           parent_id="demo")
 
     # Create workspace
-    sdk.catalog_workspace.create_or_update(my_workspace_object)
+    sdk.catalog_workspace.create_or_update(workspace=my_workspace_object)
 
     # Edit local workspace entity
     my_workspace_object.name = "Test"
 
     # Update workspace
-    sdk.catalog_workspace.create_or_update(my_workspace_object)
+    sdk.catalog_workspace.create_or_update(workspace=my_workspace_object)
 
     # Get workspace
-    workspace = sdk.catalog_workspace.get_workspace("demo")
+    workspace = sdk.catalog_workspace.get_workspace(workspace_id="test_demo")
 
     print(workspace)
-    # CatalogWorkspace(id=demo, name=Demo)
+    # CatalogWorkspace(id=test_demo, name=Test)
 
     # Delete workspace
-    sdk.catalog_workspace.delete_workspace("demo")
+    sdk.catalog_workspace.delete_workspace(workspace_id="test_demo")
+
+.. _w declarative methods:
 
 Declarative methods
 ^^^^^^^^^^^^^^^^^^^
@@ -166,19 +174,20 @@ The *gooddata_sdk.catalog_workspace* supports the following declarative API call
     token = "some_user_token"
     sdk = GoodDataSdk.create(host, token)
 
-    backup_path = Path("workspace_hierarchy_backup.yaml")
+    backup_path = Path("workspace_hierarchy_backup")
 
     # First create a backup of all workspace layout
-    sdk.catalog_workspace.store_declarative_workspaces(backup_path)
+    sdk.catalog_workspace.store_declarative_workspaces(layout_root_path=backup_path)
 
     # Get workspace layout
-    workspace_layout = sdk.catalog_workspace.get_declarative_workspace("demo")
+    workspace_layout = sdk.catalog_workspace.get_declarative_workspace(workspace_id="demo")
 
     # Modify workspace layout
-    workspace_layout.ldm.datasets = []
+    workspace_layout.ldm.datasets[0].description = "This is test"
 
     # Update the workspace layout on the server with your changes
-    workspace_layout.put_declarative_workspace(workspace_layout)
+    sdk.catalog_workspace.put_declarative_workspace(workspace_id="demo",
+                                                    workspace=workspace_layout)
 
     # If something goes wrong, use your backup to restore your workspaces from backup
-    sdk.catalog_workspace.load_and_put_declarative_workspaces(backup_path)
+    sdk.catalog_workspace.load_and_put_declarative_workspaces(layout_root_path=backup_path)

@@ -21,7 +21,7 @@ print(f"sys.path = {sys.path}")
 print(f"os.getcwd() = {os.getcwd()}")
 
 project = "GoodData Pandas"
-copyright = "2021, GoodData Corporation"
+copyright = "2021-2022, GoodData Corporation"
 author = "GoodData Corporation"
 
 # The full version, including alpha/beta/rc tags

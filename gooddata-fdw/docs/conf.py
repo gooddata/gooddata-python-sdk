@@ -23,7 +23,7 @@ print(f"os.getcwd() = {os.getcwd()}")
 # -- Project information -----------------------------------------------------
 
 project = "GoodData Foreign Data Wrapper"
-copyright = "2021, GoodData Corporation"
+copyright = "2021-2022, GoodData Corporation"
 author = "GoodData Corporation"
 
 # The full version, including alpha/beta/rc tags
