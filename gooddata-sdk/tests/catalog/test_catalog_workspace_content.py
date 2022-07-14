@@ -7,11 +7,13 @@ from unittest.mock import MagicMock
 
 import vcr
 
-from gooddata_sdk import CatalogWorkspace, DataSourceValidator, GoodDataSdk
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
+from gooddata_sdk import (
     CatalogDeclarativeAnalytics,
+    CatalogDeclarativeModel,
+    CatalogWorkspace,
+    DataSourceValidator,
+    GoodDataSdk,
 )
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
 

@@ -7,6 +7,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 from gooddata_sdk._version import __version__
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
+from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     BigQueryAttributes,
@@ -24,13 +25,27 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
+from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
-from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
-from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
+    CatalogAssigneeIdentifier,
+    CatalogDeclarativeDataSourcePermission,
+    CatalogDeclarativeSingleWorkspacePermission,
+    CatalogDeclarativeWorkspaceHierarchyPermission,
+    CatalogDeclarativeWorkspacePermissions,
+)
+from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
-from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
+from gooddata_sdk.catalog.user.declarative_model.user_group import (
+    CatalogDeclarativeUserGroup,
+    CatalogDeclarativeUserGroups,
+)
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
+    CatalogDeclarativeAnalytics,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,

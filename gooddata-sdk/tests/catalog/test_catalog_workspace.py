@@ -7,12 +7,13 @@ from pathlib import Path
 import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
-from gooddata_sdk import GoodDataApiClient, GoodDataSdk
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaces,
+    CatalogWorkspace,
+    GoodDataApiClient,
+    GoodDataSdk,
 )
-from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
 
