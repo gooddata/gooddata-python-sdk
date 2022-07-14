@@ -14,7 +14,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 - python-dateutil (2.8.2) [Apache-2.0, BSD-3-Clause]
 - six (1.16.0) [MIT]
-- urllib3 (1.26.8) [MIT, Apache-2.0]
+- urllib3 (1.26.9) [MIT, Apache-2.0]
 
 
 --------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 --------------------------------------------------------------------------------
-urllib3 (1.26.8)
+urllib3 (1.26.9)
 --------------------------------------------------------------------------------
 
 * Declared Licenses *
