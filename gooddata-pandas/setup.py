@@ -7,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-sdk~=0.8.0",
+    "gooddata-sdk~=1.0.0",
     "pandas>=1.0.0,<2.0.0",
     'importlib-metadata >= 1.0 ; python_version >= "3.7"',
 ]
@@ -17,7 +17,7 @@ setup(
     description="GoodData.CN to pandas",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="0.8.0",
+    version="1.0.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
