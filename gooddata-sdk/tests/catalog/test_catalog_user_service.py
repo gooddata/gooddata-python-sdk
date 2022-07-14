@@ -8,14 +8,16 @@ from typing import List
 import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
-from gooddata_sdk import CatalogDeclarativeUsersUserGroups, GoodDataApiClient, GoodDataSdk
-from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser
-from gooddata_sdk.catalog.user.declarative_model.user_group import (
+from gooddata_sdk import (
+    CatalogDeclarativeUser,
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
+    CatalogDeclarativeUsersUserGroups,
+    CatalogUser,
+    CatalogUserGroup,
+    GoodDataApiClient,
+    GoodDataSdk,
 )
-from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
-from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 from gooddata_sdk.utils import create_directory
 from tests import VCR_MATCH_ON
 

@@ -12,6 +12,7 @@ import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
+    BasicCredentials,
     BigQueryAttributes,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
@@ -19,6 +20,7 @@ from gooddata_sdk import (
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    CatalogDeclarativeDataSources,
     CatalogScanModelRequest,
     ExecutionDefinition,
     GoodDataApiClient,
@@ -26,10 +28,9 @@ from gooddata_sdk import (
     PostgresAttributes,
     RedshiftAttributes,
     SnowflakeAttributes,
+    TokenCredentialsFromFile,
     VerticaAttributes,
 )
-from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
-from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
 from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()

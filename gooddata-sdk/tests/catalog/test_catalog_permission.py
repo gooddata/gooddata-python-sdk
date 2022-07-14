@@ -8,13 +8,14 @@ import pytest
 import vcr
 
 import gooddata_metadata_client.apis as metadata_apis
-from gooddata_sdk import GoodDataApiClient, GoodDataSdk
-from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
-from gooddata_sdk.catalog.permission.declarative_model.permission import (
+from gooddata_sdk import (
+    CatalogAssigneeIdentifier,
     CatalogDeclarativeDataSourcePermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
+    GoodDataApiClient,
+    GoodDataSdk,
 )
 from tests import VCR_MATCH_ON
 

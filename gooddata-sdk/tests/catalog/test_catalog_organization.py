@@ -5,8 +5,7 @@ from pathlib import Path
 
 import vcr
 
-from gooddata_sdk import GoodDataSdk
-from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
+from gooddata_sdk import CatalogOrganization, GoodDataSdk
 from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()
