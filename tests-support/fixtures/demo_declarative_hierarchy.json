@@ -1305,7 +1305,7 @@
                               "popAttribute": {
                                 "identifier": {
                                   "id": "date.year",
-                                  "type": "label"
+                                  "type": "attribute"
                                 }
                               }
                             }
