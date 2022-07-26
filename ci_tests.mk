@@ -20,6 +20,12 @@ ifdef ADD_ARGS
 	LOCAL_ADD_ARGS := -e 'ADD_ARGS=$(ADD_ARGS)'
 endif
 
+LOCAL_HOST_NETWORK =
+ifeq (1,$(HOST_NETWORK))
+	LOCAL_HOST_NETWORK := --network=host
+endif
+
+
 # Docker image has default target "make test". When test-ci is called from the project, drill down
 # to the project directory so that only tests for given project are executed
 DOCKER_COMMAND =
@@ -59,6 +65,7 @@ $(TEST_CI_ENVS): $$@-build
            --security-opt seccomp:unconfined \
            --security-opt label=disable \
            $(LOCAL_RECREATE_ENVS) $(LOCAL_ADD_ARGS) \
+           $(LOCAL_HOST_NETWORK) \
            -e USER_UID=$$(id -u) \
            -e USER_GID=$$(id -g) \
            python-sdk:$(TEST_ENV) $(DOCKER_COMMAND)

@@ -57,3 +57,14 @@ test-ci:
 .PHONY: docs
 docs:
 	tox $(TOX_FLAGS) -e docs
+
+# this is effective for gooddata-sdk only now - it should be part of test fixtures
+# remove this target once implemented in pytest global fixture
+.PHONY: remove-store-data
+remove-store-data:
+	echo "Removing directory $(CURDIR)/tests/catalog/store"
+	rm -rf $(CURDIR)/tests/catalog/store
+
+.PHONY: remove-cassettes
+remove-cassettes: remove-store-data
+	find $(CURDIR)/tests -type f -name "*.json" -path "*/fixtures/*" -print -delete
