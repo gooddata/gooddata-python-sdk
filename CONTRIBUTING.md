@@ -109,7 +109,7 @@ But there is one disadvantage. One needs GD.CN instance with the original setup 
 
 When a vcrpy supported test needs to be updated:
 - start GD.CN using above `docker-compose.yaml`
-- delete original vcrpy cassette
+- delete original vcrpy cassette with `make remove-cassettes`
 - execute test
 - update a newly generated cassette to the git
 
@@ -141,6 +141,10 @@ venv automatically. So when docker tox tests are executed after localhost tests 
 - run all tests containing `http_headers` in name for py39 and py38 for all projects
   ```bash
   TEST_ENVS=py39,py38 ADD_ARGS="-k http_headers" make test-ci
+  ```
+- run tests on localhost against all-in-one image started with docker-compose
+  ```bash
+  RECREATE_ENVS=1 HOST_NETWORK=1 make test-ci
   ```
 
 # How to generate and maintain OpenAPI clients

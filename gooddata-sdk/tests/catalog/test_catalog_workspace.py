@@ -47,8 +47,9 @@ def _empty_workspace_data_filters(sdk: GoodDataSdk) -> None:
 def test_load_and_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_workspaces.json"
-    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
+    with open(_current_dir / "expected" / "declarative_workspaces.json") as f:
+        data = json.load(f)
+        workspaces_e = CatalogDeclarativeWorkspaces.from_dict(data)
 
     try:
         _empty_workspaces(sdk)
@@ -58,10 +59,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        workspaces_o = CatalogDeclarativeWorkspaces.from_dict(data)
-        sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
+        sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.json"))
