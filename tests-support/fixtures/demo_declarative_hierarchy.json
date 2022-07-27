@@ -988,16 +988,15 @@
                     }
                   }
                 ],
-                "properties": {
-                  "sortItems": [
+                "properties": {},
+                "sorts": [
                     {
                       "attributeSortItem": {
                         "attributeIdentifier": "7a4045fd00ac44579f52406df679435f",
                         "direction": "asc"
                       }
                     }
-                  ]
-                },
+                ],
                 "version": "2",
                 "visualizationUrl": "local:table"
               },
@@ -1305,7 +1304,7 @@
                               "popAttribute": {
                                 "identifier": {
                                   "id": "date.year",
-                                  "type": "label"
+                                  "type": "attribute"
                                 }
                               }
                             }
@@ -1663,16 +1662,15 @@
                     }
                   }
                 ],
-                "properties": {
-                  "sortItems": [
+                "properties": {},
+                "sorts": [
                     {
-                      "attributeSortItem": {
-                        "attributeIdentifier": "06bc6b3b9949466494e4f594c11f1bff",
-                        "direction": "asc"
-                      }
+                        "attributeSortItem": {
+                            "attributeIdentifier": "06bc6b3b9949466494e4f594c11f1bff",
+                            "direction": "asc"
+                        }
                     }
-                  ]
-                },
+                ],
                 "version": "2",
                 "visualizationUrl": "local:table"
               },
