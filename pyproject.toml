@@ -32,7 +32,12 @@ regex = '''
   (?P<minor>\d+)
   \.
   (?P<patch>\d+)
+  (a(?P<alpha>\d+))?
   '''
+
+[[tool.tbump.field]]
+name="alpha"
+default=""
 
 [tool.tbump.git]
 message_template = "Bump to {new_version}"
