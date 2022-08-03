@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - name Install pip & tbump
+      - name: Install pip & tbump
         run python -m pip install --upgrade pip tbump
       - name: Bump to alpha
         run: tbump --no-tag --no-push --non-interactive ${{ github.event.inputs.alpha-release }}
