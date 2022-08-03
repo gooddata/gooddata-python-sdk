@@ -51,6 +51,6 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          packages_dir: dist/${{ matrix.component }}
+          packages_dir: ${{ matrix.component }}/dist
           verbose: true
           repository_url: ${{ github.event.inputs.repository-url }}
