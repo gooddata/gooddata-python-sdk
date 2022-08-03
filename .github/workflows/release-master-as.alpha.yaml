@@ -6,10 +6,6 @@ on:
       alpha-release:
         description: 'Aplha release, such as 1.0.1a2'
         required: true
-      repository-url:
-        description: 'PyPI repository URI'
-        default: https://test.pypi.org/legacy/
-        required: true
 
 jobs:
   release-master-as-alpha:
@@ -53,4 +49,3 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
           packages_dir: ${{ matrix.component }}/dist
           verbose: true
-          repository_url: ${{ github.event.inputs.repository-url }}
