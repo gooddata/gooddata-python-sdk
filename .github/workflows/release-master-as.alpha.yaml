@@ -24,7 +24,6 @@ jobs:
           - gooddata-pandas
           - gooddata-fdw
           - gooddata-sdk
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
