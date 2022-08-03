@@ -6,7 +6,7 @@ on:
       alpha-release:
         description: 'Aplha release, such as 1.0.1a2'
         required: true
-      repository-uri:
+      repository-url:
         description: 'PyPI repository URI'
         default: https://test.pypi.org/
         required: true
@@ -46,3 +46,11 @@ jobs:
           name: artifacts_${{ matrix.component }}
           path: ${{ matrix.component }}/dist/
           if-no-files-found: error
+      - name: Push ${{ matrix.component}} to pypi
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: dist/${{ matrix.component }}
+          verbose: true
+          repository_url: ${{ github.event.inputs.repository-url }}
