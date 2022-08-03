@@ -1,6 +1,6 @@
 # SortKeyValue
 
-Sorting rule for sorting by measure value.
+Sorting rule for sorting by measure value. DataColumnLocators for each dimension opposite to the sorted one must be specified.
 
 ## Properties
 Name | Type | Description | Notes

@@ -421,66 +421,63 @@
         ],
         "type": "object"
       },
-      "AttributeHeader": {
+      "AttributeHeaderOut": {
         "properties": {
           "attributeHeader": {
-            "$ref": "#/components/schemas/AttributeHeaderOut"
+            "properties": {
+              "attribute": {
+                "$ref": "#/components/schemas/RestApiIdentifier"
+              },
+              "attributeName": {
+                "type": "string"
+              },
+              "granularity": {
+                "enum": [
+                  "MINUTE",
+                  "HOUR",
+                  "DAY",
+                  "WEEK",
+                  "MONTH",
+                  "QUARTER",
+                  "YEAR",
+                  "MINUTE_OF_HOUR",
+                  "HOUR_OF_DAY",
+                  "DAY_OF_WEEK",
+                  "DAY_OF_MONTH",
+                  "DAY_OF_YEAR",
+                  "WEEK_OF_YEAR",
+                  "MONTH_OF_YEAR",
+                  "QUARTER_OF_YEAR"
+                ],
+                "type": "string"
+              },
+              "label": {
+                "$ref": "#/components/schemas/RestApiIdentifier"
+              },
+              "labelName": {
+                "type": "string"
+              },
+              "localIdentifier": {
+                "pattern": "^[.a-zA-Z0-9_-]+$",
+                "type": "string"
+              },
+              "primaryLabel": {
+                "$ref": "#/components/schemas/RestApiIdentifier"
+              }
+            },
+            "required": [
+              "attribute",
+              "attributeName",
+              "label",
+              "labelName",
+              "localIdentifier",
+              "primaryLabel"
+            ],
+            "type": "object"
           }
         },
         "required": [
           "attributeHeader"
-        ],
-        "type": "object"
-      },
-      "AttributeHeaderOut": {
-        "properties": {
-          "attribute": {
-            "$ref": "#/components/schemas/RestApiIdentifier"
-          },
-          "attributeName": {
-            "type": "string"
-          },
-          "granularity": {
-            "enum": [
-              "MINUTE",
-              "HOUR",
-              "DAY",
-              "WEEK",
-              "MONTH",
-              "QUARTER",
-              "YEAR",
-              "MINUTE_OF_HOUR",
-              "HOUR_OF_DAY",
-              "DAY_OF_WEEK",
-              "DAY_OF_MONTH",
-              "DAY_OF_YEAR",
-              "WEEK_OF_YEAR",
-              "MONTH_OF_YEAR",
-              "QUARTER_OF_YEAR"
-            ],
-            "type": "string"
-          },
-          "label": {
-            "$ref": "#/components/schemas/RestApiIdentifier"
-          },
-          "labelName": {
-            "type": "string"
-          },
-          "localIdentifier": {
-            "pattern": "^[.a-zA-Z0-9_-]+$",
-            "type": "string"
-          },
-          "primaryLabel": {
-            "$ref": "#/components/schemas/RestApiIdentifier"
-          }
-        },
-        "required": [
-          "attribute",
-          "attributeName",
-          "label",
-          "labelName",
-          "localIdentifier",
-          "primaryLabel"
         ],
         "type": "object"
       },
@@ -599,7 +596,7 @@
             "additionalProperties": {
               "$ref": "#/components/schemas/DataColumnLocator"
             },
-            "description": "Mapping from dimensions to data column locators. Locators for each dimension opposite to the sorted one must be specified.",
+            "description": "Mapping from dimensions to data column locators.",
             "example": {
               "dim2": {
                 "measureGroup": "m1",
@@ -1108,7 +1105,7 @@
         ],
         "type": "object"
       },
-      "MeasureGroupHeader": {
+      "MeasureGroupHeaders": {
         "properties": {
           "measureGroupHeaders": {
             "items": {
@@ -1117,9 +1114,6 @@
             "type": "array"
           }
         },
-        "required": [
-          "measureGroupHeaders"
-        ],
         "type": "object"
       },
       "MeasureHeaderOut": {
@@ -1555,7 +1549,7 @@
         "type": "object"
       },
       "RestApiIdentifier": {
-        "description": "Identifier of primary label of attribute owning requested label, or null if the primary label is excluded.",
+        "description": "Object identifier.",
         "properties": {
           "id": {
             "example": "sample_item.price",
@@ -1573,28 +1567,53 @@
         ],
         "type": "object"
       },
+      "ResultCacheMetadata": {
+        "description": "All execution result's metadata used for calculation including ExecutionResponse",
+        "properties": {
+          "afm": {
+            "$ref": "#/components/schemas/AFM"
+          },
+          "executionResponse": {
+            "$ref": "#/components/schemas/ExecutionResponse"
+          },
+          "resultSpec": {
+            "$ref": "#/components/schemas/ResultSpec"
+          }
+        },
+        "required": [
+          "afm",
+          "executionResponse",
+          "resultSpec"
+        ],
+        "type": "object"
+      },
       "ResultDimension": {
         "properties": {
           "headers": {
             "items": {
-              "oneOf": [
-                {
-                  "$ref": "#/components/schemas/AttributeHeader"
-                },
-                {
-                  "$ref": "#/components/schemas/MeasureGroupHeader"
-                }
-              ]
+              "$ref": "#/components/schemas/ResultDimensionHeader"
             },
             "type": "array"
+          },
+          "localIdentifier": {
+            "type": "string"
           }
         },
         "required": [
-          "headers"
+          "headers",
+          "localIdentifier"
         ],
         "type": "object"
       },
       "ResultDimensionHeader": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/MeasureGroupHeaders"
+          },
+          {
+            "$ref": "#/components/schemas/AttributeHeaderOut"
+          }
+        ],
         "type": "object"
       },
       "ResultSpec": {
@@ -1673,6 +1692,9 @@
           },
           {
             "$ref": "#/components/schemas/SortKeyValue"
+          },
+          {
+            "$ref": "#/components/schemas/SortKeyTotal"
           }
         ],
         "type": "object"
@@ -1718,8 +1740,39 @@
         ],
         "type": "object"
       },
+      "SortKeyTotal": {
+        "description": "Sorting rule for sorting by total value. DataColumnLocators are only required if there is ambiguity. Locator for measureGroup is taken from the metric of the total.",
+        "properties": {
+          "total": {
+            "properties": {
+              "dataColumnLocators": {
+                "$ref": "#/components/schemas/DataColumnLocators"
+              },
+              "direction": {
+                "description": "Sorting elements - ascending/descending order.",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "type": "string"
+              },
+              "totalIdentifier": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "totalIdentifier"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "total"
+        ],
+        "type": "object"
+      },
       "SortKeyValue": {
-        "description": "Sorting rule for sorting by measure value.",
+        "description": "Sorting rule for sorting by measure value. DataColumnLocators for each dimension opposite to the sorted one must be specified.",
         "properties": {
           "value": {
             "properties": {
@@ -1942,6 +1995,7 @@
             "name": "timestamp",
             "required": false,
             "schema": {
+              "format": "timestamp",
               "type": "string"
             }
           }
@@ -2038,6 +2092,22 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions.",
+            "example": "excludedTotalDimensions=dim_0,dim_1",
+            "explode": false,
+            "in": "query",
+            "name": "excludedTotalDimensions",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -2059,7 +2129,7 @@
                 }
               }
             },
-            "description": "Limit and/or offset query parameters (paging) were invalid."
+            "description": "Limit and/or offset and/or excludedTotalDimensions query parameters (paging) were invalid."
           },
           "404": {
             "content": {
@@ -2090,6 +2160,66 @@
           "description": "Permissions required to view a report or label elements.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata": {
+      "get": {
+        "description": "The resource provides execution result's metadata as AFM and resultSpec used in execution request and an executionResponse",
+        "operationId": "retrieveExecutionMetadata",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultCacheMetadata"
+                }
+              }
+            },
+            "description": "Execution result's metadata was found and returned."
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Execution result was not found."
+          }
+        },
+        "summary": "Get a single execution result's metadata.",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to analyze data.",
+          "permissions": [
+            "ANALYZE"
           ]
         }
       }

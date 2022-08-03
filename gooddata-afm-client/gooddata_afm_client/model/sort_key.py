@@ -33,10 +33,14 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_afm_client.model.sort_key_attribute import SortKeyAttribute
     from gooddata_afm_client.model.sort_key_attribute_attribute import SortKeyAttributeAttribute
+    from gooddata_afm_client.model.sort_key_total import SortKeyTotal
+    from gooddata_afm_client.model.sort_key_total_total import SortKeyTotalTotal
     from gooddata_afm_client.model.sort_key_value import SortKeyValue
     from gooddata_afm_client.model.sort_key_value_value import SortKeyValueValue
     globals()['SortKeyAttribute'] = SortKeyAttribute
     globals()['SortKeyAttributeAttribute'] = SortKeyAttributeAttribute
+    globals()['SortKeyTotal'] = SortKeyTotal
+    globals()['SortKeyTotalTotal'] = SortKeyTotalTotal
     globals()['SortKeyValue'] = SortKeyValue
     globals()['SortKeyValueValue'] = SortKeyValueValue
 
@@ -96,6 +100,7 @@ class SortKey(ModelComposed):
         return {
             'attribute': (SortKeyAttributeAttribute,),  # noqa: E501
             'value': (SortKeyValueValue,),  # noqa: E501
+            'total': (SortKeyTotalTotal,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +111,7 @@ class SortKey(ModelComposed):
     attribute_map = {
         'attribute': 'attribute',  # noqa: E501
         'value': 'value',  # noqa: E501
+        'total': 'total',  # noqa: E501
     }
 
     read_only_vars = {
@@ -149,6 +155,7 @@ class SortKey(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute (SortKeyAttributeAttribute): [optional]  # noqa: E501
             value (SortKeyValueValue): [optional]  # noqa: E501
+            total (SortKeyTotalTotal): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -254,6 +261,7 @@ class SortKey(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             attribute (SortKeyAttributeAttribute): [optional]  # noqa: E501
             value (SortKeyValueValue): [optional]  # noqa: E501
+            total (SortKeyTotalTotal): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -326,6 +334,7 @@ class SortKey(ModelComposed):
           ],
           'oneOf': [
               SortKeyAttribute,
+              SortKeyTotal,
               SortKeyValue,
           ],
         }

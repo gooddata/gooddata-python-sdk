@@ -31,8 +31,8 @@ from gooddata_afm_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_afm_client.model.result_dimension_headers_inner import ResultDimensionHeadersInner
-    globals()['ResultDimensionHeadersInner'] = ResultDimensionHeadersInner
+    from gooddata_afm_client.model.result_dimension_header import ResultDimensionHeader
+    globals()['ResultDimensionHeader'] = ResultDimensionHeader
 
 
 class ResultDimension(ModelNormal):
@@ -88,7 +88,8 @@ class ResultDimension(ModelNormal):
         """
         lazy_import()
         return {
-            'headers': ([ResultDimensionHeadersInner],),  # noqa: E501
+            'headers': ([ResultDimensionHeader],),  # noqa: E501
+            'local_identifier': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +99,7 @@ class ResultDimension(ModelNormal):
 
     attribute_map = {
         'headers': 'headers',  # noqa: E501
+        'local_identifier': 'localIdentifier',  # noqa: E501
     }
 
     read_only_vars = {
@@ -107,11 +109,12 @@ class ResultDimension(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, headers, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, headers, local_identifier, *args, **kwargs):  # noqa: E501
         """ResultDimension - a model defined in OpenAPI
 
         Args:
-            headers ([ResultDimensionHeadersInner]):
+            headers ([ResultDimensionHeader]):
+            local_identifier (str):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -176,6 +179,7 @@ class ResultDimension(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.headers = headers
+        self.local_identifier = local_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,11 +200,12 @@ class ResultDimension(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, headers, *args, **kwargs):  # noqa: E501
+    def __init__(self, headers, local_identifier, *args, **kwargs):  # noqa: E501
         """ResultDimension - a model defined in OpenAPI
 
         Args:
-            headers ([ResultDimensionHeadersInner]):
+            headers ([ResultDimensionHeader]):
+            local_identifier (str):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -263,6 +268,7 @@ class ResultDimension(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.headers = headers
+        self.local_identifier = local_identifier
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

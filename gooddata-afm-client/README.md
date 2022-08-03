@@ -58,6 +58,7 @@ from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from gooddata_afm_client.model.execution_result import ExecutionResult
 from gooddata_afm_client.model.problem import Problem
+from gooddata_afm_client.model.result_cache_metadata import ResultCacheMetadata
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_afm_client.Configuration(
@@ -107,6 +108,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+*ActionsApi* | [**retrieve_execution_metadata**](docs/ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 *ActionsApi* | [**retrieve_result**](docs/ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
 
@@ -137,8 +139,8 @@ Class | Method | HTTP request | Description
  - [AttributeExecutionResultHeader](docs/AttributeExecutionResultHeader.md)
  - [AttributeFilter](docs/AttributeFilter.md)
  - [AttributeFilterElements](docs/AttributeFilterElements.md)
- - [AttributeHeader](docs/AttributeHeader.md)
  - [AttributeHeaderOut](docs/AttributeHeaderOut.md)
+ - [AttributeHeaderOutAttributeHeader](docs/AttributeHeaderOutAttributeHeader.md)
  - [AttributeItem](docs/AttributeItem.md)
  - [AttributeResultHeader](docs/AttributeResultHeader.md)
  - [ComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilter.md)
@@ -168,7 +170,7 @@ Class | Method | HTTP request | Description
  - [InlineMeasureDefinitionInline](docs/InlineMeasureDefinitionInline.md)
  - [MeasureDefinition](docs/MeasureDefinition.md)
  - [MeasureExecutionResultHeader](docs/MeasureExecutionResultHeader.md)
- - [MeasureGroupHeader](docs/MeasureGroupHeader.md)
+ - [MeasureGroupHeaders](docs/MeasureGroupHeaders.md)
  - [MeasureHeaderOut](docs/MeasureHeaderOut.md)
  - [MeasureItem](docs/MeasureItem.md)
  - [MeasureResultHeader](docs/MeasureResultHeader.md)
@@ -193,14 +195,17 @@ Class | Method | HTTP request | Description
  - [RelativeDateFilter](docs/RelativeDateFilter.md)
  - [RelativeDateFilterRelativeDateFilter](docs/RelativeDateFilterRelativeDateFilter.md)
  - [RestApiIdentifier](docs/RestApiIdentifier.md)
+ - [ResultCacheMetadata](docs/ResultCacheMetadata.md)
  - [ResultDimension](docs/ResultDimension.md)
- - [ResultDimensionHeadersInner](docs/ResultDimensionHeadersInner.md)
+ - [ResultDimensionHeader](docs/ResultDimensionHeader.md)
  - [ResultSpec](docs/ResultSpec.md)
  - [SimpleMeasureDefinition](docs/SimpleMeasureDefinition.md)
  - [SimpleMeasureDefinitionMeasure](docs/SimpleMeasureDefinitionMeasure.md)
  - [SortKey](docs/SortKey.md)
  - [SortKeyAttribute](docs/SortKeyAttribute.md)
  - [SortKeyAttributeAttribute](docs/SortKeyAttributeAttribute.md)
+ - [SortKeyTotal](docs/SortKeyTotal.md)
+ - [SortKeyTotalTotal](docs/SortKeyTotalTotal.md)
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
  - [StatusType](docs/StatusType.md)
