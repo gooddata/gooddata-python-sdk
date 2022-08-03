@@ -8,7 +8,7 @@ on:
         required: true
       repository-url:
         description: 'PyPI repository URI'
-        default: https://test.pypi.org/legacy
+        default: https://test.pypi.org/legacy/
         required: true
 
 jobs:
