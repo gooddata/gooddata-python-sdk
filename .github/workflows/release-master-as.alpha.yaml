@@ -1,0 +1,33 @@
+name: Release master as alpha
+
+on:
+  workflow_dispatch:
+    inputs:
+      alpha-release:
+        description: 'Aplha release, such as 1.0.1a2'
+        required: true
+      repository-uri:
+        description: 'PyPI repository URI'
+        default: https://test.pypi.org/
+        required: true
+
+jobs:
+  release-master-as-alpha:
+    name: Release master as alpha
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component:
+          - gooddata-afm-client
+          - gooddata-metadata-client
+          - gooddata-scan-client
+          - gooddata-pandas
+          - gooddata-fdw
+          - gooddata-sdk
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
