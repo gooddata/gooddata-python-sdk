@@ -1,0 +1,45 @@
+name: Release master as alpha
+
+on:
+  workflow_dispatch:
+    inputs:
+      alpha-release:
+        description: 'Aplha release, such as 1.0.1a2'
+        required: true
+
+jobs:
+  release-master-as-alpha:
+    name: Release master as alpha
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        component:
+          - gooddata-afm-client
+          - gooddata-metadata-client
+          - gooddata-scan-client
+          - gooddata-pandas
+          - gooddata-fdw
+          - gooddata-sdk
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install pip & tbump
+        run: python -m pip install --upgrade pip tbump
+      - name: Bump to alpha
+        run: tbump  --only-patch --non-interactive ${{ github.event.inputs.alpha-release }}
+      - name: Install dependencies
+        run: pip install build
+      - name: Build ${{ matrix.component }}
+        run: |
+          cd ${{ matrix.component }}
+          python -m build
+      - name: Push ${{ matrix.component}} to pypi
+        uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages_dir: ${{ matrix.component }}/dist
+          verbose: true

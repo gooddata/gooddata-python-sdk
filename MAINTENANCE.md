@@ -8,6 +8,10 @@
 * Checkout latest master tag it vX.Y.Z
 * Push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
+### Releasing Alpha versions
+To publish current master as an alpha version, use `Release master as alpha` github workflow where you need to specify
+desired alpha version. **No validity checks are performed**.
+
 ### Errors that may appear
 
 * Github release could not be created as the same release already exists.
