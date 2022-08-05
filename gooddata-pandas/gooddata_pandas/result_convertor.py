@@ -4,7 +4,6 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 
 import pandas
 
-from gooddata_afm_client import models
 from gooddata_sdk import ExecutionResponse, ExecutionResult
 
 _DEFAULT_PAGE_SIZE = 100
@@ -70,28 +69,9 @@ class _AccumulatedData:
             for idx, headers in enumerate(from_result.get_all_headers(dim=from_dim)):
                 self.data_headers[from_dim][idx].extend(headers)
 
-    @staticmethod
-    def _extract_dim_idx(grand_total: models.ExecutionResultGrandTotal) -> int:
-        # TODO: this is one super-nasty hack; there are two things:
-        #  - grand totals list contains grand totals per-dimension but in in arbitrary order & the cardinality
-        #    of the list does not match the number of dimensions of the result
-        #  - for grand-totals in some dimension, the totalDimensions property mentions the dimension's
-        #    localIdentifier -> fine, except that localIdentifier is _nowhere_ else in the exec response or
-        #    in the exec result;
-        #  - there is also this thing with the totalDimensions being an array, don't know why; guessing its relevant
-        #    for grand totals??
-        #  so for now doing with this nasty thing of relying on convention used in both UI and python SDK where
-        #  the dimension local identifier always specified index of the dimension at the end :)
-        #
-        # imho the proper way to deal with this is to include dimension identifier at least in the execution response,
-        # in the dimension descriptor - same as labels and metrics have their local id there; that way a proper
-        # lookup can be done and identify dimension index
-        dims = grand_total["totalDimensions"]
-        assert len(dims) == 1
-
-        return int(dims[0][-1])
-
-    def accumulate_grand_totals(self, from_result: ExecutionResult, paging_dim: int) -> None:
+    def accumulate_grand_totals(
+        self, from_result: ExecutionResult, paging_dim: int, response: ExecutionResponse
+    ) -> None:
         """
         accumulates grand totals from the results; processes all grand totals on all dimensions; the method
         needs to know in which direction is the paging happening so that it can append new grand total data.
@@ -100,8 +80,14 @@ class _AccumulatedData:
         if not len(grand_totals):
             return
 
+        # get dimension indexes mapping from response like {"dim1": 0, "dim0": 1}
+        dim_idx_dict = {dim["localIdentifier"]: idx for idx, dim in enumerate(response.dimensions)}
+
         for grand_total in grand_totals:
-            dim_idx = self._extract_dim_idx(grand_total)
+            # TODO not sure why totalDimensions is an array
+            dims = grand_total["totalDimensions"]
+            assert len(dims) == 1
+            dim_idx = dim_idx_dict[dims[0]]
             # the dimension id specified on the grand total says from what dimension were
             # the grand totals calculated (1 for column totals or 0 for row totals);
             #
@@ -163,7 +149,7 @@ def _extract_all_result_data(response: ExecutionResponse, page_size: int = _DEFA
 
         acc.accumulate_data(from_result=result)
         acc.accumulate_headers(from_result=result, from_dim=0)
-        acc.accumulate_grand_totals(from_result=result, paging_dim=0)
+        acc.accumulate_grand_totals(from_result=result, paging_dim=0, response=response)
 
         if num_dims > 1:
             # when result is two-dimensional make sure to read the column headers and column totals
@@ -185,7 +171,7 @@ def _extract_all_result_data(response: ExecutionResponse, page_size: int = _DEFA
 
                     if load_headers_and_totals:
                         acc.accumulate_headers(from_result=result, from_dim=1)
-                        acc.accumulate_grand_totals(from_result=result, paging_dim=1)
+                        acc.accumulate_grand_totals(from_result=result, paging_dim=1, response=response)
 
                     if result.is_complete(dim=1):
                         break
