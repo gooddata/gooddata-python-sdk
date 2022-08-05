@@ -64,6 +64,7 @@ from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
 from gooddata_sdk.compute.model.execution import (
+    BareExecutionResponse,
     ExecutionDefinition,
     ExecutionResponse,
     ExecutionResult,

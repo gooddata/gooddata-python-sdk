@@ -187,17 +187,19 @@ class ExecutionResult:
         return f"ExecutionResult(paging={self.paging})"
 
 
-class ExecutionResponse:
+class BareExecutionResponse:
+    """
+    Holds ExecutionResponse from triggered report computation and allows reading report's results.
+    """
+
     def __init__(
         self,
         actions_api: apis.ActionsApi,
         workspace_id: str,
-        exec_def: ExecutionDefinition,
         response: models.AfmExecutionResponse,
     ):
         self._actions_api = actions_api
         self._workspace_id = workspace_id
-        self._exec_def = exec_def
 
         self._r: models.ExecutionResponse = response["execution_response"]
         self._response = response
@@ -205,10 +207,6 @@ class ExecutionResponse:
     @property
     def workspace_id(self) -> str:
         return self._workspace_id
-
-    @property
-    def exec_def(self) -> ExecutionDefinition:
-        return self._exec_def
 
     @property
     def result_id(self) -> str:
@@ -244,7 +242,65 @@ class ExecutionResponse:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"ExecutionResponse(workspace_id={self.workspace_id}, result_id={self.result_id})"
+        return f"BareExecutionResponse(workspace_id={self.workspace_id}, result_id={self.result_id})"
+
+
+class Execution:
+    """
+    An envelope class holding execution related classes:
+        - exec_def              ExecutionDefinition
+        - bare_exec_response    BareExecutionResponse
+    """
+
+    def __init__(
+        self,
+        actions_api: apis.ActionsApi,
+        workspace_id: str,
+        exec_def: ExecutionDefinition,
+        response: models.AfmExecutionResponse,
+    ):
+        self._exec_def = exec_def
+        self._bare_exec_response = BareExecutionResponse(
+            actions_api=actions_api,
+            workspace_id=workspace_id,
+            response=response,
+        )
+
+    @property
+    def bare_exec_response(self) -> BareExecutionResponse:
+        return self._bare_exec_response
+
+    @property
+    def workspace_id(self) -> str:
+        return self.bare_exec_response._workspace_id
+
+    @property
+    def exec_def(self) -> ExecutionDefinition:
+        return self._exec_def
+
+    @property
+    def result_id(self) -> str:
+        return self.bare_exec_response._r["links"]["executionResult"]
+
+    @property
+    def dimensions(self) -> Any:
+        return self.bare_exec_response._r["dimensions"]
+
+    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
+        return self.bare_exec_response.read_result(limit, offset)
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"Execution(workspace_id={self.workspace_id}, result_id={self.bare_exec_response.result_id})"
+
+
+# Originally ExecutionResponse contained also ExecutionDefinition which was not correct, therefore Execution class was
+# created to hold clean BareExecutionResponse class without ExecutionDefinition.
+# Newly Execution holds BareExecutionResponse and ExecutionDefinition next to it.
+# For backwards compatibility ExecutionResponse -> Execution alias is defined.
+ExecutionResponse = Execution
 
 
 def compute_model_to_api_model(

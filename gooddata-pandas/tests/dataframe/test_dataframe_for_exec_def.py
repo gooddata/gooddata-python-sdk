@@ -1,8 +1,33 @@
 # (C) 2022 GoodData Corporation
+from pathlib import Path
+from typing import Tuple
+
+import vcr
+
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import Attribute, ExecutionDefinition, ObjId, SimpleMetric, TotalDefinition, TotalDimension
+from tests import VCR_MATCH_ON
+
+_current_dir = Path(__file__).parent.absolute()
+_fixtures_dir = _current_dir / "fixtures"
+
+gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
+def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefinition, expected: Tuple[int, int]) -> None:
+    # generate dataframe from exec_def
+    result, response = gdf.for_exec_def(exec_def=exec_def)
+    assert result.values.shape == expected
+
+    # use result ID from computation above and generate dataframe just from it
+    result_from_result_id = gdf.for_exec_result_id(response.result_id)
+    assert result_from_result_id.values.shape == expected
+
+    # compare dataframes generated using both methods above
+    assert result.to_string() == result_from_result_id.to_string()
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.json"))
 def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -17,11 +42,10 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["state", "region"], ["product_category", "measureGroup"]],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.json"))
 def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -36,11 +60,10 @@ def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["region", "state", "product_category"], ["measureGroup"]],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(182, 2))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim3.json"))
 def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -55,11 +78,10 @@ def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["product_category"], ["region", "state", "measureGroup"]],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(4, 96))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals1.json"))
 def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
     """
     Execution with column totals; the row dimension has single label
@@ -91,14 +113,13 @@ def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
             ),
         ],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(6, 96))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals2.json"))
 def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
     """
-    Execution with column totals; the row dimension has two labels; this exercises that the index is
+    Execution with column totals; the row dimension have two labels; this exercises that the index is
     padded appropriately
     """
     exec_def = ExecutionDefinition(
@@ -128,11 +149,10 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
             ),
         ],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.json"))
 def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
     """
     Execution with row totals; the column dimension has single label.
@@ -164,14 +184,13 @@ def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
             ),
         ],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 6))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals4.json"))
 def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
     """
-    Execution with row totals; the column dimension has two label; this
+    Execution with row totals; the column dimension have two label.
     """
     exec_def = ExecutionDefinition(
         attributes=[
@@ -200,11 +219,10 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
             ),
         ],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 19))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim1.json"))
 def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -219,11 +237,10 @@ def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["region", "state", "product_category", "measureGroup"]],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1))
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim2.json"))
 def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -238,6 +255,4 @@ def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
         filters=[],
         dimensions=[[], ["region", "state", "product_category", "measureGroup"]],
     )
-
-    result = gdf.for_exec_def(exec_def=exec_def)
-    print(str(result))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(1, 364))

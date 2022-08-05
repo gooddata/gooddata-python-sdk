@@ -1,10 +1,10 @@
 # (C) 2022 GoodData Corporation
 from dataclasses import dataclass, field
-from typing import Any, Callable, List, Optional, Tuple, Union
+from typing import Any, Callable, List, Optional, Tuple, Union, cast
 
 import pandas
 
-from gooddata_sdk import ExecutionResponse, ExecutionResult
+from gooddata_sdk import BareExecutionResponse, ExecutionResult
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
@@ -39,7 +39,7 @@ class _AccumulatedData:
     grand_totals: List[Optional[List[_DataArray]]] = field(init=False)
     grand_totals_headers: List[Optional[_DataHeaders]] = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.data = []
         self.data_headers = [None, None]
         self.grand_totals = [None, None]
@@ -67,10 +67,10 @@ class _AccumulatedData:
             self.data_headers[from_dim] = from_result.get_all_headers(dim=from_dim)
         else:
             for idx, headers in enumerate(from_result.get_all_headers(dim=from_dim)):
-                self.data_headers[from_dim][idx].extend(headers)
+                cast(_DataHeaders, self.data_headers[from_dim])[idx].extend(headers)
 
     def accumulate_grand_totals(
-        self, from_result: ExecutionResult, paging_dim: int, response: ExecutionResponse
+        self, from_result: ExecutionResult, paging_dim: int, response: BareExecutionResponse
     ) -> None:
         """
         accumulates grand totals from the results; processes all grand totals on all dimensions; the method
@@ -109,25 +109,26 @@ class _AccumulatedData:
                 # grand totals are already initialized and the code is paging in the direction that reveals
                 # additional grand total values; append them accordingly; no need to consider total headers:
                 # that is because only the grand total data is subject to paging
+                grand_totals_item = cast(List[_DataArray], self.grand_totals[opposite_dim])
                 if opposite_dim == 0:
                     # have column totals and paging 'to the right'; totals for the new columns are revealed so
                     # extend existing data arrays
                     for total_idx, total_data in enumerate(grand_total["data"]):
-                        self.grand_totals[opposite_dim][total_idx].extend(total_data)
+                        grand_totals_item[total_idx].extend(total_data)
                 else:
                     # have row totals and paging down, keep adding extra rows
-                    self.grand_totals[opposite_dim].extend(grand_total["data"])
+                    grand_totals_item.extend(grand_total["data"])
 
     def result(self) -> _DataWithHeaders:
         return _DataWithHeaders(
             data=self.data,
-            data_headers=(self.data_headers[0], self.data_headers[1]),
+            data_headers=(cast(_DataHeaders, self.data_headers[0]), self.data_headers[1]),
             grand_totals=(self.grand_totals[0], self.grand_totals[1]),
             grand_total_headers=(self.grand_totals_headers[0], self.grand_totals_headers[1]),
         )
 
 
-def _extract_all_result_data(response: ExecutionResponse, page_size: int = _DEFAULT_PAGE_SIZE) -> _DataWithHeaders:
+def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _DEFAULT_PAGE_SIZE) -> _DataWithHeaders:
     """
     Extracts all data and headers for an execution result. This does page around the execution result to extract
     everything from the paged API.
@@ -186,30 +187,32 @@ def _extract_all_result_data(response: ExecutionResponse, page_size: int = _DEFA
     return acc.result()
 
 
-def _create_header_mapper(response: ExecutionResponse, dim: int) -> Callable[[int, Any], str]:
+def _create_header_mapper(response: BareExecutionResponse, dim: int) -> Callable[[int, Any], str]:
     dim_descriptor = response.dimensions[dim]
 
     def _mapper(header_idx: int, header: Any) -> str:
+        label = ""
         if header is None:
-            return ""
+            pass
         elif "attributeHeader" in header:
-            return header["attributeHeader"]["labelValue"]
+            label = header["attributeHeader"]["labelValue"]
         elif "measureHeader" in header:
             measure_idx = header["measureHeader"]["measureIndex"]
             measure_descriptor = dim_descriptor["headers"][header_idx]["measureGroupHeaders"][measure_idx]
 
             if "name" in measure_descriptor:
-                return measure_descriptor["name"]
-
-            return measure_descriptor["localIdentifier"]
+                label = measure_descriptor["name"]
+            else:
+                label = measure_descriptor["localIdentifier"]
         elif "totalHeader" in header:
-            return header["totalHeader"]["function"]
+            label = header["totalHeader"]["function"]
+        return label
 
     return _mapper
 
 
 def _headers_to_index(
-    dim_idx: int, headers: Tuple[_DataHeaders, Optional[_DataHeaders]], response: ExecutionResponse
+    dim_idx: int, headers: Tuple[_DataHeaders, Optional[_DataHeaders]], response: BareExecutionResponse
 ) -> Optional[pandas.Index]:
     if len(response.dimensions) <= dim_idx or not len(response.dimensions[dim_idx]["headers"]):
         return None
@@ -219,7 +222,7 @@ def _headers_to_index(
     return pandas.MultiIndex.from_arrays(
         [
             tuple(mapper(header_idx, header) for header in header_group)
-            for header_idx, header_group in enumerate(headers[dim_idx])
+            for header_idx, header_group in enumerate(cast(_DataHeaders, headers[dim_idx]))
         ]
     )
 
@@ -254,16 +257,16 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
     for dim_idx, grand_total_headers in enumerate(extract.grand_total_headers):
         if grand_total_headers is None:
             continue
-
-        headers[dim_idx][0].extend(grand_total_headers)
+        header = cast(List[List[Any]], headers[dim_idx])
+        header[0].extend(grand_total_headers)
         padding = [None] * len(grand_total_headers)
-        for other_headers in headers[dim_idx][1:]:
+        for other_headers in header[1:]:
             other_headers.extend(padding)
 
     return headers
 
 
-def convert_result_to_dataframe(response: ExecutionResponse) -> pandas.DataFrame:
+def convert_result_to_dataframe(response: BareExecutionResponse) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
 
