@@ -22,9 +22,7 @@ class ComputeService:
 
         :param workspace_id: workspace identifier
         :param exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
-            into dimensions
-
-        :return:
+         into dimensions
         """
         response = self._actions_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
 

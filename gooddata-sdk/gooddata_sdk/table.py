@@ -60,8 +60,6 @@ class ExecutionTable:
     def column_ids(self) -> list[str]:
         """
         Returns column identifiers. Each row will be a mapping of column identifier to column data.
-
-        :return:
         """
         return [a.local_id for a in self.attributes] + [m.local_id for m in self.metrics]
 
@@ -70,7 +68,6 @@ class ExecutionTable:
         """
         Returns mapping of column identifier to definition of either attribute whose elements will be in that column
         or metric whose value will be calculated in that column.
-        :return:
         """
         return {**{a.local_id: a for a in self.attributes}, **{m.local_id: m for m in self.metrics}}
 

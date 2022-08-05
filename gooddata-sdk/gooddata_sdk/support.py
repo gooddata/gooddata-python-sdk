@@ -19,6 +19,7 @@ class SupportService:
         """
         Checks if GD.CN is available.
         Can raise exceptions in case of authentication or authorization failure.
+
         :return: True - available, False - not available
         """
         try:
@@ -37,11 +38,13 @@ class SupportService:
     def wait_till_available(self, timeout: int, sleep_time: float = 2.0) -> None:
         """
         Wait till GD.CN service is available. When timeout is:
+
           - > 0 exception is raised after given number of seconds.
           - = 0 exception is raised whe service is not available immediately
           - < 0 no timeout
 
         Method propagates is_available exceptions.
+
         :param timeout: seconds to wait to service to be available (see method description for details)
         :param sleep_time: seconds to wait between GD.CN availability tests
         """

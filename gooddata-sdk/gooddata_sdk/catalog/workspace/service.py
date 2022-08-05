@@ -75,6 +75,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def get_workspace(self, workspace_id: str) -> CatalogWorkspace:
         """
         Gets workspace content and returns it as CatalogWorkspace object.
+
         :param workspace_id: An input string parameter of workspace id.
         :return: CatalogWorkspace object containing structure of workspace.
         """
@@ -196,7 +197,6 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         Retrieves catalog for a workspace. Catalog contains all data sets and metrics defined in that workspace.
 
         :param workspace_id: workspace identifier
-        :return:
         """
         get_datasets = functools.partial(
             self._entities_api.get_all_entities_datasets,
@@ -253,12 +253,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
         :param workspace_id: workspace identifier
         :param ctx: items already in context. you can specify context in one of the following ways:
-            - single item or list of items from the execution model
-            - single item or list of items from catalog model; catalog fact, label or metric may be added
-            - the entire execution definition that is used to compute analytics
+
+         - single item or list of items from the execution model
+         - single item or list of items from catalog model; catalog fact, label or metric may be added
+         - the entire execution definition that is used to compute analytics
 
         :return: a dict of sets; type of available object is used as key in the dict,
-            the value is a set containing id's of available items
+         the value is a set containing id's of available items
         """
         if isinstance(ctx, ExecutionDefinition):
             afm = compute_model_to_api_model(attributes=ctx.attributes, metrics=ctx.metrics, filters=ctx.filters)

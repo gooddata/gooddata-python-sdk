@@ -28,6 +28,7 @@ def table_col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:
 def column_data_type_for(attribute: Optional[CatalogAttribute]) -> str:
     """
     Determine what postgres type should be used for `attribute`.
+
     :param attribute: catalog attribute instance
     """
     if not attribute:

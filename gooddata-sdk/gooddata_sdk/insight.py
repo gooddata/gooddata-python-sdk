@@ -280,6 +280,7 @@ class InsightMetric:
         """
         If this is a time comparison metric, return local_id of the master metric from which it is
         derived.
+
         :return: local_id of master metric, None if not a time comparison metric
         """
         if "popMeasureDefinition" in self._d:

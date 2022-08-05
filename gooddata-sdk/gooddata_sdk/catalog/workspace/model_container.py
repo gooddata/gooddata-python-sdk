@@ -55,7 +55,7 @@ class CatalogWorkspaceContent:
 
         :return: instance of CatalogMetric or None if no such metric in catalog
 
-        :rtype CatalogMetric
+        :rtype: CatalogMetric
         """
         if isinstance(metric_id, ObjId):
             obj_id_str = str(metric_id)
@@ -68,14 +68,14 @@ class CatalogWorkspaceContent:
 
     def get_dataset(self, dataset_id: Union[str, ObjId]) -> Union[CatalogDataset, None]:
         """
-        Gets dataset by id. The id can be either an instance of ObjId or string containing serialized ObjId
-        ('dataset/some.dataset.id') or contain just the id part ('some.dataset.id').
+        Gets dataset by id. The id can be either an instance of ObjId or string containing serialized ``ObjId
+        ('dataset/some.dataset.id')`` or contain just the id part (``some.dataset.id``).
 
         :param dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
 
         :return: instance of CatalogDataset or None if no such dataset in catalog
 
-        :rtype CatalogDataset
+        :rtype: CatalogDataset
         """
         if isinstance(dataset_id, ObjId):
             obj_id_str = str(dataset_id)
@@ -106,11 +106,11 @@ class CatalogWorkspaceContent:
         the filtered catalog will contain only those entities that can be safely added on top of that existing context.
 
         :param ctx: existing context. you can specify context in one of the following ways:
-            - single item or list of items from the execution model
-            - single item or list of items from catalog model; catalog fact, label or metric may be added
-            - the entire execution definition that is used to compute analytics
 
-        :return:
+         - single item or list of items from the execution model
+         - single item or list of items from catalog model; catalog fact, label or metric may be added
+         - the entire execution definition that is used to compute analytics
+
         """
         valid_objects = self._valid_objects(ctx)
 

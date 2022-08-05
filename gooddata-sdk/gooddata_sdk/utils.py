@@ -79,7 +79,6 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
 
     :param get_page_func: an API controller from the metadata client
     :param page_size: optionally specify page length, default is 500
-    :return:
     """
     all_paged_entities = AllPagedEntities(data=[], included=[])
     current_page = 0
