@@ -20,48 +20,16 @@ To create an instance of GoodDataSdk:
     # For example, get a list of all workspaces from my GoodData.CN project
     workspaces = sdk.catalog_workspace.list_workspaces()
 
-**Supported services:**
+.. toctree::
+   :maxdepth: 2
+   :caption: Supported services:
 
-* :doc:`Catalog Workspace <catalog-workspace>`: Read, update, create and delete workspaces.
-
-   * :ref:`w entity methods`
-   * :ref:`w declarative methods`
-
-* :doc:`Catalog Workspace Content <catalog-workspace-content>`: Read catalog objects (datasets and metrics) from a workspace.
-
-   * :ref:`wc entity methods`
-   * :ref:`wc declarative methods`
-
-* :doc:`Catalog Data Source <catalog-data-source>`: Read, update, create and delete data sources and read their tables.
-
-   * :ref:`ds entity methods`
-   * :ref:`ds declarative methods`
-   * :ref:`ds action methods`
-
-* :doc:`Catalog User <catalog-user>`: Read, update, create and delete user and user groups.
-
-   * :ref:`u entity methods`
-   * :ref:`ug entity methods`
-   * :ref:`u declarative methods`
-   * :ref:`ug declarative methods`
-   * :ref:`uug declarative methods`
-
-* :doc:`Catalog Permission <catalog-permission>`: Read, update workspace permissions.
-
-   * :ref:`p declarative methods`
-
-* :doc:`Catalog Organization <catalog-organization>`: Update organization name, OIDC parameters.
-
-   * :ref:`o entity methods`
-
-* :doc:`Insights <insight>`: Read insights stored in a workspace.
-
-   * :ref:`i entity methods`
-
-* :doc:`Compute <compute>`: Drives computation of analytics for GoodData.CN workspaces. Used by higher level services such as the Table service.
-
-   * :ref:`c entity methods`
-
-* :doc:`Table <table>`: Compute and read analytics in typical tabular format.
-
-   * :ref:`t entity methods`
+   Catalog Workspace <catalog-workspace>
+   Catalog Workspace Content <catalog-workspace-content>
+   Catalog Data Source <catalog-data-source>
+   Catalog User <catalog-user>
+   Catalog Permission <catalog-permission>
+   Catalog Organization <catalog-organization>
+   Insights <insight>
+   Compute <compute>
+   Table <table>
