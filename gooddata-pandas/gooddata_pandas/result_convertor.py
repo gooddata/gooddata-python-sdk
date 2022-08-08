@@ -84,7 +84,7 @@ class _AccumulatedData:
         dim_idx_dict = {dim["localIdentifier"]: idx for idx, dim in enumerate(response.dimensions)}
 
         for grand_total in grand_totals:
-            # TODO not sure why totalDimensions is an array
+            # 2-dim results have always 1-dim grand totals (3-dim results have 2-dim gt but DataFrame stores 2D only)
             dims = grand_total["totalDimensions"]
             assert len(dims) == 1
             dim_idx = dim_idx_dict[dims[0]]
@@ -101,7 +101,8 @@ class _AccumulatedData:
                 # grand totals not initialized yet; initialize both data and headers by making
                 # a shallow copy from the results
                 self.grand_totals[opposite_dim] = grand_total["data"][:]
-                # TODO: wtf is the deal with this? why can there be multiple elements in the headerGroups list?
+                # TODO: row total measure headers are currently not supported (only aggregation info w/o measure label)
+                #       measure header defs are under ["headerGroups"][>0]
                 self.grand_totals_headers[opposite_dim] = grand_total["dimensionHeaders"][0]["headerGroups"][0][
                     "headers"
                 ][:]

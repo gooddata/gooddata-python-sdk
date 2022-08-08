@@ -222,6 +222,40 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 19))
 
 
+# TODO - not implemented yet
+# def test_dataframe_for_exec_def_totals5(gdf: DataFrameFactory):
+#     """
+#     Execution with multiple measures row totals; the columns have labels of each measure.
+#     """
+#     exec_def = ExecutionDefinition(
+#         attributes=[
+#             Attribute(local_id="a_region", label="region"),
+#             Attribute(local_id="a_cat", label="products.category"),
+#         ],
+#         metrics=[
+#             SimpleMetric(local_id="m_price", item=ObjId(id="price", type="fact")),
+#             SimpleMetric(local_id="m_quantity", item=ObjId(id="quantity", type="fact")),
+#         ],
+#         filters=[],
+#         dimensions=[["a_region"], ["a_cat", "measureGroup"]],
+#         totals=[
+#             TotalDefinition(
+#                 local_id="grand_total1",
+#                 aggregation="sum",
+#                 total_dims=[TotalDimension(idx=1, items=["measureGroup"]), TotalDimension(idx=0, items=["a_region"])],
+#                 metric_local_id="m_price",
+#             ),
+#             TotalDefinition(
+#                 local_id="grand_total2",
+#                 aggregation="sum",
+#                 total_dims=[TotalDimension(idx=1, items=["measureGroup"]), TotalDimension(idx=0, items=["a_region"])],
+#                 metric_local_id="m_quantity",
+#             ),
+#         ],
+#     )
+#     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(?, ?))
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim1.json"))
 def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
