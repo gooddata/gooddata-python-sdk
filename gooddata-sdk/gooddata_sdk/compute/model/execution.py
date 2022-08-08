@@ -151,9 +151,6 @@ class ExecutionResponse:
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         """
         Reads from the execution result.
-        :param offset:
-        :param limit:
-        :return:
         """
 
         _offset = offset if isinstance(offset, list) else [offset] if offset is not None else None
@@ -192,7 +189,6 @@ def compute_model_to_api_model(
     :param attributes: optionally specify list of attributes
     :param metrics: optionally specify list of metrics
     :param filters: optionally specify list of filters
-    :return:
     """
     return models.AFM(
         attributes=[a.as_api_model() for a in attributes] if attributes is not None else [],

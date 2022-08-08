@@ -27,29 +27,32 @@ class SeriesFactory:
 
         :param index_by: label to index by; specify either:
 
-         - string with id: 'some_label_id',
-         - object identifier: ObjId(id='some_label_id', type='label'),
-         - string representation of object identifier: 'label/some_label_id'
-         - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
+         - string with id: ``some_label_id``,
+         - object identifier: ``ObjId(id='some_label_id', type='label')``,
+         - string representation of object identifier: ``label/some_label_id``
+         - or an Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above
 
         :param data_by: label, fact or metric to that will provide data (metric values or label elements); specify
          either:
 
-         - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
-           'metric'
-         - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
+         - object identifier: ``ObjId(id='some_id', type='<type>')`` - where type is either ``label``, ``fact``
+           or ``metric``
+         - string representation of object identifier: ``<type>/some_id`` - where type is either ``label``, ``fact`` or
+           ``metric``
+         - Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
+         - SimpleMetric object used in the compute model: ``SimpleMetric(local_id=..., item=..., aggregation=...)``
 
         :param filter_by: optionally specify filter to apply during computation on the server, reference to filtering
-            column can be one of:
-            - string reference to index key
-            - object identifier in string form
-            - object identifier: ObjId(id='some_label_id', type='<type>')
-            - Attribute or Metric depending on type of filter
+         column can be one of:
 
-        :return pandas series instance
+         - string reference to index key
+         - object identifier in string form
+         - object identifier: ``ObjId(id='some_label_id', type='<type>')``
+         - Attribute or Metric depending on type of filter
+
+        :return: pandas series instance
+
         """
         data, index = compute_and_extract(
             self._sdk,
@@ -77,29 +80,31 @@ class SeriesFactory:
 
         :param data_by: label, fact or metric to get data from; specify either:
 
-         - object identifier: ObjId(id='some_id', type='<type>') - where type is either 'label', 'fact' or 'metric'
-         - string representation of object identifier: '<type>/some_id' - where type is either 'label', 'fact' or
-           'metric'
-         - Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
-         - SimpleMetric object used in the compute model: SimpleMetric(local_id=..., item=..., aggregation=...)
+         - object identifier: ``ObjId(id='some_id', type='<type>')`` - where type is either ``label``, ``fact``
+           or ``metric``
+         - string representation of object identifier: ``<type>/some_id`` - where type is either ``label``, ``fact`` or
+           ``metric``
+         - Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
+         - SimpleMetric object used in the compute model: ``SimpleMetric(local_id=..., item=..., aggregation=...)``
 
         :param granularity: optionally specify label to slice the metric by; specify either:
 
-         - string with id: 'some_label_id',
-         - object identifier: ObjId(id='some_label_id', type='label'),
-         - string representation of object identifier: 'label/some_label_id'
-         - or an Attribute object used in the compute model: Attribute(local_id=..., label='some_label_id')
+         - string with id: ``some_label_id``,
+         - object identifier: ``ObjId(id='some_label_id', type='label')``,
+         - string representation of object identifier: ``label/some_label_id``
+         - or an Attribute object used in the compute model: ``Attribute(local_id=..., label='some_label_id')``
          - list containing multiple labels to slice the metric by - specified in one of the ways list above
          - dict containing mapping of index name to label to use for indexing - specified in one of the ways list above;
            this option is available so that you can easily switch from indexed factory method to this one if needed
 
         :param filter_by: optionally specify filter to apply during computation on the server, reference to filtering
-            column can be one of:
-            - object identifier in string form
-            - object identifier: ObjId(id='some_label_id', type='<type>')
-            - Attribute or Metric depending on type of filter
+         column can be one of:
 
-        :return pandas series instance
+         - object identifier in string form
+         - object identifier: ``ObjId(id='some_label_id', type='<type>')``
+         - Attribute or Metric depending on type of filter
+
+        :return: pandas series instance
         """
 
         if isinstance(granularity, list):

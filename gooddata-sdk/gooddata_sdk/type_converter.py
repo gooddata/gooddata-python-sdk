@@ -121,6 +121,7 @@ class TypeConverterRegistry:
     def __init__(self, type_name: str):
         """
         Initialize instance with type for which instance is going to be responsible
+
         :param type_name: type name
         """
         self._type_name = type_name
@@ -131,6 +132,7 @@ class TypeConverterRegistry:
         """
         Register converter instance for given sub-type (granularity). If sub-type is not specified, converter is
         registered as the default one for the whole type. Default converter can be registered only once.
+
         :param converter: converter instance
         :param sub_type: sub-type name
         """
@@ -142,6 +144,7 @@ class TypeConverterRegistry:
     def _register_with_sub_type(self, converter: Converter, sub_type: str) -> None:
         """
         Register converter instance for given sub-type granularity.
+
         :param converter: converter instance
         :param sub_type: sub-type name
         """
@@ -157,6 +160,7 @@ class TypeConverterRegistry:
     def _register_default(self, converter: Converter) -> None:
         """
         Register default converter instance for the type. Default type can be registered only once.
+
         :param converter: converter instance
         """
         if self._default_converter:
@@ -173,6 +177,7 @@ class TypeConverterRegistry:
         Find and return converter instance for a given sub-type. Default converter instance is returned
         if the sub-type is not found or not provided. When a default converter is not registered, ValueError
         exception is raised.
+
         :param sub_type: sub-type name
         :return: Converter instance
         """
@@ -187,6 +192,7 @@ class TypeConverterRegistry:
     def _get_default_converter(self) -> Converter:
         """
         Check if default converter is registered. If yes, return it. Otherwise raise ValueError exception.
+
         :return: default Converter instance
         """
         if not self._default_converter:
@@ -208,6 +214,7 @@ class ConverterRegistryStore:
     def _get_registry(cls, type_name: str) -> TypeConverterRegistry:
         """
         Return TypeConverterRegistry instance registered for given type. If no such instance exists, it is created.
+
         :param type_name: type name
         :return: TypeConverterRegistry instance for given type name
         """
@@ -222,6 +229,7 @@ class ConverterRegistryStore:
         """
         Register Converter instance created from provided Converter class to given type and list of sub types.
         When sub types are not provided, converter is registered as the default one for given type.
+
         :param type_name: type name
         :param class_converter: Converter class
         :param sub_types: list of sub types or None (default type Converter)
@@ -237,6 +245,7 @@ class ConverterRegistryStore:
     def find_converter(cls, type_name: str, sub_type: Optional[str] = None) -> Converter:
         """
         Find Converter for given type and sub type.
+
         :param type_name: type name
         :param sub_type: sub type name
         """
