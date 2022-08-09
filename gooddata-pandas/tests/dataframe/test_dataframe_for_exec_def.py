@@ -14,7 +14,7 @@ _fixtures_dir = _current_dir / "fixtures"
 gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
-def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefinition, expected: Tuple[int, int]) -> None:
+def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefinition, expected: Tuple[int, int]) -> str:
     # generate dataframe from exec_def
     result, response = gdf.for_exec_def(exec_def=exec_def)
     assert result.values.shape == expected
@@ -25,6 +25,8 @@ def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefiniti
 
     # compare dataframes generated using both methods above
     assert result.to_string() == result_from_result_id.to_string()
+
+    return response.result_id
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.json"))
@@ -42,7 +44,20 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["state", "region"], ["product_category", "measureGroup"]],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8))
+    exec_result_id = _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8))
+
+    # check also label overrides
+    overrides = {
+        "labels": {
+            "state": {"title": "STATE LABEL"},
+        },
+        "metrics": {
+            "price": {"title": "PRICE LABEL"},
+        },
+    }
+    result = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides)
+    assert result.to_string().find(overrides["labels"]["state"]["title"]) == 262
+    assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.json"))

@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 from dataclasses import dataclass, field
-from typing import Any, Callable, List, Optional, Tuple, Union, cast
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 import pandas
 
@@ -9,6 +9,7 @@ from gooddata_sdk import BareExecutionResponse, ExecutionResult
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
 _DataArray = List[Union[int, None]]
+LabelOverrides = Dict[str, Dict[str, Dict[str, str]]]
 
 
 @dataclass(frozen=True)
@@ -188,8 +189,20 @@ def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _
     return acc.result()
 
 
-def _create_header_mapper(response: BareExecutionResponse, dim: int) -> Callable[[int, Any], str]:
+def _create_header_mapper(
+    response: BareExecutionResponse, dim: int, label_overrides: LabelOverrides = {}
+) -> Callable[[int, Any], str]:
+    """
+    Prepares header mapper function which is doing header structures translations into appropriate label used
+    in a dataframe
+    :param response: Response structure to gather dimension header details
+    :param dim: dimension id
+    :param label_overrides: label overrides
+    :return: Mapper function
+    """
     dim_descriptor = response.dimensions[dim]
+    attribute_labels = label_overrides["labels"] if "labels" in label_overrides else {}
+    measure_labels = label_overrides["metrics"] if "metrics" in label_overrides else {}
 
     def _mapper(header_idx: int, header: Any) -> str:
         label = ""
@@ -199,12 +212,18 @@ def _create_header_mapper(response: BareExecutionResponse, dim: int) -> Callable
             if "labelValue" in header["attributeHeader"]:
                 label = header["attributeHeader"]["labelValue"]
             elif "labelName" in header["attributeHeader"]:
-                label = header["attributeHeader"]["labelName"]
+                attr_local_id = header["attributeHeader"]["localIdentifier"]
+                if attr_local_id in attribute_labels:
+                    label = attribute_labels[attr_local_id]["title"]
+                else:
+                    label = header["attributeHeader"]["labelName"]
         elif "measureHeader" in header:
             measure_idx = header["measureHeader"]["measureIndex"]
             measure_descriptor = dim_descriptor["headers"][header_idx]["measureGroupHeaders"][measure_idx]
 
-            if "name" in measure_descriptor:
+            if measure_descriptor["localIdentifier"] in measure_labels:
+                label = measure_labels[measure_descriptor["localIdentifier"]]["title"]
+            elif "name" in measure_descriptor:
                 label = measure_descriptor["name"]
             else:
                 label = measure_descriptor["localIdentifier"]
@@ -216,12 +235,15 @@ def _create_header_mapper(response: BareExecutionResponse, dim: int) -> Callable
 
 
 def _headers_to_index(
-    dim_idx: int, headers: Tuple[_DataHeaders, Optional[_DataHeaders]], response: BareExecutionResponse
+    dim_idx: int,
+    headers: Tuple[_DataHeaders, Optional[_DataHeaders]],
+    response: BareExecutionResponse,
+    label_overrides: LabelOverrides,
 ) -> Optional[pandas.Index]:
     if len(response.dimensions) <= dim_idx or not len(response.dimensions[dim_idx]["headers"]):
         return None
 
-    mapper = _create_header_mapper(response, dim=dim_idx)
+    mapper = _create_header_mapper(response=response, dim=dim_idx, label_overrides=label_overrides)
 
     return pandas.MultiIndex.from_arrays(
         [
@@ -271,13 +293,14 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
     return headers
 
 
-def convert_result_to_dataframe(response: BareExecutionResponse) -> pandas.DataFrame:
+def convert_result_to_dataframe(response: BareExecutionResponse, label_overrides: LabelOverrides) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
 
     Because the result itself does not contain all the necessary metadata to do the full conversion, this method
     expects that the execution _response_.
 
+    :param label_overrides: label overrides
     :param response: execution response through which the result can be read and converted to a dataframe
     :return: a new dataframe
     """
@@ -287,6 +310,6 @@ def convert_result_to_dataframe(response: BareExecutionResponse) -> pandas.DataF
 
     return pandas.DataFrame(
         data=full_data,
-        index=_headers_to_index(dim_idx=0, headers=full_headers, response=response),
-        columns=_headers_to_index(dim_idx=1, headers=full_headers, response=response),
+        index=_headers_to_index(dim_idx=0, headers=full_headers, response=response, label_overrides=label_overrides),
+        columns=_headers_to_index(dim_idx=1, headers=full_headers, response=response, label_overrides=label_overrides),
     )
