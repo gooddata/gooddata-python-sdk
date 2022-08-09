@@ -196,7 +196,10 @@ def _create_header_mapper(response: BareExecutionResponse, dim: int) -> Callable
         if header is None:
             pass
         elif "attributeHeader" in header:
-            label = header["attributeHeader"]["labelValue"]
+            if "labelValue" in header["attributeHeader"]:
+                label = header["attributeHeader"]["labelValue"]
+            elif "labelName" in header["attributeHeader"]:
+                label = header["attributeHeader"]["labelName"]
         elif "measureHeader" in header:
             measure_idx = header["measureHeader"]["measureIndex"]
             measure_descriptor = dim_descriptor["headers"][header_idx]["measureGroupHeaders"][measure_idx]
@@ -224,7 +227,8 @@ def _headers_to_index(
         [
             tuple(mapper(header_idx, header) for header in header_group)
             for header_idx, header_group in enumerate(cast(_DataHeaders, headers[dim_idx]))
-        ]
+        ],
+        names=[mapper(0, dim_header) for dim_header in (response.dimensions[dim_idx]["headers"])],
     )
 
 
