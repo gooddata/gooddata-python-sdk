@@ -7,7 +7,15 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 from gooddata_sdk._version import __version__
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
-from gooddata_sdk.catalog.data_source.declarative_model.data_source import CatalogDeclarativeDataSources
+from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
+    CatalogDeclarativeDataSource,
+    CatalogDeclarativeDataSources,
+    CatalogDeclarativeTables,
+)
+from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import (
+    CatalogDeclarativeColumn,
+    CatalogDeclarativeTable,
+)
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     BigQueryAttributes,
