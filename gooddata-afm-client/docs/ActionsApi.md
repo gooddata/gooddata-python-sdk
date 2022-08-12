@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_objects**](ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+[**retrieve_execution_metadata**](ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
 
@@ -484,6 +485,77 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **retrieve_execution_metadata**
+> ResultCacheMetadata retrieve_execution_metadata(workspace_id, result_id)
+
+Get a single execution result's metadata.
+
+The resource provides execution result's metadata as AFM and resultSpec used in execution request and an executionResponse
+
+### Example
+
+
+```python
+import time
+import gooddata_afm_client
+from gooddata_afm_client.api import actions_api
+from gooddata_afm_client.model.problem import Problem
+from gooddata_afm_client.model.result_cache_metadata import ResultCacheMetadata
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_afm_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_afm_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a single execution result's metadata.
+        api_response = api_instance.retrieve_execution_metadata(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_afm_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_execution_metadata: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+
+### Return type
+
+[**ResultCacheMetadata**](ResultCacheMetadata.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Execution result&#39;s metadata was found and returned. |  -  |
+**404** | Execution result was not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **retrieve_result**
 > ExecutionResult retrieve_result(workspace_id, result_id)
 
@@ -520,6 +592,9 @@ with gooddata_afm_client.ApiClient() as api_client:
     limit = [
         limit=1,10,
     ] # [int] | Return only this number of items. Format is limit=1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM. (optional) if omitted the server will use the default value of []
+    excluded_total_dimensions = [
+        "excludedTotalDimensions=dim_0,dim_1",
+    ] # [str] | Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. (optional) if omitted the server will use the default value of []
 
     # example passing only required values which don't have defaults set
     try:
@@ -533,7 +608,7 @@ with gooddata_afm_client.ApiClient() as api_client:
     # and optional values
     try:
         # Get a single execution result
-        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit)
+        api_response = api_instance.retrieve_result(workspace_id, result_id, offset=offset, limit=limit, excluded_total_dimensions=excluded_total_dimensions)
         pprint(api_response)
     except gooddata_afm_client.ApiException as e:
         print("Exception when calling ActionsApi->retrieve_result: %s\n" % e)
@@ -548,6 +623,7 @@ Name | Type | Description  | Notes
  **result_id** | **str**| Result ID |
  **offset** | **[int]**| Request page with these offsets. Format is offset&#x3D;1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
  **limit** | **[int]**| Return only this number of items. Format is limit&#x3D;1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM. | [optional] if omitted the server will use the default value of []
+ **excluded_total_dimensions** | **[str]**| Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions. | [optional] if omitted the server will use the default value of []
 
 ### Return type
 
@@ -568,7 +644,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Execution result was found and returned. |  -  |
-**400** | Limit and/or offset query parameters (paging) were invalid. |  -  |
+**400** | Limit and/or offset and/or excludedTotalDimensions query parameters (paging) were invalid. |  -  |
 **404** | Execution result was not found. |  -  |
 **500** | The result processing has failed unexpectedly. |  -  |
 

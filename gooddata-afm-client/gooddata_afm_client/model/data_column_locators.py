@@ -141,7 +141,7 @@ class DataColumnLocators(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            properties ({str: (DataColumnLocator,)}): Mapping from dimensions to data column locators. Locators for each dimension opposite to the sorted one must be specified.. [optional]  # noqa: E501
+            properties ({str: (DataColumnLocator,)}): Mapping from dimensions to data column locators.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -227,7 +227,7 @@ class DataColumnLocators(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            properties ({str: (DataColumnLocator,)}): Mapping from dimensions to data column locators. Locators for each dimension opposite to the sorted one must be specified.. [optional]  # noqa: E501
+            properties ({str: (DataColumnLocator,)}): Mapping from dimensions to data column locators.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

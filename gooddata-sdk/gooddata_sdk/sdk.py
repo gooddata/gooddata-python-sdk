@@ -95,3 +95,7 @@ class GoodDataSdk:
     @property
     def catalog_permission(self) -> CatalogPermissionService:
         return self._catalog_permission
+
+    @property
+    def client(self) -> GoodDataApiClient:
+        return self._client

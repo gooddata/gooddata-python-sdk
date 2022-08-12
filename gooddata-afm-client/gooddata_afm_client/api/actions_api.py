@@ -30,6 +30,7 @@ from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from gooddata_afm_client.model.execution_result import ExecutionResult
 from gooddata_afm_client.model.problem import Problem
+from gooddata_afm_client.model.result_cache_metadata import ResultCacheMetadata
 
 
 class ActionsApi(object):
@@ -354,6 +355,68 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.retrieve_execution_metadata_endpoint = _Endpoint(
+            settings={
+                'response_type': (ResultCacheMetadata,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata',
+                'operation_id': 'retrieve_execution_metadata',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'result_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'result_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'result_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'result_id': 'resultId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'result_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.retrieve_result_endpoint = _Endpoint(
             settings={
                 'response_type': (ExecutionResult,),
@@ -369,6 +432,7 @@ class ActionsApi(object):
                     'result_id',
                     'offset',
                     'limit',
+                    'excluded_total_dimensions',
                 ],
                 'required': [
                     'workspace_id',
@@ -402,22 +466,27 @@ class ActionsApi(object):
                         ([int],),
                     'limit':
                         ([int],),
+                    'excluded_total_dimensions':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'result_id': 'resultId',
                     'offset': 'offset',
                     'limit': 'limit',
+                    'excluded_total_dimensions': 'excludedTotalDimensions',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'result_id': 'path',
                     'offset': 'query',
                     'limit': 'query',
+                    'excluded_total_dimensions': 'query',
                 },
                 'collection_format_map': {
                     'offset': 'csv',
                     'limit': 'csv',
+                    'excluded_total_dimensions': 'csv',
                 }
             },
             headers_map={
@@ -783,6 +852,93 @@ class ActionsApi(object):
             afm_execution
         return self.explain_afm_endpoint.call_with_http_info(**kwargs)
 
+    def retrieve_execution_metadata(
+        self,
+        workspace_id,
+        result_id,
+        **kwargs
+    ):
+        """Get a single execution result's metadata.  # noqa: E501
+
+        The resource provides execution result's metadata as AFM and resultSpec used in execution request and an executionResponse  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.retrieve_execution_metadata(workspace_id, result_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+            result_id (str): Result ID
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            ResultCacheMetadata
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['result_id'] = \
+            result_id
+        return self.retrieve_execution_metadata_endpoint.call_with_http_info(**kwargs)
+
     def retrieve_result(
         self,
         workspace_id,
@@ -805,6 +961,7 @@ class ActionsApi(object):
         Keyword Args:
             offset ([int]): Request page with these offsets. Format is offset=1,2,3,... - one offset for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
             limit ([int]): Return only this number of items. Format is limit=1,2,3,... - one limit for each dimensions in ResultSpec from originating AFM.. [optional] if omitted the server will use the default value of []
+            excluded_total_dimensions ([str]): Identifiers of the dimensions where grand total data should not be returned for this request. A grand total will not be returned if all of its totalDimensions are in excludedTotalDimensions.. [optional] if omitted the server will use the default value of []
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

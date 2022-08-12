@@ -1,11 +1,13 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import pandas
 
+from gooddata_afm_client import apis, models
 from gooddata_pandas.data_access import compute_and_extract
+from gooddata_pandas.result_convertor import LabelOverrides, convert_result_to_dataframe
 from gooddata_pandas.utils import (
     ColumnsDef,
     DefaultInsightColumnNaming,
@@ -14,7 +16,7 @@ from gooddata_pandas.utils import (
     _to_item,
     make_pandas_index,
 )
-from gooddata_sdk import Attribute, Filter, GoodDataSdk
+from gooddata_sdk import Attribute, BareExecutionResponse, ExecutionDefinition, Filter, GoodDataSdk
 
 
 class DataFrameFactory:
@@ -225,3 +227,81 @@ class DataFrameFactory:
         }
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
+
+    def for_exec_def(
+        self, exec_def: ExecutionDefinition, label_overrides: LabelOverrides = {}
+    ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
+        """
+        Creates a data frame using an execution definition. The data frame will respect the dimensionality
+        specified in execution definition's result spec.
+
+        Each dimension may be sliced by multiple labels. The factory will create MultiIndex for the dataframe's
+        row index and the columns.
+
+        Example of label_overrides structure:
+
+        .. code-block:: python
+
+            {
+                "labels": {
+                    "local_attribute_id": {
+                        "title": "My new attribute label"
+                    ,...
+                },
+                "metrics": {
+                    "local_metric_id": {
+                        "title": "My new metric label"
+                    },...
+                }
+            }
+
+        :param label_overrides: label overrides for metrics and attributes
+        :param exec_def: execution definition
+        :return: a new dataframe
+        """
+        execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
+
+        return (
+            convert_result_to_dataframe(response=execution.bare_exec_response, label_overrides=label_overrides),
+            execution.bare_exec_response,
+        )
+
+    def for_exec_result_id(self, result_id: str, label_overrides: LabelOverrides = {}) -> pandas.DataFrame:
+        """
+        Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
+        the dimensionality specified in execution definition's result spec.
+
+        Each dimension may be sliced by multiple labels. The factory will create MultiIndex for the dataframe's
+        row index and the columns.
+
+        Example of label_overrides structure:
+
+        .. code-block:: python
+
+            {
+                "labels": {
+                    "local_attribute_id": {
+                        "title": "My new attribute label"
+                    ,...
+                },
+                "metrics": {
+                    "local_metric_id": {
+                        "title": "My new metric label"
+                    },...
+                }
+            }
+
+        :param label_overrides: label overrides for metrics and attributes
+        :param result_id: executionResult ID from ExecutionResponse
+        :return: a new dataframe
+        """
+        metadata = self._sdk.compute.get_exec_metadata(workspace_id=self._workspace_id, result_id=result_id)
+
+        return convert_result_to_dataframe(
+            response=BareExecutionResponse(
+                actions_api=apis.ActionsApi(self._sdk.client.afm_client),
+                workspace_id=self._workspace_id,
+                response=models.AfmExecutionResponse(metadata["execution_response"], _check_type=False),
+            ),
+            label_overrides=label_overrides,
+        )

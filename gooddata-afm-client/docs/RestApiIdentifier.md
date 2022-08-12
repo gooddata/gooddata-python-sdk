@@ -1,6 +1,6 @@
 # RestApiIdentifier
 
-Identifier of primary label of attribute owning requested label, or null if the primary label is excluded.
+Object identifier.
 
 ## Properties
 Name | Type | Description | Notes

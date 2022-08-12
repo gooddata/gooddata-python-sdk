@@ -3,11 +3,36 @@ from __future__ import annotations
 
 from typing import Any, Optional, Union
 
+from attrs import define, field
+
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
+
+
+@define
+class TotalDimension:
+    idx: int
+    """index of dimension in which to calculate the total"""
+
+    items: list[str] = field(factory=list)
+    """items to use during total calculation"""
+
+
+@define
+class TotalDefinition:
+    local_id: str
+    """total's local identifier"""
+
+    aggregation: str
+    """aggregation function; case insensitive; one of SUM, MIN, MAX, MED, AVG"""
+
+    metric_local_id: str
+    """local identifier of the measure to calculate total for"""
+
+    total_dims: list[TotalDimension]
 
 
 class ExecutionDefinition:
@@ -17,11 +42,13 @@ class ExecutionDefinition:
         metrics: Optional[list[Metric]],
         filters: Optional[list[Filter]],
         dimensions: list[Optional[list[str]]],
+        totals: Optional[list[TotalDefinition]] = None,
     ) -> None:
         self._attributes = attributes or []
         self._metrics = metrics or []
         self._filters = filters or []
         self._dimensions = [dim for dim in dimensions if dim is not None]
+        self._totals = totals
 
     @property
     def attributes(self) -> list[Attribute]:
@@ -54,15 +81,49 @@ class ExecutionDefinition:
     def is_two_dim(self) -> bool:
         return len(self.dimensions) == 2
 
-    def as_api_model(self) -> models.AfmExecution:
+    def _create_dimensions(self) -> list[models.Dimension]:
         dimensions = []
-
         for idx, dim in enumerate(self._dimensions):
             dimensions.append(models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim))
 
-        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
+        return dimensions
 
-        result_spec = models.ResultSpec(dimensions=dimensions)
+    def _create_totals(self) -> Optional[list[models.Total]]:
+        if not self._totals:
+            return None
+
+        totals = []
+        for total in self._totals:
+            total_dims = [
+                models.TotalDimension(
+                    dimension_identifier=f"dim_{total_dim.idx}", total_dimension_items=total_dim.items
+                )
+                for total_dim in total.total_dims
+            ]
+
+            totals.append(
+                models.Total(
+                    local_identifier=total.local_id,
+                    metric=total.metric_local_id,
+                    function=total.aggregation.upper(),
+                    total_dimensions=total_dims,
+                )
+            )
+
+        return totals
+
+    def _create_result_spec(self) -> models.ResultSpec:
+        dimensions = self._create_dimensions()
+        totals = self._create_totals()
+
+        if totals is None:
+            return models.ResultSpec(dimensions=dimensions)
+
+        return models.ResultSpec(dimensions=dimensions, totals=totals)
+
+    def as_api_model(self) -> models.AfmExecution:
+        execution = compute_model_to_api_model(attributes=self.attributes, metrics=self.metrics, filters=self.filters)
+        result_spec = self._create_result_spec()
 
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
@@ -108,6 +169,11 @@ class ExecutionResult:
     def next_page_start(self, dim: int = 0) -> int:
         return self.paging_offset[dim] + self.paging_count[dim]
 
+    def get_all_headers(self, dim: int) -> list[list[Any]]:
+        header_groups = self.headers[dim]["headerGroups"]
+
+        return [[header for header in header_groups[idx]["headers"]] for idx in range(len(header_groups))]
+
     def get_all_header_values(self, dim: int, header_idx: int) -> list[str]:
         return [
             header["attributeHeader"]["labelValue"]
@@ -121,32 +187,34 @@ class ExecutionResult:
         return f"ExecutionResult(paging={self.paging})"
 
 
-class ExecutionResponse:
+class BareExecutionResponse:
+    """
+    Holds ExecutionResponse from triggered report computation and allows reading report's results.
+    """
+
     def __init__(
         self,
         actions_api: apis.ActionsApi,
         workspace_id: str,
-        exec_def: ExecutionDefinition,
         response: models.AfmExecutionResponse,
     ):
         self._actions_api = actions_api
         self._workspace_id = workspace_id
-        self._exec_def = exec_def
 
-        self._r: models.ExecutionResponse = response["execution_response"]
-        self._response = response
+        self._exec_response: models.ExecutionResponse = response["execution_response"]
+        self._afm_exec_response = response
 
     @property
     def workspace_id(self) -> str:
         return self._workspace_id
 
     @property
-    def exec_def(self) -> ExecutionDefinition:
-        return self._exec_def
+    def result_id(self) -> str:
+        return self._exec_response["links"]["executionResult"]
 
     @property
-    def result_id(self) -> str:
-        return self._r["links"]["executionResult"]
+    def dimensions(self) -> Any:
+        return self._exec_response["dimensions"]
 
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         """
@@ -174,7 +242,65 @@ class ExecutionResponse:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"ExecutionResponse(workspace_id={self.workspace_id}, result_id={self.result_id})"
+        return f"BareExecutionResponse(workspace_id={self.workspace_id}, result_id={self.result_id})"
+
+
+class Execution:
+    """
+    An envelope class holding execution related classes:
+        - exec_def              ExecutionDefinition
+        - bare_exec_response    BareExecutionResponse
+    """
+
+    def __init__(
+        self,
+        actions_api: apis.ActionsApi,
+        workspace_id: str,
+        exec_def: ExecutionDefinition,
+        response: models.AfmExecutionResponse,
+    ):
+        self._exec_def = exec_def
+        self._bare_exec_response = BareExecutionResponse(
+            actions_api=actions_api,
+            workspace_id=workspace_id,
+            response=response,
+        )
+
+    @property
+    def bare_exec_response(self) -> BareExecutionResponse:
+        return self._bare_exec_response
+
+    @property
+    def workspace_id(self) -> str:
+        return self.bare_exec_response._workspace_id
+
+    @property
+    def exec_def(self) -> ExecutionDefinition:
+        return self._exec_def
+
+    @property
+    def result_id(self) -> str:
+        return self.bare_exec_response._exec_response["links"]["executionResult"]
+
+    @property
+    def dimensions(self) -> Any:
+        return self.bare_exec_response._exec_response["dimensions"]
+
+    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
+        return self.bare_exec_response.read_result(limit, offset)
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"Execution(workspace_id={self.workspace_id}, result_id={self.bare_exec_response.result_id})"
+
+
+# Originally ExecutionResponse contained also ExecutionDefinition which was not correct, therefore Execution class was
+# created to hold clean BareExecutionResponse class without ExecutionDefinition.
+# Newly Execution holds BareExecutionResponse and ExecutionDefinition next to it.
+# For backwards compatibility ExecutionResponse -> Execution alias is defined.
+ExecutionResponse = Execution
 
 
 def compute_model_to_api_model(
