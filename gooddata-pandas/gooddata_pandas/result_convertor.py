@@ -1,8 +1,8 @@
 # (C) 2022 GoodData Corporation
-from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 import pandas
+from attrs import define, field, frozen
 
 from gooddata_sdk import BareExecutionResponse, ExecutionResult
 
@@ -12,9 +12,9 @@ _DataArray = List[Union[int, None]]
 LabelOverrides = Dict[str, Dict[str, Dict[str, str]]]
 
 
-@dataclass(frozen=True)
+@frozen
 class _DataWithHeaders:
-    data: Union[_DataArray, List[_DataArray]]
+    data: List[_DataArray]
     """extracted data; either array of values for one-dimensional result or array of arrays of values"""
 
     data_headers: Tuple[_DataHeaders, Optional[_DataHeaders]]
@@ -27,7 +27,7 @@ class _DataWithHeaders:
     """per-dimension grand total headers"""
 
 
-@dataclass
+@define
 class _AccumulatedData:
     """
     Utility class to offload code from the function that extracts all data and headers for a
@@ -35,16 +35,10 @@ class _AccumulatedData:
     the essential data and headers from the page.
     """
 
-    data: Any = field(init=False)
-    data_headers: List[Optional[_DataHeaders]] = field(init=False)
-    grand_totals: List[Optional[List[_DataArray]]] = field(init=False)
-    grand_totals_headers: List[Optional[_DataHeaders]] = field(init=False)
-
-    def __post_init__(self) -> None:
-        self.data = []
-        self.data_headers = [None, None]
-        self.grand_totals = [None, None]
-        self.grand_totals_headers = [None, None]
+    data: List[_DataArray] = field(init=False, factory=list)
+    data_headers: List[Optional[_DataHeaders]] = field(init=False, factory=lambda: [None, None])
+    grand_totals: List[Optional[List[_DataArray]]] = field(init=False, factory=lambda: [None, None])
+    grand_totals_headers: List[Optional[_DataHeaders]] = field(init=False, factory=lambda: [None, None])
 
     def accumulate_data(self, from_result: ExecutionResult) -> None:
         """
@@ -87,7 +81,7 @@ class _AccumulatedData:
         for grand_total in grand_totals:
             # 2-dim results have always 1-dim grand totals (3-dim results have 2-dim gt but DataFrame stores 2D only)
             dims = grand_total["totalDimensions"]
-            assert len(dims) == 1
+            assert len(dims) == 1, "Only 2-dimensional results are supported"
             dim_idx = dim_idx_dict[dims[0]]
             # the dimension id specified on the grand total says from what dimension were
             # the grand totals calculated (1 for column totals or 0 for row totals);
@@ -139,8 +133,8 @@ def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _
     :return:
     """
     num_dims = len(response.dimensions)
-    offset = [0 for _ in range(num_dims)]
-    limit = [page_size for _ in range(num_dims)]
+    offset = [0] * num_dims
+    limit = [page_size] * num_dims
     acc = _AccumulatedData()
 
     while True:
@@ -191,7 +185,7 @@ def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _
 
 def _create_header_mapper(
     response: BareExecutionResponse, dim: int, label_overrides: LabelOverrides = {}
-) -> Callable[[int, Any], str]:
+) -> Callable[[Any, Optional[int]], str]:
     """
     Prepares header mapper function which is doing header structures translations into appropriate label used
     in a dataframe
@@ -201,10 +195,10 @@ def _create_header_mapper(
     :return: Mapper function
     """
     dim_descriptor = response.dimensions[dim]
-    attribute_labels = label_overrides["labels"] if "labels" in label_overrides else {}
-    measure_labels = label_overrides["metrics"] if "metrics" in label_overrides else {}
+    attribute_labels = label_overrides.get("labels", {})
+    measure_labels = label_overrides.get("metrics", {})
 
-    def _mapper(header_idx: int, header: Any) -> str:
+    def _mapper(header: Any, header_idx: Optional[int]) -> str:
         label = ""
         if header is None:
             pass
@@ -217,7 +211,7 @@ def _create_header_mapper(
                     label = attribute_labels[attr_local_id]["title"]
                 else:
                     label = header["attributeHeader"]["labelName"]
-        elif "measureHeader" in header:
+        elif "measureHeader" in header and header_idx is not None:
             measure_idx = header["measureHeader"]["measureIndex"]
             measure_descriptor = dim_descriptor["headers"][header_idx]["measureGroupHeaders"][measure_idx]
 
@@ -247,10 +241,10 @@ def _headers_to_index(
 
     return pandas.MultiIndex.from_arrays(
         [
-            tuple(mapper(header_idx, header) for header in header_group)
+            tuple(mapper(header, header_idx) for header in header_group)
             for header_idx, header_group in enumerate(cast(_DataHeaders, headers[dim_idx]))
         ],
-        names=[mapper(0, dim_header) for dim_header in (response.dimensions[dim_idx]["headers"])],
+        names=[mapper(dim_header, None) for dim_header in (response.dimensions[dim_idx]["headers"])],
     )
 
 
@@ -259,7 +253,7 @@ def _merge_grand_totals_into_data(extract: _DataWithHeaders) -> Union[_DataArray
     Merges grand totals into the extracted data. this function will mutate the extracted data, extending
     the rows and columns with grand totals. Going with mutation here so as not to copy arrays around
     """
-    data: Any = extract.data
+    data: List[_DataArray] = extract.data
 
     if extract.grand_totals[0] is not None:
         # column totals are computed into extra rows, one row per column total
@@ -279,7 +273,7 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
     """
     Merges grand total headers into data headers. This function will mutate the extracted data.
     """
-    headers = extract.data_headers
+    headers: Tuple[_DataHeaders, Optional[_DataHeaders]] = extract.data_headers
 
     for dim_idx, grand_total_headers in enumerate(extract.grand_total_headers):
         if grand_total_headers is None:

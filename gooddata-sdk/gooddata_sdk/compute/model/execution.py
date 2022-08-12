@@ -1,8 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import Any, Optional, Union
+
+from attrs import define, field
 
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
@@ -11,16 +12,16 @@ from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 
 
-@dataclass
+@define
 class TotalDimension:
     idx: int
     """index of dimension in which to calculate the total"""
 
-    items: list[str] = field(default_factory=list)
+    items: list[str] = field(factory=list)
     """items to use during total calculation"""
 
 
-@dataclass
+@define
 class TotalDefinition:
     local_id: str
     """total's local identifier"""
@@ -116,7 +117,6 @@ class ExecutionDefinition:
         totals = self._create_totals()
 
         if totals is None:
-            # creating model with totals=None bombs, even if the totals is optional in the definition
             return models.ResultSpec(dimensions=dimensions)
 
         return models.ResultSpec(dimensions=dimensions, totals=totals)
@@ -201,8 +201,8 @@ class BareExecutionResponse:
         self._actions_api = actions_api
         self._workspace_id = workspace_id
 
-        self._r: models.ExecutionResponse = response["execution_response"]
-        self._response = response
+        self._exec_response: models.ExecutionResponse = response["execution_response"]
+        self._afm_exec_response = response
 
     @property
     def workspace_id(self) -> str:
@@ -210,11 +210,11 @@ class BareExecutionResponse:
 
     @property
     def result_id(self) -> str:
-        return self._r["links"]["executionResult"]
+        return self._exec_response["links"]["executionResult"]
 
     @property
     def dimensions(self) -> Any:
-        return self._r["dimensions"]
+        return self._exec_response["dimensions"]
 
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         """
@@ -280,11 +280,11 @@ class Execution:
 
     @property
     def result_id(self) -> str:
-        return self.bare_exec_response._r["links"]["executionResult"]
+        return self.bare_exec_response._exec_response["links"]["executionResult"]
 
     @property
     def dimensions(self) -> Any:
-        return self.bare_exec_response._r["dimensions"]
+        return self.bare_exec_response._exec_response["dimensions"]
 
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset)
