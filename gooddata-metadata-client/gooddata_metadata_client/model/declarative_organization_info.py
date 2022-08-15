@@ -31,8 +31,14 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.declarative_csp_directive import DeclarativeCspDirective
     from gooddata_metadata_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
+    from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+    from gooddata_metadata_client.model.declarative_theme import DeclarativeTheme
+    globals()['DeclarativeCspDirective'] = DeclarativeCspDirective
     globals()['DeclarativeOrganizationPermission'] = DeclarativeOrganizationPermission
+    globals()['DeclarativeSetting'] = DeclarativeSetting
+    globals()['DeclarativeTheme'] = DeclarativeTheme
 
 
 class DeclarativeOrganizationInfo(ModelNormal):
@@ -97,11 +103,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'permissions': ([DeclarativeOrganizationPermission],),  # noqa: E501
+            'csp_directives': ([DeclarativeCspDirective],),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
+            'settings': ([DeclarativeSetting],),  # noqa: E501
+            'themes': ([DeclarativeTheme],),  # noqa: E501
         }
 
     @cached_property
@@ -114,11 +123,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'csp_directives': 'cspDirectives',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'settings': 'settings',  # noqa: E501
+        'themes': 'themes',  # noqa: E501
     }
 
     read_only_vars = {
@@ -168,11 +180,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            settings ([DeclarativeSetting]): A list of organization settings.. [optional]  # noqa: E501
+            themes ([DeclarativeTheme]): A list of themes.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -268,11 +283,14 @@ class DeclarativeOrganizationInfo(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            csp_directives ([DeclarativeCspDirective]): A list of CSP directives.. [optional]  # noqa: E501
             early_access (str): Early access defined on level Organization. [optional]  # noqa: E501
             oauth_client_id (str): Identifier of the authentication provider. [optional]  # noqa: E501
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            settings ([DeclarativeSetting]): A list of organization settings.. [optional]  # noqa: E501
+            themes ([DeclarativeTheme]): A list of themes.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

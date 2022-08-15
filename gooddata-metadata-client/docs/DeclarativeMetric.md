@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A server agnostic definition of the dashboard plugin in JSON format. | 
+**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Custom setting content in JSON format. | 
 **id** | **str** | Metric ID. | 
 **title** | **str** | Metric title. | 
 **description** | **str** | Metric description. | [optional] 

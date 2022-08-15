@@ -51,6 +51,7 @@
               "DATE",
               "NUMERIC",
               "TIMESTAMP",
+              "TIMESTAMP_TZ",
               "BOOLEAN"
             ],
             "example": "INT",
