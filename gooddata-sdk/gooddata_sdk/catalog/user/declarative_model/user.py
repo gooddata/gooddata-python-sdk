@@ -10,6 +10,7 @@ from gooddata_metadata_client.model.declarative_user import DeclarativeUser
 from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserGroupIdentifier
+from gooddata_sdk.catalog.setting import CatalogDeclarativeSetting
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
 LAYOUT_USERS_DIR = "users"
@@ -47,6 +48,7 @@ class CatalogDeclarativeUser(Base):
     id: str
     auth_id: Optional[str] = None
     user_groups: List[CatalogUserGroupIdentifier] = []
+    settings: List[CatalogDeclarativeSetting] = []
 
     @staticmethod
     def client_class() -> Type[DeclarativeUser]:
