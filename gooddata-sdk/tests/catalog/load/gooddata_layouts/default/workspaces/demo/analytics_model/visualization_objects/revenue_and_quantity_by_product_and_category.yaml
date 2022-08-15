@@ -85,11 +85,11 @@ content:
           type: label
       notIn:
         values: []
-  properties:
-    sortItems:
-    - attributeSortItem:
-        attributeIdentifier: 06bc6b3b9949466494e4f594c11f1bff
-        direction: asc
+  properties: {}
+  sorts:
+  - attributeSortItem:
+      attributeIdentifier: 06bc6b3b9949466494e4f594c11f1bff
+      direction: asc
   version: '2'
   visualizationUrl: local:table
 id: revenue_and_quantity_by_product_and_category

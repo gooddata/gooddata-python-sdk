@@ -65,11 +65,11 @@ content:
           type: label
       notIn:
         values: []
-  properties:
-    sortItems:
-    - attributeSortItem:
-        attributeIdentifier: 7a4045fd00ac44579f52406df679435f
-        direction: asc
+  properties: {}
+  sorts:
+  - attributeSortItem:
+      attributeIdentifier: 7a4045fd00ac44579f52406df679435f
+      direction: asc
   version: '2'
   visualizationUrl: local:table
 id: percent_revenue_per_product_by_customer_and_category

@@ -27,68 +27,68 @@
                     "message": "OK"
                 },
                 "headers": {
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:01 GMT"
+                        "Tue, 16 Aug 2022 05:47:31 GMT"
+                    ],
+                    "Content-Length": [
+                        "421"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
-                    "Content-Length": [
-                        "395"
+                    "Server": [
+                        "nginx"
                     ],
                     "Connection": [
                         "keep-alive"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "X-XSS-Protection": [
-                        "1 ; mode=block"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-GDC-TRACE-ID": [
-                        "a50d46c9d57ac6b4"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
                     ],
                     "Referrer-Policy": [
                         "no-referrer"
                     ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "a7bacfe49f6a036e"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"2660733dfc018f739b0d142f19af7126\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}}]}],\"links\":{\"executionResult\":\"b65d115afbe4daebe7746eb64a1c272e500d1310\"}}}"
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"2660733dfc018f739b0d142f19af7126\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}}],\"localIdentifier\":\"dim_0\"}],\"links\":{\"executionResult\":\"e6947b3e0cfe52e95996fbaec4fbdb3061c64ba9\"}}}"
                 }
             }
         },
@@ -115,68 +115,68 @@
                     "message": ""
                 },
                 "headers": {
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:01 GMT"
+                        "Tue, 16 Aug 2022 05:47:31 GMT"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Server": [
+                        "nginx"
                     ],
                     "Connection": [
                         "keep-alive"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-GDC-TRACE-ID": [
-                        "9f91dfd54a7d3713"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Transfer-Encoding": [
-                        "chunked"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "30310ce40e6eb135"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channel_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"type\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"type\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_id\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_name\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"customer_id\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customer_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"customer_name\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customer_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"region\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"region\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"state\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"state\",\"type\":\"label\"},{\"id\":\"geo__state__location\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_id\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_line_id\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_line_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_status\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_status\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"product_id\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"product_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"product_name\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"product_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE\",\"areRelationsValid\":true},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.minute\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"granularity\":\"HOUR\",\"areRelationsValid\":true},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.hour\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\",\"areRelationsValid\":true},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.day\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\",\"areRelationsValid\":true},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.week\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\",\"areRelationsValid\":true},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.month\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\",\"areRelationsValid\":true},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarter\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\",\"areRelationsValid\":true},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.year\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE_OF_HOUR\",\"areRelationsValid\":true},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.minuteOfHour\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"granularity\":\"HOUR_OF_DAY\",\"areRelationsValid\":true},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.hourOfDay\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_WEEK\",\"areRelationsValid\":true},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfWeek\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_MONTH\",\"areRelationsValid\":true},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfMonth\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.weekOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.monthOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarterOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"}],\"included\":[{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minuteOfHour\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minute\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_name\",\"valueType\":\"TEXT\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_status\",\"valueType\":\"TEXT\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_name\",\"valueType\":\"TEXT\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfMonth\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"campaign_channel_id\",\"valueType\":\"TEXT\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarterOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_id\",\"valueType\":\"TEXT\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_name\",\"valueType\":\"TEXT\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"type\",\"valueType\":\"TEXT\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/type\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"region\",\"valueType\":\"TEXT\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/region\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"category\",\"valueType\":\"TEXT\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.monthOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.weekOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Location\",\"description\":\"Location\",\"tags\":[\"Customers\"],\"primary\":false,\"sourceColumn\":\"geo__state__location\"},\"id\":\"geo__state__location\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_id\",\"valueType\":\"TEXT\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hourOfDay\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_line_id\",\"valueType\":\"TEXT\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfWeek\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hour\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"category\",\"valueType\":\"TEXT\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_id\",\"valueType\":\"TEXT\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"state\",\"valueType\":\"TEXT\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/state\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_id\",\"valueType\":\"TEXT\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id\"},\"type\":\"label\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channel_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_channels.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"areRelationsValid\":true,\"sourceColumn\":\"type\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"type\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_id\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"areRelationsValid\":true,\"sourceColumn\":\"campaign_name\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"campaign_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"customer_id\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customer_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"customer_name\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"customer_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"region\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"region\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"areRelationsValid\":true,\"sourceColumn\":\"state\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"geo__state__location\",\"type\":\"label\"},{\"id\":\"state\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_id\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_line_id\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_line_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"areRelationsValid\":true,\"sourceColumn\":\"order_status\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"order_status\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"product_id\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"product_id\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"product_name\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"product_name\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"areRelationsValid\":true,\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"products.category\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE\",\"areRelationsValid\":true},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.minute\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"granularity\":\"HOUR\",\"areRelationsValid\":true},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.hour\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\",\"areRelationsValid\":true},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.day\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\",\"areRelationsValid\":true},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.week\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\",\"areRelationsValid\":true},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.month\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\",\"areRelationsValid\":true},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarter\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\",\"areRelationsValid\":true},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.year\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE_OF_HOUR\",\"areRelationsValid\":true},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.minuteOfHour\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"granularity\":\"HOUR_OF_DAY\",\"areRelationsValid\":true},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.hourOfDay\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_WEEK\",\"areRelationsValid\":true},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfWeek\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_MONTH\",\"areRelationsValid\":true},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfMonth\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.dayOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.weekOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.monthOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER_OF_YEAR\",\"areRelationsValid\":true},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear\"},\"relationships\":{\"labels\":{\"data\":[{\"id\":\"date.quarterOfYear\",\"type\":\"label\"}]}},\"type\":\"attribute\"}],\"included\":[{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minuteOfHour\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minute\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_name\",\"valueType\":\"TEXT\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_status\",\"valueType\":\"TEXT\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_name\",\"valueType\":\"TEXT\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfMonth\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"campaign_channel_id\",\"valueType\":\"TEXT\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarterOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_id\",\"valueType\":\"TEXT\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_name\",\"valueType\":\"TEXT\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"type\",\"valueType\":\"TEXT\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/type\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"region\",\"valueType\":\"TEXT\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/region\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"category\",\"valueType\":\"TEXT\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.monthOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.weekOfYear\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Location\",\"description\":\"Location\",\"tags\":[\"Customers\"],\"primary\":false,\"sourceColumn\":\"geo__state__location\"},\"id\":\"geo__state__location\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"primary\":true,\"sourceColumn\":\"product_id\",\"valueType\":\"TEXT\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hourOfDay\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"primary\":true,\"sourceColumn\":\"order_line_id\",\"valueType\":\"TEXT\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfWeek\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hour\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"primary\":true,\"sourceColumn\":\"category\",\"valueType\":\"TEXT\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"customer_id\",\"valueType\":\"TEXT\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"primary\":true,\"sourceColumn\":\"\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"primary\":true,\"sourceColumn\":\"state\",\"valueType\":\"TEXT\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/state\"},\"type\":\"label\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"primary\":true,\"sourceColumn\":\"campaign_id\",\"valueType\":\"TEXT\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id\"},\"type\":\"label\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=1&size=500\"}}"
                 }
             }
         },
@@ -203,68 +203,68 @@
                     "message": ""
                 },
                 "headers": {
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:01 GMT"
+                        "Tue, 16 Aug 2022 05:47:31 GMT"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Server": [
+                        "nginx"
                     ],
                     "Connection": [
                         "keep-alive"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-GDC-TRACE-ID": [
-                        "e642161b35dd8624"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Transfer-Encoding": [
-                        "chunked"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "95e9cbd3b0d9d836"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channels\",\"description\":\"Campaign channels\",\"tags\":[\"Campaign channels\"],\"grain\":[{\"id\":\"campaign_channel_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]}],\"dataSourceTableId\":\"demo-test-ds:campaign_channels\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaign_channels\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_channel_id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.category\",\"type\":\"attribute\"},{\"id\":\"type\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"spend\",\"type\":\"fact\"},{\"id\":\"budget\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Campaigns\",\"description\":\"Campaigns\",\"tags\":[\"Campaigns\"],\"grain\":[{\"id\":\"campaign_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:campaigns\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaigns\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_name\",\"type\":\"attribute\"},{\"id\":\"campaign_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Customers\",\"description\":\"Customers\",\"tags\":[\"Customers\"],\"grain\":[{\"id\":\"customer_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:customers\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"customers\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"region\",\"type\":\"attribute\"},{\"id\":\"state\",\"type\":\"attribute\"},{\"id\":\"customer_id\",\"type\":\"attribute\"},{\"id\":\"customer_name\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Order lines\",\"description\":\"Order lines\",\"tags\":[\"Order lines\"],\"grain\":[{\"id\":\"order_line_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]},{\"identifier\":{\"id\":\"customers\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"customer_id\"]},{\"identifier\":{\"id\":\"date\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"date\"]},{\"identifier\":{\"id\":\"products\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"product_id\"]}],\"dataSourceTableId\":\"demo-test-ds:order_lines\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"order_lines\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"order_id\",\"type\":\"attribute\"},{\"id\":\"order_status\",\"type\":\"attribute\"},{\"id\":\"order_line_id\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"quantity\",\"type\":\"fact\"},{\"id\":\"price\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Products\",\"description\":\"Products\",\"tags\":[\"Products\"],\"grain\":[{\"id\":\"product_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:products\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"products\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"product_id\",\"type\":\"attribute\"},{\"id\":\"product_name\",\"type\":\"attribute\"},{\"id\":\"products.category\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Date\",\"description\":\"\",\"tags\":[\"Date\"],\"areRelationsValid\":true,\"type\":\"DATE\"},\"id\":\"date\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"date.hour\",\"type\":\"attribute\"},{\"id\":\"date.dayOfMonth\",\"type\":\"attribute\"},{\"id\":\"date.weekOfYear\",\"type\":\"attribute\"},{\"id\":\"date.week\",\"type\":\"attribute\"},{\"id\":\"date.dayOfWeek\",\"type\":\"attribute\"},{\"id\":\"date.minute\",\"type\":\"attribute\"},{\"id\":\"date.dayOfYear\",\"type\":\"attribute\"},{\"id\":\"date.quarter\",\"type\":\"attribute\"},{\"id\":\"date.minuteOfHour\",\"type\":\"attribute\"},{\"id\":\"date.quarterOfYear\",\"type\":\"attribute\"},{\"id\":\"date.year\",\"type\":\"attribute\"},{\"id\":\"date.hourOfDay\",\"type\":\"attribute\"},{\"id\":\"date.monthOfYear\",\"type\":\"attribute\"},{\"id\":\"date.month\",\"type\":\"attribute\"},{\"id\":\"date.day\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"}],\"included\":[{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"sourceColumn\":\"product_id\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Budget\",\"description\":\"Budget\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"budget\"},\"id\":\"budget\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"sourceColumn\":\"product_name\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_MONTH\"},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER_OF_YEAR\"},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE\"},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"sourceColumn\":\"state\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_id\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"granularity\":\"HOUR\"},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"sourceColumn\":\"campaign_name\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Price\",\"description\":\"Price\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"price\"},\"id\":\"price\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/price\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_WEEK\"},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"sourceColumn\":\"region\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"sourceColumn\":\"customer_id\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"granularity\":\"HOUR_OF_DAY\"},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Quantity\",\"description\":\"Quantity\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"quantity\"},\"id\":\"quantity\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"sourceColumn\":\"campaign_id\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"type\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Spend\",\"description\":\"Spend\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"spend\"},\"id\":\"spend\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_YEAR\"},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE_OF_HOUR\"},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK_OF_YEAR\"},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_status\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH_OF_YEAR\"},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"sourceColumn\":\"customer_name\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_line_id\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id\"},\"type\":\"attribute\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{\"title\":\"Campaign channels\",\"description\":\"Campaign channels\",\"tags\":[\"Campaign channels\"],\"grain\":[{\"id\":\"campaign_channel_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]}],\"dataSourceTableId\":\"demo-test-ds:campaign_channels\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaign_channels\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_channel_id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels.category\",\"type\":\"attribute\"},{\"id\":\"type\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"spend\",\"type\":\"fact\"},{\"id\":\"budget\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Campaigns\",\"description\":\"Campaigns\",\"tags\":[\"Campaigns\"],\"grain\":[{\"id\":\"campaign_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:campaigns\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"campaigns\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"campaign_name\",\"type\":\"attribute\"},{\"id\":\"campaign_id\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Customers\",\"description\":\"Customers\",\"tags\":[\"Customers\"],\"grain\":[{\"id\":\"customer_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:customers\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"customers\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"region\",\"type\":\"attribute\"},{\"id\":\"state\",\"type\":\"attribute\"},{\"id\":\"customer_id\",\"type\":\"attribute\"},{\"id\":\"customer_name\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Order lines\",\"description\":\"Order lines\",\"tags\":[\"Order lines\"],\"grain\":[{\"id\":\"order_line_id\",\"type\":\"attribute\"}],\"referenceProperties\":[{\"identifier\":{\"id\":\"customers\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"customer_id\"]},{\"identifier\":{\"id\":\"date\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"date\"]},{\"identifier\":{\"id\":\"products\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"product_id\"]},{\"identifier\":{\"id\":\"campaigns\",\"type\":\"dataset\"},\"multivalue\":false,\"sourceColumns\":[\"campaign_id\"]}],\"dataSourceTableId\":\"demo-test-ds:order_lines\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"order_lines\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"order_id\",\"type\":\"attribute\"},{\"id\":\"order_status\",\"type\":\"attribute\"},{\"id\":\"order_line_id\",\"type\":\"attribute\"}]},\"facts\":{\"data\":[{\"id\":\"quantity\",\"type\":\"fact\"},{\"id\":\"price\",\"type\":\"fact\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Products\",\"description\":\"Products\",\"tags\":[\"Products\"],\"grain\":[{\"id\":\"product_id\",\"type\":\"attribute\"}],\"dataSourceTableId\":\"demo-test-ds:products\",\"areRelationsValid\":true,\"type\":\"NORMAL\"},\"id\":\"products\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"product_id\",\"type\":\"attribute\"},{\"id\":\"product_name\",\"type\":\"attribute\"},{\"id\":\"products.category\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"},{\"attributes\":{\"title\":\"Date\",\"description\":\"\",\"tags\":[\"Date\"],\"areRelationsValid\":true,\"type\":\"DATE\"},\"id\":\"date\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date\"},\"relationships\":{\"attributes\":{\"data\":[{\"id\":\"date.weekOfYear\",\"type\":\"attribute\"},{\"id\":\"date.quarter\",\"type\":\"attribute\"},{\"id\":\"date.month\",\"type\":\"attribute\"},{\"id\":\"date.hour\",\"type\":\"attribute\"},{\"id\":\"date.day\",\"type\":\"attribute\"},{\"id\":\"date.monthOfYear\",\"type\":\"attribute\"},{\"id\":\"date.dayOfWeek\",\"type\":\"attribute\"},{\"id\":\"date.week\",\"type\":\"attribute\"},{\"id\":\"date.minuteOfHour\",\"type\":\"attribute\"},{\"id\":\"date.hourOfDay\",\"type\":\"attribute\"},{\"id\":\"date.dayOfYear\",\"type\":\"attribute\"},{\"id\":\"date.year\",\"type\":\"attribute\"},{\"id\":\"date.quarterOfYear\",\"type\":\"attribute\"},{\"id\":\"date.minute\",\"type\":\"attribute\"},{\"id\":\"date.dayOfMonth\",\"type\":\"attribute\"}]}},\"type\":\"dataset\"}],\"included\":[{\"attributes\":{\"title\":\"Product id\",\"description\":\"Product id\",\"tags\":[\"Products\"],\"sourceColumn\":\"product_id\"},\"id\":\"product_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Budget\",\"description\":\"Budget\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"budget\"},\"id\":\"budget\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Year\",\"description\":\"Year\",\"tags\":[\"Date\"],\"granularity\":\"YEAR\"},\"id\":\"date.year\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Product name\",\"description\":\"Product name\",\"tags\":[\"Products\"],\"sourceColumn\":\"product_name\"},\"id\":\"product_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month/Year\",\"description\":\"Month and Year (12/2020)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH\"},\"id\":\"date.month\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Products\"],\"sourceColumn\":\"category\"},\"id\":\"products.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Day of Month\",\"description\":\"Generic Day of the Month (D1-D31)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_MONTH\"},\"id\":\"date.dayOfMonth\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter of Year\",\"description\":\"Generic Quarter (Q1-Q4)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER_OF_YEAR\"},\"id\":\"date.quarterOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Quarter/Year\",\"description\":\"Quarter and Year (Q1/2020)\",\"tags\":[\"Date\"],\"granularity\":\"QUARTER\"},\"id\":\"date.quarter\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Category\",\"description\":\"Category\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"category\"},\"id\":\"campaign_channels.category\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute\",\"description\":\"Minute\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE\"},\"id\":\"date.minute\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"State\",\"description\":\"State\",\"tags\":[\"Customers\"],\"sourceColumn\":\"state\"},\"id\":\"state\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week/Year\",\"description\":\"Week and Year (W52/2020)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK\"},\"id\":\"date.week\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order id\",\"description\":\"Order id\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_id\"},\"id\":\"order_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour\",\"description\":\"Hour\",\"tags\":[\"Date\"],\"granularity\":\"HOUR\"},\"id\":\"date.hour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign name\",\"description\":\"Campaign name\",\"tags\":[\"Campaigns\"],\"sourceColumn\":\"campaign_name\"},\"id\":\"campaign_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Price\",\"description\":\"Price\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"price\"},\"id\":\"price\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/price\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Day of Week\",\"description\":\"Generic Day of the Week (D1-D7)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_WEEK\"},\"id\":\"date.dayOfWeek\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Date\",\"description\":\"Date\",\"tags\":[\"Date\"],\"granularity\":\"DAY\"},\"id\":\"date.day\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Region\",\"description\":\"Region\",\"tags\":[\"Customers\"],\"sourceColumn\":\"region\"},\"id\":\"region\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Campaign channel id\",\"description\":\"Campaign channel id\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"campaign_channel_id\"},\"id\":\"campaign_channel_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer id\",\"description\":\"Customer id\",\"tags\":[\"Customers\"],\"sourceColumn\":\"customer_id\"},\"id\":\"customer_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Hour of Day\",\"description\":\"Generic Hour of the Day(H1-H24)\",\"tags\":[\"Date\"],\"granularity\":\"HOUR_OF_DAY\"},\"id\":\"date.hourOfDay\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Quantity\",\"description\":\"Quantity\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"quantity\"},\"id\":\"quantity\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Campaign id\",\"description\":\"Campaign id\",\"tags\":[\"Campaigns\"],\"sourceColumn\":\"campaign_id\"},\"id\":\"campaign_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Type\",\"description\":\"Type\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"type\"},\"id\":\"type\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Spend\",\"description\":\"Spend\",\"tags\":[\"Campaign channels\"],\"sourceColumn\":\"spend\"},\"id\":\"spend\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend\"},\"type\":\"fact\"},{\"attributes\":{\"title\":\"Date - Day of Year\",\"description\":\"Generic Day of the Year (D1-D366)\",\"tags\":[\"Date\"],\"granularity\":\"DAY_OF_YEAR\"},\"id\":\"date.dayOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Minute of Hour\",\"description\":\"Generic Minute of the Hour(MI1-MI60)\",\"tags\":[\"Date\"],\"granularity\":\"MINUTE_OF_HOUR\"},\"id\":\"date.minuteOfHour\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Week of Year\",\"description\":\"Generic Week (W1-W53)\",\"tags\":[\"Date\"],\"granularity\":\"WEEK_OF_YEAR\"},\"id\":\"date.weekOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order status\",\"description\":\"Order status\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_status\"},\"id\":\"order_status\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Date - Month of Year\",\"description\":\"Generic Month (M1-M12)\",\"tags\":[\"Date\"],\"granularity\":\"MONTH_OF_YEAR\"},\"id\":\"date.monthOfYear\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Customer name\",\"description\":\"Customer name\",\"tags\":[\"Customers\"],\"sourceColumn\":\"customer_name\"},\"id\":\"customer_name\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name\"},\"type\":\"attribute\"},{\"attributes\":{\"title\":\"Order line id\",\"description\":\"Order line id\",\"tags\":[\"Order lines\"],\"sourceColumn\":\"order_line_id\"},\"id\":\"order_line_id\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id\"},\"type\":\"attribute\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=1&size=500\"}}"
                 }
             }
         },
@@ -291,64 +291,64 @@
                     "message": ""
                 },
                 "headers": {
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:02 GMT"
+                        "Tue, 16 Aug 2022 05:47:31 GMT"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Content-Type": [
                         "application/vnd.gooddata.api+json"
                     ],
-                    "X-Frame-Options": [
-                        "DENY"
+                    "Server": [
+                        "nginx"
                     ],
                     "Connection": [
                         "keep-alive"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-GDC-TRACE-ID": [
-                        "1abad20f72ebb995"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Transfer-Encoding": [
-                        "chunked"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "ea8820ba1df322df"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
@@ -359,7 +359,7 @@
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b65d115afbe4daebe7746eb64a1c272e500d1310?offset=0&limit=1000",
+                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e6947b3e0cfe52e95996fbaec4fbdb3061c64ba9?offset=0&limit=1000",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -379,64 +379,64 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Date": [
-                        "Wed, 27 Jul 2022 13:34:02 GMT"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
-                    "Content-Type": [
-                        "application/json"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:47:31 GMT"
                     ],
                     "Content-Length": [
                         "499"
                     ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
                     "Connection": [
                         "keep-alive"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "X-XSS-Protection": [
-                        "1 ; mode=block"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-GDC-TRACE-ID": [
-                        "fa2ea62eff55f3cf"
-                    ],
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Server": [
-                        "nginx"
-                    ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
                     ],
                     "Referrer-Policy": [
                         "no-referrer"
                     ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "b97b7e9643203dc8"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
