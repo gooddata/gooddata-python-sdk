@@ -126,18 +126,7 @@ docker run --rm \
     -v "${ROOT_DIR}:/local" \
     -u $(id -u ${USER}):$(id -g ${USER}) \
     ${CONN_NETWORK_ARG} \
-    openapitools/openapi-generator-cli:v6.0.0 generate \
+    openapitools/openapi-generator-cli:v6.0.1 generate \
     -c "/local/.openapi-generator/configs/${GD_API_CLIENT}.yaml" \
     -i "${GD_API_URI_PATH}" \
     -o "/local/${GD_API_CLIENT}"
-
-#
-# this here function in model_utils.py: convert_js_args_to_python_args
-#
-# gets messed up when our ObjectLinks are being parsed. that is because:
-#
-# - it uses _self as named parameter to a decorator function it creates; this function also has **kwargs
-# - our ObjectLinks contain self (as in links.self); the generator for some of its internal workings also generates '_self' as key of some dict
-# - the decorator function eventually gets called with this '_self' thing.. and things bomb because there are multiple values of a named argument
-#
-sed -i -e 's/_self/_self_sanitized/g' "${CLIENT_SRC_ROOT}/model_utils.py"

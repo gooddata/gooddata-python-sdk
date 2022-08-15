@@ -40,7 +40,7 @@ It is possible to generate default openapi generator templates. Execute the foll
 docker run --rm \
 -v "$(pwd):/local" \
 -u $(id -u ${USER}):$(id -g ${USER}) \
-openapitools/openapi-generator-cli:v5.3.1 author template \
+openapitools/openapi-generator-cli:v6.0.1 author template \
 -g python --library urllib3 \
 -o /local/.openapi-generator/templates
 ```
