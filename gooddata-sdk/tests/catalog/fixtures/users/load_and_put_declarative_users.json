@@ -24,68 +24,68 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
                     "X-GDC-TRACE-ID": [
-                        "51bc6a5004b3ef01"
+                        "f83693186df36e08"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:26 GMT"
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Transfer-Encoding": [
-                        "chunked"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Expires": [
+                        "0"
                     ],
-                    "Content-Type": [
-                        "application/json"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Frame-Options": [
-                        "DENY"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ]
                 },
                 "body": {
-                    "string": "{\"users\":[{\"id\":\"admin\",\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRiNmM3NDhjOC04ZTYyLTRkN2QtYWUyYy1kMTNmZTU1NTQwZjASBWxvY2Fs\",\"id\":\"demo\",\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiQ4NmE5ZGFjNy1lM2ZiLTQ3OWItYTZiYy01ZDc2OTc0ZmYzYTESBWxvY2Fs\",\"id\":\"demo2\",\"userGroups\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}]}"
+                    "string": "{\"users\":[{\"id\":\"admin\",\"settings\":[],\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs\",\"id\":\"demo\",\"settings\":[],\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs\",\"id\":\"demo2\",\"settings\":[],\"userGroups\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}]}"
                 }
             }
         },
@@ -112,68 +112,68 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
                     "X-GDC-TRACE-ID": [
-                        "37d01abb1cb15d53"
+                        "6f3cbda0e63be3c8"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:26 GMT"
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Transfer-Encoding": [
-                        "chunked"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Expires": [
+                        "0"
                     ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Frame-Options": [
-                        "DENY"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":[{\"attributes\":{},\"id\":\"admin\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/admin\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"},{\"attributes\":{\"authenticationId\":\"CiRiNmM3NDhjOC04ZTYyLTRkN2QtYWUyYy1kMTNmZTU1NTQwZjASBWxvY2Fs\"},\"id\":\"demo\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/demo\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"},{\"attributes\":{\"authenticationId\":\"CiQ4NmE5ZGFjNy1lM2ZiLTQ3OWItYTZiYy01ZDc2OTc0ZmYzYTESBWxvY2Fs\"},\"id\":\"demo2\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/demo2\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"}],\"included\":[{\"attributes\":{},\"id\":\"adminGroup\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/userGroups/adminGroup\"},\"type\":\"userGroup\"},{\"attributes\":{},\"id\":\"demoGroup\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/userGroups/demoGroup\"},\"type\":\"userGroup\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500\"}}"
+                    "string": "{\"data\":[{\"attributes\":{},\"id\":\"admin\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/admin\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"},{\"attributes\":{\"authenticationId\":\"CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs\"},\"id\":\"demo\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/demo\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"},{\"attributes\":{\"authenticationId\":\"CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs\"},\"id\":\"demo2\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users/demo2\"},\"relationships\":{\"userGroups\":{\"data\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}},\"type\":\"user\"}],\"included\":[{\"attributes\":{},\"id\":\"adminGroup\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/userGroups/adminGroup\"},\"type\":\"userGroup\"},{\"attributes\":{},\"id\":\"demoGroup\",\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/userGroups/demoGroup\"},\"type\":\"userGroup\"}],\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500\",\"next\":\"http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500\"}}"
                 }
             }
         },
@@ -197,58 +197,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
                     "X-Frame-Options": [
                         "DENY"
                     ],
-                    "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
                     ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "X-GDC-TRACE-ID": [
-                        "fdd50955984192a5"
-                    ],
                     "Access-Control-Allow-Credentials": [
                         "true"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Expires": [
+                        "0"
                     ],
                     "GoodData-Deployment": [
                         "aio"
                     ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "cbd3ec915505cb1e"
+                    ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
@@ -276,64 +276,64 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
                     "X-GDC-TRACE-ID": [
-                        "c1e711e6e3fad0a6"
+                        "1b5e6247fe01953e"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
+                    ],
+                    "Location": [
+                        "/api/v1/entities/admin/organizations/default"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Transfer-Encoding": [
-                        "chunked"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Expires": [
+                        "0"
                     ],
-                    "Location": [
-                        "/api/v1/entities/admin/organizations/default"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Frame-Options": [
-                        "DENY"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ]
                 },
                 "body": {
@@ -361,68 +361,68 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
                     "X-GDC-TRACE-ID": [
-                        "3fd2463d9255f112"
+                        "0144510fbab76b46"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Content-Type": [
+                        "application/vnd.gooddata.api+json"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Transfer-Encoding": [
-                        "chunked"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Expires": [
+                        "0"
                     ],
-                    "Content-Type": [
-                        "application/vnd.gooddata.api+json"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Frame-Options": [
-                        "DENY"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ]
                 },
                 "body": {
-                    "string": "{\"data\":{\"attributes\":{\"name\":\"Default Organization\",\"hostname\":\"localhost\",\"oauthClientId\":\"7ae9f942-987b-4edf-977b-4c52f7a75cfd\"},\"id\":\"default\",\"type\":\"organization\"},\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/admin/organizations/default\"}}"
+                    "string": "{\"data\":{\"attributes\":{\"name\":\"Default Organization\",\"hostname\":\"localhost\",\"oauthClientId\":\"1bbad755-ad5f-49f9-a12e-f84bde99798b\"},\"id\":\"default\",\"type\":\"organization\"},\"links\":{\"self\":\"http://localhost:3000/api/v1/entities/admin/organizations/default\"}}"
                 }
             }
         },
@@ -430,7 +430,7 @@
             "request": {
                 "method": "PUT",
                 "uri": "http://localhost:3000/api/v1/layout/users",
-                "body": "{\"users\": [{\"id\": \"admin\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}]}, {\"id\": \"demo\", \"authId\": \"CiRjZTY0OTFiNy0yMDc1LTRiOGQtYWNhOC1jZDY1MmUwNDdkNjISBWxvY2Fs\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}]}, {\"id\": \"demo2\", \"authId\": \"CiRmOTBmYjg4Mi1lMmRmLTRlODAtOTNhNy02ZWIxNjc3OTM2MjkSBWxvY2Fs\", \"userGroups\": [{\"id\": \"demoGroup\", \"type\": \"userGroup\"}]}]}",
+                "body": "{\"users\": [{\"id\": \"admin\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}], \"settings\": []}, {\"id\": \"demo\", \"authId\": \"CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}], \"settings\": []}, {\"id\": \"demo2\", \"authId\": \"CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs\", \"userGroups\": [{\"id\": \"demoGroup\", \"type\": \"userGroup\"}], \"settings\": []}]}",
                 "headers": {
                     "Content-Type": [
                         "application/json"
@@ -449,58 +449,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
                     "X-Frame-Options": [
                         "DENY"
                     ],
-                    "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
                     ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "X-GDC-TRACE-ID": [
-                        "4cdf334dca577103"
-                    ],
                     "Access-Control-Allow-Credentials": [
                         "true"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Expires": [
+                        "0"
                     ],
                     "GoodData-Deployment": [
                         "aio"
                     ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "fd4dcc54eb05a497"
+                    ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
@@ -531,68 +531,68 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "X-XSS-Protection": [
-                        "1; mode=block"
-                    ],
                     "X-GDC-TRACE-ID": [
-                        "0a05b892c879a98c"
+                        "b257a36f5fb8de4a"
                     ],
-                    "Access-Control-Allow-Credentials": [
-                        "true"
-                    ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
                     ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
                     "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Transfer-Encoding": [
-                        "chunked"
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
                     ],
                     "Permission-Policy": [
                         "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
-                    "Connection": [
-                        "keep-alive"
+                    "Expires": [
+                        "0"
                     ],
-                    "Content-Type": [
-                        "application/json"
-                    ],
-                    "GoodData-Deployment": [
-                        "aio"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
-                    "X-Frame-Options": [
-                        "DENY"
-                    ],
-                    "Content-Security-Policy": [
-                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
                     ]
                 },
                 "body": {
-                    "string": "{\"users\":[{\"id\":\"admin\",\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRjZTY0OTFiNy0yMDc1LTRiOGQtYWNhOC1jZDY1MmUwNDdkNjISBWxvY2Fs\",\"id\":\"demo\",\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRmOTBmYjg4Mi1lMmRmLTRlODAtOTNhNy02ZWIxNjc3OTM2MjkSBWxvY2Fs\",\"id\":\"demo2\",\"userGroups\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}]}"
+                    "string": "{\"users\":[{\"id\":\"admin\",\"settings\":[],\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs\",\"id\":\"demo\",\"settings\":[],\"userGroups\":[{\"id\":\"adminGroup\",\"type\":\"userGroup\"}]},{\"authId\":\"CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs\",\"id\":\"demo2\",\"settings\":[],\"userGroups\":[{\"id\":\"demoGroup\",\"type\":\"userGroup\"}]}]}"
                 }
             }
         },
@@ -600,7 +600,7 @@
             "request": {
                 "method": "PUT",
                 "uri": "http://localhost:3000/api/v1/layout/users",
-                "body": "{\"users\": [{\"id\": \"admin\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}]}, {\"id\": \"demo\", \"authId\": \"CiRiNmM3NDhjOC04ZTYyLTRkN2QtYWUyYy1kMTNmZTU1NTQwZjASBWxvY2Fs\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}]}, {\"id\": \"demo2\", \"authId\": \"CiQ4NmE5ZGFjNy1lM2ZiLTQ3OWItYTZiYy01ZDc2OTc0ZmYzYTESBWxvY2Fs\", \"userGroups\": [{\"id\": \"demoGroup\", \"type\": \"userGroup\"}]}]}",
+                "body": "{\"users\": [{\"id\": \"admin\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}], \"settings\": []}, {\"id\": \"demo\", \"authId\": \"CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs\", \"userGroups\": [{\"id\": \"adminGroup\", \"type\": \"userGroup\"}], \"settings\": []}, {\"id\": \"demo2\", \"authId\": \"CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs\", \"userGroups\": [{\"id\": \"demoGroup\", \"type\": \"userGroup\"}], \"settings\": []}]}",
                 "headers": {
                     "Content-Type": [
                         "application/json"
@@ -619,58 +619,58 @@
                     "message": ""
                 },
                 "headers": {
-                    "Access-Control-Expose-Headers": [
-                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
-                    ],
                     "X-Frame-Options": [
                         "DENY"
                     ],
-                    "Date": [
-                        "Wed, 27 Jul 2022 13:34:27 GMT"
-                    ],
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
+                    "Pragma": [
+                        "no-cache"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Expires": [
-                        "0"
-                    ],
-                    "Permission-Policy": [
-                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:48:16 GMT"
                     ],
                     "X-XSS-Protection": [
                         "1; mode=block"
                     ],
-                    "X-GDC-TRACE-ID": [
-                        "3e7d959a54f49946"
-                    ],
                     "Access-Control-Allow-Credentials": [
                         "true"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
                     ],
                     "Content-Security-Policy": [
                         "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
-                    ],
-                    "X-Content-Type-Options": [
-                        "nosniff"
+                    "Expires": [
+                        "0"
                     ],
                     "GoodData-Deployment": [
                         "aio"
                     ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "1ab2ed5f21545960"
+                    ],
                     "Connection": [
                         "keep-alive"
                     ],
-                    "Pragma": [
-                        "no-cache"
+                    "X-Content-Type-Options": [
+                        "nosniff"
                     ],
                     "Server": [
                         "nginx"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {

@@ -10,7 +10,7 @@ content:
             popAttribute:
               identifier:
                 id: date.year
-                type: label
+                type: attribute
         localIdentifier: c82e025fa2db4afea9a600a424591dbe_pop
     - measure:
         alias: This Period

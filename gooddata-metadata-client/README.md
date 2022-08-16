@@ -50,8 +50,14 @@ import time
 import gooddata_metadata_client
 from pprint import pprint
 from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.api_entitlement import ApiEntitlement
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
+from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from gooddata_metadata_client.model.dependent_entities_request import DependentEntitiesRequest
+from gooddata_metadata_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_metadata_client.model.entitlements_request import EntitlementsRequest
 from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
@@ -96,32 +102,52 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
+*ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
+*ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+*ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
+*ActionsApi* | [**resolve_requested_entitlements**](docs/ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
+*ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
+*ActionsApi* | [**workspace_resolve_settings**](docs/ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 *EntitiesApi* | [**create_entity_analytical_dashboards**](docs/EntitiesApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | 
 *EntitiesApi* | [**create_entity_api_tokens**](docs/EntitiesApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | 
+*EntitiesApi* | [**create_entity_color_palettes**](docs/EntitiesApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | 
+*EntitiesApi* | [**create_entity_csp_directives**](docs/EntitiesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | 
 *EntitiesApi* | [**create_entity_dashboard_plugins**](docs/EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | 
 *EntitiesApi* | [**create_entity_data_sources**](docs/EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | 
 *EntitiesApi* | [**create_entity_filter_contexts**](docs/EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | 
 *EntitiesApi* | [**create_entity_metrics**](docs/EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | 
+*EntitiesApi* | [**create_entity_organization_settings**](docs/EntitiesApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | 
+*EntitiesApi* | [**create_entity_themes**](docs/EntitiesApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | 
 *EntitiesApi* | [**create_entity_user_groups**](docs/EntitiesApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | 
+*EntitiesApi* | [**create_entity_user_settings**](docs/EntitiesApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | 
 *EntitiesApi* | [**create_entity_users**](docs/EntitiesApi.md#create_entity_users) | **POST** /api/v1/entities/users | 
 *EntitiesApi* | [**create_entity_visualization_objects**](docs/EntitiesApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
 *EntitiesApi* | [**create_entity_workspace_data_filters**](docs/EntitiesApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
+*EntitiesApi* | [**create_entity_workspace_settings**](docs/EntitiesApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | 
 *EntitiesApi* | [**create_entity_workspaces**](docs/EntitiesApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | 
 *EntitiesApi* | [**delete_entity_analytical_dashboards**](docs/EntitiesApi.md#delete_entity_analytical_dashboards) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
 *EntitiesApi* | [**delete_entity_api_tokens**](docs/EntitiesApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | 
+*EntitiesApi* | [**delete_entity_color_palettes**](docs/EntitiesApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | 
+*EntitiesApi* | [**delete_entity_csp_directives**](docs/EntitiesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | 
 *EntitiesApi* | [**delete_entity_dashboard_plugins**](docs/EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *EntitiesApi* | [**delete_entity_data_sources**](docs/EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | 
 *EntitiesApi* | [**delete_entity_filter_contexts**](docs/EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *EntitiesApi* | [**delete_entity_metrics**](docs/EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*EntitiesApi* | [**delete_entity_organization_settings**](docs/EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | 
+*EntitiesApi* | [**delete_entity_themes**](docs/EntitiesApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | 
 *EntitiesApi* | [**delete_entity_user_groups**](docs/EntitiesApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | 
+*EntitiesApi* | [**delete_entity_user_settings**](docs/EntitiesApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**delete_entity_users**](docs/EntitiesApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | 
 *EntitiesApi* | [**delete_entity_visualization_objects**](docs/EntitiesApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *EntitiesApi* | [**delete_entity_workspace_data_filters**](docs/EntitiesApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
+*EntitiesApi* | [**delete_entity_workspace_settings**](docs/EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
 *EntitiesApi* | [**delete_entity_workspaces**](docs/EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | 
 *EntitiesApi* | [**get_all_entities_analytical_dashboards**](docs/EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | 
 *EntitiesApi* | [**get_all_entities_api_tokens**](docs/EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | 
 *EntitiesApi* | [**get_all_entities_attributes**](docs/EntitiesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | 
+*EntitiesApi* | [**get_all_entities_color_palettes**](docs/EntitiesApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | 
+*EntitiesApi* | [**get_all_entities_csp_directives**](docs/EntitiesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | 
 *EntitiesApi* | [**get_all_entities_dashboard_plugins**](docs/EntitiesApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | 
 *EntitiesApi* | [**get_all_entities_data_source_identifiers**](docs/EntitiesApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | 
 *EntitiesApi* | [**get_all_entities_data_source_tables**](docs/EntitiesApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
@@ -132,18 +158,24 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_filter_contexts**](docs/EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | 
 *EntitiesApi* | [**get_all_entities_labels**](docs/EntitiesApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | 
 *EntitiesApi* | [**get_all_entities_metrics**](docs/EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | 
+*EntitiesApi* | [**get_all_entities_organization_settings**](docs/EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | 
+*EntitiesApi* | [**get_all_entities_themes**](docs/EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | 
 *EntitiesApi* | [**get_all_entities_user_groups**](docs/EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | 
+*EntitiesApi* | [**get_all_entities_user_settings**](docs/EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | 
 *EntitiesApi* | [**get_all_entities_users**](docs/EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | 
 *EntitiesApi* | [**get_all_entities_visualization_objects**](docs/EntitiesApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
 *EntitiesApi* | [**get_all_entities_workspace_data_filter_settings**](docs/EntitiesApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | 
 *EntitiesApi* | [**get_all_entities_workspace_data_filters**](docs/EntitiesApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
+*EntitiesApi* | [**get_all_entities_workspace_settings**](docs/EntitiesApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | 
 *EntitiesApi* | [**get_all_entities_workspaces**](docs/EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | 
 *EntitiesApi* | [**get_all_options**](docs/EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 *EntitiesApi* | [**get_data_source_drivers**](docs/EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
 *EntitiesApi* | [**get_entity_analytical_dashboards**](docs/EntitiesApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
 *EntitiesApi* | [**get_entity_api_tokens**](docs/EntitiesApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | 
 *EntitiesApi* | [**get_entity_attributes**](docs/EntitiesApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | 
+*EntitiesApi* | [**get_entity_color_palettes**](docs/EntitiesApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | 
 *EntitiesApi* | [**get_entity_cookie_security_configurations**](docs/EntitiesApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
+*EntitiesApi* | [**get_entity_csp_directives**](docs/EntitiesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | 
 *EntitiesApi* | [**get_entity_dashboard_plugins**](docs/EntitiesApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *EntitiesApi* | [**get_entity_data_source_identifiers**](docs/EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | 
 *EntitiesApi* | [**get_entity_data_source_tables**](docs/EntitiesApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
@@ -154,37 +186,53 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_filter_contexts**](docs/EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *EntitiesApi* | [**get_entity_labels**](docs/EntitiesApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | 
 *EntitiesApi* | [**get_entity_metrics**](docs/EntitiesApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*EntitiesApi* | [**get_entity_organization_settings**](docs/EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**get_entity_organizations**](docs/EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | 
+*EntitiesApi* | [**get_entity_themes**](docs/EntitiesApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | 
 *EntitiesApi* | [**get_entity_user_groups**](docs/EntitiesApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | 
+*EntitiesApi* | [**get_entity_user_settings**](docs/EntitiesApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**get_entity_users**](docs/EntitiesApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | 
 *EntitiesApi* | [**get_entity_visualization_objects**](docs/EntitiesApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *EntitiesApi* | [**get_entity_workspace_data_filter_settings**](docs/EntitiesApi.md#get_entity_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | 
 *EntitiesApi* | [**get_entity_workspace_data_filters**](docs/EntitiesApi.md#get_entity_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
+*EntitiesApi* | [**get_entity_workspace_settings**](docs/EntitiesApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
 *EntitiesApi* | [**get_entity_workspaces**](docs/EntitiesApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | 
 *EntitiesApi* | [**get_organization**](docs/EntitiesApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
 *EntitiesApi* | [**patch_entity_analytical_dashboards**](docs/EntitiesApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
+*EntitiesApi* | [**patch_entity_color_palettes**](docs/EntitiesApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | 
 *EntitiesApi* | [**patch_entity_cookie_security_configurations**](docs/EntitiesApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
+*EntitiesApi* | [**patch_entity_csp_directives**](docs/EntitiesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | 
 *EntitiesApi* | [**patch_entity_dashboard_plugins**](docs/EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *EntitiesApi* | [**patch_entity_data_sources**](docs/EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | 
 *EntitiesApi* | [**patch_entity_filter_contexts**](docs/EntitiesApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *EntitiesApi* | [**patch_entity_metrics**](docs/EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*EntitiesApi* | [**patch_entity_organization_settings**](docs/EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**patch_entity_organizations**](docs/EntitiesApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | 
+*EntitiesApi* | [**patch_entity_themes**](docs/EntitiesApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | 
 *EntitiesApi* | [**patch_entity_user_groups**](docs/EntitiesApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | 
 *EntitiesApi* | [**patch_entity_users**](docs/EntitiesApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | 
 *EntitiesApi* | [**patch_entity_visualization_objects**](docs/EntitiesApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *EntitiesApi* | [**patch_entity_workspace_data_filters**](docs/EntitiesApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
+*EntitiesApi* | [**patch_entity_workspace_settings**](docs/EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
 *EntitiesApi* | [**patch_entity_workspaces**](docs/EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | 
 *EntitiesApi* | [**update_entity_analytical_dashboards**](docs/EntitiesApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
+*EntitiesApi* | [**update_entity_api_tokens**](docs/EntitiesApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | 
+*EntitiesApi* | [**update_entity_color_palettes**](docs/EntitiesApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | 
 *EntitiesApi* | [**update_entity_cookie_security_configurations**](docs/EntitiesApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
+*EntitiesApi* | [**update_entity_csp_directives**](docs/EntitiesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | 
 *EntitiesApi* | [**update_entity_dashboard_plugins**](docs/EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *EntitiesApi* | [**update_entity_data_sources**](docs/EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | 
 *EntitiesApi* | [**update_entity_filter_contexts**](docs/EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *EntitiesApi* | [**update_entity_metrics**](docs/EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*EntitiesApi* | [**update_entity_organization_settings**](docs/EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**update_entity_organizations**](docs/EntitiesApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | 
+*EntitiesApi* | [**update_entity_themes**](docs/EntitiesApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | 
 *EntitiesApi* | [**update_entity_user_groups**](docs/EntitiesApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | 
+*EntitiesApi* | [**update_entity_user_settings**](docs/EntitiesApi.md#update_entity_user_settings) | **PUT** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**update_entity_users**](docs/EntitiesApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | 
 *EntitiesApi* | [**update_entity_visualization_objects**](docs/EntitiesApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *EntitiesApi* | [**update_entity_workspace_data_filters**](docs/EntitiesApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
+*EntitiesApi* | [**update_entity_workspace_settings**](docs/EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
 *EntitiesApi* | [**update_entity_workspaces**](docs/EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | 
 *LayoutApi* | [**get_analytics_model**](docs/LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
@@ -214,6 +262,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [ApiEntitlement](docs/ApiEntitlement.md)
  - [AssigneeIdentifier](docs/AssigneeIdentifier.md)
  - [DataSourceTableIdentifier](docs/DataSourceTableIdentifier.md)
  - [DatasetReferenceIdentifier](docs/DatasetReferenceIdentifier.md)
@@ -222,6 +271,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeAnalyticsLayer](docs/DeclarativeAnalyticsLayer.md)
  - [DeclarativeAttribute](docs/DeclarativeAttribute.md)
  - [DeclarativeColumn](docs/DeclarativeColumn.md)
+ - [DeclarativeCspDirective](docs/DeclarativeCspDirective.md)
  - [DeclarativeDashboardPlugin](docs/DeclarativeDashboardPlugin.md)
  - [DeclarativeDataSource](docs/DeclarativeDataSource.md)
  - [DeclarativeDataSourcePermission](docs/DeclarativeDataSourcePermission.md)
@@ -239,9 +289,11 @@ Class | Method | HTTP request | Description
  - [DeclarativeOrganizationPermission](docs/DeclarativeOrganizationPermission.md)
  - [DeclarativePdm](docs/DeclarativePdm.md)
  - [DeclarativeReference](docs/DeclarativeReference.md)
+ - [DeclarativeSetting](docs/DeclarativeSetting.md)
  - [DeclarativeSingleWorkspacePermission](docs/DeclarativeSingleWorkspacePermission.md)
  - [DeclarativeTable](docs/DeclarativeTable.md)
  - [DeclarativeTables](docs/DeclarativeTables.md)
+ - [DeclarativeTheme](docs/DeclarativeTheme.md)
  - [DeclarativeUser](docs/DeclarativeUser.md)
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
@@ -256,6 +308,13 @@ Class | Method | HTTP request | Description
  - [DeclarativeWorkspaceModel](docs/DeclarativeWorkspaceModel.md)
  - [DeclarativeWorkspacePermissions](docs/DeclarativeWorkspacePermissions.md)
  - [DeclarativeWorkspaces](docs/DeclarativeWorkspaces.md)
+ - [DependentEntitiesEdge](docs/DependentEntitiesEdge.md)
+ - [DependentEntitiesGraph](docs/DependentEntitiesGraph.md)
+ - [DependentEntitiesNode](docs/DependentEntitiesNode.md)
+ - [DependentEntitiesRequest](docs/DependentEntitiesRequest.md)
+ - [DependentEntitiesResponse](docs/DependentEntitiesResponse.md)
+ - [EntitlementsRequest](docs/EntitlementsRequest.md)
+ - [EntityIdentifier](docs/EntityIdentifier.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
@@ -298,6 +357,16 @@ Class | Method | HTTP request | Description
  - [JsonApiAttributeOutWithLinks](docs/JsonApiAttributeOutWithLinks.md)
  - [JsonApiAttributeToManyLinkage](docs/JsonApiAttributeToManyLinkage.md)
  - [JsonApiAttributeToOneLinkage](docs/JsonApiAttributeToOneLinkage.md)
+ - [JsonApiColorPaletteIn](docs/JsonApiColorPaletteIn.md)
+ - [JsonApiColorPaletteInAttributes](docs/JsonApiColorPaletteInAttributes.md)
+ - [JsonApiColorPaletteInDocument](docs/JsonApiColorPaletteInDocument.md)
+ - [JsonApiColorPaletteOut](docs/JsonApiColorPaletteOut.md)
+ - [JsonApiColorPaletteOutDocument](docs/JsonApiColorPaletteOutDocument.md)
+ - [JsonApiColorPaletteOutList](docs/JsonApiColorPaletteOutList.md)
+ - [JsonApiColorPaletteOutWithLinks](docs/JsonApiColorPaletteOutWithLinks.md)
+ - [JsonApiColorPalettePatch](docs/JsonApiColorPalettePatch.md)
+ - [JsonApiColorPalettePatchAttributes](docs/JsonApiColorPalettePatchAttributes.md)
+ - [JsonApiColorPalettePatchDocument](docs/JsonApiColorPalettePatchDocument.md)
  - [JsonApiCookieSecurityConfigurationIn](docs/JsonApiCookieSecurityConfigurationIn.md)
  - [JsonApiCookieSecurityConfigurationInAttributes](docs/JsonApiCookieSecurityConfigurationInAttributes.md)
  - [JsonApiCookieSecurityConfigurationInDocument](docs/JsonApiCookieSecurityConfigurationInDocument.md)
@@ -305,6 +374,16 @@ Class | Method | HTTP request | Description
  - [JsonApiCookieSecurityConfigurationOutDocument](docs/JsonApiCookieSecurityConfigurationOutDocument.md)
  - [JsonApiCookieSecurityConfigurationPatch](docs/JsonApiCookieSecurityConfigurationPatch.md)
  - [JsonApiCookieSecurityConfigurationPatchDocument](docs/JsonApiCookieSecurityConfigurationPatchDocument.md)
+ - [JsonApiCspDirectiveIn](docs/JsonApiCspDirectiveIn.md)
+ - [JsonApiCspDirectiveInAttributes](docs/JsonApiCspDirectiveInAttributes.md)
+ - [JsonApiCspDirectiveInDocument](docs/JsonApiCspDirectiveInDocument.md)
+ - [JsonApiCspDirectiveOut](docs/JsonApiCspDirectiveOut.md)
+ - [JsonApiCspDirectiveOutDocument](docs/JsonApiCspDirectiveOutDocument.md)
+ - [JsonApiCspDirectiveOutList](docs/JsonApiCspDirectiveOutList.md)
+ - [JsonApiCspDirectiveOutWithLinks](docs/JsonApiCspDirectiveOutWithLinks.md)
+ - [JsonApiCspDirectivePatch](docs/JsonApiCspDirectivePatch.md)
+ - [JsonApiCspDirectivePatchAttributes](docs/JsonApiCspDirectivePatchAttributes.md)
+ - [JsonApiCspDirectivePatchDocument](docs/JsonApiCspDirectivePatchDocument.md)
  - [JsonApiDashboardPluginIn](docs/JsonApiDashboardPluginIn.md)
  - [JsonApiDashboardPluginInAttributes](docs/JsonApiDashboardPluginInAttributes.md)
  - [JsonApiDashboardPluginInDocument](docs/JsonApiDashboardPluginInDocument.md)
@@ -416,6 +495,23 @@ Class | Method | HTTP request | Description
  - [JsonApiOrganizationOutRelationshipsBootstrapUserGroup](docs/JsonApiOrganizationOutRelationshipsBootstrapUserGroup.md)
  - [JsonApiOrganizationPatch](docs/JsonApiOrganizationPatch.md)
  - [JsonApiOrganizationPatchDocument](docs/JsonApiOrganizationPatchDocument.md)
+ - [JsonApiOrganizationSettingIn](docs/JsonApiOrganizationSettingIn.md)
+ - [JsonApiOrganizationSettingInAttributes](docs/JsonApiOrganizationSettingInAttributes.md)
+ - [JsonApiOrganizationSettingInDocument](docs/JsonApiOrganizationSettingInDocument.md)
+ - [JsonApiOrganizationSettingOut](docs/JsonApiOrganizationSettingOut.md)
+ - [JsonApiOrganizationSettingOutDocument](docs/JsonApiOrganizationSettingOutDocument.md)
+ - [JsonApiOrganizationSettingOutList](docs/JsonApiOrganizationSettingOutList.md)
+ - [JsonApiOrganizationSettingOutWithLinks](docs/JsonApiOrganizationSettingOutWithLinks.md)
+ - [JsonApiOrganizationSettingPatch](docs/JsonApiOrganizationSettingPatch.md)
+ - [JsonApiOrganizationSettingPatchDocument](docs/JsonApiOrganizationSettingPatchDocument.md)
+ - [JsonApiThemeIn](docs/JsonApiThemeIn.md)
+ - [JsonApiThemeInDocument](docs/JsonApiThemeInDocument.md)
+ - [JsonApiThemeOut](docs/JsonApiThemeOut.md)
+ - [JsonApiThemeOutDocument](docs/JsonApiThemeOutDocument.md)
+ - [JsonApiThemeOutList](docs/JsonApiThemeOutList.md)
+ - [JsonApiThemeOutWithLinks](docs/JsonApiThemeOutWithLinks.md)
+ - [JsonApiThemePatch](docs/JsonApiThemePatch.md)
+ - [JsonApiThemePatchDocument](docs/JsonApiThemePatchDocument.md)
  - [JsonApiUserGroupIn](docs/JsonApiUserGroupIn.md)
  - [JsonApiUserGroupInDocument](docs/JsonApiUserGroupInDocument.md)
  - [JsonApiUserGroupInRelationships](docs/JsonApiUserGroupInRelationships.md)
@@ -440,6 +536,12 @@ Class | Method | HTTP request | Description
  - [JsonApiUserOutWithLinks](docs/JsonApiUserOutWithLinks.md)
  - [JsonApiUserPatch](docs/JsonApiUserPatch.md)
  - [JsonApiUserPatchDocument](docs/JsonApiUserPatchDocument.md)
+ - [JsonApiUserSettingIn](docs/JsonApiUserSettingIn.md)
+ - [JsonApiUserSettingInDocument](docs/JsonApiUserSettingInDocument.md)
+ - [JsonApiUserSettingOut](docs/JsonApiUserSettingOut.md)
+ - [JsonApiUserSettingOutDocument](docs/JsonApiUserSettingOutDocument.md)
+ - [JsonApiUserSettingOutList](docs/JsonApiUserSettingOutList.md)
+ - [JsonApiUserSettingOutWithLinks](docs/JsonApiUserSettingOutWithLinks.md)
  - [JsonApiUserToOneLinkage](docs/JsonApiUserToOneLinkage.md)
  - [JsonApiVisualizationObjectIn](docs/JsonApiVisualizationObjectIn.md)
  - [JsonApiVisualizationObjectInDocument](docs/JsonApiVisualizationObjectInDocument.md)
@@ -487,6 +589,14 @@ Class | Method | HTTP request | Description
  - [JsonApiWorkspaceOutWithLinks](docs/JsonApiWorkspaceOutWithLinks.md)
  - [JsonApiWorkspacePatch](docs/JsonApiWorkspacePatch.md)
  - [JsonApiWorkspacePatchDocument](docs/JsonApiWorkspacePatchDocument.md)
+ - [JsonApiWorkspaceSettingIn](docs/JsonApiWorkspaceSettingIn.md)
+ - [JsonApiWorkspaceSettingInDocument](docs/JsonApiWorkspaceSettingInDocument.md)
+ - [JsonApiWorkspaceSettingOut](docs/JsonApiWorkspaceSettingOut.md)
+ - [JsonApiWorkspaceSettingOutDocument](docs/JsonApiWorkspaceSettingOutDocument.md)
+ - [JsonApiWorkspaceSettingOutList](docs/JsonApiWorkspaceSettingOutList.md)
+ - [JsonApiWorkspaceSettingOutWithLinks](docs/JsonApiWorkspaceSettingOutWithLinks.md)
+ - [JsonApiWorkspaceSettingPatch](docs/JsonApiWorkspaceSettingPatch.md)
+ - [JsonApiWorkspaceSettingPatchDocument](docs/JsonApiWorkspaceSettingPatchDocument.md)
  - [JsonApiWorkspaceToOneLinkage](docs/JsonApiWorkspaceToOneLinkage.md)
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListLinks](docs/ListLinks.md)
@@ -494,6 +604,7 @@ Class | Method | HTTP request | Description
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
+ - [ResolveSettingsRequest](docs/ResolveSettingsRequest.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
 

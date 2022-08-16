@@ -27,60 +27,75 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
                     "X-Content-Type-Options": [
                         "nosniff"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:47:09 GMT"
                     ],
-                    "X-Xss-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Feature-Policy": [
-                        "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Referrer-Policy": [
-                        "same-origin"
-                    ],
-                    "Expires": [
-                        "0"
+                    "Content-Length": [
+                        "1097"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
-                    "X-Frame-Options": [
-                        "SAMEORIGIN"
+                    "Server": [
+                        "nginx"
                     ],
-                    "X-Gdc-Trace-Id": [
-                        "8558b598d4be69a8"
-                    ],
-                    "Date": [
-                        "Mon, 08 Aug 2022 12:30:16 GMT"
+                    "Connection": [
+                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Content-Length": [
-                        "1097"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "cddb481c606d1a51"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"region\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"product_category\",\"label\":{\"id\":\"products.category\",\"type\":\"label\"},\"labelName\":\"Category\",\"attribute\":{\"id\":\"products.category\",\"type\":\"attribute\"},\"attributeName\":\"Category\",\"granularity\":null,\"primaryLabel\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"localIdentifier\":\"dim_0\"},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"state\",\"label\":{\"id\":\"state\",\"type\":\"label\"},\"labelName\":\"State\",\"attribute\":{\"id\":\"state\",\"type\":\"attribute\"},\"attributeName\":\"State\",\"granularity\":null,\"primaryLabel\":{\"id\":\"state\",\"type\":\"label\"}}},{\"measureGroupHeaders\":[{\"localIdentifier\":\"price\"},{\"localIdentifier\":\"order_amount\",\"format\":\"$#,##0\",\"name\":\"Order Amount\"}]}],\"localIdentifier\":\"dim_1\"}],\"links\":{\"executionResult\":\"24cede30ded315a655d0f9e334f9bc875b37fb2a\"}}}"
+                    "string": "{\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"region\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"product_category\",\"label\":{\"id\":\"products.category\",\"type\":\"label\"},\"labelName\":\"Category\",\"attribute\":{\"id\":\"products.category\",\"type\":\"attribute\"},\"attributeName\":\"Category\",\"granularity\":null,\"primaryLabel\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"localIdentifier\":\"dim_0\"},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"state\",\"label\":{\"id\":\"state\",\"type\":\"label\"},\"labelName\":\"State\",\"attribute\":{\"id\":\"state\",\"type\":\"attribute\"},\"attributeName\":\"State\",\"granularity\":null,\"primaryLabel\":{\"id\":\"state\",\"type\":\"label\"}}},{\"measureGroupHeaders\":[{\"localIdentifier\":\"price\"},{\"localIdentifier\":\"order_amount\",\"format\":\"$#,##0\",\"name\":\"Order Amount\"}]}],\"localIdentifier\":\"dim_1\"}],\"links\":{\"executionResult\":\"8c1b7329bdad23e36c47400ebe685e2d8c3ffaf9\"}}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/24cede30ded315a655d0f9e334f9bc875b37fb2a?offset=0%2C0&limit=100%2C100",
+                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8c1b7329bdad23e36c47400ebe685e2d8c3ffaf9?offset=0%2C0&limit=100%2C100",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -100,49 +115,64 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
                     "X-Content-Type-Options": [
                         "nosniff"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:47:09 GMT"
                     ],
-                    "X-Xss-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Feature-Policy": [
-                        "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Referrer-Policy": [
-                        "same-origin"
-                    ],
-                    "Expires": [
-                        "0"
+                    "Content-Length": [
+                        "24559"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
-                    "X-Frame-Options": [
-                        "SAMEORIGIN"
+                    "Server": [
+                        "nginx"
                     ],
-                    "X-Gdc-Trace-Id": [
-                        "43dca4606aa566ec"
-                    ],
-                    "Date": [
-                        "Mon, 08 Aug 2022 12:30:16 GMT"
+                    "Connection": [
+                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Content-Length": [
-                        "24559"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "c3d89b7aee68395f"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
@@ -153,7 +183,7 @@
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/24cede30ded315a655d0f9e334f9bc875b37fb2a/metadata",
+                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8c1b7329bdad23e36c47400ebe685e2d8c3ffaf9/metadata",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -173,60 +203,75 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
                     "X-Content-Type-Options": [
                         "nosniff"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:47:10 GMT"
                     ],
-                    "X-Xss-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Feature-Policy": [
-                        "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Referrer-Policy": [
-                        "same-origin"
-                    ],
-                    "Expires": [
-                        "0"
+                    "Content-Length": [
+                        "2304"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
-                    "X-Frame-Options": [
-                        "SAMEORIGIN"
+                    "Server": [
+                        "nginx"
                     ],
-                    "X-Gdc-Trace-Id": [
-                        "d28f1ea6a820e118"
-                    ],
-                    "Date": [
-                        "Mon, 08 Aug 2022 12:30:17 GMT"
+                    "Connection": [
+                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Content-Length": [
-                        "2304"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "43e1c19ab2f730f2"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {
-                    "string": "{\"afm\":{\"attributes\":[{\"localIdentifier\":\"region\",\"label\":{\"identifier\":{\"id\":\"region\",\"type\":\"label\"}}},{\"localIdentifier\":\"state\",\"label\":{\"identifier\":{\"id\":\"state\",\"type\":\"label\"}}},{\"localIdentifier\":\"product_category\",\"label\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"filters\":[],\"measures\":[{\"localIdentifier\":\"price\",\"definition\":{\"measure\":{\"item\":{\"identifier\":{\"id\":\"price\",\"type\":\"fact\"}},\"aggregation\":\"SUM\",\"computeRatio\":false,\"filters\":[]}}},{\"localIdentifier\":\"order_amount\",\"definition\":{\"measure\":{\"item\":{\"identifier\":{\"id\":\"order_amount\",\"type\":\"metric\"}},\"computeRatio\":false,\"filters\":[]}}}],\"auxMeasures\":[]},\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"region\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"product_category\",\"label\":{\"id\":\"products.category\",\"type\":\"label\"},\"labelName\":\"Category\",\"attribute\":{\"id\":\"products.category\",\"type\":\"attribute\"},\"attributeName\":\"Category\",\"granularity\":null,\"primaryLabel\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"localIdentifier\":\"dim_0\"},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"state\",\"label\":{\"id\":\"state\",\"type\":\"label\"},\"labelName\":\"State\",\"attribute\":{\"id\":\"state\",\"type\":\"attribute\"},\"attributeName\":\"State\",\"granularity\":null,\"primaryLabel\":{\"id\":\"state\",\"type\":\"label\"}}},{\"measureGroupHeaders\":[{\"localIdentifier\":\"price\"},{\"localIdentifier\":\"order_amount\",\"format\":\"$#,##0\",\"name\":\"Order Amount\"}]}],\"localIdentifier\":\"dim_1\"}],\"links\":{\"executionResult\":\"24cede30ded315a655d0f9e334f9bc875b37fb2a\"}},\"resultSpec\":{\"dimensions\":[{\"localIdentifier\":\"dim_0\",\"itemIdentifiers\":[\"region\",\"product_category\"],\"sorting\":[]},{\"localIdentifier\":\"dim_1\",\"itemIdentifiers\":[\"state\",\"measureGroup\"],\"sorting\":[]}],\"totals\":[{\"localIdentifier\":\"grand_total1\",\"function\":\"SUM\",\"metric\":\"price\",\"totalDimensions\":[{\"dimensionIdentifier\":\"dim_1\",\"totalDimensionItems\":[\"state\",\"measureGroup\"]}]},{\"localIdentifier\":\"grand_total2\",\"function\":\"MAX\",\"metric\":\"order_amount\",\"totalDimensions\":[{\"dimensionIdentifier\":\"dim_1\",\"totalDimensionItems\":[\"state\",\"measureGroup\"]}]}]}}"
+                    "string": "{\"afm\":{\"attributes\":[{\"localIdentifier\":\"region\",\"label\":{\"identifier\":{\"id\":\"region\",\"type\":\"label\"}}},{\"localIdentifier\":\"state\",\"label\":{\"identifier\":{\"id\":\"state\",\"type\":\"label\"}}},{\"localIdentifier\":\"product_category\",\"label\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"filters\":[],\"measures\":[{\"localIdentifier\":\"price\",\"definition\":{\"measure\":{\"item\":{\"identifier\":{\"id\":\"price\",\"type\":\"fact\"}},\"aggregation\":\"SUM\",\"computeRatio\":false,\"filters\":[]}}},{\"localIdentifier\":\"order_amount\",\"definition\":{\"measure\":{\"item\":{\"identifier\":{\"id\":\"order_amount\",\"type\":\"metric\"}},\"computeRatio\":false,\"filters\":[]}}}],\"auxMeasures\":[]},\"executionResponse\":{\"dimensions\":[{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"region\",\"label\":{\"id\":\"region\",\"type\":\"label\"},\"labelName\":\"Region\",\"attribute\":{\"id\":\"region\",\"type\":\"attribute\"},\"attributeName\":\"Region\",\"granularity\":null,\"primaryLabel\":{\"id\":\"region\",\"type\":\"label\"}}},{\"attributeHeader\":{\"localIdentifier\":\"product_category\",\"label\":{\"id\":\"products.category\",\"type\":\"label\"},\"labelName\":\"Category\",\"attribute\":{\"id\":\"products.category\",\"type\":\"attribute\"},\"attributeName\":\"Category\",\"granularity\":null,\"primaryLabel\":{\"id\":\"products.category\",\"type\":\"label\"}}}],\"localIdentifier\":\"dim_0\"},{\"headers\":[{\"attributeHeader\":{\"localIdentifier\":\"state\",\"label\":{\"id\":\"state\",\"type\":\"label\"},\"labelName\":\"State\",\"attribute\":{\"id\":\"state\",\"type\":\"attribute\"},\"attributeName\":\"State\",\"granularity\":null,\"primaryLabel\":{\"id\":\"state\",\"type\":\"label\"}}},{\"measureGroupHeaders\":[{\"localIdentifier\":\"price\"},{\"localIdentifier\":\"order_amount\",\"format\":\"$#,##0\",\"name\":\"Order Amount\"}]}],\"localIdentifier\":\"dim_1\"}],\"links\":{\"executionResult\":\"8c1b7329bdad23e36c47400ebe685e2d8c3ffaf9\"}},\"resultSpec\":{\"dimensions\":[{\"localIdentifier\":\"dim_0\",\"itemIdentifiers\":[\"region\",\"product_category\"],\"sorting\":[]},{\"localIdentifier\":\"dim_1\",\"itemIdentifiers\":[\"state\",\"measureGroup\"],\"sorting\":[]}],\"totals\":[{\"localIdentifier\":\"grand_total1\",\"function\":\"SUM\",\"metric\":\"price\",\"totalDimensions\":[{\"dimensionIdentifier\":\"dim_1\",\"totalDimensionItems\":[\"state\",\"measureGroup\"]}]},{\"localIdentifier\":\"grand_total2\",\"function\":\"MAX\",\"metric\":\"order_amount\",\"totalDimensions\":[{\"dimensionIdentifier\":\"dim_1\",\"totalDimensionItems\":[\"state\",\"measureGroup\"]}]}]}}"
                 }
             }
         },
         {
             "request": {
                 "method": "GET",
-                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/24cede30ded315a655d0f9e334f9bc875b37fb2a?offset=0%2C0&limit=100%2C100",
+                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/8c1b7329bdad23e36c47400ebe685e2d8c3ffaf9?offset=0%2C0&limit=100%2C100",
                 "body": null,
                 "headers": {
                     "Accept": [
@@ -246,49 +291,64 @@
                     "message": "OK"
                 },
                 "headers": {
-                    "Cache-Control": [
-                        "no-cache, no-store, max-age=0, must-revalidate"
-                    ],
-                    "Pragma": [
-                        "no-cache"
-                    ],
                     "X-Content-Type-Options": [
                         "nosniff"
                     ],
-                    "Set-Cookie": [
-                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    "Date": [
+                        "Tue, 16 Aug 2022 05:47:10 GMT"
                     ],
-                    "X-Xss-Protection": [
-                        "1; mode=block"
-                    ],
-                    "Feature-Policy": [
-                        "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';"
-                    ],
-                    "Referrer-Policy": [
-                        "same-origin"
-                    ],
-                    "Expires": [
-                        "0"
+                    "Content-Length": [
+                        "24559"
                     ],
                     "Content-Type": [
                         "application/json"
                     ],
-                    "X-Frame-Options": [
-                        "SAMEORIGIN"
+                    "Server": [
+                        "nginx"
                     ],
-                    "X-Gdc-Trace-Id": [
-                        "8b91fdd0fa337d9c"
-                    ],
-                    "Date": [
-                        "Mon, 08 Aug 2022 12:30:17 GMT"
+                    "Connection": [
+                        "keep-alive"
                     ],
                     "Vary": [
                         "Origin",
                         "Access-Control-Request-Method",
                         "Access-Control-Request-Headers"
                     ],
-                    "Content-Length": [
-                        "24559"
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Referrer-Policy": [
+                        "no-referrer"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "X-XSS-Protection": [
+                        "1 ; mode=block"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "b18d02561a9d28d7"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
                     ]
                 },
                 "body": {

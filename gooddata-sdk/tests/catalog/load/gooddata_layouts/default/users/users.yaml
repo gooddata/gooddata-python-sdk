@@ -1,15 +1,18 @@
 # (C) 2022 GoodData Corporation
 - id: admin
+  settings: []
   userGroups:
-  - id: adminGroup
-    type: userGroup
-- authId: CiRjZTY0OTFiNy0yMDc1LTRiOGQtYWNhOC1jZDY1MmUwNDdkNjISBWxvY2Fs
+    - id: adminGroup
+      type: userGroup
+- authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
   id: demo
+  settings: []
   userGroups:
-  - id: adminGroup
-    type: userGroup
-- authId: CiRmOTBmYjg4Mi1lMmRmLTRlODAtOTNhNy02ZWIxNjc3OTM2MjkSBWxvY2Fs
+    - id: adminGroup
+      type: userGroup
+- authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
   id: demo2
+  settings: []
   userGroups:
-  - id: demoGroup
-    type: userGroup
+    - id: demoGroup
+      type: userGroup

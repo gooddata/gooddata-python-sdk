@@ -62,6 +62,7 @@ class DeclarativeColumn(ModelNormal):
             'DATE': "DATE",
             'NUMERIC': "NUMERIC",
             'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
             'BOOLEAN': "BOOLEAN",
         },
     }

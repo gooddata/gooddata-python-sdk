@@ -1038,6 +1038,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
             DeclarativeUser(
                 auth_id="auth_id_example",
                 id="employee123",
+                settings=[
+                    DeclarativeSetting(
+                        content={},
+                        id="timezone",
+                    ),
+                ],
                 user_groups=[
                     UserGroupIdentifier(
                         id="group.admins",
@@ -1128,6 +1134,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
             DeclarativeUser(
                 auth_id="auth_id_example",
                 id="employee123",
+                settings=[
+                    DeclarativeSetting(
+                        content={},
+                        id="timezone",
+                    ),
+                ],
                 user_groups=[
                     UserGroupIdentifier(
                         id="group.admins",
@@ -1709,6 +1721,14 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ],
         organization=DeclarativeOrganizationInfo(
+            csp_directives=[
+                DeclarativeCspDirective(
+                    directive="directive_example",
+                    sources=[
+                        "sources_example",
+                    ],
+                ),
+            ],
             early_access="early_access_example",
             hostname="alpha.com",
             id="Alpha corporation",
@@ -1724,6 +1744,19 @@ with gooddata_metadata_client.ApiClient() as api_client:
                         type="user",
                     ),
                     name="MANAGE",
+                ),
+            ],
+            settings=[
+                DeclarativeSetting(
+                    content={},
+                    id="timezone",
+                ),
+            ],
+            themes=[
+                DeclarativeTheme(
+                    content={},
+                    id="id_example",
+                    name="name_example",
                 ),
             ],
         ),
@@ -1742,6 +1775,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
             DeclarativeUser(
                 auth_id="auth_id_example",
                 id="employee123",
+                settings=[
+                    DeclarativeSetting(
+                        content={},
+                        id="timezone",
+                    ),
+                ],
                 user_groups=[
                     UserGroupIdentifier(
                         id="group.admins",
@@ -1928,6 +1967,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
                             type="user",
                         ),
                         name="MANAGE",
+                    ),
+                ],
+                settings=[
+                    DeclarativeSetting(
+                        content={},
+                        id="timezone",
                     ),
                 ],
             ),
@@ -2443,6 +2488,12 @@ with gooddata_metadata_client.ApiClient() as api_client:
                             type="user",
                         ),
                         name="MANAGE",
+                    ),
+                ],
+                settings=[
+                    DeclarativeSetting(
+                        content={},
+                        id="timezone",
                     ),
                 ],
             ),

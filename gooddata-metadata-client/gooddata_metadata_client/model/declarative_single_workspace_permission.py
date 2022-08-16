@@ -63,6 +63,7 @@ class DeclarativeSingleWorkspacePermission(ModelNormal):
         ('name',): {
             'MANAGE': "MANAGE",
             'ANALYZE': "ANALYZE",
+            'EXPORT': "EXPORT",
             'VIEW': "VIEW",
         },
     }

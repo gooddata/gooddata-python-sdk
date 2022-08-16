@@ -19,3 +19,4 @@ permissions:
     id: demoGroup
     type: userGroup
   name: VIEW
+settings: []

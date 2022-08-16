@@ -63,6 +63,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
         ('permissions',): {
             'MANAGE': "MANAGE",
             'ANALYZE': "ANALYZE",
+            'EXPORT': "EXPORT",
             'VIEW': "VIEW",
         },
     }

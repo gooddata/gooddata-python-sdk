@@ -20,6 +20,7 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
 )
+from gooddata_sdk.catalog.setting import CatalogDeclarativeSetting
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalyticsLayer,
 )
@@ -56,11 +57,12 @@ class CatalogDeclarativeWorkspaceModel(Base):
 class CatalogDeclarativeWorkspace(Base):
     id: str
     name: str
-    compute_client: Optional[str] = None
     model: Optional[CatalogDeclarativeWorkspaceModel] = None
     parent: Optional[CatalogWorkspaceIdentifier] = None
     permissions: List[CatalogDeclarativeSingleWorkspacePermission] = []
     hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = []
+    early_access: Optional[str] = None
+    settings: List[CatalogDeclarativeSetting] = []
 
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspace]:
@@ -117,10 +119,12 @@ class CatalogDeclarativeWorkspaceDataFilters(Base):
         return DeclarativeWorkspaceDataFilters
 
     def store_to_disk(self, layout_organization_folder: Path) -> None:
+        workspaces_data_filters_folder = CatalogDeclarativeWorkspaces.workspace_data_filters_folder(
+            layout_organization_folder
+        )
+        create_directory(workspaces_data_filters_folder)
         for workspace_data_filter in self.workspace_data_filters:
-            workspace_data_filter.store_to_disk(
-                CatalogDeclarativeWorkspaces.workspace_data_filters_folder(layout_organization_folder)
-            )
+            workspace_data_filter.store_to_disk(workspaces_data_filters_folder)
 
     @classmethod
     def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeWorkspaceDataFilters:
