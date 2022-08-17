@@ -1,0 +1,96 @@
+{
+    "version": 1,
+    "interactions": [
+        {
+            "request": {
+                "method": "POST",
+                "uri": "http://localhost:3000/api/v1/actions/workspaces/demo/dependentEntitiesGraph",
+                "body": "{\"identifiers\": [{\"id\": \"campaign_channel_id\", \"type\": \"attribute\"}]}",
+                "headers": {
+                    "Accept": [
+                        "application/json"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "X-Requested-With": [
+                        "XMLHttpRequest"
+                    ],
+                    "X-GDC-VALIDATE-RELATIONS": [
+                        "true"
+                    ]
+                }
+            },
+            "response": {
+                "status": {
+                    "code": 200,
+                    "message": ""
+                },
+                "headers": {
+                    "Date": [
+                        "Wed, 17 Aug 2022 11:08:03 GMT"
+                    ],
+                    "Set-Cookie": [
+                        "SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; HttpOnly"
+                    ],
+                    "Transfer-Encoding": [
+                        "chunked"
+                    ],
+                    "Content-Security-Policy": [
+                        "default-src 'self' *.wistia.com *.wistia.net; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src 'self' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net privacy-policy.truste.com www.gooddata.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src 'self' data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src 'self'; object-src 'none'; worker-src 'self' blob:; child-src blob:; connect-src 'self' *.tiles.mapbox.com *.mapbox.com *.litix.io *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com; media-src 'self' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net"
+                    ],
+                    "Access-Control-Expose-Headers": [
+                        "Content-Disposition, Content-Length, Content-Range, Set-Cookie"
+                    ],
+                    "GoodData-Deployment": [
+                        "aio"
+                    ],
+                    "Access-Control-Allow-Credentials": [
+                        "true"
+                    ],
+                    "Vary": [
+                        "Origin",
+                        "Access-Control-Request-Method",
+                        "Access-Control-Request-Headers"
+                    ],
+                    "Server": [
+                        "nginx"
+                    ],
+                    "Pragma": [
+                        "no-cache"
+                    ],
+                    "Connection": [
+                        "keep-alive"
+                    ],
+                    "X-Content-Type-Options": [
+                        "nosniff"
+                    ],
+                    "X-Frame-Options": [
+                        "DENY"
+                    ],
+                    "X-XSS-Protection": [
+                        "1; mode=block"
+                    ],
+                    "Permission-Policy": [
+                        "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment 'none';"
+                    ],
+                    "Content-Type": [
+                        "application/json"
+                    ],
+                    "Cache-Control": [
+                        "no-cache, no-store, max-age=0, must-revalidate"
+                    ],
+                    "Expires": [
+                        "0"
+                    ],
+                    "X-GDC-TRACE-ID": [
+                        "9fabb75c6ba6baf4"
+                    ]
+                },
+                "body": {
+                    "string": "{\"graph\":{\"edges\":[[{\"id\":\"campaign_channel_id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels\",\"type\":\"dataset\"}]],\"nodes\":[{\"id\":\"campaign_channel_id\",\"title\":\"Campaign channel id\",\"type\":\"attribute\"},{\"id\":\"campaign_channels\",\"title\":\"Campaign channels\",\"type\":\"dataset\"}]}}"
+                }
+            }
+        }
+    ]
+}
