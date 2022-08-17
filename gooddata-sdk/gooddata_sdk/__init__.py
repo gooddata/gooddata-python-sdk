@@ -50,6 +50,7 @@ from gooddata_sdk.catalog.user.declarative_model.user_group import (
 )
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
+from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
 )
@@ -66,8 +67,11 @@ from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import 
     CatalogLabel,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
+    CatalogDependentEntitiesRequest,
+    CatalogEntityIdentifier,
+)
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
-from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId

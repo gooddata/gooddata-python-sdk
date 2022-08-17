@@ -7,7 +7,8 @@ from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.user.service import CatalogUserService
-from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceContentService, CatalogWorkspaceService
+from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContentService
+from gooddata_sdk.catalog.workspace.service import CatalogWorkspaceService
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import InsightService
