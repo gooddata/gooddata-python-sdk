@@ -73,7 +73,7 @@ class CatalogDeclarativeDataSource(Base):
     pdm: Optional[CatalogDeclarativeTables] = None
     cache_path: Optional[List[str]] = None
     username: Optional[str] = None
-    permissions: List[CatalogDeclarativeDataSourcePermission] = []
+    permissions: List[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
 
     def to_test_request(
         self,

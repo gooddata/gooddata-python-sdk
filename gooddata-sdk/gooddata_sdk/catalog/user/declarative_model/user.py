@@ -47,8 +47,8 @@ class CatalogDeclarativeUsers(Base):
 class CatalogDeclarativeUser(Base):
     id: str
     auth_id: Optional[str] = None
-    user_groups: List[CatalogUserGroupIdentifier] = []
-    settings: List[CatalogDeclarativeSetting] = []
+    user_groups: List[CatalogUserGroupIdentifier] = attr.field(factory=list)
+    settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeUser]:
