@@ -53,11 +53,11 @@ class CatalogDeclarativeAnalytics(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticsLayer(Base):
-    analytical_dashboards: List[CatalogDeclarativeAnalyticalDashboard] = []
-    dashboard_plugins: List[CatalogDeclarativeDashboardPlugin] = []
-    filter_contexts: List[CatalogDeclarativeFilterContext] = []
-    metrics: List[CatalogDeclarativeMetric] = []
-    visualization_objects: List[CatalogDeclarativeVisualizationObject] = []
+    analytical_dashboards: List[CatalogDeclarativeAnalyticalDashboard] = attr.field(factory=list)
+    dashboard_plugins: List[CatalogDeclarativeDashboardPlugin] = attr.field(factory=list)
+    filter_contexts: List[CatalogDeclarativeFilterContext] = attr.field(factory=list)
+    metrics: List[CatalogDeclarativeMetric] = attr.field(factory=list)
+    visualization_objects: List[CatalogDeclarativeVisualizationObject] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeAnalyticsLayer]:

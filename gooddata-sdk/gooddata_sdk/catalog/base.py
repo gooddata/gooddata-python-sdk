@@ -1,9 +1,10 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, Dict, Optional, Type, TypeVar
 
 import attr
+import cattr
 from cattrs import structure
 
 T = TypeVar("T", bound="Base")
@@ -21,12 +22,18 @@ def value_in_allowed(instance: Type[Base], attribute: attr.Attribute, value: str
 
 @attr.s
 class Base:
+    _converter: Optional[cattr.GenConverter] = None
+
     @classmethod
     def from_api(cls: Type[T], entity: Dict[str, Any]) -> T:
         """
         Creates object from entity passed by client class, which represents it as dictionary.
         """
-        return structure(entity, cls)
+        converter = cls._custom_converter()
+        if converter is not None:
+            return converter.structure(entity, cls)
+        else:
+            return structure(entity, cls)
 
     @classmethod
     def from_dict(cls: Type[T], data: Dict[str, Any], camel_case: bool = True) -> T:
@@ -65,3 +72,7 @@ class Base:
     def to_api(self) -> Any:
         dictionary = self._get_snake_dict()
         return self.client_class().from_dict(dictionary, camel_case=False)
+
+    @classmethod
+    def _custom_converter(cls) -> Optional[cattr.GenConverter]:
+        return cls._converter

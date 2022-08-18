@@ -59,10 +59,10 @@ class CatalogDeclarativeWorkspace(Base):
     name: str
     model: Optional[CatalogDeclarativeWorkspaceModel] = None
     parent: Optional[CatalogWorkspaceIdentifier] = None
-    permissions: List[CatalogDeclarativeSingleWorkspacePermission] = []
-    hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = []
+    permissions: List[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
+    hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
     early_access: Optional[str] = None
-    settings: List[CatalogDeclarativeSetting] = []
+    settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspace]:

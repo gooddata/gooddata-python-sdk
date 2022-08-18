@@ -47,8 +47,8 @@ class CatalogDeclarativeDataSourcePermission(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeWorkspacePermissions(Base):
-    permissions: List[CatalogDeclarativeSingleWorkspacePermission] = []
-    hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = []
+    permissions: List[CatalogDeclarativeSingleWorkspacePermission] = attr.field(factory=list)
+    hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspacePermissions]:

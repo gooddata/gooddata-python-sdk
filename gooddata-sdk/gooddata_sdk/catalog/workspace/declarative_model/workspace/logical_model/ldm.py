@@ -50,8 +50,8 @@ class CatalogDeclarativeModel(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeLdm(Base):
-    datasets: List[CatalogDeclarativeDataset] = []
-    date_instances: List[CatalogDeclarativeDateDataset] = []
+    datasets: List[CatalogDeclarativeDataset] = attr.field(factory=list)
+    date_instances: List[CatalogDeclarativeDateDataset] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeLdm]:

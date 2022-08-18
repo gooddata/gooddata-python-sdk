@@ -18,7 +18,7 @@ LAYOUT_USER_GROUPS_FILE = "user_groups.yaml"
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUserGroups(Base):
-    user_groups: List[CatalogDeclarativeUserGroup] = []
+    user_groups: List[CatalogDeclarativeUserGroup] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeUserGroups]:

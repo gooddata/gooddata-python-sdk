@@ -10,6 +10,8 @@ import vcr
 from gooddata_sdk import (
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeModel,
+    CatalogDependentEntitiesRequest,
+    CatalogEntityIdentifier,
     CatalogWorkspace,
     DataSourceValidator,
     GoodDataSdk,
@@ -252,3 +254,26 @@ def test_catalog_availability(test_config):
     # rough initial smoke-test; just do a quick 'rub' that filtered catalog has less entries than full catalog
     assert len(filtered_catalog.metrics) == 24
     assert len(filtered_catalog.datasets) == 3
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_dependent_entities_graph.json"))
+def test_get_dependent_entities_graph(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    response = sdk.catalog_workspace_content.get_dependent_entities_graph(workspace_id=test_config["workspace"])
+
+    assert len(response.graph.edges) == 191
+    assert len(response.graph.nodes) == 117
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_dependent_entities_graph_from_entry_points.json"))
+def test_get_dependent_entities_graph_from_entry_points(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    dependent_entities_request = CatalogDependentEntitiesRequest(
+        identifiers=[CatalogEntityIdentifier(id="campaign_channel_id", type="attribute")]
+    )
+    response = sdk.catalog_workspace_content.get_dependent_entities_graph_from_entry_points(
+        workspace_id=test_config["workspace"], dependent_entities_request=dependent_entities_request
+    )
+
+    assert len(response.graph.edges) == 1
+    assert len(response.graph.nodes) == 2

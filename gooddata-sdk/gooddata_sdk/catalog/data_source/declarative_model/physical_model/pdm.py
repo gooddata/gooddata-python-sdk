@@ -20,7 +20,7 @@ def get_pdm_folder(data_source_folder: Path) -> Path:
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeTables(Base):
-    tables: List[CatalogDeclarativeTable] = []
+    tables: List[CatalogDeclarativeTable] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeTables]:
@@ -46,4 +46,4 @@ class CatalogDeclarativeTables(Base):
 class CatalogScanResultPdm(Base):
     pdm: CatalogDeclarativeTables = CatalogDeclarativeTables()
     # Just informative hints. Create appropriate classes later if needed.
-    warnings: List[Dict] = []
+    warnings: List[Dict] = attr.field(factory=list)
