@@ -21,6 +21,8 @@ CREATE OR REPLACE PROCEDURE import_gooddata(
 DECLARE
   sql_statement VARCHAR;
   foreign_schema VARCHAR := coalesce(foreign_schema, workspace);
+  foreign_table RECORD;
+  view_name VARCHAR;
 BEGIN
   -- Recreate schema, where foreign tables will be imported
   sql_statement := format('DROP SCHEMA IF EXISTS "%s" CASCADE', foreign_schema);
@@ -35,4 +37,16 @@ BEGIN
     workspace, foreign_server, foreign_schema, object_type, numeric_max_size
   );
   CALL execute_sql(sql_statement, debug);
+
+  FOR foreign_table IN
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = foreign_schema AND table_type = 'FOREIGN' LOOP
+      view_name :=  foreign_table.table_name || '_view';
+      sql_statement := format(
+        'CREATE OR REPLACE VIEW "%s"."%s" AS SELECT * FROM "%s"."%s"',
+        workspace, view_name, workspace, foreign_table.table_name
+      );
+    CALL execute_sql(sql_statement, debug);
+  END LOOP;
 END; $$;
