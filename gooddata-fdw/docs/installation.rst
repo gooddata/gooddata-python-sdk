@@ -23,7 +23,7 @@ Execute the following command in your repository root folder:
 
 .. code-block:: shell
 
-   docker-compose up -d
+   docker-compose up --build -d
 
 ``gooddata-fdw`` image is built from the Dockerfile and both services are started in background.
 
