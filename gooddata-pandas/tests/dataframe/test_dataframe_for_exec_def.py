@@ -6,6 +6,7 @@ import vcr
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import Attribute, ExecutionDefinition, ObjId, SimpleMetric, TotalDefinition, TotalDimension
+from gooddata_sdk.compute.model.execution import ResultSizeLimitsExceeded
 from tests import VCR_MATCH_ON
 
 _current_dir = Path(__file__).parent.absolute()
@@ -58,6 +59,34 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
     result = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides)
     assert result.to_string().find(overrides["labels"]["state"]["title"]) == 262
     assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.json"))
+def test_dataframe_for_exec_def_limits_failure(gdf: DataFrameFactory):
+    exec_def = ExecutionDefinition(
+        attributes=[
+            Attribute(local_id="region", label="region"),
+            Attribute(local_id="state", label="state"),
+            Attribute(local_id="product_category", label="products.category"),
+        ],
+        metrics=[
+            SimpleMetric(local_id="price", item=ObjId(id="price", type="fact")),
+            SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
+        ],
+        filters=[],
+        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+    )
+
+    RESULT_SIZE_LIMITS = (1, 1)
+    exception = None
+    try:
+        gdf.for_exec_def(exec_def=exec_def, result_size_limits=RESULT_SIZE_LIMITS)
+    except ResultSizeLimitsExceeded as e:
+        exception = e
+
+    assert type(exception) is ResultSizeLimitsExceeded
+    assert exception.result_size_limits == RESULT_SIZE_LIMITS
+    assert exception.first_violating_index == 0
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.json"))
