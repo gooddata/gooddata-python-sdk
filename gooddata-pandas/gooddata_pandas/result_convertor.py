@@ -194,7 +194,7 @@ def _extract_all_result_data(
 
 
 def _create_header_mapper(
-    response: BareExecutionResponse, dim: int, label_overrides: LabelOverrides = {}
+    response: BareExecutionResponse, dim: int, label_overrides: LabelOverrides = None
 ) -> Callable[[Any, Optional[int]], str]:
     """
     Prepares header mapper function which is doing header structures translations into appropriate label used
@@ -204,6 +204,9 @@ def _create_header_mapper(
     :param label_overrides: label overrides
     :return: Mapper function
     """
+    if label_overrides is None:
+        label_overrides = {}
+
     dim_descriptor = response.dimensions[dim]
     attribute_labels = label_overrides.get("labels", {})
     measure_labels = label_overrides.get("metrics", {})

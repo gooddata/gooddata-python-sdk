@@ -232,7 +232,7 @@ class DataFrameFactory:
     def for_exec_def(
         self,
         exec_def: ExecutionDefinition,
-        label_overrides: LabelOverrides = {},
+        label_overrides: LabelOverrides = None,
         result_size_limits: ResultSize = (),
     ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
         """
@@ -263,6 +263,9 @@ class DataFrameFactory:
         :param exec_def: execution definition
         :return: a new dataframe
         """
+        if label_overrides is None:
+            label_overrides = {}
+
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         return (
@@ -277,7 +280,7 @@ class DataFrameFactory:
     def for_exec_result_id(
         self,
         result_id: str,
-        label_overrides: LabelOverrides = {},
+        label_overrides: LabelOverrides = None,
         result_size_limits: ResultSize = (),
     ) -> pandas.DataFrame:
         """
@@ -308,6 +311,9 @@ class DataFrameFactory:
         :param result_id: executionResult ID from ExecutionResponse
         :return: a new dataframe
         """
+        if label_overrides is None:
+            label_overrides = {}
+
         metadata = self._sdk.compute.get_exec_metadata(workspace_id=self._workspace_id, result_id=result_id)
 
         return convert_result_to_dataframe(
