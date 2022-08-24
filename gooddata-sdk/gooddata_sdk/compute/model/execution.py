@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union
+from typing import Any, Optional, Tuple, Union
 
 from attrs import define, field
 
@@ -128,6 +128,16 @@ class ExecutionDefinition:
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
 
+ResultSize = Tuple[Optional[int], ...]
+
+
+class ResultSizeLimitsExceeded(Exception):
+    def __init__(self, result_size_limits: ResultSize, actual_result_size: ResultSize, first_violating_index: int):
+        self.result_size_limits = tuple(result_size_limits)
+        self.actual_result_size = actual_result_size
+        self.first_violating_index = first_violating_index
+
+
 class ExecutionResult:
     def __init__(self, result: models.ExecutionResult):
         self._data: list[Any] = result["data"]
@@ -179,6 +189,20 @@ class ExecutionResult:
             header["attributeHeader"]["labelValue"]
             for header in self.headers[dim]["headerGroups"][header_idx]["headers"]
         ]
+
+    def check_size_limits(self, result_size_limits: ResultSize) -> None:
+        for dim, dim_size in enumerate(self.paging_total):
+            if dim >= len(result_size_limits):
+                return
+            dim_limit = result_size_limits[dim]
+            if dim_size is None or dim_limit is None:
+                continue
+            if dim_size > dim_limit:
+                raise ResultSizeLimitsExceeded(
+                    result_size_limits=result_size_limits,
+                    actual_result_size=tuple(self.paging_total),
+                    first_violating_index=dim,
+                )
 
     def __str__(self) -> str:
         return self.__repr__()

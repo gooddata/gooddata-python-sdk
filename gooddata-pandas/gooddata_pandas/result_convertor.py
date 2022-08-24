@@ -5,6 +5,7 @@ import pandas
 from attrs import define, field, frozen
 
 from gooddata_sdk import BareExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.execution import ResultSize
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
@@ -124,7 +125,11 @@ class _AccumulatedData:
         )
 
 
-def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _DEFAULT_PAGE_SIZE) -> _DataWithHeaders:
+def _extract_all_result_data(
+    response: BareExecutionResponse,
+    result_size_limits: ResultSize,
+    page_size: int = _DEFAULT_PAGE_SIZE,
+) -> _DataWithHeaders:
     """
     Extracts all data and headers for an execution result. This does page around the execution result to extract
     everything from the paged API.
@@ -137,12 +142,17 @@ def _extract_all_result_data(response: BareExecutionResponse, page_size: int = _
     limit = [page_size] * num_dims
     acc = _AccumulatedData()
 
+    result_size_limits_checked = False
+
     while True:
         # top-level loop pages through the first dimension;
         #
         # if one-dimensional result, it pages over an array of data
         # if two-dimensional result, it pages over table rows
         result = response.read_result(offset=offset, limit=limit)
+
+        if not result_size_limits_checked:
+            result.check_size_limits(result_size_limits)
 
         acc.accumulate_data(from_result=result)
         acc.accumulate_headers(from_result=result, from_dim=0)
@@ -287,7 +297,11 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
     return headers
 
 
-def convert_result_to_dataframe(response: BareExecutionResponse, label_overrides: LabelOverrides) -> pandas.DataFrame:
+def convert_result_to_dataframe(
+    response: BareExecutionResponse,
+    label_overrides: LabelOverrides,
+    result_size_limits: ResultSize,
+) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
 
@@ -298,7 +312,7 @@ def convert_result_to_dataframe(response: BareExecutionResponse, label_overrides
     :param response: execution response through which the result can be read and converted to a dataframe
     :return: a new dataframe
     """
-    extract = _extract_all_result_data(response)
+    extract = _extract_all_result_data(response=response, result_size_limits=result_size_limits)
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 

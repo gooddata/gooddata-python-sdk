@@ -80,6 +80,8 @@ from gooddata_sdk.compute.model.execution import (
     ExecutionDefinition,
     ExecutionResponse,
     ExecutionResult,
+    ResultSize,
+    ResultSizeLimitsExceeded,
     TotalDefinition,
     TotalDimension,
 )

@@ -17,6 +17,7 @@ from gooddata_pandas.utils import (
     make_pandas_index,
 )
 from gooddata_sdk import Attribute, BareExecutionResponse, ExecutionDefinition, Filter, GoodDataSdk
+from gooddata_sdk.compute.model.execution import ResultSize
 
 
 class DataFrameFactory:
@@ -229,7 +230,10 @@ class DataFrameFactory:
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
 
     def for_exec_def(
-        self, exec_def: ExecutionDefinition, label_overrides: LabelOverrides = {}
+        self,
+        exec_def: ExecutionDefinition,
+        label_overrides: LabelOverrides = {},
+        result_size_limits: ResultSize = (),
     ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
         """
         Creates a data frame using an execution definition. The data frame will respect the dimensionality
@@ -262,11 +266,20 @@ class DataFrameFactory:
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         return (
-            convert_result_to_dataframe(response=execution.bare_exec_response, label_overrides=label_overrides),
+            convert_result_to_dataframe(
+                response=execution.bare_exec_response,
+                label_overrides=label_overrides,
+                result_size_limits=result_size_limits,
+            ),
             execution.bare_exec_response,
         )
 
-    def for_exec_result_id(self, result_id: str, label_overrides: LabelOverrides = {}) -> pandas.DataFrame:
+    def for_exec_result_id(
+        self,
+        result_id: str,
+        label_overrides: LabelOverrides = {},
+        result_size_limits: ResultSize = (),
+    ) -> pandas.DataFrame:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
         the dimensionality specified in execution definition's result spec.
@@ -304,4 +317,5 @@ class DataFrameFactory:
                 response=models.AfmExecutionResponse(metadata["execution_response"], _check_type=False),
             ),
             label_overrides=label_overrides,
+            result_size_limits=result_size_limits,
         )
