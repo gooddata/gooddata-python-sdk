@@ -6,10 +6,10 @@ workspace:
   id: demo_west
   type: workspace
 workspaceDataFilterSettings:
-- filterValues:
-  - California
-  id: region_west_california
-  title: Region West California
-  workspace:
-    id: demo_west_california
-    type: workspace
+  - filterValues:
+      - California
+    id: region_west_california
+    title: Region West California
+    workspace:
+      id: demo_west_california
+      type: workspace

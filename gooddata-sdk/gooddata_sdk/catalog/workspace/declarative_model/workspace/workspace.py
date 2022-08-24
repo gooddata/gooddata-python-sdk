@@ -31,6 +31,10 @@ LAYOUT_WORKSPACES_DIR = "workspaces"
 LAYOUT_WORKSPACES_DATA_FILTERS_DIR = "workspaces_data_filters"
 
 
+def get_workspace_folder(workspace_id: str, layout_organization_folder: Path) -> Path:
+    return layout_organization_folder / LAYOUT_WORKSPACES_DIR / workspace_id
+
+
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeWorkspaceModel(Base):
     ldm: Optional[CatalogDeclarativeLdm] = None

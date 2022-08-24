@@ -1,15 +1,11 @@
-:orphan:
-
 Table Service
-*************
+=============
 
 The ``gooddata_sdk.table`` service allows you to consume analytics in typical tabular format. The service allows free-form
 computations and computations of data for GoodData.CN Insights.
 
-.. _t entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.table* supports the following entity API calls:
 

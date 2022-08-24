@@ -35,25 +35,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self._actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
         self._scan_api = scan_client_apis.ActionsApi(api_client.scan_client)
 
-    def list_data_sources(self) -> List[CatalogDataSource]:
-        get_data_sources = functools.partial(
-            self._entities_api.get_all_entities_data_sources,
-            _check_return_type=False,
-        )
-        data_sources = load_all_entities(get_data_sources)
-        return [CatalogDataSource.from_api(ds) for ds in data_sources.data]
-
-    def get_data_source(self, data_source_id: str) -> CatalogDataSource:
-        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id).data)
-
-    def list_data_source_tables(self, data_source_id: str) -> List[CatalogDataSourceTable]:
-        get_data_source_tables = functools.partial(
-            self._entities_api.get_all_entities_data_source_tables,
-            data_source_id,
-            _check_return_type=False,
-        )
-        data_source_tables = load_all_entities_dict(get_data_source_tables, camel_case=False)
-        return [CatalogDataSourceTable.from_dict(dst, camel_case=False) for dst in data_source_tables["data"]]
+    # Entities methods are listed below
 
     def create_or_update_data_source(
         self,
@@ -68,6 +50,9 @@ class CatalogDataSourceService(CatalogServiceBase):
         except NotFoundException:
             self._entities_api.create_entity_data_sources(data_source.to_api())
 
+    def get_data_source(self, data_source_id: str) -> CatalogDataSource:
+        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id).data)
+
     def delete_data_source(self, data_source_id: str) -> None:
         self._entities_api.delete_entity_data_sources(data_source_id)
 
@@ -81,17 +66,24 @@ class CatalogDataSourceService(CatalogServiceBase):
             data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)
         )
 
-    def generate_logical_model(
-        self,
-        data_source_id: str,
-        generate_ldm_request: CatalogGenerateLdmRequest = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf"),
-    ) -> CatalogDeclarativeModel:
-        return CatalogDeclarativeModel.from_api(
-            self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
+    def list_data_sources(self) -> List[CatalogDataSource]:
+        get_data_sources = functools.partial(
+            self._entities_api.get_all_entities_data_sources,
+            _check_return_type=False,
         )
+        data_sources = load_all_entities(get_data_sources)
+        return [CatalogDataSource.from_api(ds) for ds in data_sources.data]
 
-    def register_upload_notification(self, data_source_id: str) -> None:
-        self._actions_api.register_upload_notification(data_source_id)
+    def list_data_source_tables(self, data_source_id: str) -> List[CatalogDataSourceTable]:
+        get_data_source_tables = functools.partial(
+            self._entities_api.get_all_entities_data_source_tables,
+            data_source_id,
+            _check_return_type=False,
+        )
+        data_source_tables = load_all_entities_dict(get_data_source_tables, camel_case=False)
+        return [CatalogDataSourceTable.from_dict(dst, camel_case=False) for dst in data_source_tables["data"]]
+
+    # Declarative methods are listed below
 
     def get_declarative_data_sources(self) -> CatalogDeclarativeDataSources:
         return CatalogDeclarativeDataSources.from_api(self._layout_api.get_data_sources_layout())
@@ -107,15 +99,76 @@ class CatalogDataSourceService(CatalogServiceBase):
         credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
         self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials))
 
-    @staticmethod
-    def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:
-        data = read_layout_from_file(credentials_path)
-        if data.get("data_sources") is None:
-            raise ValueError("The file has a wrong structure. There should be a root key 'data_sources'.")
-        if len(data["data_sources"]) == 0:
-            raise ValueError("There are no pairs of data source id and token.")
-        credentials = data["data_sources"]
-        return credentials
+    def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
+        self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeDataSources:
+        return CatalogDeclarativeDataSources.load_from_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_and_put_declarative_data_sources(
+        self,
+        layout_root_path: Path = Path.cwd(),
+        credentials_path: Optional[Path] = None,
+        test_data_sources: bool = False,
+    ) -> None:
+        data_sources = self.load_declarative_data_sources(layout_root_path)
+        self.put_declarative_data_sources(data_sources, credentials_path, test_data_sources)
+
+    def get_declarative_pdm(self, data_source_id: str) -> CatalogDeclarativeTables:
+        return CatalogDeclarativeTables.from_api(self._layout_api.get_pdm_layout(data_source_id).get("pdm"))
+
+    def put_declarative_pdm(self, data_source_id: str, declarative_tables: CatalogDeclarativeTables) -> None:
+        declarative_pdm = DeclarativePdm(pdm=declarative_tables.to_api())
+        self._layout_api.set_pdm_layout(data_source_id, declarative_pdm)
+
+    def store_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
+        self.get_declarative_pdm(data_source_id).store_to_disk(data_source_folder)
+
+    def load_declarative_pdm(
+        self, data_source_id: str, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeTables:
+        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
+        return CatalogDeclarativeTables.load_from_disk(data_source_folder)
+
+    def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))
+
+    # Actions methods are listed below
+
+    def generate_logical_model(
+        self,
+        data_source_id: str,
+        generate_ldm_request: CatalogGenerateLdmRequest = CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf"),
+    ) -> CatalogDeclarativeModel:
+        return CatalogDeclarativeModel.from_api(
+            self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
+        )
+
+    def register_upload_notification(self, data_source_id: str) -> None:
+        self._actions_api.register_upload_notification(data_source_id)
+
+    def scan_data_source(
+        self,
+        data_source_id: str,
+        scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
+        report_warnings: bool = False,
+    ) -> CatalogScanResultPdm:
+        scan_result = CatalogScanResultPdm.from_api(
+            self._scan_api.scan_data_source(data_source_id, scan_request.to_api())
+        )
+        if report_warnings:
+            self.report_warnings(scan_result.warnings)
+        return scan_result
+
+    def scan_and_put_pdm(
+        self, data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest()
+    ) -> None:
+        self.put_declarative_pdm(data_source_id, self.scan_data_source(data_source_id, scan_request).pdm)
+
+    def scan_schemata(self, data_source_id: str) -> list[str]:
+        response = self._scan_api.get_data_source_schemata(data_source_id)
+        return response.get("schema_names", [])
 
     def test_data_sources_connection(
         self, declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None
@@ -143,27 +196,7 @@ class CatalogDataSourceService(CatalogServiceBase):
                 message.append(f"Test connection for data source id {k} ended with the following error {v}.")
             raise ValueError("\n".join(message))
 
-    def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
-        self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
-
-    def load_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeDataSources:
-        return CatalogDeclarativeDataSources.load_from_disk(self.layout_organization_folder(layout_root_path))
-
-    def load_and_put_declarative_data_sources(
-        self,
-        layout_root_path: Path = Path.cwd(),
-        credentials_path: Optional[Path] = None,
-        test_data_sources: bool = False,
-    ) -> None:
-        data_sources = self.load_declarative_data_sources(layout_root_path)
-        self.put_declarative_data_sources(data_sources, credentials_path, test_data_sources)
-
-    def get_declarative_pdm(self, data_source_id: str) -> CatalogDeclarativeTables:
-        return CatalogDeclarativeTables.from_api(self._layout_api.get_pdm_layout(data_source_id).get("pdm"))
-
-    def put_declarative_pdm(self, data_source_id: str, declarative_tables: CatalogDeclarativeTables) -> None:
-        declarative_pdm = DeclarativePdm(pdm=declarative_tables.to_api())
-        self._layout_api.set_pdm_layout(data_source_id, declarative_pdm)
+    # Help methods are listed below
 
     @staticmethod
     def report_warnings(warnings: list[dict]) -> None:
@@ -180,42 +213,17 @@ class CatalogDataSourceService(CatalogServiceBase):
                 else:
                     print(f"table_name={table_name} table_message={table_message}")
 
-    def scan_data_source(
-        self,
-        data_source_id: str,
-        scan_request: CatalogScanModelRequest = CatalogScanModelRequest(),
-        report_warnings: bool = False,
-    ) -> CatalogScanResultPdm:
-        scan_result = CatalogScanResultPdm.from_api(
-            self._scan_api.scan_data_source(data_source_id, scan_request.to_api())
-        )
-        if report_warnings:
-            self.report_warnings(scan_result.warnings)
-        return scan_result
-
-    def scan_and_put_pdm(
-        self, data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest()
-    ) -> None:
-        self.put_declarative_pdm(data_source_id, self.scan_data_source(data_source_id, scan_request).pdm)
-
     def data_source_folder(self, data_source_id: str, layout_root_path: Path) -> Path:
         layout_organization_folder = self.layout_organization_folder(layout_root_path)
         data_sources_folder = CatalogDeclarativeDataSources.data_sources_folder(layout_organization_folder)
         return CatalogDeclarativeDataSource.data_source_folder(data_sources_folder, data_source_id)
 
-    def store_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
-        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
-        self.get_declarative_pdm(data_source_id).store_to_disk(data_source_folder)
-
-    def load_declarative_pdm(
-        self, data_source_id: str, layout_root_path: Path = Path.cwd()
-    ) -> CatalogDeclarativeTables:
-        data_source_folder = self.data_source_folder(data_source_id, layout_root_path)
-        return CatalogDeclarativeTables.load_from_disk(data_source_folder)
-
-    def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
-        self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))
-
-    def scan_schemata(self, data_source_id: str) -> list[str]:
-        response = self._scan_api.get_data_source_schemata(data_source_id)
-        return response.get("schema_names", [])
+    @staticmethod
+    def _credentials_from_file(credentials_path: Path) -> dict[str, Any]:
+        data = read_layout_from_file(credentials_path)
+        if data.get("data_sources") is None:
+            raise ValueError("The file has a wrong structure. There should be a root key 'data_sources'.")
+        if len(data["data_sources"]) == 0:
+            raise ValueError("There are no pairs of data source id and token.")
+        credentials = data["data_sources"]
+        return credentials

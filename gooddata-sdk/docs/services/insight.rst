@@ -1,15 +1,11 @@
-:orphan:
-
 Insights Service
-****************
+================
 
 The ``gooddata_sdk.insights`` service gives you access to insights stored in a workspace. It can retrieve all the insights from a workspace or one
 insight based on its name. Insight instance is the input for other services like a Table service
 
-.. _i entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.insights* supports the following entity API calls:
 

@@ -1,5 +1,3 @@
-:orphan:
-
 Catalog Workspace Service
 *************************
 
@@ -16,12 +14,15 @@ The service supports two types of methods:
 * Entity methods let you work with workspaces on a high level using simplified *CatalogWorkspace* entities.
 * Declarative methods allow you to work with workspaces on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 
-.. _w entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+==============
 
 The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
+
+* ``create_or_update(workspace: CatalogWorkspace)``
+
+    Create a new workspace or overwrite an existing workspace with the same id.
+
 
 * ``get_workspace(workspace_id: str)``
 
@@ -29,19 +30,15 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
 
     Get an individual workspace.
 
+* ``delete_workspace(workspace_id: str)``
+
+    Delete a workspace with all its content - logical model and analytics model.
+
 * ``list_workspaces()``
 
     Returns *List[CatalogWorkspace]*.
 
     Get a list of all existing workspaces.
-
-* ``create_or_update(workspace: CatalogWorkspace)``
-
-    Create a new workspace or overwrite an existing workspace with the same id.
-
-* ``delete_workspace(workspace_id: str)``
-
-    Delete a workspace.
 
 **Example Usage**
 
@@ -88,22 +85,13 @@ The *gooddata_sdk.catalog_workspace* supports the following entity API calls:
     # Delete workspace
     sdk.catalog_workspace.delete_workspace(workspace_id="test_demo")
 
-.. _w declarative methods:
-
 Declarative methods
-^^^^^^^^^^^^^^^^^^^
+===================
 
 The *gooddata_sdk.catalog_workspace* supports the following declarative API calls:
 
-* ``get_declarative_workspace(workspace_id: str)``
-
-    Returns *CatalogDeclarativeWorkspaceModel*.
-
-    Retrieve a workspace layout.
-
-* ``put_declarative_workspace(workspace_id: str)``
-
-    Set a workspace layout.
+Workspaces
+^^^^^^^^^^
 
 * ``get_declarative_workspaces()``
 
@@ -160,6 +148,94 @@ The *gooddata_sdk.catalog_workspace* supports the following declarative API call
 
     This method combines *load_declarative_workspaces* and *put_declarative_workspaces* methods to load and
     set layouts stored using *store_declarative_workspaces*.
+
+Workspace
+^^^^^^^^^
+
+* ``get_declarative_workspace(workspace_id: str)``
+
+    Returns *CatalogDeclarativeWorkspaceModel*.
+
+    Retrieve a workspace layout.
+
+* ``put_declarative_workspace(workspace_id: str)``
+
+    Set a workspace layout.
+
+* store_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())``
+
+    Store workspace layout in directory hierarchy.
+
+    ::
+
+        gooddata_layouts
+        └── organization_id
+                └── workspaces
+                        └── workspace_a
+                                ├── analytics_model
+                                │   ├── analytical_dashboards
+                                │   │       └── analytical_dashboard.yaml
+                                │   ├── dashboard_plugins
+                                │   │       └── dashboard_plugin.yaml
+                                │   ├── filter_contexts
+                                │   │       └── filter_context.yaml
+                                │   ├── metrics
+                                │   │       └── metric.yaml
+                                │   └── visualization_objects
+                                │           └── visualization_object.yaml
+                                └── ldm
+                                    ├── datasets
+                                    │       └── dataset.yaml
+                                    └── date_instances
+                                            └── date_instance.yaml
+
+
+* ``load_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())``
+
+    Returns *CatalogDeclarativeWorkspaceModel*.
+
+    Load declarative workspaces layout, which was stored using *store_declarative_workspace*.
+
+* ``load_and_put_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())``
+
+    This method combines *load_declarative_workspace* and *put_declarative_workspace* methods to load and
+    set layouts stored using *store_declarative_workspace*.
+
+Workspace data filters
+^^^^^^^^^^^^^^^^^^^^^^
+
+* ``get_declarative_workspace_data_filters()``
+
+    Returns *CatalogDeclarativeWorkspaceDataFilters*.
+
+    Retrieve a workspace data filter layout.
+
+* ``put_declarative_workspace_data_filters(workspace_data_filters: CatalogDeclarativeWorkspaceDataFilters)``
+
+    Set a workspace data filter layout.
+
+* ``store_declarative_workspace_data_filters(layout_root_path: Path = Path.cwd())``
+
+    Store workspace data filters in directory hierarchy.
+
+    ::
+
+        gooddata_layouts
+        └── organization_id
+                └── workspaces_data_filters
+                        ├── filter_1.yaml
+                        └── filter_2.yaml
+
+* ``load_declarative_workspace_data_filters(layout_root_path: Path = Path.cwd())``
+
+    Returns *CatalogDeclarativeWorkspaceDataFilters*.
+
+    Load declarative workspaces layout, which was stored using *store_declarative_workspace_data_filters*.
+
+* ``load_and_put_declarative_workspace_data_filters(layout_root_path: Path = Path.cwd())``
+
+    This method combines *load_declarative_workspace_data_filters* and *put_declarative_workspace_data_filters* methods to load and
+    set layouts stored using *store_declarative_workspace_data_filters*.
 
 **Example Usage**
 

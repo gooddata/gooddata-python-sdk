@@ -9,6 +9,7 @@ import vcr
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilters,
+    CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
     CatalogWorkspace,
     GoodDataApiClient,
@@ -29,6 +30,19 @@ def _empty_workspaces(sdk: GoodDataSdk) -> None:
     empty_workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
     assert empty_workspaces_e == empty_workspaces_o
     assert empty_workspaces_e.to_dict(camel_case=True) == empty_workspaces_o.to_dict(camel_case=True)
+
+
+def _empty_workspace(sdk: GoodDataSdk, workspace_id: str) -> None:
+    empty_workspace_e = CatalogDeclarativeWorkspaceModel()
+    sdk.catalog_workspace.put_declarative_workspace(workspace_id=workspace_id, workspace=empty_workspace_e)
+    empty_workspace_o = sdk.catalog_workspace.get_declarative_workspace(workspace_id=workspace_id)
+    assert len(empty_workspace_o.ldm.datasets) == 0
+    assert len(empty_workspace_o.ldm.date_instances) == 0
+    assert len(empty_workspace_o.analytics.analytical_dashboards) == 0
+    assert len(empty_workspace_o.analytics.dashboard_plugins) == 0
+    assert len(empty_workspace_o.analytics.filter_contexts) == 0
+    assert len(empty_workspace_o.analytics.metrics) == 0
+    assert len(empty_workspace_o.analytics.visualization_objects) == 0
 
 
 def _empty_workspace_data_filters(sdk: GoodDataSdk) -> None:
@@ -394,3 +408,84 @@ def test_put_declarative_workspace_data_filters(test_config):
             data = json.load(f)
         declarative_workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data)
         sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.json"))
+def test_get_declarative_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+
+    workspace = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
+
+    assert len(workspace.ldm.datasets) == 5
+    assert len(workspace.ldm.date_instances) == 1
+    assert len(workspace.analytics.analytical_dashboards) == 3
+    assert len(workspace.analytics.dashboard_plugins) == 2
+    assert len(workspace.analytics.filter_contexts) == 2
+    assert len(workspace.analytics.metrics) == 24
+    assert len(workspace.analytics.visualization_objects) == 15
+    assert workspace.to_dict(camel_case=True) == layout_api.get_workspace_layout(
+        workspace_id=test_config["workspace"]
+    ).to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace.json"))
+def test_put_declarative_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    sdk.catalog_workspace.create_or_update(
+        workspace=CatalogWorkspace(workspace_id=test_config["workspace_test"], name=test_config["workspace_test"])
+    )
+
+    try:
+        workspace_e = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
+        sdk.catalog_workspace.put_declarative_workspace(
+            workspace_id=test_config["workspace_test"], workspace=workspace_e
+        )
+        workspace_o = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
+        assert workspace_e == workspace_o
+        assert workspace_e.to_dict() == workspace_o.to_dict()
+    finally:
+        sdk.catalog_workspace.delete_workspace(workspace_id=test_config["workspace_test"])
+        workspaces = sdk.catalog_workspace.list_workspaces()
+        assert len(workspaces) == 3
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace.json"))
+def test_store_declarative_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    create_directory(path)
+
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
+    sdk.catalog_workspace.store_declarative_workspace(workspace_id=test_config["workspace"], layout_root_path=path)
+    workspaces_o = sdk.catalog_workspace.load_declarative_workspace(
+        workspace_id=test_config["workspace"], layout_root_path=path
+    )
+
+    assert workspaces_e == workspaces_o
+    assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace.json"))
+def test_load_and_put_declarative_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load"
+    expected_json_path = _current_dir / "expected" / "declarative_workspace.json"
+    workspace_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+
+    try:
+        _empty_workspace(sdk, workspace_id=test_config["workspace"])
+
+        sdk.catalog_workspace.load_and_put_declarative_workspace(
+            workspace_id=test_config["workspace"], layout_root_path=path
+        )
+        workspace_o = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+        assert workspace_e == workspace_o
+        assert workspace_e.to_dict(camel_case=True) == workspace_o.to_dict(camel_case=True)
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        workspace_o = CatalogDeclarativeWorkspaceModel.from_dict(data, camel_case=True)
+        sdk.catalog_workspace.put_declarative_workspace(workspace_id=test_config["workspace"], workspace=workspace_o)

@@ -1,26 +1,26 @@
 # (C) 2022 GoodData Corporation
 attributes:
-- description: Product id
-  id: product_id
-  labels: []
-  sourceColumn: product_id
-  tags:
-  - Products
-  title: Product id
-- description: Product name
-  id: product_name
-  labels: []
-  sourceColumn: product_name
-  tags:
-  - Products
-  title: Product name
-- description: Category
-  id: products.category
-  labels: []
-  sourceColumn: category
-  tags:
-  - Products
-  title: Category
+  - description: Product id
+    id: product_id
+    labels: []
+    sourceColumn: product_id
+    tags:
+      - Products
+    title: Product id
+  - description: Product name
+    id: product_name
+    labels: []
+    sourceColumn: product_name
+    tags:
+      - Products
+    title: Product name
+  - description: Category
+    id: products.category
+    labels: []
+    sourceColumn: category
+    tags:
+      - Products
+    title: Category
 dataSourceTableId:
   dataSourceId: demo-test-ds
   id: products
@@ -28,10 +28,10 @@ dataSourceTableId:
 description: Products
 facts: []
 grain:
-- id: product_id
-  type: attribute
+  - id: product_id
+    type: attribute
 id: products
 references: []
 tags:
-- Products
+  - Products
 title: Products

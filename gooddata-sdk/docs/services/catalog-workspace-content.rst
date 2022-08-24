@@ -1,7 +1,5 @@
-:orphan:
-
 Catalog Workspace Content Service
-*********************************
+=================================
 
 The ``gooddata_sdk.catalog_workspace_content`` service enables you to
 list catalog all objects from a workspace. These objects include:
@@ -18,10 +16,8 @@ The service supports two types of methods:
 * Entity methods let you work with workspace content on a high level using simplified entities.
 * Declarative methods allow you to work with workspace content on a more granular level by fetching entire workspace content layouts, including all of their nested objects.
 
-.. _wc entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.catalog_workspace_content* supports the following entity API calls:
 
@@ -30,6 +26,46 @@ The *gooddata_sdk.catalog_workspace_content* supports the following entity API c
     Returns *CatalogWorkspaceContent*.
 
     Retrieve all datasets with attributes, facts, and metrics for a workspace.
+
+* ``get_attributes_catalog(workspace_id: str)``
+
+    Returns *list[CatalogAttribute]*
+
+    Retrieve all attributes for a workspace.
+
+* ``get_labels_catalog(workspace_id: str)``
+
+    Returns *list[CatalogLabel]*
+
+    Retrieve all labels for a workspace.
+
+* ``get_metrics_catalog(workspace_id: str)``
+
+    Returns *list[CatalogMetric]*
+
+    Retrieve all metrics for a workspace.
+
+* ``get_facts_catalog(workspace_id: str)``
+
+    Returns *list[CatalogFact]*
+
+    Retrieve all facts for a workspace.
+
+* ``get_dependent_entities_graph(workspace_id: str)``
+
+    Returns *CatalogDependentEntitiesResponse*
+
+    | There are dependencies among all catalog objects, the chain is the following:
+    | fact/attribute/label -> dataset -> metric -> insight -> dashboard
+
+    | Some steps can be skipped, e.g. fact -> insight
+    | We do not support table -> dataset dependency yet.
+
+* ``get_dependent_entities_graph_from_entry_points(workspace_id: str, dependent_entities_request: CatalogDependentEntitiesRequest)``
+
+    Returns *CatalogDependentEntitiesResponse*
+
+    Extends *get_dependent_entities_graph* with the entry point from which the graph is created.
 
 **Example Usage**
 
@@ -62,14 +98,14 @@ The *gooddata_sdk.catalog_workspace_content* supports the following entity API c
     # Read list of facts for demo workspace
     facts = sdk.catalog_workspace_content.get_facts_catalog(workspace_id)
 
-.. _wc declarative methods:
 
 Declarative methods
-^^^^^^^^^^^^^^^^^^^
+*******************
 
 The *gooddata_sdk.catalog_workspace_content* supports the following declarative API calls:
 
-**Logical Data Model:**
+Logical data model (LDM)
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 * ``get_declarative_ldm(workspace_id: str)``
 
@@ -109,7 +145,8 @@ The *gooddata_sdk.catalog_workspace_content* supports the following declarative 
     This method combines *load_declarative_ldm* and *put_declarative_ldm*
     methods to load and set layouts stored using *store_declarative_ldm*. You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
-**Analytics Model:**
+Analytics Model
+^^^^^^^^^^^^^^^
 
 * ``get_declarative_analytics_model(workspace_id: str)``
 
