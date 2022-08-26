@@ -5,7 +5,7 @@ Top level executable entity. Combination of [A]ttributes, [F]ilters & [M]etrics.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attributes** | [**[AttributeItem]**](AttributeItem.md) |  | 
+**attributes** | [**[AttributeItem]**](AttributeItem.md) | Attributes to be used in the computation. | 
 **filters** | [**[FilterDefinition]**](FilterDefinition.md) | Various filter types to filter execution result. | 
 **measures** | [**[MeasureItem]**](MeasureItem.md) | Metrics to be computed. | 
 **aux_measures** | [**[MeasureItem]**](MeasureItem.md) | Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result. | [optional] 

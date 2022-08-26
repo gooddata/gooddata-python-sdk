@@ -1721,6 +1721,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
             ),
         ],
         organization=DeclarativeOrganizationInfo(
+            color_palettes=[
+                DeclarativeColorPalette(
+                    content={},
+                    id="id_example",
+                    name="name_example",
+                ),
+            ],
             csp_directives=[
                 DeclarativeCspDirective(
                     directive="directive_example",
@@ -1815,6 +1822,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[
                     DeclarativeWorkspaceHierarchyPermission(
@@ -2336,6 +2344,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[
                     DeclarativeWorkspaceHierarchyPermission(

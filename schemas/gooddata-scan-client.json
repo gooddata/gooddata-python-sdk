@@ -451,24 +451,6 @@
               }
             },
             "description": "The result of the scan."
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "An example of a non-existent data source": {
-                    "description": "An example of a non-existent data source",
-                    "value": {
-                      "detail": "The requested endpoint does not exist or you do not have permission to access it.",
-                      "status": 404,
-                      "title": "Not Found",
-                      "traceId": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "description": "A data source with given id does not exists."
           }
         },
         "summary": "Scan a database to get a physical data model (PDM)",
@@ -521,24 +503,6 @@
               }
             },
             "description": "The result of the scan schemata"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "An example of a non-existent data source": {
-                    "description": "An example of a non-existent data source",
-                    "value": {
-                      "detail": "The requested endpoint does not exist or you do not have permission to access it.",
-                      "status": 404,
-                      "title": "Not Found",
-                      "traceId": "<traceId>"
-                    }
-                  }
-                }
-              }
-            },
-            "description": "A data source with given id does not exists."
           }
         },
         "summary": "Get a list of schema names of a database",
@@ -605,24 +569,6 @@
               }
             },
             "description": "The result of the test of a data source connection."
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "An example of a non-existent data source": {
-                    "description": "An example of a non-existent data source",
-                    "value": {
-                      "detail": "The requested endpoint does not exist or you do not have permission to access it.",
-                      "status": 404,
-                      "title": "Not Found",
-                      "traceId": "<traceId>"
-                    }
-                  }
-                }
-              }
-            },
-            "description": "A data source with given id does not exists."
           }
         },
         "summary": "Test data source connection by data source id",

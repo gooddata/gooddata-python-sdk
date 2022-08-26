@@ -82,6 +82,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
         }
@@ -92,6 +93,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
 
 
     attribute_map = {
+        'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'name': 'name',  # noqa: E501
     }
@@ -137,6 +139,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
         """
@@ -224,6 +227,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
         """

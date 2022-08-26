@@ -57,8 +57,13 @@ class ApiEntitlement(ModelNormal):
 
     allowed_values = {
         ('name',): {
+            'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
             'TIER': "Tier",
+            'USERCOUNT': "UserCount",
+            'UNLIMITEDUSERS': "UnlimitedUsers",
+            'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
+            'WORKSPACECOUNT': "WorkspaceCount",
         },
     }
 

@@ -121,7 +121,7 @@ class AFM(ModelNormal):
         """AFM - a model defined in OpenAPI
 
         Args:
-            attributes ([AttributeItem]):
+            attributes ([AttributeItem]): Attributes to be used in the computation.
             filters ([FilterDefinition]): Various filter types to filter execution result.
             measures ([MeasureItem]): Metrics to be computed.
 
@@ -215,7 +215,7 @@ class AFM(ModelNormal):
         """AFM - a model defined in OpenAPI
 
         Args:
-            attributes ([AttributeItem]):
+            attributes ([AttributeItem]): Attributes to be used in the computation.
             filters ([FilterDefinition]): Various filter types to filter execution result.
             measures ([MeasureItem]): Metrics to be computed.
 

@@ -54,8 +54,13 @@
           },
           "name": {
             "enum": [
+              "Contract",
               "CustomTheming",
-              "Tier"
+              "Tier",
+              "UserCount",
+              "UnlimitedUsers",
+              "UnlimitedWorkspaces",
+              "WorkspaceCount"
             ],
             "type": "string"
           },
@@ -299,6 +304,26 @@
           "labels",
           "sourceColumn",
           "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeColorPalette": {
+        "description": "Color palette and its properties.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "id",
+          "name"
         ],
         "type": "object"
       },
@@ -926,6 +951,13 @@
       "DeclarativeOrganizationInfo": {
         "description": "Information available about an organization.",
         "properties": {
+          "colorPalettes": {
+            "description": "A list of color palettes.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeColorPalette"
+            },
+            "type": "array"
+          },
           "cspDirectives": {
             "description": "A list of CSP directives.",
             "items": {
@@ -1333,6 +1365,10 @@
       "DeclarativeWorkspace": {
         "description": "A declarative form of a particular workspace.",
         "properties": {
+          "description": {
+            "description": "Description of the workspace",
+            "type": "string"
+          },
           "earlyAccess": {
             "description": "Early access defined on level Workspace",
             "type": "string"
@@ -1640,8 +1676,13 @@
           "entitlementsName": {
             "items": {
               "enum": [
+                "Contract",
                 "CustomTheming",
-                "Tier"
+                "Tier",
+                "UserCount",
+                "UnlimitedUsers",
+                "UnlimitedWorkspaces",
+                "WorkspaceCount"
               ],
               "type": "string"
             },
@@ -7106,6 +7147,9 @@
         "properties": {
           "attributes": {
             "properties": {
+              "description": {
+                "type": "string"
+              },
               "earlyAccess": {
                 "type": "string"
               },
@@ -7187,6 +7231,9 @@
         "properties": {
           "attributes": {
             "properties": {
+              "description": {
+                "type": "string"
+              },
               "earlyAccess": {
                 "type": "string"
               },
@@ -7334,6 +7381,9 @@
         "properties": {
           "attributes": {
             "properties": {
+              "description": {
+                "type": "string"
+              },
               "earlyAccess": {
                 "type": "string"
               },
@@ -7628,6 +7678,44 @@
         },
         "type": "object"
       },
+      "PlatformUsage": {
+        "properties": {
+          "count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "enum": [
+              "WorkspaceCount",
+              "UserCount"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "PlatformUsageRequest": {
+        "properties": {
+          "usageItemNames": {
+            "items": {
+              "enum": [
+                "WorkspaceCount",
+                "UserCount"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "usageItemNames"
+        ],
+        "type": "object"
+      },
       "ReferenceIdentifier": {
         "description": "A reference identifier.",
         "properties": {
@@ -7728,6 +7816,76 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/collectUsage": {
+      "get": {
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "operationId": "allPlatformUsage",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlatformUsage"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Info about the platform usage.",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "post": {
+        "description": "Provides information about platform usage, like amount of users, workspaces, ...",
+        "operationId": "particularPlatformUsage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformUsageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlatformUsage"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Info about the platform usage for particular items.",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel": {
       "post": {
         "description": "Generate logical data model (LDM) from physical data model (PDM) stored in data source.",
@@ -7762,16 +7920,6 @@
               }
             },
             "description": "LDM generated successfully."
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeclarativeModel"
-                }
-              }
-            },
-            "description": "Data source with given name does not exist."
           }
         },
         "summary": "Generate logical data model (LDM) from physical data model (PDM)",
@@ -7803,9 +7951,6 @@
         "responses": {
           "204": {
             "description": "An upload notification has been successfully registered."
-          },
-          "404": {
-            "description": "Data source with given name does not exist."
           }
         },
         "summary": "Register an upload notification",
@@ -8050,19 +8195,6 @@
               }
             },
             "description": "Values for selected settings."
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DeclarativeSetting"
-                  },
-                  "type": "array"
-                }
-              }
-            },
-            "description": "Setting with provided id does not exist."
           }
         },
         "summary": "Values for selected settings.",

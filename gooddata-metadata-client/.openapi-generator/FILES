@@ -9,6 +9,7 @@ docs/DeclarativeAnalyticalDashboard.md
 docs/DeclarativeAnalytics.md
 docs/DeclarativeAnalyticsLayer.md
 docs/DeclarativeAttribute.md
+docs/DeclarativeColorPalette.md
 docs/DeclarativeColumn.md
 docs/DeclarativeCspDirective.md
 docs/DeclarativeDashboardPlugin.md
@@ -344,6 +345,8 @@ docs/ListLinks.md
 docs/ListLinksAllOf.md
 docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
+docs/PlatformUsage.md
+docs/PlatformUsageRequest.md
 docs/ReferenceIdentifier.md
 docs/ResolveSettingsRequest.md
 docs/UserGroupIdentifier.md
@@ -366,6 +369,7 @@ gooddata_metadata_client/model/declarative_analytical_dashboard.py
 gooddata_metadata_client/model/declarative_analytics.py
 gooddata_metadata_client/model/declarative_analytics_layer.py
 gooddata_metadata_client/model/declarative_attribute.py
+gooddata_metadata_client/model/declarative_color_palette.py
 gooddata_metadata_client/model/declarative_column.py
 gooddata_metadata_client/model/declarative_csp_directive.py
 gooddata_metadata_client/model/declarative_dashboard_plugin.py
@@ -699,6 +703,8 @@ gooddata_metadata_client/model/list_links.py
 gooddata_metadata_client/model/list_links_all_of.py
 gooddata_metadata_client/model/object_links.py
 gooddata_metadata_client/model/object_links_container.py
+gooddata_metadata_client/model/platform_usage.py
+gooddata_metadata_client/model/platform_usage_request.py
 gooddata_metadata_client/model/reference_identifier.py
 gooddata_metadata_client/model/resolve_settings_request.py
 gooddata_metadata_client/model/user_group_identifier.py

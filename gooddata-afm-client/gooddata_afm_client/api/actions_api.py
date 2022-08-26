@@ -29,7 +29,6 @@ from gooddata_afm_client.model.afm_valid_objects_response import AfmValidObjects
 from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from gooddata_afm_client.model.execution_result import ExecutionResult
-from gooddata_afm_client.model.problem import Problem
 from gooddata_afm_client.model.result_cache_metadata import ResultCacheMetadata
 
 
@@ -310,8 +309,6 @@ class ActionsApi(object):
                 'allowed_values': {
                     ('explain_type',): {
 
-                        "LDM": "LDM",
-                        "PDM": "PDM",
                         "MAQL": "MAQL",
                         "GRPC_MODEL": "GRPC_MODEL",
                         "WDF": "WDF",
@@ -772,7 +769,7 @@ class ActionsApi(object):
     ):
         """AFM explain resource.  # noqa: E501
 
-        The resource provides static structures needed for investigation of a problem with given AFM. The structures are MAQL (internal form of AFM) and GRPC and WDF models.  # noqa: E501
+        The resource provides static structures needed for investigation of a problem with given AFM.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -784,7 +781,7 @@ class ActionsApi(object):
             afm_execution (AfmExecution):
 
         Keyword Args:
-            explain_type (str): Requested explain type (LDM, PDM, GRPC_MODEL, WDF, MAQL, QT, QT_SVG, OPT_QT, OPT_QT_SVG or SQL). If not specified all types are bundled in a ZIP archive.. [optional]
+            explain_type (str): Requested explain type. If not specified all types are bundled in a ZIP archive.  `MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info  `GRPC_MODEL` - Datasets used in execution  `WDF` - Workspace data filters in execution workspace context  `QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL  `QT_SVG` - Generated SVG image of the Query Tree  `OPT_QT` - Optimized Query Tree  `OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree  `SQL` - Final SQL to be executed. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
