@@ -4,6 +4,7 @@ from __future__ import annotations
 import functools
 import os
 import re
+import typing
 from pathlib import Path
 from typing import Any, Callable, Dict, NamedTuple, Union, cast
 
@@ -143,9 +144,15 @@ def create_directory(path: Path) -> None:
         os.makedirs(path)
 
 
+class IndentDumper(yaml.SafeDumper):
+    @typing.no_type_check
+    def increase_indent(self, flow: bool = False, indentless: bool = False):
+        return super(IndentDumper, self).increase_indent(flow, False)
+
+
 def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
     with open(path, "w", encoding="utf-8") as fp:
-        yaml.safe_dump(content, fp, indent=2)
+        yaml.dump(content, fp, indent=2, Dumper=IndentDumper)
 
 
 def read_layout_from_file(path: Path) -> Any:

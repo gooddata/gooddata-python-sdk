@@ -6,10 +6,10 @@ workspace:
   id: demo
   type: workspace
 workspaceDataFilterSettings:
-- filterValues:
-  - West
-  id: region_west
-  title: Region West
-  workspace:
-    id: demo_west
-    type: workspace
+  - filterValues:
+      - West
+    id: region_west
+    title: Region West
+    workspace:
+      id: demo_west
+      type: workspace

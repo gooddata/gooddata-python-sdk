@@ -1,7 +1,5 @@
-:orphan:
-
 Catalog User Service
-********************
+====================
 
 The ``gooddata_sdk.catalog_user`` service enables you to perform the following actions
 on users and user groups:
@@ -16,12 +14,17 @@ The service supports two types of methods:
 * Entity methods let you work with users and user groups on a high level using simplified *CatalogUser* and *CatalogUserGroup*  entities.
 * Declarative methods allow you to work with users and user groups on a more granular level by fetching entire users and user groups layouts.
 
-.. _u entity methods:
+Entity methods
+**************
 
-Entity methods for users
-^^^^^^^^^^^^^^^^^^^^^^^^
+Users
+^^^^^
 
 The *gooddata_sdk.catalog_user* supports the following user entity API calls:
+
+* ``create_or_update_user(user: CatalogUser)``
+
+    Create a new user or overwrite an existing user.
 
 * ``get_user(user_id: str)``
 
@@ -29,19 +32,15 @@ The *gooddata_sdk.catalog_user* supports the following user entity API calls:
 
     Get an individual user.
 
+* ``delete_user(user_id: str)``
+
+    Delete a user.
+
 * ``list_users()``
 
     Returns *List[CatalogUser]*.
 
     Get a list of all existing users.
-
-* ``create_or_update_user(user: CatalogUser)``
-
-    Create a new user or overwrite an existing user.
-
-* ``delete_user(user_id: str)``
-
-    Delete a user.
 
 **Example Usage**
 
@@ -76,12 +75,15 @@ The *gooddata_sdk.catalog_user* supports the following user entity API calls:
     sdk.catalog_user.delete_user(user_id=user.id)
 
 
-.. _ug entity methods:
 
-Entity methods for user groups
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User groups
+^^^^^^^^^^^
 
 The *gooddata_sdk.catalog_user* supports the following user groups entity API calls:
+
+* ``create_or_update_user_group(user_group: CatalogUserGroup)``
+
+    Create a new user group or overwrite an existing user group.
 
 * ``get_user_group(user_group_id: str)``
 
@@ -89,19 +91,16 @@ The *gooddata_sdk.catalog_user* supports the following user groups entity API ca
 
     Get an individual user group.
 
+* ``delete_user_group(user_group_id: str)``
+
+    Delete a user group.
+
 * ``list_user_groups()``
 
     Returns *List[CatalogUserGroup]*.
 
     Get a list of all existing user groups.
 
-* ``create_or_update_user_group(user_group: CatalogUserGroup)``
-
-    Create a new user group or overwrite an existing user group.
-
-* ``delete_user_group(user_group_id: str)``
-
-    Delete a user group.
 
 **Example Usage**
 
@@ -135,10 +134,12 @@ The *gooddata_sdk.catalog_user* supports the following user groups entity API ca
     # Delete user
     sdk.catalog_user.delete_user_group(user_group_id=user_group.id)
 
-.. _u declarative methods:
 
-Declarative methods for users
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Declarative methods
+*******************
+
+Users
+^^^^^
 
 The *gooddata_sdk.catalog_user* supports the following declarative user API calls:
 
@@ -202,10 +203,9 @@ The *gooddata_sdk.catalog_user* supports the following declarative user API call
     # Update user layout
     sdk.catalog_user.put_declarative_users(users=user_layout)
 
-.. _ug declarative methods:
 
-Declarative methods for user groups
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User groups
+^^^^^^^^^^^
 
 The *gooddata_sdk.catalog_user* supports the following declarative user groups API calls:
 
@@ -269,10 +269,9 @@ The *gooddata_sdk.catalog_user* supports the following declarative user groups A
     # Update user group layout
     sdk.catalog_user.put_declarative_users(users=user_group_layout)
 
-.. _uug declarative methods:
 
-Declarative methods for users and user groups
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Users and user groups
+^^^^^^^^^^^^^^^^^^^^^
 
 The *gooddata_sdk.catalog_user* supports the following declarative users and user groups API calls:
 

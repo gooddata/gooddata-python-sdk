@@ -1,7 +1,5 @@
-:orphan:
-
 Catalog Data Source Service
-***************************
+===========================
 
 The ``gooddata_sdk.catalog_data_source`` service enables you to manage data sources and
 list their tables. Data source object represents your database, which you integrate with
@@ -19,22 +17,14 @@ The service supports three types of methods:
 * Declarative methods allow you to work with data sources on a more granular level by fetching entire workspace layouts, including all of their nested objects.
 * Action methods let you perform an execution of some form of computation.
 
-.. _ds entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
 
 * ``create_or_update_data_source(data_source: CatalogDataSource)``
 
     Create or update data source.
-
-* ``list_data_sources()``
-
-    Returns *List[CatalogDataSource]*.
-
-    Lists all data sources.
 
 * ``get_data_source(data_source_id: str)``
 
@@ -49,6 +39,18 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
 * ``patch_data_source_attributes(data_source_id: str, attributes: dict)``
 
     Allows you to apply changes to the given data source.
+
+* ``list_data_sources()``
+
+    Returns *List[CatalogDataSource]*.
+
+    Lists all data sources.
+
+* ``list_data_source_tables(data_source_id: str)``
+
+    Returns *List[CatalogDataSourceTable]*
+
+    Lists all tables for a data source specified by id.
 
 **Example Usage**
 
@@ -160,12 +162,14 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
     # Delete data source
     sdk.catalog_data_source.delete_data_source(data_source_id='test')
 
-.. _ds declarative methods:
 
 Declarative methods
-^^^^^^^^^^^^^^^^^^^
+*******************
 
 The *gooddata_sdk.catalog_data_source* supports the following declarative API calls:
+
+Data sources
+^^^^^^^^^^^^
 
 * ``get_declarative_data_sources()``
 
@@ -209,6 +213,45 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
     *put_declarative_data_sources* methods to load and set
     layouts stored using *store_declarative_data_sources*.
 
+Physical data model (PDM)
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``get_declarative_pdm(data_source_id: str)``
+
+    Returns *CatalogDeclarativeTables*.
+
+    Retrieve physical model for a given data source.
+
+* ``put_declarative_pdm(data_source_id: str, declarative_tables: CatalogDeclarativeTables)``
+
+    Set physical model for a given data source.
+
+* ``store_declarative_pdm(data_source_id: str, layout_root_path: Path = Path.cwd())``
+
+    Store physical model layout in directory hierarchy for a given data source.
+
+    ::
+
+        gooddata_layouts
+        └── organization_id
+                └── data_sources
+                        └── data_source_a
+                                └── pdm
+                                    ├── table_A.yaml
+                                    └── table_B.yaml
+
+* ``load_declarative_pdm(data_source_id: str, layout_root_path: Path = Path.cwd())``
+
+    Returns *CatalogDeclarativeTables*.
+
+    Load declarative physical model layout, which was stored using *store_declarative_pdm* for a given data source.
+
+* ``load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd())``
+
+    This method combines *load_declarative_pdm* and
+    *put_declarative_pdm* methods to load and set
+    layouts stored using *store_declarative_pdm*.
+
 **Example usage:**
 
 .. code-block:: python
@@ -233,10 +276,9 @@ The *gooddata_sdk.catalog_data_source* supports the following declarative API ca
                                                         credentials_path=Path("credentials"),
                                                         test_data_sources=True)
 
-.. _ds action methods:
 
 Action methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.catalog_data_source* supports the following action API calls:
 
@@ -265,6 +307,19 @@ The *gooddata_sdk.catalog_data_source* supports the following action API calls:
     Returns *list[str]*.
 
     Returns a list of schemas that exist in the database and can be configured in the data source entity. Data source managers like Dremio or Drill can work with multiple schemas and schema names can be injected into scan_request to filter out tables stored in the different schemas.
+
+* ``test_data_sources_connection(declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None)``
+
+    Tests connection to declarative data sources. If credentials_path is omitted then the connection is tested with empty credentials.
+    In case some connection failed the ValueError is raised with information about why the connection to the data source failed, e.g. host unreachable or invalid login or password".
+
+    **Example of credentials YAML file:**
+
+    ::
+        data_sources:
+          demo-test-ds: "demopass"
+          demo-bigquery-ds: "~/home/secrets.json"
+
 
 **Example usage:**
 

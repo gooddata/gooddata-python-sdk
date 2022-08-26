@@ -1,4 +1,4 @@
-Sphinx~=5.0.2
+Sphinx~=5.1.1
 pallets-sphinx-themes
 sphinx-rtd-theme
 # Dependencies to the other projects in the repository

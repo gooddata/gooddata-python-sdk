@@ -1,34 +1,34 @@
 # (C) 2022 GoodData Corporation
 content:
   buckets:
-  - items:
-    - measure:
-        definition:
-          measureDefinition:
-            filters: []
-            item:
+    - items:
+        - measure:
+            definition:
+              measureDefinition:
+                filters: []
+                item:
+                  identifier:
+                    id: revenue
+                    type: metric
+            localIdentifier: 4ae3401bdbba4938afe983df4ba04e1c
+            title: Revenue
+      localIdentifier: measures
+    - items:
+        - attribute:
+            displayForm:
               identifier:
-                id: revenue
-                type: metric
-        localIdentifier: 4ae3401bdbba4938afe983df4ba04e1c
-        title: Revenue
-    localIdentifier: measures
-  - items:
-    - attribute:
+                id: product_name
+                type: label
+            localIdentifier: 1c8ba72dbfc84ddd913bf81dc355c427
+      localIdentifier: view
+  filters:
+    - negativeAttributeFilter:
         displayForm:
           identifier:
             id: product_name
             type: label
-        localIdentifier: 1c8ba72dbfc84ddd913bf81dc355c427
-    localIdentifier: view
-  filters:
-  - negativeAttributeFilter:
-      displayForm:
-        identifier:
-          id: product_name
-          type: label
-      notIn:
-        values: []
+        notIn:
+          values: []
   properties: {}
   version: '2'
   visualizationUrl: local:bar

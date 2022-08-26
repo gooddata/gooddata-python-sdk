@@ -1,7 +1,5 @@
-:orphan:
-
 Catalog Organization Service
-****************************
+=============================
 
 The ``gooddata_sdk.catalog_organization`` service enables you to perform the following actions
 on organization:
@@ -9,10 +7,8 @@ on organization:
 * Update OIDC parameters
 * Update organization name
 
-.. _o entity methods:
-
 Entity methods
-^^^^^^^^^^^^^^
+**************
 
 The *gooddata_sdk.catalog_organization* supports the following entity API calls:
 

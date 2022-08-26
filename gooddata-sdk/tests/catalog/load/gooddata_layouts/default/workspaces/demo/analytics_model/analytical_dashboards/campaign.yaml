@@ -6,38 +6,38 @@ content:
       type: filterContext
   layout:
     sections:
-    - items:
-      - size:
-          xl:
-            gridWidth: 6
-        type: IDashboardLayoutItem
-        widget:
-          description: ''
-          drills: []
-          ignoreDashboardFilters: []
-          insight:
-            identifier:
-              id: campaign_spend
-              type: visualizationObject
-          properties: {}
-          title: Campaign Spend
-          type: insight
-      - size:
-          xl:
-            gridWidth: 6
-        type: IDashboardLayoutItem
-        widget:
-          description: ''
-          drills: []
-          ignoreDashboardFilters: []
-          insight:
-            identifier:
-              id: revenue_per_usd_vs_spend_by_campaign
-              type: visualizationObject
-          properties: {}
-          title: Revenue per $ vs Spend by Campaign
-          type: insight
-      type: IDashboardLayoutSection
+      - items:
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: campaign_spend
+                  type: visualizationObject
+              properties: {}
+              title: Campaign Spend
+              type: insight
+          - size:
+              xl:
+                gridWidth: 6
+            type: IDashboardLayoutItem
+            widget:
+              description: ''
+              drills: []
+              ignoreDashboardFilters: []
+              insight:
+                identifier:
+                  id: revenue_per_usd_vs_spend_by_campaign
+                  type: visualizationObject
+              properties: {}
+              title: Revenue per $ vs Spend by Campaign
+              type: insight
+        type: IDashboardLayoutSection
     type: IDashboardLayout
   version: '2'
 description: ''

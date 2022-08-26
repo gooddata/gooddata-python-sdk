@@ -2,10 +2,10 @@
 - id: adminGroup
 - id: adminQA1Group
   parents:
-  - id: adminGroup
-    type: userGroup
+    - id: adminGroup
+      type: userGroup
 - id: demoGroup
 - id: visitorsGroup
   parents:
-  - id: demoGroup
-    type: userGroup
+    - id: demoGroup
+      type: userGroup

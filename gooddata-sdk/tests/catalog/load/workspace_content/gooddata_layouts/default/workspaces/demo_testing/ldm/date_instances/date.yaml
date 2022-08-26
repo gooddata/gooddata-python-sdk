@@ -1,25 +1,25 @@
 # (C) 2022 GoodData Corporation
 description: ''
 granularities:
-- MINUTE
-- HOUR
-- DAY
-- WEEK
-- MONTH
-- QUARTER
-- YEAR
-- MINUTE_OF_HOUR
-- HOUR_OF_DAY
-- DAY_OF_WEEK
-- DAY_OF_MONTH
-- DAY_OF_YEAR
-- WEEK_OF_YEAR
-- MONTH_OF_YEAR
-- QUARTER_OF_YEAR
+  - MINUTE
+  - HOUR
+  - DAY
+  - WEEK
+  - MONTH
+  - QUARTER
+  - YEAR
+  - MINUTE_OF_HOUR
+  - HOUR_OF_DAY
+  - DAY_OF_WEEK
+  - DAY_OF_MONTH
+  - DAY_OF_YEAR
+  - WEEK_OF_YEAR
+  - MONTH_OF_YEAR
+  - QUARTER_OF_YEAR
 granularitiesFormatting:
   titleBase: ''
   titlePattern: '%titleBase - %granularityTitle'
 id: date
 tags:
-- Date
+  - Date
 title: Date

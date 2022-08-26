@@ -1,55 +1,55 @@
 # (C) 2022 GoodData Corporation
 attributes:
-- description: Campaign channel id
-  id: campaign_channel_id
-  labels: []
-  sourceColumn: campaign_channel_id
-  tags:
-  - Campaign channels
-  title: Campaign channel id
-- description: Category
-  id: campaign_channels.category
-  labels: []
-  sourceColumn: category
-  tags:
-  - Campaign channels
-  title: Category
-- description: Type
-  id: type
-  labels: []
-  sourceColumn: type
-  tags:
-  - Campaign channels
-  title: Type
+  - description: Campaign channel id
+    id: campaign_channel_id
+    labels: []
+    sourceColumn: campaign_channel_id
+    tags:
+      - Campaign channels
+    title: Campaign channel id
+  - description: Category
+    id: campaign_channels.category
+    labels: []
+    sourceColumn: category
+    tags:
+      - Campaign channels
+    title: Category
+  - description: Type
+    id: type
+    labels: []
+    sourceColumn: type
+    tags:
+      - Campaign channels
+    title: Type
 dataSourceTableId:
   dataSourceId: demo-test-ds
   id: campaign_channels
   type: dataSource
 description: Campaign channels
 facts:
-- description: Budget
-  id: budget
-  sourceColumn: budget
-  tags:
-  - Campaign channels
-  title: Budget
-- description: Spend
-  id: spend
-  sourceColumn: spend
-  tags:
-  - Campaign channels
-  title: Spend
+  - description: Budget
+    id: budget
+    sourceColumn: budget
+    tags:
+      - Campaign channels
+    title: Budget
+  - description: Spend
+    id: spend
+    sourceColumn: spend
+    tags:
+      - Campaign channels
+    title: Spend
 grain:
-- id: campaign_channel_id
-  type: attribute
+  - id: campaign_channel_id
+    type: attribute
 id: campaign_channels
 references:
-- identifier:
-    id: campaigns
-    type: dataset
-  multivalue: false
-  sourceColumns:
-  - campaign_id
+  - identifier:
+      id: campaigns
+      type: dataset
+    multivalue: false
+    sourceColumns:
+      - campaign_id
 tags:
-- Campaign channels
+  - Campaign channels
 title: Campaign channels

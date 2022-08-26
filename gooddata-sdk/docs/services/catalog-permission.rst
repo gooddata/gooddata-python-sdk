@@ -1,17 +1,13 @@
-:orphan:
-
 Catalog Permission Service
-**************************
+==========================
 
 The ``gooddata_sdk.catalog_permission`` service enables you to perform the following actions
 on permissions:
 
 * Get and set declarative permissions
 
-.. _p declarative methods:
-
 Declarative methods
-^^^^^^^^^^^^^^^^^^^
+*******************
 The *gooddata_sdk.catalog_permission* supports the following declarative API calls:
 
 * ``get_declarative_permissions(workspace_id: str)``
