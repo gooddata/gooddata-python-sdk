@@ -57,8 +57,13 @@ class EntitlementsRequest(ModelNormal):
 
     allowed_values = {
         ('entitlements_name',): {
+            'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
             'TIER': "Tier",
+            'USERCOUNT': "UserCount",
+            'UNLIMITEDUSERS': "UnlimitedUsers",
+            'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
+            'WORKSPACECOUNT': "WorkspaceCount",
         },
     }
 

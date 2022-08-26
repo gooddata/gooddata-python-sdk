@@ -74,7 +74,6 @@ docs/PopDateMeasureDefinitionOverPeriodMeasure.md
 docs/PopMeasureDefinition.md
 docs/PositiveAttributeFilter.md
 docs/PositiveAttributeFilterPositiveAttributeFilter.md
-docs/Problem.md
 docs/RangeMeasureValueFilter.md
 docs/RangeMeasureValueFilterRangeMeasureValueFilter.md
 docs/RankingFilter.md
@@ -95,7 +94,6 @@ docs/SortKeyTotal.md
 docs/SortKeyTotalTotal.md
 docs/SortKeyValue.md
 docs/SortKeyValueValue.md
-docs/StatusType.md
 docs/Total.md
 docs/TotalDimension.md
 docs/TotalExecutionResultHeader.md
@@ -181,7 +179,6 @@ gooddata_afm_client/model/pop_date_measure_definition_over_period_measure.py
 gooddata_afm_client/model/pop_measure_definition.py
 gooddata_afm_client/model/positive_attribute_filter.py
 gooddata_afm_client/model/positive_attribute_filter_positive_attribute_filter.py
-gooddata_afm_client/model/problem.py
 gooddata_afm_client/model/range_measure_value_filter.py
 gooddata_afm_client/model/range_measure_value_filter_range_measure_value_filter.py
 gooddata_afm_client/model/ranking_filter.py
@@ -202,7 +199,6 @@ gooddata_afm_client/model/sort_key_total.py
 gooddata_afm_client/model/sort_key_total_total.py
 gooddata_afm_client/model/sort_key_value.py
 gooddata_afm_client/model/sort_key_value_value.py
-gooddata_afm_client/model/status_type.py
 gooddata_afm_client/model/total.py
 gooddata_afm_client/model/total_dimension.py
 gooddata_afm_client/model/total_execution_result_header.py

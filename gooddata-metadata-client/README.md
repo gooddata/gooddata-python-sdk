@@ -57,6 +57,8 @@ from gooddata_metadata_client.model.dependent_entities_request import DependentE
 from gooddata_metadata_client.model.dependent_entities_response import DependentEntitiesResponse
 from gooddata_metadata_client.model.entitlements_request import EntitlementsRequest
 from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_metadata_client.model.platform_usage import PlatformUsage
+from gooddata_metadata_client.model.platform_usage_request import PlatformUsageRequest
 from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -70,29 +72,13 @@ configuration = gooddata_metadata_client.Configuration(
 with gooddata_metadata_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
-    data_source_id = "dataSourceId_example" # str | 
-    generate_ldm_request = GenerateLdmRequest(
-        date_granularities="all",
-        denorm_prefix="dr",
-        fact_prefix="f",
-        generate_long_ids=True,
-        grain_prefix="g",
-        grain_reference_prefix="gr",
-        primary_label_prefix="pl",
-        reference_prefix="r",
-        secondary_label_prefix="sl",
-        separator="__",
-        table_prefix="out_table",
-        view_prefix="out_view",
-        wdf_prefix="wdf",
-    ) # GenerateLdmRequest | 
 
     try:
-        # Generate logical data model (LDM) from physical data model (PDM)
-        api_response = api_instance.generate_logical_model(data_source_id, generate_ldm_request)
+        # Info about the platform usage.
+        api_response = api_instance.all_platform_usage()
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
-        print("Exception when calling ActionsApi->generate_logical_model: %s\n" % e)
+        print("Exception when calling ActionsApi->all_platform_usage: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -101,9 +87,11 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
+*ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *ActionsApi* | [**resolve_requested_entitlements**](docs/ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
@@ -270,6 +258,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeAnalytics](docs/DeclarativeAnalytics.md)
  - [DeclarativeAnalyticsLayer](docs/DeclarativeAnalyticsLayer.md)
  - [DeclarativeAttribute](docs/DeclarativeAttribute.md)
+ - [DeclarativeColorPalette](docs/DeclarativeColorPalette.md)
  - [DeclarativeColumn](docs/DeclarativeColumn.md)
  - [DeclarativeCspDirective](docs/DeclarativeCspDirective.md)
  - [DeclarativeDashboardPlugin](docs/DeclarativeDashboardPlugin.md)
@@ -603,6 +592,8 @@ Class | Method | HTTP request | Description
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
+ - [PlatformUsage](docs/PlatformUsage.md)
+ - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
  - [ResolveSettingsRequest](docs/ResolveSettingsRequest.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)

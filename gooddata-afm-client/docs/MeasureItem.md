@@ -1,6 +1,5 @@
 # MeasureItem
 
-Metrics to be referenced from other AFM objects (e.g. filters) but not included in the result.
 
 ## Properties
 Name | Type | Description | Notes

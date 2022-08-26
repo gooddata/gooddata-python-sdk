@@ -1,6 +1,6 @@
 # ExecutionSettings
 
-Various setting affecting the process of ADM execution or its result
+Various settings affecting the process of AFM execution or its result
 
 ## Properties
 Name | Type | Description | Notes

@@ -1,6 +1,5 @@
 # SortKey
 
-List of sorting rules. From most relevant to least relevant (less relevant rule is applied, when more relevant rule compares items as equal).
 
 ## Properties
 Name | Type | Description | Notes

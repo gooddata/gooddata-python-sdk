@@ -57,7 +57,6 @@ from gooddata_afm_client.model.afm_valid_objects_response import AfmValidObjects
 from gooddata_afm_client.model.elements_request import ElementsRequest
 from gooddata_afm_client.model.elements_response import ElementsResponse
 from gooddata_afm_client.model.execution_result import ExecutionResult
-from gooddata_afm_client.model.problem import Problem
 from gooddata_afm_client.model.result_cache_metadata import ResultCacheMetadata
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -187,7 +186,6 @@ Class | Method | HTTP request | Description
  - [PopMeasureDefinition](docs/PopMeasureDefinition.md)
  - [PositiveAttributeFilter](docs/PositiveAttributeFilter.md)
  - [PositiveAttributeFilterPositiveAttributeFilter](docs/PositiveAttributeFilterPositiveAttributeFilter.md)
- - [Problem](docs/Problem.md)
  - [RangeMeasureValueFilter](docs/RangeMeasureValueFilter.md)
  - [RangeMeasureValueFilterRangeMeasureValueFilter](docs/RangeMeasureValueFilterRangeMeasureValueFilter.md)
  - [RankingFilter](docs/RankingFilter.md)
@@ -208,7 +206,6 @@ Class | Method | HTTP request | Description
  - [SortKeyTotalTotal](docs/SortKeyTotalTotal.md)
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
- - [StatusType](docs/StatusType.md)
  - [Total](docs/Total.md)
  - [TotalDimension](docs/TotalDimension.md)
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Identifier of a workspace | 
 **name** | **str** | Name of a workspace to view. | 
+**description** | **str** | Description of the workspace | [optional] 
 **early_access** | **str** | Early access defined on level Workspace | [optional] 
 **hierarchy_permissions** | [**[DeclarativeWorkspaceHierarchyPermission]**](DeclarativeWorkspaceHierarchyPermission.md) |  | [optional] 
 **model** | [**DeclarativeWorkspaceModel**](DeclarativeWorkspaceModel.md) |  | [optional] 

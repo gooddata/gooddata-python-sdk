@@ -1503,6 +1503,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     json_api_workspace_in_document = JsonApiWorkspaceInDocument(
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
+                description="description_example",
                 early_access="early_access_example",
                 name="name_example",
             ),
@@ -8698,6 +8699,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     json_api_workspace_patch_document = JsonApiWorkspacePatchDocument(
         data=JsonApiWorkspacePatch(
             attributes=JsonApiWorkspaceInAttributes(
+                description="description_example",
                 early_access="early_access_example",
                 name="name_example",
             ),
@@ -10456,6 +10458,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     json_api_workspace_in_document = JsonApiWorkspaceInDocument(
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
+                description="description_example",
                 early_access="early_access_example",
                 name="name_example",
             ),
