@@ -45,7 +45,7 @@ BEGIN
       view_name :=  foreign_table.table_name || '_view';
       sql_statement := format(
         'CREATE OR REPLACE VIEW "%s"."%s" AS SELECT * FROM "%s"."%s"',
-        workspace, view_name, workspace, foreign_table.table_name
+        foreign_schema, view_name, foreign_schema, foreign_table.table_name
       );
     CALL execute_sql(sql_statement, debug);
   END LOOP;
