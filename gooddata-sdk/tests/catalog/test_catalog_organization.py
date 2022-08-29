@@ -3,15 +3,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import CatalogOrganization, GoodDataSdk
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "organization"
-
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 def _default_organization_check(organization: CatalogOrganization):
@@ -20,14 +19,14 @@ def _default_organization_check(organization: CatalogOrganization):
     assert organization.attributes.hostname == "localhost"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "organization.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "organization.yaml"))
 def test_get_organization(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     organization = sdk.catalog_organization.get_organization()
     _default_organization_check(organization)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_oidc_settings.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_oidc_settings.yaml"))
 def test_update_oidc_settings(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -59,7 +58,7 @@ def test_update_oidc_settings(test_config):
         _default_organization_check(revert_organization)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_name.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_name.yaml"))
 def test_update_name(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     organization = sdk.catalog_organization.get_organization()

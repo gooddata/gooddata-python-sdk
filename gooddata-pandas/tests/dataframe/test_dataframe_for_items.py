@@ -1,18 +1,17 @@
 # (C) 2021 GoodData Corporation
 from pathlib import Path
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_pandas import DataFrameFactory
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_items.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_items.yaml"))
 def test_dataframe_for_items(gdf: DataFrameFactory):
     df = gdf.for_items(
         items=dict(
@@ -31,7 +30,7 @@ def test_dataframe_for_items(gdf: DataFrameFactory):
     assert df.columns[1] == "order_amount"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_items_no_index.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_items_no_index.yaml"))
 def test_dataframe_for_items_no_index(gdf: DataFrameFactory):
     df = gdf.for_items(
         items=dict(

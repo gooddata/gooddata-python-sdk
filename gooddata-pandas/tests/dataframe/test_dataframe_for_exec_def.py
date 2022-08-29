@@ -2,17 +2,16 @@
 from pathlib import Path
 from typing import Tuple
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import Attribute, ExecutionDefinition, ObjId, SimpleMetric, TotalDefinition, TotalDimension
 from gooddata_sdk.compute.model.execution import ResultSizeLimitsExceeded
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
-
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefinition, expected: Tuple[int, int]) -> str:
@@ -30,7 +29,7 @@ def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefiniti
     return response.result_id
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
 def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -61,7 +60,7 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
     assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
 def test_dataframe_for_exec_def_limits_failure(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -89,7 +88,7 @@ def test_dataframe_for_exec_def_limits_failure(gdf: DataFrameFactory):
     assert exception.first_violating_index == 0
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.yaml"))
 def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -107,7 +106,7 @@ def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(182, 2))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim3.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim3.yaml"))
 def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -125,7 +124,7 @@ def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(4, 96))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals1.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals1.yaml"))
 def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
     """
     Execution with column totals; the row dimension has single label
@@ -160,7 +159,7 @@ def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(6, 96))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals2.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals2.yaml"))
 def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
     """
     Execution with column totals; the row dimension have two labels; this exercises that the index is
@@ -196,7 +195,7 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.yaml"))
 def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
     """
     Execution with row totals; the column dimension has single label.
@@ -231,7 +230,7 @@ def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(96, 6))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals4.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals4.yaml"))
 def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
     """
     Execution with row totals; the column dimension have two label.
@@ -300,7 +299,7 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
 #     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(?, ?))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim1.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim1.yaml"))
 def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
@@ -318,7 +317,7 @@ def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1))
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim2.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim2.yaml"))
 def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[

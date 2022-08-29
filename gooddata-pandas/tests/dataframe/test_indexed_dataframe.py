@@ -2,16 +2,16 @@
 from pathlib import Path
 
 import pytest
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import Attribute, MetricValueFilter, ObjId, PositiveAttributeFilter
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 index_types = [
     # reference to the columns key
@@ -32,7 +32,7 @@ index_types = [
 ]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics.yaml"))
 @pytest.mark.parametrize("index", index_types)
 def test_simple_index_metrics(gdf: DataFrameFactory, index):
     df = gdf.indexed(
@@ -51,7 +51,7 @@ def test_simple_index_metrics(gdf: DataFrameFactory, index):
     assert df.columns[2] == "price"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_no_duplicate.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_no_duplicate.yaml"))
 def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by="label/region",
@@ -67,7 +67,7 @@ def test_simple_index_metrics_no_duplicate_index_col(gdf: DataFrameFactory):
     assert df.columns[1] == "quantity"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_and_label.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metrics_and_label.yaml"))
 def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
     columns = {
         "Price": "fact/price",
@@ -85,7 +85,7 @@ def test_simple_index_metrics_and_label(gdf: DataFrameFactory):
         assert df_col_name == col_name
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_metrics_and_label.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_metrics_and_label.yaml"))
 def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by=dict(reg="label/region"),
@@ -114,7 +114,7 @@ def test_simple_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "category"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics.yaml"))
 def test_multi_index_metrics(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by=dict(reg="label/region", category="label/products.category"),
@@ -129,7 +129,7 @@ def test_multi_index_metrics(gdf: DataFrameFactory):
     assert df.columns[1] == "order_count"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics_and_label.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metrics_and_label.yaml"))
 def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by=dict(reg="label/region", category="label/products.category"),
@@ -149,7 +149,7 @@ def test_multi_index_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "state"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label.yaml"))
 def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by=dict(reg="label/region", category="label/products.category"),
@@ -173,7 +173,7 @@ def test_multi_index_filtered_metrics_and_label(gdf: DataFrameFactory):
     assert df.columns[2] == "state"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label_reuse.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_metrics_and_label_reuse.yaml"))
 def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     # note here: if a single label is reused in both index and columns, that label will be used in computation
     # just once. the first-found occurrence will be used in computation. local id of the attribute will be
@@ -199,7 +199,7 @@ def test_multi_index_filtered_metrics_and_label_reuse(gdf: DataFrameFactory):
     assert df.columns[2] == "reg"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "empty_indexed_dataframe.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "empty_indexed_dataframe.yaml"))
 def test_empty_indexed_dataframe(gdf: DataFrameFactory):
     df = gdf.indexed(
         index_by="label/product_name",

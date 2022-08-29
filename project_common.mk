@@ -67,4 +67,4 @@ remove-store-data:
 
 .PHONY: remove-cassettes
 remove-cassettes: remove-store-data
-	find $(CURDIR)/tests -type f -name "*.json" -path "*/fixtures/*" -print -delete
+	find $(CURDIR)/tests -type f -name "*.yaml" -path "*/fixtures/*" -print -delete

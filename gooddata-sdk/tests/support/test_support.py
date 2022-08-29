@@ -5,18 +5,17 @@ import time
 from pathlib import Path
 
 import pytest
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import GoodDataSdk
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "is_available.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "is_available.yaml"))
 def test_is_available(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     assert sdk.support.is_available
@@ -27,14 +26,14 @@ def test_is_not_available(test_config):
     assert not sdk.support.is_available
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "is_available_no_access.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "is_available_no_access.yaml"))
 def test_is_available_no_access(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_="1234")
     with pytest.raises(Exception):
         assert sdk.support.is_available
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "wait_till_available_no_wait.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "wait_till_available_no_wait.yaml"))
 def test_wait_till_available_no_wait(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     start_time = time.time()

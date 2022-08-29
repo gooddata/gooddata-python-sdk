@@ -1,7 +1,7 @@
 # (C) 2021 GoodData Corporation
-from dotenv import dotenv_values, find_dotenv
+from __future__ import annotations
 
-VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
+from dotenv import dotenv_values, find_dotenv
 
 
 def _load_test_env():
