@@ -1,19 +1,19 @@
 # (C) 2021 GoodData Corporation
 from pathlib import Path
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_fdw import GoodDataForeignDataWrapper as fdw
-from tests import VCR_MATCH_ON
 from tests.import_foreign_schema import _tables_to_dict
+
+gd_vcr = get_vcr()
+
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "import_insights_without_restrictions.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "import_insights_without_restrictions.yaml"))
 def test_import_insights_without_restrictions(test_config):
     tables = fdw.import_schema(
         schema=test_config["workspace"],

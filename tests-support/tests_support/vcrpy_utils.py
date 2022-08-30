@@ -1,0 +1,82 @@
+# (C) 2022 GoodData Corporation
+from __future__ import annotations
+
+import json
+import typing
+from typing import Any, Optional
+
+import vcr
+import yaml
+
+VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
+NON_STATIC_HEADERS = ["Date", "X-GDC-TRACE-ID"]
+HEADERS_STR = "headers"
+PLACEHOLDER = ["PLACEHOLDER"]
+
+
+def get_vcr() -> vcr.VCR:
+    gd_vcr = vcr.VCR(
+        filter_headers=["authorization", "user-agent"],
+        match_on=VCR_MATCH_ON,
+        before_record_request=custom_before_request,
+        before_record_response=custom_before_response,
+    )
+
+    gd_vcr.register_serializer("custom", CustomSerializerYaml())
+    gd_vcr.serializer = "custom"
+    return gd_vcr
+
+
+class IndentDumper(yaml.SafeDumper):
+    @typing.no_type_check
+    def increase_indent(self, flow: bool = False, indentless: bool = False):
+        return super(IndentDumper, self).increase_indent(flow, False)
+
+
+class CustomSerializerYaml:
+    def deserialize(self, cassette_string: str) -> dict[str, Any]:
+        cassette_dict = yaml.safe_load(cassette_string)
+        for interaction in cassette_dict.get("interactions", []):
+            request_body = interaction["request"]["body"]
+            response_body = interaction["response"]["body"]
+            if request_body is not None:
+                interaction["request"]["body"] = json.dumps(request_body)
+            if response_body is not None and response_body["string"] != "":
+                interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
+        return cassette_dict
+
+    def serialize(self, cassette_dict: dict[str, Any]) -> str:
+        for interaction in cassette_dict.get("interactions", []):
+            request_body = interaction["request"]["body"]
+            response_body = interaction["response"]["body"]
+            if request_body is not None:
+                interaction["request"]["body"] = json.loads(request_body)
+            if response_body is not None and response_body["string"] != "":
+                interaction["response"]["body"]["string"] = json.loads(response_body["string"])
+        return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=False)
+
+
+def custom_before_request(request, headers_str: str = HEADERS_STR):
+    if hasattr(request, headers_str):
+        request.headers = {header: request.headers[header] for header in sorted(request.headers)}
+    return request
+
+
+def custom_before_response(
+    response: dict[str, Any],
+    headers_str: str = HEADERS_STR,
+    non_static_headers: Optional[list[str]] = None,
+    placeholder: Optional[list[str]] = None,
+):
+    if non_static_headers is None:
+        non_static_headers = NON_STATIC_HEADERS
+
+    if placeholder is None:
+        placeholder = PLACEHOLDER
+
+    if response.get(headers_str) is not None:
+        response[headers_str] = {header: response[headers_str][header] for header in sorted(response[headers_str])}
+        for header in non_static_headers:
+            if response[headers_str].get(header)[0] is not None:
+                response[headers_str][header] = placeholder
+    return response

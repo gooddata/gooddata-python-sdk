@@ -1,20 +1,19 @@
 # (C) 2021 GoodData Corporation
 from pathlib import Path
 
-import vcr
 from numpy import float64
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_pandas import SeriesFactory
 from gooddata_sdk import PositiveAttributeFilter
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_metric_series.yaml"))
 def test_simple_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region"),
@@ -25,7 +24,7 @@ def test_simple_index_metric_series(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_label_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_label_series.yaml"))
 def test_simple_index_label_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region"),
@@ -36,7 +35,7 @@ def test_simple_index_label_series(gds: SeriesFactory):
     assert series["Midwest"] == "Midwest"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "simple_index_filtered_series.yaml"))
 def test_simple_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region"),
@@ -51,7 +50,7 @@ def test_simple_index_filtered_series(gds: SeriesFactory):
     assert series["Midwest"] == "Clothing"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metric_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_metric_series.yaml"))
 def test_multi_index_metric_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region", category="label/products.category"),
@@ -64,7 +63,7 @@ def test_multi_index_metric_series(gds: SeriesFactory):
     assert series.values.dtype == float64
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_series.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "multi_index_filtered_series.yaml"))
 def test_multi_index_filtered_series(gds: SeriesFactory):
     series = gds.indexed(
         index_by=dict(reg="label/region", category="label/products.category"),

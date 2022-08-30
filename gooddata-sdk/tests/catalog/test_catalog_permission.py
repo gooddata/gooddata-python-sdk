@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
@@ -17,12 +17,11 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
 )
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "permissions"
-
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 def _empty_permissions(sdk: GoodDataSdk, workspace_id: str) -> None:
@@ -76,7 +75,7 @@ def test_data_source_permission(test_config):
     _validation_helper(CatalogDeclarativeDataSourcePermission, "name")
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_permissions.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_permissions.yaml"))
 def test_get_declarative_permissions(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -88,7 +87,7 @@ def test_get_declarative_permissions(test_config):
     assert catalog_declarative_permissions.to_dict(camel_case=True) == declarative_permissions.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_permissions.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_permissions.yaml"))
 def test_put_declarative_permissions(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     expected_json_path = _current_dir / "expected" / "declarative_workspace_permissions.json"

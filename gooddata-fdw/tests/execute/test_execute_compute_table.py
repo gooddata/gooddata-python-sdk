@@ -1,18 +1,17 @@
 # (C) 2021 GoodData Corporation
 from pathlib import Path
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_fdw import GoodDataForeignDataWrapper
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
-
-@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_all_columns.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_all_columns.yaml"))
 def test_execute_compute_table_all_columns(fdw_options_for_compute_table, test_compute_table_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
 
@@ -26,7 +25,7 @@ def test_execute_compute_table_all_columns(fdw_options_for_compute_table, test_c
         assert column in first_row
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_metrics_only.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_metrics_only.yaml"))
 def test_execute_compute_table_metrics_only(fdw_options_for_compute_table, test_compute_table_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
 
@@ -41,7 +40,7 @@ def test_execute_compute_table_metrics_only(fdw_options_for_compute_table, test_
         assert column in first_row
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_with_reduced_granularity.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "execute_compute_table_with_reduced_granularity.yaml"))
 def test_execute_compute_table_with_reduced_granularity(fdw_options_for_compute_table, test_compute_table_columns):
     fdw = GoodDataForeignDataWrapper(fdw_options_for_compute_table, test_compute_table_columns)
 

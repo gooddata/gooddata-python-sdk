@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import List
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
@@ -19,18 +19,17 @@ from gooddata_sdk import (
     GoodDataSdk,
 )
 from gooddata_sdk.utils import create_directory
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "users"
-
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 # ENTITY USERS
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "list_users.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_users.yaml"))
 def test_list_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users = sdk.catalog_user.list_users()
@@ -38,7 +37,7 @@ def test_list_users(test_config):
     assert set(user.id for user in users) == {"demo2", "admin", "demo"}
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_user.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_user.yaml"))
 def test_get_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user = sdk.catalog_user.get_user(test_config["test_user"])
@@ -46,7 +45,7 @@ def test_get_user(test_config):
     assert user.get_user_groups == [test_config["test_user_group"]]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "create_delete_user.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_delete_user.yaml"))
 def test_create_delete_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_new_user"]
@@ -67,7 +66,7 @@ def test_create_delete_user(test_config):
         assert len(sdk.catalog_user.list_users()) == 3
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_user.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_user.yaml"))
 def test_update_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_user"]
@@ -91,7 +90,7 @@ def test_update_user(test_config):
 # ENTITY USER GROUPS
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "list_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_user_groups.yaml"))
 def test_list_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_groups = sdk.catalog_user.list_user_groups()
@@ -104,14 +103,14 @@ def test_list_user_groups(test_config):
     }
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_user_group.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_user_group.yaml"))
 def test_get_user_group(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_group = sdk.catalog_user.get_user_group(test_config["test_user_group"])
     assert user_group.id == test_config["test_user_group"]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "create_delete_user_group.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_delete_user_group.yaml"))
 def test_create_delete_user_group(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_group_id = test_config["test_new_user_group"]
@@ -130,7 +129,7 @@ def test_create_delete_user_group(test_config):
         assert len(sdk.catalog_user.list_user_groups()) == 4
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "update_user_group.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_user_group.yaml"))
 def test_update_user_group(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_group_id = test_config["test_user_group"]
@@ -153,7 +152,7 @@ def test_update_user_group(test_config):
 # DECLARATIVE USERS
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_users.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_users.yaml"))
 def test_get_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -165,7 +164,7 @@ def test_get_declarative_users(test_config):
     assert users.to_dict(camel_case=True) == layout_api.get_users_layout().to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_users.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_users.yaml"))
 def test_store_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -181,7 +180,7 @@ def test_store_declarative_users(test_config):
     assert users_e.to_dict(camel_case=True) == users_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users.yaml"))
 def test_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users_e = sdk.catalog_user.get_declarative_users()
@@ -198,7 +197,7 @@ def test_put_declarative_users(test_config):
         sdk.catalog_user.put_declarative_users(users_e)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users.yaml"))
 def test_load_and_put_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
@@ -219,7 +218,7 @@ def test_load_and_put_declarative_users(test_config):
 # DECLARATIVE USER GROUPS
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_user_groups.yaml"))
 def test_get_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -231,7 +230,7 @@ def test_get_declarative_user_groups(test_config):
     assert user_groups.to_dict(camel_case=True) == layout_api.get_user_groups_layout().to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_user_groups.yaml"))
 def test_store_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -247,7 +246,7 @@ def test_store_declarative_user_groups(test_config):
     assert user_groups_e.to_dict(camel_case=True) == user_groups_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_user_groups.yaml"))
 def test_put_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_groups_path = _current_dir / "expected" / "declarative_user_groups.json"
@@ -274,7 +273,7 @@ def test_put_declarative_user_groups(test_config):
         sdk.catalog_user.put_declarative_users(users_e)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_user_groups.yaml"))
 def test_load_and_put_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
@@ -303,7 +302,7 @@ def test_load_and_put_declarative_user_groups(test_config):
 
 
 # DECLARATIVE USERS AND USER GROUPS
-@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_users_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "get_declarative_users_user_groups.yaml"))
 def test_get_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -317,7 +316,7 @@ def test_get_declarative_users_user_groups(test_config):
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_users_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "store_declarative_users_user_groups.yaml"))
 def test_store_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -333,7 +332,7 @@ def test_store_declarative_users_user_groups(test_config):
     assert users_user_groups_e.to_dict(camel_case=True) == users_user_groups_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_users_user_groups.yaml"))
 def test_put_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
@@ -351,7 +350,7 @@ def test_put_declarative_users_user_groups(test_config):
         sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users_user_groups.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "load_and_put_declarative_users_user_groups.yaml"))
 def test_load_and_put_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"

@@ -8,7 +8,7 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
@@ -31,15 +31,21 @@ from gooddata_sdk import (
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
+
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "data_sources"
 
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test.yaml"))
+def test_optimization(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_register_upload_notification.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_register_upload_notification.yaml"))
 def test_register_upload_notification(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     metrics = sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
@@ -53,7 +59,7 @@ def test_register_upload_notification(test_config):
     assert exec_response_1.result_id != exec_response_2.result_id
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model.yaml"))
 def test_generate_logical_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
@@ -67,7 +73,7 @@ def test_generate_logical_model(test_config):
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_sources_list.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_sources_list.yaml"))
 def test_catalog_list_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_sources = sdk.catalog_data_source.list_data_sources()
@@ -101,7 +107,7 @@ def _get_data_source(data_sources: List[CatalogDataSource], data_source_id: str)
     return None
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_create_update.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_create_update.yaml"))
 def test_catalog_create_update_list_data_source(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     try:
@@ -152,7 +158,7 @@ def _create_delete_ds(sdk, data_source: CatalogDataSource):
         sdk.catalog_data_source.delete_data_source(data_source.id)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "redshift.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "redshift.yaml"))
 def test_catalog_create_data_source_redshift_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     _create_delete_ds(
@@ -172,7 +178,7 @@ def test_catalog_create_data_source_redshift_spec(test_config):
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "vertica.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "vertica.yaml"))
 def test_catalog_create_data_source_vertica_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     _create_delete_ds(
@@ -192,7 +198,7 @@ def test_catalog_create_data_source_vertica_spec(test_config):
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "snowflake.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "snowflake.yaml"))
 def test_catalog_create_data_source_snowflake_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     _create_delete_ds(
@@ -213,7 +219,7 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "bigquery.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "bigquery.yaml"))
 def test_catalog_create_data_source_bigquery_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     with mock.patch("builtins.open", mock.mock_open(read_data=b"bigquery_service_account_json")):
@@ -235,7 +241,7 @@ def test_catalog_create_data_source_bigquery_spec(test_config):
 #
 #  Here we test default interface without DB specific custom attributes (plain url, data_source_type specified
 #
-@gd_vcr.use_cassette(str(_fixtures_dir / "dremio.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "dremio.yaml"))
 def test_catalog_create_data_source_dremio_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     _create_delete_ds(
@@ -256,7 +262,7 @@ def test_catalog_create_data_source_dremio_spec(test_config):
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "patch.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "patch.yaml"))
 def test_catalog_patch_data_source(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     try:
@@ -276,7 +282,7 @@ def test_catalog_patch_data_source(test_config):
         sdk.catalog_data_source.delete_data_source("test")
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_source_tables.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_source_tables.yaml"))
 def test_catalog_data_source_table(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_tables = sdk.catalog_data_source.list_data_source_tables(test_config["data_source"])
@@ -286,7 +292,7 @@ def test_catalog_data_source_table(test_config):
     assert len(order_lines.attributes.columns) == 11
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "declarative_data_sources.yaml"))
 def test_catalog_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -301,7 +307,7 @@ def test_catalog_declarative_data_sources(test_config):
     assert data_sources_o.to_dict(camel_case=True) == layout_api.get_data_sources_layout().to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_declarative_data_sources.yaml"))
 def test_delete_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -318,7 +324,7 @@ def test_delete_declarative_data_sources(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_data_sources.yaml"))
 def test_store_declarative_data_sources(test_config):
     store_folder = _current_dir / "store"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -331,7 +337,7 @@ def test_store_declarative_data_sources(test_config):
     assert data_sources_e == data_sources_o
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_data_sources.yaml"))
 def test_load_and_put_declarative_data_sources(test_config):
     load_folder = _current_dir / "load"
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -366,7 +372,7 @@ def test_load_and_put_declarative_data_sources(test_config):
         sdk2.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources_connection.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources_connection.yaml"))
 def test_put_declarative_data_sources_connection(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_data_sources.json"
@@ -385,7 +391,7 @@ def test_put_declarative_data_sources_connection(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_data_sources.yaml"))
 def test_put_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_data_sources.json"
@@ -404,7 +410,7 @@ def test_put_declarative_data_sources(test_config):
         sdk.catalog_data_source.put_declarative_data_sources(data_sources_o, credentials_path)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_declarative_data_sources.yaml"))
 def test_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     credentials_path = _current_dir / "load" / "data_source_credentials" / "data_sources_credentials.yaml"
@@ -417,14 +423,14 @@ def test_declarative_data_sources(test_config):
         sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_get_declarative_pdm.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_get_declarative_pdm.yaml"))
 def test_get_declarative_pdm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     pdm = sdk.catalog_data_source.get_declarative_pdm(test_config["data_source"])
     assert len(pdm.tables) == 5
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_put_declarative_pdm.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_put_declarative_pdm.yaml"))
 def test_put_declarative_pdm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
@@ -440,7 +446,7 @@ def test_put_declarative_pdm(test_config):
         sdk.catalog_data_source.put_declarative_pdm(data_source_id, pdm)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.yaml"))
 def test_scan_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
@@ -459,7 +465,7 @@ def test_scan_model(test_config):
     assert len(scan_result.warnings) == 0
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model_with_table_prefix.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model_with_table_prefix.yaml"))
 def test_scan_mode_with_table_prefix(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
@@ -470,7 +476,7 @@ def test_scan_mode_with_table_prefix(test_config):
     assert scan_result.pdm.tables[0].name_prefix == "order"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_and_put_declarative_pdm.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_and_put_declarative_pdm.yaml"))
 def test_scan_and_put_declarative_pdm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
@@ -489,7 +495,7 @@ def test_scan_and_put_declarative_pdm(test_config):
         assert len(pdm.tables) == 5
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_and_load_and_put_declarative_pdm.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_and_load_and_put_declarative_pdm.yaml"))
 def test_store_and_load_and_put_declarative_pdm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]
@@ -508,7 +514,7 @@ def test_store_and_load_and_put_declarative_pdm(test_config):
     assert pdm.to_dict(camel_case=True) == pdm_loaded.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_scan_schemata.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_scan_schemata.yaml"))
 def test_scan_schemata(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     data_source_id = test_config["data_source"]

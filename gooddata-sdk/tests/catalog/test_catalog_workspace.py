@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import vcr
+from tests_support.vcrpy_utils import get_vcr
 
 import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
@@ -16,12 +16,11 @@ from gooddata_sdk import (
     GoodDataSdk,
 )
 from gooddata_sdk.utils import create_directory
-from tests import VCR_MATCH_ON
+
+gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "workspaces"
-
-gd_vcr = vcr.VCR(filter_headers=["authorization", "user-agent"], serializer="json", match_on=VCR_MATCH_ON)
 
 
 def _empty_workspaces(sdk: GoodDataSdk) -> None:
@@ -57,7 +56,7 @@ def _empty_workspace_data_filters(sdk: GoodDataSdk) -> None:
     )
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.yaml"))
 def test_load_and_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
@@ -76,7 +75,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.yaml"))
 def test_store_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -90,7 +89,7 @@ def test_store_declarative_workspaces(test_config):
     assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspaces.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspaces.yaml"))
 def test_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces.json"
@@ -110,7 +109,7 @@ def test_put_declarative_workspaces(test_config):
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces_snake_case.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces_snake_case.yaml"))
 def test_get_declarative_workspaces_snake_case(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces_snake_case.json"
@@ -125,7 +124,7 @@ def test_get_declarative_workspaces_snake_case(test_config):
     assert workspaces_o.to_dict(camel_case=False) == data
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces.yaml"))
 def test_get_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces.json"
@@ -140,7 +139,7 @@ def test_get_declarative_workspaces(test_config):
     assert workspaces_o.to_api().to_dict(camel_case=True) == data
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_declarative_workspaces.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_declarative_workspaces.yaml"))
 def test_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -154,7 +153,7 @@ def test_declarative_workspaces(test_config):
     assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout().to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.yaml"))
 def test_update_workspace_invalid(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -178,7 +177,7 @@ def test_update_workspace_invalid(test_config):
         assert workspace == workspace_o
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_valid.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_valid.yaml"))
 def test_update_workspace_valid(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -210,7 +209,7 @@ def test_update_workspace_valid(test_config):
         assert workspace_o == workspace
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_workspace.yaml"))
 def test_delete_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspace_id = "demo_west_california"
@@ -233,7 +232,7 @@ def test_delete_workspace(test_config):
         assert workspace_id in [w.id for w in workspaces]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_non_existing_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_non_existing_workspace.yaml"))
 def test_delete_non_existing_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspace_id = "non_existing_workspace"
@@ -250,7 +249,7 @@ def test_delete_non_existing_workspace(test_config):
         assert len(workspaces) == 3
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_parent_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_parent_workspace.yaml"))
 def test_delete_parent_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspaces = sdk.catalog_workspace.list_workspaces()
@@ -264,7 +263,7 @@ def test_delete_parent_workspace(test_config):
         assert len(workspaces) == 3
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_create_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_create_workspace.yaml"))
 def test_create_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspace_id = "test"
@@ -291,7 +290,7 @@ def test_create_workspace(test_config):
         assert workspace_id not in [w.id for w in workspaces]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_workspace.yaml"))
 def test_get_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -308,7 +307,7 @@ def test_get_workspace(test_config):
     assert workspace_with_parent.parent_id == test_config["workspace"]
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_workspace_list.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_workspace_list.yaml"))
 def test_workspace_list(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     ids = ["demo", "demo_west", "demo_west_california"]
@@ -331,7 +330,7 @@ def test_workspace_list(test_config):
     assert parents == workspaces_parent_l
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace_data_filters.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace_data_filters.yaml"))
 def test_get_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -351,7 +350,7 @@ def test_get_declarative_workspace_data_filters(test_config):
     ) == layout_api.get_workspace_data_filters_layout().to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace_data_filters.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace_data_filters.yaml"))
 def test_store_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -367,7 +366,7 @@ def test_store_declarative_workspace_data_filters(test_config):
     ) == declarative_workspace_data_filters_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace_data_filters.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace_data_filters.yaml"))
 def test_load_and_put_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
@@ -388,7 +387,7 @@ def test_load_and_put_declarative_workspace_data_filters(test_config):
         sdk.catalog_workspace.put_declarative_workspace_data_filters(workspace_data_filters_o)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace_data_filters.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace_data_filters.yaml"))
 def test_put_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspace_data_filters.json"
@@ -410,7 +409,7 @@ def test_put_declarative_workspace_data_filters(test_config):
         sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.yaml"))
 def test_get_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
@@ -430,7 +429,7 @@ def test_get_declarative_workspace(test_config):
     ).to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace.yaml"))
 def test_put_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
 
@@ -452,7 +451,7 @@ def test_put_declarative_workspace(test_config):
         assert len(workspaces) == 3
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace.yaml"))
 def test_store_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
@@ -468,12 +467,12 @@ def test_store_declarative_workspace(test_config):
     assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace.json"))
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspace.yaml"))
 def test_load_and_put_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
     expected_json_path = _current_dir / "expected" / "declarative_workspace.json"
-    workspace_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+    workspace_e = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
 
     try:
         _empty_workspace(sdk, workspace_id=test_config["workspace"])
@@ -481,7 +480,7 @@ def test_load_and_put_declarative_workspace(test_config):
         sdk.catalog_workspace.load_and_put_declarative_workspace(
             workspace_id=test_config["workspace"], layout_root_path=path
         )
-        workspace_o = sdk.catalog_workspace.get_declarative_workspace_data_filters()
+        workspace_o = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
         assert workspace_e == workspace_o
         assert workspace_e.to_dict(camel_case=True) == workspace_o.to_dict(camel_case=True)
     finally:
