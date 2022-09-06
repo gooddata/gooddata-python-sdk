@@ -28,7 +28,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     python_requires=">=3.7.0",
     project_urls={
-        "Documentation": "https://gooddata-fdw.readthedocs.io/en/1.0.0",
+        "Documentation": "https://gooddata-fdw.readthedocs.io/en/v1.0.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[

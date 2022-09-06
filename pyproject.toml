@@ -100,15 +100,15 @@ src=".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
 src="gooddata-sdk/setup.py"
-search='"Documentation": "https://gooddata-sdk.readthedocs.io/en/{current_version}"'
+search='"Documentation": "https://gooddata-sdk.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
 src="gooddata-pandas/setup.py"
-search='"Documentation": "https://gooddata-pandas.readthedocs.io/en/{current_version}"'
+search='"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
 src="gooddata-fdw/setup.py"
-search='"Documentation": "https://gooddata-fdw.readthedocs.io/en/{current_version}"'
+search='"Documentation": "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
 
 # You can specify a list of commands to
 # run after the files have been patched
