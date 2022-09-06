@@ -297,7 +297,6 @@ Class | Method | HTTP request | Description
  - [DeclarativeWorkspaceModel](docs/DeclarativeWorkspaceModel.md)
  - [DeclarativeWorkspacePermissions](docs/DeclarativeWorkspacePermissions.md)
  - [DeclarativeWorkspaces](docs/DeclarativeWorkspaces.md)
- - [DependentEntitiesEdge](docs/DependentEntitiesEdge.md)
  - [DependentEntitiesGraph](docs/DependentEntitiesGraph.md)
  - [DependentEntitiesNode](docs/DependentEntitiesNode.md)
  - [DependentEntitiesRequest](docs/DependentEntitiesRequest.md)

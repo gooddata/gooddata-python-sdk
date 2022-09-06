@@ -31,10 +31,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_metadata_client.model.dependent_entities_edge import DependentEntitiesEdge
     from gooddata_metadata_client.model.dependent_entities_node import DependentEntitiesNode
-    globals()['DependentEntitiesEdge'] = DependentEntitiesEdge
+    from gooddata_metadata_client.model.entity_identifier import EntityIdentifier
     globals()['DependentEntitiesNode'] = DependentEntitiesNode
+    globals()['EntityIdentifier'] = EntityIdentifier
 
 
 class DependentEntitiesGraph(ModelNormal):
@@ -94,7 +94,7 @@ class DependentEntitiesGraph(ModelNormal):
         """
         lazy_import()
         return {
-            'edges': ([DependentEntitiesEdge],),  # noqa: E501
+            'edges': ([[EntityIdentifier]],),  # noqa: E501
             'nodes': ([DependentEntitiesNode],),  # noqa: E501
         }
 
@@ -119,7 +119,7 @@ class DependentEntitiesGraph(ModelNormal):
         """DependentEntitiesGraph - a model defined in OpenAPI
 
         Args:
-            edges ([DependentEntitiesEdge]):
+            edges ([[EntityIdentifier]]):
             nodes ([DependentEntitiesNode]):
 
         Keyword Args:
@@ -210,7 +210,7 @@ class DependentEntitiesGraph(ModelNormal):
         """DependentEntitiesGraph - a model defined in OpenAPI
 
         Args:
-            edges ([DependentEntitiesEdge]):
+            edges ([[EntityIdentifier]]):
             nodes ([DependentEntitiesNode]):
 
         Keyword Args:

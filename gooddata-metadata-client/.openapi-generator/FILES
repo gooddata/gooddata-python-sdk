@@ -48,7 +48,6 @@ docs/DeclarativeWorkspaceHierarchyPermission.md
 docs/DeclarativeWorkspaceModel.md
 docs/DeclarativeWorkspacePermissions.md
 docs/DeclarativeWorkspaces.md
-docs/DependentEntitiesEdge.md
 docs/DependentEntitiesGraph.md
 docs/DependentEntitiesNode.md
 docs/DependentEntitiesRequest.md
@@ -408,7 +407,6 @@ gooddata_metadata_client/model/declarative_workspace_hierarchy_permission.py
 gooddata_metadata_client/model/declarative_workspace_model.py
 gooddata_metadata_client/model/declarative_workspace_permissions.py
 gooddata_metadata_client/model/declarative_workspaces.py
-gooddata_metadata_client/model/dependent_entities_edge.py
 gooddata_metadata_client/model/dependent_entities_graph.py
 gooddata_metadata_client/model/dependent_entities_node.py
 gooddata_metadata_client/model/dependent_entities_request.py

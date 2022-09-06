@@ -1590,26 +1590,14 @@
         ],
         "type": "object"
       },
-      "DependentEntitiesEdge": {
-        "properties": {
-          "from": {
-            "$ref": "#/components/schemas/EntityIdentifier"
-          },
-          "to": {
-            "$ref": "#/components/schemas/EntityIdentifier"
-          }
-        },
-        "required": [
-          "from",
-          "to"
-        ],
-        "type": "object"
-      },
       "DependentEntitiesGraph": {
         "properties": {
           "edges": {
             "items": {
-              "$ref": "#/components/schemas/DependentEntitiesEdge"
+              "items": {
+                "$ref": "#/components/schemas/EntityIdentifier"
+              },
+              "type": "array"
             },
             "type": "array",
             "uniqueItems": true
