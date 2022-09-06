@@ -72,16 +72,6 @@ interactions:
       body:
         string:
           data:
-            - attributes: {}
-              id: admin
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
             - attributes:
                 authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
               id: demo
@@ -102,6 +92,16 @@ interactions:
                 userGroups:
                   data:
                     - id: demoGroup
+                      type: userGroup
+              type: user
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
                       type: userGroup
               type: user
           included:
@@ -191,7 +191,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 78803927f363d1c5
+          traceId: 1eacde48b3164b17
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -437,16 +437,6 @@ interactions:
       body:
         string:
           data:
-            - attributes: {}
-              id: admin
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
             - attributes:
                 authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
               id: demo
@@ -467,6 +457,16 @@ interactions:
                 userGroups:
                   data:
                     - id: demoGroup
+                      type: userGroup
+              type: user
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
                       type: userGroup
               type: user
             - attributes:
@@ -627,16 +627,6 @@ interactions:
       body:
         string:
           data:
-            - attributes: {}
-              id: admin
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
             - attributes:
                 authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
               id: demo
@@ -657,6 +647,16 @@ interactions:
                 userGroups:
                   data:
                     - id: demoGroup
+                      type: userGroup
+              type: user
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
                       type: userGroup
               type: user
           included:

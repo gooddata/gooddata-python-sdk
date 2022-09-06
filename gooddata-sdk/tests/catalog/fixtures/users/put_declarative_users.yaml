@@ -159,21 +159,21 @@ interactions:
       body:
         string:
           data:
-            - attributes: {}
-              id: admin
+            - attributes:
+                authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
+              id: demo
               links:
-                self: http://localhost:3000/api/v1/entities/users/admin
+                self: http://localhost:3000/api/v1/entities/users/demo
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
               type: user
-            - attributes:
-                authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
-              id: demo
+            - attributes: {}
+              id: admin
               links:
-                self: http://localhost:3000/api/v1/entities/users/demo
+                self: http://localhost:3000/api/v1/entities/users/admin
               relationships:
                 userGroups:
                   data:

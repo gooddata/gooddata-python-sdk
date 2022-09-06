@@ -72,16 +72,6 @@ interactions:
       body:
         string:
           data:
-            - attributes: {}
-              id: admin
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              type: user
             - attributes:
                 authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
               id: demo
@@ -102,6 +92,16 @@ interactions:
                 userGroups:
                   data:
                     - id: demoGroup
+                      type: userGroup
+              type: user
+            - attributes: {}
+              id: admin
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
                       type: userGroup
               type: user
           included:

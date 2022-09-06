@@ -196,7 +196,15 @@ interactions:
                       - demo
                       - products
                     type: TABLE
-              permissions: []
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo
@@ -395,7 +403,15 @@ interactions:
                       - demo
                       - products
                     type: TABLE
-              permissions: []
+              permissions:
+                - assignee:
+                    id: demo2
+                    type: user
+                  name: MANAGE
+                - assignee:
+                    id: demoGroup
+                    type: userGroup
+                  name: USE
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo

@@ -1079,29 +1079,29 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - product_id
                   - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - date
-                  - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - campaign_id
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - date
                 dataSourceTableId: demo-test-ds:order_lines
                 areRelationsValid: true
                 type: NORMAL
@@ -1161,35 +1161,35 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
                     - id: date.monthOfYear
                       type: attribute
-                    - id: date.dayOfWeek
+                    - id: date.week
                       type: attribute
                     - id: date.dayOfYear
                       type: attribute
                     - id: date.day
                       type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
                     - id: date.minuteOfHour
                       type: attribute
-                    - id: date.quarterOfYear
+                    - id: date.quarter
                       type: attribute
-                    - id: date.month
+                    - id: date.hourOfDay
                       type: attribute
-                    - id: date.week
+                    - id: date.weekOfYear
                       type: attribute
                     - id: date.minute
                       type: attribute
-                    - id: date.dayOfMonth
+                    - id: date.year
                       type: attribute
                     - id: date.hour
                       type: attribute
-                    - id: date.quarter
+                    - id: date.month
+                      type: attribute
+                    - id: date.quarterOfYear
                       type: attribute
               type: dataset
           included:
