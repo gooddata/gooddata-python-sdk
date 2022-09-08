@@ -16,7 +16,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 NAME = "gooddata-scan-client"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 # To install the library, run the following
 #
 # python setup.py install
