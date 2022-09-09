@@ -3,4 +3,3 @@ pytest-cov~=3.0.0
 vcrpy~=4.2.0
 python-dotenv~=0.20.0
 pyyaml
-../tests-support
