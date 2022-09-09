@@ -6,4 +6,3 @@ vcrpy~=4.2.0
 python-dotenv~=0.20.0
 attrs==21.4.0
 cattrs==22.1.0
-../tests-support
