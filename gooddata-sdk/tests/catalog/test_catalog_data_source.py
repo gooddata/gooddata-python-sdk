@@ -476,6 +476,16 @@ def test_scan_mode_with_table_prefix(test_config):
     assert scan_result.pdm.tables[0].name_prefix == "order"
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model_with_schemata.yaml"))
+def test_scan_mode_with_schemata(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = CatalogScanModelRequest(schemata=["demo"])
+
+    scan_result = sdk.catalog_data_source.scan_data_source(data_source_id, request)
+    assert len(scan_result.pdm.tables) == 5
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_and_put_declarative_pdm.yaml"))
 def test_scan_and_put_declarative_pdm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])

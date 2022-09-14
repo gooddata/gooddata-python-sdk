@@ -16,7 +16,7 @@ from gooddata_sdk import (
     DataSourceValidator,
     GoodDataSdk,
 )
-from gooddata_sdk.utils import create_directory
+from gooddata_sdk.utils import recreate_directory
 
 gd_vcr = get_vcr()
 
@@ -65,7 +65,7 @@ def test_store_declarative_ldm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store" / "workspace_content"
     workspace_id = test_config["workspace"]
-    create_directory(path)
+    recreate_directory(path)
 
     ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
     sdk.catalog_workspace_content.store_declarative_ldm(workspace_id, path)
@@ -135,7 +135,7 @@ def test_store_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store" / "workspace_content"
     workspace_id = test_config["workspace"]
-    create_directory(path)
+    recreate_directory(path)
 
     analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id)
     sdk.catalog_workspace_content.store_declarative_analytics_model(workspace_id, path)

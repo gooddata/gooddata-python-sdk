@@ -6,6 +6,7 @@ import os
 import re
 import typing
 from pathlib import Path
+from shutil import rmtree
 from typing import Any, Callable, Dict, NamedTuple, Union, cast
 
 import yaml
@@ -142,6 +143,12 @@ def get_sorted_yaml_files(folder: Path) -> list[Path]:
 def create_directory(path: Path) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
+
+
+def recreate_directory(path: Path) -> None:
+    if os.path.exists(path):
+        rmtree(path)
+    os.makedirs(path)
 
 
 class IndentDumper(yaml.SafeDumper):

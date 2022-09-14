@@ -18,7 +18,7 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
 )
-from gooddata_sdk.utils import create_directory
+from gooddata_sdk.utils import recreate_directory
 
 gd_vcr = get_vcr()
 
@@ -168,7 +168,7 @@ def test_get_declarative_users(test_config):
 def test_store_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     users_e = sdk.catalog_user.get_declarative_users()
     _assert_users_default(users_e.users)
@@ -234,7 +234,7 @@ def test_get_declarative_user_groups(test_config):
 def test_store_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     user_groups_e = sdk.catalog_user.get_declarative_user_groups()
     _assert_user_groups_default(user_groups_e.user_groups)
@@ -320,7 +320,7 @@ def test_get_declarative_users_user_groups(test_config):
 def test_store_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     users_user_groups_e = sdk.catalog_user.get_declarative_users_user_groups()
     _assert_users_user_groups_default(users_user_groups_e)
