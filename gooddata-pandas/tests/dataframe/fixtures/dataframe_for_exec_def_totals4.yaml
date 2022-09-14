@@ -193,6 +193,7 @@ interactions:
                 localIdentifier: dim_1
             links:
               executionResult: a4555c898adce077a96ed08349d86bbec9de521f
+          resultSize: 2048
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4555c898adce077a96ed08349d86bbec9de521f?offset=0%2C0&limit=100%2C100
@@ -2894,6 +2895,7 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
+          resultSize: 2048
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4555c898adce077a96ed08349d86bbec9de521f?offset=0%2C0&limit=100%2C100

@@ -1843,6 +1843,7 @@ interactions:
                       - region
                       - state
                       - measureGroup
+          resultSize: 2048
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/74d684f9a04bcbf6429eca8ca5cf037bd31e8b24?offset=0%2C0&limit=100%2C100

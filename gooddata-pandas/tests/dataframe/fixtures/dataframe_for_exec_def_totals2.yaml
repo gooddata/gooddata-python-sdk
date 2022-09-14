@@ -2894,6 +2894,7 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
+          resultSize: 2048
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/cde98dbc99534858f98bbe57d0a6cdf13f9a230e?offset=0%2C0&limit=100%2C100

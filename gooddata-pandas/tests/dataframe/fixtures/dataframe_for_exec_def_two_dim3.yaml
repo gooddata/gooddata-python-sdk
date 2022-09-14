@@ -1604,6 +1604,7 @@ interactions:
                   - measureGroup
                 sorting: []
             totals: []
+          resultSize: 2048
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/1f2a5ed76b0cb3393cda63938d34ca86e67be4b4?offset=0%2C0&limit=100%2C100

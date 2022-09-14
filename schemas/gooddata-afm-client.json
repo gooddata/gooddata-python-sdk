@@ -1537,6 +1537,10 @@
           "executionResponse": {
             "$ref": "#/components/schemas/ExecutionResponse"
           },
+          "resultSize": {
+            "format": "int64",
+            "type": "integer"
+          },
           "resultSpec": {
             "$ref": "#/components/schemas/ResultSpec"
           }
@@ -1544,6 +1548,7 @@
         "required": [
           "afm",
           "executionResponse",
+          "resultSize",
           "resultSpec"
         ],
         "type": "object"
