@@ -15,7 +15,7 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
 )
-from gooddata_sdk.utils import create_directory
+from gooddata_sdk.utils import recreate_directory
 
 gd_vcr = get_vcr()
 
@@ -79,7 +79,7 @@ def test_load_and_put_declarative_workspaces(test_config):
 def test_store_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
     sdk.catalog_workspace.store_declarative_workspaces(path)
@@ -354,7 +354,7 @@ def test_get_declarative_workspace_data_filters(test_config):
 def test_store_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     declarative_workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
     sdk.catalog_workspace.store_declarative_workspace_data_filters(path)
@@ -455,7 +455,7 @@ def test_put_declarative_workspace(test_config):
 def test_store_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "store"
-    create_directory(path)
+    recreate_directory(path)
 
     workspaces_e = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
     sdk.catalog_workspace.store_declarative_workspace(workspace_id=test_config["workspace"], layout_root_path=path)
