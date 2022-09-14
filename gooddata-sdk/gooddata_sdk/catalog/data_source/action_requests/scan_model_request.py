@@ -22,6 +22,7 @@ class CatalogScanModelRequest(Base):
     scan_views: bool = field(default=False, validator=one_scan_true)
     table_prefix: Optional[str] = None
     view_prefix: Optional[str] = None
+    schemata: Optional[list[str]] = None
 
     @staticmethod
     def client_class() -> Type[ScanRequest]:
