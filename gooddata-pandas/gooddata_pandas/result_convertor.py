@@ -142,7 +142,7 @@ def _extract_all_result_data(
     limit = [page_size] * num_dims
     acc = _AccumulatedData()
 
-    result_size_dimensions_limits_checked = False
+    result_size_limits_checked = False
 
     while True:
         # top-level loop pages through the first dimension;
@@ -151,8 +151,9 @@ def _extract_all_result_data(
         # if two-dimensional result, it pages over table rows
         result = response.read_result(offset=offset, limit=limit)
 
-        if not result_size_dimensions_limits_checked:
+        if not result_size_limits_checked:
             result.check_dimensions_size_limits(result_size_dimensions_limits)
+            result_size_limits_checked = True
 
         acc.accumulate_data(from_result=result)
         acc.accumulate_headers(from_result=result, from_dim=0)
