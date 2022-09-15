@@ -16,8 +16,15 @@ from gooddata_pandas.utils import (
     _to_item,
     make_pandas_index,
 )
-from gooddata_sdk import Attribute, BareExecutionResponse, ExecutionDefinition, Filter, GoodDataSdk
-from gooddata_sdk.compute.model.execution import ResultCacheMetadata, ResultSizeDimensions
+from gooddata_sdk import (
+    Attribute,
+    BareExecutionResponse,
+    ExecutionDefinition,
+    Filter,
+    GoodDataSdk,
+    ResultCacheMetadata,
+    ResultSizeDimensions,
+)
 
 
 class DataFrameFactory:
@@ -242,6 +249,7 @@ class DataFrameFactory:
         exec_def: ExecutionDefinition,
         label_overrides: Optional[LabelOverrides] = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
+        result_size_bytes_limit: Optional[int] = None,
     ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
         """
         Creates a data frame using an execution definition. The data frame will respect the dimensionality
@@ -267,20 +275,25 @@ class DataFrameFactory:
                 }
             }
 
-        :param label_overrides: label overrides for metrics and attributes
         :param exec_def: execution definition
+        :param label_overrides: label overrides for metrics and attributes
+        :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
+        :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
         :return: a new dataframe
         """
         if label_overrides is None:
             label_overrides = {}
 
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
+        result_cache_metadata = self.result_cache_metadata_for_exec_result_id(execution.result_id)
 
         return (
             convert_execution_response_to_dataframe(
                 execution_response=execution.bare_exec_response,
+                result_cache_metadata=result_cache_metadata,
                 label_overrides=label_overrides,
                 result_size_dimensions_limits=result_size_dimensions_limits,
+                result_size_bytes_limit=result_size_bytes_limit,
             ),
             execution.bare_exec_response,
         )
@@ -289,7 +302,9 @@ class DataFrameFactory:
         self,
         result_id: str,
         label_overrides: Optional[LabelOverrides] = None,
+        result_cache_metadata: Optional[ResultCacheMetadata] = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
+        result_size_bytes_limit: Optional[int] = None,
     ) -> pandas.DataFrame:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
@@ -315,14 +330,19 @@ class DataFrameFactory:
                 }
             }
 
-        :param label_overrides: label overrides for metrics and attributes
         :param result_id: executionResult ID from ExecutionResponse
+        :param label_overrides: label overrides for metrics and attributes
+        :param result_cache_metadata: Metadata for the corresponding exec result. Optional.
+        :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
+        :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
+
         :return: a new dataframe
         """
         if label_overrides is None:
             label_overrides = {}
 
-        result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
+        if result_cache_metadata is None:
+            result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
@@ -332,6 +352,8 @@ class DataFrameFactory:
                     result_cache_metadata.execution_response, _check_type=False
                 ),
             ),
+            result_cache_metadata=result_cache_metadata,
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,
+            result_size_bytes_limit=result_size_bytes_limit,
         )

@@ -4,8 +4,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 import pandas
 from attrs import define, field, frozen
 
-from gooddata_sdk import BareExecutionResponse, ExecutionResult
-from gooddata_sdk.compute.model.execution import ResultSizeDimensions
+from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
@@ -127,7 +126,9 @@ class _AccumulatedData:
 
 def _read_complete_execution_result(
     execution_response: BareExecutionResponse,
+    result_cache_metadata: ResultCacheMetadata,
     result_size_dimensions_limits: ResultSizeDimensions,
+    result_size_bytes_limit: Optional[int] = None,
     page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> _DataWithHeaders:
     """
@@ -153,6 +154,7 @@ def _read_complete_execution_result(
 
         if not result_size_limits_checked:
             result.check_dimensions_size_limits(result_size_dimensions_limits)
+            result_cache_metadata.check_bytes_size_limit(result_size_bytes_limit)
             result_size_limits_checked = True
 
         acc.accumulate_data(from_result=result)
@@ -303,8 +305,10 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
 
 def convert_execution_response_to_dataframe(
     execution_response: BareExecutionResponse,
+    result_cache_metadata: ResultCacheMetadata,
     label_overrides: LabelOverrides,
     result_size_dimensions_limits: ResultSizeDimensions,
+    result_size_bytes_limit: Optional[int] = None,
 ) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -317,7 +321,10 @@ def convert_execution_response_to_dataframe(
     :return: a new dataframe
     """
     extract = _read_complete_execution_result(
-        execution_response=execution_response, result_size_dimensions_limits=result_size_dimensions_limits
+        execution_response=execution_response,
+        result_cache_metadata=result_cache_metadata,
+        result_size_dimensions_limits=result_size_dimensions_limits,
+        result_size_bytes_limit=result_size_bytes_limit,
     )
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)

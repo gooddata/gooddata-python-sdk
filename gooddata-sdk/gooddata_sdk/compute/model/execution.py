@@ -334,6 +334,16 @@ class Execution:
 ExecutionResponse = Execution
 
 
+class ResultSizeBytesLimitExceeded(Exception):
+    def __init__(
+        self,
+        result_size_bytes_limit: int,
+        actual_result_bytes_size: int,
+    ):
+        self.result_size_bytes_limit = result_size_bytes_limit
+        self.actual_result_bytes_size = actual_result_bytes_size
+
+
 class ResultCacheMetadata:
     def __init__(self, result_cache_metadata: models.ResultCacheMetadata):
         self._result_cache_metadata = result_cache_metadata
@@ -353,6 +363,13 @@ class ResultCacheMetadata:
     @property
     def result_spec(self) -> ResultSpec:
         return self._result_cache_metadata.result_spec
+
+    def check_bytes_size_limit(self, result_size_bytes_limit: Optional[int] = None) -> None:
+        if result_size_bytes_limit is not None and self.result_size > result_size_bytes_limit:
+            raise ResultSizeBytesLimitExceeded(
+                result_size_bytes_limit=result_size_bytes_limit,
+                actual_result_bytes_size=self.result_size,
+            )
 
 
 def compute_model_to_api_model(
