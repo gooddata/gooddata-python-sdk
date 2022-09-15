@@ -7,7 +7,7 @@ import pandas
 
 from gooddata_afm_client import apis, models
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.result_convertor import LabelOverrides, convert_result_to_dataframe
+from gooddata_pandas.result_convertor import LabelOverrides, convert_execution_response_to_dataframe
 from gooddata_pandas.utils import (
     ColumnsDef,
     DefaultInsightColumnNaming,
@@ -269,8 +269,8 @@ class DataFrameFactory:
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
 
         return (
-            convert_result_to_dataframe(
-                response=execution.bare_exec_response,
+            convert_execution_response_to_dataframe(
+                execution_response=execution.bare_exec_response,
                 label_overrides=label_overrides,
                 result_size_dimensions_limits=result_size_dimensions_limits,
             ),
@@ -314,13 +314,17 @@ class DataFrameFactory:
         if label_overrides is None:
             label_overrides = {}
 
-        metadata = self._sdk.compute.get_exec_metadata(workspace_id=self._workspace_id, result_id=result_id)
+        result_cache_metadata = self._sdk.compute.retrieve_result_cache_metadata(
+            workspace_id=self._workspace_id, result_id=result_id
+        )
 
-        return convert_result_to_dataframe(
-            response=BareExecutionResponse(
+        return convert_execution_response_to_dataframe(
+            execution_response=BareExecutionResponse(
                 actions_api=apis.ActionsApi(self._sdk.client.afm_client),
                 workspace_id=self._workspace_id,
-                response=models.AfmExecutionResponse(metadata["execution_response"], _check_type=False),
+                execution_response=models.AfmExecutionResponse(
+                    result_cache_metadata["execution_response"], _check_type=False
+                ),
             ),
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,

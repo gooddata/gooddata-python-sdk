@@ -33,7 +33,7 @@ class ComputeService:
             response=response,
         )
 
-    def get_exec_metadata(self, workspace_id: str, result_id: str) -> models.ResultCacheMetadata:
+    def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> models.ResultCacheMetadata:
         """
         Gets execution result's metadata from GoodData.CN workspace for given execution result ID.
 

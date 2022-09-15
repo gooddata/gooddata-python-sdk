@@ -225,13 +225,13 @@ class BareExecutionResponse:
         self,
         actions_api: apis.ActionsApi,
         workspace_id: str,
-        response: models.AfmExecutionResponse,
+        execution_response: models.AfmExecutionResponse,
     ):
         self._actions_api = actions_api
         self._workspace_id = workspace_id
 
-        self._exec_response: models.ExecutionResponse = response["execution_response"]
-        self._afm_exec_response = response
+        self._exec_response: models.ExecutionResponse = execution_response["execution_response"]
+        self._afm_exec_response = execution_response
 
     @property
     def workspace_id(self) -> str:
@@ -292,7 +292,7 @@ class Execution:
         self._bare_exec_response = BareExecutionResponse(
             actions_api=actions_api,
             workspace_id=workspace_id,
-            response=response,
+            execution_response=response,
         )
 
     @property
