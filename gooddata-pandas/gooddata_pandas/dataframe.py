@@ -17,7 +17,7 @@ from gooddata_pandas.utils import (
     make_pandas_index,
 )
 from gooddata_sdk import Attribute, BareExecutionResponse, ExecutionDefinition, Filter, GoodDataSdk
-from gooddata_sdk.compute.model.execution import ResultSize
+from gooddata_sdk.compute.model.execution import ResultSizeDimensions
 
 
 class DataFrameFactory:
@@ -233,7 +233,7 @@ class DataFrameFactory:
         self,
         exec_def: ExecutionDefinition,
         label_overrides: Optional[LabelOverrides] = None,
-        result_size_limits: ResultSize = (),
+        result_size_dimensions_limits: ResultSizeDimensions = (),
     ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
         """
         Creates a data frame using an execution definition. The data frame will respect the dimensionality
@@ -272,7 +272,7 @@ class DataFrameFactory:
             convert_result_to_dataframe(
                 response=execution.bare_exec_response,
                 label_overrides=label_overrides,
-                result_size_limits=result_size_limits,
+                result_size_dimensions_limits=result_size_dimensions_limits,
             ),
             execution.bare_exec_response,
         )
@@ -281,7 +281,7 @@ class DataFrameFactory:
         self,
         result_id: str,
         label_overrides: Optional[LabelOverrides] = None,
-        result_size_limits: ResultSize = (),
+        result_size_dimensions_limits: ResultSizeDimensions = (),
     ) -> pandas.DataFrame:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
@@ -323,5 +323,5 @@ class DataFrameFactory:
                 response=models.AfmExecutionResponse(metadata["execution_response"], _check_type=False),
             ),
             label_overrides=label_overrides,
-            result_size_limits=result_size_limits,
+            result_size_dimensions_limits=result_size_dimensions_limits,
         )

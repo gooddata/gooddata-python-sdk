@@ -128,13 +128,18 @@ class ExecutionDefinition:
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
 
-ResultSize = Tuple[Optional[int], ...]
+ResultSizeDimensions = Tuple[Optional[int], ...]
 
 
-class ResultSizeLimitsExceeded(Exception):
-    def __init__(self, result_size_limits: ResultSize, actual_result_size: ResultSize, first_violating_index: int):
-        self.result_size_limits = tuple(result_size_limits)
-        self.actual_result_size = actual_result_size
+class ResultSizeDimensionsLimitsExceeded(Exception):
+    def __init__(
+        self,
+        result_size_dimensions_limits: ResultSizeDimensions,
+        actual_result_size_dimensions: ResultSizeDimensions,
+        first_violating_index: int,
+    ):
+        self.result_size_dimensions_limits = tuple(result_size_dimensions_limits)
+        self.actual_result_size = actual_result_size_dimensions
         self.first_violating_index = first_violating_index
 
 
@@ -190,17 +195,17 @@ class ExecutionResult:
             for header in self.headers[dim]["headerGroups"][header_idx]["headers"]
         ]
 
-    def check_size_limits(self, result_size_limits: ResultSize) -> None:
+    def check_dimensions_size_limits(self, result_size_dimensions_limits: ResultSizeDimensions) -> None:
         for dim, dim_size in enumerate(self.paging_total):
-            if dim >= len(result_size_limits):
+            if dim >= len(result_size_dimensions_limits):
                 return
-            dim_limit = result_size_limits[dim]
+            dim_limit = result_size_dimensions_limits[dim]
             if dim_size is None or dim_limit is None:
                 continue
             if dim_size > dim_limit:
-                raise ResultSizeLimitsExceeded(
-                    result_size_limits=result_size_limits,
-                    actual_result_size=tuple(self.paging_total),
+                raise ResultSizeDimensionsLimitsExceeded(
+                    result_size_dimensions_limits=result_size_dimensions_limits,
+                    actual_result_size_dimensions=tuple(self.paging_total),
                     first_violating_index=dim,
                 )
 

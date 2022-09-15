@@ -5,7 +5,7 @@ import pandas
 from attrs import define, field, frozen
 
 from gooddata_sdk import BareExecutionResponse, ExecutionResult
-from gooddata_sdk.compute.model.execution import ResultSize
+from gooddata_sdk.compute.model.execution import ResultSizeDimensions
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
@@ -127,7 +127,7 @@ class _AccumulatedData:
 
 def _extract_all_result_data(
     response: BareExecutionResponse,
-    result_size_limits: ResultSize,
+    result_size_dimensions_limits: ResultSizeDimensions,
     page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> _DataWithHeaders:
     """
@@ -142,7 +142,7 @@ def _extract_all_result_data(
     limit = [page_size] * num_dims
     acc = _AccumulatedData()
 
-    result_size_limits_checked = False
+    result_size_dimensions_limits_checked = False
 
     while True:
         # top-level loop pages through the first dimension;
@@ -151,8 +151,8 @@ def _extract_all_result_data(
         # if two-dimensional result, it pages over table rows
         result = response.read_result(offset=offset, limit=limit)
 
-        if not result_size_limits_checked:
-            result.check_size_limits(result_size_limits)
+        if not result_size_dimensions_limits_checked:
+            result.check_dimensions_size_limits(result_size_dimensions_limits)
 
         acc.accumulate_data(from_result=result)
         acc.accumulate_headers(from_result=result, from_dim=0)
@@ -303,7 +303,7 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
 def convert_result_to_dataframe(
     response: BareExecutionResponse,
     label_overrides: LabelOverrides,
-    result_size_limits: ResultSize,
+    result_size_dimensions_limits: ResultSizeDimensions,
 ) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -315,7 +315,7 @@ def convert_result_to_dataframe(
     :param response: execution response through which the result can be read and converted to a dataframe
     :return: a new dataframe
     """
-    extract = _extract_all_result_data(response=response, result_size_limits=result_size_limits)
+    extract = _extract_all_result_data(response=response, result_size_dimensions_limits=result_size_dimensions_limits)
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 
