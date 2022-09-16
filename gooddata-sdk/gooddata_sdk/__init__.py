@@ -33,6 +33,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
+from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
@@ -56,7 +57,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeWorkspaceDataFilter,
     CatalogDeclarativeWorkspaceDataFilters,
+    CatalogDeclarativeWorkspaceDataFilterSetting,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
 )
