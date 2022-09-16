@@ -83,6 +83,7 @@ from gooddata_sdk.compute.model.execution import (
     ExecutionDefinition,
     ExecutionResponse,
     ExecutionResult,
+    ResultCacheMetadata,
     ResultSizeDimensions,
     ResultSizeDimensionsLimitsExceeded,
     TotalDefinition,

@@ -17,7 +17,7 @@ from gooddata_pandas.utils import (
     make_pandas_index,
 )
 from gooddata_sdk import Attribute, BareExecutionResponse, ExecutionDefinition, Filter, GoodDataSdk
-from gooddata_sdk.compute.model.execution import ResultSizeDimensions
+from gooddata_sdk.compute.model.execution import ResultCacheMetadata, ResultSizeDimensions
 
 
 class DataFrameFactory:
@@ -229,6 +229,14 @@ class DataFrameFactory:
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
 
+    def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
+        """
+        Retrieves result cache metadata for given :result_id:
+        :param result_id: ID of execution result to retrieve the metadata for
+        :return: corresponding result cache metadata
+        """
+        return self._sdk.compute.retrieve_result_cache_metadata(workspace_id=self._workspace_id, result_id=result_id)
+
     def for_exec_def(
         self,
         exec_def: ExecutionDefinition,
@@ -314,16 +322,14 @@ class DataFrameFactory:
         if label_overrides is None:
             label_overrides = {}
 
-        result_cache_metadata = self._sdk.compute.retrieve_result_cache_metadata(
-            workspace_id=self._workspace_id, result_id=result_id
-        )
+        result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
                 actions_api=apis.ActionsApi(self._sdk.client.afm_client),
                 workspace_id=self._workspace_id,
                 execution_response=models.AfmExecutionResponse(
-                    result_cache_metadata["execution_response"], _check_type=False
+                    result_cache_metadata.execution_response, _check_type=False
                 ),
             ),
             label_overrides=label_overrides,

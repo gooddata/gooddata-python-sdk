@@ -7,6 +7,8 @@ from attrs import define, field
 
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
+from gooddata_afm_client.model.afm import AFM
+from gooddata_afm_client.model.result_spec import ResultSpec
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
@@ -330,6 +332,27 @@ class Execution:
 # Newly Execution holds BareExecutionResponse and ExecutionDefinition next to it.
 # For backwards compatibility ExecutionResponse -> Execution alias is defined.
 ExecutionResponse = Execution
+
+
+class ResultCacheMetadata:
+    def __init__(self, result_cache_metadata: models.ResultCacheMetadata):
+        self._result_cache_metadata = result_cache_metadata
+
+    @property
+    def afm(self) -> AFM:
+        return self._result_cache_metadata.afm
+
+    @property
+    def execution_response(self) -> ExecutionResponse:
+        return self._result_cache_metadata.execution_response
+
+    @property
+    def result_size(self) -> int:
+        return self._result_cache_metadata.result_size
+
+    @property
+    def result_spec(self) -> ResultSpec:
+        return self._result_cache_metadata.result_spec
 
 
 def compute_model_to_api_model(
