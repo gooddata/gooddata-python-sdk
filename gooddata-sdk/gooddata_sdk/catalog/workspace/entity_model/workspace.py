@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Optional
 
 from gooddata_metadata_client.model.json_api_workspace_in import JsonApiWorkspaceIn
 from gooddata_metadata_client.model.json_api_workspace_in_attributes import JsonApiWorkspaceInAttributes
@@ -15,7 +15,7 @@ from gooddata_sdk.catalog.entity import CatalogNameEntity
 
 
 class CatalogWorkspace(CatalogNameEntity):
-    def __init__(self, workspace_id: str, name: str, parent_id: str = None):
+    def __init__(self, workspace_id: str, name: str, parent_id: Optional[str] = None):
         super(CatalogWorkspace, self).__init__(workspace_id, name)
         self.parent_id = parent_id
 

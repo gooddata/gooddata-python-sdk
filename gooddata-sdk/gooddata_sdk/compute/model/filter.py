@@ -35,7 +35,7 @@ def _to_identifier(val: Union[ObjId, str]) -> Union[afm_models.AfmLocalIdentifie
 
 
 class AttributeFilter(Filter):
-    def __init__(self, label: Union[ObjId, str, Attribute], values: list[str] = None) -> None:
+    def __init__(self, label: Union[ObjId, str, Attribute], values: Optional[list[str]] = None) -> None:
         super(AttributeFilter, self).__init__()
 
         self._label = _extract_id_or_local_id(label)

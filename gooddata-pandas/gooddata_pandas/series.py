@@ -69,7 +69,7 @@ class SeriesFactory:
     def not_indexed(
         self,
         data_by: Union[SimpleMetric, str, ObjId, Attribute],
-        granularity: Union[list[LabelItemDef], IndexDef] = None,
+        granularity: Optional[Union[list[LabelItemDef], IndexDef]] = None,
         filter_by: Optional[Union[Filter, list[Filter]]] = None,
     ) -> pandas.Series:
         """

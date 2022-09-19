@@ -232,7 +232,7 @@ class DataFrameFactory:
     def for_exec_def(
         self,
         exec_def: ExecutionDefinition,
-        label_overrides: LabelOverrides = None,
+        label_overrides: Optional[LabelOverrides] = None,
         result_size_limits: ResultSize = (),
     ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
         """
@@ -280,7 +280,7 @@ class DataFrameFactory:
     def for_exec_result_id(
         self,
         result_id: str,
-        label_overrides: LabelOverrides = None,
+        label_overrides: Optional[LabelOverrides] = None,
         result_size_limits: ResultSize = (),
     ) -> pandas.DataFrame:
         """

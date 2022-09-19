@@ -23,7 +23,7 @@ LAYOUT_DATA_SOURCES_DIR = "data_sources"
 class CatalogDeclarativeDataSources(Base):
     data_sources: List[CatalogDeclarativeDataSource]
 
-    def to_api(self, credentials: dict[str, Any] = None) -> DeclarativeDataSources:
+    def to_api(self, credentials: Optional[dict[str, Any]] = None) -> DeclarativeDataSources:
         data_sources = []
         client_class = self.client_class()
         credentials = credentials if credentials is not None else dict()
