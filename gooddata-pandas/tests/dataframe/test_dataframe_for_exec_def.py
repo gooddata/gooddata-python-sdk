@@ -5,8 +5,16 @@ from typing import Tuple
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_pandas import DataFrameFactory
-from gooddata_sdk import Attribute, ExecutionDefinition, ObjId, SimpleMetric, TotalDefinition, TotalDimension
-from gooddata_sdk.compute.model.execution import ResultSizeLimitsExceeded
+from gooddata_sdk import (
+    Attribute,
+    ExecutionDefinition,
+    ObjId,
+    ResultSizeBytesLimitExceeded,
+    ResultSizeDimensionsLimitsExceeded,
+    SimpleMetric,
+    TotalDefinition,
+    TotalDimension,
+)
 
 gd_vcr = get_vcr()
 
@@ -61,7 +69,7 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
-def test_dataframe_for_exec_def_limits_failure(gdf: DataFrameFactory):
+def test_dataframe_for_exec_def_dimensions_limits_failure(gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -76,16 +84,43 @@ def test_dataframe_for_exec_def_limits_failure(gdf: DataFrameFactory):
         dimensions=[["state", "region"], ["product_category", "measureGroup"]],
     )
 
-    RESULT_SIZE_LIMITS = (1, 1)
+    result_size_dimensions_limits = (1, 1)
     exception = None
     try:
-        gdf.for_exec_def(exec_def=exec_def, result_size_limits=RESULT_SIZE_LIMITS)
-    except ResultSizeLimitsExceeded as e:
+        gdf.for_exec_def(exec_def=exec_def, result_size_dimensions_limits=result_size_dimensions_limits)
+    except ResultSizeDimensionsLimitsExceeded as e:
         exception = e
 
-    assert type(exception) is ResultSizeLimitsExceeded
-    assert exception.result_size_limits == RESULT_SIZE_LIMITS
+    assert type(exception) is ResultSizeDimensionsLimitsExceeded
+    assert exception.result_size_dimensions_limits == result_size_dimensions_limits
     assert exception.first_violating_index == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
+def test_dataframe_for_exec_def_bytes_limits_failure(gdf: DataFrameFactory):
+    exec_def = ExecutionDefinition(
+        attributes=[
+            Attribute(local_id="region", label="region"),
+            Attribute(local_id="state", label="state"),
+            Attribute(local_id="product_category", label="products.category"),
+        ],
+        metrics=[
+            SimpleMetric(local_id="price", item=ObjId(id="price", type="fact")),
+            SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
+        ],
+        filters=[],
+        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+    )
+
+    result_size_bytes_limit = 2047
+    exception = None
+    try:
+        gdf.for_exec_def(exec_def=exec_def, result_size_bytes_limit=result_size_bytes_limit)
+    except ResultSizeBytesLimitExceeded as e:
+        exception = e
+
+    assert type(exception) is ResultSizeBytesLimitExceeded
+    assert exception.result_size_bytes_limit == result_size_bytes_limit
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim2.yaml"))

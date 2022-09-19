@@ -4,8 +4,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 import pandas
 from attrs import define, field, frozen
 
-from gooddata_sdk import BareExecutionResponse, ExecutionResult
-from gooddata_sdk.compute.model.execution import ResultSize
+from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
@@ -125,19 +124,21 @@ class _AccumulatedData:
         )
 
 
-def _extract_all_result_data(
-    response: BareExecutionResponse,
-    result_size_limits: ResultSize,
+def _read_complete_execution_result(
+    execution_response: BareExecutionResponse,
+    result_cache_metadata: ResultCacheMetadata,
+    result_size_dimensions_limits: ResultSizeDimensions,
+    result_size_bytes_limit: Optional[int] = None,
     page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> _DataWithHeaders:
     """
     Extracts all data and headers for an execution result. This does page around the execution result to extract
     everything from the paged API.
 
-    :param response: execution response to work with;
+    :param execution_response: execution response to work with;
     :return:
     """
-    num_dims = len(response.dimensions)
+    num_dims = len(execution_response.dimensions)
     offset = [0] * num_dims
     limit = [page_size] * num_dims
     acc = _AccumulatedData()
@@ -149,14 +150,16 @@ def _extract_all_result_data(
         #
         # if one-dimensional result, it pages over an array of data
         # if two-dimensional result, it pages over table rows
-        result = response.read_result(offset=offset, limit=limit)
+        result = execution_response.read_result(offset=offset, limit=limit)
 
         if not result_size_limits_checked:
-            result.check_size_limits(result_size_limits)
+            result.check_dimensions_size_limits(result_size_dimensions_limits)
+            result_cache_metadata.check_bytes_size_limit(result_size_bytes_limit)
+            result_size_limits_checked = True
 
         acc.accumulate_data(from_result=result)
         acc.accumulate_headers(from_result=result, from_dim=0)
-        acc.accumulate_grand_totals(from_result=result, paging_dim=0, response=response)
+        acc.accumulate_grand_totals(from_result=result, paging_dim=0, response=execution_response)
 
         if num_dims > 1:
             # when result is two-dimensional make sure to read the column headers and column totals
@@ -173,12 +176,12 @@ def _extract_all_result_data(
                 # page 'to the right' to get data from all columns, extend existing rows with that data
                 offset = [offset[0], result.next_page_start(dim=1)]
                 while True:
-                    result = response.read_result(offset=offset, limit=limit)
+                    result = execution_response.read_result(offset=offset, limit=limit)
                     acc.extend_existing_row_data(from_result=result)
 
                     if load_headers_and_totals:
                         acc.accumulate_headers(from_result=result, from_dim=1)
-                        acc.accumulate_grand_totals(from_result=result, paging_dim=1, response=response)
+                        acc.accumulate_grand_totals(from_result=result, paging_dim=1, response=execution_response)
 
                     if result.is_complete(dim=1):
                         break
@@ -300,10 +303,12 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
     return headers
 
 
-def convert_result_to_dataframe(
-    response: BareExecutionResponse,
+def convert_execution_response_to_dataframe(
+    execution_response: BareExecutionResponse,
+    result_cache_metadata: ResultCacheMetadata,
     label_overrides: LabelOverrides,
-    result_size_limits: ResultSize,
+    result_size_dimensions_limits: ResultSizeDimensions,
+    result_size_bytes_limit: Optional[int] = None,
 ) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -312,15 +317,24 @@ def convert_result_to_dataframe(
     expects that the execution _response_.
 
     :param label_overrides: label overrides
-    :param response: execution response through which the result can be read and converted to a dataframe
+    :param execution_response: execution response through which the result can be read and converted to a dataframe
     :return: a new dataframe
     """
-    extract = _extract_all_result_data(response=response, result_size_limits=result_size_limits)
+    extract = _read_complete_execution_result(
+        execution_response=execution_response,
+        result_cache_metadata=result_cache_metadata,
+        result_size_dimensions_limits=result_size_dimensions_limits,
+        result_size_bytes_limit=result_size_bytes_limit,
+    )
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 
     return pandas.DataFrame(
         data=full_data,
-        index=_headers_to_index(dim_idx=0, headers=full_headers, response=response, label_overrides=label_overrides),
-        columns=_headers_to_index(dim_idx=1, headers=full_headers, response=response, label_overrides=label_overrides),
+        index=_headers_to_index(
+            dim_idx=0, headers=full_headers, response=execution_response, label_overrides=label_overrides
+        ),
+        columns=_headers_to_index(
+            dim_idx=1, headers=full_headers, response=execution_response, label_overrides=label_overrides
+        ),
     )

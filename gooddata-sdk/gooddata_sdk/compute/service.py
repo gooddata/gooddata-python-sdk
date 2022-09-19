@@ -1,9 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from gooddata_afm_client import apis, models
+from gooddata_afm_client import apis
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition
+from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, ResultCacheMetadata
 
 
 class ComputeService:
@@ -33,7 +33,7 @@ class ComputeService:
             response=response,
         )
 
-    def get_exec_metadata(self, workspace_id: str, result_id: str) -> models.ResultCacheMetadata:
+    def retrieve_result_cache_metadata(self, workspace_id: str, result_id: str) -> ResultCacheMetadata:
         """
         Gets execution result's metadata from GoodData.CN workspace for given execution result ID.
 
@@ -41,4 +41,8 @@ class ComputeService:
         :param result_id: execution result ID
         :return: execution result's metadata
         """
-        return self._actions_api.retrieve_execution_metadata(workspace_id, result_id, _check_return_type=False)
+        return ResultCacheMetadata(
+            result_cache_metadata=self._actions_api.retrieve_execution_metadata(
+                workspace_id, result_id, _check_return_type=False
+            )
+        )

@@ -94,6 +94,7 @@ class ResultCacheMetadata(ModelNormal):
         return {
             'afm': (AFM,),  # noqa: E501
             'execution_response': (ExecutionResponse,),  # noqa: E501
+            'result_size': (int,),  # noqa: E501
             'result_spec': (ResultSpec,),  # noqa: E501
         }
 
@@ -105,6 +106,7 @@ class ResultCacheMetadata(ModelNormal):
     attribute_map = {
         'afm': 'afm',  # noqa: E501
         'execution_response': 'executionResponse',  # noqa: E501
+        'result_size': 'resultSize',  # noqa: E501
         'result_spec': 'resultSpec',  # noqa: E501
     }
 
@@ -115,12 +117,13 @@ class ResultCacheMetadata(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, afm, execution_response, result_spec, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, afm, execution_response, result_size, result_spec, *args, **kwargs):  # noqa: E501
         """ResultCacheMetadata - a model defined in OpenAPI
 
         Args:
             afm (AFM):
             execution_response (ExecutionResponse):
+            result_size (int):
             result_spec (ResultSpec):
 
         Keyword Args:
@@ -187,6 +190,7 @@ class ResultCacheMetadata(ModelNormal):
 
         self.afm = afm
         self.execution_response = execution_response
+        self.result_size = result_size
         self.result_spec = result_spec
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -208,12 +212,13 @@ class ResultCacheMetadata(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, afm, execution_response, result_spec, *args, **kwargs):  # noqa: E501
+    def __init__(self, afm, execution_response, result_size, result_spec, *args, **kwargs):  # noqa: E501
         """ResultCacheMetadata - a model defined in OpenAPI
 
         Args:
             afm (AFM):
             execution_response (ExecutionResponse):
+            result_size (int):
             result_spec (ResultSpec):
 
         Keyword Args:
@@ -278,6 +283,7 @@ class ResultCacheMetadata(ModelNormal):
 
         self.afm = afm
         self.execution_response = execution_response
+        self.result_size = result_size
         self.result_spec = result_spec
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

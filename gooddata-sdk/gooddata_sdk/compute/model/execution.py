@@ -7,6 +7,8 @@ from attrs import define, field
 
 import gooddata_afm_client.apis as apis
 import gooddata_afm_client.models as models
+from gooddata_afm_client.model.afm import AFM
+from gooddata_afm_client.model.result_spec import ResultSpec
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
@@ -128,13 +130,18 @@ class ExecutionDefinition:
         return models.AfmExecution(execution=execution, result_spec=result_spec)
 
 
-ResultSize = Tuple[Optional[int], ...]
+ResultSizeDimensions = Tuple[Optional[int], ...]
 
 
-class ResultSizeLimitsExceeded(Exception):
-    def __init__(self, result_size_limits: ResultSize, actual_result_size: ResultSize, first_violating_index: int):
-        self.result_size_limits = tuple(result_size_limits)
-        self.actual_result_size = actual_result_size
+class ResultSizeDimensionsLimitsExceeded(Exception):
+    def __init__(
+        self,
+        result_size_dimensions_limits: ResultSizeDimensions,
+        actual_result_size_dimensions: ResultSizeDimensions,
+        first_violating_index: int,
+    ):
+        self.result_size_dimensions_limits = tuple(result_size_dimensions_limits)
+        self.actual_result_size = actual_result_size_dimensions
         self.first_violating_index = first_violating_index
 
 
@@ -190,17 +197,17 @@ class ExecutionResult:
             for header in self.headers[dim]["headerGroups"][header_idx]["headers"]
         ]
 
-    def check_size_limits(self, result_size_limits: ResultSize) -> None:
+    def check_dimensions_size_limits(self, result_size_dimensions_limits: ResultSizeDimensions) -> None:
         for dim, dim_size in enumerate(self.paging_total):
-            if dim >= len(result_size_limits):
+            if dim >= len(result_size_dimensions_limits):
                 return
-            dim_limit = result_size_limits[dim]
+            dim_limit = result_size_dimensions_limits[dim]
             if dim_size is None or dim_limit is None:
                 continue
             if dim_size > dim_limit:
-                raise ResultSizeLimitsExceeded(
-                    result_size_limits=result_size_limits,
-                    actual_result_size=tuple(self.paging_total),
+                raise ResultSizeDimensionsLimitsExceeded(
+                    result_size_dimensions_limits=result_size_dimensions_limits,
+                    actual_result_size_dimensions=tuple(self.paging_total),
                     first_violating_index=dim,
                 )
 
@@ -220,13 +227,13 @@ class BareExecutionResponse:
         self,
         actions_api: apis.ActionsApi,
         workspace_id: str,
-        response: models.AfmExecutionResponse,
+        execution_response: models.AfmExecutionResponse,
     ):
         self._actions_api = actions_api
         self._workspace_id = workspace_id
 
-        self._exec_response: models.ExecutionResponse = response["execution_response"]
-        self._afm_exec_response = response
+        self._exec_response: models.ExecutionResponse = execution_response["execution_response"]
+        self._afm_exec_response = execution_response
 
     @property
     def workspace_id(self) -> str:
@@ -287,7 +294,7 @@ class Execution:
         self._bare_exec_response = BareExecutionResponse(
             actions_api=actions_api,
             workspace_id=workspace_id,
-            response=response,
+            execution_response=response,
         )
 
     @property
@@ -325,6 +332,44 @@ class Execution:
 # Newly Execution holds BareExecutionResponse and ExecutionDefinition next to it.
 # For backwards compatibility ExecutionResponse -> Execution alias is defined.
 ExecutionResponse = Execution
+
+
+class ResultSizeBytesLimitExceeded(Exception):
+    def __init__(
+        self,
+        result_size_bytes_limit: int,
+        actual_result_bytes_size: int,
+    ):
+        self.result_size_bytes_limit = result_size_bytes_limit
+        self.actual_result_bytes_size = actual_result_bytes_size
+
+
+class ResultCacheMetadata:
+    def __init__(self, result_cache_metadata: models.ResultCacheMetadata):
+        self._result_cache_metadata = result_cache_metadata
+
+    @property
+    def afm(self) -> AFM:
+        return self._result_cache_metadata.afm
+
+    @property
+    def execution_response(self) -> ExecutionResponse:
+        return self._result_cache_metadata.execution_response
+
+    @property
+    def result_size(self) -> int:
+        return self._result_cache_metadata.result_size
+
+    @property
+    def result_spec(self) -> ResultSpec:
+        return self._result_cache_metadata.result_spec
+
+    def check_bytes_size_limit(self, result_size_bytes_limit: Optional[int] = None) -> None:
+        if result_size_bytes_limit is not None and self.result_size > result_size_bytes_limit:
+            raise ResultSizeBytesLimitExceeded(
+                result_size_bytes_limit=result_size_bytes_limit,
+                actual_result_bytes_size=self.result_size,
+            )
 
 
 def compute_model_to_api_model(
