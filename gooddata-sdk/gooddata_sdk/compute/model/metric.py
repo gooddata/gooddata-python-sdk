@@ -54,7 +54,7 @@ class SimpleMetric(Metric):
         item: ObjId,
         aggregation: Optional[str] = None,
         compute_ratio: bool = False,
-        filters: list[Filter] = None,
+        filters: Optional[list[Filter]] = None,
     ) -> None:
         super(SimpleMetric, self).__init__(local_id)
 

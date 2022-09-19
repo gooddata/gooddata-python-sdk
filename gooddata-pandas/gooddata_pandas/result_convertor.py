@@ -194,7 +194,7 @@ def _extract_all_result_data(
 
 
 def _create_header_mapper(
-    response: BareExecutionResponse, dim: int, label_overrides: LabelOverrides = None
+    response: BareExecutionResponse, dim: int, label_overrides: Optional[LabelOverrides] = None
 ) -> Callable[[Any, Optional[int]], str]:
     """
     Prepares header mapper function which is doing header structures translations into appropriate label used
