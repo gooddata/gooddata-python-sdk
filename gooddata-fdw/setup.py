@@ -25,7 +25,7 @@ setup(
     license_file="LICENSE.txt",
     license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.7.0",
     project_urls={
         "Documentation": "https://gooddata-fdw.readthedocs.io/en/v1.1.0",
