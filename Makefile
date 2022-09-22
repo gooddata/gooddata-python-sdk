@@ -38,22 +38,46 @@ format-fix:
 	isort .
 
 .PHONY: clients
-clients: afm-client metadata-client scan-client
+clients: afm-client metadata-client scan-client api-client
+
+define download_client
+    curl "${URL}/$(1)" | jq --sort-keys > schemas/gooddata-$(1)-client.json
+endef
+
+define generate_client
+	./scripts/generate_client.sh gooddata-$(1)-client -f "/local/schemas/gooddata-$(1)-client.json"
+endef
+
+define download_generate_client
+	$(call download_client,$(1))
+	$(call generate_client,$(1))
+endef
+
 
 .PHONY: afm-client
 afm-client:
-	curl "${URL}/afm" | jq --sort-keys > schemas/gooddata-afm-client.json
-	./scripts/generate_client.sh gooddata-afm-client -f "/local/schemas/gooddata-afm-client.json"
+	$(call download_generate_client,afm)
 
 .PHONY: metadata-client
 metadata-client:
-	curl "${URL}/metadata" | jq --sort-keys > schemas/gooddata-metadata-client.json
-	./scripts/generate_client.sh gooddata-metadata-client -f "/local/schemas/gooddata-metadata-client.json"
+	$(call download_generate_client,metadata)
 
 .PHONY: scan-client
 scan-client:
-	curl "${URL}/scan" | jq --sort-keys > schemas/gooddata-scan-client.json
-	./scripts/generate_client.sh gooddata-scan-client -f "/local/schemas/gooddata-scan-client.json"
+	$(call download_generate_client,scan)
+
+.PHONY: api-client
+api-client: download
+	rm -f schemas/gooddata-api-client.json
+	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' > "schemas/gooddata-api-client.json"
+	$(call generate_client,api)
+
+.PHONY: download
+download:
+	$(call download_client,afm)
+	$(call download_client,metadata)
+	$(call download_client,scan)
+	$(call download_client,"export")
 
 .PHONY: mypy
 mypy:
