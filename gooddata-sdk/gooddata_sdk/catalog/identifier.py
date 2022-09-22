@@ -5,12 +5,12 @@ from typing import Type
 
 import attr
 
-from gooddata_metadata_client.model.assignee_identifier import AssigneeIdentifier
-from gooddata_metadata_client.model.grain_identifier import GrainIdentifier
-from gooddata_metadata_client.model.label_identifier import LabelIdentifier
-from gooddata_metadata_client.model.reference_identifier import ReferenceIdentifier
-from gooddata_metadata_client.model.user_group_identifier import UserGroupIdentifier
-from gooddata_metadata_client.model.workspace_identifier import WorkspaceIdentifier
+from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+from gooddata_api_client.model.grain_identifier import GrainIdentifier
+from gooddata_api_client.model.label_identifier import LabelIdentifier
+from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
+from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 

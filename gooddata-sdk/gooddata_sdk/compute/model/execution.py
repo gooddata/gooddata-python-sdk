@@ -5,10 +5,10 @@ from typing import Any, Optional, Tuple, Union
 
 from attrs import define, field
 
-import gooddata_afm_client.apis as apis
-import gooddata_afm_client.models as models
-from gooddata_afm_client.model.afm import AFM
-from gooddata_afm_client.model.result_spec import ResultSpec
+import gooddata_api_client.apis as apis
+import gooddata_api_client.models as models
+from gooddata_api_client.model.afm import AFM
+from gooddata_api_client.model.result_spec import ResultSpec
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric

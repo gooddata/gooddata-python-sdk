@@ -5,11 +5,11 @@ from typing import List, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.dependent_entities_graph import DependentEntitiesGraph
-from gooddata_metadata_client.model.dependent_entities_node import DependentEntitiesNode
-from gooddata_metadata_client.model.dependent_entities_request import DependentEntitiesRequest
-from gooddata_metadata_client.model.dependent_entities_response import DependentEntitiesResponse
-from gooddata_metadata_client.model.entity_identifier import EntityIdentifier
+from gooddata_api_client.model.dependent_entities_graph import DependentEntitiesGraph
+from gooddata_api_client.model.dependent_entities_node import DependentEntitiesNode
+from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
+from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.model.entity_identifier import EntityIdentifier
 from gooddata_sdk.catalog.base import Base
 
 

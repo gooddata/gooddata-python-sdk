@@ -6,7 +6,7 @@ from typing import Dict, List, Type
 
 import attr
 
-from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
+from gooddata_api_client.model.declarative_tables import DeclarativeTables
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable
 from gooddata_sdk.utils import create_directory

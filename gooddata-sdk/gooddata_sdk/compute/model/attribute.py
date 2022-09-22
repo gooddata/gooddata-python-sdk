@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Union
 
-import gooddata_afm_client.models as afm_models
+import gooddata_api_client.models as afm_models
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId
 
 

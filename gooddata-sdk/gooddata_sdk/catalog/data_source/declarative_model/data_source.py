@@ -6,9 +6,9 @@ from typing import Any, List, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.declarative_data_source import DeclarativeDataSource
-from gooddata_metadata_client.model.declarative_data_sources import DeclarativeDataSources
-from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
+from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
+from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile

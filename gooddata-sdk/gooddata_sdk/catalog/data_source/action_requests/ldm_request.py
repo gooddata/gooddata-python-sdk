@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
 from gooddata_sdk.catalog.base import Base
 
 

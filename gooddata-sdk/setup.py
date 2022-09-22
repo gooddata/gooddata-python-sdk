@@ -10,6 +10,7 @@ REQUIRES = [
     "gooddata-afm-client~=1.1.0",
     "gooddata-metadata-client~=1.1.0",
     "gooddata-scan-client~=1.1.0",
+    "gooddata-api-client~=1.1.0",
     'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     "python-dateutil>=2.5.3",
     "pyyaml>=5.1",

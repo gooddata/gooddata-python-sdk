@@ -5,8 +5,7 @@ import functools
 from pathlib import Path
 from typing import List, Optional, Union
 
-import gooddata_afm_client.apis as afm_apis
-import gooddata_afm_client.models as afm_models
+import gooddata_api_client.models as afm_models
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.types import ValidObjects
@@ -48,7 +47,6 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
         super(CatalogWorkspaceContentService, self).__init__(api_client)
-        self._afm_actions_api = afm_apis.ActionsApi(api_client.afm_client)
 
     # Entities methods
 
@@ -121,14 +119,14 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     def get_dependent_entities_graph(self, workspace_id: str) -> CatalogDependentEntitiesResponse:
         return CatalogDependentEntitiesResponse.from_api(
-            self._metadata_actions_api.get_dependent_entities_graph(workspace_id=workspace_id)
+            self._actions_api.get_dependent_entities_graph(workspace_id=workspace_id)
         )
 
     def get_dependent_entities_graph_from_entry_points(
         self, workspace_id: str, dependent_entities_request: CatalogDependentEntitiesRequest
     ) -> CatalogDependentEntitiesResponse:
         return CatalogDependentEntitiesResponse.from_api(
-            self._metadata_actions_api.get_dependent_entities_graph_from_entry_points(
+            self._actions_api.get_dependent_entities_graph_from_entry_points(
                 workspace_id=workspace_id, dependent_entities_request=dependent_entities_request.to_api()
             )
         )
@@ -234,7 +232,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             afm = self._prepare_afm_for_availability(_ctx)
 
         query = afm_models.AfmValidObjectsQuery(afm=afm, types=["facts", "attributes", "measures"])
-        response = self._afm_actions_api.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
+        response = self._actions_api.compute_valid_objects(workspace_id=workspace_id, afm_valid_objects_query=query)
 
         by_type: dict[str, set[str]] = dict()
 

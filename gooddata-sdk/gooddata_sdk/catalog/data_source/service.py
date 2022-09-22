@@ -5,10 +5,8 @@ import functools
 from pathlib import Path
 from typing import Any, List, Optional
 
-import gooddata_metadata_client.apis as metadata_apis
-import gooddata_scan_client.apis as scan_client_apis
-from gooddata_metadata_client.exceptions import NotFoundException
-from gooddata_metadata_client.model.declarative_pdm import DeclarativePdm
+from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.declarative_pdm import DeclarativePdm
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
@@ -32,8 +30,6 @@ from gooddata_sdk.utils import load_all_entities, load_all_entities_dict, read_l
 class CatalogDataSourceService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
         super(CatalogDataSourceService, self).__init__(api_client)
-        self._actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
-        self._scan_api = scan_client_apis.ActionsApi(api_client.scan_client)
 
     # Entities methods are listed below
 
@@ -155,7 +151,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         report_warnings: bool = False,
     ) -> CatalogScanResultPdm:
         scan_result = CatalogScanResultPdm.from_api(
-            self._scan_api.scan_data_source(data_source_id, scan_request.to_api())
+            self._actions_api.scan_data_source(data_source_id, scan_request.to_api())
         )
         if report_warnings:
             self.report_warnings(scan_result.warnings)
@@ -167,7 +163,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self.put_declarative_pdm(data_source_id, self.scan_data_source(data_source_id, scan_request).pdm)
 
     def scan_schemata(self, data_source_id: str) -> list[str]:
-        response = self._scan_api.get_data_source_schemata(data_source_id)
+        response = self._actions_api.get_data_source_schemata(data_source_id)
         return response.get("schema_names", [])
 
     def test_data_sources_connection(
@@ -179,15 +175,15 @@ class CatalogDataSourceService(CatalogServiceBase):
             if credentials.get(declarative_data_source.id) is not None:
                 if declarative_data_source.type == BIGQUERY_TYPE:
                     token = TokenCredentialsFromFile.token_from_file(credentials[declarative_data_source.id])
-                    response = self._scan_api.test_data_source_definition(
+                    response = self._actions_api.test_data_source_definition(
                         declarative_data_source.to_test_request(token=token)
                     )
                 else:
-                    response = self._scan_api.test_data_source_definition(
+                    response = self._actions_api.test_data_source_definition(
                         declarative_data_source.to_test_request(password=credentials[declarative_data_source.id])
                     )
             else:
-                response = self._scan_api.test_data_source_definition(declarative_data_source.to_test_request())
+                response = self._actions_api.test_data_source_definition(declarative_data_source.to_test_request())
             if not response.successful:
                 errors[declarative_data_source.id] = response.error
         if len(errors) != 0:

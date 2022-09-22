@@ -5,7 +5,7 @@ import functools
 from pathlib import Path
 from typing import List
 
-from gooddata_metadata_client.exceptions import NotFoundException
+from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceDataFilters,

@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from typing import Union
 
-import gooddata_afm_client.models as afm_models
-from gooddata_afm_client.model_utils import OpenApiModel
+import gooddata_api_client.models as afm_models
+from gooddata_api_client.model_utils import OpenApiModel
 
 
 class ObjId:

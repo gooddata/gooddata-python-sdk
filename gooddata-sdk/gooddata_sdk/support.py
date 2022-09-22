@@ -5,14 +5,13 @@ import time
 
 import urllib3.exceptions as urllib3_ex
 
-import gooddata_metadata_client.apis as metadata_apis
-import gooddata_metadata_client.exceptions as metadata_ex
+import gooddata_api_client.exceptions as exceptions
 from gooddata_sdk.client import GoodDataApiClient
 
 
 class SupportService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        self._entities_api = api_client.entities_api
 
     @property
     def is_available(self) -> bool:
@@ -25,10 +24,10 @@ class SupportService:
         try:
             self._entities_api.get_all_options()
             return True
-        except (metadata_ex.ForbiddenException, metadata_ex.UnauthorizedException):
+        except (exceptions.ForbiddenException, exceptions.UnauthorizedException):
             # do not consider invalid credentials or missing rights "not available" state
             raise
-        except metadata_ex.ApiException:
+        except exceptions.ApiException:
             # invalid response from GD.CN - GD.CN is still booting but endpoint is receiving connections already
             return False
         except urllib3_ex.MaxRetryError:
