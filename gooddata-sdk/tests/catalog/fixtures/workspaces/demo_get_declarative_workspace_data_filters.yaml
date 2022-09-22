@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '603'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,55 +53,53 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           workspaceDataFilters:
-            - columnName: wdf__region
-              id: wdf__region
+            - id: wdf__region
               title: Customer region
-              workspace:
-                id: demo
-                type: workspace
+              columnName: wdf__region
               workspaceDataFilterSettings:
-                - filterValues:
-                    - West
-                  id: region_west
+                - id: region_west
                   title: Region West
+                  filterValues:
+                    - West
                   workspace:
                     id: demo_west
                     type: workspace
-            - columnName: wdf__state
-              id: wdf__state
-              title: Customer state
               workspace:
-                id: demo_west
+                id: demo
                 type: workspace
+            - id: wdf__state
+              title: Customer state
+              columnName: wdf__state
               workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
+                - id: region_west_california
                   title: Region West California
+                  filterValues:
+                    - California
                   workspace:
                     id: demo_west_california
                     type: workspace
+              workspace:
+                id: demo_west
+                type: workspace
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
@@ -114,7 +114,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -124,6 +124,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '603'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -149,52 +151,50 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           workspaceDataFilters:
-            - columnName: wdf__region
-              id: wdf__region
+            - id: wdf__region
               title: Customer region
-              workspace:
-                id: demo
-                type: workspace
+              columnName: wdf__region
               workspaceDataFilterSettings:
-                - filterValues:
-                    - West
-                  id: region_west
+                - id: region_west
                   title: Region West
+                  filterValues:
+                    - West
                   workspace:
                     id: demo_west
                     type: workspace
-            - columnName: wdf__state
-              id: wdf__state
-              title: Customer state
               workspace:
-                id: demo_west
+                id: demo
                 type: workspace
+            - id: wdf__state
+              title: Customer state
+              columnName: wdf__state
               workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
+                - id: region_west_california
                   title: Region West California
+                  filterValues:
+                    - California
                   workspace:
                     id: demo_west_california
                     type: workspace
+              workspace:
+                id: demo_west
+                type: workspace

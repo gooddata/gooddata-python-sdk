@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '8675'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,357 +53,355 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
+            - id: campaign_channel_id
+              type: attribute
+              attributes:
                 title: Campaign channel id
                 description: Campaign channel id
                 tags:
                   - Campaign channels
                 areRelationsValid: true
                 sourceColumn: campaign_channel_id
-              id: campaign_channel_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+            - id: campaign_channels.category
               type: attribute
-            - attributes:
+              attributes:
                 title: Category
                 description: Category
                 tags:
                   - Campaign channels
                 areRelationsValid: true
                 sourceColumn: category
-              id: campaign_channels.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+            - id: type
               type: attribute
-            - attributes:
+              attributes:
                 title: Type
                 description: Type
                 tags:
                   - Campaign channels
                 areRelationsValid: true
                 sourceColumn: type
-              id: type
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+            - id: campaign_id
               type: attribute
-            - attributes:
+              attributes:
                 title: Campaign id
                 description: Campaign id
                 tags:
                   - Campaigns
                 areRelationsValid: true
                 sourceColumn: campaign_id
-              id: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+            - id: campaign_name
               type: attribute
-            - attributes:
+              attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
                   - Campaigns
                 areRelationsValid: true
                 sourceColumn: campaign_name
-              id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+            - id: customer_id
               type: attribute
-            - attributes:
+              attributes:
                 title: Customer id
                 description: Customer id
                 tags:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: customer_id
-              id: customer_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+            - id: customer_name
               type: attribute
-            - attributes:
+              attributes:
                 title: Customer name
                 description: Customer name
                 tags:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: customer_name
-              id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+            - id: region
               type: attribute
-            - attributes:
+              attributes:
                 title: Region
                 description: Region
                 tags:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: region
-              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+            - id: state
               type: attribute
-            - attributes:
+              attributes:
                 title: State
                 description: State
                 tags:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: state
-              id: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+            - id: order_id
               type: attribute
-            - attributes:
+              attributes:
                 title: Order id
                 description: Order id
                 tags:
                   - Order lines
                 areRelationsValid: true
                 sourceColumn: order_id
-              id: order_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+            - id: order_line_id
               type: attribute
-            - attributes:
+              attributes:
                 title: Order line id
                 description: Order line id
                 tags:
                   - Order lines
                 areRelationsValid: true
                 sourceColumn: order_line_id
-              id: order_line_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+            - id: order_status
               type: attribute
-            - attributes:
+              attributes:
                 title: Order status
                 description: Order status
                 tags:
                   - Order lines
                 areRelationsValid: true
                 sourceColumn: order_status
-              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+            - id: product_id
               type: attribute
-            - attributes:
+              attributes:
                 title: Product id
                 description: Product id
                 tags:
                   - Products
                 areRelationsValid: true
                 sourceColumn: product_id
-              id: product_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
+            - id: product_name
               type: attribute
-            - attributes:
+              attributes:
                 title: Product name
                 description: Product name
                 tags:
                   - Products
                 areRelationsValid: true
                 sourceColumn: product_name
-              id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+            - id: products.category
               type: attribute
-            - attributes:
+              attributes:
                 title: Category
                 description: Category
                 tags:
                   - Products
                 areRelationsValid: true
                 sourceColumn: category
-              id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+            - id: date.minute
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Minute
                 description: Minute
                 tags:
                   - Date
                 granularity: MINUTE
                 areRelationsValid: true
-              id: date.minute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+            - id: date.hour
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Hour
                 description: Hour
                 tags:
                   - Date
                 granularity: HOUR
                 areRelationsValid: true
-              id: date.hour
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+            - id: date.day
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Date
                 description: Date
                 tags:
                   - Date
                 granularity: DAY
                 areRelationsValid: true
-              id: date.day
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+            - id: date.week
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Week/Year
                 description: Week and Year (W52/2020)
                 tags:
                   - Date
                 granularity: WEEK
                 areRelationsValid: true
-              id: date.week
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+            - id: date.month
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Month/Year
                 description: Month and Year (12/2020)
                 tags:
                   - Date
                 granularity: MONTH
                 areRelationsValid: true
-              id: date.month
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+            - id: date.quarter
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
                 tags:
                   - Date
                 granularity: QUARTER
                 areRelationsValid: true
-              id: date.quarter
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+            - id: date.year
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Year
                 description: Year
                 tags:
                   - Date
                 granularity: YEAR
                 areRelationsValid: true
-              id: date.year
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+            - id: date.minuteOfHour
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Minute of Hour
                 description: Generic Minute of the Hour(MI1-MI60)
                 tags:
                   - Date
                 granularity: MINUTE_OF_HOUR
                 areRelationsValid: true
-              id: date.minuteOfHour
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
+            - id: date.hourOfDay
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Hour of Day
                 description: Generic Hour of the Day(H1-H24)
                 tags:
                   - Date
                 granularity: HOUR_OF_DAY
                 areRelationsValid: true
-              id: date.hourOfDay
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
+            - id: date.dayOfWeek
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Day of Week
                 description: Generic Day of the Week (D1-D7)
                 tags:
                   - Date
                 granularity: DAY_OF_WEEK
                 areRelationsValid: true
-              id: date.dayOfWeek
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
+            - id: date.dayOfMonth
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Day of Month
                 description: Generic Day of the Month (D1-D31)
                 tags:
                   - Date
                 granularity: DAY_OF_MONTH
                 areRelationsValid: true
-              id: date.dayOfMonth
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
+            - id: date.dayOfYear
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Day of Year
                 description: Generic Day of the Year (D1-D366)
                 tags:
                   - Date
                 granularity: DAY_OF_YEAR
                 areRelationsValid: true
-              id: date.dayOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
+            - id: date.weekOfYear
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Week of Year
                 description: Generic Week (W1-W53)
                 tags:
                   - Date
                 granularity: WEEK_OF_YEAR
                 areRelationsValid: true
-              id: date.weekOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
+            - id: date.monthOfYear
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Month of Year
                 description: Generic Month (M1-M12)
                 tags:
                   - Date
                 granularity: MONTH_OF_YEAR
                 areRelationsValid: true
-              id: date.monthOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
+            - id: date.quarterOfYear
               type: attribute
-            - attributes:
+              attributes:
                 title: Date - Quarter of Year
                 description: Generic Quarter (Q1-Q4)
                 tags:
                   - Date
                 granularity: QUARTER_OF_YEAR
                 areRelationsValid: true
-              id: date.quarterOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
-              type: attribute
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?page=1&size=500

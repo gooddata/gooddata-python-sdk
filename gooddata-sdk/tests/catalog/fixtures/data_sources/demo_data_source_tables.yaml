@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '4564'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,28 +53,28 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
+            - id: campaign_channels
+              type: dataSourceTable
+              attributes:
                 path:
                   - demo
                   - campaign_channels
@@ -108,11 +110,11 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-              id: campaign_channels
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/campaign_channels
+            - id: campaigns
               type: dataSourceTable
-            - attributes:
+              attributes:
                 path:
                   - demo
                   - campaigns
@@ -128,11 +130,11 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-              id: campaigns
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/campaigns
+            - id: customers
               type: dataSourceTable
-            - attributes:
+              attributes:
                 path:
                   - demo
                   - customers
@@ -163,11 +165,11 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-              id: customers
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/customers
+            - id: order_lines
               type: dataSourceTable
-            - attributes:
+              attributes:
                 path:
                   - demo
                   - order_lines
@@ -228,11 +230,11 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-              id: order_lines
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/order_lines
+            - id: products
               type: dataSourceTable
-            - attributes:
+              attributes:
                 path:
                   - demo
                   - products
@@ -253,10 +255,8 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-              id: products
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/products
-              type: dataSourceTable
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables?page=0&size=500
             next: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables?page=1&size=500

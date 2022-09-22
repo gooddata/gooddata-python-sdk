@@ -6,7 +6,6 @@ from pathlib import Path
 
 from tests_support.vcrpy_utils import get_vcr
 
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
@@ -143,7 +142,7 @@ def test_get_declarative_workspaces(test_config):
 def test_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
 
@@ -334,7 +333,7 @@ def test_workspace_list(test_config):
 def test_get_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     declarative_workspace_data_filters = sdk.catalog_workspace.get_declarative_workspace_data_filters()
     workspace_data_filters = declarative_workspace_data_filters.workspace_data_filters
@@ -413,7 +412,7 @@ def test_put_declarative_workspace_data_filters(test_config):
 def test_get_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     workspace = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
 

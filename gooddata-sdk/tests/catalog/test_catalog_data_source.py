@@ -10,7 +10,6 @@ from unittest.mock import MagicMock
 import pytest
 from tests_support.vcrpy_utils import get_vcr
 
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     BasicCredentials,
     BigQueryAttributes,
@@ -296,7 +295,7 @@ def test_catalog_data_source_table(test_config):
 def test_catalog_declarative_data_sources(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
     data_sources = data_sources_o.data_sources
