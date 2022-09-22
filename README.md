@@ -9,9 +9,9 @@ This repository contains Python packages useful for integration with [GoodData.C
 
 ## Available packages
 
-### GoodData API Clients
+### GoodData API Client
 
-API clients are generated directly from the GoodData.CN OpenAPI specifications and allow you to call any API from
+API client is generated directly from the GoodData.CN OpenAPI specifications and allow you to call any API from
 Python. Learn more about the clients in their [dedicated readme](./clients_README.md).
 
 ### GoodData Python SDK

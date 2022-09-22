@@ -2,7 +2,7 @@
 [tool.black]
 line-length = 120
 # intentionally ignore the generated clients
-extend-exclude = '(gooddata-afm-client|gooddata-metadata-client|gooddata-scan-client|.*\.snapshot\..*)'
+extend-exclude = '(gooddata-afm-client|gooddata-metadata-client|gooddata-scan-client|gooddata-api-client|.*\.snapshot\..*)'
 
 [tool.isort]
 # make isort setup compatible with black
@@ -10,11 +10,12 @@ profile = "black"
 multi_line_output = 3
 include_trailing_comma = true
 line_length = 120
-skip_glob = ["*/gooddata-afm-client/*","*/gooddata-metadata-client/*","*/gooddata-scan-client/*", "*/.snapshot/*"]
+skip_glob = ["*/gooddata-afm-client/*","*/gooddata-metadata-client/*","*/gooddata-scan-client/*","*/gooddata-api-client/*","*/.snapshot/*"]
 src_paths = [
     "gooddata-afm-client",
     "gooddata-metadata-client",
     "gooddata-scan-client",
+    "gooddata-api-client",
     "gooddata-sdk",
     "gooddata-fdw",
     "gooddata-pandas"
