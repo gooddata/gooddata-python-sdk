@@ -143,6 +143,7 @@ docs/JsonApiDataSourceIdentifierOutMeta.md
 docs/JsonApiDataSourceIdentifierOutWithLinks.md
 docs/JsonApiDataSourceIn.md
 docs/JsonApiDataSourceInAttributes.md
+docs/JsonApiDataSourceInAttributesParametersInner.md
 docs/JsonApiDataSourceInDocument.md
 docs/JsonApiDataSourceOut.md
 docs/JsonApiDataSourceOutAttributes.md
@@ -344,6 +345,7 @@ docs/ListLinks.md
 docs/ListLinksAllOf.md
 docs/ObjectLinks.md
 docs/ObjectLinksContainer.md
+docs/Parameter.md
 docs/PlatformUsage.md
 docs/PlatformUsageRequest.md
 docs/ReferenceIdentifier.md
@@ -501,6 +503,7 @@ gooddata_metadata_client/model/json_api_data_source_identifier_out_meta.py
 gooddata_metadata_client/model/json_api_data_source_identifier_out_with_links.py
 gooddata_metadata_client/model/json_api_data_source_in.py
 gooddata_metadata_client/model/json_api_data_source_in_attributes.py
+gooddata_metadata_client/model/json_api_data_source_in_attributes_parameters_inner.py
 gooddata_metadata_client/model/json_api_data_source_in_document.py
 gooddata_metadata_client/model/json_api_data_source_out.py
 gooddata_metadata_client/model/json_api_data_source_out_attributes.py
@@ -701,6 +704,7 @@ gooddata_metadata_client/model/list_links.py
 gooddata_metadata_client/model/list_links_all_of.py
 gooddata_metadata_client/model/object_links.py
 gooddata_metadata_client/model/object_links_container.py
+gooddata_metadata_client/model/parameter.py
 gooddata_metadata_client/model/platform_usage.py
 gooddata_metadata_client/model/platform_usage_request.py
 gooddata_metadata_client/model/reference_identifier.py

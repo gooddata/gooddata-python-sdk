@@ -11,7 +11,9 @@ Method | HTTP request | Description
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
+[**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_requested_entitlements**](ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
+[**resolve_settings_without_workspace**](ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -337,7 +339,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     platform_usage_request = PlatformUsageRequest(
         usage_item_names=[
-            "WorkspaceCount",
+            "UserCount",
         ],
     ) # PlatformUsageRequest | 
 
@@ -507,6 +509,69 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **resolve_all_settings_without_workspace**
+> [DeclarativeSetting] resolve_all_settings_without_workspace()
+
+Values for all settings without workspace.
+
+Resolves values for all settings without workspace by current user, organization, or default settings.
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Values for all settings without workspace.
+        api_response = api_instance.resolve_all_settings_without_workspace()
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->resolve_all_settings_without_workspace: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[DeclarativeSetting]**](DeclarativeSetting.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Values for selected settings. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **resolve_requested_entitlements**
 > [ApiEntitlement] resolve_requested_entitlements(entitlements_request)
 
@@ -576,6 +641,76 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **resolve_settings_without_workspace**
+> [DeclarativeSetting] resolve_settings_without_workspace(resolve_settings_request)
+
+Values for selected settings without workspace.
+
+Resolves values for selected settings without workspace by current user, organization, or default settings.
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    resolve_settings_request = ResolveSettingsRequest(
+        settings=["timezone"],
+    ) # ResolveSettingsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Values for selected settings without workspace.
+        api_response = api_instance.resolve_settings_without_workspace(resolve_settings_request)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->resolve_settings_without_workspace: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **resolve_settings_request** | [**ResolveSettingsRequest**](ResolveSettingsRequest.md)|  |
+
+### Return type
+
+[**[DeclarativeSetting]**](DeclarativeSetting.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Values for selected settings. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

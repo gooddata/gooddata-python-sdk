@@ -120,7 +120,7 @@ class DeclarativeDashboardPlugin(ModelNormal):
         """DeclarativeDashboardPlugin - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.
             id (str): Dashboard plugin object ID.
             title (str): Dashboard plugin object title.
 
@@ -215,7 +215,7 @@ class DeclarativeDashboardPlugin(ModelNormal):
         """DeclarativeDashboardPlugin - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.
             id (str): Dashboard plugin object ID.
             title (str): Dashboard plugin object title.
 

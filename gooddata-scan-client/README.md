@@ -54,6 +54,7 @@ from gooddata_scan_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_scan_client.model.test_request import TestRequest
 from gooddata_scan_client.model.test_response import TestResponse
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -92,6 +93,7 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [ColumnWarning](docs/ColumnWarning.md)
+ - [DataSourceParameter](docs/DataSourceParameter.md)
  - [DataSourceSchemata](docs/DataSourceSchemata.md)
  - [DeclarativeColumn](docs/DeclarativeColumn.md)
  - [DeclarativeTable](docs/DeclarativeTable.md)
@@ -100,6 +102,7 @@ Class | Method | HTTP request | Description
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [TableWarning](docs/TableWarning.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
+ - [TestRequest](docs/TestRequest.md)
  - [TestResponse](docs/TestResponse.md)
 
 

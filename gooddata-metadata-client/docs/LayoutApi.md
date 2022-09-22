@@ -850,9 +850,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 cache_path=[
                     "[ "dfs", "data" ]. Example used in Apache Drill.",
                 ],
+                decoded_parameters=[
+                    Parameter(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 enable_caching=False,
                 id="pg_local_docker-demo",
                 name="postgres demo",
+                parameters=[
+                    Parameter(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 password="*****",
                 pdm=DeclarativeTables(
                     tables=[
@@ -1681,9 +1693,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 cache_path=[
                     "[ "dfs", "data" ]. Example used in Apache Drill.",
                 ],
+                decoded_parameters=[
+                    Parameter(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 enable_caching=False,
                 id="pg_local_docker-demo",
                 name="postgres demo",
+                parameters=[
+                    Parameter(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 password="*****",
                 pdm=DeclarativeTables(
                     tables=[

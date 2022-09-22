@@ -10,6 +10,7 @@
 # sys.setrecursionlimit(n)
 
 from gooddata_scan_client.model.column_warning import ColumnWarning
+from gooddata_scan_client.model.data_source_parameter import DataSourceParameter
 from gooddata_scan_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_scan_client.model.declarative_column import DeclarativeColumn
 from gooddata_scan_client.model.declarative_table import DeclarativeTable
@@ -18,4 +19,5 @@ from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.table_warning import TableWarning
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_scan_client.model.test_request import TestRequest
 from gooddata_scan_client.model.test_response import TestResponse

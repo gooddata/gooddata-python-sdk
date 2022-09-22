@@ -59,10 +59,13 @@ class ApiEntitlement(ModelNormal):
         ('name',): {
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'MANAGEDOIDC': "ManagedOIDC",
+            'UILOCALIZATION': "UiLocalization",
             'TIER': "Tier",
             'USERCOUNT': "UserCount",
             'UNLIMITEDUSERS': "UnlimitedUsers",
             'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
+            'WHITELABELING': "WhiteLabeling",
             'WORKSPACECOUNT': "WorkspaceCount",
         },
     }
