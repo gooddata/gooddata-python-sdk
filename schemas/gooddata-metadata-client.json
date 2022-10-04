@@ -56,10 +56,13 @@
             "enum": [
               "Contract",
               "CustomTheming",
+              "ManagedOIDC",
+              "UiLocalization",
               "Tier",
               "UserCount",
               "UnlimitedUsers",
               "UnlimitedWorkspaces",
+              "WhiteLabeling",
               "WorkspaceCount"
             ],
             "type": "string"
@@ -441,6 +444,12 @@
             },
             "type": "array"
           },
+          "decodedParameters": {
+            "items": {
+              "$ref": "#/components/schemas/Parameter"
+            },
+            "type": "array"
+          },
           "enableCaching": {
             "description": "Enable caching of intermediate results.",
             "example": false,
@@ -456,6 +465,12 @@
             "description": "Name of the data source.",
             "example": "postgres demo",
             "type": "string"
+          },
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/Parameter"
+            },
+            "type": "array"
           },
           "password": {
             "description": "Password for the data-source user, property is never returned back.",
@@ -513,8 +528,7 @@
           "id",
           "name",
           "schema",
-          "type",
-          "url"
+          "type"
         ],
         "type": "object"
       },
@@ -1666,10 +1680,13 @@
               "enum": [
                 "Contract",
                 "CustomTheming",
+                "ManagedOIDC",
+                "UiLocalization",
                 "Tier",
                 "UserCount",
                 "UnlimitedUsers",
                 "UnlimitedWorkspaces",
+                "WhiteLabeling",
                 "WorkspaceCount"
               ],
               "type": "string"
@@ -3406,10 +3423,30 @@
                 "type": "array"
               },
               "enableCaching": {
+                "description": "Enable caching of intermediate results.",
+                "example": false,
                 "type": "boolean"
               },
               "name": {
                 "type": "string"
+              },
+              "parameters": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "password": {
                 "type": "string"
@@ -3445,8 +3482,7 @@
             "required": [
               "name",
               "schema",
-              "type",
-              "url"
+              "type"
             ],
             "type": "object"
           },
@@ -3494,11 +3530,49 @@
                 },
                 "type": "array"
               },
+              "decodedParameters": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
               "enableCaching": {
+                "description": "Enable caching of intermediate results.",
+                "example": false,
                 "type": "boolean"
               },
               "name": {
                 "type": "string"
+              },
+              "parameters": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "schema": {
                 "type": "string"
@@ -3528,8 +3602,7 @@
             "required": [
               "name",
               "schema",
-              "type",
-              "url"
+              "type"
             ],
             "type": "object"
           },
@@ -3626,10 +3699,30 @@
                 "type": "array"
               },
               "enableCaching": {
+                "description": "Enable caching of intermediate results.",
+                "example": false,
                 "type": "boolean"
               },
               "name": {
                 "type": "string"
+              },
+              "parameters": {
+                "items": {
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               },
               "password": {
                 "type": "string"
@@ -7600,7 +7693,7 @@
         ]
       },
       "JsonNode": {
-        "description": "Custom setting content in JSON format.",
+        "description": "A server agnostic definition of the dashboard plugin in JSON format.",
         "example": {},
         "type": "object"
       },
@@ -7666,6 +7759,21 @@
         },
         "type": "object"
       },
+      "Parameter": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object"
+      },
       "PlatformUsage": {
         "properties": {
           "count": {
@@ -7674,8 +7782,8 @@
           },
           "name": {
             "enum": [
-              "WorkspaceCount",
-              "UserCount"
+              "UserCount",
+              "WorkspaceCount"
             ],
             "type": "string"
           }
@@ -7690,8 +7798,8 @@
           "usageItemNames": {
             "items": {
               "enum": [
-                "WorkspaceCount",
-                "UserCount"
+                "UserCount",
+                "WorkspaceCount"
               ],
               "type": "string"
             },
@@ -8021,6 +8129,64 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/resolveSettings": {
+      "get": {
+        "description": "Resolves values for all settings without workspace by current user, organization, or default settings.",
+        "operationId": "resolveAllSettingsWithoutWorkspace",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarativeSetting"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Values for selected settings."
+          }
+        },
+        "summary": "Values for all settings without workspace.",
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "description": "Resolves values for selected settings without workspace by current user, organization, or default settings.",
+        "operationId": "resolveSettingsWithoutWorkspace",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveSettingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarativeSetting"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Values for selected settings."
+          }
+        },
+        "summary": "Values for selected settings without workspace.",
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph": {

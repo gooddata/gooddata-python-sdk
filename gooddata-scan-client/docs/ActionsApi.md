@@ -155,7 +155,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **test_data_source**
-> TestResponse test_data_source(data_source_id, body)
+> TestResponse test_data_source(data_source_id, test_request)
 
 Test data source connection by data source id
 
@@ -168,6 +168,7 @@ Test if it is possible to connect to a database using an existing data source de
 import time
 import gooddata_scan_client
 from gooddata_scan_client.api import actions_api
+from gooddata_scan_client.model.test_request import TestRequest
 from gooddata_scan_client.model.test_response import TestResponse
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -182,12 +183,28 @@ with gooddata_scan_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
-    body = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | 
+    test_request = TestRequest(
+        cache_path=[
+            "cache_path_example",
+        ],
+        enable_caching=False,
+        parameters=[
+            DataSourceParameter(
+                name="name_example",
+                value="value_example",
+            ),
+        ],
+        password="admin123",
+        schema="public",
+        token="token_example",
+        url="jdbc:postgresql://localhost:5432/db_name",
+        username="dbadmin",
+    ) # TestRequest | 
 
     # example passing only required values which don't have defaults set
     try:
         # Test data source connection by data source id
-        api_response = api_instance.test_data_source(data_source_id, body)
+        api_response = api_instance.test_data_source(data_source_id, test_request)
         pprint(api_response)
     except gooddata_scan_client.ApiException as e:
         print("Exception when calling ActionsApi->test_data_source: %s\n" % e)
@@ -199,7 +216,7 @@ with gooddata_scan_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **data_source_id** | **str**| Data source id |
- **body** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**|  |
+ **test_request** | [**TestRequest**](TestRequest.md)|  |
 
 ### Return type
 
@@ -252,6 +269,12 @@ with gooddata_scan_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     test_definition_request = TestDefinitionRequest(
+        parameters=[
+            DataSourceParameter(
+                name="name_example",
+                value="value_example",
+            ),
+        ],
         password="admin123",
         schema="public",
         token="token_example",

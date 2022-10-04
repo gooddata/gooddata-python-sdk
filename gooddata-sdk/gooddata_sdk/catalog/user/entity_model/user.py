@@ -5,8 +5,8 @@ from typing import List, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.json_api_user_in import JsonApiUserIn
-from gooddata_metadata_client.model.json_api_user_in_document import JsonApiUserInDocument
+from gooddata_api_client.model.json_api_user_in import JsonApiUserIn
+from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
 

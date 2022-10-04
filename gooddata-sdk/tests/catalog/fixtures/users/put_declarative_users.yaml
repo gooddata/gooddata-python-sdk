@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '402'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,44 +53,42 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           users:
             - id: admin
-              settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
-              id: demo
               settings: []
+            - id: demo
+              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
-              id: demo2
               settings: []
+            - id: demo2
+              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
               userGroups:
                 - id: demoGroup
                   type: userGroup
+              settings: []
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
@@ -103,7 +103,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -113,6 +113,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '1219'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -138,70 +140,68 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
-                authenticationId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
-              id: demo
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
+            - id: admin
+              type: user
+              attributes: {}
               relationships:
                 userGroups:
                   data:
                     - id: adminGroup
                       type: userGroup
-              type: user
-            - attributes: {}
-              id: admin
               links:
                 self: http://localhost:3000/api/v1/entities/users/admin
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
+            - id: demo2
               type: user
-            - attributes:
-                authenticationId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
-              id: demo2
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
+              attributes:
+                authenticationId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
                     - id: demoGroup
                       type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
+            - id: demo
               type: user
+              attributes:
+                authenticationId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
           included:
-            - attributes: {}
-              id: adminGroup
+            - id: adminGroup
+              type: userGroup
+              attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+            - id: demoGroup
               type: userGroup
-            - attributes: {}
-              id: demoGroup
+              attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
-              type: userGroup
           links:
             self: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
             next: http://localhost:3000/api/v1/entities/users?include=userGroups&page=1&size=500
@@ -217,7 +217,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -239,6 +239,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/vnd.gooddata.api+json
         Date: *id001
         Expires:
           - '0'
@@ -250,22 +252,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -279,13 +281,13 @@ interactions:
                 type: userGroup
             settings: []
           - id: demo
-            authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
+            authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
           - id: demo2
-            authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
+            authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -300,7 +302,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -322,6 +324,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: *id001
         Expires:
           - '0'
@@ -333,22 +337,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -365,7 +369,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -375,6 +379,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '402'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -400,44 +406,42 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           users:
             - id: admin
-              settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
-              id: demo
               settings: []
+            - id: demo
+              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
-              id: demo2
               settings: []
+            - id: demo2
+              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
               userGroups:
                 - id: demoGroup
                   type: userGroup
+              settings: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/users
@@ -449,13 +453,13 @@ interactions:
                 type: userGroup
             settings: []
           - id: demo
-            authId: CiRkZWE3MTU5Yi1kNTMwLTQ4NGYtYjgxNy0yNGEwYjBhYWRkNzYSBWxvY2Fs
+            authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
           - id: demo2
-            authId: CiRmYmNhNDkwOS04YzYxLTRmMTYtODI3NC1iNzI0Njk1Y2FmNTESBWxvY2Fs
+            authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -470,7 +474,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -492,6 +496,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: *id001
         Expires:
           - '0'
@@ -503,21 +509,21 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''

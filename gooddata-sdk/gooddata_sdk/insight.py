@@ -4,7 +4,6 @@ from __future__ import annotations
 import functools
 from typing import Any, Optional, Union, cast
 
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
@@ -470,7 +469,7 @@ class InsightService:
     #  access returned object's properties
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
+        self._entities_api = api_client.entities_api
 
     def get_insights(self, workspace_id: str) -> list[Insight]:
         """

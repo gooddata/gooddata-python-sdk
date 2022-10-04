@@ -26,6 +26,7 @@ from gooddata_scan_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_scan_client.model.test_request import TestRequest
 from gooddata_scan_client.model.test_response import TestResponse
 
 
@@ -171,11 +172,11 @@ class ActionsApi(object):
             params_map={
                 'all': [
                     'data_source_id',
-                    'body',
+                    'test_request',
                 ],
                 'required': [
                     'data_source_id',
-                    'body',
+                    'test_request',
                 ],
                 'nullable': [
                 ],
@@ -199,15 +200,15 @@ class ActionsApi(object):
                 'openapi_types': {
                     'data_source_id':
                         (str,),
-                    'body':
-                        ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                    'test_request':
+                        (TestRequest,),
                 },
                 'attribute_map': {
                     'data_source_id': 'dataSourceId',
                 },
                 'location_map': {
                     'data_source_id': 'path',
-                    'body': 'body',
+                    'test_request': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -446,7 +447,7 @@ class ActionsApi(object):
     def test_data_source(
         self,
         data_source_id,
-        body,
+        test_request,
         **kwargs
     ):
         """Test data source connection by data source id  # noqa: E501
@@ -455,12 +456,12 @@ class ActionsApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.test_data_source(data_source_id, body, async_req=True)
+        >>> thread = api.test_data_source(data_source_id, test_request, async_req=True)
         >>> result = thread.get()
 
         Args:
             data_source_id (str): Data source id
-            body ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}):
+            test_request (TestRequest):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -526,8 +527,8 @@ class ActionsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['data_source_id'] = \
             data_source_id
-        kwargs['body'] = \
-            body
+        kwargs['test_request'] = \
+            test_request
         return self.test_data_source_endpoint.call_with_http_info(**kwargs)
 
     def test_data_source_definition(

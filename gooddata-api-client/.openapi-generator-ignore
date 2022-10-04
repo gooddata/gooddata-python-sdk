@@ -1,0 +1,6 @@
+# (C) 2022 GoodData Corporation
+.openapi-generator-ignore
+.gitlab-ci.yml
+.travis.yml
+git_push.sh
+test/**

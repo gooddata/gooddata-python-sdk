@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import gooddata_metadata_client.apis as metadata_apis
-from gooddata_metadata_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
+import gooddata_api_client.apis as apis
+from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.client import GoodDataApiClient
 
@@ -14,9 +14,9 @@ LAYOUT_ROOT_FOLDER = "gooddata_layouts"
 class CatalogServiceBase:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._client = api_client
-        self._entities_api = metadata_apis.EntitiesApi(api_client.metadata_client)
-        self._layout_api = metadata_apis.LayoutApi(api_client.metadata_client)
-        self._metadata_actions_api = metadata_apis.ActionsApi(api_client.metadata_client)
+        self._entities_api: apis.EntitiesApi = api_client.entities_api
+        self._layout_api: apis.LayoutApi = api_client.layout_api
+        self._actions_api: apis.ActionsApi = api_client.actions_api
 
     def get_organization(self) -> CatalogOrganization:
         # The generated client does work properly with redirecting APIs

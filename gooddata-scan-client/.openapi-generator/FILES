@@ -2,6 +2,7 @@
 README.md
 docs/ActionsApi.md
 docs/ColumnWarning.md
+docs/DataSourceParameter.md
 docs/DataSourceSchemata.md
 docs/DeclarativeColumn.md
 docs/DeclarativeTable.md
@@ -10,6 +11,7 @@ docs/ScanRequest.md
 docs/ScanResultPdm.md
 docs/TableWarning.md
 docs/TestDefinitionRequest.md
+docs/TestRequest.md
 docs/TestResponse.md
 gooddata_scan_client/__init__.py
 gooddata_scan_client/api/__init__.py
@@ -20,6 +22,7 @@ gooddata_scan_client/configuration.py
 gooddata_scan_client/exceptions.py
 gooddata_scan_client/model/__init__.py
 gooddata_scan_client/model/column_warning.py
+gooddata_scan_client/model/data_source_parameter.py
 gooddata_scan_client/model/data_source_schemata.py
 gooddata_scan_client/model/declarative_column.py
 gooddata_scan_client/model/declarative_table.py
@@ -28,6 +31,7 @@ gooddata_scan_client/model/scan_request.py
 gooddata_scan_client/model/scan_result_pdm.py
 gooddata_scan_client/model/table_warning.py
 gooddata_scan_client/model/test_definition_request.py
+gooddata_scan_client/model/test_request.py
 gooddata_scan_client/model/test_response.py
 gooddata_scan_client/model_utils.py
 gooddata_scan_client/models/__init__.py

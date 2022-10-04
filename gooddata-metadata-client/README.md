@@ -94,7 +94,9 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
+*ActionsApi* | [**resolve_all_settings_without_workspace**](docs/ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 *ActionsApi* | [**resolve_requested_entitlements**](docs/ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
+*ActionsApi* | [**resolve_settings_without_workspace**](docs/ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 *ActionsApi* | [**workspace_resolve_settings**](docs/ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 *EntitiesApi* | [**create_entity_analytical_dashboards**](docs/EntitiesApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | 
@@ -391,6 +393,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDataSourceIdentifierOutWithLinks](docs/JsonApiDataSourceIdentifierOutWithLinks.md)
  - [JsonApiDataSourceIn](docs/JsonApiDataSourceIn.md)
  - [JsonApiDataSourceInAttributes](docs/JsonApiDataSourceInAttributes.md)
+ - [JsonApiDataSourceInAttributesParametersInner](docs/JsonApiDataSourceInAttributesParametersInner.md)
  - [JsonApiDataSourceInDocument](docs/JsonApiDataSourceInDocument.md)
  - [JsonApiDataSourceOut](docs/JsonApiDataSourceOut.md)
  - [JsonApiDataSourceOutAttributes](docs/JsonApiDataSourceOutAttributes.md)
@@ -591,6 +594,7 @@ Class | Method | HTTP request | Description
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
+ - [Parameter](docs/Parameter.md)
  - [PlatformUsage](docs/PlatformUsage.md)
  - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)

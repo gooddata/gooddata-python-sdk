@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '9350'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,28 +53,28 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
+            - id: campaign_channel_id
+              type: label
+              attributes:
                 title: Campaign channel id
                 description: Campaign channel id
                 tags:
@@ -81,11 +83,11 @@ interactions:
                 sourceColumn: campaign_channel_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: campaign_channel_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+            - id: campaign_channels.category
               type: label
-            - attributes:
+              attributes:
                 title: Category
                 description: Category
                 tags:
@@ -94,11 +96,11 @@ interactions:
                 sourceColumn: category
                 valueType: TEXT
                 areRelationsValid: true
-              id: campaign_channels.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+            - id: type
               type: label
-            - attributes:
+              attributes:
                 title: Type
                 description: Type
                 tags:
@@ -107,11 +109,11 @@ interactions:
                 sourceColumn: type
                 valueType: TEXT
                 areRelationsValid: true
-              id: type
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
+            - id: campaign_id
               type: label
-            - attributes:
+              attributes:
                 title: Campaign id
                 description: Campaign id
                 tags:
@@ -120,11 +122,11 @@ interactions:
                 sourceColumn: campaign_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+            - id: campaign_name
               type: label
-            - attributes:
+              attributes:
                 title: Campaign name
                 description: Campaign name
                 tags:
@@ -133,11 +135,11 @@ interactions:
                 sourceColumn: campaign_name
                 valueType: TEXT
                 areRelationsValid: true
-              id: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+            - id: customer_id
               type: label
-            - attributes:
+              attributes:
                 title: Customer id
                 description: Customer id
                 tags:
@@ -146,11 +148,11 @@ interactions:
                 sourceColumn: customer_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: customer_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
+            - id: customer_name
               type: label
-            - attributes:
+              attributes:
                 title: Customer name
                 description: Customer name
                 tags:
@@ -159,11 +161,11 @@ interactions:
                 sourceColumn: customer_name
                 valueType: TEXT
                 areRelationsValid: true
-              id: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
+            - id: region
               type: label
-            - attributes:
+              attributes:
                 title: Region
                 description: Region
                 tags:
@@ -172,11 +174,11 @@ interactions:
                 sourceColumn: region
                 valueType: TEXT
                 areRelationsValid: true
-              id: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+            - id: state
               type: label
-            - attributes:
+              attributes:
                 title: State
                 description: State
                 tags:
@@ -185,11 +187,11 @@ interactions:
                 sourceColumn: state
                 valueType: TEXT
                 areRelationsValid: true
-              id: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+            - id: geo__state__location
               type: label
-            - attributes:
+              attributes:
                 title: Location
                 description: Location
                 tags:
@@ -197,11 +199,11 @@ interactions:
                 primary: false
                 sourceColumn: geo__state__location
                 areRelationsValid: true
-              id: geo__state__location
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
+            - id: order_id
               type: label
-            - attributes:
+              attributes:
                 title: Order id
                 description: Order id
                 tags:
@@ -210,11 +212,11 @@ interactions:
                 sourceColumn: order_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: order_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
+            - id: order_line_id
               type: label
-            - attributes:
+              attributes:
                 title: Order line id
                 description: Order line id
                 tags:
@@ -223,11 +225,11 @@ interactions:
                 sourceColumn: order_line_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: order_line_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
+            - id: order_status
               type: label
-            - attributes:
+              attributes:
                 title: Order status
                 description: Order status
                 tags:
@@ -236,11 +238,11 @@ interactions:
                 sourceColumn: order_status
                 valueType: TEXT
                 areRelationsValid: true
-              id: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+            - id: product_id
               type: label
-            - attributes:
+              attributes:
                 title: Product id
                 description: Product id
                 tags:
@@ -249,11 +251,11 @@ interactions:
                 sourceColumn: product_id
                 valueType: TEXT
                 areRelationsValid: true
-              id: product_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+            - id: product_name
               type: label
-            - attributes:
+              attributes:
                 title: Product name
                 description: Product name
                 tags:
@@ -262,11 +264,11 @@ interactions:
                 sourceColumn: product_name
                 valueType: TEXT
                 areRelationsValid: true
-              id: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+            - id: products.category
               type: label
-            - attributes:
+              attributes:
                 title: Category
                 description: Category
                 tags:
@@ -275,11 +277,11 @@ interactions:
                 sourceColumn: category
                 valueType: TEXT
                 areRelationsValid: true
-              id: products.category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+            - id: date.minute
               type: label
-            - attributes:
+              attributes:
                 title: Date - Minute
                 description: Minute
                 tags:
@@ -287,11 +289,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.minute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minute
+            - id: date.hour
               type: label
-            - attributes:
+              attributes:
                 title: Date - Hour
                 description: Hour
                 tags:
@@ -299,11 +301,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.hour
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hour
+            - id: date.day
               type: label
-            - attributes:
+              attributes:
                 title: Date - Date
                 description: Date
                 tags:
@@ -311,11 +313,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.day
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+            - id: date.week
               type: label
-            - attributes:
+              attributes:
                 title: Date - Week/Year
                 description: Week and Year (W52/2020)
                 tags:
@@ -323,11 +325,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.week
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+            - id: date.month
               type: label
-            - attributes:
+              attributes:
                 title: Date - Month/Year
                 description: Month and Year (12/2020)
                 tags:
@@ -335,11 +337,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.month
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+            - id: date.quarter
               type: label
-            - attributes:
+              attributes:
                 title: Date - Quarter/Year
                 description: Quarter and Year (Q1/2020)
                 tags:
@@ -347,11 +349,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.quarter
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+            - id: date.year
               type: label
-            - attributes:
+              attributes:
                 title: Date - Year
                 description: Year
                 tags:
@@ -359,11 +361,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.year
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+            - id: date.minuteOfHour
               type: label
-            - attributes:
+              attributes:
                 title: Date - Minute of Hour
                 description: Generic Minute of the Hour(MI1-MI60)
                 tags:
@@ -371,11 +373,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.minuteOfHour
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minuteOfHour
+            - id: date.hourOfDay
               type: label
-            - attributes:
+              attributes:
                 title: Date - Hour of Day
                 description: Generic Hour of the Day(H1-H24)
                 tags:
@@ -383,11 +385,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.hourOfDay
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hourOfDay
+            - id: date.dayOfWeek
               type: label
-            - attributes:
+              attributes:
                 title: Date - Day of Week
                 description: Generic Day of the Week (D1-D7)
                 tags:
@@ -395,11 +397,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.dayOfWeek
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfWeek
+            - id: date.dayOfMonth
               type: label
-            - attributes:
+              attributes:
                 title: Date - Day of Month
                 description: Generic Day of the Month (D1-D31)
                 tags:
@@ -407,11 +409,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.dayOfMonth
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfMonth
+            - id: date.dayOfYear
               type: label
-            - attributes:
+              attributes:
                 title: Date - Day of Year
                 description: Generic Day of the Year (D1-D366)
                 tags:
@@ -419,11 +421,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.dayOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfYear
+            - id: date.weekOfYear
               type: label
-            - attributes:
+              attributes:
                 title: Date - Week of Year
                 description: Generic Week (W1-W53)
                 tags:
@@ -431,11 +433,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.weekOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.weekOfYear
+            - id: date.monthOfYear
               type: label
-            - attributes:
+              attributes:
                 title: Date - Month of Year
                 description: Generic Month (M1-M12)
                 tags:
@@ -443,11 +445,11 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.monthOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.monthOfYear
+            - id: date.quarterOfYear
               type: label
-            - attributes:
+              attributes:
                 title: Date - Quarter of Year
                 description: Generic Quarter (Q1-Q4)
                 tags:
@@ -455,10 +457,8 @@ interactions:
                 primary: true
                 sourceColumn: ''
                 areRelationsValid: true
-              id: date.quarterOfYear
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarterOfYear
-              type: label
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=1&size=500

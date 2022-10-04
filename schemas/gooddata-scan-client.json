@@ -25,6 +25,24 @@
         ],
         "type": "object"
       },
+      "DataSourceParameter": {
+        "description": "A parameter for testing data source connection",
+        "properties": {
+          "name": {
+            "description": "Parameter name.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Parameter value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object"
+      },
       "DataSourceSchemata": {
         "description": "Result of getSchemata. Contains list of available DB schema names.",
         "properties": {
@@ -245,6 +263,12 @@
       "TestDefinitionRequest": {
         "description": "A request containing all information for testing data source definition.",
         "properties": {
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/DataSourceParameter"
+            },
+            "type": "array"
+          },
           "password": {
             "description": "Database user password.",
             "example": "admin123",
@@ -295,6 +319,49 @@
       },
       "TestRequest": {
         "description": "A request containing all information for testing existing data source.",
+        "properties": {
+          "cachePath": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "enableCaching": {
+            "description": "Enable caching of intermediate results.",
+            "example": false,
+            "type": "boolean"
+          },
+          "parameters": {
+            "items": {
+              "$ref": "#/components/schemas/DataSourceParameter"
+            },
+            "type": "array"
+          },
+          "password": {
+            "description": "Database user password.",
+            "example": "admin123",
+            "type": "string"
+          },
+          "schema": {
+            "description": "Database schema.",
+            "example": "public",
+            "type": "string"
+          },
+          "token": {
+            "description": "Secret for token based authentication for data sources which supports it.",
+            "type": "string"
+          },
+          "url": {
+            "description": "URL to database in JDBC format, where test should connect to.",
+            "example": "jdbc:postgresql://localhost:5432/db_name",
+            "type": "string"
+          },
+          "username": {
+            "description": "Database user name.",
+            "example": "dbadmin",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "TestResponse": {

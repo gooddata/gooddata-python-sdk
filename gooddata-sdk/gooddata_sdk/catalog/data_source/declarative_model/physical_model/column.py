@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.declarative_column import DeclarativeColumn
+from gooddata_api_client.model.declarative_column import DeclarativeColumn
 from gooddata_sdk.catalog.base import Base
 
 

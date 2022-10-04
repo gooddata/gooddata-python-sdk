@@ -1,6 +1,6 @@
 # Generated API Clients
 
-The generated clients provide Python classes that you can use to call GoodData.CN REST APIs. The clients contain
+The generated client provide Python classes that you can use to call GoodData.CN REST APIs. The client contains
 models for API requests and responses and controllers to actually call the APIs.
 
 We recommend using the gooddata_sdk package where possible because:

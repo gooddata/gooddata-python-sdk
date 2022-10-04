@@ -6,12 +6,12 @@ from typing import List, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.data_source_table_identifier import DataSourceTableIdentifier
-from gooddata_metadata_client.model.declarative_attribute import DeclarativeAttribute
-from gooddata_metadata_client.model.declarative_dataset import DeclarativeDataset
-from gooddata_metadata_client.model.declarative_fact import DeclarativeFact
-from gooddata_metadata_client.model.declarative_label import DeclarativeLabel
-from gooddata_metadata_client.model.declarative_reference import DeclarativeReference
+from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
+from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
+from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
+from gooddata_api_client.model.declarative_fact import DeclarativeFact
+from gooddata_api_client.model.declarative_label import DeclarativeLabel
+from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file

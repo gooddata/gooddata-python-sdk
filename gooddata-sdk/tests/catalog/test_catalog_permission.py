@@ -7,7 +7,6 @@ from pathlib import Path
 import pytest
 from tests_support.vcrpy_utils import get_vcr
 
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
     CatalogDeclarativeDataSourcePermission,
@@ -79,7 +78,7 @@ def test_data_source_permission(test_config):
 def test_get_declarative_permissions(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     catalog_declarative_permissions = sdk.catalog_permission.get_declarative_permissions(test_config["workspace"])
     declarative_permissions = layout_api.get_workspace_permissions(test_config["workspace"])

@@ -57,8 +57,8 @@ class PlatformUsage(ModelNormal):
 
     allowed_values = {
         ('name',): {
-            'WORKSPACECOUNT': "WorkspaceCount",
             'USERCOUNT': "UserCount",
+            'WORKSPACECOUNT': "WorkspaceCount",
         },
     }
 

@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '1115'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,68 +53,66 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
+            - id: demo
+              type: workspace
+              attributes:
                 name: Demo
-              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_west
               type: workspace
-            - attributes:
+              attributes:
                 name: Demo West
-              id: demo_west
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
               relationships:
                 parent:
                   data:
                     id: demo
                     type: workspace
-              type: workspace
-            - attributes:
-                name: Demo West California
-              id: demo_west_california
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+            - id: demo_west_california
+              type: workspace
+              attributes:
+                name: Demo West California
               relationships:
                 parent:
                   data:
                     id: demo_west
                     type: workspace
-              type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
           included:
-            - attributes:
+            - id: demo
+              type: workspace
+              attributes:
                 name: Demo
-              id: demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_west
               type: workspace
-            - attributes:
+              attributes:
                 name: Demo West
-              id: demo_west
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-              type: workspace
           links:
             self: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=1&size=500

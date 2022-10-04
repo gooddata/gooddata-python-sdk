@@ -3,17 +3,17 @@ from __future__ import annotations
 
 from typing import Optional, Union
 
-import gooddata_afm_client.models as afm_models
-from gooddata_afm_client.model_utils import OpenApiModel
-from gooddata_afm_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
-from gooddata_afm_client.models import (
+import gooddata_api_client.models as afm_models
+from gooddata_api_client.model_utils import OpenApiModel
+from gooddata_api_client.models import AbsoluteDateFilterAbsoluteDateFilter as AbsoluteDateFilterBody
+from gooddata_api_client.models import (
     ComparisonMeasureValueFilterComparisonMeasureValueFilter as ComparisonMeasureValueFilterBody,
 )
-from gooddata_afm_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
-from gooddata_afm_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
-from gooddata_afm_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
-from gooddata_afm_client.models import RankingFilterRankingFilter as RankingFilterBody
-from gooddata_afm_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
+from gooddata_api_client.models import NegativeAttributeFilterNegativeAttributeFilter as NegativeAttributeFilterBody
+from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeFilter as PositiveAttributeFilterBody
+from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
+from gooddata_api_client.models import RankingFilterRankingFilter as RankingFilterBody
+from gooddata_api_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.metric import Metric

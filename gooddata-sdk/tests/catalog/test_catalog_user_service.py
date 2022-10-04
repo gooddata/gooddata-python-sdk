@@ -7,7 +7,6 @@ from typing import List
 
 from tests_support.vcrpy_utils import get_vcr
 
-import gooddata_metadata_client.apis as metadata_apis
 from gooddata_sdk import (
     CatalogDeclarativeUser,
     CatalogDeclarativeUserGroup,
@@ -156,7 +155,7 @@ def test_update_user_group(test_config):
 def test_get_declarative_users(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     users = sdk.catalog_user.get_declarative_users()
 
@@ -222,7 +221,7 @@ def test_load_and_put_declarative_users(test_config):
 def test_get_declarative_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     user_groups = sdk.catalog_user.get_declarative_user_groups()
 
@@ -306,7 +305,7 @@ def test_load_and_put_declarative_user_groups(test_config):
 def test_get_declarative_users_user_groups(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
-    layout_api = metadata_apis.LayoutApi(client.metadata_client)
+    layout_api = client.layout_api
 
     users_user_groups = sdk.catalog_user.get_declarative_users_user_groups()
 

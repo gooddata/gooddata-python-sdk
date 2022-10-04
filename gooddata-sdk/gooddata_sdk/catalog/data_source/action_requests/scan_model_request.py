@@ -6,7 +6,7 @@ from typing import Any, Optional, Type
 import attr
 from attr import field
 
-from gooddata_scan_client.model.scan_request import ScanRequest
+from gooddata_api_client.model.scan_request import ScanRequest
 from gooddata_sdk.catalog.base import Base
 
 

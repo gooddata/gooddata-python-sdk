@@ -16,7 +16,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -38,6 +38,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: &id001
           - PLACEHOLDER
         Expires:
@@ -50,22 +52,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -82,7 +84,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -92,6 +94,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '18'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -117,24 +121,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           dataSources: []
@@ -291,7 +293,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -313,6 +315,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: *id001
         Expires:
           - '0'
@@ -324,21 +328,21 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''

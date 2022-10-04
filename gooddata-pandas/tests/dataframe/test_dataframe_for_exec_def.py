@@ -38,7 +38,7 @@ def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefiniti
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
-def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
+def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -68,8 +68,8 @@ def test_dataframe_for_exec_def_two_dim1(gdf: DataFrameFactory):
     assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
-def test_dataframe_for_exec_def_dimensions_limits_failure(gdf: DataFrameFactory):
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_dimensions_limits_failure.yaml"))
+def test_dataframe_for_exec_def_dimensions_limits_failure(test_config, gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),
@@ -96,8 +96,8 @@ def test_dataframe_for_exec_def_dimensions_limits_failure(gdf: DataFrameFactory)
     assert exception.first_violating_index == 0
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
-def test_dataframe_for_exec_def_bytes_limits_failure(gdf: DataFrameFactory):
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_bytes_limits_failure.yaml"))
+def test_dataframe_for_exec_def_bytes_limits_failure(test_config, gdf: DataFrameFactory):
     exec_def = ExecutionDefinition(
         attributes=[
             Attribute(local_id="region", label="region"),

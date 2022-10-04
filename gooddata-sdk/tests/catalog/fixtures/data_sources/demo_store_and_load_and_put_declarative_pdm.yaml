@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '2358'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,147 +53,145 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           pdm:
             tables:
-              - columns:
-                  - dataType: NUMERIC
-                    isPrimaryKey: false
-                    name: budget
-                  - dataType: STRING
-                    isPrimaryKey: true
-                    name: campaign_channel_id
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: campaign_id
-                    referencedTableColumn: campaign_id
-                    referencedTableId: campaigns
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: category
-                  - dataType: NUMERIC
-                    isPrimaryKey: false
-                    name: spend
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: type
-                id: campaign_channels
+              - id: campaign_channels
                 path:
                   - demo
                   - campaign_channels
                 type: TABLE
-              - columns:
-                  - dataType: INT
-                    isPrimaryKey: true
-                    name: campaign_id
-                  - dataType: STRING
+                columns:
+                  - name: budget
+                    dataType: NUMERIC
                     isPrimaryKey: false
-                    name: campaign_name
-                id: campaigns
+                  - name: campaign_channel_id
+                    dataType: STRING
+                    isPrimaryKey: true
+                  - name: campaign_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
+                  - name: category
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: spend
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: type
+                    dataType: STRING
+                    isPrimaryKey: false
+              - id: campaigns
                 path:
                   - demo
                   - campaigns
                 type: TABLE
-              - columns:
-                  - dataType: INT
+                columns:
+                  - name: campaign_id
+                    dataType: INT
                     isPrimaryKey: true
-                    name: customer_id
-                  - dataType: STRING
+                  - name: campaign_name
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: customer_name
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: geo__state__location
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: region
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: state
-                id: customers
+              - id: customers
                 path:
                   - demo
                   - customers
                 type: TABLE
-              - columns:
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: campaign_id
-                    referencedTableColumn: campaign_id
-                    referencedTableId: campaigns
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: customer_id
-                    referencedTableColumn: customer_id
-                    referencedTableId: customers
-                  - dataType: DATE
-                    isPrimaryKey: false
-                    name: date
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: order_id
-                  - dataType: STRING
+                columns:
+                  - name: customer_id
+                    dataType: INT
                     isPrimaryKey: true
-                    name: order_line_id
-                  - dataType: STRING
+                  - name: customer_name
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: order_status
-                  - dataType: NUMERIC
+                  - name: geo__state__location
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: price
-                  - dataType: INT
+                  - name: region
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: product_id
-                    referencedTableColumn: product_id
-                    referencedTableId: products
-                  - dataType: NUMERIC
+                  - name: state
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: quantity
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: wdf__region
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: wdf__state
-                id: order_lines
+              - id: order_lines
                 path:
                   - demo
                   - order_lines
                 type: TABLE
-              - columns:
-                  - dataType: STRING
+                columns:
+                  - name: campaign_id
+                    dataType: INT
                     isPrimaryKey: false
-                    name: category
-                  - dataType: INT
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
+                  - name: customer_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: customers
+                    referencedTableColumn: customer_id
+                  - name: date
+                    dataType: DATE
+                    isPrimaryKey: false
+                  - name: order_id
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: order_line_id
+                    dataType: STRING
                     isPrimaryKey: true
-                    name: product_id
-                  - dataType: STRING
+                  - name: order_status
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: product_name
-                id: products
+                  - name: price
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: product_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: products
+                    referencedTableColumn: product_id
+                  - name: quantity
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: wdf__region
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: wdf__state
+                    dataType: STRING
+                    isPrimaryKey: false
+              - id: products
                 path:
                   - demo
                   - products
                 type: TABLE
+                columns:
+                  - name: category
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: product_id
+                    dataType: INT
+                    isPrimaryKey: true
+                  - name: product_name
+                    dataType: STRING
+                    isPrimaryKey: false
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/organization
@@ -204,7 +204,7 @@ interactions:
     response:
       status:
         code: 302
-        message: ''
+        message: Found
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -214,6 +214,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -239,24 +241,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -271,7 +271,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -281,6 +281,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -306,33 +308,31 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
+            id: default
+            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: bf4fb720-620c-48e4-b2a8-058cc58d335b
-            id: default
-            type: organization
+              oauthClientId: 8b43c645-cd6d-4029-baf9-aff505b46ccd
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -349,7 +349,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -359,6 +359,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '2358'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -384,147 +386,145 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           pdm:
             tables:
-              - columns:
-                  - dataType: NUMERIC
-                    isPrimaryKey: false
-                    name: budget
-                  - dataType: STRING
-                    isPrimaryKey: true
-                    name: campaign_channel_id
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: campaign_id
-                    referencedTableColumn: campaign_id
-                    referencedTableId: campaigns
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: category
-                  - dataType: NUMERIC
-                    isPrimaryKey: false
-                    name: spend
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: type
-                id: campaign_channels
+              - id: campaign_channels
                 path:
                   - demo
                   - campaign_channels
                 type: TABLE
-              - columns:
-                  - dataType: INT
-                    isPrimaryKey: true
-                    name: campaign_id
-                  - dataType: STRING
+                columns:
+                  - name: budget
+                    dataType: NUMERIC
                     isPrimaryKey: false
-                    name: campaign_name
-                id: campaigns
+                  - name: campaign_channel_id
+                    dataType: STRING
+                    isPrimaryKey: true
+                  - name: campaign_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
+                  - name: category
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: spend
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: type
+                    dataType: STRING
+                    isPrimaryKey: false
+              - id: campaigns
                 path:
                   - demo
                   - campaigns
                 type: TABLE
-              - columns:
-                  - dataType: INT
+                columns:
+                  - name: campaign_id
+                    dataType: INT
                     isPrimaryKey: true
-                    name: customer_id
-                  - dataType: STRING
+                  - name: campaign_name
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: customer_name
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: geo__state__location
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: region
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: state
-                id: customers
+              - id: customers
                 path:
                   - demo
                   - customers
                 type: TABLE
-              - columns:
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: campaign_id
-                    referencedTableColumn: campaign_id
-                    referencedTableId: campaigns
-                  - dataType: INT
-                    isPrimaryKey: false
-                    name: customer_id
-                    referencedTableColumn: customer_id
-                    referencedTableId: customers
-                  - dataType: DATE
-                    isPrimaryKey: false
-                    name: date
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: order_id
-                  - dataType: STRING
+                columns:
+                  - name: customer_id
+                    dataType: INT
                     isPrimaryKey: true
-                    name: order_line_id
-                  - dataType: STRING
+                  - name: customer_name
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: order_status
-                  - dataType: NUMERIC
+                  - name: geo__state__location
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: price
-                  - dataType: INT
+                  - name: region
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: product_id
-                    referencedTableColumn: product_id
-                    referencedTableId: products
-                  - dataType: NUMERIC
+                  - name: state
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: quantity
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: wdf__region
-                  - dataType: STRING
-                    isPrimaryKey: false
-                    name: wdf__state
-                id: order_lines
+              - id: order_lines
                 path:
                   - demo
                   - order_lines
                 type: TABLE
-              - columns:
-                  - dataType: STRING
+                columns:
+                  - name: campaign_id
+                    dataType: INT
                     isPrimaryKey: false
-                    name: category
-                  - dataType: INT
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
+                  - name: customer_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: customers
+                    referencedTableColumn: customer_id
+                  - name: date
+                    dataType: DATE
+                    isPrimaryKey: false
+                  - name: order_id
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: order_line_id
+                    dataType: STRING
                     isPrimaryKey: true
-                    name: product_id
-                  - dataType: STRING
+                  - name: order_status
+                    dataType: STRING
                     isPrimaryKey: false
-                    name: product_name
-                id: products
+                  - name: price
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: product_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: products
+                    referencedTableColumn: product_id
+                  - name: quantity
+                    dataType: NUMERIC
+                    isPrimaryKey: false
+                  - name: wdf__region
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: wdf__state
+                    dataType: STRING
+                    isPrimaryKey: false
+              - id: products
                 path:
                   - demo
                   - products
                 type: TABLE
+                columns:
+                  - name: category
+                    dataType: STRING
+                    isPrimaryKey: false
+                  - name: product_id
+                    dataType: INT
+                    isPrimaryKey: true
+                  - name: product_name
+                    dataType: STRING
+                    isPrimaryKey: false
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/organization
@@ -537,7 +537,7 @@ interactions:
     response:
       status:
         code: 302
-        message: ''
+        message: Found
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -547,6 +547,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -572,24 +574,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -604,7 +604,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -614,6 +614,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -639,33 +641,31 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
+            id: default
+            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: bf4fb720-620c-48e4-b2a8-058cc58d335b
-            id: default
-            type: organization
+              oauthClientId: 8b43c645-cd6d-4029-baf9-aff505b46ccd
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -680,7 +680,7 @@ interactions:
     response:
       status:
         code: 302
-        message: ''
+        message: Found
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -690,6 +690,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -715,24 +717,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -747,7 +747,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -757,6 +757,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -782,33 +784,31 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
+            id: default
+            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: bf4fb720-620c-48e4-b2a8-058cc58d335b
-            id: default
-            type: organization
+              oauthClientId: 8b43c645-cd6d-4029-baf9-aff505b46ccd
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -946,7 +946,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -968,6 +968,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: *id001
         Expires:
           - '0'
@@ -979,22 +981,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -1009,7 +1011,7 @@ interactions:
     response:
       status:
         code: 302
-        message: ''
+        message: Found
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -1019,6 +1021,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1044,24 +1048,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -1076,7 +1078,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -1086,6 +1088,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1111,32 +1115,30 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
+            id: default
+            type: organization
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: bf4fb720-620c-48e4-b2a8-058cc58d335b
-            id: default
-            type: organization
+              oauthClientId: 8b43c645-cd6d-4029-baf9-aff505b46ccd
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

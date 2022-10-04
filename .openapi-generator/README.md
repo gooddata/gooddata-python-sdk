@@ -13,9 +13,7 @@ OpenAPI client generation is orchestrated by script `scripts/generate_client.sh`
 if no such exists or updates existing client code.
 
 Use prepared `make` targets from repository root:
-- `make afm-client`
-- `make metadata-client`
-- `make scan-client`
+- `make api-client`
 
 Predefined targets use `http://gooddata-cn-ce:3000` URL to fetch OpenAPI schema and connect generator container to
 the `gooddata-python-sdk_default` network. It is prepared to be executed against running `docker-compose.yaml`

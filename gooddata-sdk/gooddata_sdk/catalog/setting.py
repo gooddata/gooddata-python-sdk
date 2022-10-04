@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from gooddata_api_client.model.declarative_setting import DeclarativeSetting
 from gooddata_sdk.catalog.base import Base
 
 

@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from gooddata_afm_client import apis
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.execution import Execution, ExecutionDefinition, ResultCacheMetadata
 
@@ -14,7 +13,7 @@ class ComputeService:
     """
 
     def __init__(self, api_client: GoodDataApiClient):
-        self._actions_api = apis.ActionsApi(api_client.afm_client)
+        self._actions_api = api_client.actions_api
 
     def for_exec_def(self, workspace_id: str, exec_def: ExecutionDefinition) -> Execution:
         """

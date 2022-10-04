@@ -18,9 +18,10 @@ api-client:
   gooddata-scan-client
   gooddata-metadata-client
   gooddata-afm-client
+  gooddata-api-client
 
 Options are:
-  -u <schema-url> - OpenApi schema url (default: ${GD_SCHEMA_URL})
+  -u <schema-url> - OpenApi schema url (default: ${GD_SCHEMA_URL}), this option in not supported for gooddata-api-client
   -f <schema-file> - OpenApi schema file, has precedence before -u if present
   -n <docker-network> - Name of docker network to connect to so that schema URL
                         is reachable. If not specified, no network is connected.
@@ -83,6 +84,9 @@ case "$GD_API_CLIENT" in
     GD_API_URI_PATH="${GD_SCHEMA_URL}/api/${API_VERSION}/schemas/afm"
     CLIENT_SRC_ROOT="${CLIENT_DIR}/gooddata_afm_client"
     ;;
+  gooddata-api-client)
+      CLIENT_SRC_ROOT="${CLIENT_DIR}/gooddata_api_client"
+      ;;
   *)
     usage
     ;;

@@ -5,7 +5,7 @@ from typing import Optional, Tuple, Union
 
 import pandas
 
-from gooddata_afm_client import apis, models
+from gooddata_api_client import models
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.result_convertor import LabelOverrides, convert_execution_response_to_dataframe
 from gooddata_pandas.utils import (
@@ -346,7 +346,7 @@ class DataFrameFactory:
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
-                actions_api=apis.ActionsApi(self._sdk.client.afm_client),
+                actions_api=self._sdk.client.actions_api,
                 workspace_id=self._workspace_id,
                 execution_response=models.AfmExecutionResponse(
                     result_cache_metadata.execution_response, _check_type=False

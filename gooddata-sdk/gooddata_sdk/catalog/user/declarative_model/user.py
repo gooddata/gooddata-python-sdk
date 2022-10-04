@@ -6,8 +6,8 @@ from typing import List, Optional, Type
 
 import attr
 
-from gooddata_metadata_client.model.declarative_user import DeclarativeUser
-from gooddata_metadata_client.model.declarative_users import DeclarativeUsers
+from gooddata_api_client.model.declarative_user import DeclarativeUser
+from gooddata_api_client.model.declarative_users import DeclarativeUsers
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserGroupIdentifier
 from gooddata_sdk.catalog.setting import CatalogDeclarativeSetting

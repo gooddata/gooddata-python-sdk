@@ -15,7 +15,7 @@ interactions:
     response:
       status:
         code: 200
-        message: ''
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -25,6 +25,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '8359'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -51,59 +53,59 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
-        Transfer-Encoding:
-          - chunked
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string:
           data:
-            - attributes:
+            - id: amount_of_active_customers
+              type: metric
+              attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-              id: amount_of_active_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+            - id: amount_of_orders
               type: metric
-            - attributes:
+              attributes:
                 title: '# of Orders'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-              id: amount_of_orders
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
+            - id: amount_of_top_customers
               type: metric
-            - attributes:
+              attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-              id: amount_of_top_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
+            - id: amount_of_valid_orders
               type: metric
-            - attributes:
+              attributes:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
@@ -111,107 +113,107 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-              id: amount_of_valid_orders
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
+            - id: campaign_spend
               type: metric
-            - attributes:
+              attributes:
                 title: Campaign Spend
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-              id: campaign_spend
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
+            - id: order_amount
               type: metric
-            - attributes:
+              attributes:
                 title: Order Amount
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-              id: order_amount
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+            - id: percent_revenue
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-              id: percent_revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+            - id: percent_revenue_from_top_10_customers
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-              id: percent_revenue_from_top_10_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
+            - id: percent_revenue_from_top_10_percent_customers
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-              id: percent_revenue_from_top_10_percent_customers
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
+            - id: percent_revenue_from_top_10_percent_products
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-              id: percent_revenue_from_top_10_percent_products
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
+            - id: percent_revenue_from_top_10_products
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-              id: percent_revenue_from_top_10_products
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
+            - id: percent_revenue_in_category
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-              id: percent_revenue_in_category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
+            - id: percent_revenue_per_product
               type: metric
-            - attributes:
+              attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-              id: percent_revenue_per_product
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+            - id: revenue
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
@@ -219,114 +221,112 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-              id: revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+            - id: revenue-clothing
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-              id: revenue-clothing
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+            - id: revenue-electronic
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-              id: revenue-electronic
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+            - id: revenue-home
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-              id: revenue-home
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+            - id: revenue-outdoor
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-              id: revenue-outdoor
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+            - id: revenue_per_customer
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-              id: revenue_per_customer
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+            - id: revenue_per_dollar_spent
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-              id: revenue_per_dollar_spent
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+            - id: revenue_top_10
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-              id: revenue_top_10
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+            - id: revenue_top_10_percent
               type: metric
-            - attributes:
+              attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-              id: revenue_top_10_percent
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+            - id: total_revenue
               type: metric
-            - attributes:
+              attributes:
                 title: Total Revenue
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-              id: total_revenue
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+            - id: total_revenue-no_filters
               type: metric
-            - attributes:
+              attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-              id: total_revenue-no_filters
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
-              type: metric
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
@@ -428,7 +428,7 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: 275e455fb526f059457c6a43b5f254e44dd9769b
+              executionResult: a3275a1fc4478fb5cf51e171dfb11fa98dc075cf
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/dataSources/demo-test-ds/uploadNotification
@@ -443,7 +443,7 @@ interactions:
     response:
       status:
         code: 204
-        message: ''
+        message: No Content
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -465,6 +465,8 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/json
         Date: *id001
         Expires:
           - '0'
@@ -476,22 +478,22 @@ interactions:
             'none';
         Pragma:
           - no-cache
+        Referrer-Policy:
+          - no-referrer
         Server:
           - nginx
         Set-Cookie:
-          - SPRING_SEC_SECURITY_CONTEXT=; Max-Age=0; Expires=Thu, 01-Jan-1970 00:00:10
-            GMT; Path=/; HttpOnly
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-Frame-Options:
-          - DENY
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
-          - 1; mode=block
+          - 1 ; mode=block
       body:
         string: ''
   - request:
@@ -592,4 +594,4 @@ interactions:
                         name: '# of Active Customers'
                 localIdentifier: dim_0
             links:
-              executionResult: 0da98a6430c16e091b0cdbc67a977d71edffc925
+              executionResult: 555e0835bba3315dfd3286f26c14ebdea672fff0

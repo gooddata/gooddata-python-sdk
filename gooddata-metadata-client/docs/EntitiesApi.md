@@ -558,8 +558,14 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
-                enable_caching=True,
+                enable_caching=False,
                 name="name_example",
+                parameters=[
+                    JsonApiDataSourceInAttributesParametersInner(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 password="password_example",
                 schema="schema_example",
                 token="token_example",
@@ -7659,8 +7665,14 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
-                enable_caching=True,
+                enable_caching=False,
                 name="name_example",
+                parameters=[
+                    JsonApiDataSourceInAttributesParametersInner(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 password="password_example",
                 schema="schema_example",
                 token="token_example",
@@ -9331,8 +9343,14 @@ with gooddata_metadata_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
-                enable_caching=True,
+                enable_caching=False,
                 name="name_example",
+                parameters=[
+                    JsonApiDataSourceInAttributesParametersInner(
+                        name="name_example",
+                        value="value_example",
+                    ),
+                ],
                 password="password_example",
                 schema="schema_example",
                 token="token_example",

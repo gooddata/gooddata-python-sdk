@@ -11,7 +11,7 @@ from typing import Any, Callable, Dict, NamedTuple, Union, cast
 
 import yaml
 
-from gooddata_metadata_client import ApiAttributeError
+from gooddata_api_client import ApiAttributeError
 from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
@@ -72,9 +72,9 @@ def load_all_entities(get_page_func: functools.partial[Any], page_size: int = 50
     An example usage:
 
     >>> import functools
-    >>> import gooddata_metadata_client as metadata_client
-    >>> import gooddata_metadata_client.apis as metadata_apis
-    >>> api = metadata_apis.EntitiesApi(metadata_client.ApiClient())
+    >>> import gooddata_api_client as api_client
+    >>> import gooddata_api_client.apis as apis
+    >>> api = apis.EntitiesApi(api_client.ApiClient())
     >>> get_func = functools.partial(api.get_all_entities_visualization_objects, 'some-workspace-id',
     >>>                              include=["ALL"], _check_return_type=False)
     >>> vis_objects = load_all_entities(get_func)

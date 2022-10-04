@@ -24,18 +24,22 @@ cd ./gooddata-scan-client
 pipenv install --skip-lock -r requirements.txt
 cd ..
 
+cd ./gooddata-api-client
+pipenv install --skip-lock -r requirements.txt
+cd ..
+
 cd ./gooddata-sdk
-pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ \
+pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ ../gooddata-api-client/ \
 -r requirements.txt
 cd ..
 
 cd ./gooddata-fdw
-pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ \
+pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 cd ..
 
 cd ./gooddata-pandas
-pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ \
+pipenv install --skip-lock ../gooddata-afm-client/ ../gooddata-metadata-client/ ../gooddata-scan-client/ ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 cd ..
 

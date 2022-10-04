@@ -33,8 +33,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_metadata_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
     from gooddata_metadata_client.model.declarative_tables import DeclarativeTables
+    from gooddata_metadata_client.model.parameter import Parameter
     globals()['DeclarativeDataSourcePermission'] = DeclarativeDataSourcePermission
     globals()['DeclarativeTables'] = DeclarativeTables
+    globals()['Parameter'] = Parameter
 
 
 class DeclarativeDataSource(ModelNormal):
@@ -111,13 +113,15 @@ class DeclarativeDataSource(ModelNormal):
             'name': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'url': (str,),  # noqa: E501
             'cache_path': ([str],),  # noqa: E501
+            'decoded_parameters': ([Parameter],),  # noqa: E501
             'enable_caching': (bool,),  # noqa: E501
+            'parameters': ([Parameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
             'pdm': (DeclarativeTables,),  # noqa: E501
             'permissions': ([DeclarativeDataSourcePermission],),  # noqa: E501
             'token': (str,),  # noqa: E501
+            'url': (str,),  # noqa: E501
             'username': (str,),  # noqa: E501
         }
 
@@ -131,13 +135,15 @@ class DeclarativeDataSource(ModelNormal):
         'name': 'name',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'url': 'url',  # noqa: E501
         'cache_path': 'cachePath',  # noqa: E501
+        'decoded_parameters': 'decodedParameters',  # noqa: E501
         'enable_caching': 'enableCaching',  # noqa: E501
+        'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
         'pdm': 'pdm',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
         'token': 'token',  # noqa: E501
+        'url': 'url',  # noqa: E501
         'username': 'username',  # noqa: E501
     }
 
@@ -148,7 +154,7 @@ class DeclarativeDataSource(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, name, schema, type, url, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, name, schema, type, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSource - a model defined in OpenAPI
 
         Args:
@@ -156,7 +162,6 @@ class DeclarativeDataSource(ModelNormal):
             name (str): Name of the data source.
             schema (str): A scheme/database with the data.
             type (str): Type of database.
-            url (str): An connection string relevant to type of database.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -190,11 +195,14 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            decoded_parameters ([Parameter]): [optional]  # noqa: E501
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
+            parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
             token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
+            url (str): An connection string relevant to type of database.. [optional]  # noqa: E501
             username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
         """
 
@@ -231,7 +239,6 @@ class DeclarativeDataSource(ModelNormal):
         self.name = name
         self.schema = schema
         self.type = type
-        self.url = url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -252,7 +259,7 @@ class DeclarativeDataSource(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, schema, type, url, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, name, schema, type, *args, **kwargs):  # noqa: E501
         """DeclarativeDataSource - a model defined in OpenAPI
 
         Args:
@@ -260,7 +267,6 @@ class DeclarativeDataSource(ModelNormal):
             name (str): Name of the data source.
             schema (str): A scheme/database with the data.
             type (str): Type of database.
-            url (str): An connection string relevant to type of database.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -294,11 +300,14 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            decoded_parameters ([Parameter]): [optional]  # noqa: E501
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
+            parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
             pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
             token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
+            url (str): An connection string relevant to type of database.. [optional]  # noqa: E501
             username (str): User with permission connect the data source/database.. [optional]  # noqa: E501
         """
 
@@ -333,7 +342,6 @@ class DeclarativeDataSource(ModelNormal):
         self.name = name
         self.schema = schema
         self.type = type
-        self.url = url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
