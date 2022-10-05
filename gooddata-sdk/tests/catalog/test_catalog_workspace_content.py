@@ -276,3 +276,25 @@ def test_get_dependent_entities_graph_from_entry_points(test_config):
 
     assert len(response.graph.edges) == 1
     assert len(response.graph.nodes) == 2
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "ldm_store_load.yaml"))
+def test_ldm_store_load(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    ldm = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
+
+    sdk.catalog_workspace_content.store_ldm_to_disk(test_config["workspace"], path)
+    loaded_ldm = sdk.catalog_workspace_content.load_ldm_from_disk(path)
+    assert loaded_ldm == ldm
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "analytics_store_load.yaml"))
+def test_analytics_store_load(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    analytics_model = sdk.catalog_workspace_content.get_declarative_analytics_model(test_config["workspace"])
+
+    sdk.catalog_workspace_content.store_analytics_model_to_disk(test_config["workspace"], path)
+    loaded_analytics_model = sdk.catalog_workspace_content.load_analytics_model_from_disk(path)
+    assert loaded_analytics_model == analytics_model
