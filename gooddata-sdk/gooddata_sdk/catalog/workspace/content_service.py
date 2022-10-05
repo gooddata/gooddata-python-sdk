@@ -145,11 +145,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
-        self.get_declarative_ldm(workspace_id).store_to_disk(workspace_folder)
+        self.store_ldm_to_disk(workspace_id, workspace_folder)
 
     def load_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeModel:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
-        return CatalogDeclarativeModel.load_from_disk(workspace_folder)
+        return self.load_ldm_from_disk(workspace_folder)
 
     def load_and_put_declarative_ldm(
         self,
@@ -159,6 +159,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
     ) -> None:
         declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
         self.put_declarative_ldm(workspace_id, declarative_ldm, validator)
+
+    def store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
+        self.get_declarative_ldm(workspace_id).store_to_disk(path)
+
+    @staticmethod
+    def load_ldm_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeModel:
+        return CatalogDeclarativeModel.load_from_disk(path)
 
     # Declarative methods for analytics model
 
@@ -170,18 +177,24 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     def store_declarative_analytics_model(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
-        declarative_analytics_model = self.get_declarative_analytics_model(workspace_id)
-        declarative_analytics_model.store_to_disk(workspace_folder)
+        self.store_analytics_model_to_disk(workspace_id, workspace_folder)
 
     def load_declarative_analytics_model(
         self, workspace_id: str, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeAnalytics:
         workspace_folder = self.layout_workspace_folder(workspace_id, layout_root_path)
-        return CatalogDeclarativeAnalytics.load_from_disk(workspace_folder)
+        return self.load_analytics_model_from_disk(workspace_folder)
 
     def load_and_put_declarative_analytics_model(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
         declarative_analytics_model = self.load_declarative_analytics_model(workspace_id, layout_root_path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
+
+    def store_analytics_model_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
+        self.get_declarative_analytics_model(workspace_id).store_to_disk(path)
+
+    @staticmethod
+    def load_analytics_model_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeAnalytics:
+        return CatalogDeclarativeAnalytics.load_from_disk(path)
 
     # Help methods
 

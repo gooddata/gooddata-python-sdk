@@ -33,7 +33,6 @@ from gooddata_sdk import (
 
 gd_vcr = get_vcr()
 
-
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "data_sources"
 
@@ -531,3 +530,14 @@ def test_scan_schemata(test_config):
     schemata = sdk.catalog_data_source.scan_schemata(data_source_id)
     assert len(schemata) == 1
     assert "demo" in schemata
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "pdm_store_load.yaml"))
+def test_pdm_store_load(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    pdm = sdk.catalog_data_source.get_declarative_pdm(test_config["data_source"])
+
+    sdk.catalog_data_source.store_pdm_to_disk(test_config["data_source"], path)
+    loaded_pdm = sdk.catalog_data_source.load_pdm_from_disk(path)
+    assert loaded_pdm == pdm
