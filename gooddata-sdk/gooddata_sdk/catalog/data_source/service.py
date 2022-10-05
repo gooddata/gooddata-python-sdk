@@ -130,6 +130,13 @@ class CatalogDataSourceService(CatalogServiceBase):
     def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
         self.put_declarative_pdm(data_source_id, self.load_declarative_pdm(data_source_id, layout_root_path))
 
+    def store_pdm_to_disk(self, datasource_id: str, path: Path = Path.cwd()) -> None:
+        self.get_declarative_pdm(datasource_id).store_to_disk(path)
+
+    @staticmethod
+    def load_pdm_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeTables:
+        return CatalogDeclarativeTables.load_from_disk(path)
+
     # Actions methods are listed below
 
     def generate_logical_model(
