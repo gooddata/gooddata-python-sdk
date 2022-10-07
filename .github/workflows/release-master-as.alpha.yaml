@@ -17,6 +17,7 @@ jobs:
           - gooddata-afm-client
           - gooddata-metadata-client
           - gooddata-scan-client
+          - gooddata-api-client
           - gooddata-pandas
           - gooddata-fdw
           - gooddata-sdk
