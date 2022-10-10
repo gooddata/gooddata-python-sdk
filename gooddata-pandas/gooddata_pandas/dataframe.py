@@ -305,6 +305,7 @@ class DataFrameFactory:
         result_cache_metadata: Optional[ResultCacheMetadata] = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
+        use_local_ids_in_headers: bool = False,
     ) -> pandas.DataFrame:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
@@ -335,6 +336,7 @@ class DataFrameFactory:
         :param result_cache_metadata: Metadata for the corresponding exec result. Optional.
         :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
         :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
+        :param use_local_ids_in_headers: Use local identifiers of header attributes and metrics. Optional.
 
         :return: a new dataframe
         """
@@ -356,4 +358,5 @@ class DataFrameFactory:
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
+            use_local_ids_in_headers=use_local_ids_in_headers,
         )
