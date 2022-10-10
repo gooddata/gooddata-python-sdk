@@ -197,7 +197,10 @@ def _read_complete_execution_result(
 
 
 def _create_header_mapper(
-    response: BareExecutionResponse, dim: int, label_overrides: Optional[LabelOverrides] = None
+    response: BareExecutionResponse,
+    dim: int,
+    label_overrides: Optional[LabelOverrides] = None,
+    use_local_ids_in_headers: bool = False,
 ) -> Callable[[Any, Optional[int]], str]:
     """
     Prepares header mapper function which is doing header structures translations into appropriate label used
@@ -205,6 +208,8 @@ def _create_header_mapper(
     :param response: Response structure to gather dimension header details
     :param dim: dimension id
     :param label_overrides: label overrides
+    :param use_local_ids_in_headers: Use local identifiers of header attributes and metrics. Optional.
+
     :return: Mapper function
     """
     if label_overrides is None:
@@ -223,20 +228,26 @@ def _create_header_mapper(
                 label = header["attributeHeader"]["labelValue"]
             elif "labelName" in header["attributeHeader"]:
                 attr_local_id = header["attributeHeader"]["localIdentifier"]
-                if attr_local_id in attribute_labels:
-                    label = attribute_labels[attr_local_id]["title"]
+                if use_local_ids_in_headers:
+                    label = attr_local_id
                 else:
-                    label = header["attributeHeader"]["labelName"]
+                    if attr_local_id in attribute_labels:
+                        label = attribute_labels[attr_local_id]["title"]
+                    else:
+                        label = header["attributeHeader"]["labelName"]
         elif "measureHeader" in header and header_idx is not None:
             measure_idx = header["measureHeader"]["measureIndex"]
             measure_descriptor = dim_descriptor["headers"][header_idx]["measureGroupHeaders"][measure_idx]
 
-            if measure_descriptor["localIdentifier"] in measure_labels:
-                label = measure_labels[measure_descriptor["localIdentifier"]]["title"]
-            elif "name" in measure_descriptor:
-                label = measure_descriptor["name"]
-            else:
+            if use_local_ids_in_headers:
                 label = measure_descriptor["localIdentifier"]
+            else:
+                if measure_descriptor["localIdentifier"] in measure_labels:
+                    label = measure_labels[measure_descriptor["localIdentifier"]]["title"]
+                elif "name" in measure_descriptor:
+                    label = measure_descriptor["name"]
+                else:
+                    label = measure_descriptor["localIdentifier"]
         elif "totalHeader" in header:
             label = header["totalHeader"]["function"]
         return label
@@ -249,11 +260,17 @@ def _headers_to_index(
     headers: Tuple[_DataHeaders, Optional[_DataHeaders]],
     response: BareExecutionResponse,
     label_overrides: LabelOverrides,
+    use_local_ids_in_headers: bool = False,
 ) -> Optional[pandas.Index]:
     if len(response.dimensions) <= dim_idx or not len(response.dimensions[dim_idx]["headers"]):
         return None
 
-    mapper = _create_header_mapper(response=response, dim=dim_idx, label_overrides=label_overrides)
+    mapper = _create_header_mapper(
+        response=response,
+        dim=dim_idx,
+        label_overrides=label_overrides,
+        use_local_ids_in_headers=use_local_ids_in_headers,
+    )
 
     return pandas.MultiIndex.from_arrays(
         [
@@ -309,6 +326,7 @@ def convert_execution_response_to_dataframe(
     label_overrides: LabelOverrides,
     result_size_dimensions_limits: ResultSizeDimensions,
     result_size_bytes_limit: Optional[int] = None,
+    use_local_ids_in_headers: bool = False,
 ) -> pandas.DataFrame:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -332,9 +350,17 @@ def convert_execution_response_to_dataframe(
     return pandas.DataFrame(
         data=full_data,
         index=_headers_to_index(
-            dim_idx=0, headers=full_headers, response=execution_response, label_overrides=label_overrides
+            dim_idx=0,
+            headers=full_headers,
+            response=execution_response,
+            label_overrides=label_overrides,
+            use_local_ids_in_headers=use_local_ids_in_headers,
         ),
         columns=_headers_to_index(
-            dim_idx=1, headers=full_headers, response=execution_response, label_overrides=label_overrides
+            dim_idx=1,
+            headers=full_headers,
+            response=execution_response,
+            label_overrides=label_overrides,
+            use_local_ids_in_headers=use_local_ids_in_headers,
         ),
     )
