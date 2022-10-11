@@ -335,7 +335,7 @@ class DataFrameFactory:
         :param label_overrides: label overrides for metrics and attributes
         :param result_cache_metadata: Metadata for the corresponding exec result. Optional.
         :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
-        :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
+        :param result_size_bytes_limit: Maximum size of result in bytes. Optional.
         :param use_local_ids_in_headers: Use local identifiers of header attributes and metrics. Optional.
 
         :return: a new dataframe
