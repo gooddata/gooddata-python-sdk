@@ -7,7 +7,7 @@ import pandas
 
 from gooddata_api_client import models
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.result_convertor import LabelOverrides, convert_execution_response_to_dataframe
+from gooddata_pandas.result_convertor import DataFrameMetadata, LabelOverrides, convert_execution_response_to_dataframe
 from gooddata_pandas.utils import (
     ColumnsDef,
     DefaultInsightColumnNaming,
@@ -250,7 +250,7 @@ class DataFrameFactory:
         label_overrides: Optional[LabelOverrides] = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
-    ) -> Tuple[pandas.DataFrame, BareExecutionResponse]:
+    ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition. The data frame will respect the dimensionality
         specified in execution definition's result spec.
@@ -279,7 +279,7 @@ class DataFrameFactory:
         :param label_overrides: label overrides for metrics and attributes
         :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
         :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
-        :return: a new dataframe
+        :return: tuple holding DataFrame and DataFrame metadata
         """
         if label_overrides is None:
             label_overrides = {}
@@ -287,15 +287,12 @@ class DataFrameFactory:
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
         result_cache_metadata = self.result_cache_metadata_for_exec_result_id(execution.result_id)
 
-        return (
-            convert_execution_response_to_dataframe(
-                execution_response=execution.bare_exec_response,
-                result_cache_metadata=result_cache_metadata,
-                label_overrides=label_overrides,
-                result_size_dimensions_limits=result_size_dimensions_limits,
-                result_size_bytes_limit=result_size_bytes_limit,
-            ),
-            execution.bare_exec_response,
+        return convert_execution_response_to_dataframe(
+            execution_response=execution.bare_exec_response,
+            result_cache_metadata=result_cache_metadata,
+            label_overrides=label_overrides,
+            result_size_dimensions_limits=result_size_dimensions_limits,
+            result_size_bytes_limit=result_size_bytes_limit,
         )
 
     def for_exec_result_id(
@@ -306,7 +303,7 @@ class DataFrameFactory:
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
         use_local_ids_in_headers: bool = False,
-    ) -> pandas.DataFrame:
+    ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
         the dimensionality specified in execution definition's result spec.
@@ -338,7 +335,7 @@ class DataFrameFactory:
         :param result_size_bytes_limit: Maximum size of result in bytes. Optional.
         :param use_local_ids_in_headers: Use local identifiers of header attributes and metrics. Optional.
 
-        :return: a new dataframe
+        :return: tuple holding DataFrame and DataFrame metadata
         """
         if label_overrides is None:
             label_overrides = {}

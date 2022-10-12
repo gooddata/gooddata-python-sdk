@@ -1,6 +1,6 @@
 # (C) 2022 GoodData Corporation
 from pathlib import Path
-from typing import Tuple
+from typing import List, Optional, Tuple
 
 from tests_support.vcrpy_utils import get_vcr
 
@@ -22,19 +22,30 @@ _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
 
-def _run_and_validate_results(gdf: DataFrameFactory, exec_def: ExecutionDefinition, expected: Tuple[int, int]) -> str:
+def _run_and_validate_results(
+    gdf: DataFrameFactory,
+    exec_def: ExecutionDefinition,
+    expected: Tuple[int, int],
+    expected_row_totals: Optional[List[List[int]]] = None,
+) -> str:
     # generate dataframe from exec_def
-    result, response = gdf.for_exec_def(exec_def=exec_def)
+    result, result_metadata = gdf.for_exec_def(exec_def=exec_def)
     assert result.values.shape == expected
 
     # use result ID from computation above and generate dataframe just from it
-    result_from_result_id = gdf.for_exec_result_id(response.result_id)
+    result_from_result_id, result_metadata_from_result_id = gdf.for_exec_result_id(
+        result_id=result_metadata.execution_response.result_id,
+    )
+
+    if expected_row_totals is not None:
+        assert result_metadata_from_result_id.row_totals_indexes == expected_row_totals
+
     assert result_from_result_id.values.shape == expected
 
     # compare dataframes generated using both methods above
     assert result.to_string() == result_from_result_id.to_string()
 
-    return response.result_id
+    return result_metadata.execution_response.result_id
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_two_dim1.yaml"))
@@ -63,7 +74,7 @@ def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
             "price": {"title": "PRICE LABEL"},
         },
     }
-    result = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides)
+    result, _ = gdf.for_exec_result_id(exec_result_id, label_overrides=overrides)
     assert result.to_string().find(overrides["labels"]["state"]["title"]) == 262
     assert result.to_string().find(overrides["metrics"]["price"]["title"]) == 162
 
@@ -191,7 +202,7 @@ def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(6, 96))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(6, 96), expected_row_totals=[[4, 5]])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals2.yaml"))
@@ -227,7 +238,7 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96))
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96), expected_row_totals=[[17, 18], []])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.yaml"))
