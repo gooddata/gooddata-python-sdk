@@ -124,6 +124,37 @@ class _AccumulatedData:
         )
 
 
+@define
+class DataFrameMetadata:
+    # row line location where total header is located per index header column
+    # example:
+    # Category  | Country | Budget
+    # Car       | Arizona |    100
+    #           | Texas   |     50
+    #           | SUM     |    150
+    # Train     | Arizona |    200    =>    [[7],[3,6]]
+    #           | Texas   |    100
+    #           | AVG     |    150
+    # SUM       |         |    450
+    row_totals_indexes: List[List[int]]
+
+    execution_response: BareExecutionResponse
+
+    @classmethod
+    def from_data(
+        cls,
+        headers: Tuple[_DataHeaders, Optional[_DataHeaders]],
+        execution_response: BareExecutionResponse,
+    ) -> "DataFrameMetadata":
+        row_totals_indexes = [
+            [idx for idx, hdr in enumerate(dim) if hdr is not None and "totalHeader" in hdr] for dim in headers[0]
+        ]
+        return cls(
+            row_totals_indexes=row_totals_indexes,
+            execution_response=execution_response,
+        )
+
+
 def _read_complete_execution_result(
     execution_response: BareExecutionResponse,
     result_cache_metadata: ResultCacheMetadata,
@@ -327,7 +358,7 @@ def convert_execution_response_to_dataframe(
     result_size_dimensions_limits: ResultSizeDimensions,
     result_size_bytes_limit: Optional[int] = None,
     use_local_ids_in_headers: bool = False,
-) -> pandas.DataFrame:
+) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
 
@@ -347,7 +378,7 @@ def convert_execution_response_to_dataframe(
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)
 
-    return pandas.DataFrame(
+    df = pandas.DataFrame(
         data=full_data,
         index=_headers_to_index(
             dim_idx=0,
@@ -364,3 +395,5 @@ def convert_execution_response_to_dataframe(
             use_local_ids_in_headers=use_local_ids_in_headers,
         ),
     )
+
+    return df, DataFrameMetadata.from_data(headers=full_headers, execution_response=execution_response)
