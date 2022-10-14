@@ -30,6 +30,10 @@ class GoodPandas:
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 
+    @property
+    def sdk(self) -> GoodDataSdk:
+        return self._sdk
+
     def series(self, workspace_id: str) -> SeriesFactory:
         """
         Creates factory to use for construction of pandas.Series.
