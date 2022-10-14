@@ -17,8 +17,16 @@ class GoodPandas:
     Facade to access factories that create pandas Series and DataFrames using analytics computed by GoodData.CN.
     """
 
-    def __init__(self, host: str, token: str, headers_host: Optional[str] = None) -> None:
-        self._sdk = GoodDataSdk.create(host, token, USER_AGENT, Host=headers_host)
+    def __init__(
+        self,
+        host: str,
+        token: str,
+        headers_host: Optional[str] = None,
+        **custom_headers_: Optional[str],
+    ) -> None:
+        if headers_host is not None:
+            custom_headers_["Host"] = headers_host
+        self._sdk = GoodDataSdk.create(host, token, USER_AGENT, **custom_headers_)
         self._series_per_ws: dict[str, SeriesFactory] = dict()
         self._frames_per_ws: dict[str, DataFrameFactory] = dict()
 
