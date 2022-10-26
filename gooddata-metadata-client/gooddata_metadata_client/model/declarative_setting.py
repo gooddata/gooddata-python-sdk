@@ -145,7 +145,7 @@ class DeclarativeSetting(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -235,7 +235,7 @@ class DeclarativeSetting(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -64,6 +64,7 @@ class TabularExportRequest(ModelNormal):
     allowed_values = {
         ('format',): {
             'CSV': "CSV",
+            'XLSX': "XLSX",
         },
     }
 
@@ -120,15 +121,15 @@ class TabularExportRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, execution_result, file_name, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, execution_result, file_name, format, *args, **kwargs):  # noqa: E501
         """TabularExportRequest - a model defined in OpenAPI
 
         Args:
             execution_result (str): Execution result identifier.
             file_name (str): Filename of downloaded file without extension.
+            format (str): Expected file format.
 
         Keyword Args:
-            format (str): Expected file format.. defaults to "CSV", must be one of ["CSV", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -163,7 +164,6 @@ class TabularExportRequest(ModelNormal):
             settings (Settings): [optional]  # noqa: E501
         """
 
-        format = kwargs.get('format', "CSV")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -216,15 +216,15 @@ class TabularExportRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, execution_result, file_name, *args, **kwargs):  # noqa: E501
+    def __init__(self, execution_result, file_name, format, *args, **kwargs):  # noqa: E501
         """TabularExportRequest - a model defined in OpenAPI
 
         Args:
             execution_result (str): Execution result identifier.
             file_name (str): Filename of downloaded file without extension.
+            format (str): Expected file format.
 
         Keyword Args:
-            format (str): Expected file format.. defaults to "CSV", must be one of ["CSV", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -259,7 +259,6 @@ class TabularExportRequest(ModelNormal):
             settings (Settings): [optional]  # noqa: E501
         """
 
-        format = kwargs.get('format', "CSV")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

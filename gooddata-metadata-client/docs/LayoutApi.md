@@ -1846,6 +1846,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                custom_application_settings=[
+                    DeclarativeCustomApplicationSetting(
+                        application_name="Modeler",
+                        content={},
+                        id="modeler.demo",
+                    ),
+                ],
                 description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[
@@ -2368,6 +2375,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                custom_application_settings=[
+                    DeclarativeCustomApplicationSetting(
+                        application_name="Modeler",
+                        content={},
+                        id="modeler.demo",
+                    ),
+                ],
                 description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[

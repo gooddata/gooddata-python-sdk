@@ -71,6 +71,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'PRESTO': "PRESTO",
             'DREMIO': "DREMIO",
             'DRILL': "DRILL",
+            'GREENPLUM': "GREENPLUM",
         },
     }
 

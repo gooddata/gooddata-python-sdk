@@ -31,11 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
     from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+    globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
     globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
@@ -103,6 +105,7 @@ class DeclarativeWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
@@ -120,6 +123,7 @@ class DeclarativeWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'custom_application_settings': 'customApplicationSettings',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
@@ -174,6 +178,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
@@ -272,6 +277,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501

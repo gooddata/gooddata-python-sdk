@@ -120,7 +120,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         """DeclarativeAnalyticalDashboard - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
             id (str): Analytical dashboard ID.
             title (str): Analytical dashboard title.
 
@@ -215,7 +215,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
         """DeclarativeAnalyticalDashboard - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A server agnostic definition of the dashboard plugin in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
             id (str): Analytical dashboard ID.
             title (str): Analytical dashboard title.
 

@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**create_entity_api_tokens**](EntitiesApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | 
 [**create_entity_color_palettes**](EntitiesApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | 
 [**create_entity_csp_directives**](EntitiesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | 
+[**create_entity_custom_application_settings**](EntitiesApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | 
 [**create_entity_dashboard_plugins**](EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | 
 [**create_entity_data_sources**](EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | 
 [**create_entity_filter_contexts**](EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | 
@@ -25,6 +26,7 @@ Method | HTTP request | Description
 [**delete_entity_api_tokens**](EntitiesApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | 
 [**delete_entity_color_palettes**](EntitiesApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | 
 [**delete_entity_csp_directives**](EntitiesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | 
+[**delete_entity_custom_application_settings**](EntitiesApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
 [**delete_entity_dashboard_plugins**](EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 [**delete_entity_data_sources**](EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | 
 [**delete_entity_filter_contexts**](EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
@@ -39,10 +41,11 @@ Method | HTTP request | Description
 [**delete_entity_workspace_settings**](EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
 [**delete_entity_workspaces**](EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | 
 [**get_all_entities_analytical_dashboards**](EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | 
-[**get_all_entities_api_tokens**](EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | 
+[**get_all_entities_api_tokens**](EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
 [**get_all_entities_attributes**](EntitiesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | 
 [**get_all_entities_color_palettes**](EntitiesApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | 
 [**get_all_entities_csp_directives**](EntitiesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | 
+[**get_all_entities_custom_application_settings**](EntitiesApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | 
 [**get_all_entities_dashboard_plugins**](EntitiesApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | 
 [**get_all_entities_data_source_identifiers**](EntitiesApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | 
 [**get_all_entities_data_source_tables**](EntitiesApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
@@ -56,7 +59,7 @@ Method | HTTP request | Description
 [**get_all_entities_organization_settings**](EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | 
 [**get_all_entities_themes**](EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | 
 [**get_all_entities_user_groups**](EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | 
-[**get_all_entities_user_settings**](EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | 
+[**get_all_entities_user_settings**](EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 [**get_all_entities_users**](EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | 
 [**get_all_entities_visualization_objects**](EntitiesApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
 [**get_all_entities_workspace_data_filter_settings**](EntitiesApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | 
@@ -71,6 +74,7 @@ Method | HTTP request | Description
 [**get_entity_color_palettes**](EntitiesApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | 
 [**get_entity_cookie_security_configurations**](EntitiesApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
 [**get_entity_csp_directives**](EntitiesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | 
+[**get_entity_custom_application_settings**](EntitiesApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
 [**get_entity_dashboard_plugins**](EntitiesApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 [**get_entity_data_source_identifiers**](EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | 
 [**get_entity_data_source_tables**](EntitiesApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
@@ -97,6 +101,7 @@ Method | HTTP request | Description
 [**patch_entity_color_palettes**](EntitiesApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | 
 [**patch_entity_cookie_security_configurations**](EntitiesApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
 [**patch_entity_csp_directives**](EntitiesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | 
+[**patch_entity_custom_application_settings**](EntitiesApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
 [**patch_entity_dashboard_plugins**](EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 [**patch_entity_data_sources**](EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | 
 [**patch_entity_filter_contexts**](EntitiesApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
@@ -115,6 +120,7 @@ Method | HTTP request | Description
 [**update_entity_color_palettes**](EntitiesApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | 
 [**update_entity_cookie_security_configurations**](EntitiesApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
 [**update_entity_csp_directives**](EntitiesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | 
+[**update_entity_custom_application_settings**](EntitiesApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
 [**update_entity_dashboard_plugins**](EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 [**update_entity_data_sources**](EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | 
 [**update_entity_filter_contexts**](EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
@@ -426,6 +432,82 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiCspDirectiveOutDocument**](JsonApiCspDirectiveOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_custom_application_settings**
+> JsonApiCustomApplicationSettingOutDocument create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_custom_application_setting_in_document = JsonApiCustomApplicationSettingInDocument(
+        data=JsonApiCustomApplicationSettingIn(
+            attributes=JsonApiCustomApplicationSettingInAttributes(
+                application_name="application_name_example",
+                content={},
+            ),
+            id="id1",
+            type="customApplicationSetting",
+        ),
+    ) # JsonApiCustomApplicationSettingInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_custom_application_setting_in_document** | [**JsonApiCustomApplicationSettingInDocument**](JsonApiCustomApplicationSettingInDocument.md)|  |
+
+### Return type
+
+[**JsonApiCustomApplicationSettingOutDocument**](JsonApiCustomApplicationSettingOutDocument.md)
 
 ### Authorization
 
@@ -1860,6 +1942,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_custom_application_settings**
+> delete_entity_custom_application_settings(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_custom_application_settings(workspace_id, object_id)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_custom_application_settings(workspace_id, object_id, filter=filter)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_dashboard_plugins**
 > delete_entity_dashboard_plugins(workspace_id, object_id)
 
@@ -2890,7 +3045,7 @@ No authorization required
 # **get_all_entities_api_tokens**
 > JsonApiApiTokenOutList get_all_entities_api_tokens(user_id)
 
-
+List all api tokens for a user
 
 ### Example
 
@@ -2922,6 +3077,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # List all api tokens for a user
         api_response = api_instance.get_all_entities_api_tokens(user_id)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
@@ -2930,6 +3086,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # List all api tokens for a user
         api_response = api_instance.get_all_entities_api_tokens(user_id, filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
@@ -3186,6 +3343,92 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiCspDirectiveOutList**](JsonApiCspDirectiveOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_custom_application_settings**
+> JsonApiCustomApplicationSettingOutList get_all_entities_custom_application_settings(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_all_entities_custom_application_settings(workspace_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_custom_application_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiCustomApplicationSettingOutList**](JsonApiCustomApplicationSettingOutList.md)
 
 ### Authorization
 
@@ -4276,7 +4519,7 @@ No authorization required
 # **get_all_entities_user_settings**
 > JsonApiUserSettingOutList get_all_entities_user_settings(user_id)
 
-
+List all settings for a user
 
 ### Example
 
@@ -4308,6 +4551,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # List all settings for a user
         api_response = api_instance.get_all_entities_user_settings(user_id)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
@@ -4316,6 +4560,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # List all settings for a user
         api_response = api_instance.get_all_entities_user_settings(user_id, filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
@@ -4870,7 +5115,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_all_options**
-> get_all_options()
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_all_options()
 
 Links for all configuration options
 
@@ -4899,7 +5144,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example, this endpoint has no required or optional parameters
     try:
         # Links for all configuration options
-        api_instance.get_all_options()
+        api_response = api_instance.get_all_options()
+        pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_options: %s\n" % e)
 ```
@@ -4910,7 +5156,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-void (empty response body)
+**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
 
 ### Authorization
 
@@ -4931,7 +5177,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_data_source_drivers**
-> get_data_source_drivers()
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_data_source_drivers()
 
 Get all available data source drivers
 
@@ -4960,7 +5206,8 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example, this endpoint has no required or optional parameters
     try:
         # Get all available data source drivers
-        api_instance.get_data_source_drivers()
+        api_response = api_instance.get_data_source_drivers()
+        pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_data_source_drivers: %s\n" % e)
 ```
@@ -4971,7 +5218,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-void (empty response body)
+**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
 
 ### Authorization
 
@@ -5434,6 +5681,84 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiCspDirectiveOutDocument**](JsonApiCspDirectiveOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_custom_application_settings**
+> JsonApiCustomApplicationSettingOutDocument get_entity_custom_application_settings(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiCustomApplicationSettingOutDocument**](JsonApiCustomApplicationSettingOutDocument.md)
 
 ### Authorization
 
@@ -7539,6 +7864,94 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_custom_application_settings**
+> JsonApiCustomApplicationSettingOutDocument patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_custom_application_setting_patch_document = JsonApiCustomApplicationSettingPatchDocument(
+        data=JsonApiCustomApplicationSettingPatch(
+            attributes=JsonApiCustomApplicationSettingPatchAttributes(
+                application_name="application_name_example",
+                content={},
+            ),
+            id="id1",
+            type="customApplicationSetting",
+        ),
+    ) # JsonApiCustomApplicationSettingPatchDocument | 
+    filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_custom_application_setting_patch_document** | [**JsonApiCustomApplicationSettingPatchDocument**](JsonApiCustomApplicationSettingPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiCustomApplicationSettingOutDocument**](JsonApiCustomApplicationSettingOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_dashboard_plugins**
 > JsonApiDashboardPluginOutDocument patch_entity_dashboard_plugins(workspace_id, object_id, json_api_dashboard_plugin_patch_document)
 
@@ -9198,6 +9611,94 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiCspDirectiveOutDocument**](JsonApiCspDirectiveOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_custom_application_settings**
+> JsonApiCustomApplicationSettingOutDocument update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import entities_api
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_custom_application_setting_in_document = JsonApiCustomApplicationSettingInDocument(
+        data=JsonApiCustomApplicationSettingIn(
+            attributes=JsonApiCustomApplicationSettingInAttributes(
+                application_name="application_name_example",
+                content={},
+            ),
+            id="id1",
+            type="customApplicationSetting",
+        ),
+    ) # JsonApiCustomApplicationSettingInDocument | 
+    filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_custom_application_settings: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_custom_application_setting_in_document** | [**JsonApiCustomApplicationSettingInDocument**](JsonApiCustomApplicationSettingInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiCustomApplicationSettingOutDocument**](JsonApiCustomApplicationSettingOutDocument.md)
 
 ### Authorization
 
