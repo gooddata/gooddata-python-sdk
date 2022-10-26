@@ -295,7 +295,8 @@
               "MSSQL",
               "PRESTO",
               "DREMIO",
-              "DRILL"
+              "DRILL",
+              "GREENPLUM"
             ],
             "example": "POSTGRESQL",
             "type": "string"

@@ -42,6 +42,10 @@ from gooddata_metadata_client.model.json_api_csp_directive_in_document import Js
 from gooddata_metadata_client.model.json_api_csp_directive_out_document import JsonApiCspDirectiveOutDocument
 from gooddata_metadata_client.model.json_api_csp_directive_out_list import JsonApiCspDirectiveOutList
 from gooddata_metadata_client.model.json_api_csp_directive_patch_document import JsonApiCspDirectivePatchDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_metadata_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
+from gooddata_metadata_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from gooddata_metadata_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
@@ -339,6 +343,62 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'json_api_csp_directive_in_document': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCustomApplicationSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings',
+                'operation_id': 'create_entity_custom_application_settings',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'json_api_custom_application_setting_in_document',
+                ],
+                'required': [
+                    'workspace_id',
+                    'json_api_custom_application_setting_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'json_api_custom_application_setting_in_document':
+                        (JsonApiCustomApplicationSettingInDocument,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'json_api_custom_application_setting_in_document': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -1372,6 +1432,64 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}',
+                'operation_id': 'delete_entity_custom_application_settings',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -2540,6 +2658,93 @@ class EntitiesApi(object):
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
+                },
+                'collection_format_map': {
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCustomApplicationSettingOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings',
+                'operation_id': 'get_all_entities_custom_application_settings',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'origin',
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                    'x_gdc_validate_relations',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'origin',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('origin',): {
+
+                        "ALL": "ALL",
+                        "PARENTS": "PARENTS",
+                        "NATIVE": "NATIVE"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'origin':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'origin': 'origin',
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'origin': 'query',
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'x_gdc_validate_relations': 'header',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
@@ -4272,7 +4477,7 @@ class EntitiesApi(object):
         )
         self.get_all_options_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                 'auth': [],
                 'endpoint_path': '/api/v1/options',
                 'operation_id': 'get_all_options',
@@ -4314,7 +4519,7 @@ class EntitiesApi(object):
         )
         self.get_data_source_drivers_endpoint = _Endpoint(
             settings={
-                'response_type': None,
+                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                 'auth': [],
                 'endpoint_path': '/api/v1/options/availableDrivers',
                 'operation_id': 'get_data_source_drivers',
@@ -4755,6 +4960,71 @@ class EntitiesApi(object):
                 'location_map': {
                     'id': 'path',
                     'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_entity_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCustomApplicationSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}',
+                'operation_id': 'get_entity_custom_application_settings',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                    'x_gdc_validate_relations',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                    'x_gdc_validate_relations': 'header',
                 },
                 'collection_format_map': {
                 }
@@ -6680,6 +6950,73 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.patch_entity_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCustomApplicationSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}',
+                'operation_id': 'patch_entity_custom_application_settings',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_custom_application_setting_patch_document',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_custom_application_setting_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_custom_application_setting_patch_document':
+                        (JsonApiCustomApplicationSettingPatchDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_custom_application_setting_patch_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.patch_entity_dashboard_plugins_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiDashboardPluginOutDocument,),
@@ -8018,6 +8355,73 @@ class EntitiesApi(object):
                 'location_map': {
                     'id': 'path',
                     'json_api_csp_directive_in_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.update_entity_custom_application_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiCustomApplicationSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}',
+                'operation_id': 'update_entity_custom_application_settings',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_custom_application_setting_in_document',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_custom_application_setting_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_custom_application_setting_in_document':
+                        (JsonApiCustomApplicationSettingInDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_custom_application_setting_in_document': 'body',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -9434,6 +9838,92 @@ class EntitiesApi(object):
         kwargs['json_api_csp_directive_in_document'] = \
             json_api_csp_directive_in_document
         return self.create_entity_csp_directives_endpoint.call_with_http_info(**kwargs)
+
+    def create_entity_custom_application_settings(
+        self,
+        workspace_id,
+        json_api_custom_application_setting_in_document,
+        **kwargs
+    ):
+        """create_entity_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            json_api_custom_application_setting_in_document (JsonApiCustomApplicationSettingInDocument):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCustomApplicationSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['json_api_custom_application_setting_in_document'] = \
+            json_api_custom_application_setting_in_document
+        return self.create_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_dashboard_plugins(
         self,
@@ -10876,6 +11366,93 @@ class EntitiesApi(object):
             id
         return self.delete_entity_csp_directives_endpoint.call_with_http_info(**kwargs)
 
+    def delete_entity_custom_application_settings(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """delete_entity_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_custom_application_settings(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.delete_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_dashboard_plugins(
         self,
         workspace_id,
@@ -12077,7 +12654,7 @@ class EntitiesApi(object):
         user_id,
         **kwargs
     ):
-        """get_all_entities_api_tokens  # noqa: E501
+        """List all api tokens for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12408,6 +12985,94 @@ class EntitiesApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_csp_directives_endpoint.call_with_http_info(**kwargs)
+
+    def get_all_entities_custom_application_settings(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """get_all_entities_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_custom_application_settings(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            origin (str): [optional] if omitted the server will use the default value of "ALL"
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCustomApplicationSettingOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_all_entities_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_dashboard_plugins(
         self,
@@ -13522,7 +14187,7 @@ class EntitiesApi(object):
         user_id,
         **kwargs
     ):
-        """get_all_entities_user_settings  # noqa: E501
+        """List all settings for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14170,7 +14835,7 @@ class EntitiesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -14248,7 +14913,7 @@ class EntitiesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            None
+            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -14792,6 +15457,94 @@ class EntitiesApi(object):
         kwargs['id'] = \
             id
         return self.get_entity_csp_directives_endpoint.call_with_http_info(**kwargs)
+
+    def get_entity_custom_application_settings(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """get_entity_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_custom_application_settings(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCustomApplicationSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.get_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def get_entity_dashboard_plugins(
         self,
@@ -17042,6 +17795,97 @@ class EntitiesApi(object):
             json_api_csp_directive_patch_document
         return self.patch_entity_csp_directives_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_custom_application_settings(
+        self,
+        workspace_id,
+        object_id,
+        json_api_custom_application_setting_patch_document,
+        **kwargs
+    ):
+        """patch_entity_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_custom_application_setting_patch_document (JsonApiCustomApplicationSettingPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCustomApplicationSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_custom_application_setting_patch_document'] = \
+            json_api_custom_application_setting_patch_document
+        return self.patch_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_dashboard_plugins(
         self,
         workspace_id,
@@ -18648,6 +19492,97 @@ class EntitiesApi(object):
         kwargs['json_api_csp_directive_in_document'] = \
             json_api_csp_directive_in_document
         return self.update_entity_csp_directives_endpoint.call_with_http_info(**kwargs)
+
+    def update_entity_custom_application_settings(
+        self,
+        workspace_id,
+        object_id,
+        json_api_custom_application_setting_in_document,
+        **kwargs
+    ):
+        """update_entity_custom_application_settings  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_custom_application_setting_in_document (JsonApiCustomApplicationSettingInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiCustomApplicationSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_custom_application_setting_in_document'] = \
+            json_api_custom_application_setting_in_document
+        return self.update_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def update_entity_dashboard_plugins(
         self,

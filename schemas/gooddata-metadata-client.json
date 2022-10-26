@@ -391,6 +391,31 @@
         ],
         "type": "object"
       },
+      "DeclarativeCustomApplicationSetting": {
+        "description": "Custom application setting and its value.",
+        "properties": {
+          "applicationName": {
+            "description": "The application id",
+            "example": "Modeler",
+            "type": "string"
+          },
+          "content": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "id": {
+            "description": "Custom Application Setting ID.",
+            "example": "modeler.demo",
+            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "applicationName",
+          "content",
+          "id"
+        ],
+        "type": "object"
+      },
       "DeclarativeDashboardPlugin": {
         "properties": {
           "content": {
@@ -508,7 +533,8 @@
               "MSSQL",
               "PRESTO",
               "DREMIO",
-              "DRILL"
+              "DRILL",
+              "GREENPLUM"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1379,6 +1405,13 @@
       "DeclarativeWorkspace": {
         "description": "A declarative form of a particular workspace.",
         "properties": {
+          "customApplicationSettings": {
+            "description": "A list of workspace custom settings.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeCustomApplicationSetting"
+            },
+            "type": "array"
+          },
           "description": {
             "description": "Description of the workspace",
             "type": "string"
@@ -3052,6 +3085,187 @@
         ],
         "type": "object"
       },
+      "JsonApiCustomApplicationSettingIn": {
+        "description": "JSON:API representation of customApplicationSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "applicationName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "applicationName",
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "customApplicationSetting"
+            ],
+            "example": "customApplicationSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiCustomApplicationSettingIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingOut": {
+        "description": "JSON:API representation of customApplicationSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "applicationName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "applicationName",
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "customApplicationSetting"
+            ],
+            "example": "customApplicationSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiCustomApplicationSettingPatch": {
+        "description": "JSON:API representation of patching customApplicationSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "applicationName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "customApplicationSetting"
+            ],
+            "example": "customApplicationSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiCustomApplicationSettingPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiDashboardPluginIn": {
         "description": "JSON:API representation of dashboardPlugin entity.",
         "properties": {
@@ -3318,7 +3532,8 @@
                   "MSSQL",
                   "PRESTO",
                   "DREMIO",
-                  "DRILL"
+                  "DRILL",
+                  "GREENPLUM"
                 ],
                 "type": "string"
               }
@@ -3468,7 +3683,8 @@
                   "MSSQL",
                   "PRESTO",
                   "DREMIO",
-                  "DRILL"
+                  "DRILL",
+                  "GREENPLUM"
                 ],
                 "type": "string"
               },
@@ -3588,7 +3804,8 @@
                   "MSSQL",
                   "PRESTO",
                   "DREMIO",
-                  "DRILL"
+                  "DRILL",
+                  "GREENPLUM"
                 ],
                 "type": "string"
               },
@@ -3744,7 +3961,8 @@
                   "MSSQL",
                   "PRESTO",
                   "DREMIO",
-                  "DRILL"
+                  "DRILL",
+                  "GREENPLUM"
                 ],
                 "type": "string"
               },
@@ -7693,7 +7911,7 @@
         ]
       },
       "JsonNode": {
-        "description": "A server agnostic definition of the dashboard plugin in JSON format.",
+        "description": "Custom setting content in JSON format.",
         "example": {},
         "type": "object"
       },
@@ -10978,6 +11196,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "List all api tokens for a user",
         "tags": [
           "entities"
         ]
@@ -11189,6 +11408,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "List all settings for a user",
         "tags": [
           "entities"
         ]
@@ -12388,6 +12608,332 @@
               "application/vnd.gooddata.api+json": {
                 "schema": {
                   "$ref": "#/components/schemas/JsonApiAttributeOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings": {
+      "get": {
+        "operationId": "getAllEntities@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=applicationName==someString;content==JsonNodeValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiCustomApplicationSettingInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=applicationName==someString;content==JsonNodeValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "tags": [
+          "entities"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=applicationName==someString;content==JsonNodeValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=applicationName==someString;content==JsonNodeValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiCustomApplicationSettingPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@CustomApplicationSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=applicationName==someString;content==JsonNodeValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiCustomApplicationSettingInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiCustomApplicationSettingOutDocument"
                 }
               }
             },
@@ -16434,6 +16980,9 @@
                       }
                     }
                   }
+                },
+                "schema": {
+                  "type": "object"
                 }
               }
             },
@@ -16462,6 +17011,9 @@
                       "REDSHIFT": "com.amazon.redshift.jdbc42.Driver"
                     }
                   }
+                },
+                "schema": {
+                  "type": "object"
                 }
               }
             },

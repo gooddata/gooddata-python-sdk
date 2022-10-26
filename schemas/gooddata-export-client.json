@@ -91,7 +91,8 @@
           "format": {
             "description": "Expected file format.",
             "enum": [
-              "CSV"
+              "CSV",
+              "XLSX"
             ],
             "example": "CSV",
             "type": "string"
