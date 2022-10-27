@@ -71,24 +71,24 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          permissions:
-            - name: ANALYZE
-              assignee:
-                id: demo2
-                type: user
-            - name: VIEW
-              assignee:
-                id: demoGroup
-                type: userGroup
           hierarchyPermissions:
-            - name: MANAGE
-              assignee:
+            - assignee:
                 id: demo2
                 type: user
-            - name: ANALYZE
-              assignee:
+              name: MANAGE
+            - assignee:
                 id: demoGroup
                 type: userGroup
+              name: ANALYZE
+          permissions:
+            - assignee:
+                id: demo2
+                type: user
+              name: ANALYZE
+            - assignee:
+                id: demoGroup
+                type: userGroup
+              name: VIEW
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/layout/workspaces/demo/permissions
@@ -158,21 +158,21 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          permissions:
-            - name: ANALYZE
-              assignee:
-                id: demo2
-                type: user
-            - name: VIEW
-              assignee:
-                id: demoGroup
-                type: userGroup
           hierarchyPermissions:
-            - name: MANAGE
-              assignee:
+            - assignee:
                 id: demo2
                 type: user
-            - name: ANALYZE
-              assignee:
+              name: MANAGE
+            - assignee:
                 id: demoGroup
                 type: userGroup
+              name: ANALYZE
+          permissions:
+            - assignee:
+                id: demo2
+                type: user
+              name: ANALYZE
+            - assignee:
+                id: demoGroup
+                type: userGroup
+              name: VIEW

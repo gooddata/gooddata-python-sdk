@@ -73,122 +73,122 @@ interactions:
         string:
           pdm:
             tables:
-              - id: campaign_channels
+              - columns:
+                  - dataType: NUMERIC
+                    isPrimaryKey: false
+                    name: budget
+                  - dataType: STRING
+                    isPrimaryKey: true
+                    name: campaign_channel_id
+                  - dataType: INT
+                    isPrimaryKey: false
+                    name: campaign_id
+                    referencedTableColumn: campaign_id
+                    referencedTableId: campaigns
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: category
+                  - dataType: NUMERIC
+                    isPrimaryKey: false
+                    name: spend
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: type
+                id: campaign_channels
                 path:
                   - demo
                   - campaign_channels
                 type: TABLE
-                columns:
-                  - name: budget
-                    dataType: NUMERIC
-                    isPrimaryKey: false
-                  - name: campaign_channel_id
-                    dataType: STRING
+              - columns:
+                  - dataType: INT
                     isPrimaryKey: true
-                  - name: campaign_id
-                    dataType: INT
+                    name: campaign_id
+                  - dataType: STRING
                     isPrimaryKey: false
-                    referencedTableId: campaigns
-                    referencedTableColumn: campaign_id
-                  - name: category
-                    dataType: STRING
-                    isPrimaryKey: false
-                  - name: spend
-                    dataType: NUMERIC
-                    isPrimaryKey: false
-                  - name: type
-                    dataType: STRING
-                    isPrimaryKey: false
-              - id: campaigns
+                    name: campaign_name
+                id: campaigns
                 path:
                   - demo
                   - campaigns
                 type: TABLE
-                columns:
-                  - name: campaign_id
-                    dataType: INT
+              - columns:
+                  - dataType: INT
                     isPrimaryKey: true
-                  - name: campaign_name
-                    dataType: STRING
+                    name: customer_id
+                  - dataType: STRING
                     isPrimaryKey: false
-              - id: customers
+                    name: customer_name
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: geo__state__location
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: region
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: state
+                id: customers
                 path:
                   - demo
                   - customers
                 type: TABLE
-                columns:
-                  - name: customer_id
-                    dataType: INT
+              - columns:
+                  - dataType: INT
+                    isPrimaryKey: false
+                    name: campaign_id
+                    referencedTableColumn: campaign_id
+                    referencedTableId: campaigns
+                  - dataType: INT
+                    isPrimaryKey: false
+                    name: customer_id
+                    referencedTableColumn: customer_id
+                    referencedTableId: customers
+                  - dataType: DATE
+                    isPrimaryKey: false
+                    name: date
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: order_id
+                  - dataType: STRING
                     isPrimaryKey: true
-                  - name: customer_name
-                    dataType: STRING
+                    name: order_line_id
+                  - dataType: STRING
                     isPrimaryKey: false
-                  - name: geo__state__location
-                    dataType: STRING
+                    name: order_status
+                  - dataType: NUMERIC
                     isPrimaryKey: false
-                  - name: region
-                    dataType: STRING
+                    name: price
+                  - dataType: INT
                     isPrimaryKey: false
-                  - name: state
-                    dataType: STRING
+                    name: product_id
+                    referencedTableColumn: product_id
+                    referencedTableId: products
+                  - dataType: NUMERIC
                     isPrimaryKey: false
-              - id: order_lines
+                    name: quantity
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: wdf__region
+                  - dataType: STRING
+                    isPrimaryKey: false
+                    name: wdf__state
+                id: order_lines
                 path:
                   - demo
                   - order_lines
                 type: TABLE
-                columns:
-                  - name: campaign_id
-                    dataType: INT
+              - columns:
+                  - dataType: STRING
                     isPrimaryKey: false
-                    referencedTableId: campaigns
-                    referencedTableColumn: campaign_id
-                  - name: customer_id
-                    dataType: INT
-                    isPrimaryKey: false
-                    referencedTableId: customers
-                    referencedTableColumn: customer_id
-                  - name: date
-                    dataType: DATE
-                    isPrimaryKey: false
-                  - name: order_id
-                    dataType: STRING
-                    isPrimaryKey: false
-                  - name: order_line_id
-                    dataType: STRING
+                    name: category
+                  - dataType: INT
                     isPrimaryKey: true
-                  - name: order_status
-                    dataType: STRING
+                    name: product_id
+                  - dataType: STRING
                     isPrimaryKey: false
-                  - name: price
-                    dataType: NUMERIC
-                    isPrimaryKey: false
-                  - name: product_id
-                    dataType: INT
-                    isPrimaryKey: false
-                    referencedTableId: products
-                    referencedTableColumn: product_id
-                  - name: quantity
-                    dataType: NUMERIC
-                    isPrimaryKey: false
-                  - name: wdf__region
-                    dataType: STRING
-                    isPrimaryKey: false
-                  - name: wdf__state
-                    dataType: STRING
-                    isPrimaryKey: false
-              - id: products
+                    name: product_name
+                id: products
                 path:
                   - demo
                   - products
                 type: TABLE
-                columns:
-                  - name: category
-                    dataType: STRING
-                    isPrimaryKey: false
-                  - name: product_id
-                    dataType: INT
-                    isPrimaryKey: true
-                  - name: product_name
-                    dataType: STRING
-                    isPrimaryKey: false

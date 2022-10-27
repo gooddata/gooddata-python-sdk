@@ -71,24 +71,6 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          users:
-            - id: admin
-              userGroups:
-                - id: adminGroup
-                  type: userGroup
-              settings: []
-            - id: demo
-              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
-              userGroups:
-                - id: adminGroup
-                  type: userGroup
-              settings: []
-            - id: demo2
-              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
-              userGroups:
-                - id: demoGroup
-                  type: userGroup
-              settings: []
           userGroups:
             - id: adminGroup
             - id: adminQA1Group
@@ -98,6 +80,24 @@ interactions:
             - id: demoGroup
             - id: visitorsGroup
               parents:
+                - id: demoGroup
+                  type: userGroup
+          users:
+            - id: admin
+              settings: []
+              userGroups:
+                - id: adminGroup
+                  type: userGroup
+            - authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
+              id: demo
+              settings: []
+              userGroups:
+                - id: adminGroup
+                  type: userGroup
+            - authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+              id: demo2
+              settings: []
+              userGroups:
                 - id: demoGroup
                   type: userGroup
   - request:
@@ -169,24 +169,6 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          users:
-            - id: admin
-              userGroups:
-                - id: adminGroup
-                  type: userGroup
-              settings: []
-            - id: demo
-              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
-              userGroups:
-                - id: adminGroup
-                  type: userGroup
-              settings: []
-            - id: demo2
-              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
-              userGroups:
-                - id: demoGroup
-                  type: userGroup
-              settings: []
           userGroups:
             - id: adminGroup
             - id: adminQA1Group
@@ -196,5 +178,23 @@ interactions:
             - id: demoGroup
             - id: visitorsGroup
               parents:
+                - id: demoGroup
+                  type: userGroup
+          users:
+            - id: admin
+              settings: []
+              userGroups:
+                - id: adminGroup
+                  type: userGroup
+            - authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
+              id: demo
+              settings: []
+              userGroups:
+                - id: adminGroup
+                  type: userGroup
+            - authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+              id: demo2
+              settings: []
+              userGroups:
                 - id: demoGroup
                   type: userGroup

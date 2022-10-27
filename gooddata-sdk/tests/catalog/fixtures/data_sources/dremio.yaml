@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ae3092a6e710f929
+          traceId: 1403074bc3ddf38d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -85,12 +85,12 @@ interactions:
             name: Dremio
             schema: ''
             type: DREMIO
-            url: jdbc:dremio:direct=dremio:31010
             username: demouser
             password: demopass
             enableCaching: true
             cachePath:
               - $scratch
+            url: jdbc:dremio:direct=dremio:31010
           id: dremio
           type: dataSource
       headers:

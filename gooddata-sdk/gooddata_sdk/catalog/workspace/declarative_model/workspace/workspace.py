@@ -18,7 +18,7 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
 )
-from gooddata_sdk.catalog.setting import CatalogDeclarativeSetting
+from gooddata_sdk.catalog.setting import CatalogDeclarativeCustomApplicationSetting, CatalogDeclarativeSetting
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalyticsLayer,
 )
@@ -65,6 +65,7 @@ class CatalogDeclarativeWorkspace(Base):
     hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
     early_access: Optional[str] = None
     settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
+    custom_application_settings: List[CatalogDeclarativeCustomApplicationSetting] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspace]:

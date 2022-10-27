@@ -4,4 +4,9 @@ id: demo-bigquery-ds
 name: demo-bigquery-ds
 schema: demo
 type: BIGQUERY
-url: jdbc:bigquery://https://www.googleapis.com/bigquery/v2:443;ProjectId=test;OAuthType=0
+parameters:
+    - name: "projectId"
+      value: "projectId-value-override"
+decodedParameters:
+    - name: "clientEmail"
+      value: "fake email"

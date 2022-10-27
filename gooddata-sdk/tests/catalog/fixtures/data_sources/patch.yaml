@@ -159,7 +159,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4b7371637c1f5040
+          traceId: 8ac828639e14083c
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -169,12 +169,12 @@ interactions:
             name: Test
             schema: demo
             type: POSTGRESQL
-            url: jdbc:postgresql://localhost:5432/demoparam=value
             username: demouser
             password: demopass
             enableCaching: true
             cachePath:
               - cache_schema
+            url: jdbc:postgresql://localhost:5432/demoparam=value
           id: test
           type: dataSource
       headers:

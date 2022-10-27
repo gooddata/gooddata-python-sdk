@@ -72,6 +72,133 @@ interactions:
       body:
         string:
           data:
+            - id: percent_revenue_per_product
+              type: metric
+              attributes:
+                title: '% Revenue per Product'
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
+                    {attribute/product_id})
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+            - id: revenue
+              type: metric
+              attributes:
+                title: Revenue
+                description: ''
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
+                    IN ("Returned", "Canceled"))
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+            - id: revenue-clothing
+              type: metric
+              attributes:
+                title: Revenue (Clothing)
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Clothing")
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+            - id: revenue-electronic
+              type: metric
+              attributes:
+                title: Revenue (Electronic)
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ( "Electronics")
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+            - id: revenue-home
+              type: metric
+              attributes:
+                title: Revenue (Home)
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Home")
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+            - id: revenue-outdoor
+              type: metric
+              attributes:
+                title: Revenue (Outdoor)
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Outdoor")
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+            - id: revenue_per_customer
+              type: metric
+              attributes:
+                title: Revenue per Customer
+                areRelationsValid: true
+                content:
+                  format: $#,##0.0
+                  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+            - id: revenue_per_dollar_spent
+              type: metric
+              attributes:
+                title: Revenue per Dollar Spent
+                areRelationsValid: true
+                content:
+                  format: $#,##0.0
+                  maql: SELECT {metric/revenue} / {metric/campaign_spend}
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+            - id: revenue_top_10
+              type: metric
+              attributes:
+                title: Revenue / Top 10
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+            - id: revenue_top_10_percent
+              type: metric
+              attributes:
+                title: Revenue / Top 10%
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+            - id: total_revenue
+              type: metric
+              attributes:
+                title: Total Revenue
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} BY ALL OTHER
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+            - id: total_revenue-no_filters
+              type: metric
+              attributes:
+                title: Total Revenue (No Filters)
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
             - id: amount_of_active_customers
               type: metric
               attributes:
@@ -200,133 +327,6 @@ interactions:
                     ALL OTHER)
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
-            - id: percent_revenue_per_product
-              type: metric
-              attributes:
-                title: '% Revenue per Product'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
-                    {attribute/product_id})
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
-            - id: revenue
-              type: metric
-              attributes:
-                title: Revenue
-                description: ''
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
-                    IN ("Returned", "Canceled"))
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
-            - id: revenue-clothing
-              type: metric
-              attributes:
-                title: Revenue (Clothing)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Clothing")
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
-            - id: revenue-electronic
-              type: metric
-              attributes:
-                title: Revenue (Electronic)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ( "Electronics")
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
-            - id: revenue-home
-              type: metric
-              attributes:
-                title: Revenue (Home)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Home")
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
-            - id: revenue-outdoor
-              type: metric
-              attributes:
-                title: Revenue (Outdoor)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Outdoor")
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
-            - id: revenue_per_customer
-              type: metric
-              attributes:
-                title: Revenue per Customer
-                areRelationsValid: true
-                content:
-                  format: $#,##0.0
-                  maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
-            - id: revenue_per_dollar_spent
-              type: metric
-              attributes:
-                title: Revenue per Dollar Spent
-                areRelationsValid: true
-                content:
-                  format: $#,##0.0
-                  maql: SELECT {metric/revenue} / {metric/campaign_spend}
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
-            - id: revenue_top_10
-              type: metric
-              attributes:
-                title: Revenue / Top 10
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
-            - id: revenue_top_10_percent
-              type: metric
-              attributes:
-                title: Revenue / Top 10%
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
-            - id: total_revenue
-              type: metric
-              attributes:
-                title: Total Revenue
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} BY ALL OTHER
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
-            - id: total_revenue-no_filters
-              type: metric
-              attributes:
-                title: Total Revenue (No Filters)
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500

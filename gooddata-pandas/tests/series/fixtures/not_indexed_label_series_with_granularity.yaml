@@ -126,7 +126,7 @@ interactions:
                         type: label
                 localIdentifier: dim_0
             links:
-              executionResult: a645b8dd53c89ab2b82e3a850b32929669d03d9b
+              executionResult: 1e6fd5a630705716a1122d1221b3002d819b89ac
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
@@ -337,9 +337,9 @@ interactions:
               relationships:
                 labels:
                   data:
-                    - id: state
-                      type: label
                     - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
@@ -1212,11 +1212,11 @@ interactions:
                     sourceColumns:
                       - customer_id
                   - identifier:
-                      id: date
+                      id: campaigns
                       type: dataset
                     multivalue: false
                     sourceColumns:
-                      - date
+                      - campaign_id
                   - identifier:
                       id: products
                       type: dataset
@@ -1224,11 +1224,11 @@ interactions:
                     sourceColumns:
                       - product_id
                   - identifier:
-                      id: campaigns
+                      id: date
                       type: dataset
                     multivalue: false
                     sourceColumns:
-                      - campaign_id
+                      - date
                 dataSourceTableId: demo-test-ds:order_lines
                 areRelationsValid: true
                 type: NORMAL
@@ -1285,33 +1285,33 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.month
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
                     - id: date.quarter
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.quarterOfYear
                       type: attribute
                     - id: date.dayOfWeek
                       type: attribute
-                    - id: date.weekOfYear
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.week
                       type: attribute
                     - id: date.hour
+                      type: attribute
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.minute
                       type: attribute
                     - id: date.monthOfYear
                       type: attribute
@@ -1991,7 +1991,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a645b8dd53c89ab2b82e3a850b32929669d03d9b?offset=0&limit=1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/1e6fd5a630705716a1122d1221b3002d819b89ac?offset=0&limit=1000
       body: null
       headers:
         Accept:

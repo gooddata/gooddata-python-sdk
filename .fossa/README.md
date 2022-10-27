@@ -6,5 +6,5 @@ Use job https://checklist.intgdc.com/job/space/job/fossa-repository-scanning-too
 - REPOSITORIES: gooddata-python-sdk
 - GITHUB_USER: gooddata
 - BRANCH: latest
-- DOCKER_IMAGE: harbor.intgdc.com/pavel.cerny/gdc-fossa-cli_py39:latest
+- DOCKER_IMAGE: harbor.intgdc.com/tools/gdc-fossa-cli:latest
 - SCAN_CMD: analyze

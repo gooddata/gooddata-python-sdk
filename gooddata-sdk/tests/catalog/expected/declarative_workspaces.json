@@ -1,6 +1,7 @@
 {
   "workspaces": [
     {
+      "customApplicationSettings": [],
       "hierarchyPermissions": [
         {
           "assignee": {
@@ -2678,6 +2679,7 @@
       "settings": []
     },
     {
+      "customApplicationSettings": [],
       "hierarchyPermissions": [],
       "id": "demo_west",
       "model": {
@@ -2702,6 +2704,7 @@
       "settings": []
     },
     {
+      "customApplicationSettings": [],
       "hierarchyPermissions": [],
       "id": "demo_west_california",
       "model": {

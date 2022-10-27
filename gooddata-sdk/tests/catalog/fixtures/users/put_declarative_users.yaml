@@ -73,22 +73,22 @@ interactions:
         string:
           users:
             - id: admin
+              settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
+            - authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
+              id: demo
               settings: []
-            - id: demo
-              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
               userGroups:
                 - id: adminGroup
                   type: userGroup
+            - authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+              id: demo2
               settings: []
-            - id: demo2
-              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
               userGroups:
                 - id: demoGroup
                   type: userGroup
-              settings: []
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
@@ -169,21 +169,10 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/admin
-            - id: demo2
-              type: user
-              attributes:
-                authenticationId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
+                authenticationId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -191,6 +180,17 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo
+            - id: demo2
+              type: user
+              attributes:
+                authenticationId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
           included:
             - id: adminGroup
               type: userGroup
@@ -281,13 +281,13 @@ interactions:
                 type: userGroup
             settings: []
           - id: demo
-            authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
+            authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
           - id: demo2
-            authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
+            authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -426,22 +426,22 @@ interactions:
         string:
           users:
             - id: admin
+              settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
+            - authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
+              id: demo
               settings: []
-            - id: demo
-              authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
               userGroups:
                 - id: adminGroup
                   type: userGroup
+            - authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+              id: demo2
               settings: []
-            - id: demo2
-              authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
               userGroups:
                 - id: demoGroup
                   type: userGroup
-              settings: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/users
@@ -453,13 +453,13 @@ interactions:
                 type: userGroup
             settings: []
           - id: demo
-            authId: CiQzNDljOGMzYi02OTllLTRhY2EtOTk5NC0xODZjYTQ2YzYxMTUSBWxvY2Fs
+            authId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
           - id: demo2
-            authId: CiQ5ZjYzOWEwNC0xY2NlLTQ1YzQtYmU3My1lZGEwODgzYzEzMGMSBWxvY2Fs
+            authId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

@@ -194,10 +194,10 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a4506d758df1e0244e029f1da155c2a3493311db
+              executionResult: e73c7f66e2f4df26d86143222f2feb2b5195ac10
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4506d758df1e0244e029f1da155c2a3493311db/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e73c7f66e2f4df26d86143222f2feb2b5195ac10/metadata
       body: null
       headers:
         Accept:
@@ -357,7 +357,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a4506d758df1e0244e029f1da155c2a3493311db
+              executionResult: e73c7f66e2f4df26d86143222f2feb2b5195ac10
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -389,10 +389,10 @@ interactions:
                       - region
                       - state
                       - measureGroup
-          resultSize: 11856
+          resultSize: 11840
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4506d758df1e0244e029f1da155c2a3493311db?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e73c7f66e2f4df26d86143222f2feb2b5195ac10?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -415,7 +415,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '23307'
+          - '23291'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1353,11 +1353,11 @@ interactions:
                         labelValue: Rhode Island
                         primaryLabelValue: Rhode Island
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -1846,7 +1846,7 @@ interactions:
               - 4
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4506d758df1e0244e029f1da155c2a3493311db/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e73c7f66e2f4df26d86143222f2feb2b5195ac10/metadata
       body: null
       headers:
         Accept:
@@ -2006,7 +2006,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a4506d758df1e0244e029f1da155c2a3493311db
+              executionResult: e73c7f66e2f4df26d86143222f2feb2b5195ac10
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -2038,10 +2038,10 @@ interactions:
                       - region
                       - state
                       - measureGroup
-          resultSize: 11856
+          resultSize: 11840
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a4506d758df1e0244e029f1da155c2a3493311db?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e73c7f66e2f4df26d86143222f2feb2b5195ac10?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2064,7 +2064,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '23307'
+          - '23291'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -3002,11 +3002,11 @@ interactions:
                         labelValue: Rhode Island
                         primaryLabelValue: Rhode Island
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona

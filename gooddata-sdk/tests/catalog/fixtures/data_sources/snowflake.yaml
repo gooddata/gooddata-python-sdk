@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3f7cbf4b70183cec
+          traceId: e7b37ee210c7834c
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -85,12 +85,12 @@ interactions:
             name: Test
             schema: demo
             type: SNOWFLAKE
-            url: jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGERparam=value
             username: demouser
             password: demopass
             enableCaching: true
             cachePath:
               - cache_schema
+            url: jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGERparam=value
           id: test
           type: dataSource
       headers:
