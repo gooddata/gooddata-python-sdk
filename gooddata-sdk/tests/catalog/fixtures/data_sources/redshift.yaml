@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4846860468b37ab8
+          traceId: 3d3edfc106d1f3b8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -85,10 +85,10 @@ interactions:
             name: Test2
             schema: demo
             type: REDSHIFT
-            url: jdbc:redshift://aws.endpoint:5439/demoparam=value
             username: demouser
             password: demopass
             enableCaching: false
+            url: jdbc:redshift://aws.endpoint:5439/demoparam=value
           id: test
           type: dataSource
       headers:

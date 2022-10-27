@@ -12,7 +12,6 @@ from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
     BasicCredentials,
-    BigQueryAttributes,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
     CatalogDataSourcePostgres,
@@ -220,18 +219,16 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "bigquery.yaml"))
 def test_catalog_create_data_source_bigquery_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    with mock.patch("builtins.open", mock.mock_open(read_data=b"bigquery_service_account_json")):
+    with mock.patch("builtins.open", mock.mock_open(read_data=test_config["bigquery_token_file"].encode("utf-8"))):
         _create_delete_ds(
             sdk=sdk,
             data_source=CatalogDataSourceBigQuery(
                 id="test",
                 name="Test",
-                db_specific_attributes=BigQueryAttributes(project_id="gdc-us-dev"),
                 schema="demo",
                 credentials=TokenCredentialsFromFile(file_path=Path("credentials") / "bigquery_service_account.json"),
                 enable_caching=True,
                 cache_path=["cache_schema"],
-                url_params=[("param", "value")],
             ),
         )
 
@@ -343,7 +340,7 @@ def test_load_and_put_declarative_data_sources(test_config):
     expected_json_path = _current_dir / "expected" / "declarative_data_sources.json"
     try:
         sdk.catalog_data_source.put_declarative_data_sources(CatalogDeclarativeDataSources(data_sources=[]))
-        TokenCredentialsFromFile.token_from_file = MagicMock(return_value="c2VjcmV0X3Rva2Vu")
+        TokenCredentialsFromFile.token_from_file = MagicMock(return_value=test_config["bigquery_token"])
         sdk.catalog_data_source.load_and_put_declarative_data_sources(load_folder, credentials_path)
         data_sources_o = sdk.catalog_data_source.get_declarative_data_sources()
         assert len(data_sources_o.data_sources) == 3
@@ -362,6 +359,8 @@ def test_load_and_put_declarative_data_sources(test_config):
             5,
             5,
         ]
+        assert len(data_sources_o.data_sources[0].parameters) == 1
+        assert len(data_sources_o.data_sources[0].decoded_parameters) == 3
     finally:
         with open(expected_json_path) as f:
             data = json.load(f)

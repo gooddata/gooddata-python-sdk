@@ -77,15 +77,15 @@ interactions:
       body:
         string:
           graph:
-            nodes:
-              - id: campaign_channel_id
-                type: attribute
-                title: Campaign channel id
-              - id: campaign_channels
-                type: dataset
-                title: Campaign channels
             edges:
               - - id: campaign_channel_id
                   type: attribute
                 - id: campaign_channels
                   type: dataset
+            nodes:
+              - id: campaign_channel_id
+                title: Campaign channel id
+                type: attribute
+              - id: campaign_channels
+                title: Campaign channels
+                type: dataset

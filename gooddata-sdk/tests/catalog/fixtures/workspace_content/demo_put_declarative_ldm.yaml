@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 9c4d14d6ff7b1303
+          traceId: bca336df26e68192
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -230,47 +230,50 @@ interactions:
         string:
           ldm:
             datasets:
-              - id: campaign_channels
-                title: Campaign channels
-                description: Campaign channels
-                grain:
-                  - id: campaign_channel_id
-                    type: attribute
-                attributes:
-                  - id: campaign_channel_id
-                    title: Campaign channel id
-                    description: Campaign channel id
+              - attributes:
+                  - description: Campaign channel id
+                    id: campaign_channel_id
                     labels: []
-                    tags:
-                      - Campaign channels
                     sourceColumn: campaign_channel_id
-                  - id: campaign_channels.category
-                    title: Category
-                    description: Category
-                    labels: []
                     tags:
                       - Campaign channels
+                    title: Campaign channel id
+                  - description: Category
+                    id: campaign_channels.category
+                    labels: []
                     sourceColumn: category
-                  - id: type
-                    title: Type
-                    description: Type
-                    labels: []
                     tags:
                       - Campaign channels
+                    title: Category
+                  - description: Type
+                    id: type
+                    labels: []
                     sourceColumn: type
+                    tags:
+                      - Campaign channels
+                    title: Type
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: campaign_channels
+                  type: dataSource
+                description: Campaign channels
                 facts:
-                  - id: budget
-                    title: Budget
-                    description: Budget
+                  - description: Budget
+                    id: budget
                     sourceColumn: budget
                     tags:
                       - Campaign channels
-                  - id: spend
-                    title: Spend
-                    description: Spend
+                    title: Budget
+                  - description: Spend
+                    id: spend
                     sourceColumn: spend
                     tags:
                       - Campaign channels
+                    title: Spend
+                grain:
+                  - id: campaign_channel_id
+                    type: attribute
+                id: campaign_channels
                 references:
                   - identifier:
                       id: campaigns
@@ -278,131 +281,131 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                dataSourceTableId:
-                  id: campaign_channels
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Campaign channels
-              - id: campaigns
-                title: Campaigns
+                title: Campaign channels
+              - attributes:
+                  - description: Campaign id
+                    id: campaign_id
+                    labels: []
+                    sourceColumn: campaign_id
+                    tags:
+                      - Campaigns
+                    title: Campaign id
+                  - description: Campaign name
+                    id: campaign_name
+                    labels: []
+                    sourceColumn: campaign_name
+                    tags:
+                      - Campaigns
+                    title: Campaign name
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: campaigns
+                  type: dataSource
                 description: Campaigns
+                facts: []
                 grain:
                   - id: campaign_id
                     type: attribute
-                attributes:
-                  - id: campaign_id
-                    title: Campaign id
-                    description: Campaign id
-                    labels: []
-                    tags:
-                      - Campaigns
-                    sourceColumn: campaign_id
-                  - id: campaign_name
-                    title: Campaign name
-                    description: Campaign name
-                    labels: []
-                    tags:
-                      - Campaigns
-                    sourceColumn: campaign_name
-                facts: []
+                id: campaigns
                 references: []
-                dataSourceTableId:
-                  id: campaigns
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Campaigns
-              - id: customers
-                title: Customers
-                description: Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
-                attributes:
-                  - id: customer_id
-                    title: Customer id
-                    description: Customer id
+                title: Campaigns
+              - attributes:
+                  - description: Customer id
+                    id: customer_id
                     labels: []
-                    tags:
-                      - Customers
                     sourceColumn: customer_id
-                  - id: customer_name
-                    title: Customer name
-                    description: Customer name
-                    labels: []
                     tags:
                       - Customers
+                    title: Customer id
+                  - description: Customer name
+                    id: customer_name
+                    labels: []
                     sourceColumn: customer_name
-                  - id: region
-                    title: Region
-                    description: Region
-                    labels: []
                     tags:
                       - Customers
+                    title: Customer name
+                  - description: Region
+                    id: region
+                    labels: []
                     sourceColumn: region
-                  - id: state
-                    title: State
-                    description: State
+                    tags:
+                      - Customers
+                    title: Region
+                  - description: State
+                    id: state
                     labels:
-                      - id: geo__state__location
-                        title: Location
-                        description: Location
+                      - description: Location
+                        id: geo__state__location
                         sourceColumn: geo__state__location
                         tags:
                           - Customers
+                        title: Location
+                    sourceColumn: state
                     tags:
                       - Customers
-                    sourceColumn: state
-                facts: []
-                references: []
+                    title: State
                 dataSourceTableId:
-                  id: customers
                   dataSourceId: demo-test-ds
+                  id: customers
                   type: dataSource
+                description: Customers
+                facts: []
+                grain:
+                  - id: customer_id
+                    type: attribute
+                id: customers
+                references: []
                 tags:
                   - Customers
-              - id: order_lines
-                title: Order lines
-                description: Order lines
-                grain:
-                  - id: order_line_id
-                    type: attribute
-                attributes:
-                  - id: order_id
-                    title: Order id
-                    description: Order id
+                title: Customers
+              - attributes:
+                  - description: Order id
+                    id: order_id
                     labels: []
-                    tags:
-                      - Order lines
                     sourceColumn: order_id
-                  - id: order_line_id
-                    title: Order line id
-                    description: Order line id
-                    labels: []
                     tags:
                       - Order lines
+                    title: Order id
+                  - description: Order line id
+                    id: order_line_id
+                    labels: []
                     sourceColumn: order_line_id
-                  - id: order_status
-                    title: Order status
-                    description: Order status
-                    labels: []
                     tags:
                       - Order lines
+                    title: Order line id
+                  - description: Order status
+                    id: order_status
+                    labels: []
                     sourceColumn: order_status
+                    tags:
+                      - Order lines
+                    title: Order status
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: order_lines
+                  type: dataSource
+                description: Order lines
                 facts:
-                  - id: price
-                    title: Price
-                    description: Price
+                  - description: Price
+                    id: price
                     sourceColumn: price
                     tags:
                       - Order lines
-                  - id: quantity
-                    title: Quantity
-                    description: Quantity
+                    title: Price
+                  - description: Quantity
+                    id: quantity
                     sourceColumn: quantity
                     tags:
                       - Order lines
+                    title: Quantity
+                grain:
+                  - id: order_line_id
+                    type: attribute
+                id: order_lines
                 references:
                   - identifier:
                       id: campaigns
@@ -428,55 +431,47 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - product_id
-                dataSourceTableId:
-                  id: order_lines
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Order lines
-              - id: products
-                title: Products
+                title: Order lines
+              - attributes:
+                  - description: Product id
+                    id: product_id
+                    labels: []
+                    sourceColumn: product_id
+                    tags:
+                      - Products
+                    title: Product id
+                  - description: Product name
+                    id: product_name
+                    labels: []
+                    sourceColumn: product_name
+                    tags:
+                      - Products
+                    title: Product name
+                  - description: Category
+                    id: products.category
+                    labels: []
+                    sourceColumn: category
+                    tags:
+                      - Products
+                    title: Category
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: products
+                  type: dataSource
                 description: Products
+                facts: []
                 grain:
                   - id: product_id
                     type: attribute
-                attributes:
-                  - id: product_id
-                    title: Product id
-                    description: Product id
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: product_id
-                  - id: product_name
-                    title: Product name
-                    description: Product name
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: product_name
-                  - id: products.category
-                    title: Category
-                    description: Category
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: category
-                facts: []
+                id: products
                 references: []
-                dataSourceTableId:
-                  id: products
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Products
+                title: Products
             dateInstances:
-              - id: date
-                title: Date
-                description: ''
-                granularitiesFormatting:
-                  titleBase: ''
-                  titlePattern: '%titleBase - %granularityTitle'
+              - description: ''
                 granularities:
                   - MINUTE
                   - HOUR
@@ -493,8 +488,13 @@ interactions:
                   - WEEK_OF_YEAR
                   - MONTH_OF_YEAR
                   - QUARTER_OF_YEAR
+                granularitiesFormatting:
+                  titleBase: ''
+                  titlePattern: '%titleBase - %granularityTitle'
+                id: date
                 tags:
                   - Date
+                title: Date
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaces/test_put_declarative_ldm/logicalModel
@@ -900,47 +900,50 @@ interactions:
         string:
           ldm:
             datasets:
-              - id: campaign_channels
-                title: Campaign channels
-                description: Campaign channels
-                grain:
-                  - id: campaign_channel_id
-                    type: attribute
-                attributes:
-                  - id: campaign_channel_id
-                    title: Campaign channel id
-                    description: Campaign channel id
+              - attributes:
+                  - description: Campaign channel id
+                    id: campaign_channel_id
                     labels: []
-                    tags:
-                      - Campaign channels
                     sourceColumn: campaign_channel_id
-                  - id: campaign_channels.category
-                    title: Category
-                    description: Category
-                    labels: []
                     tags:
                       - Campaign channels
+                    title: Campaign channel id
+                  - description: Category
+                    id: campaign_channels.category
+                    labels: []
                     sourceColumn: category
-                  - id: type
-                    title: Type
-                    description: Type
-                    labels: []
                     tags:
                       - Campaign channels
+                    title: Category
+                  - description: Type
+                    id: type
+                    labels: []
                     sourceColumn: type
+                    tags:
+                      - Campaign channels
+                    title: Type
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: campaign_channels
+                  type: dataSource
+                description: Campaign channels
                 facts:
-                  - id: budget
-                    title: Budget
-                    description: Budget
+                  - description: Budget
+                    id: budget
                     sourceColumn: budget
                     tags:
                       - Campaign channels
-                  - id: spend
-                    title: Spend
-                    description: Spend
+                    title: Budget
+                  - description: Spend
+                    id: spend
                     sourceColumn: spend
                     tags:
                       - Campaign channels
+                    title: Spend
+                grain:
+                  - id: campaign_channel_id
+                    type: attribute
+                id: campaign_channels
                 references:
                   - identifier:
                       id: campaigns
@@ -948,131 +951,131 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                dataSourceTableId:
-                  id: campaign_channels
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Campaign channels
-              - id: campaigns
-                title: Campaigns
+                title: Campaign channels
+              - attributes:
+                  - description: Campaign id
+                    id: campaign_id
+                    labels: []
+                    sourceColumn: campaign_id
+                    tags:
+                      - Campaigns
+                    title: Campaign id
+                  - description: Campaign name
+                    id: campaign_name
+                    labels: []
+                    sourceColumn: campaign_name
+                    tags:
+                      - Campaigns
+                    title: Campaign name
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: campaigns
+                  type: dataSource
                 description: Campaigns
+                facts: []
                 grain:
                   - id: campaign_id
                     type: attribute
-                attributes:
-                  - id: campaign_id
-                    title: Campaign id
-                    description: Campaign id
-                    labels: []
-                    tags:
-                      - Campaigns
-                    sourceColumn: campaign_id
-                  - id: campaign_name
-                    title: Campaign name
-                    description: Campaign name
-                    labels: []
-                    tags:
-                      - Campaigns
-                    sourceColumn: campaign_name
-                facts: []
+                id: campaigns
                 references: []
-                dataSourceTableId:
-                  id: campaigns
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Campaigns
-              - id: customers
-                title: Customers
-                description: Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
-                attributes:
-                  - id: customer_id
-                    title: Customer id
-                    description: Customer id
+                title: Campaigns
+              - attributes:
+                  - description: Customer id
+                    id: customer_id
                     labels: []
-                    tags:
-                      - Customers
                     sourceColumn: customer_id
-                  - id: customer_name
-                    title: Customer name
-                    description: Customer name
-                    labels: []
                     tags:
                       - Customers
+                    title: Customer id
+                  - description: Customer name
+                    id: customer_name
+                    labels: []
                     sourceColumn: customer_name
-                  - id: region
-                    title: Region
-                    description: Region
-                    labels: []
                     tags:
                       - Customers
+                    title: Customer name
+                  - description: Region
+                    id: region
+                    labels: []
                     sourceColumn: region
-                  - id: state
-                    title: State
-                    description: State
+                    tags:
+                      - Customers
+                    title: Region
+                  - description: State
+                    id: state
                     labels:
-                      - id: geo__state__location
-                        title: Location
-                        description: Location
+                      - description: Location
+                        id: geo__state__location
                         sourceColumn: geo__state__location
                         tags:
                           - Customers
+                        title: Location
+                    sourceColumn: state
                     tags:
                       - Customers
-                    sourceColumn: state
-                facts: []
-                references: []
+                    title: State
                 dataSourceTableId:
-                  id: customers
                   dataSourceId: demo-test-ds
+                  id: customers
                   type: dataSource
+                description: Customers
+                facts: []
+                grain:
+                  - id: customer_id
+                    type: attribute
+                id: customers
+                references: []
                 tags:
                   - Customers
-              - id: order_lines
-                title: Order lines
-                description: Order lines
-                grain:
-                  - id: order_line_id
-                    type: attribute
-                attributes:
-                  - id: order_id
-                    title: Order id
-                    description: Order id
+                title: Customers
+              - attributes:
+                  - description: Order id
+                    id: order_id
                     labels: []
-                    tags:
-                      - Order lines
                     sourceColumn: order_id
-                  - id: order_line_id
-                    title: Order line id
-                    description: Order line id
-                    labels: []
                     tags:
                       - Order lines
+                    title: Order id
+                  - description: Order line id
+                    id: order_line_id
+                    labels: []
                     sourceColumn: order_line_id
-                  - id: order_status
-                    title: Order status
-                    description: Order status
-                    labels: []
                     tags:
                       - Order lines
+                    title: Order line id
+                  - description: Order status
+                    id: order_status
+                    labels: []
                     sourceColumn: order_status
+                    tags:
+                      - Order lines
+                    title: Order status
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: order_lines
+                  type: dataSource
+                description: Order lines
                 facts:
-                  - id: price
-                    title: Price
-                    description: Price
+                  - description: Price
+                    id: price
                     sourceColumn: price
                     tags:
                       - Order lines
-                  - id: quantity
-                    title: Quantity
-                    description: Quantity
+                    title: Price
+                  - description: Quantity
+                    id: quantity
                     sourceColumn: quantity
                     tags:
                       - Order lines
+                    title: Quantity
+                grain:
+                  - id: order_line_id
+                    type: attribute
+                id: order_lines
                 references:
                   - identifier:
                       id: campaigns
@@ -1098,55 +1101,47 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - product_id
-                dataSourceTableId:
-                  id: order_lines
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Order lines
-              - id: products
-                title: Products
+                title: Order lines
+              - attributes:
+                  - description: Product id
+                    id: product_id
+                    labels: []
+                    sourceColumn: product_id
+                    tags:
+                      - Products
+                    title: Product id
+                  - description: Product name
+                    id: product_name
+                    labels: []
+                    sourceColumn: product_name
+                    tags:
+                      - Products
+                    title: Product name
+                  - description: Category
+                    id: products.category
+                    labels: []
+                    sourceColumn: category
+                    tags:
+                      - Products
+                    title: Category
+                dataSourceTableId:
+                  dataSourceId: demo-test-ds
+                  id: products
+                  type: dataSource
                 description: Products
+                facts: []
                 grain:
                   - id: product_id
                     type: attribute
-                attributes:
-                  - id: product_id
-                    title: Product id
-                    description: Product id
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: product_id
-                  - id: product_name
-                    title: Product name
-                    description: Product name
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: product_name
-                  - id: products.category
-                    title: Category
-                    description: Category
-                    labels: []
-                    tags:
-                      - Products
-                    sourceColumn: category
-                facts: []
+                id: products
                 references: []
-                dataSourceTableId:
-                  id: products
-                  dataSourceId: demo-test-ds
-                  type: dataSource
                 tags:
                   - Products
+                title: Products
             dateInstances:
-              - id: date
-                title: Date
-                description: ''
-                granularitiesFormatting:
-                  titleBase: ''
-                  titlePattern: '%titleBase - %granularityTitle'
+              - description: ''
                 granularities:
                   - MINUTE
                   - HOUR
@@ -1163,8 +1158,13 @@ interactions:
                   - WEEK_OF_YEAR
                   - MONTH_OF_YEAR
                   - QUARTER_OF_YEAR
+                granularitiesFormatting:
+                  titleBase: ''
+                  titlePattern: '%titleBase - %granularityTitle'
+                id: date
                 tags:
                   - Date
+                title: Date
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces?include=workspaces&page=0&size=500

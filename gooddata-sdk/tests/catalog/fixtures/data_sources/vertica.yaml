@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d1e7b6b3032bee35
+          traceId: 630cd5ea0730a8f8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -85,10 +85,10 @@ interactions:
             name: Test2
             schema: demo
             type: VERTICA
-            url: jdbc:vertica://localhost:5433/demoparam=value
             username: demouser
             password: demopass
             enableCaching: false
+            url: jdbc:vertica://localhost:5433/demoparam=value
           id: test
           type: dataSource
       headers:

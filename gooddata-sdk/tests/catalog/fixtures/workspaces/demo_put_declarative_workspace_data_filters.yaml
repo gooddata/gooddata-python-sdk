@@ -72,34 +72,34 @@ interactions:
       body:
         string:
           workspaceDataFilters:
-            - id: wdf__region
+            - columnName: wdf__region
+              id: wdf__region
               title: Customer region
-              columnName: wdf__region
-              workspaceDataFilterSettings:
-                - id: region_west
-                  title: Region West
-                  filterValues:
-                    - West
-                  workspace:
-                    id: demo_west
-                    type: workspace
               workspace:
                 id: demo
                 type: workspace
-            - id: wdf__state
-              title: Customer state
-              columnName: wdf__state
               workspaceDataFilterSettings:
-                - id: region_west_california
-                  title: Region West California
-                  filterValues:
-                    - California
+                - filterValues:
+                    - West
+                  id: region_west
+                  title: Region West
                   workspace:
-                    id: demo_west_california
+                    id: demo_west
                     type: workspace
+            - columnName: wdf__state
+              id: wdf__state
+              title: Customer state
               workspace:
                 id: demo_west
                 type: workspace
+              workspaceDataFilterSettings:
+                - filterValues:
+                    - California
+                  id: region_west_california
+                  title: Region West California
+                  workspace:
+                    id: demo_west_california
+                    type: workspace
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
@@ -404,34 +404,34 @@ interactions:
       body:
         string:
           workspaceDataFilters:
-            - id: wdf__region
+            - columnName: wdf__region
+              id: wdf__region
               title: Customer region
-              columnName: wdf__region
-              workspaceDataFilterSettings:
-                - id: region_west
-                  title: Region West
-                  filterValues:
-                    - West
-                  workspace:
-                    id: demo_west
-                    type: workspace
               workspace:
                 id: demo
                 type: workspace
-            - id: wdf__state
-              title: Customer state
-              columnName: wdf__state
               workspaceDataFilterSettings:
-                - id: region_west_california
-                  title: Region West California
-                  filterValues:
-                    - California
+                - filterValues:
+                    - West
+                  id: region_west
+                  title: Region West
                   workspace:
-                    id: demo_west_california
+                    id: demo_west
                     type: workspace
+            - columnName: wdf__state
+              id: wdf__state
+              title: Customer state
               workspace:
                 id: demo_west
                 type: workspace
+              workspaceDataFilterSettings:
+                - filterValues:
+                    - California
+                  id: region_west_california
+                  title: Region West California
+                  workspace:
+                    id: demo_west_california
+                    type: workspace
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaceDataFilters

@@ -192,10 +192,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888
+              executionResult: 9ddde844043814d1b9b469ef95459018f6d8bfc4
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9ddde844043814d1b9b469ef95459018f6d8bfc4/metadata
       body: null
       headers:
         Accept:
@@ -355,7 +355,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888
+              executionResult: 9ddde844043814d1b9b469ef95459018f6d8bfc4
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -385,10 +385,10 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
-          resultSize: 12250
+          resultSize: 12234
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9ddde844043814d1b9b469ef95459018f6d8bfc4?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -411,7 +411,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '24559'
+          - '24543'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1224,10 +1224,10 @@ interactions:
               - null
               - null
               - null
-            - - 652.4
+            - - null
+              - null
+              - 652.4
               - 712.22
-              - null
-              - null
               - null
               - null
               - 527.93
@@ -1320,10 +1320,10 @@ interactions:
               - 681.94
               - null
               - null
-            - - 949.42
+            - - null
+              - null
+              - 949.42
               - 1198.83
-              - null
-              - null
               - null
               - null
               - 316.18
@@ -1416,10 +1416,10 @@ interactions:
               - 750.01
               - null
               - null
-            - - 759.31
+            - - null
+              - null
+              - 759.31
               - 927.48
-              - null
-              - null
               - null
               - null
               - 454.73
@@ -1512,10 +1512,10 @@ interactions:
               - 1176.32
               - null
               - null
-            - - 3837.42
+            - - null
+              - null
               - 3837.42
-              - null
-              - null
+              - 3837.42
               - null
               - null
               - 3384.84
@@ -1704,10 +1704,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 790.0
+            - - 790.0
               - 963.08
+              - null
+              - null
               - 2294.87
               - 2725.93
               - null
@@ -1800,10 +1800,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 869.41
+            - - 869.41
               - 890.67
+              - null
+              - null
               - 2170.62
               - 2380.37
               - null
@@ -1896,10 +1896,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 659.24
+            - - 659.24
               - 926.38
+              - null
+              - null
               - 2137.33
               - 2158.09
               - null
@@ -1992,10 +1992,10 @@ interactions:
               - null
               - null
               - null
-            - - null
+            - - 2664.71
+              - 2664.71
               - null
-              - 2664.71
-              - 2664.71
+              - null
               - 3676.86
               - 3676.86
               - null
@@ -2197,17 +2197,17 @@ interactions:
             - headerGroups:
                 - headers:
                     - attributeHeader:
-                        labelValue: Alabama
-                        primaryLabelValue: Alabama
+                        labelValue: AK
+                        primaryLabelValue: AK
+                    - attributeHeader:
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
-                    - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: Alabama
+                        primaryLabelValue: Alabama
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -2680,9 +2680,9 @@ interactions:
           grandTotals:
             - data:
                 - - null
-                  - 3837.42
-                  - null
                   - 2664.71
+                  - null
+                  - 3837.42
                   - null
                   - 3676.86
                   - null
@@ -2775,9 +2775,9 @@ interactions:
                   - 1176.32
                   - null
                   - 5646.42
-                - - 6198.55
+                - - 4983.36
                   - null
-                  - 4983.36
+                  - 6198.55
                   - null
                   - 10279.68
                   - null
@@ -2897,7 +2897,7 @@ interactions:
               - 96
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9ddde844043814d1b9b469ef95459018f6d8bfc4/metadata
       body: null
       headers:
         Accept:
@@ -3057,7 +3057,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888
+              executionResult: 9ddde844043814d1b9b469ef95459018f6d8bfc4
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3087,10 +3087,10 @@ interactions:
                     totalDimensionItems:
                       - state
                       - measureGroup
-          resultSize: 12250
+          resultSize: 12234
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/f1ddb5ac0e6d3f47aea093fd1ab625d2dbca7888?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9ddde844043814d1b9b469ef95459018f6d8bfc4?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -3113,7 +3113,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '24559'
+          - '24543'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -3926,10 +3926,10 @@ interactions:
               - null
               - null
               - null
-            - - 652.4
+            - - null
+              - null
+              - 652.4
               - 712.22
-              - null
-              - null
               - null
               - null
               - 527.93
@@ -4022,10 +4022,10 @@ interactions:
               - 681.94
               - null
               - null
-            - - 949.42
+            - - null
+              - null
+              - 949.42
               - 1198.83
-              - null
-              - null
               - null
               - null
               - 316.18
@@ -4118,10 +4118,10 @@ interactions:
               - 750.01
               - null
               - null
-            - - 759.31
+            - - null
+              - null
+              - 759.31
               - 927.48
-              - null
-              - null
               - null
               - null
               - 454.73
@@ -4214,10 +4214,10 @@ interactions:
               - 1176.32
               - null
               - null
-            - - 3837.42
+            - - null
+              - null
               - 3837.42
-              - null
-              - null
+              - 3837.42
               - null
               - null
               - 3384.84
@@ -4406,10 +4406,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 790.0
+            - - 790.0
               - 963.08
+              - null
+              - null
               - 2294.87
               - 2725.93
               - null
@@ -4502,10 +4502,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 869.41
+            - - 869.41
               - 890.67
+              - null
+              - null
               - 2170.62
               - 2380.37
               - null
@@ -4598,10 +4598,10 @@ interactions:
               - null
               - null
               - null
-            - - null
-              - null
-              - 659.24
+            - - 659.24
               - 926.38
+              - null
+              - null
               - 2137.33
               - 2158.09
               - null
@@ -4694,10 +4694,10 @@ interactions:
               - null
               - null
               - null
-            - - null
+            - - 2664.71
+              - 2664.71
               - null
-              - 2664.71
-              - 2664.71
+              - null
               - 3676.86
               - 3676.86
               - null
@@ -4899,17 +4899,17 @@ interactions:
             - headerGroups:
                 - headers:
                     - attributeHeader:
-                        labelValue: Alabama
-                        primaryLabelValue: Alabama
+                        labelValue: AK
+                        primaryLabelValue: AK
+                    - attributeHeader:
+                        labelValue: AK
+                        primaryLabelValue: AK
                     - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
                     - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
-                    - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
+                        labelValue: Alabama
+                        primaryLabelValue: Alabama
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -5382,9 +5382,9 @@ interactions:
           grandTotals:
             - data:
                 - - null
-                  - 3837.42
-                  - null
                   - 2664.71
+                  - null
+                  - 3837.42
                   - null
                   - 3676.86
                   - null
@@ -5477,9 +5477,9 @@ interactions:
                   - 1176.32
                   - null
                   - 5646.42
-                - - 6198.55
+                - - 4983.36
                   - null
-                  - 4983.36
+                  - 6198.55
                   - null
                   - 10279.68
                   - null

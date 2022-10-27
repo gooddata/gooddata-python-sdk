@@ -175,10 +175,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 84f17ec92e4c381193ecb617a58cef6bf68bf00b
+              executionResult: 526c8e8a10e8e7363ffb95f57a7269421b08b814
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/84f17ec92e4c381193ecb617a58cef6bf68bf00b/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/526c8e8a10e8e7363ffb95f57a7269421b08b814/metadata
       body: null
       headers:
         Accept:
@@ -338,7 +338,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 84f17ec92e4c381193ecb617a58cef6bf68bf00b
+              executionResult: 526c8e8a10e8e7363ffb95f57a7269421b08b814
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -352,10 +352,10 @@ interactions:
                   - measureGroup
                 sorting: []
             totals: []
-          resultSize: 7085
+          resultSize: 7077
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/84f17ec92e4c381193ecb617a58cef6bf68bf00b?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/526c8e8a10e8e7363ffb95f57a7269421b08b814?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -378,7 +378,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '11303'
+          - '11295'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -423,14 +423,6 @@ interactions:
       body:
         string:
           data:
-            - - 652.4
-              - 712.22
-              - 949.42
-              - 1198.83
-              - 759.31
-              - 927.48
-              - 3837.42
-              - 3837.42
             - - 790.0
               - 963.08
               - 869.41
@@ -439,6 +431,14 @@ interactions:
               - 926.38
               - 2664.71
               - 2664.71
+            - - 652.4
+              - 712.22
+              - 949.42
+              - 1198.83
+              - 759.31
+              - 927.48
+              - 3837.42
+              - 3837.42
             - - 2294.87
               - 2725.93
               - 2170.62
@@ -811,11 +811,11 @@ interactions:
             - headerGroups:
                 - headers:
                     - attributeHeader:
+                        labelValue: AK
+                        primaryLabelValue: AK
+                    - attributeHeader:
                         labelValue: Alabama
                         primaryLabelValue: Alabama
-                    - attributeHeader:
-                        labelValue: Alaska
-                        primaryLabelValue: Alaska
                     - attributeHeader:
                         labelValue: Arizona
                         primaryLabelValue: Arizona
@@ -956,11 +956,11 @@ interactions:
                         primaryLabelValue: Wisconsin
                 - headers:
                     - attributeHeader:
-                        labelValue: South
-                        primaryLabelValue: South
-                    - attributeHeader:
                         labelValue: West
                         primaryLabelValue: West
+                    - attributeHeader:
+                        labelValue: South
+                        primaryLabelValue: South
                     - attributeHeader:
                         labelValue: West
                         primaryLabelValue: West

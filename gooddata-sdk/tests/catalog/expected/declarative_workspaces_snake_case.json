@@ -2665,7 +2665,8 @@
           }
         }
       ],
-      "settings": []
+      "settings": [],
+      "custom_application_settings": []
     },
     {
       "id": "demo_west",
@@ -2688,7 +2689,8 @@
       },
       "permissions": [],
       "hierarchy_permissions": [],
-      "settings": []
+      "settings": [],
+      "custom_application_settings": []
     },
     {
       "id": "demo_west_california",
@@ -2711,7 +2713,8 @@
       },
       "permissions": [],
       "hierarchy_permissions": [],
-      "settings": []
+      "settings": [],
+      "custom_application_settings": []
     }
   ],
   "workspace_data_filters": [
