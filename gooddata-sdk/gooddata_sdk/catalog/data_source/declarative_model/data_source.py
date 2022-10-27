@@ -9,9 +9,10 @@ import attr
 from gooddata_api_client.model.declarative_data_source import DeclarativeDataSource
 from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
+from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeDataSourcePermission
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
@@ -65,14 +66,16 @@ class CatalogDeclarativeDataSources(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDataSource(Base):
     id: str
-    type: str
     name: str
-    url: str
+    type: str = attr.field(validator=value_in_allowed)
+    url: Optional[str] = None
     schema: str
     enable_caching: Optional[bool] = None
-    pdm: Optional[CatalogDeclarativeTables] = None
+    pdm: CatalogDeclarativeTables = CatalogDeclarativeTables()
     cache_path: Optional[List[str]] = None
     username: Optional[str] = None
+    parameters: Optional[List[CatalogParameter]] = None
+    decoded_parameters: Optional[List[CatalogParameter]] = None
     permissions: List[CatalogDeclarativeDataSourcePermission] = attr.field(factory=list)
 
     def to_test_request(

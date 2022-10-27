@@ -18,7 +18,6 @@ from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table imp
 )
 from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import CatalogDataSourceTable
 from gooddata_sdk.catalog.data_source.entity_model.data_source import (
-    BigQueryAttributes,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
     CatalogDataSourcePostgres,

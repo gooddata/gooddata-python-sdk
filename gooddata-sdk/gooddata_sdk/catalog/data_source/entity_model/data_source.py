@@ -48,7 +48,7 @@ class CatalogDataSource(CatalogNameEntity):
         self.data_source_type = data_source_type or self._make_data_source_type()
         self.url = url or self._make_url()
 
-    def _make_url(self) -> str:
+    def _make_url(self) -> Optional[str]:
         if self.db_specific_attributes and self._URL_TMPL:
             db_vendor = None
             if self._URL_VENDOR:
@@ -62,7 +62,7 @@ class CatalogDataSource(CatalogNameEntity):
                 db_vendor=db_vendor,
             ) + self._join_params(";")
         else:
-            raise Exception("Neither url(constructor) nor URL_TMPL set, cannot setup final url.")
+            return None
 
     def _join_params(self, delimiter: str) -> str:
         if self.url_params:
@@ -99,13 +99,14 @@ class CatalogDataSource(CatalogNameEntity):
             kwargs["enableCaching"] = self.enable_caching
         if self.cache_path is not None:
             kwargs["cachePath"] = self.cache_path
+        if self.url is not None:
+            kwargs["url"] = self.url
         return JsonApiDataSourceInDocument(
             data=JsonApiDataSourceIn(
                 id=self.id,
                 attributes=JsonApiDataSourceInAttributes(
                     name=self.name,
                     type=self.data_source_type,
-                    url=self.url,
                     schema=self.schema,
                     **kwargs,
                 ),
@@ -176,16 +177,5 @@ class CatalogDataSourceSnowflake(CatalogDataSource):
     _DATA_SOURCE_TYPE = "SNOWFLAKE"
 
 
-class BigQueryAttributes(DatabaseAttributes):
-    def __init__(self, project_id: str, port: str = "443"):
-        self.project_id = project_id
-        self.port = port
-
-    @property
-    def str_attributes(self) -> dict[str, str]:
-        return dict(project_id=self.project_id, port=self.port)
-
-
 class CatalogDataSourceBigQuery(CatalogDataSource):
-    _URL_TMPL = "jdbc:{db_vendor}://https://www.googleapis.com/bigquery/v2:{port};ProjectId={project_id};OAuthType=0"
     _DATA_SOURCE_TYPE = "BIGQUERY"
