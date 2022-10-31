@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3bb55142488305d7
+          traceId: 6b7cc008f9ffb402
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -89,6 +89,9 @@ interactions:
             enableCaching: true
             cachePath:
               - cache_schema
+            parameters:
+              - name: projectId
+                value: abc
           id: test
           type: dataSource
       headers:
@@ -114,7 +117,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '382'
+          - '432'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -165,6 +168,9 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
+              parameters:
+                - name: projectId
+                  value: abc
               decodedParameters:
                 - name: clientEmail
                   value: SERVICE_ACCOUNT_EMAIL
