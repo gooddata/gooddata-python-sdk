@@ -79,22 +79,23 @@ def test_catalog_list_data_sources(test_config):
     assert data_sources[0].id == test_config["data_source"]
 
 
-def _create_default_data_source(sdk):
-    sdk.catalog_data_source.create_or_update_data_source(
-        CatalogDataSourcePostgres(
-            id="test",
-            name="Test",
-            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
-            schema="demo",
-            credentials=BasicCredentials(
-                username="demouser",
-                password="demopass",
-            ),
-            enable_caching=True,
-            cache_path=["cache_schema"],
-            url_params=[("param", "value")],
-        )
+def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
+    expected_data_source = CatalogDataSourcePostgres(
+        id=data_source_id,
+        name="Test",
+        db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+        schema="demo",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demopass",
+        ),
+        enable_caching=True,
+        cache_path=["cache_schema"],
+        url_params=[("param", "value")],
     )
+    sdk.catalog_data_source.create_or_update_data_source(data_source=expected_data_source)
+    data_source = sdk.catalog_data_source.get_data_source(data_source_id)
+    assert expected_data_source == data_source
 
 
 def _get_data_source(data_sources: List[CatalogDataSource], data_source_id: str) -> Optional[CatalogDataSource]:
@@ -115,20 +116,19 @@ def test_catalog_create_update_list_data_source(test_config):
         _create_default_data_source(sdk)
 
         # Update of previously created DS (same ID!)
-        sdk.catalog_data_source.create_or_update_data_source(
-            CatalogDataSourcePostgres(
-                id="test",
-                name="Test2",
-                db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
-                schema="demo",
-                credentials=BasicCredentials(
-                    username="demouser",
-                    password="demopass",
-                ),
-                enable_caching=False,
-                url_params=[("param", "value")],
-            )
+        updated_data_source = CatalogDataSourcePostgres(
+            id="test",
+            name="Test2",
+            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("param", "value")],
         )
+        sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
 
         data_sources = sdk.catalog_data_source.list_data_sources()
         assert len(data_sources) == 2
@@ -136,11 +136,7 @@ def test_catalog_create_update_list_data_source(test_config):
         assert demo_ds
         assert demo_ds.id == test_config["data_source"]
         test_ds = _get_data_source(data_sources, "test")
-        assert test_ds
-        assert test_ds.id == "test"
-        assert test_ds.name == "Test2"
-        assert not test_ds.enable_caching
-        assert test_ds.cache_path is None
+        assert updated_data_source == test_ds
     finally:
         # Cleanup every time
         sdk.catalog_data_source.delete_data_source("test")
@@ -229,6 +225,7 @@ def test_catalog_create_data_source_bigquery_spec(test_config):
                 credentials=TokenCredentialsFromFile(file_path=Path("credentials") / "bigquery_service_account.json"),
                 enable_caching=True,
                 cache_path=["cache_schema"],
+                parameters=[{"name": "projectId", "value": "abc"}],
             ),
         )
 

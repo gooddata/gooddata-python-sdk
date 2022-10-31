@@ -36,6 +36,8 @@ class CatalogDataSource(CatalogNameEntity):
         enable_caching: Optional[bool] = None,
         cache_path: Optional[list[str]] = None,
         url_params: Optional[List[Tuple[str, str]]] = None,
+        parameters: Optional[List[dict[str, str]]] = None,
+        decoded_parameters: Optional[List[dict[str, str]]] = None,
     ):
         super(CatalogDataSource, self).__init__(id, name)
         Credentials.validate_instance(self._SUPPORTED_CREDENTIALS, credentials)
@@ -47,6 +49,8 @@ class CatalogDataSource(CatalogNameEntity):
         self.url_params = url_params
         self.data_source_type = data_source_type or self._make_data_source_type()
         self.url = url or self._make_url()
+        self.parameters = parameters
+        self.decoded_parameters = decoded_parameters
 
     def _make_url(self) -> Optional[str]:
         if self.db_specific_attributes and self._URL_TMPL:
@@ -86,21 +90,25 @@ class CatalogDataSource(CatalogNameEntity):
             id=entity["id"],
             name=ea["name"],
             data_source_type=ea["type"],
-            url=ea["url"],
+            url=ea.get("url"),
             schema=ea["schema"],
             credentials=credentials,
-            enable_caching=ea.get("enableCaching"),
-            cache_path=ea.get("cachePath"),
+            enable_caching=ea.get("enable_caching"),
+            cache_path=ea.get("cache_path"),
+            parameters=ea.get("parameters"),
+            decoded_parameters=ea.get("decoded_parameters"),
         )
 
     def to_api(self) -> JsonApiDataSourceInDocument:
         kwargs = self.credentials.to_api_args()
         if self.enable_caching is not None:
-            kwargs["enableCaching"] = self.enable_caching
+            kwargs["enable_caching"] = self.enable_caching
         if self.cache_path is not None:
-            kwargs["cachePath"] = self.cache_path
+            kwargs["cache_path"] = self.cache_path
         if self.url is not None:
             kwargs["url"] = self.url
+        if self.parameters is not None:
+            kwargs["parameters"] = self.parameters
         return JsonApiDataSourceInDocument(
             data=JsonApiDataSourceIn(
                 id=self.id,
@@ -117,6 +125,17 @@ class CatalogDataSource(CatalogNameEntity):
     def to_api_patch(cls, data_source_id: str, attributes: dict) -> JsonApiDataSourcePatchDocument:
         return JsonApiDataSourcePatchDocument(
             data=JsonApiDataSourcePatch(id=data_source_id, attributes=JsonApiDataSourcePatchAttributes(**attributes))
+        )
+
+    def __eq__(self, other: Any) -> bool:
+        return (
+            self.enable_caching == other.enable_caching
+            and self.cache_path == other.cache_path
+            and self.url == other.url
+            and self.parameters == other.parameters
+            and self.name == other.name
+            and self.data_source_type == other.data_source_type
+            and self.schema == other.schema
         )
 
 
