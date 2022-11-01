@@ -47,7 +47,9 @@ class CatalogDataSourceService(CatalogServiceBase):
             self._entities_api.create_entity_data_sources(data_source.to_api())
 
     def get_data_source(self, data_source_id: str) -> CatalogDataSource:
-        return CatalogDataSource.from_api(self._entities_api.get_entity_data_sources(data_source_id).data)
+        return CatalogDataSource.from_api(
+            self._entities_api.get_entity_data_sources(data_source_id).data.to_dict(camel_case=False)
+        )
 
     def delete_data_source(self, data_source_id: str) -> None:
         self._entities_api.delete_entity_data_sources(data_source_id)
@@ -56,7 +58,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         # TODO - workaround solution getting data source type from backend
         #      - once backend accepts empty value in this field (enum), remove this code
         current_ds = self.get_data_source(data_source_id)
-        attributes["type"] = attributes.get("type", current_ds.data_source_type)
+        attributes["type"] = attributes.get("type", current_ds.type)
 
         self._entities_api.patch_entity_data_sources(
             data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)

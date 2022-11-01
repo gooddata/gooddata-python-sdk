@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, ClassVar, Optional, Type, TypeVar
 
+import attr
+
+from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.compute.model.base import ObjId
 
 T = TypeVar("T", bound="CatalogTypeEntity")
@@ -111,17 +114,18 @@ class CatalogTitleEntity:
         return self.id == other.id and self.title == other.title
 
 
-class Credentials:
+@attr.s(auto_attribs=True, kw_only=True)
+class Credentials(Base):
+    TOKEN_KEY: ClassVar[str] = "token"
+    USER_KEY: ClassVar[str] = "username"
+    PASSWORD_KEY: ClassVar[str] = "password"
+
     def to_api_args(self) -> dict[str, Any]:
-        raise NotImplementedError()
+        return attr.asdict(self)
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
-        raise NotImplementedError()
-
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> Credentials:
-        raise NotImplementedError()
+        return NotImplemented
 
     @classmethod
     def create(cls, creds_classes: list[Type[Credentials]], entity: dict[str, Any]) -> Credentials:
@@ -139,15 +143,9 @@ class Credentials:
             raise ValueError(f"Unsupported credentials type. Pick one of {classes_as_str}")
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class TokenCredentials(Credentials):
-    TOKEN_KEY: str = "token"
-    USER_KEY: str = "username"
-
-    def __init__(self, token: str):
-        self.token = token
-
-    def to_api_args(self) -> dict[str, Any]:
-        return {self.TOKEN_KEY: self.token}
+    token: str = attr.field(repr=lambda value: "***")
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
@@ -159,12 +157,13 @@ class TokenCredentials(Credentials):
         return cls(token="")
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class TokenCredentialsFromFile(Credentials):
-    TOKEN_KEY: str = "token"
-    USER_KEY: str = "username"
+    file_path: Path
+    token: str = attr.field(init=False, repr=lambda value: "***")
 
-    def __init__(self, file_path: Path):
-        self.token = self.token_from_file(file_path)
+    def __attrs_post_init__(self) -> None:
+        self.token = self.token_from_file(self.file_path)
 
     def to_api_args(self) -> dict[str, Any]:
         return {self.TOKEN_KEY: self.token}
@@ -174,7 +173,7 @@ class TokenCredentialsFromFile(Credentials):
         return cls.USER_KEY not in entity
 
     @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> TokenCredentials:
+    def from_api(cls, entity: dict[str, Any]) -> TokenCredentialsFromFile:
         # Credentials are not returned for security reasons
         raise NotImplementedError
 
@@ -184,16 +183,10 @@ class TokenCredentialsFromFile(Credentials):
             return base64.b64encode(fp.read()).decode("utf-8")
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class BasicCredentials(Credentials):
-    USER_KEY: str = "username"
-    PASSWORD_KEY: str = "password"
-
-    def __init__(self, username: str, password: str):
-        self.username = username
-        self.password = password
-
-    def to_api_args(self) -> dict[str, Any]:
-        return {self.USER_KEY: self.username, self.PASSWORD_KEY: self.password}
+    username: str
+    password: str = attr.field(repr=lambda value: "***")
 
     @classmethod
     def is_part_of_api(cls, entity: dict[str, Any]) -> bool:
