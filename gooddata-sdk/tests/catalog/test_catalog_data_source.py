@@ -36,12 +36,6 @@ _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures" / "data_sources"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test.yaml"))
-def test_optimization(test_config):
-    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
-
-
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_register_upload_notification.yaml"))
 def test_register_upload_notification(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -91,7 +85,7 @@ def _create_default_data_source(sdk: GoodDataSdk, data_source_id: str = "test"):
         ),
         enable_caching=True,
         cache_path=["cache_schema"],
-        url_params=[("param", "value")],
+        url_params=[("autosave", "true")],
     )
     sdk.catalog_data_source.create_or_update_data_source(data_source=expected_data_source)
     data_source = sdk.catalog_data_source.get_data_source(data_source_id)
@@ -126,7 +120,7 @@ def test_catalog_create_update_list_data_source(test_config):
                 password="demopass",
             ),
             enable_caching=False,
-            url_params=[("param", "value")],
+            url_params=[("autosave", "false")],
         )
         sdk.catalog_data_source.create_or_update_data_source(updated_data_source)
 
@@ -147,6 +141,8 @@ def test_catalog_create_update_list_data_source(test_config):
 def _create_delete_ds(sdk, data_source: CatalogDataSource):
     try:
         sdk.catalog_data_source.create_or_update_data_source(data_source)
+        created_ds = sdk.catalog_data_source.get_data_source(data_source.id)
+        assert data_source == created_ds
     finally:
         sdk.catalog_data_source.delete_data_source(data_source.id)
 
@@ -166,7 +162,7 @@ def test_catalog_create_data_source_redshift_spec(test_config):
                 password="demopass",
             ),
             enable_caching=False,
-            url_params=[("param", "value")],
+            url_params=[("autosave", "true")],
         ),
     )
 
@@ -186,7 +182,7 @@ def test_catalog_create_data_source_vertica_spec(test_config):
                 password="demopass",
             ),
             enable_caching=False,
-            url_params=[("param", "value")],
+            url_params=[("TLSmode", "false")],
         ),
     )
 
@@ -207,7 +203,7 @@ def test_catalog_create_data_source_snowflake_spec(test_config):
             ),
             enable_caching=True,
             cache_path=["cache_schema"],
-            url_params=[("param", "value")],
+            url_params=[("useProxy", "true")],
         ),
     )
 
@@ -241,7 +237,7 @@ def test_catalog_create_data_source_dremio_spec(test_config):
         data_source=CatalogDataSource(
             id="dremio",
             name="Dremio",
-            data_source_type="DREMIO",
+            type="DREMIO",
             url="jdbc:dremio:direct=dremio:31010",
             credentials=BasicCredentials(
                 username="demouser",
@@ -263,9 +259,6 @@ def test_catalog_patch_data_source(test_config):
         assert data_sources[0].id == test_config["data_source"]
 
         _create_default_data_source(sdk)
-
-        data_source = sdk.catalog_data_source.get_data_source("test")
-        assert data_source.name == "Test"
 
         sdk.catalog_data_source.patch_data_source_attributes(data_source_id="test", attributes={"name": "Test2"})
         patched_data_source = sdk.catalog_data_source.get_data_source("test")
@@ -537,3 +530,39 @@ def test_pdm_store_load(test_config):
     sdk.catalog_data_source.store_pdm_to_disk(test_config["data_source"], path)
     loaded_pdm = sdk.catalog_data_source.load_pdm_from_disk(path)
     assert loaded_pdm == pdm
+
+
+def test_postgres_url_creation(test_config):
+    data_source = CatalogDataSourcePostgres(
+        id="test",
+        name="Test",
+        db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+        schema="demo",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demopass",
+        ),
+        enable_caching=True,
+        cache_path=["cache_schema"],
+        url_params=[("autosave", "true")],
+    )
+    assert data_source.url == "jdbc:postgresql://localhost:5432/demo?autosave=true"
+
+
+def test_snowflake_url_creation(test_config):
+    data_source = CatalogDataSourceSnowflake(
+        id="test",
+        name="Test",
+        db_specific_attributes=SnowflakeAttributes(account="gooddata", warehouse="TIGER", db_name="TIGER"),
+        schema="demo",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demopass",
+        ),
+        enable_caching=True,
+        cache_path=["cache_schema"],
+        url_params=[("useProxy", "true")],
+    )
+    assert (
+        data_source.url == "jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true"
+    )
