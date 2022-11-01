@@ -27,15 +27,11 @@ RUN apk add --no-cache --update wget make musl-dev llvm11 llvm-dev gcc clang pyt
 #
 # Add all required gooddata-python packages into the image
 #
-ADD gooddata-afm-client /gd/gooddata-afm-client
-ADD gooddata-metadata-client /gd/gooddata-metadata-client
-ADD gooddata-scan-client /gd/gooddata-scan-client
+ADD gooddata-api-client /gd/gooddata-api-client
 ADD gooddata-sdk /gd/gooddata-sdk
 ADD gooddata-fdw /gd/gooddata-fdw
 
-RUN cd /gd/gooddata-afm-client && python3 setup.py install \
-     && cd /gd/gooddata-metadata-client && python3 setup.py install \
-     && cd /gd/gooddata-scan-client && python3 setup.py install \
+RUN cd /gd/gooddata-api-client && python3 setup.py install \
      && cd /gd/gooddata-sdk && python3 setup.py install \
      && cd /gd/gooddata-fdw && python3 setup.py install
 
