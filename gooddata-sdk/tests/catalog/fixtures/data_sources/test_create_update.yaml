@@ -159,7 +159,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: dd2f71ebaef1f66c
+          traceId: a259ed0c136c4158
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -171,10 +171,10 @@ interactions:
             type: POSTGRESQL
             username: demouser
             password: demopass
+            url: jdbc:postgresql://localhost:5432/demo?autosave=true
             enableCaching: true
             cachePath:
               - cache_schema
-            url: jdbc:postgresql://localhost:5432/demoparam=value
           id: test
           type: dataSource
       headers:
@@ -200,7 +200,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '310'
+          - '313'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -248,7 +248,7 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demoparam=value
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true
               username: demouser
               enableCaching: true
               cachePath:
@@ -283,7 +283,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '310'
+          - '313'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -331,7 +331,7 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demoparam=value
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true
               username: demouser
               enableCaching: true
               cachePath:
@@ -366,7 +366,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '310'
+          - '313'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -414,7 +414,7 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demoparam=value
+              url: jdbc:postgresql://localhost:5432/demo?autosave=true
               username: demouser
               enableCaching: true
               cachePath:
@@ -435,8 +435,8 @@ interactions:
             type: POSTGRESQL
             username: demouser
             password: demopass
+            url: jdbc:postgresql://localhost:5432/demo?autosave=false
             enableCaching: false
-            url: jdbc:postgresql://localhost:5432/demoparam=value
           id: test
           type: dataSource
       headers:
@@ -462,7 +462,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '283'
+          - '287'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -510,7 +510,7 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:postgresql://localhost:5432/demoparam=value
+              url: jdbc:postgresql://localhost:5432/demo?autosave=false
               username: demouser
               enableCaching: false
               name: Test2
@@ -543,7 +543,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '732'
+          - '736'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -602,7 +602,7 @@ interactions:
             - id: test
               type: dataSource
               attributes:
-                url: jdbc:postgresql://localhost:5432/demoparam=value
+                url: jdbc:postgresql://localhost:5432/demo?autosave=false
                 username: demouser
                 enableCaching: false
                 name: Test2

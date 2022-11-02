@@ -1,7 +1,10 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, List, Optional, Tuple, Type
+from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type, TypeVar
+
+import attr
+from cattrs import structure
 
 from gooddata_api_client.model.json_api_data_source_in import JsonApiDataSourceIn
 from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
@@ -9,117 +12,58 @@ from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDa
 from gooddata_api_client.model.json_api_data_source_patch import JsonApiDataSourcePatch
 from gooddata_api_client.model.json_api_data_source_patch_attributes import JsonApiDataSourcePatchAttributes
 from gooddata_api_client.model.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
-from gooddata_sdk.catalog.entity import (
-    BasicCredentials,
-    CatalogNameEntity,
-    Credentials,
-    TokenCredentials,
-    TokenCredentialsFromFile,
-)
+from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.entity import BasicCredentials, Credentials, TokenCredentials, TokenCredentialsFromFile
+
+U = TypeVar("U", bound="CatalogDataSourceBase")
 
 
-class CatalogDataSource(CatalogNameEntity):
-    _URL_TMPL: Optional[str] = None
-    _URL_VENDOR: Optional[str] = None
-    _DATA_SOURCE_TYPE: Optional[str] = None
-    _SUPPORTED_CREDENTIALS: list[Type[Credentials]] = [BasicCredentials, TokenCredentials, TokenCredentialsFromFile]
+def db_attrs_with_template(instance: CatalogDataSource, *args: Any) -> None:
+    if instance.db_specific_attributes is not None and instance.url_template is None:
+        raise ValueError("_URL_TMPL needs to be set when db_specific_attributes is not None.")
 
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        schema: str,
-        credentials: Credentials,
-        url: Optional[str] = None,
-        data_source_type: Optional[str] = None,
-        db_specific_attributes: Optional[DatabaseAttributes] = None,
-        enable_caching: Optional[bool] = None,
-        cache_path: Optional[list[str]] = None,
-        url_params: Optional[List[Tuple[str, str]]] = None,
-        parameters: Optional[List[dict[str, str]]] = None,
-        decoded_parameters: Optional[List[dict[str, str]]] = None,
-    ):
-        super(CatalogDataSource, self).__init__(id, name)
-        Credentials.validate_instance(self._SUPPORTED_CREDENTIALS, credentials)
-        self.db_specific_attributes = db_specific_attributes
-        self.schema = schema
-        self.credentials = credentials
-        self.enable_caching = enable_caching
-        self.cache_path = cache_path
-        self.url_params = url_params
-        self.data_source_type = data_source_type or self._make_data_source_type()
-        self.url = url or self._make_url()
-        self.parameters = parameters
-        self.decoded_parameters = decoded_parameters
 
-    def _make_url(self) -> Optional[str]:
-        if self.db_specific_attributes and self._URL_TMPL:
-            db_vendor = None
-            if self._URL_VENDOR:
-                db_vendor = self._URL_VENDOR
-            elif self._DATA_SOURCE_TYPE:
-                db_vendor = self._DATA_SOURCE_TYPE.lower()
-            return self._URL_TMPL.format(
-                **self.db_specific_attributes.str_attributes,
-                # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
-                # we inject custom or default (DS_TYPE.lower()) value there
-                db_vendor=db_vendor,
-            ) + self._join_params(";")
-        else:
-            return None
+@attr.s(auto_attribs=True, kw_only=True, eq=False)
+class CatalogDataSourceBase(Base):
+    _SUPPORTED_CREDENTIALS: ClassVar[List[Type[Credentials]]] = [
+        BasicCredentials,
+        TokenCredentials,
+        TokenCredentialsFromFile,
+    ]
+    _DELIMITER: ClassVar[str] = "&"
+    _ATTRIBUTES: ClassVar[List[str]] = ["enable_caching", "cache_path", "url", "parameters", "name", "type", "schema"]
 
-    def _join_params(self, delimiter: str) -> str:
-        if self.url_params:
-            return delimiter.join([p[0] + "=" + p[1] for p in self.url_params])
-        return ""
+    id: str
+    name: str
+    type: str
+    schema: str
+    url: Optional[str] = None
+    enable_caching: Optional[bool] = None
+    cache_path: Optional[List[str]] = None
+    parameters: Optional[List[Dict[str, str]]] = None
+    decoded_parameters: Optional[List[Dict[str, str]]] = None
+    credentials: Credentials = attr.field(repr=False)
 
-    def _make_data_source_type(self) -> str:
-        if self._DATA_SOURCE_TYPE:
-            return self._DATA_SOURCE_TYPE
-        else:
-            raise Exception(
-                "Neither data_source_type(constructor) nor DATA_SOURCE_TYPE(class var) set, "
-                + "cannot setup final data_source_type"
-            )
-
-    @classmethod
-    def from_api(cls, entity: dict[str, Any]) -> CatalogDataSource:
-        ea = entity["attributes"]
-        credentials = Credentials.create(cls._SUPPORTED_CREDENTIALS, entity)
-        return cls(
-            id=entity["id"],
-            name=ea["name"],
-            data_source_type=ea["type"],
-            url=ea.get("url"),
-            schema=ea["schema"],
-            credentials=credentials,
-            enable_caching=ea.get("enable_caching"),
-            cache_path=ea.get("cache_path"),
-            parameters=ea.get("parameters"),
-            decoded_parameters=ea.get("decoded_parameters"),
-        )
-
-    def to_api(self) -> JsonApiDataSourceInDocument:
+    def to_api(self) -> Any:
         kwargs = self.credentials.to_api_args()
-        if self.enable_caching is not None:
-            kwargs["enable_caching"] = self.enable_caching
-        if self.cache_path is not None:
-            kwargs["cache_path"] = self.cache_path
-        if self.url is not None:
-            kwargs["url"] = self.url
-        if self.parameters is not None:
-            kwargs["parameters"] = self.parameters
+        attributes = attr.asdict(
+            self, filter=lambda attribute, value: attribute.name in self._ATTRIBUTES and value is not None
+        )
+        kwargs = {**kwargs, **attributes}
         return JsonApiDataSourceInDocument(
             data=JsonApiDataSourceIn(
                 id=self.id,
                 attributes=JsonApiDataSourceInAttributes(
-                    name=self.name,
-                    type=self.data_source_type,
-                    schema=self.schema,
                     **kwargs,
                 ),
             )
         )
+
+    @classmethod
+    def from_api(cls: Type[U], entity: Dict[str, Any]) -> U:
+        attributes = entity["attributes"]
+        credentials = Credentials.create(cls._SUPPORTED_CREDENTIALS, entity)
+        return structure({"id": entity["id"], "credentials": credentials, **attributes}, cls)
 
     @classmethod
     def to_api_patch(cls, data_source_id: str, attributes: dict) -> JsonApiDataSourcePatchDocument:
@@ -129,72 +73,125 @@ class CatalogDataSource(CatalogNameEntity):
 
     def __eq__(self, other: Any) -> bool:
         return (
-            self.enable_caching == other.enable_caching
-            and self.cache_path == other.cache_path
-            and self.url == other.url
-            and self.parameters == other.parameters
+            self.id == other.id
             and self.name == other.name
-            and self.data_source_type == other.data_source_type
+            and self.type == other.type
             and self.schema == other.schema
+            and self.enable_caching == other.enable_caching
+            and self.cache_path == other.cache_path
+            and self.parameters == other.parameters
         )
 
 
+@attr.s(auto_attribs=True, kw_only=True, eq=False)
+class CatalogDataSource(CatalogDataSourceBase):
+    _URL_TMPL: ClassVar[Optional[str]] = None
+    _DATA_SOURCE_TYPE: ClassVar[Optional[str]] = None
+
+    db_specific_attributes: Optional[DatabaseAttributes] = attr.field(default=None, validator=db_attrs_with_template)
+    url_params: Optional[List[Tuple[str, str]]] = None
+
+    def __attrs_post_init__(self) -> None:
+        self.url = self._make_url()
+
+    def _make_url(self) -> Optional[str]:
+        parameters = self._join_params()
+        if self.url:
+            return f"{self.url}?{parameters}" if parameters else self.url
+        elif self.db_specific_attributes and self._URL_TMPL:
+            db_vendor = self.type.lower()
+            base_url = self._URL_TMPL.format(
+                **self.db_specific_attributes.str_attributes,
+                # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
+                # we inject custom or default (DS_TYPE.lower()) value there
+                db_vendor=db_vendor,
+            )
+            return f"{base_url}?{parameters}" if parameters else base_url
+        else:
+            return None
+
+    def _join_params(self) -> Optional[str]:
+        if self.url_params:
+            return self._DELIMITER.join([f"{p[0]}={p[1]}" for p in self.url_params])
+        return None
+
+    @property
+    def url_template(self) -> Optional[str]:
+        return self._URL_TMPL
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class DatabaseAttributes:
     @property
     def str_attributes(self) -> dict[str, str]:
-        raise NotImplementedError
+        return attr.asdict(self)
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class PostgresAttributes(DatabaseAttributes):
-    def __init__(self, host: str, db_name: str, port: str = "5432"):
-        self.host = host
-        self.port = port
-        self.db_name = db_name
-
-    @property
-    def str_attributes(self) -> dict[str, str]:
-        return dict(host=self.host, port=self.port, db_name=self.db_name)
+    host: str
+    db_name: str
+    port: str = "5432"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class RedshiftAttributes(PostgresAttributes):
-    def __init__(self, host: str, db_name: str, port: str = "5439"):
-        super(RedshiftAttributes, self).__init__(host, db_name, port)
+    host: str
+    db_name: str
+    port: str = "5439"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class VerticaAttributes(PostgresAttributes):
-    def __init__(self, host: str, db_name: str, port: str = "5433"):
-        super(VerticaAttributes, self).__init__(host, db_name, port)
+    host: str
+    db_name: str
+    port: str = "5433"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourcePostgres(CatalogDataSource):
-    _URL_TMPL = "jdbc:{db_vendor}://{host}:{port}/{db_name}"
-    _DATA_SOURCE_TYPE = "POSTGRESQL"
+    _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/{db_name}"
+    type: str = "POSTGRESQL"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceRedshift(CatalogDataSourcePostgres):
-    _DATA_SOURCE_TYPE = "REDSHIFT"
+    type: str = "REDSHIFT"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceVertica(CatalogDataSourcePostgres):
-    _DATA_SOURCE_TYPE = "VERTICA"
+    type: str = "VERTICA"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class SnowflakeAttributes(DatabaseAttributes):
-    def __init__(self, account: str, warehouse: str, db_name: str, port: str = "443"):
-        self.account = account
-        self.port = port
-        self.warehouse = warehouse
-        self.db_name = db_name
-
-    @property
-    def str_attributes(self) -> dict[str, str]:
-        return dict(account=self.account, port=self.port, warehouse=self.warehouse, db_name=self.db_name)
+    account: str
+    warehouse: str
+    db_name: str
+    port: str = "443"
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceSnowflake(CatalogDataSource):
-    _URL_TMPL = "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
-    _DATA_SOURCE_TYPE = "SNOWFLAKE"
+    _URL_TMPL: ClassVar[
+        str
+    ] = "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
+    type: str = "SNOWFLAKE"
+    db_specific_attributes: DatabaseAttributes
+
+    def _make_url(self) -> str:
+        parameters = self._join_params()
+        db_vendor = self.type.lower()
+        base_url = self._URL_TMPL.format(
+            **self.db_specific_attributes.str_attributes,
+            # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
+            # we inject custom or default (DS_TYPE.lower()) value there
+            db_vendor=db_vendor,
+        )
+        return f"{base_url}{self._DELIMITER}{parameters}" if parameters else base_url
 
 
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceBigQuery(CatalogDataSource):
-    _DATA_SOURCE_TYPE = "BIGQUERY"
+    type: str = "BIGQUERY"
