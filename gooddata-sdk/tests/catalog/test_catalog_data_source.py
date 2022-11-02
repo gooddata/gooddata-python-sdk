@@ -10,10 +10,12 @@ from unittest.mock import MagicMock
 import pytest
 from tests_support.vcrpy_utils import get_vcr
 
+from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
+    CatalogDataSourceGreenplum,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
@@ -23,6 +25,7 @@ from gooddata_sdk import (
     ExecutionDefinition,
     GoodDataApiClient,
     GoodDataSdk,
+    GreenplumAttributes,
     PostgresAttributes,
     RedshiftAttributes,
     SnowflakeAttributes,
@@ -532,6 +535,27 @@ def test_pdm_store_load(test_config):
     assert loaded_pdm == pdm
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "greenplum.yaml"))
+def test_catalog_create_data_source_greenplum_spec(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    _create_delete_ds(
+        sdk=sdk,
+        data_source=CatalogDataSourceGreenplum(
+            id="test",
+            name="Test",
+            db_specific_attributes=GreenplumAttributes(host="greenplum", db_name="demo"),
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=True,
+            cache_path=["cache_schema"],
+            url_params=[("autosave", "true")],
+        ),
+    )
+
+
 def test_postgres_url_creation(test_config):
     data_source = CatalogDataSourcePostgres(
         id="test",
@@ -566,3 +590,43 @@ def test_snowflake_url_creation(test_config):
     assert (
         data_source.url == "jdbc:snowflake://gooddata.snowflakecomputing.com:443?warehouse=TIGER&db=TIGER&useProxy=true"
     )
+
+
+def test_allowed_data_source_type(test_config):
+    allowed_types = JsonApiDataSourceInAttributes.allowed_values.get(("type",))
+    for t in allowed_types.values():
+        try:
+            CatalogDataSource(
+                id="test",
+                name="Test2",
+                type=t,
+                url="jdbc:postgresql://localhost:5432/demo",
+                schema="demo",
+                credentials=BasicCredentials(
+                    username="demouser",
+                    password="demopass",
+                ),
+                enable_caching=False,
+                url_params=[("param", "value")],
+            )
+        except ValueError:
+            assert False, f"ValueError was raised for valid database type {t}"
+    db_type = "nonsense"
+    try:
+        CatalogDataSource(
+            id="test",
+            name="Test2",
+            type=db_type,
+            url="jdbc:postgresql://localhost:5432/demo",
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("param", "value")],
+        )
+    except ValueError:
+        pass
+    else:
+        assert False, "ValueError was not raised for nonsense database type"
