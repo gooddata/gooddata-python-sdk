@@ -12,7 +12,7 @@ from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDa
 from gooddata_api_client.model.json_api_data_source_patch import JsonApiDataSourcePatch
 from gooddata_api_client.model.json_api_data_source_patch_attributes import JsonApiDataSourcePatchAttributes
 from gooddata_api_client.model.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.entity import BasicCredentials, Credentials, TokenCredentials, TokenCredentialsFromFile
 
 U = TypeVar("U", bound="CatalogDataSourceBase")
@@ -35,7 +35,7 @@ class CatalogDataSourceBase(Base):
 
     id: str
     name: str
-    type: str
+    type: str = attr.field()
     schema: str
     url: Optional[str] = None
     enable_caching: Optional[bool] = None
@@ -43,6 +43,10 @@ class CatalogDataSourceBase(Base):
     parameters: Optional[List[Dict[str, str]]] = None
     decoded_parameters: Optional[List[Dict[str, str]]] = None
     credentials: Credentials = attr.field(repr=False)
+
+    @type.validator
+    def _check_allowed_values(self, attribute: attr.Attribute, value: str) -> None:
+        value_in_allowed(self.__class__, attribute, value, JsonApiDataSourceInAttributes)
 
     def to_api(self) -> Any:
         kwargs = self.credentials.to_api_args()
@@ -88,10 +92,12 @@ class CatalogDataSource(CatalogDataSourceBase):
     _URL_TMPL: ClassVar[Optional[str]] = None
     _DATA_SOURCE_TYPE: ClassVar[Optional[str]] = None
 
+    db_vendor: Optional[str] = attr.field(default=None, init=False)
     db_specific_attributes: Optional[DatabaseAttributes] = attr.field(default=None, validator=db_attrs_with_template)
     url_params: Optional[List[Tuple[str, str]]] = None
 
     def __attrs_post_init__(self) -> None:
+        self.db_vendor = self.db_vendor or self.type.lower()
         self.url = self._make_url()
 
     def _make_url(self) -> Optional[str]:
@@ -99,12 +105,11 @@ class CatalogDataSource(CatalogDataSourceBase):
         if self.url:
             return f"{self.url}?{parameters}" if parameters else self.url
         elif self.db_specific_attributes and self._URL_TMPL:
-            db_vendor = self.type.lower()
             base_url = self._URL_TMPL.format(
                 **self.db_specific_attributes.str_attributes,
                 # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
                 # we inject custom or default (DS_TYPE.lower()) value there
-                db_vendor=db_vendor,
+                db_vendor=self.db_vendor,
             )
             return f"{base_url}?{parameters}" if parameters else base_url
         else:
@@ -136,16 +141,17 @@ class PostgresAttributes(DatabaseAttributes):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class RedshiftAttributes(PostgresAttributes):
-    host: str
-    db_name: str
     port: str = "5439"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class VerticaAttributes(PostgresAttributes):
-    host: str
-    db_name: str
     port: str = "5433"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class GreenplumAttributes(PostgresAttributes):
+    pass
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -182,12 +188,11 @@ class CatalogDataSourceSnowflake(CatalogDataSource):
 
     def _make_url(self) -> str:
         parameters = self._join_params()
-        db_vendor = self.type.lower()
         base_url = self._URL_TMPL.format(
             **self.db_specific_attributes.str_attributes,
             # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
             # we inject custom or default (DS_TYPE.lower()) value there
-            db_vendor=db_vendor,
+            db_vendor=self.db_vendor,
         )
         return f"{base_url}{self._DELIMITER}{parameters}" if parameters else base_url
 
@@ -195,3 +200,9 @@ class CatalogDataSourceSnowflake(CatalogDataSource):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceBigQuery(CatalogDataSource):
     type: str = "BIGQUERY"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceGreenplum(CatalogDataSourcePostgres):
+    type: str = "GREENPLUM"
+    db_vendor: str = "postgresql"

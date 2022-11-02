@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, Dict, Optional, Type, TypeVar
 
 import attr
 from cattrs import structure
@@ -9,8 +9,11 @@ from cattrs import structure
 T = TypeVar("T", bound="Base")
 
 
-def value_in_allowed(instance: Type[Base], attribute: attr.Attribute, value: str) -> None:
-    client_class = instance.client_class()
+def value_in_allowed(
+    instance: Type[Base], attribute: attr.Attribute, value: str, client_class: Optional[Any] = None
+) -> None:
+    if client_class is None:
+        client_class = instance.client_class()
     allowed_values = client_class.allowed_values.get((attribute.name,))
     if allowed_values is not None and value not in list(allowed_values.values()):
         raise ValueError(
