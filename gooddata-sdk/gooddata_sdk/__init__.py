@@ -20,10 +20,12 @@ from gooddata_sdk.catalog.data_source.entity_model.content_objects.table import 
 from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSource,
     CatalogDataSourceBigQuery,
+    CatalogDataSourceGreenplum,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
+    GreenplumAttributes,
     PostgresAttributes,
     RedshiftAttributes,
     SnowflakeAttributes,
