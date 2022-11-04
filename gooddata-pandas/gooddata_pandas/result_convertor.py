@@ -232,7 +232,7 @@ def _create_header_mapper(
     dim: int,
     label_overrides: Optional[LabelOverrides] = None,
     use_local_ids_in_headers: bool = False,
-) -> Callable[[Any, Optional[int]], str]:
+) -> Callable[[Any, Optional[int]], Optional[str]]:
     """
     Prepares header mapper function which is doing header structures translations into appropriate label used
     in a dataframe
@@ -250,8 +250,8 @@ def _create_header_mapper(
     attribute_labels = label_overrides.get("labels", {})
     measure_labels = label_overrides.get("metrics", {})
 
-    def _mapper(header: Any, header_idx: Optional[int]) -> str:
-        label = ""
+    def _mapper(header: Any, header_idx: Optional[int]) -> Optional[str]:
+        label = None
         if header is None:
             pass
         elif "attributeHeader" in header:
