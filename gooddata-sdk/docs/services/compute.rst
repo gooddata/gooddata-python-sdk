@@ -15,6 +15,12 @@ The *gooddata_sdk.compute* supports the following entity API calls:
 
 * ``for_exec_def(workspace_id: str, exec_def: ExecutionDefinition)``
 
-    Returns *ExecutionResponse*.
+    Returns *Execution*.
 
     Starts computation in GoodData.CN workspace, using the provided execution definition.
+
+* ``retrieve_result_cache_metadata(workspace_id: str, result_id: str)``
+
+    Returns *ResultCacheMetadata*.
+
+    Gets execution result's metadata from GoodData.CN workspace for given execution result ID.
