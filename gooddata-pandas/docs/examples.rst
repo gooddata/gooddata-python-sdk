@@ -71,11 +71,11 @@ Data Frames
         )
     )
 
-    # creates data frame based on the contents of the insight. if the insight contains labels and
+    # create data frame based on the contents of the insight. if the insight contains labels and
     #  measures, the data frame will contain index or hierarchical index.
     insight_df = frames.for_insight('insight_id')
 
-    # creates data frame based on the content of the items dict. if the dict contains both labels 
+    # create data frame based on the content of the items dict. if the dict contains both labels
     # and measures, the frame will contain index or hierarchical index.
     df = frames.for_items(
         items=dict(
@@ -84,4 +84,25 @@ Data Frames
             first_metric='metric/first_metric_id',
             second_metric='fact/fact_id'
         )
+    )
+
+    # create data frame from custom execution definition
+    exec_def = ExecutionDefinition(
+        attributes=[
+            Attribute(local_id="region", label="region"),
+            Attribute(local_id="state", label="state"),
+            Attribute(local_id="product_category", label="products.category"),
+        ],
+        metrics=[
+            SimpleMetric(local_id="price", item=ObjId(id="price", type="fact")),
+            SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
+        ],
+        filters=[],
+        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+    )
+    df, df_metadata = frames.for_exec_def(exec_def=exec_def)
+
+    # use result ID from computation above and generate dataframe just from it
+    df_from_result_id, df_metadata_from_result_id = frames.for_exec_result_id(
+        result_id=df_metadata.execution_response.result_id,
     )
