@@ -117,6 +117,24 @@ Logical data model (LDM)
 
     Put a logical data model into a given workspace. You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
+* ``store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd())``
+
+    Store the ldm layout in the directory for a given workspace.
+    The directory structure below shows the output for the path set to :code:`Path("ldm_location")`.
+
+    ::
+
+        ldm_location
+             └── ldm
+                  ├── datasets
+                  │       └── dataset.yaml
+                  └── date_instances
+                          └── date_instance.yaml
+
+* ``load_ldm_from_disk(self, path: Path = Path.cwd())``
+
+    The method is used to load ldm stored to disk using method `store_ldm_to_disk`.
+
 * ``store_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
     Store logical data model layout in directory hierarchy.
@@ -133,6 +151,8 @@ Logical data model (LDM)
                                             │       └── dataset.yaml
                                             └── date_instances
                                                     └── date_instance.yaml
+
+
 
 * ``load_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
@@ -157,6 +177,31 @@ Analytics Model
 * ``put_declarative_analytics_model(workspace_id: str, analytics_model: CatalogDeclarativeAnalytics)``
 
     Put an analytics model into a given workspace.
+
+* ``store_analytics_model_to_disk(self, workspace_id: str, path: Path = Path.cwd())``
+
+    Store the analytics model layout in the directory for a given workspace.
+    The directory structure below shows the output for the path set to :code:`Path("analytics_model_location")`.
+
+    ::
+
+        analytics_model_location
+                 └── analytics_model
+                           ├── analytical_dashboards
+                           │       └── analytical_dashboard.yaml
+                           ├── dashboard_plugins
+                           │       └── dashboard_plugin.yaml
+                           ├── filter_contexts
+                           │       └── filter_context.yaml
+                           ├── metrics
+                           │       └── metric.yaml
+                           └── visualization_objects
+                                   └── visualization_object.yaml
+
+* ``load_analytics_model_from_disk(self, path: Path = Path.cwd())``
+
+    The method is used to load analytics model stored to disk using method `store_analytics_model_to_disk`.
+
 
 * ``store_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 

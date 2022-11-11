@@ -81,7 +81,7 @@ The *gooddata_sdk.catalog_data_source* supports the following entity API calls:
         CatalogDataSource(
             id="test",
             name="Test2",
-            data_source_type="POSTGRESQL",
+            type="POSTGRESQL",
             url="jdbc:postgresql://localhost:5432/demo",
             schema="demo",
             credentials=BasicCredentials(
@@ -225,6 +225,22 @@ Physical data model (PDM)
 * ``put_declarative_pdm(data_source_id: str, declarative_tables: CatalogDeclarativeTables)``
 
     Set physical model for a given data source.
+
+* ``store_pdm_to_disk(self, datasource_id: str, path: Path = Path.cwd())``
+
+    Store the physical model layout in the directory for a given data source.
+    The directory structure below shows the output for the path set to :code:`Path("pdm_location")`.
+
+    ::
+
+        pdm_location
+            └── pdm
+                 ├── table_A.yaml
+                 └── table_B.yaml
+
+* ``load_pdm_from_disk(self, path: Path = Path.cwd())``
+
+    The method is used to load pdm stored to disk using method `store_pdm_to_disk`.
 
 * ``store_declarative_pdm(data_source_id: str, layout_root_path: Path = Path.cwd())``
 
