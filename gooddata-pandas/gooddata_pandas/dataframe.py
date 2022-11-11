@@ -4,6 +4,7 @@ from __future__ import annotations
 from typing import Optional, Tuple, Union
 
 import pandas
+# import logging
 
 from gooddata_api_client import models
 from gooddata_pandas.data_access import compute_and_extract
@@ -25,7 +26,9 @@ from gooddata_sdk import (
     ResultCacheMetadata,
     ResultSizeDimensions,
 )
+from gooddata_sdk.utils import Logger
 
+# logger = logging.getLogger(__name__)
 
 class DataFrameFactory:
     """
@@ -49,7 +52,7 @@ class DataFrameFactory:
     def __init__(self, sdk: GoodDataSdk, workspace_id: str) -> None:
         self._sdk = sdk
         self._workspace_id = workspace_id
-
+        self._logger = Logger(type(self).__name__, "INFO")
     def indexed(
         self, index_by: IndexDef, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
     ) -> pandas.DataFrame:
@@ -242,7 +245,14 @@ class DataFrameFactory:
         :param result_id: ID of execution result to retrieve the metadata for
         :return: corresponding result cache metadata
         """
-        return self._sdk.compute.retrieve_result_cache_metadata(workspace_id=self._workspace_id, result_id=result_id)
+        result_cache_metadata = self._sdk.compute.retrieve_result_cache_metadata(workspace_id=self._workspace_id, result_id=result_id)
+
+        if hasattr(self._sdk.client._custom_headers, 'X-GDC-TRACE-ID'):
+            self._logger.info(
+                "result_cache_metadata_for_exec_result_id",
+                traceId=self.result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'] + " " + result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'],
+            )
+        return result_cache_metadata
 
     def for_exec_def(
         self,
@@ -342,6 +352,9 @@ class DataFrameFactory:
 
         if result_cache_metadata is None:
             result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
+
+        # logger.info("for_exec_result_id Trace id: " + self._sdk.client._custom_headers['X-GDC-TRACE-ID']
+        #             + " - " + result_cache_metadata._http_header_dict['X-GDC-TRACE-ID'])
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(

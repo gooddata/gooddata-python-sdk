@@ -218,6 +218,21 @@ class ExecutionResult:
         return f"ExecutionResult(paging={self.paging})"
 
 
+class ExecutionResultWithHttpHeaders:
+    def __init__(self, execution_result: ExecutionResult, http_headers: Dict[str, Any]):
+        self._execution_result = execution_result
+        self._http_headers = http_headers
+
+    @property
+    def execution_result(self) -> ExecutionResult:
+        return self._execution_result
+
+    @property
+    def http_headers(self) -> Dict[str, Any]:
+        return self._http_headers
+
+
+
 class BareExecutionResponse:
     """
     Holds ExecutionResponse from triggered report computation and allows reading report's results.
@@ -247,7 +262,7 @@ class BareExecutionResponse:
     def dimensions(self) -> Any:
         return self._exec_response["dimensions"]
 
-    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
+    def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResultWithHttpHeaders(ExecutionResult, Dict[str, Any]):
         """
         Reads from the execution result.
         """
@@ -259,15 +274,18 @@ class BareExecutionResponse:
         # this makes sure that offset gets defaulted to start of result
         _offset = [0 for _ in _limit] if _limit is not None and _offset is None else _offset
 
-        return ExecutionResult(
+        _execution_result = ExecutionResult(
             self._actions_api.retrieve_result(
                 workspace_id=self._workspace_id,
                 result_id=self.result_id,
                 offset=_offset,
                 limit=_limit,
                 _check_return_type=False,
+                _return_http_data_only=False,
             )
         )
+
+        return ExecutionResultWithHttpHeaders(_execution_result[0], _execution_result[2])
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -346,7 +364,11 @@ class ResultSizeBytesLimitExceeded(Exception):
 
 class ResultCacheMetadata:
     def __init__(self, result_cache_metadata: models.ResultCacheMetadata):
-        self._result_cache_metadata = result_cache_metadata
+        if type(result_cache_metadata) is tuple :
+            self._http_header_dict = result_cache_metadata[2]
+            self._result_cache_metadata = result_cache_metadata[0]
+        else:
+            self._result_cache_metadata = result_cache_metadata
 
     @property
     def afm(self) -> AFM:
@@ -363,6 +385,13 @@ class ResultCacheMetadata:
     @property
     def result_spec(self) -> ResultSpec:
         return self._result_cache_metadata.result_spec
+
+    @property
+    def http_header_dict(self) -> Dict[str, Any]:
+        if hasattr(self, _http_header_dict):
+            return self._http_header_dict
+        else:
+            return None
 
     def check_bytes_size_limit(self, result_size_bytes_limit: Optional[int] = None) -> None:
         if result_size_bytes_limit is not None and self.result_size > result_size_bytes_limit:

@@ -4,13 +4,14 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 import pandas
 from attrs import define, field, frozen
 
-from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions
+from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions, ExecutionResultWithHttpHeaders
+from gooddata_sdk.utils import Logger
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
 _DataArray = List[Union[int, None]]
 LabelOverrides = Dict[str, Dict[str, Dict[str, str]]]
-
+_logger = Logger("result_converter", "INFO")
 
 @frozen
 class _DataWithHeaders:
@@ -125,6 +126,18 @@ class _AccumulatedData:
 
 
 @define
+class _AccumulatedTraceIds:
+    _trace_ids = []
+
+    def add(self, execution: ExecutionResultWithHttpHeaders) -> None:
+        if hasattr(execution.http_headers, 'x-gdc-trace-id'):
+            self._trace_ids.append(execution.http_headers['x-gdc-trace-id'])
+
+    def trace_ids(self) -> List[str]:
+        return self._trace_ids
+
+
+@define
 class DataFrameMetadata:
     # row line location where total header is located per index header column
     # example:
@@ -173,6 +186,7 @@ def _read_complete_execution_result(
     offset = [0] * num_dims
     limit = [page_size] * num_dims
     acc = _AccumulatedData()
+    trace_id_acc = _AccumulatedTraceIds()
 
     result_size_limits_checked = False
 
@@ -181,7 +195,9 @@ def _read_complete_execution_result(
         #
         # if one-dimensional result, it pages over an array of data
         # if two-dimensional result, it pages over table rows
-        result = execution_response.read_result(offset=offset, limit=limit)
+        result_with_headers = execution_response.read_result(offset=offset, limit=limit)
+        result = result_with_headers.execution_result
+        trace_id_acc.add(result_with_headers.http_headers)
 
         if not result_size_limits_checked:
             result.check_dimensions_size_limits(result_size_dimensions_limits)
@@ -207,7 +223,10 @@ def _read_complete_execution_result(
                 # page 'to the right' to get data from all columns, extend existing rows with that data
                 offset = [offset[0], result.next_page_start(dim=1)]
                 while True:
-                    result = execution_response.read_result(offset=offset, limit=limit)
+                    result_with_headers = execution_response.read_result(offset=offset, limit=limit)
+                    result = result_with_headers.execution_result
+                    trace_id_acc.add(result_with_headers.http_headers)
+
                     acc.extend_existing_row_data(from_result=result)
 
                     if load_headers_and_totals:
@@ -223,7 +242,11 @@ def _read_complete_execution_result(
             break
 
         offset = [result.next_page_start(dim=0), 0] if num_dims > 1 else [result.next_page_start(dim=0)]
-
+        if hasattr(result_cache_metadata.http_header_dict, 'X-GDC-TRACE-ID'):
+            _logger.info(
+                "action: complete execution result completed",
+                traceId=result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'] + " " + trace_id_acc.trace_ids(),
+            )
     return acc.result()
 
 
