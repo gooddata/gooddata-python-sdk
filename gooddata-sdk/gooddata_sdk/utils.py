@@ -2,15 +2,9 @@
 from __future__ import annotations
 
 import functools
+import os
 import re
 import typing
-import datetime
-import json
-import logging
-import os
-import sys
-import traceback
-
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, Dict, NamedTuple, Union, cast
@@ -22,7 +16,7 @@ from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
 IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
-LOG_LEVELS_WITH_TRACEBACK = ["DEBUG", "ERROR", "CRITICAL"]
+
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
     """
@@ -201,58 +195,3 @@ def change_case(dictionary: dict, case: Callable[[str], str]) -> dict:
     for k, v in dictionary.items():
         temp[case(k)] = change_case_helper(v, case)
     return temp
-
-
-class Logger:
-    """
-    Wrapper around native logging to provide structured logs
-    """
-
-    def __init__(self, app: str, level: str, format: str = "JSON"):
-        self.app = app
-        self.format = format.upper()
-        if self.format not in ["PLAIN", "JSON"]:
-            raise Exception("invalid logformat")
-        logging.basicConfig(level=level.upper(), format="%(message)s")
-
-    def compose(self, loglevel: str, message: str, **kwargs: str) -> str:
-        include_exc = loglevel in LOG_LEVELS_WITH_TRACEBACK
-        base = {}
-        base["ts"] = datetime.datetime.now().astimezone().isoformat()
-        base["level"] = loglevel
-        base["app"] = self.app
-        base["pid"] = str(os.getpid())
-        base["msg"] = message
-        if include_exc:
-            exception_tb = sys.exc_info()[2]
-            base["exc"] = "N/A" if exception_tb is None else "".join(traceback.format_tb(exception_tb))
-        if self.format == "PLAIN":
-            composed_msg = "[%s] [%s:%s] [%s] %s %s" % (
-                base["ts"],
-                base["app"],
-                base["pid"],
-                base["level"],
-                base["msg"],
-                json.dumps(kwargs, ensure_ascii=False),
-            )
-            if include_exc:
-                composed_msg += f" {base['exc']}"
-            return composed_msg
-        elif self.format == "JSON":
-            return json.dumps(kwargs | base, ensure_ascii=False)
-        return ""
-
-    def debug(self, message: str, **kwargs: str) -> None:
-        logging.debug(self.compose("DEBUG", message, **kwargs))
-
-    def info(self, message: str, **kwargs: str) -> None:
-        logging.info(self.compose("INFO", message, **kwargs))
-
-    def warn(self, message: str, **kwargs: str) -> None:
-        logging.warn(self.compose("WARNING", message, **kwargs))
-
-    def error(self, message: str, **kwargs: str) -> None:
-        logging.error(self.compose("ERROR", message, **kwargs))
-
-    def critical(self, message: str, **kwargs: str) -> None:
-        logging.critical(self.compose("CRITICAL", message, **kwargs))

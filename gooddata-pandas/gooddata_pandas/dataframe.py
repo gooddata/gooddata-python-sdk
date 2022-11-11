@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Optional, Tuple, Union
 
 import pandas
-# import logging
 
 from gooddata_api_client import models
 from gooddata_pandas.data_access import compute_and_extract
@@ -15,6 +14,7 @@ from gooddata_pandas.utils import (
     IndexDef,
     LabelItemDef,
     _to_item,
+    log_info,
     make_pandas_index,
 )
 from gooddata_sdk import (
@@ -26,9 +26,7 @@ from gooddata_sdk import (
     ResultCacheMetadata,
     ResultSizeDimensions,
 )
-from gooddata_sdk.utils import Logger
 
-# logger = logging.getLogger(__name__)
 
 class DataFrameFactory:
     """
@@ -52,7 +50,7 @@ class DataFrameFactory:
     def __init__(self, sdk: GoodDataSdk, workspace_id: str) -> None:
         self._sdk = sdk
         self._workspace_id = workspace_id
-        self._logger = Logger(type(self).__name__, "INFO")
+
     def indexed(
         self, index_by: IndexDef, columns: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None
     ) -> pandas.DataFrame:
@@ -245,13 +243,18 @@ class DataFrameFactory:
         :param result_id: ID of execution result to retrieve the metadata for
         :return: corresponding result cache metadata
         """
-        result_cache_metadata = self._sdk.compute.retrieve_result_cache_metadata(workspace_id=self._workspace_id, result_id=result_id)
+        result_cache_metadata = self._sdk.compute.retrieve_result_cache_metadata(
+            workspace_id=self._workspace_id, result_id=result_id
+        )
 
-        if hasattr(self._sdk.client._custom_headers, 'X-GDC-TRACE-ID'):
-            self._logger.info(
-                "result_cache_metadata_for_exec_result_id",
-                traceId=self.result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'] + " " + result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'],
-            )
+        log_info(
+            [
+                self._sdk.client.get_headers.get("X-GDC-TRACE-ID"),
+                result_cache_metadata.http_header_dict.get("x-gdc-trace-id"),
+            ],
+            "Received result cache metadata from AFM.",
+        )
+
         return result_cache_metadata
 
     def for_exec_def(
@@ -296,12 +299,18 @@ class DataFrameFactory:
 
         execution = self._sdk.compute.for_exec_def(workspace_id=self._workspace_id, exec_def=exec_def)
         result_cache_metadata = self.result_cache_metadata_for_exec_result_id(execution.result_id)
+        external_trace_id = (
+            self._sdk.client.get_headers["X-GDC-TRACE-ID"]
+            if self._sdk.client.get_headers.get("X-GDC-TRACE-ID") is not None
+            else "N/A"
+        )
 
         return convert_execution_response_to_dataframe(
             execution_response=execution.bare_exec_response,
             result_cache_metadata=result_cache_metadata,
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,
+            external_trace_id=external_trace_id,
             result_size_bytes_limit=result_size_bytes_limit,
         )
 
@@ -353,8 +362,11 @@ class DataFrameFactory:
         if result_cache_metadata is None:
             result_cache_metadata = self.result_cache_metadata_for_exec_result_id(result_id=result_id)
 
-        # logger.info("for_exec_result_id Trace id: " + self._sdk.client._custom_headers['X-GDC-TRACE-ID']
-        #             + " - " + result_cache_metadata._http_header_dict['X-GDC-TRACE-ID'])
+        external_trace_id = (
+            self._sdk.client.get_headers["X-GDC-TRACE-ID"]
+            if self._sdk.client.get_headers.get("X-GDC-TRACE-ID") is not None
+            else "N/A"
+        )
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
@@ -368,5 +380,6 @@ class DataFrameFactory:
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
+            external_trace_id=external_trace_id,
             use_local_ids_in_headers=use_local_ids_in_headers,
         )

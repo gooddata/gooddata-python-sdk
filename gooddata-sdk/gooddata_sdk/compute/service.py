@@ -42,6 +42,6 @@ class ComputeService:
         """
         return ResultCacheMetadata(
             result_cache_metadata=self._actions_api.retrieve_execution_metadata(
-                workspace_id, result_id, _check_return_type=False
+                workspace_id, result_id, _check_return_type=False, _return_http_data_only=False
             )
         )

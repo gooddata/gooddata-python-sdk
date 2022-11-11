@@ -4,14 +4,14 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 import pandas
 from attrs import define, field, frozen
 
-from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions, ExecutionResultWithHttpHeaders
-from gooddata_sdk.utils import Logger
+from gooddata_pandas.utils import log_info
+from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions
 
 _DEFAULT_PAGE_SIZE = 100
 _DataHeaders = List[List[Any]]
 _DataArray = List[Union[int, None]]
 LabelOverrides = Dict[str, Dict[str, Dict[str, str]]]
-_logger = Logger("result_converter", "INFO")
+
 
 @frozen
 class _DataWithHeaders:
@@ -127,11 +127,11 @@ class _AccumulatedData:
 
 @define
 class _AccumulatedTraceIds:
-    _trace_ids = []
+    _trace_ids: List[str] = field(init=False, factory=list)
 
-    def add(self, execution: ExecutionResultWithHttpHeaders) -> None:
-        if hasattr(execution.http_headers, 'x-gdc-trace-id'):
-            self._trace_ids.append(execution.http_headers['x-gdc-trace-id'])
+    def add(self, http_headers: Dict[str, str]) -> None:
+        if http_headers.get("x-gdc-trace-id") is not None:
+            self._trace_ids.append(http_headers["x-gdc-trace-id"])
 
     def trace_ids(self) -> List[str]:
         return self._trace_ids
@@ -172,6 +172,7 @@ def _read_complete_execution_result(
     execution_response: BareExecutionResponse,
     result_cache_metadata: ResultCacheMetadata,
     result_size_dimensions_limits: ResultSizeDimensions,
+    external_trace_id: str,
     result_size_bytes_limit: Optional[int] = None,
     page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> _DataWithHeaders:
@@ -242,11 +243,8 @@ def _read_complete_execution_result(
             break
 
         offset = [result.next_page_start(dim=0), 0] if num_dims > 1 else [result.next_page_start(dim=0)]
-        if hasattr(result_cache_metadata.http_header_dict, 'X-GDC-TRACE-ID'):
-            _logger.info(
-                "action: complete execution result completed",
-                traceId=result_cache_metadata.http_header_dict['X-GDC-TRACE-ID'] + " " + trace_id_acc.trace_ids(),
-            )
+
+    log_info([external_trace_id] + trace_id_acc.trace_ids(), "Received result cache metadata from AFM.")
     return acc.result()
 
 
@@ -379,6 +377,7 @@ def convert_execution_response_to_dataframe(
     result_cache_metadata: ResultCacheMetadata,
     label_overrides: LabelOverrides,
     result_size_dimensions_limits: ResultSizeDimensions,
+    external_trace_id: str,
     result_size_bytes_limit: Optional[int] = None,
     use_local_ids_in_headers: bool = False,
 ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
@@ -397,6 +396,7 @@ def convert_execution_response_to_dataframe(
         result_cache_metadata=result_cache_metadata,
         result_size_dimensions_limits=result_size_dimensions_limits,
         result_size_bytes_limit=result_size_bytes_limit,
+        external_trace_id=external_trace_id,
     )
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)

@@ -1,7 +1,11 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import datetime
 import hashlib
+import json
+import logging
+import os
 import uuid
 from typing import Any, Dict, Optional, Union
 
@@ -124,3 +128,19 @@ class DefaultInsightColumnNaming:
         id_to_use = measure.item_id or measure.alias or measure.title or measure.local_id
 
         return self._ensure_unique(id_to_use)
+
+
+def log_info(trace_ids: list, message: str) -> None:
+    logger = logging.getLogger(__name__)
+    logger.info(
+        json.dumps(
+            {
+                "ts": datetime.datetime.now().astimezone().isoformat(),
+                "level": "INFO",
+                "app": "gooddata-python-sdk",
+                "pid": str(os.getpid()),
+                "trace_id": ", ".join(map(lambda x: x if x is not None else "N/A", trace_ids)),
+                "msg": message,
+            }
+        )
+    )
