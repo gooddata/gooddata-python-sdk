@@ -422,6 +422,23 @@
         ],
         "type": "object"
       },
+      "AttributeFormat": {
+        "properties": {
+          "locale": {
+            "description": "Format locale",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Format pattern",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale",
+          "pattern"
+        ],
+        "type": "object"
+      },
       "AttributeHeaderOut": {
         "properties": {
           "attributeHeader": {
@@ -431,6 +448,9 @@
               },
               "attributeName": {
                 "type": "string"
+              },
+              "format": {
+                "$ref": "#/components/schemas/AttributeFormat"
               },
               "granularity": {
                 "enum": [
@@ -749,6 +769,30 @@
               "$ref": "#/components/schemas/Element"
             },
             "type": "array"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AttributeFormat"
+          },
+          "granularity": {
+            "description": "Granularity of requested label in case of date attribute",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "type": "string"
           },
           "paging": {
             "$ref": "#/components/schemas/Paging"

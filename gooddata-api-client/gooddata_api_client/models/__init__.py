@@ -36,6 +36,7 @@ from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_api_client.model.attribute_execution_result_header import AttributeExecutionResultHeader
 from gooddata_api_client.model.attribute_filter import AttributeFilter
 from gooddata_api_client.model.attribute_filter_elements import AttributeFilterElements
+from gooddata_api_client.model.attribute_format import AttributeFormat
 from gooddata_api_client.model.attribute_header_out import AttributeHeaderOut
 from gooddata_api_client.model.attribute_header_out_attribute_header import AttributeHeaderOutAttributeHeader
 from gooddata_api_client.model.attribute_item import AttributeItem
@@ -473,6 +474,7 @@ from gooddata_api_client.model.table_warning import TableWarning
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_api_client.model.tabular_export_result import TabularExportResult
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_api_client.model.test_query_duration import TestQueryDuration
 from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
 from gooddata_api_client.model.total import Total

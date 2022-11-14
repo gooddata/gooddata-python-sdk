@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.attribute_format import AttributeFormat
     from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
+    globals()['AttributeFormat'] = AttributeFormat
     globals()['RestApiIdentifier'] = RestApiIdentifier
 
 
@@ -116,6 +118,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
             'label_name': (str,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
+            'format': (AttributeFormat,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
         }
 
@@ -131,6 +134,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
         'label_name': 'labelName',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
+        'format': 'format',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
     }
 
@@ -183,6 +187,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
         """
 
@@ -283,6 +288,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
         """
 

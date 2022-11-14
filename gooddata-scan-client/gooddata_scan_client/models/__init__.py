@@ -19,5 +19,6 @@ from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
 from gooddata_scan_client.model.table_warning import TableWarning
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
+from gooddata_scan_client.model.test_query_duration import TestQueryDuration
 from gooddata_scan_client.model.test_request import TestRequest
 from gooddata_scan_client.model.test_response import TestResponse

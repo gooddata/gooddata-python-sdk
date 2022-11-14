@@ -60,6 +60,8 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'TEXT': "TEXT",
             'HYPERLINK': "HYPERLINK",
             'GEO': "GEO",
+            'GEO_LONGITUDE': "GEO_LONGITUDE",
+            'GEO_LATITUDE': "GEO_LATITUDE",
         },
     }
 

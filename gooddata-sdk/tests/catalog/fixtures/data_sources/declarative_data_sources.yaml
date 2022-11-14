@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '2682'
+          - '2561'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -196,15 +196,7 @@ interactions:
                       - demo
                       - products
                     type: TABLE
-              permissions:
-                - assignee:
-                    id: demo2
-                    type: user
-                  name: MANAGE
-                - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
+              permissions: []
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo
@@ -234,7 +226,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '2682'
+          - '2561'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -403,15 +395,7 @@ interactions:
                       - demo
                       - products
                     type: TABLE
-              permissions:
-                - assignee:
-                    id: demo2
-                    type: user
-                  name: MANAGE
-                - assignee:
-                    id: demoGroup
-                    type: userGroup
-                  name: USE
+              permissions: []
               schema: demo
               type: POSTGRESQL
               url: jdbc:postgresql://localhost:5432/demo

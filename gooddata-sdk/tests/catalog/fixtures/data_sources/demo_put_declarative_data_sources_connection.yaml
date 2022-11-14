@@ -241,7 +241,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '19'
+          - '60'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -285,6 +285,8 @@ interactions:
           - 1 ; mode=block
       body:
         string:
+          queryDurationMillis:
+            simpleSelect: 8
           successful: true
   - request:
       method: PUT

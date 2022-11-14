@@ -72,6 +72,8 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             'DREMIO': "DREMIO",
             'DRILL': "DRILL",
             'GREENPLUM': "GREENPLUM",
+            'AZURESQL': "AZURESQL",
+            'SYNAPSESQL': "SYNAPSESQL",
         },
     }
 

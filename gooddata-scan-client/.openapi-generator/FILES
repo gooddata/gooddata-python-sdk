@@ -11,6 +11,7 @@ docs/ScanRequest.md
 docs/ScanResultPdm.md
 docs/TableWarning.md
 docs/TestDefinitionRequest.md
+docs/TestQueryDuration.md
 docs/TestRequest.md
 docs/TestResponse.md
 gooddata_scan_client/__init__.py
@@ -31,6 +32,7 @@ gooddata_scan_client/model/scan_request.py
 gooddata_scan_client/model/scan_result_pdm.py
 gooddata_scan_client/model/table_warning.py
 gooddata_scan_client/model/test_definition_request.py
+gooddata_scan_client/model/test_query_duration.py
 gooddata_scan_client/model/test_request.py
 gooddata_scan_client/model/test_response.py
 gooddata_scan_client/model_utils.py
