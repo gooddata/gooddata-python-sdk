@@ -15,7 +15,6 @@ from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
-    CatalogDataSourceGreenplum,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
@@ -25,7 +24,6 @@ from gooddata_sdk import (
     ExecutionDefinition,
     GoodDataApiClient,
     GoodDataSdk,
-    GreenplumAttributes,
     PostgresAttributes,
     RedshiftAttributes,
     SnowflakeAttributes,
@@ -535,6 +533,8 @@ def test_pdm_store_load(test_config):
     assert loaded_pdm == pdm
 
 
+"""
+# TODO: commented because Greenplum is supported only for Cloud and it cannot be tested using Docker image.
 @gd_vcr.use_cassette(str(_fixtures_dir / "greenplum.yaml"))
 def test_catalog_create_data_source_greenplum_spec(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -554,6 +554,7 @@ def test_catalog_create_data_source_greenplum_spec(test_config):
             url_params=[("autosave", "true")],
         ),
     )
+"""
 
 
 def test_postgres_url_creation(test_config):
