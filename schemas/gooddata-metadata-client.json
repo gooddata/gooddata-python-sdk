@@ -534,7 +534,9 @@
               "PRESTO",
               "DREMIO",
               "DRILL",
-              "GREENPLUM"
+              "GREENPLUM",
+              "AZURESQL",
+              "SYNAPSESQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -862,9 +864,11 @@
             "enum": [
               "TEXT",
               "HYPERLINK",
-              "GEO"
+              "GEO",
+              "GEO_LONGITUDE",
+              "GEO_LATITUDE"
             ],
-            "example": "\"TEXT\" | \"HYPERLINK\" | \"GEO\"",
+            "example": "\"TEXT\" | \"HYPERLINK\" | \"GEO\" | \"GEO_LONGITUDE\" | \"GEO_LATITUDE\"",
             "type": "string"
           }
         },
@@ -3533,7 +3537,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               }
@@ -3684,7 +3690,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -3805,7 +3813,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -3962,7 +3972,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -4992,7 +5004,9 @@
                 "enum": [
                   "TEXT",
                   "HYPERLINK",
-                  "GEO"
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE"
                 ],
                 "type": "string"
               }

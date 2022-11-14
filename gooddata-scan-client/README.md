@@ -102,6 +102,7 @@ Class | Method | HTTP request | Description
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [TableWarning](docs/TableWarning.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
+ - [TestQueryDuration](docs/TestQueryDuration.md)
  - [TestRequest](docs/TestRequest.md)
  - [TestResponse](docs/TestResponse.md)
 

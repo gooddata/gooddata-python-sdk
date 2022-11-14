@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.attribute_format import AttributeFormat
     from gooddata_api_client.model.element import Element
     from gooddata_api_client.model.paging import Paging
     from gooddata_api_client.model.rest_api_identifier import RestApiIdentifier
+    globals()['AttributeFormat'] = AttributeFormat
     globals()['Element'] = Element
     globals()['Paging'] = Paging
     globals()['RestApiIdentifier'] = RestApiIdentifier
@@ -64,6 +66,23 @@ class ElementsResponse(ModelNormal):
     """
 
     allowed_values = {
+        ('granularity',): {
+            'MINUTE': "MINUTE",
+            'HOUR': "HOUR",
+            'DAY': "DAY",
+            'WEEK': "WEEK",
+            'MONTH': "MONTH",
+            'QUARTER': "QUARTER",
+            'YEAR': "YEAR",
+            'MINUTE_OF_HOUR': "MINUTE_OF_HOUR",
+            'HOUR_OF_DAY': "HOUR_OF_DAY",
+            'DAY_OF_WEEK': "DAY_OF_WEEK",
+            'DAY_OF_MONTH': "DAY_OF_MONTH",
+            'DAY_OF_YEAR': "DAY_OF_YEAR",
+            'WEEK_OF_YEAR': "WEEK_OF_YEAR",
+            'MONTH_OF_YEAR': "MONTH_OF_YEAR",
+            'QUARTER_OF_YEAR': "QUARTER_OF_YEAR",
+        },
     }
 
     validations = {
@@ -95,6 +114,8 @@ class ElementsResponse(ModelNormal):
             'elements': ([Element],),  # noqa: E501
             'paging': (Paging,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
+            'format': (AttributeFormat,),  # noqa: E501
+            'granularity': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +127,8 @@ class ElementsResponse(ModelNormal):
         'elements': 'elements',  # noqa: E501
         'paging': 'paging',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
+        'format': 'format',  # noqa: E501
+        'granularity': 'granularity',  # noqa: E501
     }
 
     read_only_vars = {
@@ -154,6 +177,8 @@ class ElementsResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            format (AttributeFormat): [optional]  # noqa: E501
+            granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -247,6 +272,8 @@ class ElementsResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            format (AttributeFormat): [optional]  # noqa: E501
+            granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

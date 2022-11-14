@@ -296,7 +296,9 @@
               "PRESTO",
               "DREMIO",
               "DRILL",
-              "GREENPLUM"
+              "GREENPLUM",
+              "AZURESQL",
+              "SYNAPSESQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -315,6 +317,27 @@
         "required": [
           "type",
           "url"
+        ],
+        "type": "object"
+      },
+      "TestQueryDuration": {
+        "description": "A structure containing duration of the test queries run on a data source. It is omitted if an error happens.",
+        "properties": {
+          "createCacheTable": {
+            "description": "Field containing duration of a test 'create table as select' query on a datasource. In milliseconds. The field is omitted if a data source doesn't support caching.",
+            "example": 235,
+            "format": "int32",
+            "type": "integer"
+          },
+          "simpleSelect": {
+            "description": "Field containing duration of a test select query on a data source. In milliseconds.",
+            "example": 562,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "simpleSelect"
         ],
         "type": "object"
       },
@@ -373,6 +396,9 @@
             "example": "Connection exception: Failed to initialize pool: FATAL: password authentication failed for user \"user\"",
             "type": "string"
           },
+          "queryDurationMillis": {
+            "$ref": "#/components/schemas/TestQueryDuration"
+          },
           "successful": {
             "description": "A flag indicating whether test passed or not.",
             "example": true,
@@ -414,6 +440,10 @@
                   "An example of a successful connection": {
                     "description": "An example of a successful connection",
                     "value": {
+                      "queryDurationMillis": {
+                        "createCacheTable": 235,
+                        "simpleSelect": 562
+                      },
                       "successful": true
                     }
                   },
@@ -620,6 +650,10 @@
                   "An example of a successful connection": {
                     "description": "An example of a successful connection",
                     "value": {
+                      "queryDurationMillis": {
+                        "createCacheTable": 235,
+                        "simpleSelect": 562
+                      },
                       "successful": true
                     }
                   },

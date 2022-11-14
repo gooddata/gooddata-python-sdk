@@ -517,6 +517,23 @@
         ],
         "type": "object"
       },
+      "AttributeFormat": {
+        "properties": {
+          "locale": {
+            "description": "Format locale",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Format pattern",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale",
+          "pattern"
+        ],
+        "type": "object"
+      },
       "AttributeHeaderOut": {
         "properties": {
           "attributeHeader": {
@@ -526,6 +543,9 @@
               },
               "attributeName": {
                 "type": "string"
+              },
+              "format": {
+                "$ref": "#/components/schemas/AttributeFormat"
               },
               "granularity": {
                 "enum": [
@@ -1262,7 +1282,9 @@
               "PRESTO",
               "DREMIO",
               "DRILL",
-              "GREENPLUM"
+              "GREENPLUM",
+              "AZURESQL",
+              "SYNAPSESQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1590,9 +1612,11 @@
             "enum": [
               "TEXT",
               "HYPERLINK",
-              "GEO"
+              "GEO",
+              "GEO_LONGITUDE",
+              "GEO_LATITUDE"
             ],
-            "example": "\"TEXT\" | \"HYPERLINK\" | \"GEO\"",
+            "example": "\"TEXT\" | \"HYPERLINK\" | \"GEO\" | \"GEO_LONGITUDE\" | \"GEO_LATITUDE\"",
             "type": "string"
           }
         },
@@ -2562,6 +2586,30 @@
               "$ref": "#/components/schemas/Element"
             },
             "type": "array"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AttributeFormat"
+          },
+          "granularity": {
+            "description": "Granularity of requested label in case of date attribute",
+            "enum": [
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "type": "string"
           },
           "paging": {
             "$ref": "#/components/schemas/Paging"
@@ -4717,7 +4765,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               }
@@ -4868,7 +4918,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -4989,7 +5041,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -5146,7 +5200,9 @@
                   "PRESTO",
                   "DREMIO",
                   "DRILL",
-                  "GREENPLUM"
+                  "GREENPLUM",
+                  "AZURESQL",
+                  "SYNAPSESQL"
                 ],
                 "type": "string"
               },
@@ -6176,7 +6232,9 @@
                 "enum": [
                   "TEXT",
                   "HYPERLINK",
-                  "GEO"
+                  "GEO",
+                  "GEO_LONGITUDE",
+                  "GEO_LATITUDE"
                 ],
                 "type": "string"
               }
@@ -10143,7 +10201,9 @@
               "PRESTO",
               "DREMIO",
               "DRILL",
-              "GREENPLUM"
+              "GREENPLUM",
+              "AZURESQL",
+              "SYNAPSESQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -10162,6 +10222,27 @@
         "required": [
           "type",
           "url"
+        ],
+        "type": "object"
+      },
+      "TestQueryDuration": {
+        "description": "A structure containing duration of the test queries run on a data source. It is omitted if an error happens.",
+        "properties": {
+          "createCacheTable": {
+            "description": "Field containing duration of a test 'create table as select' query on a datasource. In milliseconds. The field is omitted if a data source doesn't support caching.",
+            "example": 235,
+            "format": "int32",
+            "type": "integer"
+          },
+          "simpleSelect": {
+            "description": "Field containing duration of a test select query on a data source. In milliseconds.",
+            "example": 562,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "simpleSelect"
         ],
         "type": "object"
       },
@@ -10219,6 +10300,9 @@
             "description": "Field containing more details in case of a failure. Details are available to a privileged user only.",
             "example": "Connection exception: Failed to initialize pool: FATAL: password authentication failed for user \"user\"",
             "type": "string"
+          },
+          "queryDurationMillis": {
+            "$ref": "#/components/schemas/TestQueryDuration"
           },
           "successful": {
             "description": "A flag indicating whether test passed or not.",
@@ -10469,6 +10553,10 @@
                   "An example of a successful connection": {
                     "description": "An example of a successful connection",
                     "value": {
+                      "queryDurationMillis": {
+                        "createCacheTable": 235,
+                        "simpleSelect": 562
+                      },
                       "successful": true
                     }
                   },
@@ -10723,6 +10811,10 @@
                   "An example of a successful connection": {
                     "description": "An example of a successful connection",
                     "value": {
+                      "queryDurationMillis": {
+                        "createCacheTable": 235,
+                        "simpleSelect": 562
+                      },
                       "successful": true
                     }
                   },

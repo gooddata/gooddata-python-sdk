@@ -26,6 +26,7 @@ docs/ArithmeticMeasureDefinitionArithmeticMeasure.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
 docs/AttributeFilterElements.md
+docs/AttributeFormat.md
 docs/AttributeHeaderOut.md
 docs/AttributeHeaderOutAttributeHeader.md
 docs/AttributeItem.md
@@ -131,6 +132,7 @@ gooddata_afm_client/model/arithmetic_measure_definition_arithmetic_measure.py
 gooddata_afm_client/model/attribute_execution_result_header.py
 gooddata_afm_client/model/attribute_filter.py
 gooddata_afm_client/model/attribute_filter_elements.py
+gooddata_afm_client/model/attribute_format.py
 gooddata_afm_client/model/attribute_header_out.py
 gooddata_afm_client/model/attribute_header_out_attribute_header.py
 gooddata_afm_client/model/attribute_item.py

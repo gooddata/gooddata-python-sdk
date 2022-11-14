@@ -185,11 +185,11 @@ interactions:
                     type: fact
               labels:
                 data:
-                  - id: product_name
-                    type: label
                   - id: products.category
                     type: label
                   - id: customer_name
+                    type: label
+                  - id: product_name
                     type: label
           included:
             - id: quantity
@@ -447,10 +447,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: cf3d6660f9c3d5fb5c8e4fabdebadccf751fa899
+              executionResult: d958ec25d29a11ac62d68383c40cd5de891dda0d
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/cf3d6660f9c3d5fb5c8e4fabdebadccf751fa899?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d958ec25d29a11ac62d68383c40cd5de891dda0d?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

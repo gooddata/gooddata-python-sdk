@@ -28,6 +28,7 @@ docs/AssigneeIdentifier.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
 docs/AttributeFilterElements.md
+docs/AttributeFormat.md
 docs/AttributeHeaderOut.md
 docs/AttributeHeaderOutAttributeHeader.md
 docs/AttributeItem.md
@@ -467,6 +468,7 @@ docs/TableWarning.md
 docs/TabularExportRequest.md
 docs/TabularExportResult.md
 docs/TestDefinitionRequest.md
+docs/TestQueryDuration.md
 docs/TestRequest.md
 docs/TestResponse.md
 docs/Total.md
@@ -512,6 +514,7 @@ gooddata_api_client/model/assignee_identifier.py
 gooddata_api_client/model/attribute_execution_result_header.py
 gooddata_api_client/model/attribute_filter.py
 gooddata_api_client/model/attribute_filter_elements.py
+gooddata_api_client/model/attribute_format.py
 gooddata_api_client/model/attribute_header_out.py
 gooddata_api_client/model/attribute_header_out_attribute_header.py
 gooddata_api_client/model/attribute_item.py
@@ -949,6 +952,7 @@ gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/tabular_export_result.py
 gooddata_api_client/model/test_definition_request.py
+gooddata_api_client/model/test_query_duration.py
 gooddata_api_client/model/test_request.py
 gooddata_api_client/model/test_response.py
 gooddata_api_client/model/total.py
