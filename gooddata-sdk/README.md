@@ -3,8 +3,13 @@
 The `gooddata-sdk` package provides a clean and convenient Python API to interact with [GoodData.CN](https://www.gooddata.com/developers/cloud-native/).
 
 At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics:
-* Catalog Service
-* Insights Service
+* Workspaces Sevice
+* Workspace Content Service
+* Data Source Service
+* User Service
+* Permission Service
+* Organization Service
+* Insight Service
 * Compute Service
 * Table Service
 
