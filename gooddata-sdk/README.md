@@ -9,7 +9,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * User Service
 * Permission Service
 * Organization Service
-* Insight Service
+* Insights Service
 * Compute Service
 * Table Service
 
