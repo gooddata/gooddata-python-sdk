@@ -3,12 +3,12 @@
 The `gooddata-sdk` package provides a clean and convenient Python API to interact with [GoodData](https://www.gooddata.com/).
 
 At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics:
-* Workspaces Sevice
-* Workspace Content Service
-* Data Source Service
-* User Service
-* Permission Service
-* Organization Service
+* Catalog Workspaces Service
+* Catalog Workspace Content Service
+* Catalog Data Source Service
+* Catalog User Service
+* Catalog Permission Service
+* Catalog Organization Service
 * Insights Service
 * Compute Service
 * Table Service
