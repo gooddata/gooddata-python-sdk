@@ -31,9 +31,9 @@ ADD gooddata-api-client /gd/gooddata-api-client
 ADD gooddata-sdk /gd/gooddata-sdk
 ADD gooddata-fdw /gd/gooddata-fdw
 
-RUN cd /gd/gooddata-api-client && python3 setup.py install \
-     && cd /gd/gooddata-sdk && python3 setup.py install \
-     && cd /gd/gooddata-fdw && python3 setup.py install
+RUN cd /gd/gooddata-api-client  && pip install . \
+     && cd /gd/gooddata-sdk && pip install . \
+     && cd /gd/gooddata-fdw && pip install .
 
 # Add sql files to be executed during start of container
 # They register extensions and install helping sql procedures
