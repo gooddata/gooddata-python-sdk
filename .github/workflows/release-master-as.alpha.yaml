@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       alpha-release:
-        description: 'Aplha release, such as 1.0.1a2'
+        description: 'Aplha release version (such as 1.1.1a1 for major 1.1.0 or 1.1.1a2 if 1.1.1a1 already exists etc)'
         required: true
 
 jobs:
