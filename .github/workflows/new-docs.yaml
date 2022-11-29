@@ -1,0 +1,8 @@
+name: Hugo Deploy
+on:
+  push:
+    branches:
+      - PSDK-116
+jobs:
+  hugo-build:
+    uses: ./.github/workflows/hugo-build.yaml
