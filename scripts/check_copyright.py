@@ -72,8 +72,10 @@ def comment_copyright(suffix: str, copy_right: str) -> str:
 
     if lower_suffix == ".sql":
         return f"-- {copy_right}"
-    elif suffix == ".xml":
+    elif suffix in [".xml", ".svg", ".html"]:
         return f"<!-- {copy_right} -->"
+    elif suffix in [".scss", ".css", ".js"]:
+        return f"// {copy_right}"
     else:
         return f"# {copy_right}"
 
