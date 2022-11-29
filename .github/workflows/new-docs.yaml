@@ -1,0 +1,19 @@
+name: Hugo Deploy
+on:
+  push:
+    branches:
+      - PSDK-116
+jobs:
+  hugo-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Hugo Build
+        uses: ./.github/actions/hugo-build-action
+      - name: Check
+        working-directory: gooddata-sdk/docs/hugo/docs
+        run: ls | grep "public"
+        shell: bash
