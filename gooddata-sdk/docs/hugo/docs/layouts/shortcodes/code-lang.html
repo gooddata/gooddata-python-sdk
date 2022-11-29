@@ -1,0 +1,19 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{ $lang := .Get "lang" }}
+{{ $userAgent := .Get "userAgent" | default $lang }}
+{{ $index := .Ordinal }}
+{{ $codeBlock := .Inner }}
+
+{{ with .Parent }}
+  {{ $selectId := .Get "id" }}
+  {{ $scratchIdLang := print "code-block-lang-" (string .Ordinal) }}
+  {{ .Scratch.SetInMap $scratchIdLang (string $index) $lang }}
+  {{ $scratchIdUserAgent := print "code-block-userAgent-" (string .Ordinal) }}
+  {{ .Scratch.SetInMap $scratchIdUserAgent (string $index) $userAgent }}
+
+  <div class="gd-docs-code-select__code lang-{{ $lang | anchorize }}{{ if eq $index 0 }} active{{ end }}">
+    {{ $codeBlock }}
+  </div>
+{{ else }}
+  {{ $codeBlock }}
+{{ end }}

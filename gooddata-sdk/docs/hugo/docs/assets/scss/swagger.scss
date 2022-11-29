@@ -1,0 +1,100 @@
+// (C) 2022 GoodData Corporation
+// Fix swagger style broken by theme
+pre.version {
+    background-color: initial;
+    overflow: hidden;
+}
+
+#ohpen_swagger_ui {
+    margin-left: -35px;
+}
+
+#ohpen_swagger_ui .swagger-ui {
+    &,
+    button,
+    input,
+    optgroup,
+    select,
+    textarea,
+    label,
+    .system-sans-serif,
+    .tab li,
+    .response-col_status,
+    .download-contents,
+    .scheme-container .schemes > label,
+    .loading-container .loading:after,
+    section h3,
+    .btn,
+    .btn.cancel,
+    .dialog-ux .modal-ux-content p,
+    .dialog-ux .modal-ux-content h4,
+    .dialog-ux .modal-ux-header h3,
+    section.models h4,
+    section.models h5,
+    .model-title,
+    .model-deprecated-warning,
+    .servers>label,
+    table thead tr td,
+    table thead tr th,
+    .parameter__name,
+    .topbar a,
+    .topbar .download-url-wrapper .download-url-button,
+    .scopes h2,
+    .errors-wrapper hgroup h4 {
+        font-family: inherit;
+    }
+
+
+
+    .opblock {
+        &-tag {
+            &,
+            small {
+                font-family: inherit;
+            }
+        }
+
+        .opblock-section-header {
+            > label,
+            h4 {
+                font-family: inherit;
+            }
+        }
+
+        & &-summary-method,
+        & &-summary-description {
+            font-family: inherit;
+        }
+
+        &-description-wrapper,
+        &-external-docs-wrapper,
+        &-title_normal {
+            &,
+            h4,
+            p {
+                font-family: inherit;
+            }
+        }
+    }
+
+    .responses-inner {
+        h4,
+        h5 {
+            font-family: inherit;
+        }
+    }
+
+    li,
+    p,
+    table,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    a,
+    .title,
+    .title small pre {
+        font-family: inherit;
+    }
+}

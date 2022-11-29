@@ -1,0 +1,4 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{ $maxRow := .Get "maxRow" }}
+
+<div class="row{{ if and (gt (int $maxRow) 0) (lt (int $maxRow) 13) }} row-cols-1 row-cols-xl-{{ int $maxRow }}{{ end }} mt-4">{{ .Inner }}</div>

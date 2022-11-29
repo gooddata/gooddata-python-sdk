@@ -1,0 +1,4 @@
+# (C) 2022 GoodData Corporation
+DirectoryPath: public
+IgnoreInternalEmptyHash: true
+CheckExternal: false

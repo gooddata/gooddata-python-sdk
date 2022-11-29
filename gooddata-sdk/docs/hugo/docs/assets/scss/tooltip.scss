@@ -1,0 +1,31 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+.tooltip {
+    font-family: inherit;
+
+    .tooltip-inner {
+      padding: 12px 15px;
+      text-align: left;
+      max-width: 300px;
+      font-family: inherit;
+      color: $color-white;
+      background-color: $color-tooltip;
+    }
+
+    &.bs-tooltip-right .arrow:before {
+      border-right-color: $color-tooltip;
+    }
+
+    &.bs-tooltip-top .arrow:before {
+      border-top-color: $color-tooltip;
+    }
+
+    &.bs-tooltip-left .arrow:before {
+      border-left-color: $color-tooltip;
+    }
+
+    &.bs-tooltip-bottom .arrow:before {
+      border-bottom-color: $color-tooltip;
+    }
+  }

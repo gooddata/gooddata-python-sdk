@@ -1,0 +1,3 @@
+# (C) 2022 GoodData Corporation
+# Netlify format redirect from root to Cloud version for deploy previews
+/ /cloud/ 301!

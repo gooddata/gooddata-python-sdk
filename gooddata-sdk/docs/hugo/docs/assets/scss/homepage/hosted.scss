@@ -1,0 +1,40 @@
+// (C) 2022 GoodData Corporation
+.gd-docs-homepage-hosted {
+    &__inner {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+
+        @include mq(large) {
+            flex-direction: row;
+            align-items: flex-start;
+        }
+    }
+
+    &__icon {
+        flex: 0 0 auto;
+        margin-right: 20px;
+
+        @include mq(large) {
+            align-self: flex-start;
+        }
+    }
+
+    &__content {
+        margin: 20px 0;
+
+        @include mq(large) {
+            margin-top: 0;
+            margin-right: 50px;
+        }
+    }
+
+    &__links {
+        align-self: center;
+        text-align: center;
+    }
+
+    &__text {
+        margin-bottom: 0;
+    }
+}

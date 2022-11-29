@@ -1,0 +1,97 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+.alert,
+.td-content > blockquote {
+    padding: 10px 10px 10px 45px;
+    border: none;
+    border-left: $alert-border-width solid $color-gray-tag;
+    border-radius: 0;
+    color: $color-alert;
+    background-color: $color-alert-bg;
+}
+
+.alert {
+    position: relative;
+
+    &-heading {
+        color: $color-gray-tag;
+
+        .td-content & {
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+    }
+
+    &-primary {
+        border-left-color: $color-gray-tag;
+        color: $color-deep-purple;
+    }
+
+    &-primary &-heading {
+        color: $color-deep-purple;
+    }
+
+    &-info {
+        border-left-color: $color-alert-info;
+        color: $color-deep-purple;
+        background-color: $color-alert-info-bg;
+    }
+
+    &-info &-heading {
+        color: $color-alert-info;
+    }
+
+    &-warning {
+        border-left-color: $color-alert-warning;
+        background-color: $color-alert-warning-bg;
+    }
+
+    &-warning &-heading {
+        color: $color-alert-warning;
+    }
+
+    &-label {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-left-color: transparent;
+        color: $color-white;
+        background-color: $color-deep-purple;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -$alert-border-width;
+            bottom: 0;
+            width: $alert-border-width;
+            border-left: $alert-border-width solid rgba($color-deep-purple, 0.3);
+            background-color: $color-white;
+        }
+
+        svg {
+            position: absolute;
+            top: 13px;
+            left: 15px;
+        }
+
+        strong {
+            font-family: $gdfont-demibold;
+        }
+
+        a {
+            &,
+            &:hover,
+            &:focus,
+            &:active {
+                color: $color-white;
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.td-content .alert.alert-label {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}

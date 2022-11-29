@@ -1,0 +1,44 @@
+<!-- (C) 2022 GoodData Corporation -->
+<!doctype html>
+<html lang="{{ .Site.Language.Lang }}" class="no-js">
+  <head>
+    {{ partial "head.html" . }}
+    <link rel="canonical" href="{{ .RelPermalink }}">
+    {{ partial "meta-version.html" . }}
+    {{ if .Params.externalLink }}
+      <meta http-equiv="refresh" content="0;url={{ .Params.externalLink }}" />
+    {{ end }}
+  </head>
+  <body class="td-{{ .Kind }}">
+    {{ partial "gtm-body.html" }}
+    <header>
+      {{ partial "navbar.html" . }}
+    </header>
+    <div class="container-fluid td-outer">
+      <div class="td-main">
+        <div class="row flex-xl-nowrap">
+          <div class="col-12 col-md-4 col-xl-3 td-sidebar d-print-none">
+            {{ partial "sidebar.html" . }}
+          </div>
+          <div class="d-none d-xl-block col-xl-2 td-toc d-print-none">
+            {{ partial "toc.html" . }}
+          </div>
+          <main class="col-12 col-md-8 col-xl-7 pl-md-5" role="main">
+            {{ partial "version-banner.html" . }}
+            {{ if not .Site.Params.ui.breadcrumb_disable }}{{ partial "breadcrumb.html" . }}{{ end }}
+            {{ if .Draft }}
+            <div class="alert alert-warning" role="alert">
+                <h1>DRAFT</h1>
+                <p>This document is a draft and will not be published.</p>
+            </div>
+            {{ end }}
+            {{ block "main" . }}{{ end }}
+          </main>
+        </div>
+      </div>
+      {{ partialCached "footer.html" . }}
+    </div>
+    {{ partial "scripts.html" . }}
+    {{ partial "search.html" . }}
+  </body>
+</html>

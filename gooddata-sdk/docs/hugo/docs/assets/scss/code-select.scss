@@ -1,0 +1,133 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+.td-content .highlight,
+.td-content .code-toolbar {
+    border: none;
+    border-radius: 0;
+    background-color: $color-text;
+
+    pre {
+        outline: none;
+        font-size: 12.2px;
+        line-height: 1.5;
+        background-color: transparent !important;
+    }
+
+    .toolbar {
+        top: auto;
+        right: 10px;
+        bottom: 10px;
+
+        button {
+            height: 27px;
+            padding: 0 11px;
+            border: 1px solid $color-share-button;
+            border-radius: 3px;
+            box-shadow: 0 1px 1px 0 rgba(20, 56, 93, 0.15);
+            outline: none;
+            color: #778491;
+            font-size: 12px;
+            line-height: 25px;
+            background: #fcfcfd;
+
+            &:hover {
+                box-shadow: 0 1px 1px 0 rgba(20, 56, 93, 0.15), inset 0 -1px 0 0 rgba(177, 193, 209, 0.6);
+                color: #464e56;
+                background: #f5f8fa;
+                border-color: rgba(31,52,73,0.2);
+            }
+
+            &:focus {
+                box-shadow: 0 0 3px 1px rgba(69, 199, 239, 0), 0 1px 2px 0 rgba(20, 56, 93, 0.15), inset 0 -1px 0 0 rgba(177, 193, 209, 0.6);
+                border-color: rgba(20, 178, 226, 0.75);
+            }
+
+            &:active {
+                box-shadow: inset 0 1px 0 0 rgba(177, 193, 209, 0.65);
+                color: #464e56;
+                border-color: #b1c1d1;
+                background: #ecf0f5;
+                background-image: linear-gradient(to top, #dee6ef, #ecf0f5);
+            }
+
+            span {
+                padding: 0;
+                border: none;
+                box-shadow: none;
+                color: inherit;
+                font-size: inherit;
+                background: none;
+            }
+        }
+    }
+}
+
+.td-content .highlight,
+.td-content > .code-toolbar {
+    margin: 1.5rem 0;
+    border-left: 5px solid #717B82;
+}
+
+.gd-docs-code-select,
+.highlight {
+    @include mq(xxx-large) {
+        width: 80%;
+    }
+}
+
+.gd-docs-code-select {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid #717B82;
+    background-color: $color-text;
+
+    &__tabs {
+        display: flex;
+        align-self: flex-end;
+        margin: 10px;
+        padding: 1px;
+        border-radius: 5px;
+        background-color: #545C61;
+    }
+
+    &__tab {
+        padding: 1px 10px;
+        border-radius: 4px;
+        color: transparentize($color-white, 0.2);
+        line-height: 18px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+            color: $color-white;
+        }
+
+        &.active {
+            color: $color-white;
+            background-color: $color-shocking-pink;
+        }
+    }
+
+    &__code {
+        display: none;
+
+        &.active {
+            display: block;
+        }
+
+        .highlight {
+            width: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
+            border: none;
+            background-color: transparent;
+
+            pre {
+                background: none !important;
+            }
+        }
+    }
+}

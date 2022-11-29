@@ -1,0 +1,25 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{ $label := "" }}
+
+{{ if isset . "labelId" }}
+  {{ $label = .labelId }}
+{{ else if .Params.articleLabel }}
+  {{ $label = .Params.articleLabel }}
+{{ end }}
+
+{{ if and $label (gt (len $label) 0) }}
+  {{ $hasLabel := true }}
+  {{ range site.Data.articleLabels }}
+    {{ if and (eq (index . "labelId") $label) $hasLabel }}
+      <div class="alert alert-label" role="alert">
+        {{ with resources.Get "icons/icon-info.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
+        {{ (index . "text") | markdownify }}
+        {{ $hasLabel = false }}
+      </div>
+    {{ end }}
+  {{ end }}
+
+  {{ if $hasLabel }}
+    {{ warnf "Article label %q isn't specified in articleLabels.yml" $label }}
+  {{ end }}
+{{ end }}

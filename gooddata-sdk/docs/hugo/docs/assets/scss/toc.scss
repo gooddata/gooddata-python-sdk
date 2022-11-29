@@ -1,0 +1,97 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+$toc-top: 20px;
+
+.td-page-meta {
+    display: none;
+}
+
+.td-toc {
+    position: sticky;
+    top: $header-height + $toc-top;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    padding: 0 20px;
+    border-left: none;
+
+    @include mq(large) {
+        top: $header-height-desktop + $toc-top;
+    }
+
+    @include mq(x-large) {
+        top: $header-height-x-big-desktop + $toc-top;
+    }
+
+    #TableOfContents {
+        border-left: 1px solid $color-gray-divider;
+
+        a {
+            &,
+            &:hover,
+            &:focus,
+            &:active {
+                color: #464e56;
+            }
+
+            &:hover,
+            &:focus,
+            &:active {
+                text-decoration: underline;
+            }
+        }
+
+        &:empty {
+            + h3 {
+                margin-top: 0;
+            }
+        }
+    }
+
+    h3 {
+        margin: 35px 0 15px;
+        font-size: 21px;
+        font-weight: bold;
+    }
+}
+
+.td-toc nav,
+.gd-docs-learn-more {
+    border-left: 1px solid $color-gray-divider;
+
+    ul {
+        padding-left: 20px;
+    }
+
+    li {
+        margin: 3px 0;
+    }
+
+    > ul > li:only-child > ul  {
+        padding-left: 0;
+    }
+
+    a {
+        padding-bottom: 5px;
+        font-size: 15px;
+        line-height: 26px;
+    }
+}
+
+.gd-docs-learn-more {
+    a {
+        color: $color-shocking-pink;
+        font-weight: bold;
+    }
+}
+
+.link-external {
+    &::after {
+        content: "";
+    }
+}
+
+.related-desc {
+    font-size: 12px;
+}

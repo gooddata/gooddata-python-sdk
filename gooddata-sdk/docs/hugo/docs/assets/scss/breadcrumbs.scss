@@ -1,0 +1,35 @@
+// (C) 2022 GoodData Corporation
+.gd-breadcrumb {
+    display: none;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    white-space: nowrap;
+
+    @include mq(large) {
+        display: flex;
+    }
+
+    &-item {
+        &::before {
+            content: "/";
+            margin-left: 4px;
+        }
+
+        &:first-child {
+            &::before {
+                display: none;
+            }
+        }
+
+        a {
+            &,
+            &:hover,
+            &:focus,
+            &:active {
+                color: $color-deep-purple;
+            }
+        }
+    }
+}

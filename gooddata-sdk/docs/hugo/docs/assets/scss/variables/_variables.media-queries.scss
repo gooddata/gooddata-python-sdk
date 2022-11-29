@@ -1,0 +1,57 @@
+// (C) 2022 GoodData Corporation
+// -------------------------------------
+// Media queries
+// -------------------------------------
+
+$breakpoints-map: (
+  under-small: (
+    query: "all and (max-width: 575px)",
+    generate-grid: false,
+    generate-helpers: false
+  ),
+  under-medium: (
+    query: "all and (max-width: 767px)",
+    generate-grid: false,
+    generate-helpers: false
+  ),
+  under-large: (
+    query: "all and (max-width: 991px)",
+    generate-grid: false,
+    generate-helpers: false
+  ),
+  under-x-large: (
+    query: "all and (max-width: 1199px)",
+    generate-grid: false,
+    generate-helpers: false
+  ),
+  x-small: (
+    query: "all and (min-width: 320px)",
+    generate-grid: true,
+    generate-helpers: true
+  ),
+  small: (
+    query: "all and (min-width: 576px)",
+    generate-grid: true,
+    generate-helpers: true
+  ),
+  medium: (
+    query: "all and (min-width: 768px)",
+    generate-grid: true,
+    generate-helpers: true
+  ),
+  large: (
+    query: "all and (min-width: 992px)",
+    generate-grid: true,
+    generate-helpers: true
+  ),
+  x-large: (
+    query: "all and (min-width: 1200px)",
+    generate-grid: true,
+    generate-helpers: true
+  ),
+  xxx-large: (
+    query: "all and (min-width: 1600px)",
+    generate-grid: true,
+    generate-helpers: true
+  )
+) !default;

@@ -1,0 +1,40 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{ if .Params.related }}
+  <h3>Learn more:</h3>
+  <nav class="gd-docs-learn-more">
+    <ul>
+    {{ $Site := .Site }}
+    {{ $Page := . }}
+    {{ range .Params.related }}
+      {{ $isExternalLink := findRE "^(http|https)://" .link }}
+      <li>
+        {{ if $isExternalLink }}
+          <a href="{{ .link  | safeURL }}" target="_blank" class="related-link link-external">{{ .title }}</a>
+        {{ else }}
+          {{ $Title := .title }}
+          {{ $linkTrim := replaceRE "(#.*)|(/$)" "" .link }}
+          {{ $link := cond (gt (len (findRE "^/" .link)) 0) (print (replaceRE "/$" "" $Page.FirstSection.RelPermalink) $linkTrim) $linkTrim }}
+          {{ $hash := findRE "#.*" .link }}
+          {{ if $Site.GetPage $link }}
+            {{ with $Site.GetPage $link }}
+              <a href="{{ .Permalink | safeURL }}{{ if gt (len $hash) 0 }}{{ index $hash 0 }}{{ end }}" class="related-link">
+                {{ if $Title }}
+                  {{ $Title }}
+                {{ else }}
+                  {{ .LinkTitle }}
+                {{ end }}
+              </a>
+            {{ end }}
+          {{ else }}
+              {{ warnf "Related content linked page doesn't exist: %q" .link }}
+          {{ end }}
+        {{ end }}
+
+        {{ if .desc }}
+          <p class="related-desc">{{ .desc }}</p>
+        {{ end }}
+      </li>
+    {{ end }}
+    </ul>
+  </nav>
+{{ end }}

@@ -1,0 +1,7 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{/* This shortcode can be handy if you need to provide a link to latest dirpath of the versioned documentation, defaults to "docs". */}}
+{{- if .Site.Params.versions -}}
+  {{- (index .Site.Params.versions 0).dirpath -}}
+{{- else -}}
+docs
+{{- end -}}

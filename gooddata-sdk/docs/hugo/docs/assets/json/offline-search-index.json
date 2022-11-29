@@ -1,0 +1,13 @@
+{{- $.Scratch.Add "offline-search-index" slice -}}
+{{- $pages := where .Site.AllPages ".Params.exclude_search" "!=" true -}}
+{{- if eq hugo.Environment "public" -}}
+{{- $.Scratch.Add "filtered" (where $pages "Section" "!=" "docs") -}}
+{{- else -}}
+{{- $.Scratch.Add "filtered" $pages -}}
+{{- end -}}
+{{- range $.Scratch.Get "filtered" -}}
+{{/* We have to apply `htmlUnescape` again after `truncate` because `truncate` applies `html.EscapeString` if the argument is not HTML. */}}
+{{/* Indvidual taxonomies can be added in the next line by add '"taxonomy-name" (.Params.taxonomy-name | default "")' to the dict (as seen for categories and tags). */}}
+{{- $.Scratch.Add "offline-search-index" (dict "ref" .RelPermalink "title" .Title "categories" (.Params.categories | default "") "tags" (.Params.tags | default "") "description" (.Description | default "") "body" (.Plain | htmlUnescape) "excerpt" ((.Description | default .Plain) | htmlUnescape | truncate (.Site.Params.offlineSearchSummaryLength | default 70) | htmlUnescape)) -}}
+{{- end -}}
+{{- $.Scratch.Get "offline-search-index" | jsonify -}}

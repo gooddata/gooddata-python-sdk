@@ -1,0 +1,20 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{/* set sane defaults */}}
+{{ $.Scratch.Set "docLabel" "Version " }}
+{{ $.Scratch.Set "activeVersion" .Site.Params.version }}
+{{ $curPage := .Page.Section }}
+{{/* find version matching the current page */}}
+{{ range .Site.Params.versions }}
+  {{ if eq $curPage .dirpath }}
+	{{ $.Scratch.Add "docLabel" (printf "(%s)" .version) }}
+    {{ $.Scratch.Set "activeVersion" .version }}
+  {{ end }}
+{{ end }}
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	{{ printf "%s" ($.Scratch.Get "docLabel") }}
+</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+	{{ range .Site.Params.versions }}
+	<a class="dropdown-item{{ if eq ( $.Scratch.Get "activeVersion" ) ( printf "%s" .version ) }} active{{ end }}" href="{{ .url |  relURL }}">{{ .version }}</a>
+	{{ end }}
+</div>

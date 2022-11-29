@@ -1,0 +1,12 @@
+// (C) 2022 GoodData Corporation
+@if variable-exists("avenir-roman") {
+    $footer-font-family: $avenir-roman;
+} @else {
+    $footer-font-family: inferit;
+}
+$footer-spacing: 1.25rem;
+//$footer-max-width: map-get($container-max-widths, xxxl);
+$footer-max-width: 1280px;
+$footer-light-gray: #CACACA;
+$footer-gray: $color-gray-tag;
+$footer-dark-gray: #646464;

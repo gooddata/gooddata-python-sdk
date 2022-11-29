@@ -1,0 +1,13 @@
+<!-- (C) 2022 GoodData Corporation -->
+{{- $scratch := newScratch }}
+{{- $scratch.Set "attrs" slice }}
+{{- if ne .Title "" }}
+    {{- with .Title }}
+        {{- $options := transform.Unmarshal . }}
+        {{- range $key, $val := $options }}
+            {{- $scratch.Add "attrs" (printf `%s="%s"` $key $val) }}
+        {{- end }}
+    {{- end }}
+{{- end -}}
+<a href="{{ .Destination | safeURL }}" {{ with (delimit ($scratch.Get "attrs") " ")  -}}{{ . | safeHTMLAttr }}{{- end }}{{ if strings.HasPrefix .Destination "http" }} target="_blank" rel="noreferrer noopener"{{ end }}>{{ .Text | safeHTML }}{{ if strings.HasPrefix .Destination "http" }}<span class="external-link">{{ with resources.Get "icons/external-link.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}</span>{{ end }}</a>
+{{- /* This comment removes trailing newlines. */ -}}

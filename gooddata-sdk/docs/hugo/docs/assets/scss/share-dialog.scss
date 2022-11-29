@@ -1,0 +1,114 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+.gd-docs-share {
+    &__button {
+        height: 30px;
+        margin-bottom: 15px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1;
+        border: none;
+        border-radius: 3px;
+        color: $color-deep-purple;
+        font-weight: normal;
+        background: transparentize($color-share-button, 0.5);
+        transition: background 350ms ease;
+
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            box-shadow: none !important;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            background: rgba($color-share-button, .8);
+        }
+
+        &::before {
+            position: relative;
+            top: 1px;
+            content: url("../img/share.svg");
+            margin-right: 8px;
+        }
+    }
+
+    &__dialog {
+        width: 250px;
+        margin: 0;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 3px;
+        box-shadow: 0 1px 14px 0 transparentize($color-black, 0.8);
+    }
+
+    &__arrow.arrow {
+        display: none;
+    }
+
+    &__header,
+    &__body {
+        padding: 0;
+    }
+
+    &__header {
+        margin-bottom: 10px;
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 1.4;
+        background-color: transparent;
+    }
+
+    &__close {
+        position: absolute;
+        top: 13px;
+        right: 18px;
+        width: 20px;
+        height: 20px;
+        background-image: url("../img/close.svg");
+        background-position: center;
+        background-repeat: repeat;
+        cursor: pointer;
+    }
+
+    &__body {
+        margin-bottom: 10px;
+        color: $color-black;
+        font-size: 13px;
+
+        textarea {
+            width: 100%;
+            height: 40px;
+            border: none;
+            outline: none;
+            resize: none;
+            color: $color-black;
+            font-family: inherit;
+            line-height: 18px;
+            word-break: break-all;
+        }
+    }
+
+    &__copy {
+        text-decoration: underline;
+        cursor: pointer;
+
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            color: $color-deep-purple;
+        }
+
+        &::before {
+            position: relative;
+            top: 2px;
+            content: url("../img/copy.svg");
+            margin-right: 8px;
+        }
+    }
+}

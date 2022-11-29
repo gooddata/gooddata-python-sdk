@@ -1,0 +1,20 @@
+// (C) 2022 GoodData Corporation
+@import "variables/variables";
+
+.td-main {
+    flex-shrink: 0;
+
+    main {
+        padding-top: 20px;
+
+        @include mq(large) {
+            padding-top: $header-height + 20px;
+        }
+    }
+}
+
+.section-index {
+    .panel-line:only-child {
+        display: none;
+    }
+}

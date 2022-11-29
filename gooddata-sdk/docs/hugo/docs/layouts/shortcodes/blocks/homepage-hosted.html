@@ -1,0 +1,14 @@
+<!-- (C) 2022 GoodData Corporation -->
+<div class="gd-docs-homepage-hosted col col-12 text-left td-box container">
+  <div class="gd-docs-homepage-box__inner gd-docs-homepage-hosted__inner gray-box">
+    <i class="gd-docs-homepage-hosted__icon {{ .Get "icon" }}"></i>
+    <div class="gd-docs-homepage-hosted__content">
+      <h3 class="gd-docs-homepage-hosted__title">{{ .Get "title" }}</h3>
+      <p class="gd-docs-homepage-hosted__text">{{ .Get "text" }}</p>
+      {{ .Inner }}
+    </div>
+    <div class="gd-docs-homepage-hosted__links">
+      <a href="{{ .Get "buttonLink" }}" class="gd-docs-homepage-hosted__button gd-docs-button">{{ .Get "buttonText" }}</a>
+    </div>
+  </div>
+</div>
