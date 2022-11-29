@@ -68,5 +68,8 @@ venv/**
 **/docs/_autosummary/**
 **/*.rst
 
+# Hugo docs
+**/docs/hugo/**
+
 # PyBuilder
 **/target/**
