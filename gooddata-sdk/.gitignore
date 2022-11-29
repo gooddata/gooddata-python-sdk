@@ -65,3 +65,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+docs/hugo/docs/node_modules
+docs/hugo/docs/public
+docs/hugo/docs/resources/_gen
+docs/hugo/docs/tmp/
+docs/hugo/docs/multidocs
+docs/hugo/docs/.hugo_build.lock

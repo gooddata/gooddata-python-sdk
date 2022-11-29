@@ -1,0 +1,112 @@
+@import "variables/variables";
+
+$font-path-base: "https://www.gooddata.com";
+
+@font-face {
+    font-family: "dc8ebcd096d8d65d80200bbe8e045d86";
+    src: url($font-path-base + "/fonts/3b0b43206ff82b5e0ccd8bfb1bcaac76.woff2") format("woff2"),
+         url($font-path-base + "/fonts/dc8ebcd096d8d65d80200bbe8e045d86.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "bca6d3310b5c9dae1dae416e8abc8405";
+    src: url($font-path-base + "/fonts/11c42aac24b0c1dea0b6c3fd9a9d359e.woff2") format("woff2"),
+         url($font-path-base + "/fonts/bca6d3310b5c9dae1dae416e8abc8405.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "ae2e11957f2c90bcba60dd109b5379f5";
+    src: url($font-path-base + "/fonts/8072c81499658513a0f702db8a9ace34.woff2") format("woff2"),
+         url($font-path-base + "/fonts/ae2e11957f2c90bcba60dd109b5379f5.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    color: $color-deep-purple;
+    font-family: $font-family;
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.td-content,
+.td-home {
+    h2,
+    h3,
+    h4 {
+        margin-top: 2em;
+        margin-bottom: 1em;
+
+        &[id]:before {
+            @include mq(large) {
+                height: 179px;
+                margin-top: -179px;
+            }
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    h1 {
+        font-family: $gdfont-regular;
+        font-weight: normal;
+        font-size: 2.25em;
+        margin-bottom: 1.5rem;
+    }
+
+    h2 {
+        font-family: $gdfont-regular;
+        font-weight: normal;
+        font-size: 1.75em;
+    }
+
+    h3 {
+        font-family: $gdfont-demibold;
+        font-size: 1.375em;
+    }
+
+    h4 {
+        font-family: $gdfont-demibold;
+        font-size: 1.125em;
+    }
+
+    a {
+        font-weight: normal;
+    }
+
+    strong {
+        font-family: $gdfont-extrabold;
+        font-weight: normal;
+    }
+}
+
+a,
+.td-box--gray p > a {
+    text-decoration: none;
+    color: $color-shocking-pink;
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: $color-shocking-pink-dark;
+        text-decoration: underline;
+    }
+
+    .external-link {
+        svg {
+            position: relative;
+            top: -5px;
+            margin-left: 5px;
+
+            path {
+                fill: currentColor;
+            }
+        }
+    }
+}

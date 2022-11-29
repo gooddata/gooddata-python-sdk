@@ -1,0 +1,87 @@
+@import "variables/variables";
+
+.gd-docs-homepage-slack {
+    padding-bottom: 40px;
+
+    &__inner {
+        display: flex;
+        align-items: flex-start;
+
+        &.white {
+            margin-bottom: 0;
+        }
+
+        @include mq(x-large) {
+            flex-direction: row;
+        }
+    }
+
+    &__left {
+        flex: 1 1 auto;
+
+        @include mq(x-large) {
+            max-width: 450px;
+        }
+    }
+
+    &__icon {
+        margin-right: 20px;
+    }
+
+    &__title {
+        max-width: 350px;
+
+        @include mq(x-large) {
+            margin-right: 20px;
+        }
+    }
+
+    &__text {
+        flex: 1 1 auto;
+
+        @include mq(x-large) {
+            margin-right: 50px;
+        }
+    }
+
+    &__buttonWrapper {
+        flex: 0;
+        align-self: center;
+        text-align: center;
+
+        @include mq(x-large) {
+            align-self: flex-start;
+            text-align: left;
+        }
+    }
+
+    &__button {
+        align-self: center;
+        margin-bottom: 8px;
+    }
+
+    .row {
+        padding: 0;
+    }
+
+    #pactsafe-container {
+        .ps-contract {
+            padding-bottom: 0;
+            color: transparentize($color-black, 0.3);
+            font-size: 12px;
+
+            a {
+                font-weight: bold;
+            }
+        }
+    }
+
+    [data-all-agreed="false"] ~ &__button {
+        cursor: not-allowed;
+        user-select: none;
+    }
+
+    [data-all-agreed="true"] ~ &__button {
+        cursor: pointer;
+    }
+}

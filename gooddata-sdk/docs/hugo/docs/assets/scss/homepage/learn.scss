@@ -1,0 +1,67 @@
+.gd-docs-homepage-learn {
+    padding-bottom: 40px;
+
+    &__inner {
+        &.white {
+            margin-bottom: 0;
+        }
+    }
+
+    &__content {
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column;
+
+        @include mq(medium) {
+            height: 100%;
+        }
+    }
+
+    &__icon {
+        margin-right: 20px;
+    }
+
+    &__text {
+        flex: 1 1 auto;
+
+        @include mq(medium) {
+            margin-bottom: 70px;
+        }
+    }
+
+    &__links {
+        margin-top: 20px;
+    }
+
+    &__button {
+        position: relative;
+        margin: 20px auto 0;
+        align-self: center;
+
+        @include mq(medium) {
+            align-self: flex-start;
+            margin: -51px 15px 0;
+
+            &.gd-docs-button {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+        }
+    }
+
+    &__links {
+        p {
+            margin: 0;
+            line-height: 35px;
+
+            a {
+                font-weight: bold;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .row {
+        padding: 0;
+    }
+}

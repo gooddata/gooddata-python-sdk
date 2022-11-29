@@ -1,0 +1,62 @@
+@import "variables/variables";
+
+.gd-docs-content-select,
+.highlight {
+  @include mq(xxx-large) {
+    width: 80%;
+  }
+}
+
+.gd-docs-content-select {
+  display: flex;
+  flex-direction: column;
+  margin-top: 45px;
+
+  &__tabs {
+    width: 100%;
+    display: flex;
+    align-self: flex-start;
+    z-index: 1;
+    margin-bottom: -1px;
+  }
+
+  &__tab {
+    padding: 10px 20px 11px;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    color: rgba($color-deep-purple, 0.5);
+    font-family: $gdfont-demibold;
+    font-size: 14px;
+    line-height: 1.25;
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &.active {
+      color: $color-deep-purple;
+    }
+
+    &.active {
+      border-color: $color-dove-gray;
+      background-color: $color-white;
+    }
+  }
+}
+
+.gd-docs-content__block {
+  display: none;
+  padding: 24px;
+  border: 1px solid $color-dove-gray;
+
+  &.active {
+    display: block;
+  }
+
+  .highlight {
+    width: 100%;
+  }
+}

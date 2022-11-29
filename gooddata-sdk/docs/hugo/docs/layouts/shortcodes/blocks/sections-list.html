@@ -1,0 +1,52 @@
+{{- if (and (isset .Site.Params "versions") (isset .Site.Params.versions 0)) -}}
+{{ .Scratch.Set "docsRoot" (index .Site.Params.versions 0).url }}
+{{- else -}}
+{{ .Scratch.Set "docsRoot" "/docs/" }}
+{{- end -}}
+{{- $sections := .Site.GetPage (.Scratch.Get "docsRoot") -}}
+<section class="row td-box td-box--height-auto">
+  <div class="col-12">
+    <div class="text-center">
+      {{ .Inner | markdownify }}
+    </div>
+
+    <div class="gd-docs-homepage-sections-list container">
+      <div class="row">
+        {{ range $sections.CurrentSection.Pages }}
+          {{ $site := .Page.Site }}
+          {{ $page := .Page }}
+
+          {{ if and (not $page.Params.toc_hide) (not $page.Params.homepage_hide) (ne $page $site.Home) }}
+            <div class="col col-12 col-md-6 col-lg-4">
+              <div class="gd-docs-homepage-sections-list__section">
+                {{ if $page.Params.icon }}
+                <div class="gd-docs-homepage-sections-list__sectionLeft">
+                  <img src="{{ $page.RelPermalink }}{{ $page.Params.icon }}" alt="{{ $page.LinkTitle }}" class="gd-docs-homepage-sections-list__icon" />
+                </div>
+                {{ end }}
+                <div class="gd-docs-homepage-sections-list__sectionRight">
+                  <h4 class="gd-docs-homepage-sections-list__title">{{ $page.LinkTitle }}</h4>
+                  <p class="gd-docs-homepage-sections-list__description">{{ $page.Description }}</p>
+                  <a href="{{ $page.RelPermalink }}" class="gd-docs-homepage-sections-list__link">Learn more</a>
+
+                  {{ if $page.Params.promotedLinks }}
+                  <h4 class="gd-docs-homepage-sections-list-promoted-links__title">In this section:</h4>
+                  <ul class="gd-docs-homepage-sections-list-promoted-links">
+                    {{ range $page.Params.promotedLinks }}
+                      {{ with $site.GetPage . }}
+                        <li class="gd-docs-homepage-sections-list-promoted-links__item">
+                            <a href="{{ .RelPermalink }}" class="gd-docs-homepage-sections-list-promoted-links__link">{{ .LinkTitle }}</a>
+                        </li>
+                      {{ end }}
+                    {{ end }}
+                  </ul>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</section>
