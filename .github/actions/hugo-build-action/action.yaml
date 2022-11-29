@@ -1,0 +1,23 @@
+name: Hugo Build
+description: Builds documentation using Hugo
+inputs:
+  BASE_URL:
+    required: false
+    description: Optional base url used during build
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.81.0'
+        extended: true
+    - name: Install dependencies
+      working-directory: gooddata-sdk/docs/hugo/docs
+      run: npm ci
+      shell: bash
+    - name: Build
+      working-directory: gooddata-sdk/docs/hugo/docs
+      run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
+      shell: bash
