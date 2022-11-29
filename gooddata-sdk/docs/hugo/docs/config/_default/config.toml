@@ -1,0 +1,84 @@
+theme = ["docsy"]
+contentDir = "content/en"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+
+# Necessary for proper static path resolution
+# when baseUrl has some path component.
+canonifyURLs = true
+
+# Disable, it makes problems with Netlify (missing internal redirect .../path -> .../path/)
+# relativeURLs = true
+
+disableKinds = ["taxonomy", "taxonomyTerm"]
+
+# Highlighting config
+pygmentsCodeFences = true
+pygmentsUseClasses = false
+# Use the new Chroma Go highlighter in Hugo.
+pygmentsUseClassic = false
+#pygmentsOptions = "linenos=table"
+# See https://help.farbox.com/pygments.html
+pygmentsStyle = "tango"
+
+[frontmatter]
+lastmod = ["date", ":fileModTime"]
+## Configuration for BlackFriday markdown parser: https://github.com/russross/blackfriday
+[blackfriday]
+plainIDAnchors = true
+hrefTargetBlank = true
+angledQuotes = false
+latexDashes = true
+
+# Image processing configuration.
+[imaging]
+resampleFilter = "CatmullRom"
+quality = 75
+anchor = "smart"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+      # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
+      style = "tango"
+      # Uncomment if you want your chosen highlight style used for code blocks without a specified language
+      # guessSyntax = "true"
+
+[languages]
+[languages.en]
+title = "GoodData Python SDK"
+description = "Python SDK documentation"
+languageName ="English"
+# Weight used for sorting.
+weight = 1
+auth_token = "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+auth_header = '-H "Authorization: Bearer YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"'
+
+[outputs]
+section = [ "HTML" ]
+
+[params]
+menuTitle = "Python SDK"
+copyright = "GoodData"
+offlineSearch = false
+
+# Enable syntax highlighting and copy buttons on code blocks with Prism
+prism_syntax_highlighting = true
+
+# User interface configuration
+[params.ui]
+# Enable to show the side bar menu in its compact state.
+sidebar_menu_compact = true
+#  Set to true to disable breadcrumb navigation.
+breadcrumb_disable = true
+#  Set to true to hide the sidebar search box (the top nav search box will still be displayed if search is enabled)
+sidebar_search_disable = true
+#  Set to false if you don't want to display a logo (/assets/icons/logo.svg) in the top nav bar
+navbar_logo = true
+# Set to true to disable the About link in the site footer
+footer_about_disable = false
+
+[params.mermaid]
+enable = true
