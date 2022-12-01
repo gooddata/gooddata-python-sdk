@@ -735,8 +735,7 @@ class ActionsApi(object):
             headers_map={
                 'accept': [
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'text/csv',
-                    'application/json'
+                    'text/csv'
                 ],
                 'content_type': [],
             },
