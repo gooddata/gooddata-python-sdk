@@ -1008,7 +1008,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, application/json
+ - **Accept**: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
 
 
 ### HTTP response details

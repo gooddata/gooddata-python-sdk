@@ -217,7 +217,18 @@
           },
           "202": {
             "content": {
-              "application/json": {}
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
             },
             "description": "Request is accepted, provided exportId exists, but export is not yet ready."
           }
