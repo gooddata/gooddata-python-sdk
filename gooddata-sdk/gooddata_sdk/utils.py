@@ -5,6 +5,7 @@ import functools
 import os
 import re
 import typing
+from collections.abc import KeysView
 from pathlib import Path
 from shutil import rmtree
 from typing import Any, Callable, Dict, NamedTuple, Union, cast
@@ -16,6 +17,10 @@ from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
 IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
+
+PROFILES_FILE = "profiles.yaml"
+PROFILES_DIRECTORY = ".gooddata"
+PROFILES_FILE_PATH = Path.home() / PROFILES_DIRECTORY / PROFILES_FILE
 
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
@@ -195,3 +200,24 @@ def change_case(dictionary: dict, case: Callable[[str], str]) -> dict:
     for k, v in dictionary.items():
         temp[case(k)] = change_case_helper(v, case)
     return temp
+
+
+def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView) -> None:
+    mandatory_parameters = ["host", "token"]
+    missing = []
+    for mandatory_parameter in mandatory_parameters:
+        if mandatory_parameter not in profile_content_keys:
+            missing.append(mandatory_parameter)
+    if missing:
+        missing_str = " and ".join(missing)
+        raise ValueError(f"Profile {profile} is missing mandatory parameter or parameters {missing_str}.")
+
+
+def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> dict[str, Any]:
+    if not profiles_path.exists():
+        raise ValueError(f"There is no profiles file located for path {profiles_path}.")
+    content = read_layout_from_file(profiles_path)
+    if not content.get(profile):
+        raise ValueError(f"Profiles file does not contain profile {profile}.")
+    mandatory_profile_content_check(profile, content.get(profile).keys())
+    return content.get(profile)

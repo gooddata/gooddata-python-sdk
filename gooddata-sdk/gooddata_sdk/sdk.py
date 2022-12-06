@@ -1,6 +1,7 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Optional
 
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
@@ -14,10 +15,17 @@ from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.insight import InsightService
 from gooddata_sdk.support import SupportService
 from gooddata_sdk.table import TableService
+from gooddata_sdk.utils import PROFILES_FILE_PATH, profile_content
 
 
 class GoodDataSdk:
     """Top-level class that wraps all the functionality together."""
+
+    @classmethod
+    def create_from_profile(cls, profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> GoodDataSdk:
+        content = profile_content(profile, profiles_path)
+        client = GoodDataApiClient(**content)
+        return cls(client)
 
     @classmethod
     def create(
