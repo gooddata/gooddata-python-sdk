@@ -96,6 +96,10 @@ class GoodDataApiClient:
         headers["X-GDC-VALIDATE-RELATIONS"] = "true"
 
     @property
+    def custom_headers(self) -> dict[str, str]:
+        return self._custom_headers
+
+    @property
     def afm_client(self) -> afm_client.ApiClient:
         warn(
             "This property is deprecated and it will be removed in PythonSDK 2.0. "
