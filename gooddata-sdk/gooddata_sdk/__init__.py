@@ -4,6 +4,8 @@
 At the moment the SDK provides services to inspect and interact with the Semantic Model and consume analytics.
 """
 
+import logging
+
 from gooddata_sdk._version import __version__
 from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
 from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
@@ -117,3 +119,6 @@ from gooddata_sdk.insight import Insight, InsightAttribute, InsightBucket, Insig
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
+
+# by default don't log anything
+logging.getLogger().addHandler(logging.NullHandler())
