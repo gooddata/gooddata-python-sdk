@@ -1,17 +1,20 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import logging
 from typing import Any, Optional, Tuple, Union
 
 from attrs import define, field
 
-import gooddata_api_client.apis as apis
 import gooddata_api_client.models as models
 from gooddata_api_client.model.afm import AFM
 from gooddata_api_client.model.result_spec import ResultSpec
+from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
+
+logger = logging.getLogger(__name__)
 
 
 @define
@@ -225,11 +228,12 @@ class BareExecutionResponse:
 
     def __init__(
         self,
-        actions_api: apis.ActionsApi,
+        api_client: GoodDataApiClient,
         workspace_id: str,
         execution_response: models.AfmExecutionResponse,
     ):
-        self._actions_api = actions_api
+        self._api_client = api_client
+        self._actions_api = self._api_client.actions_api
         self._workspace_id = workspace_id
 
         self._exec_response: models.ExecutionResponse = execution_response["execution_response"]
@@ -259,15 +263,24 @@ class BareExecutionResponse:
         # this makes sure that offset gets defaulted to start of result
         _offset = [0 for _ in _limit] if _limit is not None and _offset is None else _offset
 
-        return ExecutionResult(
-            self._actions_api.retrieve_result(
-                workspace_id=self._workspace_id,
-                result_id=self.result_id,
-                offset=_offset,
-                limit=_limit,
-                _check_return_type=False,
-            )
+        execution_result, _, http_headers = self._actions_api.retrieve_result(
+            workspace_id=self._workspace_id,
+            result_id=self.result_id,
+            offset=_offset,
+            limit=_limit,
+            _check_return_type=False,
+            _return_http_data_only=False,
         )
+        custom_headers = self._api_client.custom_headers
+        if "X-GDC-TRACE-ID" in custom_headers and "X-GDC-TRACE-ID" in http_headers:
+            logger.info(
+                "Received execution result from AFM.",
+                extra=dict(
+                    requestTraceId=custom_headers["X-GDC-TRACE-ID"],
+                    responseTraceId=http_headers["X-GDC-TRACE-ID"],
+                ),
+            )
+        return ExecutionResult(execution_result)
 
     def __str__(self) -> str:
         return self.__repr__()
@@ -285,14 +298,14 @@ class Execution:
 
     def __init__(
         self,
-        actions_api: apis.ActionsApi,
+        api_client: GoodDataApiClient,
         workspace_id: str,
         exec_def: ExecutionDefinition,
         response: models.AfmExecutionResponse,
     ):
         self._exec_def = exec_def
         self._bare_exec_response = BareExecutionResponse(
-            actions_api=actions_api,
+            api_client=api_client,
             workspace_id=workspace_id,
             execution_response=response,
         )

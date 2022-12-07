@@ -345,7 +345,7 @@ class DataFrameFactory:
 
         return convert_execution_response_to_dataframe(
             execution_response=BareExecutionResponse(
-                actions_api=self._sdk.client.actions_api,
+                api_client=self._sdk.client,
                 workspace_id=self._workspace_id,
                 execution_response=models.AfmExecutionResponse(
                     result_cache_metadata.execution_response, _check_type=False
