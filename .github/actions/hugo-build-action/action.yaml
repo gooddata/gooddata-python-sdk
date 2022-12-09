@@ -1,7 +1,7 @@
 name: Hugo Build
 description: Builds documentation using Hugo
 inputs:
-  BASE_URL:
+  base-url:
     required: false
     description: Optional base url used during build
 
@@ -19,5 +19,7 @@ runs:
       shell: bash
     - name: Build
       working-directory: gooddata-sdk/docs/hugo/docs
+      env:
+        BASE_URL: ${{ inputs.base-url }}
       run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
       shell: bash
