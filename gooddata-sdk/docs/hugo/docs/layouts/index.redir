@@ -1,0 +1,2 @@
+# Redirect homepage to the latest version
+/ {{ .Site.BaseURL }}/docs/ 301!
