@@ -6,7 +6,10 @@ jobs:
   netlify-preview-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: Hugo Build
         uses: ./.github/actions/hugo-build-action
         with:
