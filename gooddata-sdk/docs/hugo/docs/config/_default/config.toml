@@ -57,6 +57,7 @@ auth_token = "YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
 auth_header = '-H "Authorization: Bearer YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"'
 
 [outputs]
+home = [ "HTML", "REDIR" ]
 section = [ "HTML" ]
 
 [params]
@@ -82,3 +83,17 @@ footer_about_disable = false
 
 [params.mermaid]
 enable = true
+
+# Generate Netlify redirects file in Hugo
+# Example taken from: https://github.com/gohugoio/hugoDocs/commit/c1ab9894e8292e0a74c43bbca2263b1fb3840f9e
+[mediaTypes]
+[mediaTypes."text/netlify"]
+suffixes = [""]
+delimiter = ""
+
+[outputFormats]
+[outputFormats.REDIR]
+mediatype = "text/netlify"
+baseName = "_redirects"
+isPlainText = true
+notAlternative = true
