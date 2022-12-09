@@ -1,0 +1,49 @@
+i {
+    &.hosted,
+    &.gooddata-ui-documentation,
+    &.accelerator-toolkit,
+    &.examples-gallery,
+    &.interactive-code-samples,
+    &.slack,
+    &.community,
+    &.university {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    &.hosted {
+        background-image: url("../img/icon-hosted.svg");
+    }
+
+    &.gooddata-ui-documentation {
+        background-image: url("../img/icon-gooddata-ui-documentation.svg");
+    }
+
+    &.accelerator-toolkit {
+        background-image: url("../img/icon-accelerator-toolkit.svg");
+    }
+
+    &.examples-gallery {
+        background-image: url("../img/icon-examples-gallery.svg");
+    }
+
+    &.interactive-code-samples {
+        background-image: url("../img/icon-interactive-code-samples.svg");
+    }
+
+    &.slack {
+        background-image: url("../img/icon-slack.svg");
+    }
+
+    &.community {
+        background-image: url("../img/icon-community.svg");
+    }
+
+    &.university {
+        background-image: url("../img/icon-university.svg");
+    }
+}

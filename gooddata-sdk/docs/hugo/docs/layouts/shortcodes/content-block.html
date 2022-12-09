@@ -1,0 +1,15 @@
+{{ $title := .Get "title" }}
+{{ $index := .Ordinal }}
+{{ $block := .Inner }}
+
+{{ with .Parent }}
+{{ $selectId := .Get "id" }}
+{{ $scratchIdTitles := print "content-block-" (string .Ordinal) }}
+{{ .Scratch.SetInMap $scratchIdTitles (string $index) $title }}
+
+<div class="gd-docs-content__block content-{{ $title | anchorize }}{{ if eq $index 0 }} active{{ end }}">
+  {{ $block }}
+</div>
+{{ else }}
+{{ $block }}
+{{ end }}

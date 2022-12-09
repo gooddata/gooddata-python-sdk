@@ -1,0 +1,10 @@
+{{- $curPage := .Page.Section -}}
+{{- if .Site.Params.versions -}}
+  {{- range .Site.Params.versions -}}
+    {{- if eq $curPage .dirpath -}}
+    {{- .latestTag -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- .Site.Params.version -}}
+{{- end -}}

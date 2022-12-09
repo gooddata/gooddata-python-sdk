@@ -1,0 +1,35 @@
+// TODO: Change this variable for distributed version of docs to remove Avenir font.
+$is-public: true;
+
+$gdfont-regular: ("dc8ebcd096d8d65d80200bbe8e045d86", "Helvetica", "Arial", sans-serif);
+$gdfont-demibold: ("bca6d3310b5c9dae1dae416e8abc8405", "Helvetica", "Arial", sans-serif);
+$gdfont-extrabold: ("ae2e11957f2c90bcba60dd109b5379f5", "Helvetica", "Arial", sans-serif);
+
+$font-family: $gdfont-regular;
+
+$header-first-nav-height: 64px;
+$header-first-nav-height-desktop: 80px;
+$header-first-nav-height-x-big-desktop: 100px;
+
+$header-second-nav-height: 59px;
+
+$header-height: $header-first-nav-height + $header-second-nav-height;
+$header-height-desktop: $header-first-nav-height-desktop + $header-second-nav-height;
+$header-height-x-big-desktop: $header-first-nav-height-x-big-desktop + $header-second-nav-height;
+
+$color-text: #1C0D3F;
+$color-share-button: #CCD8E2;
+$color-alert: #4D4A3D;
+$color-alert-bg: #f5f6f8;
+$color-alert-info: #1B127D;
+$color-alert-info-bg: #e1defa;
+$color-alert-warning: #CF4336;
+$color-alert-warning-bg: #FDEEEC;
+$color-tooltip: #e26300;
+$color-gray-bg: #f2f2f2;
+
+$color-shocking-pink-dark: darken($color-shocking-pink, 10%);
+
+$alert-border-width: 5px;
+
+$transition: 0.15s ease-in-out;

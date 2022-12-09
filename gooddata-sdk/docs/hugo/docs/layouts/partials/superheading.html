@@ -1,0 +1,18 @@
+{{/* PETR: Definition of the superheading tag */}}
+
+{{ $label := "" }}
+
+{{ if isset . "labelContent" }}
+  {{ $label = .labelContent }}
+{{ else if .Params.superheading }}
+  {{ $label = .Params.superheading }}
+{{ end }}
+
+{{ if and $label (gt (len $label) 0) }}
+  {{ $hasLabel := true }}
+  <div style="color: #474747">
+    <i>
+        {{ $label | markdownify }}
+    </i>
+  </div>
+{{ end }}

@@ -1,0 +1,14 @@
+<div class="gd-docs-homepage-slack col col-12 text-left">
+  <div class="gd-docs-homepage-box__inner gd-docs-homepage-slack__inner white">
+    <div class="gd-docs-homepage-slack__left d-flex">
+      <i class="gd-docs-homepage-slack__icon {{ .Get "icon" }}"></i>
+      <h3 class="gd-docs-homepage-slack__title">{{ .Get "title" }}</h3>
+    </div>
+    <div class="gd-docs-homepage-slack__text">{{ .Inner }}</div>
+    <div class="gd-docs-homepage-slack__buttonWrapper d-flex flex-column-reverse">
+      <div id="pactsafe-container" class="gd-docs-homepage-slack__pactsafe"></div>
+      <a id="cta-tiger-join-us-on-slack-bumper" class="gd-docs-homepage-slack__button gd-docs-button" data-toggle="tooltip" data-placement="right" title="Before continuing to the site you have to agree with the conditions.">{{ .Get "buttonText" }}</a>
+      <input hidden value="anonymous" id="fake-uid">
+    </div>
+  </div>
+</div>

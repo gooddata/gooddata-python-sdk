@@ -1,0 +1,17 @@
+<div class="gd-docs-homepage-learn col col-12 col-xl-6 text-left">
+  <div class="gd-docs-homepage-box__inner gd-docs-homepage-learn__inner white">
+    <div class="row">
+      <div class="col col-12 d-flex align-items-center">
+        <i class="gd-docs-homepage-learn__icon {{ .Get "icon" }}"></i>
+        <h3 class="gd-docs-homepage-learn__title mb-0">{{ .Get "title" }}</h3>
+      </div>
+    </div>
+    <div class="row flex-grow-1">
+      <div class="gd-docs-homepage-learn__content col col-12 col-md-6">
+        <p class="gd-docs-homepage-learn__text">{{ .Get "text" }}</p>
+      </div>
+      <div class="gd-docs-homepage-learn__links col col-12 col-md-6">{{ .Inner }}</div>
+      <a href="{{ .Get "buttonLink" }}" class="gd-docs-homepage-learn__button gd-docs-button">{{ .Get "buttonText" }}</a>
+    </div>
+  </div>
+</div>

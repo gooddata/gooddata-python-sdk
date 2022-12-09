@@ -1,0 +1,9 @@
+{{ partial "page-meta-links.html" . }}
+{{ if not .Params.notoc }}
+{{ with .TableOfContents }}
+{{ if ge (len .) 1 }}
+{{ . }}
+{{ end }}
+{{ end }}
+{{ end }}
+{{ partial "custom-related-content.html" . }}

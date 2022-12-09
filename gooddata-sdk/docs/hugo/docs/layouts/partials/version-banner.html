@@ -1,0 +1,34 @@
+{{ $currentVersion := $.Page.Section }}
+{{ $versionRE := "\\d\\.\\d" }}
+
+{{ $data := newScratch }}
+
+{{ if .Site.Params.versions }}
+  {{ range .Site.Params.versions }}
+    {{ if and (not ($data.Get "latestVersion")) (gt (len (findRE $versionRE .version 1)) 0) }}
+      {{ $data.Set "latestVersion" .dirpath }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ $latestVersion := $data.Get "latestVersion" }}
+
+{{ if and (ne $currentVersion $latestVersion) (gt (len (findRE $versionRE $currentVersion 1)) 0) }}
+  <div class="alert alert-label" role="alert">
+    {{ with resources.Get "icons/icon-info.svg" }}
+      {{ ( . | minify).Content | safeHTML }}
+    {{ end }}
+    This documentation is for an older version of GoodData.
+
+    {{ $latestVersionPath := string (delimit (union (slice "" $latestVersion) (after 2 (split .RelPermalink "/"))) "/") }}
+    {{ if .GetPage $latestVersionPath }}
+      {{ with .GetPage $latestVersionPath }}
+        Go to <a href="{{ .Permalink }}">the latest version of this article</a>.
+      {{ end}}
+    {{ else }}
+      {{ with .GetPage (string (delimit (slice "" $latestVersion) "/")) }}
+        Go to <a href="{{ .Permalink }}">the latest version</a>.
+      {{ end}}
+    {{ end }}
+  </div>
+{{ end }}

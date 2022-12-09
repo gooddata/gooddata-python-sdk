@@ -1,0 +1,100 @@
+{{ $footer := getJSON "https://www.gooddata.com/learn-assets/js/footer-definition.json" }}
+
+<footer class="gd-footer">
+  {{ if $footer.footer.bannerLinks }}
+    <ul class="gd-footer-banner-links gd-footer-links">
+    {{ range $index, $link := $footer.footer.bannerLinks }}
+      <li class="gd-footer-banner-links-item gd-footer-links-item">
+        <input
+          type="checkbox"
+          tabindex="-1"
+          id="gd-footer-banner-links-item-trigger-{{ $index }}"
+          name="gd-footer-banner-links-item-trigger-{{ $index }}"
+          class="gd-footer-banner-links-item-trigger gd-footer-links-item-trigger"
+        />
+        <label
+          for="gd-footer-banner-links-item-trigger-{{ $index }}"
+          class="gd-footer-banner-links-item-text gd-footer-links-item-text"
+        >
+          {{ $link.title }}
+        </label>
+        {{ if $link.items }}
+          <ul class="gd-footer-banner-sublinks gd-footer-sublinks">
+            {{ range $sublink := $link.items }}
+              <li class="gd-footer-banner-sublinks-item gd-footer-sublinks-item">
+                {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+    {{ end }}
+    </ul>
+  {{ end }}
+
+  <ul class="gd-footer-links">
+    {{ range $index, $link := $footer.footer.links }}
+      <li class="gd-footer-links-item">
+        <input
+          type="checkbox"
+          tabindex="-1"
+          id="gd-footer-links-item-trigger-{{ $index }}"
+          name="gd-footer-links-item-trigger-{{ $index }}"
+          class="gd-footer-links-item-trigger"
+        />
+        <label
+          for="gd-footer-links-item-trigger-{{ $index }}"
+          class="gd-footer-links-item-text"
+        >
+          {{ $link.title }}
+        </label>
+        {{ if $link.items }}
+          <ul class="gd-footer-sublinks">
+            {{ range $sublink := $link.items }}
+              <li class="gd-footer-sublinks-item">
+                {{ template "absolute-link" (dict "url" $sublink.link "text" $sublink.title "class" "gd-footer-sublinks-item-link" "idPrefix" "footer-link-") }}
+              </li>
+            {{ end }}
+          </ul>
+        {{ end }}
+      </li>
+    {{ end }}
+  </ul>
+
+  <div class="gd-footer-bottom">
+    {{ if $footer.footer.buttons }}
+      <div class="gd-footer-buttons">
+        {{ range $button := $footer.footer.buttons }}
+          {{ if eq $button.type "social" }}
+            {{ template "absolute-link" (dict "url" $button.link "text" $button.text "icon" ($button.icon | safeHTML) "class" "gd-footer-buttons-item gd-footer-buttons-item-icon-button" "idPrefix" "footer-btn-" "rel" "noreferrer noopener") }}
+          {{ else if eq $button.type "secondary" }}
+            {{ template "absolute-link" (dict "url" $button.link "text" $button.text "class" "gd-footer-buttons-item button button-secondary button-small button-inverted" "idPrefix" "footer-btn-") }}
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ end }}
+
+    {{ if $footer.footer.copyright }}
+      <div class="gd-footer-copyright">
+        {{ range $copy := $footer.footer.copyright }}
+          <div class="gd-footer-copyright-text">
+            {{ if $copy.link }}
+              {{ template "absolute-link" (dict "url" $copy.link "text" $copy.text "class" "gd-footer-copyright-link" "idPrefix" "footer-copyright-") }}
+            {{ else }}
+              {{ $copy.text }}
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</footer>
+
+{{ define "absolute-link" }}
+  {{ $urlParse := urls.Parse .url }}
+  {{ $url := print (cond (and (gt (len $urlParse.Path) 0) (eq (len $urlParse.Host) 0)) "https://www.gooddata.com" "") .url }}
+  {{ $id := replace (lower .text) " " "-" }}
+  {{ $content := cond (isset . "icon") .icon .text }}
+
+  <a href="{{ $url }}" class="{{ .class }}" id="{{ .idPrefix }}{{ $id }}" target="_blank" {{ if (isset . "rel") }}rel="{{ .rel }}"{{ end }}>{{ $content }}</a>
+{{ end }}

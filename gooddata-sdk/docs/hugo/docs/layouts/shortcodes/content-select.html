@@ -1,0 +1,13 @@
+<div class="gd-docs-content-select">
+    {{ $scratchIdTitles := print "content-block-" (string .Ordinal) }}
+    {{ $titles := .Scratch.Get $scratchIdTitles }}
+
+    {{ if $titles }}
+    <div class="gd-docs-content-select__tabs">
+        {{ range $index, $title := $titles }}
+        <div class="gd-docs-content-select__tab{{ if eq $index "0" }} active{{ end }}" data-content="{{ $title | anchorize }}">{{ $title }}</div>
+    {{ end }}
+</div>
+{{ end }}
+{{ .Inner }}
+</div>

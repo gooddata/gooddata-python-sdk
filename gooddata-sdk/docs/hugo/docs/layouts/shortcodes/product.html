@@ -1,0 +1,8 @@
+{{- $.Scratch.Set "productName" "GoodData.CN" -}}
+{{- $curPage := $.Page.Section -}}
+{{- range $.Site.Params.versions -}}
+  {{- if and (eq $curPage .dirpath) (isset . "productName") -}}
+    {{- $.Scratch.Set "productName" .productName -}}
+  {{- end -}}
+{{- end -}}
+{{- $.Scratch.Get "productName" -}}
