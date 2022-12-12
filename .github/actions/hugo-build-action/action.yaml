@@ -4,6 +4,10 @@ inputs:
   base-url:
     required: false
     description: Optional base url used during build
+  working-directory:
+    required: false
+    description: Path to documentation directory
+    default: gooddata-sdk/docs/hugo/docs
 
 runs:
   using: "composite"
@@ -14,11 +18,11 @@ runs:
         hugo-version: '0.81.0'
         extended: true
     - name: Install dependencies
-      working-directory: gooddata-sdk/docs/hugo/docs
+      working-directory: ${{ inputs.working-directory }}
       run: npm ci
       shell: bash
     - name: Build
-      working-directory: gooddata-sdk/docs/hugo/docs
+      working-directory: ${{ inputs.working-directory }}
       env:
         BASE_URL: ${{ inputs.base-url }}
       run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
