@@ -13,6 +13,7 @@ RUN set -x \
 USER ${USER_NAME}
 WORKDIR /app
 COPY ./tests-support/requirements.txt /app/requirements.txt
+COPY ./tests-support/fixtures /app/fixtures
 
 RUN set -x \
   && pip3 install --no-cache-dir --user -r requirements.txt \
