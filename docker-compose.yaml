@@ -34,8 +34,6 @@ services:
     build:
       context: .
       dockerfile: tests-support/Dockerfile
-    volumes:
-      - ./tests-support/fixtures:/app/fixtures
     environment:
       FIXTURES_DIR: /app/fixtures
       HOST: "http://gooddata-cn-ce:3000"
