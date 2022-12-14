@@ -143,6 +143,38 @@
         }
     }
 
+    &__github {
+        color: $color-deep-purple;
+        border-color: $color-deep-purple;
+        font-size: 14px;
+        line-height: 1;
+        height: 2rem;
+        padding: .5rem 0.8rem;
+
+        &,
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $color-white;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            color: desaturate(lighten($color-deep-purple, 30%), 40%);
+            border-color: desaturate(lighten($color-deep-purple, 30%), 40%);
+        }
+
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba($color-deep-purple, 0);
+        }
+
+        svg {
+            margin-right: 10px;
+        }
+    }
+
+
     &__search {
         align-items: center;
         justify-content: center;

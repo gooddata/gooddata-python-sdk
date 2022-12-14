@@ -20,7 +20,7 @@
         <a href="https://community.gooddata.com/" class="gd-docs-header-nav__menulink gd-header-link">Community</a>
       </li>
       <li class="gd-docs-header-nav__menuitem gd-header-link-item">
-        <a href="{{ .Site.Home.RelPermalink }}" class="gd-docs-header-nav__menulink gd-header-link gd-header-link__active">Documentation</a>
+        <a href="https://www.gooddata.com/developers/cloud-native/doc/cloud/" class="gd-docs-header-nav__menulink gd-header-link gd-header-link__active">Documentation</a>
       </li>
       <li class="gd-docs-header-nav__menuitem gd-header-link-item">
         <a href="https://support.gooddata.com/hc/en-us" class="gd-docs-header-nav__menulink gd-header-link">Support</a>
@@ -44,7 +44,7 @@
         <a href="https://www.gooddata.com/developers/cloud-native/doc/cloud/">Docs</a>
       </li>
       <li class="gd-breadcrumb-item">
-        <span>Python SDK</span>
+        <span> Python SDK</span>
       </li>
     </ul>
   </div>
@@ -59,7 +59,7 @@
   {{ else }}
   <div class="gd-docs-header-nav__right">
     {{ with .Site.GetPage "docs" }}
-    <a href="https://github.com/gooddata/gooddata-python-sdk" class="gd-docs-header-nav__cta gd-docs-header-nav__slack">
+    <a href="https://github.com/gooddata/gooddata-python-sdk" class="gd-docs-header-nav__cta gd-docs-header-nav__github">
       {{ with resources.Get "icons/github.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}
       GitHub
     </a>
