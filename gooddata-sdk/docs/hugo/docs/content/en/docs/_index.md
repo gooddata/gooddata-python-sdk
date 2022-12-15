@@ -48,14 +48,14 @@ Integrate GoodData analytics into your continuous delivery practices by, for exa
 ```python
 # Reads visualizations from workspace
 insights = sdk.insights.get_insights("123")
-​
+
 # Iterate through visualizations and check if they are valid
 for insight in insights:
     try:
         sdk.tables.for_insight("123", insight)
     except Exception:
         print(f"Visualization {insight.title} is broken.")
-​
+
 ```
 
 #### Create data pipelines

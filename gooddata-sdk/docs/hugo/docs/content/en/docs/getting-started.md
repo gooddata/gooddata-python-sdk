@@ -34,8 +34,8 @@ Start integrating GoodData into your Python application right now.
     ```python
     workspaces = sdk.catalog_workspace.list_workspaces()
     print(workspaces)
-    ​
-    ​
+
+
     # [
     #   CatalogWorkspace(id=demo_west, name=Demo West),
     #   CatalogWorkspace(id=demo_west_california, name=Demo West California),
@@ -66,29 +66,29 @@ To be able to execute the code, simply replace **host** and **token** variables 
 The __standalone__ code examples look as follows:
 ```python
 from gooddata_sdk import GoodDataSdk
-​
+
 # GoodData base URL, e.g. "https://www.example.com"
 host = "https://www.example.com"
 # GoodData user token
 token = "some_user_token"
 sdk = GoodDataSdk.create(host, token)
-​
+
 workspace_id = "123"
-​
+
 # Read catalog for demo workspace
 catalog = sdk.catalog_workspace_content.get_full_catalog(workspace_id)
-​
+
 # Print all dataset in the workspace
 for dataset in catalog.datasets:
     print(dataset)
-​
+
 # Print all metrics in the workspace
 for metric in catalog.metrics:
     print(metric)
-​
+
 # Read list of attributes for demo workspace
 attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id)
-​
+
 # Read list of facts for demo workspace
 facts = sdk.catalog_workspace_content.get_facts_catalog(workspace_id)
 ```
@@ -99,10 +99,10 @@ The __snippet__ examples on the other hand are made to be small and quickly dige
 
 ```python
 my_analytics_model = sdk.catalog_workspace_content.get_declarative_analytics_model("123")
-​
+
 # Modify the `CatalogDeclarativeAnalytics` object:
 my_analytics_model.analytics.analytical_dashboards.clear()
-​
+
 # Put analytics model object back to the server:
 sdk.catalog_workspace_content.put_declarative_analytics_model("123",my_analytics_model)
 ```

@@ -42,7 +42,7 @@ See [Connect Data](https://www.gooddata.com/developers/cloud-native/doc/cloud/co
 Since there are multiple data source types, here are examples, how to initialize each of them:
 
 ### Postgres
-​
+
 ```python
 CatalogDataSourcePostgres(
     id=data_source_id,
@@ -58,9 +58,9 @@ CatalogDataSourcePostgres(
     ),
 )
 ```
-​
+
 ### Redshift
-​
+
 ```python
 CatalogDataSourceRedshift(
     id=data_source_id,
@@ -77,7 +77,7 @@ CatalogDataSourceRedshift(
 )
 ```
 ### Snowflake
-​
+
 ```python
 CatalogDataSourceSnowflake(
     id=data_source_id,
@@ -95,7 +95,7 @@ CatalogDataSourceSnowflake(
 )
 ```
 ### Vertica
-​
+
 ```python
 CatalogDataSourceVertica(
     id=data_source_id,
@@ -111,9 +111,9 @@ CatalogDataSourceVertica(
     ),
 )
 ```
-​
+
 ### BigQuery
-​
+
 ```python
 CatalogDataSourceBigQuery(
     id=data_source_id,
@@ -126,7 +126,7 @@ CatalogDataSourceBigQuery(
 )
 ```
 ### Greenplum
-​
+
 ```python
 CatalogDataSourceGreenplum(
     id=data_source_id,
