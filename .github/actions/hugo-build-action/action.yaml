@@ -8,6 +8,10 @@ inputs:
     required: false
     description: Path to documentation directory
     default: gooddata-sdk/docs/hugo/docs
+  hugo-env:
+    required: false
+    description: Environment variable
+    default: public
 
 runs:
   using: "composite"
@@ -24,6 +28,7 @@ runs:
     - name: Build
       working-directory: ${{ inputs.working-directory }}
       env:
+        HUGO_ENV: ${{ inputs.hugo-env }}
         BASE_URL: ${{ inputs.base-url }}
       run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
       shell: bash
