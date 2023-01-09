@@ -13,7 +13,7 @@ At the moment the SDK provides services to inspect and interact with the Semanti
 * Compute Service
 * Table Service
 
-See [DOCUMENTATION](https://gooddata-sdk.readthedocs.io) for more details.
+See [DOCUMENTATION](https://www.gooddata.com/docs/python-sdk) for more details.
 
 ## Requirements
 
