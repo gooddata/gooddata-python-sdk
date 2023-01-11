@@ -18,7 +18,7 @@ Python. Learn more about the clients in their [dedicated readme](./clients_READM
 
 The [gooddata-sdk](./gooddata-sdk) package provides a clean and convenient Python API to interact with GoodData.CN.
 
-Check out the GoodData Python SDK [documentation](https://gooddata-sdk.readthedocs.io/en/latest/) to learn more and get started.
+Check out the GoodData Python SDK [documentation](https://www.gooddata.com/docs/python-sdk) to learn more and get started.
 
 ### GoodData Foreign Data Wrapper
 
