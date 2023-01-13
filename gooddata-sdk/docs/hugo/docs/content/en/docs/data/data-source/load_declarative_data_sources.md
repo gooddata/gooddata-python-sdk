@@ -13,6 +13,24 @@ Returns *CatalogDeclarativeDataSources*.
 
 Load declarative data sources layout, which was stored using [store_declarative_data_sources](../store_declarative_data_sources).
 
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="declarative_data_sources" p_type="CatalogDeclarativeDataSources" >}}
+ Declarative Data Sources object
+{{< /parameter >}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+
+{{< parameter p_type="CatalogDeclarativeDataSources" >}}
+Declarative Data Sources object
+{{< /parameter >}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```python

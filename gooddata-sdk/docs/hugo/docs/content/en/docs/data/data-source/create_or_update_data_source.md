@@ -9,7 +9,18 @@ superheading: "catalog_data_source."
 
 ``create_or_update_data_source(data_source: CatalogDataSource)``
 
-Create or update data source.
+Pushes the Data Source to the GoodData environment. Automatically decides, whether to create or update.
+
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="data_source" p_type="CatalogDataSource" >}}
+Catalog Data Source object
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
 ### Example
 
