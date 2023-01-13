@@ -20,7 +20,7 @@ dev:
 
 .PHONY: lint
 lint:
-	flake8 .
+	ruff .
 
 .PHONY: format
 format:

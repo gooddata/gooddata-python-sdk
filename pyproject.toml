@@ -1,4 +1,32 @@
 # (C) 2021 GoodData Corporation
+[tool.ruff]
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    ".tox",
+    "build",
+    "dist",
+    "gooddata-afm-client",
+    "gooddata-metadata-client",
+    "gooddata-scan-client",
+    "gooddata-api-client",
+]
+line-length = 120
+select = [
+    # pyflakes
+    "F",
+    # pycodestyle
+    "E",
+    "W",
+]
+
+[tool.ruff.per-file-ignores]
+"gooddata-pandas/gooddata_pandas/__init__.py" = ["F401"]
+"gooddata-sdk/gooddata_sdk/*/__init__.py" = ["F401"]
+"gooddata-sdk/gooddata_sdk/__init__.py" = ["F401"]
+"gooddata-fdw/gooddata_fdw/__init__.py" = ["F401"]
+
 [tool.black]
 line-length = 120
 # intentionally ignore the generated clients
@@ -10,7 +38,7 @@ profile = "black"
 multi_line_output = 3
 include_trailing_comma = true
 line_length = 120
-skip_glob = ["*/gooddata-afm-client/*","*/gooddata-metadata-client/*","*/gooddata-scan-client/*","*/gooddata-api-client/*","*/.snapshot/*"]
+skip_glob = ["*/gooddata-afm-client/*", "*/gooddata-metadata-client/*", "*/gooddata-scan-client/*", "*/gooddata-api-client/*", "*/.snapshot/*"]
 src_paths = [
     "gooddata-afm-client",
     "gooddata-metadata-client",
@@ -37,8 +65,8 @@ regex = '''
   '''
 
 [[tool.tbump.field]]
-name="alpha"
-default=""
+name = "alpha"
+default = ""
 
 [tool.tbump.git]
 message_template = "Bump to {new_version}"
@@ -46,70 +74,70 @@ tag_template = "v{new_version}"
 
 [[tool.tbump.file]]
 # clients setup.py
-src="gooddata-*-client/setup.py"
-search="VERSION = \"{current_version}\""
+src = "gooddata-*-client/setup.py"
+search = "VERSION = \"{current_version}\""
 
 [[tool.tbump.file]]
 # fdw setup.py
-src="gooddata-fdw/setup.py"
-search="version=\"{current_version}\""
+src = "gooddata-fdw/setup.py"
+search = "version=\"{current_version}\""
 
 [[tool.tbump.file]]
 # fdw setup.py dependency
-src="gooddata-fdw/setup.py"
-search="gooddata-sdk~={current_version}"
+src = "gooddata-fdw/setup.py"
+search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
 # pandas setup.py
-src="gooddata-pandas/setup.py"
-search="version=\"{current_version}\""
+src = "gooddata-pandas/setup.py"
+search = "version=\"{current_version}\""
 
 [[tool.tbump.file]]
 # pandas setup.py dependency
-src="gooddata-pandas/setup.py"
-search="gooddata-sdk~={current_version}"
+src = "gooddata-pandas/setup.py"
+search = "gooddata-sdk~={current_version}"
 
 [[tool.tbump.file]]
 # sdk setup.py
-src="gooddata-sdk/setup.py"
-search="version=\"{current_version}\""
+src = "gooddata-sdk/setup.py"
+search = "version=\"{current_version}\""
 
 [[tool.tbump.file]]
 # sdk setup.py dependency
-src="gooddata-sdk/setup.py"
-search="gooddata-.*-client~={current_version}"
+src = "gooddata-sdk/setup.py"
+search = "gooddata-.*-client~={current_version}"
 
 [[tool.tbump.file]]
 # clients README
-src="gooddata-*-client/README.md"
+src = "gooddata-*-client/README.md"
 
 [[tool.tbump.file]]
 # clients user agent
-src="gooddata-*-client/gooddata_*_client/api_client.py"
+src = "gooddata-*-client/gooddata_*_client/api_client.py"
 
 [[tool.tbump.file]]
 # clients config
-src="gooddata-*-client/gooddata_*_client/configuration.py"
+src = "gooddata-*-client/gooddata_*_client/configuration.py"
 
 [[tool.tbump.file]]
 # clients __init__.py
-src="gooddata-*-client/gooddata_*_client/__init__.py"
+src = "gooddata-*-client/gooddata_*_client/__init__.py"
 
 [[tool.tbump.file]]
 # clients generator configs
-src=".openapi-generator/configs/gooddata-*-client.yaml"
+src = ".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
-src="gooddata-sdk/setup.py"
-search='"Documentation": "https://gooddata-sdk.readthedocs.io/en/v{current_version}"'
+src = "gooddata-sdk/setup.py"
+search = '"Documentation": "https://gooddata-sdk.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
-src="gooddata-pandas/setup.py"
-search='"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
+src = "gooddata-pandas/setup.py"
+search = '"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
 
 [[tool.tbump.file]]
-src="gooddata-fdw/setup.py"
-search='"Documentation": "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
+src = "gooddata-fdw/setup.py"
+search = '"Documentation": "https://gooddata-fdw.readthedocs.io/en/v{current_version}"'
 
 # You can specify a list of commands to
 # run after the files have been patched
