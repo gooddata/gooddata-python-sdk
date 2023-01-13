@@ -34,7 +34,7 @@ jobs:
         python_version: [py310, py39, py38, py37]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Execute tests
         run: |
           make test-ci
@@ -42,17 +42,16 @@ jobs:
           TEST_ENVS: ${{ matrix.python_version }}
       - name: Upload coverage to Codecov
         if: ${{ matrix.python_version == 'py310' }}
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml
-          fail_ci_if_error: true
   lint-and-format-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Python 3.10
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           cache: 'pip'
@@ -73,9 +72,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up Python 3.10
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           cache: 'pip'
