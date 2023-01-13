@@ -9,9 +9,19 @@ superheading: "catalog_data_source."
 
 ``list_data_sources()``
 
-Returns *List[CatalogDataSource]*.
-
 Lists all data sources.
+
+
+{{% parameters-block title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+
+{{% parameter p_type="List[CatalogDataSource]" %}}
+List of all Data Sources in the whole organization.
+{{% /parameter %}}
+
+{{% /parameters-block %}}
 
 ```Python
 # List all data sources

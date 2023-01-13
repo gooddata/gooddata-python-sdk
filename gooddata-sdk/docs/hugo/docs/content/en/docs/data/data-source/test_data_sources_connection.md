@@ -18,6 +18,27 @@ In case some connection failed the ValueError is raised with information about w
         demo-test-ds: "demopass"
         demo-bigquery-ds: "~/home/secrets.json"
 
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="declarative_data_sources" p_type="CatalogDeclarativeDataSources" >}}
+Declarative Data Sources object
+{{< /parameter >}}
+{{< parameter p_name="credentials_path" p_type="Optional[Path]" >}}
+Path to the credentials. Defaults to None.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Raises"%}}
+
+{{< parameter p_type="ValueError" >}}
+Check API references for possible errors of data source connections.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+
 ## Example
 
 ```Python

@@ -48,6 +48,7 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Args:
             data_source (CatalogDataSource): Catalog Data Source object
+
         Returns:
             None
         """
@@ -63,8 +64,6 @@ class CatalogDataSourceService(CatalogServiceBase):
     def get_data_source(self, data_source_id: str) -> CatalogDataSource:
         """Retrieve Data Source entity using data source id.
 
-
-
         Args:
             data_source_id (str): Data Source identification string e.g. "demo"
 
@@ -79,16 +78,23 @@ class CatalogDataSourceService(CatalogServiceBase):
         """Delete data source using Data Source id.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
+
+        Returns:
+            None
         """
         self._entities_api.delete_entity_data_sources(data_source_id)
 
     def patch_data_source_attributes(self, data_source_id: str, attributes: dict) -> None:
-        """Applies changes to the given data source.
+        """Applies changes to the specified data source.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
-            attributes (dict): TODO hkad98
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
+            attributes (dict):
+                TODO hkad98
+
         Returns:
             None
         """
@@ -102,10 +108,14 @@ class CatalogDataSourceService(CatalogServiceBase):
         )
 
     def list_data_sources(self) -> List[CatalogDataSource]:
-        """Lists all data sources. Uses the GET /api/v1/entities/dataSources API call.
+        """Lists all data sources.
+
+        Args:
+            None
 
         Returns:
-            List[CatalogDataSource]: List of all Data Sources in the whole organization.
+            List[CatalogDataSource]:
+                List of all Data Sources in the whole organization.
         """
         get_data_sources = functools.partial(
             self._entities_api.get_all_entities_data_sources,
@@ -118,10 +128,12 @@ class CatalogDataSourceService(CatalogServiceBase):
         """Lists all the data source tables for a given data source.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
 
         Returns:
-            List[CatalogDataSourceTable]: List of Data Source Tables objects
+            List[CatalogDataSourceTable]:
+                List of Data Source Table objects
         """
         get_data_source_tables = functools.partial(
             self._entities_api.get_all_entities_data_source_tables,
@@ -136,8 +148,12 @@ class CatalogDataSourceService(CatalogServiceBase):
     def get_declarative_data_sources(self) -> CatalogDeclarativeDataSources:
         """Retrieve all data sources, including their related physical data model.
 
+        Args:
+            None
+
         Returns:
-            CatalogDeclarativeDataSources: Declarative Data Sources, including physical data model.
+            CatalogDeclarativeDataSources:
+                Declarative Data Sources, including physical data model.
         """
         return CatalogDeclarativeDataSources.from_api(self._layout_api.get_data_sources_layout())
 
@@ -154,7 +170,11 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Declarative Data Source object. Can be retrieved by get_declarative_data_sources.
             credentials_path (Optional[Path], optional):
                 Path to the Credentials. Optional, defaults to None.
-            test_data_sources (bool, optional): TODO hkad98. Defaults to False.
+            test_data_sources (bool, optional):
+                TODO hkad98. Defaults to False.
+
+        Returns:
+            None
         """
         if test_data_sources:
             self.test_data_sources_connection(declarative_data_sources, credentials_path)
@@ -192,11 +212,12 @@ class CatalogDataSourceService(CatalogServiceBase):
             which was stored using store_declarative_data_sources.
 
         Args:
-            layout_root_path (Path, optional):
+            layout_root_path (Optional[Path], optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
 
         Returns:
-            CatalogDeclarativeDataSources: Declarative Data Sources object
+            CatalogDeclarativeDataSources:
+                Declarative Data Sources object
         """
         return CatalogDeclarativeDataSources.load_from_disk(self.layout_organization_folder(layout_root_path))
 
@@ -210,11 +231,12 @@ class CatalogDataSourceService(CatalogServiceBase):
             methods to load and set layouts stored using store_declarative_data_sources.
 
         Args:
-            layout_root_path (Path, optional):
+            layout_root_path (Optional[Path], optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
             credentials_path (Optional[Path], optional):
                 Path to the credentials. Defaults to Path.cwd().
-            test_data_sources (bool, optional): TODO hkad98. Defaults to False.
+            test_data_sources (bool, optional):
+                TODO hkad98. Defaults to False.
 
         Returns:
             None
@@ -224,8 +246,6 @@ class CatalogDataSourceService(CatalogServiceBase):
 
     def get_declarative_pdm(self, data_source_id: str) -> CatalogDeclarativeTables:
         """Retrieve physical data model for a given data source.
-
-
 
         Args:
             data_source_id (str): Data Source identification string. e.g. "demo"
@@ -349,22 +369,24 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Args:
             data_source_id (str):
-            Data Source identification string. e.g. "demo"
+                Data Source identification string. e.g. "demo"
             generate_ldm_request (CatalogGenerateLdmRequest, optional):
                 LDM options. Defaults to CatalogGenerateLdmRequest(separator="__", wdf_prefix="wdf")
 
         Returns:
-            CatalogDeclarativeModel: Logical Data Model object.
+            CatalogDeclarativeModel:
+                Logical Data Model object.
         """
         return CatalogDeclarativeModel.from_api(
             self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
         )
 
     def register_upload_notification(self, data_source_id: str) -> None:
-        """This method invalidates cache for a given data Soure
+        """Invalidate cache of your computed reports to force your analytics to be recomputed.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
 
         Returns:
             None
@@ -393,7 +415,8 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Switch to turn on warnings. Defaults to False.
 
         Returns:
-            CatalogScanResultPdm: TODO hkad98
+            CatalogScanResultPdm:
+                TODO hkad98
         """
         scan_result = CatalogScanResultPdm.from_api(
             self._actions_api.scan_data_source(data_source_id, scan_request.to_api())
@@ -430,7 +453,8 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Data Source identification string. e.g. "demo"
 
         Returns:
-            list[str]: TODO hkad98
+            list[str]:
+                List of configurable data source entities. TODO hkad98 (specify better pls)
         """
         response = self._actions_api.get_data_source_schemata(data_source_id)
         return response.get("schema_names", [])
@@ -445,8 +469,6 @@ class CatalogDataSourceService(CatalogServiceBase):
         the connection to the data source failed, e.g. host
         unreachable or invalid login or password”.
 
-
-
         Args:
             declarative_data_sources (CatalogDeclarativeDataSources):
                 Declarative Data Sources object
@@ -454,12 +476,12 @@ class CatalogDataSourceService(CatalogServiceBase):
                 Path to the credentials. Defaults to None.
 
         Raises:
-            ValueError: Error Code in the case of failure
+            ValueError:
+                Check API references for possible errors of data source connections.
 
         Returns:
             None
         """
-
         credentials = self._credentials_from_file(credentials_path) if credentials_path is not None else dict()
         errors: dict[str, str] = dict()
         for declarative_data_source in declarative_data_sources.data_sources:
@@ -501,6 +523,18 @@ class CatalogDataSourceService(CatalogServiceBase):
                     print(f"table_name={table_name} table_message={table_message}")
 
     def data_source_folder(self, data_source_id: str, layout_root_path: Path) -> Path:
+        """TODO
+
+        Args:
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
+            layout_root_path (Path):
+                ...
+
+        Returns:
+            Path:
+                Path to the source folder.
+        """
         layout_organization_folder = self.layout_organization_folder(layout_root_path)
         data_sources_folder = CatalogDeclarativeDataSources.data_sources_folder(layout_organization_folder)
         return CatalogDeclarativeDataSource.data_source_folder(data_sources_folder, data_source_id)
