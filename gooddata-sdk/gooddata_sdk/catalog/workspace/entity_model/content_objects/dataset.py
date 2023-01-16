@@ -42,7 +42,7 @@ class CatalogAttribute(CatalogEntity):
 
     def primary_label(self) -> Union[CatalogLabel, None]:
         # use cast as mypy is not applying next, it claims, type is filter[CatalogLabel]
-        return cast(Union[CatalogLabel, None], next(filter(lambda l: l.primary, self.labels), None))
+        return cast(Union[CatalogLabel, None], next(filter(lambda x: x.primary, self.labels), None))
 
     def find_label(self, id_obj: IdObjType) -> Union[CatalogLabel, None]:
         obj_key = id_obj_to_key(id_obj)
