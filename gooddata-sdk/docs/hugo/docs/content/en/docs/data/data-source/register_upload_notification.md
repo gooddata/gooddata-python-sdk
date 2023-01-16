@@ -11,6 +11,17 @@ superheading: "catalog_data_source."
 
 Invalidate cache of your computed reports to force your analytics to be recomputed.
 
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data Source identification string. e.g. "demo"
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```Python

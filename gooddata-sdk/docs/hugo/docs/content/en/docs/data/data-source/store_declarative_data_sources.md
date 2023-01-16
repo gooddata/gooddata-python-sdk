@@ -5,8 +5,6 @@ weight: 90
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
-
 ``store_declarative_data_sources(layout_root_path: Path = Path.cwd())``
 
 Store data sources layouts in directory hierarchy.
@@ -24,6 +22,16 @@ Store data sources layouts in directory hierarchy.
                             │   ├── table_X.yaml
                             │   └── table_Y.yaml
                             └── data_source_b.yaml
+
+{{% parameters-block title="Parameters"%}}
+{{< parameter p_name="layout_root_path" p_type="Path" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

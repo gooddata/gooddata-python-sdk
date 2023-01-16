@@ -9,9 +9,22 @@ superheading: "catalog_data_source."
 
 ``get_data_source(data_source_id: str)``
 
-Returns *CatalogDataSource*.
-
 Retrieve data source using data source id.
+
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="data_source_id" p_type="str" >}}
+Data Source identification string e.g. "demo"
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDataSource" >}}
+Data Source Object
+{{< /parameter >}}
+
+{{% /parameters-block %}}
 
 ## Example
 

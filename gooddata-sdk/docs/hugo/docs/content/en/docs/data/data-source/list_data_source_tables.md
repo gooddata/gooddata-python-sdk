@@ -9,9 +9,22 @@ superheading: "catalog_data_source."
 
 ``list_data_source_tables(data_source_id: str)``
 
-Returns *List[CatalogDataSourceTable]*
+Lists all the data source tables for a given data source.
 
-Lists all tables for a data source specified by id.
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="data_source_id" p_type="str" >}}
+Data Source identification string e.g. "demo"
+{{< /parameter >}}
+
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="List[CatalogDataSourceTable]" >}}
+List of Data Source Table objects
+{{< /parameter >}}
+
+{{% /parameters-block %}}
 
 ## Example
 
