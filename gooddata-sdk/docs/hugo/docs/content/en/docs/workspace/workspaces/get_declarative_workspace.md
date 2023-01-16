@@ -9,9 +9,17 @@ superheading: "catalog_workspace."
 
 ``get_declarative_workspace(workspace_id: str)``
 
-Returns *CatalogDeclarativeWorkspaceModel*.
+Get all workspaces in the current organization in a declarative form.
 
-Retrieve a workspace layout.
+{{% parameters-block title="Parameters" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeWorkspaces" >}}
+Declarative Workspaces object including all the workspaces for given organization.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
 
 ## Example
 

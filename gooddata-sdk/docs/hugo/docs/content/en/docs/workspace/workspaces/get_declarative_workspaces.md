@@ -7,9 +7,16 @@ superheading: "catalog_workspace."
 
 ``get_declarative_workspaces()``
 
-Returns _CatalogDeclarativeWorkspaces_.
-
 Retrieve layout of all workspaces and their hierarchy.
+
+{{% parameters-block title="Parameters" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeWorkspaces" >}}
+Declarative Workspaces object including all the workspaces for given organization.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
