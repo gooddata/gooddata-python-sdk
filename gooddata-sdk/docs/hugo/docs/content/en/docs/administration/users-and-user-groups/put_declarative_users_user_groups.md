@@ -12,6 +12,14 @@ superheading: "catalog_user."
 
 Set all users and user groups.
 
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="users" p_type="CatalogDeclarativeUsersUserGroups" >}}
+Declarative Users and User Groups object.
+{{< /parameter >}}
+{{% /parameters-block %}}
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```python

@@ -19,7 +19,7 @@ Path to the root of the layout directory.. Defaults to Path.cwd().
 {{% /parameters-block %}}
 {{% parameters-block title="Returns"%}}
 {{< parameter p_type="CatalogDeclarativeUsers" >}}
-Declarative Users object.Declarative Users object.
+Declarative Users object.
 {{< /parameter >}}
 {{% /parameters-block %}}
 

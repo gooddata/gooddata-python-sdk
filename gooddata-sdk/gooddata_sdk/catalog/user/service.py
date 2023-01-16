@@ -305,11 +305,11 @@ class CatalogUserService(CatalogServiceBase):
         return CatalogDeclarativeUsersUserGroups.from_api(self._layout_api.get_users_user_groups_layout())
 
     def put_declarative_users_user_groups(self, users_user_groups: CatalogDeclarativeUsersUserGroups) -> None:
-        """Puts all users and user groups in a declarative form.
+        """Set all users and user groups.
 
         Args:
             users_user_groups (CatalogDeclarativeUsersUserGroups):
-            Declarative Users and User Groups object.
+                Declarative Users and User Groups object.
 
         Returns:
             None

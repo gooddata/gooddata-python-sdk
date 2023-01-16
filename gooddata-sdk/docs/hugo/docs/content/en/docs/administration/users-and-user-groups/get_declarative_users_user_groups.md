@@ -10,9 +10,16 @@ superheading: "catalog_user."
 
 ``get_declarative_users_user_groups()``
 
-Returns *CatalogDeclarativeUsersUserGroups*.
+Retrieves all users and user groups in a declarative form.
 
-Retrieve all users and all user-groups.
+{{% parameters-block  title="Parameters" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeUsersUserGroups" >}}
+Declarative Users and User Groups object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
