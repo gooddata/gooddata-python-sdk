@@ -10,7 +10,16 @@ superheading: "catalog_user."
 
 ``delete_user_group(user_group_id: str)``
 
-Delete a user group.
+"Delete User Group using User Group id.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="user_group_id" p_type="string" >}}
+User Group identification string. e.g. "123"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

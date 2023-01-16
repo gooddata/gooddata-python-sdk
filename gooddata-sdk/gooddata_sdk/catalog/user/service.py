@@ -87,7 +87,7 @@ class CatalogUserService(CatalogServiceBase):
     # Entity methods for user groups
 
     def create_or_update_user_group(self, user_group: CatalogUserGroup) -> None:
-        """Pushes the User Group to the GoodData environment. Automatically decides, whether to create or update.
+        """Create a new user group or overwrite an existing user group.
 
         Args:
             user_group (CatalogUserGroup):
@@ -110,7 +110,7 @@ class CatalogUserService(CatalogServiceBase):
             self._entities_api.create_entity_user_groups(user_group_document.to_api())
 
     def get_user_group(self, user_group_id: str) -> CatalogUserGroup:
-        """Retrieve User Group using User Group id.
+        """Get an individual user group using user group id.
 
         Args:
             user_group_id (str):
@@ -138,7 +138,7 @@ class CatalogUserService(CatalogServiceBase):
         self._entities_api.delete_entity_user_groups(id=user_group_id)
 
     def list_user_groups(self) -> List[CatalogUserGroup]:
-        """Lists all the User Groups.
+        """Get a list of all existing user groups.
 
         Args:
             None
@@ -236,7 +236,7 @@ class CatalogUserService(CatalogServiceBase):
         return CatalogDeclarativeUserGroups.from_api(self._layout_api.get_user_groups_layout())
 
     def put_declarative_user_groups(self, user_groups: CatalogDeclarativeUserGroups) -> None:
-        """Puts all user groups in a declarative form.
+        """Set all user groups eventually with their parents.
 
         Args:
             user_groups (CatalogDeclarativeUserGroups):

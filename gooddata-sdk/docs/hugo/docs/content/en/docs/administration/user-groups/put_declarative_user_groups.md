@@ -10,7 +10,16 @@ superheading: "catalog_user."
 
 ``put_declarative_user_groups(user_groups: CatalogDeclarativeUserGroups)``
 
-Set all user groups with their parents eventually.
+Set all user groups eventually with their parents.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="user_groups" p_type="CatalogDeclarativeUserGroups" >}}
+Declarative User Groups object.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
 ## Example
 
