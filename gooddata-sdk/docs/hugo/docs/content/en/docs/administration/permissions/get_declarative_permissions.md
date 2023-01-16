@@ -10,9 +10,19 @@ superheading: "catalog_permission."
 
 ``get_declarative_permissions(workspace_id: str)``
 
-Returns *CatalogDeclarativeWorkspacePermissions*.
-
 Retrieve current set of permissions of the workspace in a declarative form.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string. e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDeclarativeWorkspacePermissions" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

@@ -10,7 +10,16 @@ superheading: "catalog_user."
 
 ``delete_user(user_id: str)``
 
-Delete a user.
+Deletes User using User id.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="user_id" p_type="string" >}}
+User identification string. e.g. "123"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

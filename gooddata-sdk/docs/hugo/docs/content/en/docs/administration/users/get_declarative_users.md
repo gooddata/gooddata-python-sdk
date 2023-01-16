@@ -10,9 +10,16 @@ superheading: "catalog_user."
 
 ``get_declarative_users()``
 
-Returns *CatalogDeclarativeUsers*.
-
 Retrieve all users including authentication properties.
+
+{{% parameters-block  title="Parameters" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeUsers" >}}
+Declarative Users object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

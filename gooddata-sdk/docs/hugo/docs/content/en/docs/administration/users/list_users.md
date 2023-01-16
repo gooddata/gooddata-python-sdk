@@ -10,9 +10,16 @@ superheading: "catalog_user."
 
 ``list_users()``
 
-Returns *List[CatalogUser]*.
-
 Get a list of all existing users.
+
+{{% parameters-block  title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="List[CatalogUser]" >}}
+List of all Users as User entity objects.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

@@ -12,6 +12,14 @@ superheading: "catalog_user."
 
 Set all users and their authentication properties.
 
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="users" p_type="CatalogDeclarativeUsers" >}}
+Declarative Users object, incuding authetication properties.
+{{< /parameter >}}
+{{% /parameters-block %}}
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```python

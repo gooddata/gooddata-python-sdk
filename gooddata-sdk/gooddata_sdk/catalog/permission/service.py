@@ -9,11 +9,32 @@ class CatalogPermissionService(CatalogServiceBase):
         super(CatalogPermissionService, self).__init__(api_client)
 
     def get_declarative_permissions(self, workspace_id: str) -> CatalogDeclarativeWorkspacePermissions:
+        """Retrieve current set of permissions of the workspace in a declarative form.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string. e.g. "demo"
+
+        Returns:
+            CatalogDeclarativeWorkspacePermissions:
+                TODO hkad98
+        """
         return CatalogDeclarativeWorkspacePermissions.from_api(self._layout_api.get_workspace_permissions(workspace_id))
 
     def put_declarative_permissions(
         self, workspace_id: str, declarative_workspace_permissions: CatalogDeclarativeWorkspacePermissions
     ) -> None:
+        """Set effective permissions for the workspace.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string. e.g. "demo"
+            declarative_workspace_permissions (CatalogDeclarativeWorkspacePermissions):
+                TODO hkad98
+
+        Returns:
+            None
+        """
         self._layout_api.set_workspace_permissions(
             workspace_id=workspace_id, declarative_workspace_permissions=declarative_workspace_permissions.to_api()
         )

@@ -12,6 +12,14 @@ superheading: "catalog_user."
 
 This method combines [load_declarative_users](../load_declarative_users) and [put_declarative_users](../put_declarative_users) methods to load and set users stored using [store_declarative_users](../store_declarative_users).
 
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory.. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
 ## Example
 
 The load and put can be done two ways.

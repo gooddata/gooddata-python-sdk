@@ -10,7 +10,18 @@ superheading: "catalog_user."
 
 ``load_declarative_users(layout_root_path: Path = Path.cwd())``
 
-Load users from directory hierarchy.
+Load declarative users layout, which was stored using store_declarative_users.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory.. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDeclarativeUsers" >}}
+Declarative Users object.Declarative Users object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
