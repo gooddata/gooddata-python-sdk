@@ -247,10 +247,12 @@ class CatalogDataSourceService(CatalogServiceBase):
         """Retrieve physical data model for a given data source.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
 
         Returns:
-            CatalogDeclarativeTables: Physical Data Model object.
+            CatalogDeclarativeTables:
+                Physical Data Model object.
         """
         return CatalogDeclarativeTables.from_api(self._layout_api.get_pdm_layout(data_source_id).get("pdm"))
 
@@ -415,7 +417,8 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Returns:
             CatalogScanResultPdm:
-                An instance of CatalogScanResultPdm. Containing pdm itself and a list of warnings that occurred during scanning.
+                An instance of CatalogScanResultPdm.
+                Containing pdm itself and a list of warnings that occurred during scanning.
         """
         scan_result = CatalogScanResultPdm.from_api(
             self._actions_api.scan_data_source(data_source_id, scan_request.to_api())

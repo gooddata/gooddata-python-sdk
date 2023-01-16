@@ -11,6 +11,18 @@ superheading: "catalog_data_source."
 
 This method combines [scan_data_source](../../data-source/scan_data_source) and [put_declarative_pdm](../put_declarative_pdm) methods.
 
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data Source identification string. e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="scan_request" p_type="Optional[CatalogScanModelRequest]" >}}
+Options for the Scan Request. Defaults to CatalogScanModelRequest().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```Python

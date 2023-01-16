@@ -17,6 +17,18 @@ The directory structure below shows the output for the path set to `Path("pdm_lo
                  ├── table_A.yaml
                  └── table_B.yaml
 
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data Source identification string. e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```Python

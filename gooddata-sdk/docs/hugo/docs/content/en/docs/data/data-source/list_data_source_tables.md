@@ -13,7 +13,7 @@ Lists all the data source tables for a given data source.
 
 {{% parameters-block  title="Parameters"%}}
 
-{{< parameter p_name="data_source_id" p_type="str" >}}
+{{< parameter p_name="data_source_id" p_type="string" >}}
 Data Source identification string e.g. "demo"
 {{< /parameter >}}
 

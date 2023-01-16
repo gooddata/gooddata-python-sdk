@@ -16,7 +16,7 @@ Set effective permissions for the workspace.
 {{< parameter p_name="workspace_id" p_type="string" >}}
 Workspace identification string. e.g. "demo"
 {{< /parameter >}}
-{{< parameter p_type="CatalogDeclarativeWorkspacePermissions" >}}
+{{< parameter p_name="declarative_workspace_permissions" p_type="CatalogDeclarativeWorkspacePermissions" >}}
 TODO hkad98
 {{< /parameter >}}
 {{% /parameters-block %}}
