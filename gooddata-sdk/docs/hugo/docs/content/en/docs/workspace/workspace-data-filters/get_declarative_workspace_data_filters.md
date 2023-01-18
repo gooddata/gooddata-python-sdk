@@ -5,13 +5,18 @@ weight: 140
 superheading: "catalog_workspace."
 ---
 
-<!-- TODO -->
-
 ``get_declarative_workspace_data_filters()``
 
-Returns *CatalogDeclarativeWorkspaceDataFilters*.
+Retrieve a workspace data filers layout.
 
-Retrieve a workspace data filter layout.
+{{% parameters-block  title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeWorkspaceDataFilters" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

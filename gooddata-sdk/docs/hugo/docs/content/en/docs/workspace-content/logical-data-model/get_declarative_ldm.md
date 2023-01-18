@@ -9,9 +9,19 @@ superheading: "catalog_workspace_content."
 
 ``get_declarative_ldm(workspace_id: str)``
 
-Returns *CatalogDeclarativeModel*.
-
 Retrieve a logical model layout. On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitutes data source id in datasets.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeModel" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

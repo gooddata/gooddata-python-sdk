@@ -9,8 +9,6 @@ superheading: "catalog_workspace_content."
 
 ``get_dependent_entities_graph(workspace_id: str)``
 
-Returns *CatalogDependentEntitiesResponse*
-
 There are dependencies among all catalog objects, the chain is the following:
 
 `fact/attribute/label → dataset → metric → visualization → dashboard`
@@ -18,6 +16,18 @@ There are dependencies among all catalog objects, the chain is the following:
 Some steps can be skipped, e.g. `fact → visualization`
 
 We do not support `table → dataset` dependency yet.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDependentEntitiesResponse" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

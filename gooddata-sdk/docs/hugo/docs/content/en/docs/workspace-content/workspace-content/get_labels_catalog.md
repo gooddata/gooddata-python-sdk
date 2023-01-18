@@ -9,9 +9,19 @@ superheading: "catalog_workspace_content."
 
 ``get_labels_catalog(workspace_id: str)``
 
-Returns *list[CatalogLabel]*
+Retrieve all labels in a given workspace.
 
-Retrieve all labels for a workspace.
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="list[CatalogLabel]" >}}
+List of all labels in a given workspace.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

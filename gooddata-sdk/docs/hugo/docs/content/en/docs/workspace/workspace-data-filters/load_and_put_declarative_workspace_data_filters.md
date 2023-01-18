@@ -11,6 +11,16 @@ superheading: "catalog_workspace."
 
 This method combines [load_declarative_workspace_data_filters](../load_declarative_workspace_data_filters) and [put_declarative_workspace_data_filters](../put_declarative_workspace_data_filters) methods to load and set layouts stored using [store_declarative_workspace_data_filters](../store_declarative_workspace_data_filters).
 
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
+
 ## Example
 
 The load and put can be done two ways.

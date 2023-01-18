@@ -7,8 +7,19 @@ superheading: "catalog_workspace_content."
 
 ``put_declarative_analytics_model(workspace_id: str, analytics_model: CatalogDeclarativeAnalytics)``
 
-Put an analytics model into a given workspace.
+Sets the declarative analytics model for a given workspace.
 
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="analytics_model" p_type="CatalogDeclarativeAnalytics" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

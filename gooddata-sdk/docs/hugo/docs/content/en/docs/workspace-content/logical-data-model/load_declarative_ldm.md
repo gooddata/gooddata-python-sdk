@@ -9,9 +9,22 @@ superheading: "catalog_workspace_content."
 
 ``load_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-Returns *CatalogDeclarativeModel*.
-
 Load declarative LDM layout, which was stored using [store_declarative_ldm](./store_declarative_ldm).
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeModel" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

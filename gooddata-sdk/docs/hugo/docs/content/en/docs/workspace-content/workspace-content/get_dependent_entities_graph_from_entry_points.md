@@ -9,9 +9,22 @@ superheading: "catalog_workspace_content."
 
 ``get_dependent_entities_graph_from_entry_points(workspace_id: str, dependent_entities_request: CatalogDependentEntitiesRequest)``
 
-Returns *CatalogDependentEntitiesResponse*
-
 Extends [get_dependent_entities_graph](../get_dependent_entities_graph) with the entry point from which the graph is created.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="dependent_entities_request" p_type="CatalogDependentEntitiesRequest" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDependentEntitiesResponse" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

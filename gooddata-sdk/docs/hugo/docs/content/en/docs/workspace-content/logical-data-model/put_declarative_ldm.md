@@ -11,6 +11,21 @@ superheading: "catalog_workspace_content."
 
 Put a logical data model into a given workspace. You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{< parameter p_name="ldm" p_type="CatalogDeclarativeModel" >}}
+TODO hkad98
+{{< /parameter >}}
+{{< parameter p_name="validator" p_type="Optional[DataSourceValidator]" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
 ## Example
 
 ```Python

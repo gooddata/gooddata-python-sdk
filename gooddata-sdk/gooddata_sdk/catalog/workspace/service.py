@@ -262,7 +262,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     # Declarative methods - workspace data filters
 
     def get_declarative_workspace_data_filters(self) -> CatalogDeclarativeWorkspaceDataFilters:
-        """Retrieve workspace data filers layout.
+        """Retrieve a workspace data filers layout.
 
         Args:
             None

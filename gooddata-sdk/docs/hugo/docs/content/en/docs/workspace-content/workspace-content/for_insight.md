@@ -9,9 +9,22 @@ superheading: "table."
 
 ``for_insight(workspace_id: str, insight: Insight)``
 
-Returns *ExecutionTable*.
-
 Retrieve data as an ExecutionTable from the given visualization.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="insight" p_type="Insight" >}}
+Insight object, representing a visualization.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="ExecutionTable" >}}
+TODO hkad98
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

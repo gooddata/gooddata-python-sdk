@@ -7,7 +7,8 @@ superheading: "catalog_workspace_content."
 
 ``store_analytics_model_to_disk(workspace_id: str, path: Path = Path.cwd())``
 
-Store the analytics model layout in the directory for a given workspace.
+Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative analytics model to the workspace and organization, thus it is recommended for migration between workspaces. If you want to backup analytics model between workspaces or organizations, use store_analytics_model_to_disk.
+
 The directory structure below shows the output for the path set to `Path("analytics_model_location")`.
 
     analytics_model_location
@@ -22,6 +23,18 @@ The directory structure below shows the output for the path set to `Path("analyt
                         │       └── metric.yaml
                         └── visualization_objects
                                 └── visualization_object.yaml
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="str" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

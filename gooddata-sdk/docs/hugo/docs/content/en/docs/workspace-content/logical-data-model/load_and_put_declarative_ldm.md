@@ -11,6 +11,21 @@ superheading: "catalog_workspace_content."
 
 This method combines [load_declarative_ldm](../load_declarative_ldm) and [put_declarative_ldm](../get_declarative_ldm) methods to load and set layouts stored using [store_declarative_ldm](../store_declarative_ldm). You can pass an additional validator parameter which checks that for every data source id in the logical data model the corresponding data source exists.
 
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{< parameter p_name="validator" p_type="Optional[DataSourceValidator]" >}}
+TODO hkad98. Defaults to None.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
+
 ## Example
 
 The load and put can be done two ways.
