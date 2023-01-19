@@ -5,20 +5,30 @@ weight: 60
 superheading: "catalog_workspace_content."
 ---
 
-<!-- TODO -->
+
 
 ``get_labels_catalog(workspace_id: str)``
 
-Returns *list[CatalogLabel]*
+Gets all labels in a given workspace.
 
-Retrieve all labels for a workspace.
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="list[CatalogLabel]" >}}
+List of all labels in a given workspace.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
 ```Python
 # Get all labels
 labels = sdk.catalog_workspace_content.get_labels_catalog(workspace_id="123")
-#[
+# [
 #   CatalogLabel(
 #       id=campaign_channel_id,
 #       title=Campaign channel id
@@ -32,5 +42,5 @@ labels = sdk.catalog_workspace_content.get_labels_catalog(workspace_id="123")
 #       title=Type
 #   ),
 #   ...
-#]
+# ]
 ```
