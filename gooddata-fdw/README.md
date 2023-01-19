@@ -28,3 +28,7 @@ or request features.
 
 Consult [Github releases](https://github.com/gooddata/gooddata-python-sdk/releases) for a released versions
 and list of changes.
+
+## Limitations
+
+FDW is suitable for small to medium insights results or scheduled reports created in the third party tools. Carefully consider use in a production environment.
