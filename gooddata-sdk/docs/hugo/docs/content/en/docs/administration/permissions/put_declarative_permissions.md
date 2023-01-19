@@ -6,11 +6,23 @@ no_list: true
 superheading: "catalog_permission."
 ---
 
-<!-- TODO -->
+
 
 ``put_declarative_permissions(workspace_id: str, declarative_workspace_permissions: CatalogDeclarativeWorkspacePermissions)``
 
-Set effective permissions for the workspace.
+Sets the permissions for the workspace.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string. e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="declarative_workspace_permissions" p_type="CatalogDeclarativeWorkspacePermissions" >}}
+Object Containing Workspace Permissions.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

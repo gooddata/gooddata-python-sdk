@@ -5,13 +5,23 @@ weight: 30
 superheading: "catalog_workspace_content."
 ---
 
-<!-- TODO -->
+
 
 ``get_metrics_catalog(workspace_id: str)``
 
-Returns *list[CatalogMetric]*
+Gets all metrics for a workspace.
 
-Retrieve all metrics for a workspace.
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="list[CatalogMetric]" >}}
+List of all metrics in a given workspace.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

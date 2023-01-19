@@ -5,13 +5,23 @@ weight: 110
 superheading: "catalog_workspace_content."
 ---
 
-<!-- TODO -->
-
 ``get_declarative_analytics_model(workspace_id: str)``
 
-Returns *CatalogDeclarativeAnalytics*.
+Gets an analytics model layout.
 
-Retrieve an analytics model layout.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeAnalytics" >}}
+Object Containing declarative Analytical Model.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
 
 ## Example
 

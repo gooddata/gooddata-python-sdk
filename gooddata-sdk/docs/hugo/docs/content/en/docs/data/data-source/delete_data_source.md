@@ -5,16 +5,16 @@ weight: 30
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``delete_data_source(data_source_id: str)``
 
-Delete data source using data source id.
+Deletes data source using data source id.
 
 {{% parameters-block  title="Parameters"%}}
 
 {{< parameter p_name="data_source_id" p_type="string" >}}
-Data Source identification string e.g. "demo"
+Data source identification string e.g. "demo"
 {{< /parameter >}}
 
 {{< /parameters-block >}}

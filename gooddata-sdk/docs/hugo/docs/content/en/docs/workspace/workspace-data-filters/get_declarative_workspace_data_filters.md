@@ -5,20 +5,25 @@ weight: 140
 superheading: "catalog_workspace."
 ---
 
-<!-- TODO -->
-
 ``get_declarative_workspace_data_filters()``
 
-Returns *CatalogDeclarativeWorkspaceDataFilters*.
+Gets a workspace data filers layout.
 
-Retrieve a workspace data filter layout.
+{{% parameters-block  title="Parameters" None="yes"%}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeWorkspaceDataFilters" >}}
+Object containing List of declarative workspace data filters.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
 ```Python
 # Fetch the workspace data filters
 declarative_workspace_filters = sdk.catalog_workspace.get_declarative_workspace_data_filters()
-#CatalogDeclarativeWorkspaceDataFilters(
+# CatalogDeclarativeWorkspaceDataFilters(
 #    workspace_data_filters=[
 #        CatalogDeclarativeWorkspaceDataFilter(
 #            id='wdf__region',
@@ -55,5 +60,5 @@ declarative_workspace_filters = sdk.catalog_workspace.get_declarative_workspace_
 #            workspace=CatalogWorkspaceIdentifier(id='demo_west')
 #        )
 #    ]
-#)
+# )
 ```

@@ -5,13 +5,23 @@ weight: 50
 superheading: "catalog_workspace_content."
 ---
 
-<!-- TODO -->
+
 
 ``get_attributes_catalog(workspace_id: str)``
 
-Returns *list[CatalogAttribute]*
+Gets all attributes in a given workspace.
 
-Retrieve all attributes for a workspace.
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="list[CatalogAttribute]" >}}
+List of all attributes in a given workspace.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
@@ -19,7 +29,7 @@ Retrieve all attributes for a workspace.
 # Get attributes
 attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id="123")
 
-#[
+# [
 #   CatalogAttribute(
 #       id=campaign_channel_id,
 #       title=Campaign channel id,
@@ -36,6 +46,6 @@ attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id="
 #       labels=[]
 #   ),
 # ...
-#]
+# ]
 
 ```

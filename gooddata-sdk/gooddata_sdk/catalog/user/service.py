@@ -20,6 +20,16 @@ class CatalogUserService(CatalogServiceBase):
     # Entity methods for users
 
     def create_or_update_user(self, user: CatalogUser) -> None:
+        """Creates a new user or overwrites an existing user.
+
+
+        Args:
+            user (CatalogUser):
+                User entity object.
+
+        Returns:
+            None
+        """
         try:
             self.get_user(user_id=user.id)
             user_document = CatalogUserDocument(data=user)
@@ -29,15 +39,43 @@ class CatalogUserService(CatalogServiceBase):
             self._entities_api.create_entity_users(json_api_user_in_document=user_document.to_api())
 
     def get_user(self, user_id: str) -> CatalogUser:
+        """Get an individual user using User id.
+
+        Args:
+            user_id (str):
+                User identification string. e.g. "123"
+
+        Returns:
+            CatalogUser:
+                User entity object.
+        """
         user_dict = self._entities_api.get_entity_users(id=user_id, include=["userGroups"]).data.to_dict(
             camel_case=False
         )
         return CatalogUser.from_dict(user_dict, camel_case=False)
 
     def delete_user(self, user_id: str) -> None:
+        """Delete User using User id.
+
+        Args:
+            user_id (str):
+                User identification string. e.g. "123"
+
+        Returns:
+            None
+        """
         self._entities_api.delete_entity_users(id=user_id)
 
     def list_users(self) -> List[CatalogUser]:
+        """Get a list of all existing users.
+
+        Args:
+            None
+
+        Returns:
+            List[CatalogUser]:
+                List of all Users as User entity objects.
+        """
         get_users = functools.partial(
             self._entities_api.get_all_entities_users,
             include=["userGroups"],
@@ -49,6 +87,15 @@ class CatalogUserService(CatalogServiceBase):
     # Entity methods for user groups
 
     def create_or_update_user_group(self, user_group: CatalogUserGroup) -> None:
+        """Create a new user group or overwrite an existing user group.
+
+        Args:
+            user_group (CatalogUserGroup):
+                UserGroup entity object.
+
+        Returns:
+            None
+        """
         try:
             self.get_user_group(user_group_id=user_group.id)
             user_group_document = CatalogUserGroupDocument(data=user_group)
@@ -63,15 +110,43 @@ class CatalogUserService(CatalogServiceBase):
             self._entities_api.create_entity_user_groups(user_group_document.to_api())
 
     def get_user_group(self, user_group_id: str) -> CatalogUserGroup:
+        """Get an individual user group using user group id.
+
+        Args:
+            user_group_id (str):
+                User Group identification string. e.g. "123"
+
+        Returns:
+            CatalogUserGroup:
+                UserGroup entity object.
+        """
         user_group = self._entities_api.get_entity_user_groups(id=user_group_id, include=["ALL"]).data.to_dict(
             camel_case=False
         )
         return CatalogUserGroup.from_dict(user_group, camel_case=False)
 
     def delete_user_group(self, user_group_id: str) -> None:
+        """Delete User Group using User Group id.
+
+        Args:
+            user_group_id (str):
+                User Group identification string. e.g. "123"
+
+        Returns:
+            None
+        """
         self._entities_api.delete_entity_user_groups(id=user_group_id)
 
     def list_user_groups(self) -> List[CatalogUserGroup]:
+        """Get a list of all existing user groups.
+
+        Args:
+            None
+
+        Returns:
+            List[CatalogUserGroup]:
+                List of all User groups as UserGroup entity object.
+        """
         get_user_groups = functools.partial(
             self._entities_api.get_all_entities_user_groups,
             include=["userGroups"],
@@ -83,57 +158,206 @@ class CatalogUserService(CatalogServiceBase):
     # Declarative methods for users
 
     def get_declarative_users(self) -> CatalogDeclarativeUsers:
+        """Retrieve all users in a declarative form.
+
+        Args:
+            None
+
+        Returns:
+            CatalogDeclarativeUsers:
+                Declarative Users object.
+        """
         return CatalogDeclarativeUsers.from_api(self._layout_api.get_users_layout())
 
     def put_declarative_users(self, users: CatalogDeclarativeUsers) -> None:
+        """Set all users and their authentication properties.
+
+        Args:
+            users (CatalogDeclarativeUsers):
+                Declarative Users object, incuding authetication properties.
+
+        Returns:
+            None
+        """
         self._layout_api.put_users_layout(users.to_api())
 
     def store_declarative_users(self, layout_root_path: Path = Path.cwd()) -> None:
+        """Store users in directory hierarchy. Directly from server.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
         self.get_declarative_users().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_declarative_users(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeUsers:
+        """Load declarative users layout, which was stored using store_declarative_users.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+        Returns:
+            CatalogDeclarativeUsers:
+                Declarative Users object, incuding authetication properties.
+        """
         return CatalogDeclarativeUsers.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_users(self, layout_root_path: Path = Path.cwd()) -> None:
+        """This method combines load_declarative_users and put_declarative_users
+            methods to load and set layouts stored using store_declarative_users.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
         declarative_users = self.load_declarative_users(layout_root_path)
         self.put_declarative_users(declarative_users)
 
     # Declarative methods for user groups
 
     def get_declarative_user_groups(self) -> CatalogDeclarativeUserGroups:
+        """Retrieve all user groups in a declarative form.
+
+
+        Args:
+            None
+
+        Returns:
+            CatalogDeclarativeUserGroups:
+                Declarative User Groups object.
+        """
         return CatalogDeclarativeUserGroups.from_api(self._layout_api.get_user_groups_layout())
 
     def put_declarative_user_groups(self, user_groups: CatalogDeclarativeUserGroups) -> None:
+        """Set all user groups eventually with their parents.
+
+        Args:
+            user_groups (CatalogDeclarativeUserGroups):
+                Declarative User Groups object.
+
+
+        Returns:
+            None
+        """
         self._layout_api.put_user_groups_layout(user_groups.to_api())
 
     def load_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeUserGroups:
+        """Load declarative users groups layout, which was stored using store_declarative_user_groups.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+        Returns:
+            CatalogDeclarativeUserGroups:
+                Declarative User Groups object.
+        """
         return CatalogDeclarativeUserGroups.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def store_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        """Stores all the user groups in a directory hierarchy.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+
+        Returns:
+            None
+        """
         self.get_declarative_user_groups().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        """This method combines load_declarative_users and put_declarative_users
+            methods to load and set layouts stored using store_declarative_users.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+
+        Returns:
+            None
+        """
         declarative_user_groups = self.load_declarative_user_groups(layout_root_path)
         self.put_declarative_user_groups(declarative_user_groups)
 
     # Declarative methods for usersUserGroups
 
     def get_declarative_users_user_groups(self) -> CatalogDeclarativeUsersUserGroups:
+        """Retrieves all users and user groups in a declarative form.
+
+
+        Args:
+            None
+
+        Returns:
+            CatalogDeclarativeUsersUserGroups:
+                Declarative Users and User Groups object.
+        """
         return CatalogDeclarativeUsersUserGroups.from_api(self._layout_api.get_users_user_groups_layout())
 
     def put_declarative_users_user_groups(self, users_user_groups: CatalogDeclarativeUsersUserGroups) -> None:
+        """Set all users and user groups.
+
+        Args:
+            users_user_groups (CatalogDeclarativeUsersUserGroups):
+                Declarative Users and User Groups object.
+
+        Returns:
+            None
+        """
         self._layout_api.put_users_user_groups_layout(declarative_users_user_groups=users_user_groups.to_api())
 
     def load_declarative_users_user_groups(
         self, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeUsersUserGroups:
+        """Load declarative users and user groups layout, which was stored using store_declarative_users_user_groups.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+        Returns:
+            CatalogDeclarativeUsersUserGroups:
+                Declarative Users and User Groups object.
+        """
         return CatalogDeclarativeUsersUserGroups.load_from_disk(
             layout_organization_folder=self.layout_organization_folder(layout_root_path)
         )
 
     def store_declarative_users_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        """Stores all the users and user groups in a directory hierarchy.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+
+
+        Returns:
+            None
+        """
         self.get_declarative_users_user_groups().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_users_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
+        """This method combines load_declarative_users and put_declarative_users_user_groups
+            methods to load and set layouts stored using store_declarative_users_user_groups.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory.. Defaults to Path.cwd().
+
+
+        Returns:
+            None
+        """
         declarative_users_user_groups = self.load_declarative_users_user_groups(layout_root_path)
         self.put_declarative_users_user_groups(declarative_users_user_groups)

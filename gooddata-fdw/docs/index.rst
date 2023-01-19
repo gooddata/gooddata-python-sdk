@@ -5,6 +5,10 @@ GoodData Foreign Data Wrapper delivers PostgreSQL foreign data wrapper extension
 The extension makes GoodData.CN insights, computations and ad-hoc report data available in PostgreSQL as tables.
 It can be selected like any other table using the SQL language.
 
+Limitations
+===========
+FDW is suitable for small to medium insights results or scheduled reports created in the third party tools. Carefully consider use in a production environment.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -13,4 +17,3 @@ It can be selected like any other table using the SQL language.
    connecting_to_postgresql
    foreign_tables
    api
-

@@ -6,11 +6,20 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-<!-- TODO -->
+
 
 ``create_or_update_user_group(user_group: CatalogUserGroup)``
 
-Create a new user group or overwrite an existing user group.
+Creates a new user group or overwrites an existing user group.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="user_group" p_type="CatalogUserGroup" >}}
+User group entity object.
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

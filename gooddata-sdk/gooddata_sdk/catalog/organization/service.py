@@ -18,6 +18,23 @@ class CatalogOrganizationService(CatalogServiceBase):
         oauth_client_id: Optional[str] = None,
         oauth_client_secret: Optional[str] = None,
     ) -> None:
+        """Updates OIDC parameters of organization.
+
+        Args:
+            oauth_issuer_location (Optional[str], optional):
+                Issuer location. Defaults to None.
+            oauth_client_id (Optional[str], optional):
+                Public client identifier. Defaults to None.
+            oauth_client_secret (Optional[str], optional):
+                Client secret. Defaults to None.
+
+        Returns:
+            None
+
+        Raises:
+            ValueError:
+                Parameters were not strictly all none or all string.
+        """
         parameters = [oauth_issuer_location, oauth_client_id, oauth_client_secret]
         if not all(p is not None for p in parameters) and any(p is not None for p in parameters):
             raise ValueError("All parameters have to be set to None or all parameters has to be string.")
@@ -30,6 +47,15 @@ class CatalogOrganizationService(CatalogServiceBase):
         )
 
     def update_name(self, name: str) -> None:
+        """Updates the name of the organization.
+
+        Args:
+            name (str):
+                New name of the organization
+
+        Returns:
+            None
+        """
         organization = self.get_organization()
         organization.attributes.name = name
         organization_document = CatalogOrganizationDocument(data=organization)

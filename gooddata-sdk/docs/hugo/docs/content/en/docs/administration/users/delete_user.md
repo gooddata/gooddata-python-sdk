@@ -6,11 +6,20 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-<!-- TODO -->
+
 
 ``delete_user(user_id: str)``
 
-Delete a user.
+Deletes user using user id.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="user_id" p_type="string" >}}
+User identification string. e.g. "123"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

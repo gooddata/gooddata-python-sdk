@@ -476,8 +476,12 @@ class InsightService:
         Gets all insights for a workspace. The insights will contain side loaded metadata for all execution entities
         that they reference.
 
-        :param workspace_id: identifier of workspace to load insights from
-        :return: all available insights, each insight will contain side loaded metadata about the entities it references
+        Args:
+             workspace_id (str):
+                Workspace identification string e.g. "demo"
+        Returns:
+             list[Insight]:
+                All available insights, each insight will contain side loaded metadata about the entities it references
         """
         get_func = functools.partial(
             self._entities_api.get_all_entities_visualization_objects,
@@ -492,13 +496,17 @@ class InsightService:
         return [Insight(vis_obj, side_loads) for vis_obj in vis_objects.data]
 
     def get_insight(self, workspace_id: str, insight_id: str) -> Insight:
-        """
-        Gets a single insight from a workspace.
+        """Gets a single insight from a workspace.
 
-        :param workspace_id: identifier of workspace to load insight from
-        :param insight_id: identifier of the insight
-        :return: single insight; the insight will contain sideloaded metadata about the entities it references
-        :rtype: Insight
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo"
+            insight_id (str):
+                Insight identifier string e.g. "bikes"
+
+        Returns:
+            Insight:
+                A single Insight object contains side loaded metadata about the entities it references
         """
         vis_obj = self._entities_api.get_entity_visualization_objects(
             workspace_id,

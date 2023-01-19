@@ -5,13 +5,23 @@ weight: 120
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``get_declarative_pdm(data_source_id: str)``
 
-Returns *CatalogDeclarativeTables*.
+Retrieves the physical data model for a given data source.
 
-Retrieve physical data model for a given data source.
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data source identification string. e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeTables" >}}
+Physical Data Model object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 

@@ -5,19 +5,19 @@ weight: 70
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``get_declarative_data_sources()``
 
-Returns *CatalogDeclarativeDataSources*.
 
-Retrieve all data sources, including their related physical data model.
+Gets all data sources, including their related physical data model.
+
 
 {{% parameters-block title="Parameters" None="yes" %}}
 {{% /parameters-block %}}
 {{% parameters-block title="Returns"%}}
 {{< parameter p_type="CatalogDeclarativeDataSources" >}}
-Data Source Object, including physical data model.
+Data source object, including physical data model.
 {{< /parameter >}}
 {{% /parameters-block %}}
 

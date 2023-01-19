@@ -5,7 +5,7 @@ weight: 110
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``load_and_put_declarative_data_sources(layout_root_path: Path = Path.cwd(), credentials_path: Optional[Path] = None, test_data_sources: bool = False)``
 
@@ -44,10 +44,10 @@ sdk.catalog_data_source.load_and_put_declarative_data_sources(
 Or by two separate calls:
 
 ```Python
-#Load the data source
+# Load the data source
 data_sources = sdk.catalog_data_source.get_declarative_data_sources()
 
-#Put the data source
+# Put the data source
 sdk.catalog_data_source.put_declarative_data_sources(
     declarative_data_sources=data_sources
     layout_root_path=Path("abc"),

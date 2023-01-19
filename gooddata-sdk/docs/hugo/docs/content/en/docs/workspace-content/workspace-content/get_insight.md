@@ -1,23 +1,29 @@
 ---
-title: "get_insights"
-linkTitle: "get_insights"
+title: "get_insight"
+linkTitle: "get_insight"
 weight: 15
 superheading: "insights."
 ---
 
-``get_insights(workspace_id: str)``
 
-Gets a list of visualization objects.
+
+``get_insight(workspace_id: str, insight_id: str)``
+
+Gets a single visualization from a workspace.
+
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}
 Workspace identification string e.g. "demo"
 {{< /parameter >}}
+{{< parameter p_name="insight_id" p_type="string" >}}
+Insight identifier string e.g. "bikes"
+{{< /parameter >}}
 {{% /parameters-block %}}
 
 {{% parameters-block title="Returns"%}}
-{{< parameter p_type="list[Insight]" >}}
-All available insights, each insight will contain side loaded metadata about the entities it references
+{{< parameter p_type="Insight" >}}
+A single Insight object contains side loaded metadata about the entities it references
 {{< /parameter >}}
 {{% /parameters-block %}}
 

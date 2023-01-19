@@ -5,16 +5,16 @@ weight: 180
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``register_upload_notification(data_source_id: str)``
 
-Invalidate cache of your computed reports to force your analytics to be recomputed.
+Forces the recomputation of analytics by invalidating the cache of the computed reports.
 
 {{% parameters-block  title="Parameters"%}}
 
 {{< parameter p_name="data_source_id" p_type="string" >}}
-Data Source identification string. e.g. "demo"
+Data source identification string. e.g. "demo"
 {{< /parameter >}}
 
 {{% /parameters-block %}}

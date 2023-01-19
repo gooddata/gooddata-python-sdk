@@ -5,13 +5,25 @@ weight: 80
 superheading: "catalog_workspace_content."
 ---
 
-<!-- TODO -->
+
 
 ``get_declarative_ldm(workspace_id: str)``
 
-Returns *CatalogDeclarativeModel*.
+Gets a logical model layout.
 
-Retrieve a logical model layout. On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitutes data source id in datasets.
+On CatalogDeclarativeModel user can call ``modify_mapped_data_source(data_source_mapping: dict)`` method, which substitutes data source id in datasets.
+
+{{% parameters-block  title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeModel" >}}
+Object Containing declarative Logical Data Model
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
@@ -19,7 +31,7 @@ Retrieve a logical model layout. On CatalogDeclarativeModel user can call ``modi
 # Get declarative Logical Data Model
 declarative_ldm = sdk.get_declarative_ldm(workspace_id="123")
 
-#CatalogDeclarativeModel(
+# CatalogDeclarativeModel(
 #    ldm=CatalogDeclarativeLdm(
 #        datasets=[
 #            CatalogDeclarativeDataset(
