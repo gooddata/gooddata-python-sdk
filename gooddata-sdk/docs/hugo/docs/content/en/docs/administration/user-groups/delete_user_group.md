@@ -6,11 +6,20 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-<!-- TODO -->
+
 
 ``delete_user_group(user_group_id: str)``
 
-Delete a user group.
+Deletes user group using user group id.
+
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="user_group_id" p_type="string" >}}
+User group identification string. e.g. "123"
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 

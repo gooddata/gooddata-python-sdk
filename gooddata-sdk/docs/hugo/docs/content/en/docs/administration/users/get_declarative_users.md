@@ -6,17 +6,26 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-<!-- TODO -->
+
 
 ``get_declarative_users()``
 
-Returns *CatalogDeclarativeUsers*.
 
-Retrieve all users including authentication properties.
+Gets all users including authentication properties.
+
+
+{{% parameters-block  title="Parameters" None="yes" %}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" %}}
+{{< parameter p_type="CatalogDeclarativeUsers" >}}
+Declarative users object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
 ```python
-#Retrieve users in declarative form
+# Get users in declarative form
 declarative_users = sdk.catalog_user.get_declarative_users()
 ```

@@ -6,17 +6,26 @@ no_list: true
 superheading: "catalog_user."
 ---
 
-<!-- TODO -->
+
 
 ``load_declarative_users_user_groups(layout_root_path: Path = Path.cwd())``
 
-Returns *CatalogDeclarativeUsersUserGroups*.
+Loads declarative users and user groups layout, which was stored using [store_declarative_users_user_groups](../store_declarative_users_user_groups).
 
-Load users and user groups from directory hierarchy.
+{{% parameters-block  title="Parameters"%}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory.. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+{{% parameters-block title="Returns"%}}
+{{< parameter p_type="CatalogDeclarativeUsersUserGroups" >}}
+Declarative users and user Groups object.
+{{< /parameter >}}
+{{% /parameters-block %}}
 
 ## Example
 
 ```python
-#Load users and user groups from directory
+# Load users and user groups from directory
 users_and_user_groups = sdk.catalog_user.load_declarative_users_user_groups(layout_root_path=Path.cwd())
 ```

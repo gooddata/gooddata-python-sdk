@@ -6,11 +6,21 @@ no_list: true
 superheading: "catalog_organization."
 ---
 
-<!-- TODO -->
+
 
 ``update_name(name: str)``
 
-Update name of organization.
+Updates the name of the organization.
+
+{{% parameters-block  title="Parameters"%}}
+
+{{< parameter p_name="name" p_type="string" >}}
+New name of the organization
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes"%}}
+{{% /parameters-block %}}
 
 ## Example
 
