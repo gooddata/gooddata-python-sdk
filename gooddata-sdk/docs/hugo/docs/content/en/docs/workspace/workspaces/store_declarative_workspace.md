@@ -5,11 +5,11 @@ weight: 115
 superheading: "catalog_workspace."
 ---
 
-<!-- TODO -->
+
 
 `store_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())`
 
-Store workspace layout in directory hierarchy.
+Stores the workspace layout in a directory hierarchy.
 
     gooddata_layouts
     └── organization_id
@@ -31,6 +31,18 @@ Store workspace layout in directory hierarchy.
                                 │       └── dataset.yaml
                                 └── date_instances
                                         └── date_instance.yaml
+
+{{% parameters-block title="Parameters" %}}
+{{< parameter p_name="workspace_id" p_type="string" >}}
+Workspace identification string e.g. "demo"
+{{< /parameter >}}
+{{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
+Path to the root of the layout directory. Defaults to Path.cwd().
+{{< /parameter >}}
+{{% /parameters-block %}}
+
+{{% parameters-block title="Returns" None="yes" %}}
+{{% /parameters-block %}}
 
 ## Example
 
