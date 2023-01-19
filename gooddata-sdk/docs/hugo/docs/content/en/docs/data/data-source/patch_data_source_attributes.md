@@ -5,7 +5,7 @@ weight: 40
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``patch_data_source_attributes(data_source_id: str, attributes: dict)``
 
@@ -14,7 +14,7 @@ Applies changes to the specified data source.
 {{% parameters-block  title="Parameters"%}}
 
 {{< parameter p_name="data_source_id" p_type="string" >}}
-Data Source identification string e.g. "demo"
+Data source identification string e.g. "demo"
 {{< /parameter >}}
 
 {{< parameter p_name="attributes" p_type="dictionary" >}}

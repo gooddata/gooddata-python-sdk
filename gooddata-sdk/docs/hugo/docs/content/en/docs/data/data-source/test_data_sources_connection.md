@@ -5,14 +5,15 @@ weight: 220
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``test_data_sources_connection(declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None)``
 
 Tests connection to declarative data sources. If *credentials_path* is omitted then the connection is tested with empty credentials.
+
 In case some connection failed the ValueError is raised with information about why the connection to the data source failed, e.g. host unreachable or invalid login or password.
 
-**Example of credentials YAML file:**
+Example of credentials YAML file:
 
     data_sources:
         demo-test-ds: "demopass"
@@ -21,7 +22,7 @@ In case some connection failed the ValueError is raised with information about w
 {{% parameters-block  title="Parameters"%}}
 
 {{< parameter p_name="declarative_data_sources" p_type="CatalogDeclarativeDataSources" >}}
-Declarative Data Sources object
+Declarative data sources object
 {{< /parameter >}}
 {{< parameter p_name="credentials_path" p_type="Optional[Path]" >}}
 Path to the credentials. Defaults to None.

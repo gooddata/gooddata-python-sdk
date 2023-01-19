@@ -5,7 +5,7 @@ weight: 60
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``list_data_source_tables(data_source_id: str)``
 
@@ -13,15 +13,15 @@ Lists all the data source tables for a given data source.
 
 {{% parameters-block  title="Parameters"%}}
 
-{{< parameter p_name="data_source_id" p_type="str" >}}
-Data Source identification string e.g. "demo"
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data source identification string e.g. "demo"
 {{< /parameter >}}
 
 {{% /parameters-block %}}
 
 {{% parameters-block title="Returns"%}}
 {{< parameter p_type="List[CatalogDataSourceTable]" >}}
-List of Data Source Table objects
+List of data source table objects
 {{< /parameter >}}
 
 {{% /parameters-block %}}
@@ -33,7 +33,7 @@ List of Data Source Table objects
 source_tables = sdk.catalog_data_source.list_data_source_tables(data_source_id="123")
 
 
-#[
+# [
 #    CatalogDataSourceTable(
 #        id='campaign_channels',
 #        type='dataSourceTable',
@@ -78,5 +78,5 @@ source_tables = sdk.catalog_data_source.list_data_source_tables(data_source_id="
 #        )
 #    ),
 #    ...
-#]
+# ]
 ```

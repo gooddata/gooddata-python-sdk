@@ -5,16 +5,16 @@ weight: 170
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``generate_logical_model(data_source_id: str, generate_ldm_request: CatalogGenerateLdmRequest)``
 
-Generate logical data model for a data source.
+Generates logical data model for a data source.
 
 {{% parameters-block  title="Parameters"%}}
 
-{{< parameter p_name="data_source_id" p_type="str" >}}
-Data Source identification string e.g. "demo"
+{{< parameter p_name="data_source_id" p_type="string" >}}
+Data source identification string e.g. "demo"
 {{< /parameter >}}
 
 {{< parameter p_name="generate_ldm_request" p_type="Optional[CatalogGenerateLdmRequest]" >}}
@@ -26,7 +26,7 @@ LDM options. Defaults to CatalogGenerateLdmRequest(separator="__", wdf_prefix="w
 {{% parameters-block title="Returns"%}}
 
 {{< parameter p_type="CatalogDeclarativeModel" >}}
-Logical Data Model object.
+Object Containing declarative Logical Data Model
 {{< /parameter >}}
 
 {{% /parameters-block %}}

@@ -7,7 +7,7 @@ superheading: "catalog_data_source."
 
 ``store_declarative_data_sources(layout_root_path: Path = Path.cwd())``
 
-Store data sources layouts in directory hierarchy.
+Stores the data sources layouts in a directory hierarchy.
 
     gooddata_layouts
     └── organization_id

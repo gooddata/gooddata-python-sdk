@@ -5,23 +5,24 @@ weight: 20
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``get_data_source(data_source_id: str)``
 
-Retrieve data source using data source id.
+Gets data source using data source id.
+
 
 {{% parameters-block  title="Parameters"%}}
 
 {{< parameter p_name="data_source_id" p_type="str" >}}
-Data Source identification string e.g. "demo"
+Data source identification string e.g. "demo"
 {{< /parameter >}}
 
 {{% /parameters-block %}}
 
 {{% parameters-block title="Returns"%}}
 {{< parameter p_type="CatalogDataSource" >}}
-Data Source Object
+Data source object.
 {{< /parameter >}}
 
 {{% /parameters-block %}}

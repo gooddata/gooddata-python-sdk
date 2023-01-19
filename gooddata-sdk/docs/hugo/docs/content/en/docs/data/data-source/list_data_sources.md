@@ -5,7 +5,7 @@ weight: 50
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``list_data_sources()``
 
@@ -18,7 +18,7 @@ Lists all data sources.
 {{% parameters-block title="Returns"%}}
 
 {{% parameter p_type="List[CatalogDataSource]" %}}
-List of all Data Sources in the whole organization.
+List of all data sources in the whole organization.
 {{% /parameter %}}
 
 {{% /parameters-block %}}
@@ -28,7 +28,7 @@ List of all Data Sources in the whole organization.
 data_sources = sdk.catalog_data_sources.list_data_sources()
 
 
-#[
+# [
 #    CatalogDataSource(
 #        id='demo-test-ds',
 #        name='demo-test-ds',
@@ -43,6 +43,6 @@ data_sources = sdk.catalog_data_sources.list_data_sources()
 #        db_specific_attributes=None,
 #        url_params=None
 #    ),
-#...
-#]
+# ...
+# ]
 ```

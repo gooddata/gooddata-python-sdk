@@ -5,16 +5,16 @@ weight: 80
 superheading: "catalog_data_source."
 ---
 
-<!-- TODO -->
+
 
 ``put_declarative_data_sources(declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None, test_data_sources: bool = False)``
 
-Set all data sources, including their related physical data model.
+Sets all data sources, including their related physical data model.
 
 {{% parameters-block title="Parameters"%}}
 
 {{< parameter p_name="declarative_data_sources" p_type="CatalogDeclarativeDataSources" >}}
-Declarative Data Source object. Can be retrieved by get_declarative_data_sources.
+Declarative data source object. Can be retrieved by get_declarative_data_sources.
 {{< /parameter >}}
 
 {{< parameter p_name="credentials_path" p_type="Optional[Path]" >}}
@@ -32,7 +32,7 @@ If True, the connection of data sources is tested. Defaults to False.
 ## Example
 
 ```python
-#get declarative data sources.
+# get declarative data sources.
 data_sources = sdk.catalog_data_source.get_declarative_data_sources()
 
 # Modification
