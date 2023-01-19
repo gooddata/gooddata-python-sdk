@@ -47,7 +47,8 @@ class CatalogDataSourceService(CatalogServiceBase):
         Automatically decides, whether to create or update.
 
         Args:
-            data_source (CatalogDataSource): Catalog Data Source object
+            data_source (CatalogDataSource):
+                Catalog Data Source object
 
         Returns:
             None
@@ -93,7 +94,7 @@ class CatalogDataSourceService(CatalogServiceBase):
             data_source_id (str):
                 Data Source identification string. e.g. "demo"
             attributes (dict):
-                TODO hkad98
+                A dictionary containing attributes of the data source to be changed.
 
         Returns:
             None
@@ -171,7 +172,7 @@ class CatalogDataSourceService(CatalogServiceBase):
             credentials_path (Optional[Path], optional):
                 Path to the Credentials. Optional, defaults to None.
             test_data_sources (bool, optional):
-                TODO hkad98. Defaults to False.
+                If True, the connection of data sources is tested. Defaults to False.
 
         Returns:
             None
@@ -182,7 +183,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self._layout_api.put_data_sources_layout(declarative_data_sources.to_api(credentials))
 
     def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
-        """Store data sources layouts in directory hierarchy.
+        """Store data sources layouts in a directory hierarchy.
             gooddata_layouts
             └── organization_id
                     └── data_sources
@@ -207,9 +208,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         self.get_declarative_data_sources().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeDataSources:
-        """Returns CatalogDeclarativeDataSources.
-            Load declarative data sources layout,
-            which was stored using store_declarative_data_sources.
+        """Load declarative data sources layout, which was stored using store_declarative_data_sources.
 
         Args:
             layout_root_path (Optional[Path], optional):
@@ -236,7 +235,7 @@ class CatalogDataSourceService(CatalogServiceBase):
             credentials_path (Optional[Path], optional):
                 Path to the credentials. Defaults to Path.cwd().
             test_data_sources (bool, optional):
-                TODO hkad98. Defaults to False.
+                If True, the connection of data sources is tested. Defaults to False.
 
         Returns:
             None
@@ -248,10 +247,12 @@ class CatalogDataSourceService(CatalogServiceBase):
         """Retrieve physical data model for a given data source.
 
         Args:
-            data_source_id (str): Data Source identification string. e.g. "demo"
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
 
         Returns:
-            CatalogDeclarativeTables: Physical Data Model object.
+            CatalogDeclarativeTables:
+                Physical Data Model object.
         """
         return CatalogDeclarativeTables.from_api(self._layout_api.get_pdm_layout(data_source_id).get("pdm"))
 
@@ -375,7 +376,7 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Returns:
             CatalogDeclarativeModel:
-                Logical Data Model object.
+                Object Containing declarative Logical Data Model
         """
         return CatalogDeclarativeModel.from_api(
             self._actions_api.generate_logical_model(data_source_id, generate_ldm_request.to_api())
@@ -416,7 +417,8 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Returns:
             CatalogScanResultPdm:
-                TODO hkad98
+                An instance of CatalogScanResultPdm.
+                Containing pdm itself and a list of warnings that occurred during scanning.
         """
         scan_result = CatalogScanResultPdm.from_api(
             self._actions_api.scan_data_source(data_source_id, scan_request.to_api())
@@ -454,7 +456,7 @@ class CatalogDataSourceService(CatalogServiceBase):
 
         Returns:
             list[str]:
-                List of configurable data source entities. TODO hkad98 (specify better pls)
+                List of schema names for the given data source specified by its id.
         """
         response = self._actions_api.get_data_source_schemata(data_source_id)
         return response.get("schema_names", [])
