@@ -257,6 +257,9 @@ def _create_header_mapper(
         elif "attributeHeader" in header:
             if "labelValue" in header["attributeHeader"]:
                 label = header["attributeHeader"]["labelValue"]
+                # explicitly handle '(empty value)' otherwise it's not recognizable in final MultiIndex
+                if label is None:
+                    label = ""
             elif "labelName" in header["attributeHeader"]:
                 attr_local_id = header["attributeHeader"]["localIdentifier"]
                 if use_local_ids_in_headers:
