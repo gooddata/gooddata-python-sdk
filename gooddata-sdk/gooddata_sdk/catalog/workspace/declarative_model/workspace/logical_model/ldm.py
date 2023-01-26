@@ -42,6 +42,41 @@ class CatalogDeclarativeModel(Base):
                     if data_source_id in data_source_mapping:
                         dataset.data_source_table_id.data_source_id = data_source_mapping[data_source_id]
 
+    @staticmethod
+    def _change_case(object_name: str, lower_case: bool, upper_case: bool) -> str:
+        if lower_case:
+            return object_name.lower()
+        elif upper_case:
+            return object_name.upper()
+        else:
+            return object_name
+
+    def change_tables_columns_case(self, lower_case: bool = False, upper_case: bool = False) -> None:
+        if self.ldm is not None and (lower_case or upper_case):
+            for dataset in self.ldm.datasets:
+                if dataset.data_source_table_id and dataset.data_source_table_id.id:
+                    dataset.data_source_table_id.id = self._change_case(
+                        dataset.data_source_table_id.id, lower_case, upper_case
+                    )
+                if dataset.attributes:
+                    for attribute in dataset.attributes:
+                        if attribute.source_column:
+                            attribute.source_column = self._change_case(attribute.source_column, lower_case, upper_case)
+                        if attribute.sort_column:
+                            attribute.sort_column = self._change_case(attribute.sort_column, lower_case, upper_case)
+                        for label in attribute.labels:
+                            if label.source_column:
+                                label.source_column = self._change_case(label.source_column, lower_case, upper_case)
+                if dataset.facts:
+                    for fact in dataset.facts:
+                        if fact.source_column:
+                            fact.source_column = self._change_case(fact.source_column, lower_case, upper_case)
+                for reference in dataset.references:
+                    new_columns = []
+                    for reference_column in reference.source_columns:
+                        new_columns.append(self._change_case(reference_column, lower_case, upper_case))
+                    reference.source_columns = new_columns
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:
         ldm = CatalogDeclarativeLdm.load_from_disk(workspace_folder)
