@@ -3,10 +3,13 @@ from __future__ import annotations
 
 import functools
 from pathlib import Path
-from typing import List
+from typing import List, Optional
+
+import attrs
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
@@ -21,6 +24,7 @@ from gooddata_sdk.utils import load_all_entities
 class CatalogWorkspaceService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
         super(CatalogWorkspaceService, self).__init__(api_client)
+        self._permissions_service = CatalogPermissionService(api_client)
 
     # Entities methods
 
@@ -99,7 +103,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         """Returns a list of all workspaces in current organization
 
         Args:
-            None
+            List[CatalogWorkspace]
 
         Returns:
             List[CatalogWorkspace]:
@@ -258,6 +262,85 @@ class CatalogWorkspaceService(CatalogServiceBase):
             workspace_id=workspace_id, layout_root_path=layout_root_path
         )
         self.put_declarative_workspace(workspace_id=workspace_id, workspace=declarative_workspace)
+
+    def clone_workspace(
+        self,
+        source_workspace_id: str,
+        target_workspace_id: Optional[str] = None,
+        target_workspace_name: Optional[str] = None,
+        overwrite_existing: Optional[bool] = None,
+        data_source_mapping: Optional[dict] = None,
+        upper_case: Optional[bool] = True,
+    ) -> None:
+        """Clone workspace from existing workspace.
+        Clones complete workspace content - LDM, ADM, permissions.
+
+        If the target workspace already exists, it's content is overwritten.
+        This can be useful when testing changes in the clone
+          - once you are satisfied, you can clone it back to the origin workspace.
+        For the safety, you have to enforce this behavior by the dedicated input argument `overwrite_existing`.
+
+        Beware of workspace data filters - after the clone you have to set WDF value for the new workspace.
+
+        Args:
+            source_workspace_id (str):
+                Source workspace ID, from which we wanna create a clone
+            target_workspace_id (str):
+                Target workspace ID, where we wanna clone the source workspace
+                Optional, if empty, we generate <source_workspace_id>_clone
+            target_workspace_name (str):
+                Target workspace name
+                Optional, if empty, we generate <source_workspace_name> (Clone)
+            overwrite_existing (bool):
+                Overwrite existing workspace.
+            data_source_mapping (dict):
+                Optional, allows users to map LDM to different data source ID
+            upper_case (bool):
+                Optional, allows users to change the case of all physical object IDs (table names, columns names)
+                True changes it to upper-case, False to lower-case, None(default) is noop
+                Useful when migrating to Snowflake, which is the only DB with upper-case default.
+
+        Returns:
+            None
+        """
+        # TODO - what if it has already been cloned? List existing WS and find first free WS ID?
+        source_declarative_ws = self.get_declarative_workspace(workspace_id=source_workspace_id)
+        source_ws = self.get_workspace(source_workspace_id)
+
+        final_target_workspace_id = target_workspace_id or f"{source_workspace_id}_clone"
+        final_target_workspace_name = target_workspace_name or f"{source_ws.name} (Clone)"
+        # TODO - enable cloning into another hierarchy
+        final_target_parent_id = source_ws.parent_id
+
+        try:
+            self.get_workspace(final_target_workspace_id)
+            if not overwrite_existing:
+                raise Exception(
+                    f"Target workspace {final_target_workspace_id} already exists, "
+                    "and `overwrite_existing` argument is False"
+                )
+        except NotFoundException:
+            self.create_or_update(
+                CatalogWorkspace(
+                    workspace_id=final_target_workspace_id,
+                    name=final_target_workspace_name,
+                    parent_id=final_target_parent_id,
+                )
+            )
+
+        target_declarative_ws = source_declarative_ws
+        if source_declarative_ws.ldm:
+            target_declarative_ws = attrs.evolve(
+                source_declarative_ws,
+                ldm=source_declarative_ws.ldm.modify_mapped_data_source(data_source_mapping).change_tables_columns_case(
+                    upper_case
+                ),
+            )
+
+        self.put_declarative_workspace(workspace_id=final_target_workspace_id, workspace=target_declarative_ws)
+        self._permissions_service.put_declarative_permissions(
+            final_target_workspace_id, self._permissions_service.get_declarative_permissions(source_workspace_id)
+        )
 
     # Declarative methods - workspace data filters
 
