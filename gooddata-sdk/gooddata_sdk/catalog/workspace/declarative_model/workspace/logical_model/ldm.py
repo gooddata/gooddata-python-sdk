@@ -34,6 +34,30 @@ class CatalogDeclarativeModel(Base):
         if self.ldm is not None:
             self.ldm.store_to_disk(workspace_folder)
 
+    """LDM contains data source ID - is mapped to this data source.
+    You may decide to migrate to different data source containing the same physical data model
+    (e.g. change the DB engine, but keep the model).
+    This function helps you to replace any set of data source IDs with new set of IDs
+    (ready for multiple DS per workspace).
+
+    Example:
+    ```
+    data_source_mapping = {"postgresql": "snowflake"}
+    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+    ldm.modify_mapped_data_source(data_source_mapping)
+    # When migrating to Snowflake, we need to change the case of table/column names as well
+    ldm.change_tables_columns_case(upper_case=True)
+    sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
+    ```
+
+    Args:
+        upper_case (bool):
+            If True, all tables/columns names are changes to upper-case, otherwise to lower-case.
+
+    Returns:
+        None
+    """
+
     def modify_mapped_data_source(self, data_source_mapping: dict) -> None:
         if self.ldm is not None:
             for dataset in self.ldm.datasets:
@@ -41,6 +65,63 @@ class CatalogDeclarativeModel(Base):
                     data_source_id = dataset.data_source_table_id.data_source_id
                     if data_source_id in data_source_mapping:
                         dataset.data_source_table_id.data_source_id = data_source_mapping[data_source_id]
+
+    @staticmethod
+    def _change_case(object_name: str, upper_case: bool) -> str:
+        if upper_case:
+            return object_name.upper()
+        else:
+            return object_name.lower()
+
+    """Change case (to lower/upper-case) of all physical objects mapped in the LDM.
+    Namely mapped table names and column names.
+    Default is to change everything to upper-case.
+    This is handy if you migrate e.g. from PostgreSQL to Snowflake, which is the only DB having upper-case as default.
+    Instead of enclosing all (lower-cased) object names in all DDLs during the migration,
+    you can use this function to change the case in GoodData LDM.
+    If you specify upper-case=False, the function changes the case to lower-case
+    (e.g. migration from Snowflake back to PostgreSQL).
+
+    Example:
+    ```
+    data_source_mapping = {"postgresql": "snowflake"}
+    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+    ldm.modify_mapped_data_source(data_source_mapping)
+    ldm.change_tables_columns_case(upper_case=True)
+    sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
+    ```
+
+    Args:
+        upper_case (bool):
+            If True, all tables/columns names are changes to upper-case, otherwise to lower-case.
+
+    Returns:
+        None
+    """
+
+    def change_tables_columns_case(self, upper_case: bool = True) -> None:
+        if self.ldm is not None:
+            for dataset in self.ldm.datasets:
+                if dataset.data_source_table_id and dataset.data_source_table_id.id:
+                    dataset.data_source_table_id.id = self._change_case(dataset.data_source_table_id.id, upper_case)
+                if dataset.attributes:
+                    for attribute in dataset.attributes:
+                        if attribute.source_column:
+                            attribute.source_column = self._change_case(attribute.source_column, upper_case)
+                        if attribute.sort_column:
+                            attribute.sort_column = self._change_case(attribute.sort_column, upper_case)
+                        for label in attribute.labels:
+                            if label.source_column:
+                                label.source_column = self._change_case(label.source_column, upper_case)
+                if dataset.facts:
+                    for fact in dataset.facts:
+                        if fact.source_column:
+                            fact.source_column = self._change_case(fact.source_column, upper_case)
+                for reference in dataset.references:
+                    new_columns = []
+                    for reference_column in reference.source_columns:
+                        new_columns.append(self._change_case(reference_column, upper_case))
+                    reference.source_columns = new_columns
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:

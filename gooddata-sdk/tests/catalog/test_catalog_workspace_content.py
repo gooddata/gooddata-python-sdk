@@ -130,6 +130,27 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
         sdk.catalog_workspace.delete_workspace(identifier)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_ldm_and_modify_tables_columns_case.yaml"))
+def test_load_ldm_and_modify_tables_columns_case(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    workspace_id = test_config["workspace"]
+    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+    ldm_e.change_tables_columns_case(upper_case=True)
+    table_id = "campaign_channels"
+    attribute_column = "campaign_channel_id"
+    fact_column = "budget"
+    reference_column = "campaign_id"
+    assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id.upper()
+    assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column.upper()
+    assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column.upper()
+    assert ldm_e.ldm.datasets[0].references[0].source_columns == [reference_column.upper()]
+    ldm_e.change_tables_columns_case(upper_case=False)
+    assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id
+    assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column
+    assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column
+    assert ldm_e.ldm.datasets[0].references[0].source_columns == [reference_column]
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_analytics_model.yaml"))
 def test_store_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
