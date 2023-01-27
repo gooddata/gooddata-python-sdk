@@ -48,23 +48,32 @@ class CatalogDeclarativeModel(Base):
     # When migrating to Snowflake, we need to change the case of table/column names as well
     ldm.change_tables_columns_case(upper_case=True)
     sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
+
+    # Chaining approach is also possible:
     ```
+    sdk.catalog_workspace_content.put_declarative_ldm(
+        workspace_id,
+        sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)\\
+            .modify_mapped_data_source(data_source_mapping)\\
+            .change_tables_columns_case(upper_case=True)
+    )
 
     Args:
-        upper_case (bool):
-            If True, all tables/columns names are changes to upper-case, otherwise to lower-case.
+        data_source_mapping (dict):
+            Key value pairs representing which DS(key) should be replaced by which DS(value).
 
     Returns:
-        None
+        self
     """
 
-    def modify_mapped_data_source(self, data_source_mapping: dict) -> None:
+    def modify_mapped_data_source(self, data_source_mapping: dict) -> CatalogDeclarativeModel:
         if self.ldm is not None:
             for dataset in self.ldm.datasets:
                 if dataset.data_source_table_id is not None:
                     data_source_id = dataset.data_source_table_id.data_source_id
                     if data_source_id in data_source_mapping:
                         dataset.data_source_table_id.data_source_id = data_source_mapping[data_source_id]
+        return self
 
     @staticmethod
     def _change_case(object_name: str, upper_case: bool) -> str:
@@ -82,24 +91,17 @@ class CatalogDeclarativeModel(Base):
     If you specify upper-case=False, the function changes the case to lower-case
     (e.g. migration from Snowflake back to PostgreSQL).
 
-    Example:
-    ```
-    data_source_mapping = {"postgresql": "snowflake"}
-    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-    ldm.modify_mapped_data_source(data_source_mapping)
-    ldm.change_tables_columns_case(upper_case=True)
-    sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
-    ```
+    Examples can be found in the DOC of modify_mapped_data_source() method.
 
     Args:
         upper_case (bool):
             If True, all tables/columns names are changes to upper-case, otherwise to lower-case.
 
     Returns:
-        None
+        self
     """
 
-    def change_tables_columns_case(self, upper_case: bool = True) -> None:
+    def change_tables_columns_case(self, upper_case: bool = True) -> CatalogDeclarativeModel:
         if self.ldm is not None:
             for dataset in self.ldm.datasets:
                 if dataset.data_source_table_id and dataset.data_source_table_id.id:
@@ -122,6 +124,7 @@ class CatalogDeclarativeModel(Base):
                     for reference_column in reference.source_columns:
                         new_columns.append(self._change_case(reference_column, upper_case))
                     reference.source_columns = new_columns
+        return self
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:
