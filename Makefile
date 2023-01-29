@@ -111,3 +111,10 @@ remove-cassettes:
 	RESULT=0; \
 	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
+
+.PHONY: new-docs
+new-docs:
+	git submodule update --init --recursive --depth 1; \
+	cd gooddata-sdk/docs/hugo/docs; \
+	npm install; \
+	hugo server
