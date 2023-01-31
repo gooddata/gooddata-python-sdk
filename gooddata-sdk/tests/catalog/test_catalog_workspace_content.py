@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import attrs
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
@@ -112,7 +113,7 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
     try:
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
         assert True
-        ldm_e.modify_mapped_data_source(data_source_mapping=data_source_mapping)
+        ldm_e.ldm.modify_mapped_data_source(data_source_mapping=data_source_mapping)
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
         assert False
     except ValueError:
@@ -121,7 +122,7 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
 
         reverse_data_source_mapping = {v: k for k, v in data_source_mapping.items()}
 
-        ldm_e.modify_mapped_data_source(data_source_mapping=reverse_data_source_mapping)
+        ldm_e.ldm.modify_mapped_data_source(data_source_mapping=reverse_data_source_mapping)
         sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
         ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
@@ -135,7 +136,7 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspace_id = test_config["workspace"]
     ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-    ldm_e.change_tables_columns_case(upper_case=True)
+    ldm_e.ldm.change_tables_columns_case(upper_case=True)
     table_id = "campaign_channels"
     attribute_column = "campaign_channel_id"
     fact_column = "budget"
@@ -146,7 +147,9 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_e.ldm.datasets[0].references[0].source_columns == [reference_column.upper()]
     # Test chaining approach as well
     data_source_mapping = {test_config["data_source"]: test_config["data_source2"]}
-    ldm_o = ldm_e.modify_mapped_data_source(data_source_mapping).change_tables_columns_case(upper_case=False)
+    ldm_o = attrs.evolve(
+        ldm_e, ldm=ldm_e.ldm.modify_mapped_data_source(data_source_mapping).change_tables_columns_case(upper_case=False)
+    )
     assert ldm_o.ldm.datasets[0].data_source_table_id.data_source_id == test_config["data_source2"]
     assert ldm_o.ldm.datasets[0].data_source_table_id.id == table_id
     assert ldm_o.ldm.datasets[0].attributes[0].source_column == attribute_column

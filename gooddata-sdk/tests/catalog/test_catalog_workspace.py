@@ -7,12 +7,15 @@ from pathlib import Path
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
+    BasicCredentials,
+    CatalogDataSourcePostgres,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
     CatalogWorkspace,
     GoodDataApiClient,
     GoodDataSdk,
+    PostgresAttributes,
 )
 from gooddata_sdk.utils import recreate_directory
 
@@ -487,3 +490,64 @@ def test_load_and_put_declarative_workspace(test_config):
             data = json.load(f)
         workspace_o = CatalogDeclarativeWorkspaceModel.from_dict(data, camel_case=True)
         sdk.catalog_workspace.put_declarative_workspace(workspace_id=test_config["workspace"], workspace=workspace_o)
+
+
+def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
+    sdk.catalog_data_source.create_or_update_data_source(
+        CatalogDataSourcePostgres(
+            id=ds_id,
+            name="Test2",
+            db_specific_attributes=PostgresAttributes(host="localhost", db_name="demo"),
+            schema="demo",
+            credentials=BasicCredentials(
+                username="demouser",
+                password="demopass",
+            ),
+            enable_caching=False,
+            url_params=[("autosave", "false")],
+        )
+    )
+
+
+def delete_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
+    sdk.catalog_data_source.delete_data_source(ds_id)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_clone_workspace.yaml"))
+def test_clone_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    source_ws_id = test_config["workspace"]
+    default_cloned_ws_id = "demo_clone"
+    custom_cloned_ws_id = "demo_jacek"
+    custom_cloned_ws_name = "Deno Jacek"
+    data_source_mapping = {test_config["data_source"]: test_config["data_source2"]}
+
+    try:
+        # Must create the second DS, backend validates when putting the re-mapped LDM
+        create_second_data_source(sdk, test_config["data_source2"])
+        sdk.catalog_workspace.clone_workspace(source_ws_id, data_source_mapping=data_source_mapping, upper_case=True)
+        default_cloned_ws = sdk.catalog_workspace.get_workspace(default_cloned_ws_id)
+        assert default_cloned_ws.id == default_cloned_ws_id
+        default_cloned_decl_ws = sdk.catalog_workspace.get_declarative_workspace(default_cloned_ws_id)
+        assert default_cloned_decl_ws.ldm.datasets[0].data_source_table_id.data_source_id == test_config["data_source2"]
+        assert default_cloned_decl_ws.ldm.datasets[0].facts[0].source_column == "BUDGET"
+
+        sdk.catalog_workspace.clone_workspace(
+            source_ws_id, target_workspace_id=custom_cloned_ws_id, target_workspace_name=custom_cloned_ws_name
+        )
+        custom_ws = sdk.catalog_workspace.get_workspace(custom_cloned_ws_id)
+        assert custom_ws.name == custom_cloned_ws_name
+
+        origin_permissions = sdk.catalog_permission.get_declarative_permissions(source_ws_id)
+        cloned_permissions = sdk.catalog_permission.get_declarative_permissions(custom_cloned_ws_id)
+        assert len(origin_permissions.permissions) == len(cloned_permissions.permissions)
+
+        # Clone once again, test overwrite works
+        sdk.catalog_workspace.clone_workspace(
+            source_ws_id, data_source_mapping=data_source_mapping, upper_case=True, overwrite_existing=True
+        )
+    finally:
+        # Cleanup
+        sdk.catalog_workspace.delete_workspace(default_cloned_ws_id)
+        sdk.catalog_workspace.delete_workspace(custom_cloned_ws_id)
+        delete_data_source(sdk, test_config["data_source2"])
