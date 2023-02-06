@@ -257,9 +257,12 @@ def _create_header_mapper(
         elif "attributeHeader" in header:
             if "labelValue" in header["attributeHeader"]:
                 label = header["attributeHeader"]["labelValue"]
-                # explicitly handle '(empty value)' otherwise it's not recognizable in final MultiIndex
+                # explicitly handle '(empty value)' if it's None otherwise it's not recognizable in final MultiIndex
+                # backend represents ^^^ by "" (datasource value is "") or None (datasource value is NULL) therefore
+                # if both representation are used it's necessary to set label to unique header label (space) to avoid
+                # Excel formatter apply call failure
                 if label is None:
-                    label = ""
+                    label = " "
             elif "labelName" in header["attributeHeader"]:
                 attr_local_id = header["attributeHeader"]["localIdentifier"]
                 if use_local_ids_in_headers:
