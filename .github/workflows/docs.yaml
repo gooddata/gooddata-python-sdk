@@ -1,5 +1,5 @@
 # Keep docs build to verify documentation can be built also on localhost
-name: docs
+name: Old docs
 on:
   pull_request:
     branches:
@@ -8,7 +8,6 @@ on:
       # API documentation is generated from code so build must be triggered also for code changes
       - 'gooddata-fdw/**'
       - 'gooddata-pandas/**'
-      - 'gooddata-sdk/**'
 jobs:
   docs-check:
     runs-on: ubuntu-latest
@@ -29,12 +28,3 @@ jobs:
       - name: Doc checks
         run: |
           make docs
-  hugo-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Hugo Build
-        uses: ./.github/actions/hugo-build-action
