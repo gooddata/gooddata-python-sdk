@@ -1,4 +1,4 @@
 # (C) 2022 GoodData Corporation
-[submodule "gooddata-sdk/docs/hugo/docs/themes/docsy"]
-	path = gooddata-sdk/docs/hugo/docs/themes/docsy
+[submodule "docs/themes/docsy"]
+	path = docs/themes/docsy
 	url = https://github.com/google/docsy.git

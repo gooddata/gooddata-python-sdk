@@ -8,3 +8,10 @@ gooddata-sdk/tests/catalog/store
 .DS_Store
 .vscode
 .ruff_cache
+
+docs/node_modules
+docs/public
+docs/resources/_gen
+docs/tmp/
+docs/multidocs
+docs/.hugo_build.lock
