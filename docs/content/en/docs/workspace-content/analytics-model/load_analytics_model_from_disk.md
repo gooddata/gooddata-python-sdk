@@ -7,7 +7,7 @@ superheading: "catalog_workspace_content."
 
 ``load_analytics_model_from_disk(path: Path = Path.cwd())``
 
-Loads the analytics model stored to disk using [store_analytics_model_to_disk](../store_analytics_model_to_disk).
+Loads the analytics model stored to disk using [store_analytics_model_to_disk](../store_analytics_model_to_disk/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="path" p_type="Optional[Path]" >}}

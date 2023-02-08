@@ -9,7 +9,7 @@ superheading: "catalog_data_source."
 
 ``load_declarative_pdm(data_source_id: str, layout_root_path: Path = Path.cwd())``
 
-Loads declarative physical data model layout, which was stored using [store_declarative_pdm](../store_declarative_pdm) for a given data source.
+Loads declarative physical data model layout, which was stored using [store_declarative_pdm](../store_declarative_pdm/) for a given data source.
 
 {{% parameters-block  title="Parameters"%}}
 {{< parameter p_name="data_source_id" p_type="string" >}}

@@ -7,7 +7,7 @@ superheading: "catalog_data_source."
 
 ``load_pdm_from_disk(path: Path = Path.cwd())``
 
-This method is used to load pdm stored to disk using method [store_pdm_to_disk](../store_pdm_to_disk).
+This method is used to load pdm stored to disk using method [store_pdm_to_disk](../store_pdm_to_disk/).
 
 
 {{% parameters-block  title="Parameters"%}}

@@ -10,7 +10,7 @@ superheading: "catalog_user."
 
 ``load_and_put_declarative_users(layout_root_path: Path = Path.cwd())``
 
-This method combines [load_declarative_users](../load_declarative_users) and [put_declarative_users](../put_declarative_users) methods to load and set users stored using [store_declarative_users](../store_declarative_users).
+This method combines [load_declarative_users](../load_declarative_users/) and [put_declarative_users](../put_declarative_users/) methods to load and set users stored using [store_declarative_users](../store_declarative_users/).
 
 {{% parameters-block  title="Parameters"%}}
 {{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}

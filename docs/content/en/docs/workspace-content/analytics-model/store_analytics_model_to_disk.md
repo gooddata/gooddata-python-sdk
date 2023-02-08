@@ -7,7 +7,7 @@ superheading: "catalog_workspace_content."
 
 ``store_analytics_model_to_disk(workspace_id: str, path: Path = Path.cwd())``
 
-Stores analytics model for a given workspace in directory hierarchy.This method does not tie the declarative analytics model to the workspace and organization, thus it is recommended for migration between workspaces. If you want to backup analytics model between workspaces or organizations, use [store_analytics_model_to_disk](../store_analytics_model_to_disk).
+Stores analytics model for a given workspace in directory hierarchy.This method does not tie the declarative analytics model to the workspace and organization, thus it is recommended for migration between workspaces. If you want to backup analytics model between workspaces or organizations, use [store_analytics_model_to_disk](../store_analytics_model_to_disk/).
 
 The directory structure below shows the output for the path set to `Path("analytics_model_location")`.
 

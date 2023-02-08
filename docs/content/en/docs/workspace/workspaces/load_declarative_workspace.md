@@ -9,7 +9,7 @@ superheading: "catalog_workspace."
 
 ``load_declarative_workspace(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-Loads declarative workspaces layout, which was stored using [store_declarative_workspace](../store_declarative_workspace).
+Loads declarative workspaces layout, which was stored using [store_declarative_workspace](../store_declarative_workspace/).
 
 {{% parameters-block title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}

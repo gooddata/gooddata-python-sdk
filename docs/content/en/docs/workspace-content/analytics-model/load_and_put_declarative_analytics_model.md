@@ -9,7 +9,7 @@ superheading: "catalog_workspace_content."
 
 ``load_and_put_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-This method combines [load_declarative_analytics_model](../load_declarative_analytics_model) and [put_declarative_analytics_model](../put_declarative_analytics_model) methods to load and set layouts stored using [store_declarative_analytics_model](../store_declarative_analytics_model).
+This method combines [load_declarative_analytics_model](../load_declarative_analytics_model/) and [put_declarative_analytics_model](../put_declarative_analytics_model/) methods to load and set layouts stored using [store_declarative_analytics_model](../store_declarative_analytics_model/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}

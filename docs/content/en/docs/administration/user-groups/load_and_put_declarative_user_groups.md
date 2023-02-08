@@ -10,8 +10,8 @@ superheading: "catalog_user."
 
 ``load_and_put_declarative_user_groups(layout_root_path: Path = Path.cwd())``
 
-This method combines [load_declarative_user_groups](../load_declarative_user_groups) and [put_declarative_user_groups](../put_declarative_user_groups) methods to load and
-set user groups stored using [store_declarative_user_groups](../store_declarative_user_groups).
+This method combines [load_declarative_user_groups](../load_declarative_user_groups/) and [put_declarative_user_groups](../put_declarative_user_groups/) methods to load and
+set user groups stored using [store_declarative_user_groups](../store_declarative_user_groups/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}
