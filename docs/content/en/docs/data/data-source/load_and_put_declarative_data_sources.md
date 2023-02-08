@@ -9,7 +9,7 @@ superheading: "catalog_data_source."
 
 ``load_and_put_declarative_data_sources(layout_root_path: Path = Path.cwd(), credentials_path: Optional[Path] = None, test_data_sources: bool = False)``
 
-This method combines [load_declarative_data_sources](../load_and_put_declarative_data_sources) and [put_declarative_data_sources](../put_declarative_data_sources) methods to load and set layouts stored using [store_declarative_data_sources](../store_declarative_data_sources).
+This method combines [load_declarative_data_sources](../load_and_put_declarative_data_sources/) and [put_declarative_data_sources](../put_declarative_data_sources/) methods to load and set layouts stored using [store_declarative_data_sources](../store_declarative_data_sources/).
 
 {{% parameters-block  title="Parameters"%}}
 

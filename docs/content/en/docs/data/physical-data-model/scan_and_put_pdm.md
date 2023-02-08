@@ -9,7 +9,7 @@ superheading: "catalog_data_source."
 
 ``scan_and_put_pdm(data_source_id: str, scan_request: CatalogScanModelRequest = CatalogScanModelRequest())``
 
-This method combines [scan_data_source](../../data-source/scan_data_source) and [put_declarative_pdm](../put_declarative_pdm) methods.
+This method combines [scan_data_source](../../data-source/scan_data_source/) and [put_declarative_pdm](../put_declarative_pdm/) methods.
 
 {{% parameters-block  title="Parameters"%}}
 {{< parameter p_name="data_source_id" p_type="string" >}}

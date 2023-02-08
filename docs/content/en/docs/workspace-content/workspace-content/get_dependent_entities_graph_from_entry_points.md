@@ -9,7 +9,7 @@ superheading: "catalog_workspace_content."
 
 ``get_dependent_entities_graph_from_entry_points(workspace_id: str, dependent_entities_request: CatalogDependentEntitiesRequest)``
 
-Extends the [get_dependent_entities_graph](../get_dependent_entities_graph) with the entry point from which the graph is created.
+Extends the [get_dependent_entities_graph](../get_dependent_entities_graph/) with the entry point from which the graph is created.
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}

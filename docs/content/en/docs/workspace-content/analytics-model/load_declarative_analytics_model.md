@@ -9,7 +9,7 @@ superheading: "catalog_workspace_content."
 
 ``load_declarative_analytics_model(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-Loads declarative analytics layout, which was stored using [store_declarative_analytics_model](../store_declarative_analytics_model).
+Loads declarative analytics layout, which was stored using [store_declarative_analytics_model](../store_declarative_analytics_model/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}

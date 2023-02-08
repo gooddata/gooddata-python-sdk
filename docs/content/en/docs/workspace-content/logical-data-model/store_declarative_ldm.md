@@ -9,7 +9,7 @@ superheading: "catalog_workspace_content."
 
 ``store_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-Stores the declarative logical data model for a given workspace in directory hierarchy. This method ties the LDM to the workspace and organization, thus it is recommended for backups. If you want to move LDM between workspaces or organizations, use [store_ldm_to_disk](../store_ldm_to_disk).
+Stores the declarative logical data model for a given workspace in directory hierarchy. This method ties the LDM to the workspace and organization, thus it is recommended for backups. If you want to move LDM between workspaces or organizations, use [store_ldm_to_disk](../store_ldm_to_disk/).
 
     gooddata_layouts
     └── organization_id

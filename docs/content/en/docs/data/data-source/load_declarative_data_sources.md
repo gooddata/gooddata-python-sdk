@@ -9,7 +9,7 @@ superheading: "catalog_data_source."
 
 ``load_declarative_data_sources(layout_root_path: Path = Path.cwd())``
 
-Loads declarative data sources layout, which was stored using [store_declarative_data_sources](../store_declarative_data_sources).
+Loads declarative data sources layout, which was stored using [store_declarative_data_sources](../store_declarative_data_sources/).
 
 {{% parameters-block  title="Parameters"%}}
 

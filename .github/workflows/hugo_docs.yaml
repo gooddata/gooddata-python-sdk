@@ -1,4 +1,4 @@
-# Keep Hugo docs build to verify documentation can be built also on localhost
+# Keep Hugo docs build to verify documentation can be built also on localhost with correct links
 name: Hugo docs
 on:
   pull_request:
@@ -17,3 +17,6 @@ jobs:
           submodules: recursive
       - name: Hugo Build
         uses: ./.github/actions/hugo-build-action
+      - name: htmltest
+        run: |
+          scripts/htmltest -c docs/.htmltest.yml docs/public

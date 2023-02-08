@@ -10,7 +10,7 @@ superheading: "catalog_user."
 
 ``load_declarative_user_groups(layout_root_path: Path = Path.cwd())``
 
-Loads the declarative users groups layout, which was stored using [store_declarative_user_groups](../store_declarative_user_groups).
+Loads the declarative users groups layout, which was stored using [store_declarative_user_groups](../store_declarative_user_groups/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="layout_root_path" p_type="Optional[Path]" >}}

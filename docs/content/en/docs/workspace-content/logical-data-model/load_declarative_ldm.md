@@ -9,7 +9,7 @@ superheading: "catalog_workspace_content."
 
 ``load_declarative_ldm(workspace_id: str, layout_root_path: Path = Path.cwd())``
 
-Loads declarative LDM layout, which was stored using [store_declarative_ldm](../store_declarative_ldm).
+Loads declarative LDM layout, which was stored using [store_declarative_ldm](../store_declarative_ldm/).
 
 {{% parameters-block  title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}
