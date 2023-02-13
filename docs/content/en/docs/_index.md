@@ -3,6 +3,11 @@ title: "Introduction"
 linkTitle: "Introduction"
 weight: 10
 sectionIndex: false
+cascade:
+- type: "docs"
+  toc_root: true
+  _target:
+    path: "/*/**"
 ---
 
 GoodData Python SDK provides a clean and convenient way to interact with the [GoodData API](https://www.gooddata.com/developers/cloud-native/doc/cloud/api-and-sdk/api/) in Python applications.
