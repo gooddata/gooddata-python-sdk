@@ -25,7 +25,7 @@ List of all data sources in the whole organization.
 
 ```Python
 # List all data sources
-data_sources = sdk.catalog_data_sources.list_data_sources()
+data_sources = sdk.catalog_data_source.list_data_sources()
 
 
 # [
