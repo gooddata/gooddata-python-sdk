@@ -23,15 +23,20 @@ from gooddata_metadata_client.model_utils import (  # noqa: F401
     validate_and_convert_types
 )
 from gooddata_metadata_client.model.api_entitlement import ApiEntitlement
+from gooddata_metadata_client.model.available_assignees import AvailableAssignees
+from gooddata_metadata_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
 from gooddata_metadata_client.model.dependent_entities_request import DependentEntitiesRequest
 from gooddata_metadata_client.model.dependent_entities_response import DependentEntitiesResponse
 from gooddata_metadata_client.model.entitlements_request import EntitlementsRequest
 from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_metadata_client.model.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_metadata_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_metadata_client.model.permissions_for_assignee import PermissionsForAssignee
 from gooddata_metadata_client.model.platform_usage import PlatformUsage
 from gooddata_metadata_client.model.platform_usage_request import PlatformUsageRequest
 from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 
 
 class ActionsApi(object):
@@ -84,6 +89,117 @@ class ActionsApi(object):
                     'application/json'
                 ],
                 'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.available_assignes_endpoint = _Endpoint(
+            settings={
+                'response_type': (AvailableAssignees,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees',
+                'operation_id': 'available_assignes',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'dashboard_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'dashboard_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'dashboard_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'dashboard_id': 'dashboardId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'dashboard_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.check_entity_overrides_endpoint = _Endpoint(
+            settings={
+                'response_type': ([IdentifierDuplications],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides',
+                'operation_id': 'check_entity_overrides',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'hierarchy_object_identification',
+                ],
+                'required': [
+                    'workspace_id',
+                    'hierarchy_object_identification',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'hierarchy_object_identification':
+                        ([HierarchyObjectIdentification],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'hierarchy_object_identification': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
             },
             api_client=api_client
         )
@@ -248,6 +364,164 @@ class ActionsApi(object):
             },
             api_client=api_client
         )
+        self.inherited_entity_conflicts_endpoint = _Endpoint(
+            settings={
+                'response_type': ([IdentifierDuplications],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts',
+                'operation_id': 'inherited_entity_conflicts',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.manage_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions',
+                'operation_id': 'manage_permissions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'dashboard_id',
+                    'permissions_for_assignee',
+                ],
+                'required': [
+                    'workspace_id',
+                    'dashboard_id',
+                    'permissions_for_assignee',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'dashboard_id':
+                        (str,),
+                    'permissions_for_assignee':
+                        ([PermissionsForAssignee],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'dashboard_id': 'dashboardId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'dashboard_id': 'path',
+                    'permissions_for_assignee': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.overridden_child_entities_endpoint = _Endpoint(
+            settings={
+                'response_type': ([IdentifierDuplications],),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities',
+                'operation_id': 'overridden_child_entities',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.particular_platform_usage_endpoint = _Endpoint(
             settings={
                 'response_type': ([PlatformUsage],),
@@ -295,6 +569,61 @@ class ActionsApi(object):
                 'content_type': [
                     'application/json'
                 ]
+            },
+            api_client=api_client
+        )
+        self.permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': (DashboardPermissions,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions',
+                'operation_id': 'permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'dashboard_id',
+                ],
+                'required': [
+                    'workspace_id',
+                    'dashboard_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'dashboard_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'dashboard_id': 'dashboardId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'dashboard_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
             },
             api_client=api_client
         )
@@ -389,7 +718,7 @@ class ActionsApi(object):
         )
         self.resolve_all_settings_without_workspace_endpoint = _Endpoint(
             settings={
-                'response_type': ([DeclarativeSetting],),
+                'response_type': ([ResolvedSetting],),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/resolveSettings',
                 'operation_id': 'resolve_all_settings_without_workspace',
@@ -481,7 +810,7 @@ class ActionsApi(object):
         )
         self.resolve_settings_without_workspace_endpoint = _Endpoint(
             settings={
-                'response_type': ([DeclarativeSetting],),
+                'response_type': ([ResolvedSetting],),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/resolveSettings',
                 'operation_id': 'resolve_settings_without_workspace',
@@ -531,7 +860,7 @@ class ActionsApi(object):
         )
         self.workspace_resolve_all_settings_endpoint = _Endpoint(
             settings={
-                'response_type': ([DeclarativeSetting],),
+                'response_type': ([ResolvedSetting],),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/resolveSettings',
                 'operation_id': 'workspace_resolve_all_settings',
@@ -580,7 +909,7 @@ class ActionsApi(object):
         )
         self.workspace_resolve_settings_endpoint = _Endpoint(
             settings={
-                'response_type': ([DeclarativeSetting],),
+                'response_type': ([ResolvedSetting],),
                 'auth': [],
                 'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/resolveSettings',
                 'operation_id': 'workspace_resolve_settings',
@@ -712,6 +1041,179 @@ class ActionsApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.all_platform_usage_endpoint.call_with_http_info(**kwargs)
+
+    def available_assignes(
+        self,
+        workspace_id,
+        dashboard_id,
+        **kwargs
+    ):
+        """available_assignes  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.available_assignes(workspace_id, dashboard_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            dashboard_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            AvailableAssignees
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['dashboard_id'] = \
+            dashboard_id
+        return self.available_assignes_endpoint.call_with_http_info(**kwargs)
+
+    def check_entity_overrides(
+        self,
+        workspace_id,
+        hierarchy_object_identification,
+        **kwargs
+    ):
+        """Finds entities with given ID in hierarchy.  # noqa: E501
+
+        Finds entities with given ID in hierarchy (e.g. to check possible future conflicts).  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.check_entity_overrides(workspace_id, hierarchy_object_identification, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            hierarchy_object_identification ([HierarchyObjectIdentification]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [IdentifierDuplications]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['hierarchy_object_identification'] = \
+            hierarchy_object_identification
+        return self.check_entity_overrides_endpoint.call_with_http_info(**kwargs)
 
     def generate_logical_model(
         self,
@@ -970,6 +1472,262 @@ class ActionsApi(object):
             dependent_entities_request
         return self.get_dependent_entities_graph_from_entry_points_endpoint.call_with_http_info(**kwargs)
 
+    def inherited_entity_conflicts(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Finds API identifier conflicts in given workspace hierarchy.  # noqa: E501
+
+        Finds API identifier conflicts in given workspace hierarchy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.inherited_entity_conflicts(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [IdentifierDuplications]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.inherited_entity_conflicts_endpoint.call_with_http_info(**kwargs)
+
+    def manage_permissions(
+        self,
+        workspace_id,
+        dashboard_id,
+        permissions_for_assignee,
+        **kwargs
+    ):
+        """manage_permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.manage_permissions(workspace_id, dashboard_id, permissions_for_assignee, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            dashboard_id (str):
+            permissions_for_assignee ([PermissionsForAssignee]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['dashboard_id'] = \
+            dashboard_id
+        kwargs['permissions_for_assignee'] = \
+            permissions_for_assignee
+        return self.manage_permissions_endpoint.call_with_http_info(**kwargs)
+
+    def overridden_child_entities(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Finds API identifier overrides in given workspace hierarchy.  # noqa: E501
+
+        Finds API identifier overrides in given workspace hierarchy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.overridden_child_entities(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [IdentifierDuplications]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.overridden_child_entities_endpoint.call_with_http_info(**kwargs)
+
     def particular_platform_usage(
         self,
         platform_usage_request,
@@ -1052,6 +1810,92 @@ class ActionsApi(object):
         kwargs['platform_usage_request'] = \
             platform_usage_request
         return self.particular_platform_usage_endpoint.call_with_http_info(**kwargs)
+
+    def permissions(
+        self,
+        workspace_id,
+        dashboard_id,
+        **kwargs
+    ):
+        """permissions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.permissions(workspace_id, dashboard_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            dashboard_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            DashboardPermissions
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['dashboard_id'] = \
+            dashboard_id
+        return self.permissions_endpoint.call_with_http_info(**kwargs)
 
     def register_upload_notification(
         self,
@@ -1261,7 +2105,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            [DeclarativeSetting]
+            [ResolvedSetting]
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1425,7 +2269,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            [DeclarativeSetting]
+            [ResolvedSetting]
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1508,7 +2352,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            [DeclarativeSetting]
+            [ResolvedSetting]
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -1593,7 +2437,7 @@ class ActionsApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            [DeclarativeSetting]
+            [ResolvedSetting]
                 If the method is called asynchronously, returns the request
                 thread.
         """

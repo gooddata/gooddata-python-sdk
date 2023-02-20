@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
     from gooddata_api_client.model.json_api_workspace_setting_out import JsonApiWorkspaceSettingOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiOrganizationSettingInAttributes'] = JsonApiOrganizationSettingInAttributes
     globals()['JsonApiWorkspaceSettingOut'] = JsonApiWorkspaceSettingOut
     globals()['ObjectLinks'] = ObjectLinks
@@ -105,6 +107,7 @@ class JsonApiWorkspaceSettingOutWithLinks(ModelComposed):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiOrganizationSettingInAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -117,6 +120,7 @@ class JsonApiWorkspaceSettingOutWithLinks(ModelComposed):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -162,6 +166,7 @@ class JsonApiWorkspaceSettingOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -270,6 +275,7 @@ class JsonApiWorkspaceSettingOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiOrganizationSettingInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

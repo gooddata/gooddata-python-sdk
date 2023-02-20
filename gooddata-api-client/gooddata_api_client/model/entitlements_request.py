@@ -59,6 +59,7 @@ class EntitlementsRequest(ModelNormal):
         ('entitlements_name',): {
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",
             'TIER': "Tier",

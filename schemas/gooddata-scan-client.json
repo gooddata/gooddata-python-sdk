@@ -230,6 +230,75 @@
         ],
         "type": "object"
       },
+      "ScanSqlRequest": {
+        "description": "A request with SQL query to by analyzed.",
+        "properties": {
+          "sql": {
+            "description": "SQL query to be analyzed.",
+            "example": "SELECT a.special_value as result FROM tableA a",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sql"
+        ],
+        "type": "object"
+      },
+      "ScanSqlResponse": {
+        "description": "Result of scanSql. Consists of array of query columns including type. Sql query result data preview can be attached optionally",
+        "properties": {
+          "columns": {
+            "description": "Array of columns with types.",
+            "items": {
+              "$ref": "#/components/schemas/SqlColumn"
+            },
+            "type": "array"
+          },
+          "dataPreview": {
+            "description": "Array of rows where each row is another array of string values.",
+            "items": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "columns"
+        ],
+        "type": "object"
+      },
+      "SqlColumn": {
+        "description": "A SQL query result column.",
+        "properties": {
+          "dataType": {
+            "description": "Column type",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "INT",
+            "type": "string"
+          },
+          "name": {
+            "description": "Column name",
+            "example": "customer_id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataType",
+          "name"
+        ],
+        "type": "object"
+      },
       "TableWarning": {
         "description": "Warnings related to single table.",
         "properties": {
@@ -298,7 +367,8 @@
               "DRILL",
               "GREENPLUM",
               "AZURESQL",
-              "SYNAPSESQL"
+              "SYNAPSESQL",
+              "DATABRICKS"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -604,6 +674,90 @@
           }
         },
         "summary": "Get a list of schema names of a database",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/dataSources/{dataSourceId}/scanSql": {
+      "post": {
+        "description": "It executes SQL query against specified data source and extracts metadata. Metadata consist of column names and column data types. It can optionally provide also preview of data returned by SQL query",
+        "operationId": "scanSql",
+        "parameters": [
+          {
+            "description": "Data source id",
+            "example": "myPostgres",
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanSqlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "An example of a successful scan": {
+                    "description": "An example of a successful scan",
+                    "value": {
+                      "columns": [
+                        {
+                          "dataType": "NUMERIC",
+                          "name": "budget"
+                        },
+                        {
+                          "dataType": "STRING",
+                          "name": "category"
+                        },
+                        {
+                          "dataType": "NUMERIC",
+                          "name": "spend"
+                        }
+                      ],
+                      "dataPreview": [
+                        [
+                          "1000",
+                          "campaign1",
+                          "458.8"
+                        ],
+                        [
+                          "1800",
+                          "campaign2",
+                          "144"
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ScanSqlResponse"
+                }
+              }
+            },
+            "description": "The result of the scan."
+          }
+        },
+        "summary": "Collect metadata about SQL query",
         "tags": [
           "actions"
         ],

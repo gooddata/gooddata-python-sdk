@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **description** | **str** | Attribute description. | [optional] 
 **sort_column** | **str** | Attribute sort column. | [optional] 
 **sort_direction** | **str** | Attribute sort direction. | [optional] 
+**source_column_data_type** | **str** | A type of the source column | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -91,6 +91,7 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
             'identifier': (DatasetReferenceIdentifier,),  # noqa: E501
             'multivalue': (bool,),  # noqa: E501
             'source_columns': ([str],),  # noqa: E501
+            'source_column_data_types': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -102,6 +103,7 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
         'identifier': 'identifier',  # noqa: E501
         'multivalue': 'multivalue',  # noqa: E501
         'source_columns': 'sourceColumns',  # noqa: E501
+        'source_column_data_types': 'sourceColumnDataTypes',  # noqa: E501
     }
 
     read_only_vars = {
@@ -150,6 +152,7 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            source_column_data_types ([str]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -243,6 +246,7 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            source_column_data_types ([str]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

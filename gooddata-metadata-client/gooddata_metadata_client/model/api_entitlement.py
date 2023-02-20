@@ -59,6 +59,7 @@ class ApiEntitlement(ModelNormal):
         ('name',): {
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",
             'TIER': "Tier",

@@ -56,6 +56,15 @@ class JsonApiLabelOutAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('source_column_data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
         ('value_type',): {
             'TEXT': "TEXT",
             'HYPERLINK': "HYPERLINK",
@@ -93,6 +102,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'description': (str,),  # noqa: E501
             'primary': (bool,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
+            'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'value_type': (str,),  # noqa: E501
@@ -108,6 +118,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
         'description': 'description',  # noqa: E501
         'primary': 'primary',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
+        'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
         'value_type': 'valueType',  # noqa: E501
@@ -158,6 +169,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
             value_type (str): [optional]  # noqa: E501
@@ -250,6 +262,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             primary (bool): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
             value_type (str): [optional]  # noqa: E501

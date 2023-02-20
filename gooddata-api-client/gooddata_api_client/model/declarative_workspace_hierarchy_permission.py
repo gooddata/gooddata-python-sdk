@@ -63,6 +63,9 @@ class DeclarativeWorkspaceHierarchyPermission(ModelNormal):
         ('name',): {
             'MANAGE': "MANAGE",
             'ANALYZE': "ANALYZE",
+            'EXPORT': "EXPORT",
+            'EXPORT_TABULAR': "EXPORT_TABULAR",
+            'EXPORT_PDF': "EXPORT_PDF",
             'VIEW': "VIEW",
         },
     }

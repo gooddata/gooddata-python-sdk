@@ -31,7 +31,9 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
     from gooddata_metadata_client.model.user_group_identifier import UserGroupIdentifier
+    globals()['DeclarativeUserGroupPermission'] = DeclarativeUserGroupPermission
     globals()['UserGroupIdentifier'] = UserGroupIdentifier
 
 
@@ -94,7 +96,9 @@ class DeclarativeUserGroup(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
+            'name': (str,),  # noqa: E501
             'parents': ([UserGroupIdentifier],),  # noqa: E501
+            'permissions': ([DeclarativeUserGroupPermission],),  # noqa: E501
         }
 
     @cached_property
@@ -104,7 +108,9 @@ class DeclarativeUserGroup(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'name': 'name',  # noqa: E501
         'parents': 'parents',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
     }
 
     read_only_vars = {
@@ -151,7 +157,9 @@ class DeclarativeUserGroup(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name (str): Name of UserGroup. [optional]  # noqa: E501
             parents ([UserGroupIdentifier]): [optional]  # noqa: E501
+            permissions ([DeclarativeUserGroupPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,7 +249,9 @@ class DeclarativeUserGroup(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            name (str): Name of UserGroup. [optional]  # noqa: E501
             parents ([UserGroupIdentifier]): [optional]  # noqa: E501
+            permissions ([DeclarativeUserGroupPermission]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

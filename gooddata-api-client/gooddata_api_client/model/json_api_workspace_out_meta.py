@@ -64,6 +64,8 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
             'MANAGE': "MANAGE",
             'ANALYZE': "ANALYZE",
             'EXPORT': "EXPORT",
+            'EXPORT_TABULAR': "EXPORT_TABULAR",
+            'EXPORT_PDF': "EXPORT_PDF",
             'VIEW': "VIEW",
         },
     }
@@ -150,7 +152,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
-            permissions ([str]): List of valid permissions for a logged user.. [optional]  # noqa: E501
+            permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -237,7 +239,7 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
-            permissions ([str]): List of valid permissions for a logged user.. [optional]  # noqa: E501
+            permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

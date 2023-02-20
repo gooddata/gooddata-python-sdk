@@ -31,10 +31,12 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_custom_application_setting_in_attributes import JsonApiCustomApplicationSettingInAttributes
     from gooddata_api_client.model.json_api_custom_application_setting_out import JsonApiCustomApplicationSettingOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiCustomApplicationSettingInAttributes'] = JsonApiCustomApplicationSettingInAttributes
     globals()['JsonApiCustomApplicationSettingOut'] = JsonApiCustomApplicationSettingOut
     globals()['ObjectLinks'] = ObjectLinks
@@ -105,6 +107,7 @@ class JsonApiCustomApplicationSettingOutWithLinks(ModelComposed):
             'attributes': (JsonApiCustomApplicationSettingInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -117,6 +120,7 @@ class JsonApiCustomApplicationSettingOutWithLinks(ModelComposed):
         'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -162,6 +166,7 @@ class JsonApiCustomApplicationSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -270,6 +275,7 @@ class JsonApiCustomApplicationSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

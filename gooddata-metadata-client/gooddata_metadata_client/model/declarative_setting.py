@@ -56,6 +56,15 @@ class DeclarativeSetting(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'TIMEZONE': "TIMEZONE",
+            'ACTIVE_THEME': "ACTIVE_THEME",
+            'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
+            'WHITE_LABELING': "WHITE_LABELING",
+            'LOCALE': "LOCALE",
+            'FORMAT_LOCALE': "FORMAT_LOCALE",
+            'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+        },
     }
 
     validations = {
@@ -89,6 +98,7 @@ class DeclarativeSetting(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'content': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -99,6 +109,7 @@ class DeclarativeSetting(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'content': 'content',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -146,6 +157,7 @@ class DeclarativeSetting(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
+            type (str): Type of the setting.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,6 +248,7 @@ class DeclarativeSetting(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
+            type (str): Type of the setting.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

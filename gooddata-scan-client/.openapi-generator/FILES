@@ -9,6 +9,9 @@ docs/DeclarativeTable.md
 docs/DeclarativeTables.md
 docs/ScanRequest.md
 docs/ScanResultPdm.md
+docs/ScanSqlRequest.md
+docs/ScanSqlResponse.md
+docs/SqlColumn.md
 docs/TableWarning.md
 docs/TestDefinitionRequest.md
 docs/TestQueryDuration.md
@@ -30,6 +33,9 @@ gooddata_scan_client/model/declarative_table.py
 gooddata_scan_client/model/declarative_tables.py
 gooddata_scan_client/model/scan_request.py
 gooddata_scan_client/model/scan_result_pdm.py
+gooddata_scan_client/model/scan_sql_request.py
+gooddata_scan_client/model/scan_sql_response.py
+gooddata_scan_client/model/sql_column.py
 gooddata_scan_client/model/table_warning.py
 gooddata_scan_client/model/test_definition_request.py
 gooddata_scan_client/model/test_query_duration.py

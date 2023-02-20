@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
+    from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
     from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
     globals()['DeclarativeSetting'] = DeclarativeSetting
+    globals()['DeclarativeUserPermission'] = DeclarativeUserPermission
     globals()['UserGroupIdentifier'] = UserGroupIdentifier
 
 
@@ -97,6 +99,10 @@ class DeclarativeUser(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'auth_id': (str,),  # noqa: E501
+            'email': (str,),  # noqa: E501
+            'firstname': (str,),  # noqa: E501
+            'lastname': (str,),  # noqa: E501
+            'permissions': ([DeclarativeUserPermission],),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
             'user_groups': ([UserGroupIdentifier],),  # noqa: E501
         }
@@ -109,6 +115,10 @@ class DeclarativeUser(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'auth_id': 'authId',  # noqa: E501
+        'email': 'email',  # noqa: E501
+        'firstname': 'firstname',  # noqa: E501
+        'lastname': 'lastname',  # noqa: E501
+        'permissions': 'permissions',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
     }
@@ -158,6 +168,10 @@ class DeclarativeUser(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             auth_id (str): User identification in the authentication manager.. [optional]  # noqa: E501
+            email (str): User email address. [optional]  # noqa: E501
+            firstname (str): User first name. [optional]  # noqa: E501
+            lastname (str): User last name. [optional]  # noqa: E501
+            permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
             user_groups ([UserGroupIdentifier]): [optional]  # noqa: E501
         """
@@ -250,6 +264,10 @@ class DeclarativeUser(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             auth_id (str): User identification in the authentication manager.. [optional]  # noqa: E501
+            email (str): User email address. [optional]  # noqa: E501
+            firstname (str): User first name. [optional]  # noqa: E501
+            lastname (str): User last name. [optional]  # noqa: E501
+            permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
             user_groups ([UserGroupIdentifier]): [optional]  # noqa: E501
         """

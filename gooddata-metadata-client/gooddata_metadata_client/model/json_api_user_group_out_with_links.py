@@ -31,10 +31,12 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_metadata_client.model.json_api_user_group_in_attributes import JsonApiUserGroupInAttributes
     from gooddata_metadata_client.model.json_api_user_group_in_relationships import JsonApiUserGroupInRelationships
     from gooddata_metadata_client.model.json_api_user_group_out import JsonApiUserGroupOut
     from gooddata_metadata_client.model.object_links import ObjectLinks
     from gooddata_metadata_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiUserGroupInAttributes'] = JsonApiUserGroupInAttributes
     globals()['JsonApiUserGroupInRelationships'] = JsonApiUserGroupInRelationships
     globals()['JsonApiUserGroupOut'] = JsonApiUserGroupOut
     globals()['ObjectLinks'] = ObjectLinks
@@ -104,6 +106,7 @@ class JsonApiUserGroupOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'attributes': (JsonApiUserGroupInAttributes,),  # noqa: E501
             'relationships': (JsonApiUserGroupInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -116,6 +119,7 @@ class JsonApiUserGroupOutWithLinks(ModelComposed):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'attributes': 'attributes',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -161,6 +165,7 @@ class JsonApiUserGroupOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -269,6 +274,7 @@ class JsonApiUserGroupOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attributes (JsonApiUserGroupInAttributes): [optional]  # noqa: E501
             relationships (JsonApiUserGroupInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """

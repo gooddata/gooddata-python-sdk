@@ -1,6 +1,6 @@
 # DeclarativeOrganizationPermission
 
-Definition of a permission assigned to a user/user-group.
+Definition of an organization permission assigned to a user/user-group.
 
 ## Properties
 Name | Type | Description | Notes

@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attributes** | [**JsonApiUserInAttributes**](JsonApiUserInAttributes.md) |  | [optional] 
+**attributes** | [**JsonApiUserGroupInAttributes**](JsonApiUserGroupInAttributes.md) |  | [optional] 
 **relationships** | [**JsonApiUserGroupInRelationships**](JsonApiUserGroupInRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **id** | **str** | Analytical dashboard ID. | 
 **title** | **str** | Analytical dashboard title. | 
 **description** | **str** | Analytical dashboard description. | [optional] 
+**permissions** | [**[DeclarativeAnalyticalDashboardPermission]**](DeclarativeAnalyticalDashboardPermission.md) | A list of permissions. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

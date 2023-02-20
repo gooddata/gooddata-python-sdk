@@ -916,6 +916,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiOrganizationSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="organizationSetting",
@@ -1061,6 +1062,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     json_api_user_group_in_document = JsonApiUserGroupInDocument(
         data=JsonApiUserGroupIn(
+            attributes=JsonApiUserGroupInAttributes(
+                name="name_example",
+            ),
             id="id1",
             relationships=JsonApiUserGroupInRelationships(
                 parents=JsonApiUserGroupInRelationshipsParents(
@@ -1156,6 +1160,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiUserSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="userSetting",
@@ -1230,6 +1235,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiUserIn(
             attributes=JsonApiUserInAttributes(
                 authentication_id="authentication_id_example",
+                email="email_example",
+                firstname="firstname_example",
+                lastname="lastname_example",
             ),
             id="id1",
             relationships=JsonApiUserInRelationships(
@@ -1518,6 +1526,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiWorkspaceSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="workspaceSetting",
@@ -2330,7 +2339,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2472,7 +2481,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2544,7 +2553,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     user_id = "userId_example" # str | 
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2616,7 +2625,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=authenticationId==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2834,7 +2843,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -2989,6 +2998,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=permissions,origin,accessInfo,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3000,7 +3012,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_analytical_dashboards(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_analytical_dashboards(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_analytical_dashboards: %s\n" % e)
@@ -3019,6 +3031,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -3163,6 +3176,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3174,7 +3190,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_attributes(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_attributes(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_attributes: %s\n" % e)
@@ -3193,6 +3209,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -3396,6 +3413,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3407,7 +3427,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_custom_application_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_custom_application_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_custom_application_settings: %s\n" % e)
@@ -3425,6 +3445,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -3482,6 +3503,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3493,7 +3517,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_dashboard_plugins(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_dashboard_plugins(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_dashboard_plugins: %s\n" % e)
@@ -3511,6 +3535,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -3807,6 +3832,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3818,7 +3846,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_datasets(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_datasets(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_datasets: %s\n" % e)
@@ -3837,6 +3865,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -3970,6 +3999,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3981,7 +4013,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_facts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_facts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_facts: %s\n" % e)
@@ -4000,6 +4032,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4060,6 +4093,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4071,7 +4107,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_filter_contexts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_filter_contexts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_filter_contexts: %s\n" % e)
@@ -4090,6 +4126,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4150,6 +4187,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4161,7 +4201,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_labels(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_labels(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_labels: %s\n" % e)
@@ -4180,6 +4220,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4240,6 +4281,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4251,7 +4295,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_metrics(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_metrics(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_metrics: %s\n" % e)
@@ -4270,6 +4314,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4318,7 +4363,7 @@ configuration = gooddata_metadata_client.Configuration(
 with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -4464,7 +4509,7 @@ configuration = gooddata_metadata_client.Configuration(
 with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
-    filter = "filter=" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=parents",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -4542,7 +4587,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     user_id = "userId_example" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
@@ -4625,7 +4670,7 @@ configuration = gooddata_metadata_client.Configuration(
 with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
-    filter = "filter=authenticationId==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=userGroups",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -4714,6 +4759,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4725,7 +4773,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_visualization_objects(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_visualization_objects(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_visualization_objects: %s\n" % e)
@@ -4744,6 +4792,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4974,13 +5023,16 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
     size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -4992,7 +5044,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_all_entities_workspace_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_all_entities_workspace_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_workspace_settings: %s\n" % e)
@@ -5010,6 +5062,7 @@ Name | Type | Description  | Notes
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5270,6 +5323,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=permissions,origin,accessInfo,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5281,7 +5337,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_analytical_dashboards(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_analytical_dashboards(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_analytical_dashboards: %s\n" % e)
@@ -5297,6 +5353,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5428,6 +5485,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=dataset,defaultView,labels",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5439,7 +5499,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_attributes(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_attributes(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_attributes: %s\n" % e)
@@ -5455,6 +5515,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5729,6 +5790,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     filter = "filter=applicationName==someString;content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5740,7 +5804,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_custom_application_settings: %s\n" % e)
@@ -5755,6 +5819,7 @@ Name | Type | Description  | Notes
  **object_id** | **str**|  |
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5807,6 +5872,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     filter = "filter=title==someString;description==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5818,7 +5886,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_dashboard_plugins(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_dashboard_plugins(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_dashboard_plugins: %s\n" % e)
@@ -5833,6 +5901,7 @@ Name | Type | Description  | Notes
  **object_id** | **str**|  |
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6120,6 +6189,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=attributes,facts,references",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6131,7 +6203,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_datasets(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_datasets(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_datasets: %s\n" % e)
@@ -6147,6 +6219,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6276,6 +6349,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=dataset",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6287,7 +6363,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_facts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_facts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_facts: %s\n" % e)
@@ -6303,6 +6379,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6358,6 +6435,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=attributes,datasets,labels",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6369,7 +6449,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_filter_contexts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_filter_contexts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_filter_contexts: %s\n" % e)
@@ -6385,6 +6465,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6440,6 +6521,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=attribute",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6451,7 +6535,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_labels(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_labels(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_labels: %s\n" % e)
@@ -6467,6 +6551,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6522,6 +6607,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6533,7 +6621,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_metrics(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_metrics(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_metrics: %s\n" % e)
@@ -6549,6 +6637,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -6598,7 +6687,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6828,7 +6917,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=parents",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -6907,7 +6996,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     user_id = "userId_example" # str | 
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -6982,7 +7071,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = entities_api.EntitiesApi(api_client)
     id = "/6bUUGjjNSwg0_bs" # str | 
-    filter = "filter=authenticationId==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=userGroups",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -7066,6 +7155,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -7077,7 +7169,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_visualization_objects(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_visualization_objects(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_visualization_objects: %s\n" % e)
@@ -7093,6 +7185,7 @@ Name | Type | Description  | Notes
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -7307,8 +7400,11 @@ with gooddata_metadata_client.ApiClient() as api_client:
     api_instance = entities_api.EntitiesApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     object_id = "objectId_example" # str | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -7320,7 +7416,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.get_entity_workspace_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations)
+        api_response = api_instance.get_entity_workspace_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_entity_workspace_settings: %s\n" % e)
@@ -7335,6 +7431,7 @@ Name | Type | Description  | Notes
  **object_id** | **str**|  |
  **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
  **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -8374,12 +8471,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiOrganizationSettingPatch(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="organizationSetting",
         ),
     ) # JsonApiOrganizationSettingPatchDocument | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -8641,6 +8739,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_user_group_patch_document = JsonApiUserGroupPatchDocument(
         data=JsonApiUserGroupPatch(
+            attributes=JsonApiUserGroupInAttributes(
+                name="name_example",
+            ),
             id="id1",
             relationships=JsonApiUserGroupInRelationships(
                 parents=JsonApiUserGroupInRelationshipsParents(
@@ -8655,7 +8756,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="userGroup",
         ),
     ) # JsonApiUserGroupPatchDocument | 
-    filter = "filter=" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=parents",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -8739,6 +8840,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiUserPatch(
             attributes=JsonApiUserInAttributes(
                 authentication_id="authentication_id_example",
+                email="email_example",
+                firstname="firstname_example",
+                lastname="lastname_example",
             ),
             id="id1",
             relationships=JsonApiUserInRelationships(
@@ -8754,7 +8858,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="user",
         ),
     ) # JsonApiUserPatchDocument | 
-    filter = "filter=authenticationId==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=userGroups",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -9039,12 +9143,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiWorkspaceSettingPatch(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="workspaceSetting",
         ),
     ) # JsonApiWorkspaceSettingPatchDocument | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -10140,12 +10245,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiOrganizationSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="organizationSetting",
         ),
     ) # JsonApiOrganizationSettingInDocument | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -10407,6 +10513,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     id = "/6bUUGjjNSwg0_bs" # str | 
     json_api_user_group_in_document = JsonApiUserGroupInDocument(
         data=JsonApiUserGroupIn(
+            attributes=JsonApiUserGroupInAttributes(
+                name="name_example",
+            ),
             id="id1",
             relationships=JsonApiUserGroupInRelationships(
                 parents=JsonApiUserGroupInRelationshipsParents(
@@ -10421,7 +10530,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="userGroup",
         ),
     ) # JsonApiUserGroupInDocument | 
-    filter = "filter=" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=name==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=parents",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -10506,12 +10615,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiUserSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="userSetting",
         ),
     ) # JsonApiUserSettingInDocument | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -10592,6 +10702,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiUserIn(
             attributes=JsonApiUserInAttributes(
                 authentication_id="authentication_id_example",
+                email="email_example",
+                firstname="firstname_example",
+                lastname="lastname_example",
             ),
             id="id1",
             relationships=JsonApiUserInRelationships(
@@ -10607,7 +10720,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="user",
         ),
     ) # JsonApiUserInDocument | 
-    filter = "filter=authenticationId==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=authenticationId==someString;firstname==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
     include = [
         "include=userGroups",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -10892,12 +11005,13 @@ with gooddata_metadata_client.ApiClient() as api_client:
         data=JsonApiWorkspaceSettingIn(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
+                type="TIMEZONE",
             ),
             id="id1",
             type="workspaceSetting",
         ),
     ) # JsonApiWorkspaceSettingInDocument | 
-    filter = "filter=content==JsonNodeValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    filter = "filter=content==JsonNodeValue;type==SettingConfigurationValue" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
 
     # example passing only required values which don't have defaults set
     try:

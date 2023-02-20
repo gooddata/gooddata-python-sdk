@@ -78,6 +78,7 @@ class DeclarativeDataSource(ModelNormal):
             'GREENPLUM': "GREENPLUM",
             'AZURESQL': "AZURESQL",
             'SYNAPSESQL': "SYNAPSESQL",
+            'DATABRICKS': "DATABRICKS",
         },
     }
 

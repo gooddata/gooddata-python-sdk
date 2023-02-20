@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_custom_application_setting_in_attributes import JsonApiCustomApplicationSettingInAttributes
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiCustomApplicationSettingInAttributes'] = JsonApiCustomApplicationSettingInAttributes
 
 
@@ -99,6 +101,7 @@ class JsonApiCustomApplicationSettingOut(ModelNormal):
             'attributes': (JsonApiCustomApplicationSettingInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +113,7 @@ class JsonApiCustomApplicationSettingOut(ModelNormal):
         'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,6 +162,7 @@ class JsonApiCustomApplicationSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "customApplicationSetting")
@@ -252,6 +257,7 @@ class JsonApiCustomApplicationSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "customApplicationSetting")

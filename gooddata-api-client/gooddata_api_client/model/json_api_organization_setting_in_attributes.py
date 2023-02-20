@@ -56,6 +56,15 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'TIMEZONE': "TIMEZONE",
+            'ACTIVE_THEME': "ACTIVE_THEME",
+            'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
+            'WHITE_LABELING': "WHITE_LABELING",
+            'LOCALE': "LOCALE",
+            'FORMAT_LOCALE': "FORMAT_LOCALE",
+            'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+        },
     }
 
     validations = {
@@ -83,6 +92,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
         """
         return {
             'content': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -92,6 +102,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
 
     attribute_map = {
         'content': 'content',  # noqa: E501
+        'type': 'type',  # noqa: E501
     }
 
     read_only_vars = {
@@ -136,6 +147,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
+            type (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -222,6 +234,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
+            type (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

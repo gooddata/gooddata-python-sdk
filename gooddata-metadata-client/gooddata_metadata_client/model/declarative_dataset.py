@@ -33,11 +33,13 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_metadata_client.model.data_source_table_identifier import DataSourceTableIdentifier
     from gooddata_metadata_client.model.declarative_attribute import DeclarativeAttribute
+    from gooddata_metadata_client.model.declarative_dataset_sql import DeclarativeDatasetSql
     from gooddata_metadata_client.model.declarative_fact import DeclarativeFact
     from gooddata_metadata_client.model.declarative_reference import DeclarativeReference
     from gooddata_metadata_client.model.grain_identifier import GrainIdentifier
     globals()['DataSourceTableIdentifier'] = DataSourceTableIdentifier
     globals()['DeclarativeAttribute'] = DeclarativeAttribute
+    globals()['DeclarativeDatasetSql'] = DeclarativeDatasetSql
     globals()['DeclarativeFact'] = DeclarativeFact
     globals()['DeclarativeReference'] = DeclarativeReference
     globals()['GrainIdentifier'] = GrainIdentifier
@@ -111,7 +113,9 @@ class DeclarativeDataset(ModelNormal):
             'data_source_table_id': (DataSourceTableIdentifier,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'facts': ([DeclarativeFact],),  # noqa: E501
+            'sql': (DeclarativeDatasetSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
+            'workspace_data_filter_columns': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -128,7 +132,9 @@ class DeclarativeDataset(ModelNormal):
         'data_source_table_id': 'dataSourceTableId',  # noqa: E501
         'description': 'description',  # noqa: E501
         'facts': 'facts',  # noqa: E501
+        'sql': 'sql',  # noqa: E501
         'tags': 'tags',  # noqa: E501
+        'workspace_data_filter_columns': 'workspaceDataFilterColumns',  # noqa: E501
     }
 
     read_only_vars = {
@@ -182,7 +188,9 @@ class DeclarativeDataset(ModelNormal):
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
+            sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            workspace_data_filter_columns ([str]): An array of workspace data filter columns applied on a workspace.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -282,7 +290,9 @@ class DeclarativeDataset(ModelNormal):
             data_source_table_id (DataSourceTableIdentifier): [optional]  # noqa: E501
             description (str): A dataset description.. [optional]  # noqa: E501
             facts ([DeclarativeFact]): An array of facts.. [optional]  # noqa: E501
+            sql (DeclarativeDatasetSql): [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
+            workspace_data_filter_columns ([str]): An array of workspace data filter columns applied on a workspace.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

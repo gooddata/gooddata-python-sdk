@@ -5,10 +5,16 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+[**available_assignes**](ActionsApi.md#available_assignes) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees | 
+[**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 [**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 [**get_dependent_entities_graph**](ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 [**get_dependent_entities_graph_from_entry_points**](ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
+[**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+[**manage_permissions**](ActionsApi.md#manage_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions | 
+[**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
+[**permissions**](ActionsApi.md#permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions | 
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -81,6 +87,147 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **available_assignes**
+> AvailableAssignees available_assignes(workspace_id, dashboard_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.available_assignees import AvailableAssignees
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    dashboard_id = "dashboardId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.available_assignes(workspace_id, dashboard_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->available_assignes: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **dashboard_id** | **str**|  |
+
+### Return type
+
+[**AvailableAssignees**](AvailableAssignees.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **check_entity_overrides**
+> [IdentifierDuplications] check_entity_overrides(workspace_id, hierarchy_object_identification)
+
+Finds entities with given ID in hierarchy.
+
+Finds entities with given ID in hierarchy (e.g. to check possible future conflicts).
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_metadata_client.model.identifier_duplications import IdentifierDuplications
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    hierarchy_object_identification = [
+        HierarchyObjectIdentification(
+            id="id_example",
+            type="metric",
+        ),
+    ] # [HierarchyObjectIdentification] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Finds entities with given ID in hierarchy.
+        api_response = api_instance.check_entity_overrides(workspace_id, hierarchy_object_identification)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->check_entity_overrides: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **hierarchy_object_identification** | [**[HierarchyObjectIdentification]**](HierarchyObjectIdentification.md)|  |
+
+### Return type
+
+[**[IdentifierDuplications]**](IdentifierDuplications.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Searching for entities finished successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **generate_logical_model**
 > DeclarativeModel generate_logical_model(data_source_id, generate_ldm_request)
 
@@ -117,6 +264,20 @@ with gooddata_metadata_client.ApiClient() as api_client:
         generate_long_ids=True,
         grain_prefix="g",
         grain_reference_prefix="gr",
+        pdm=PdmLdmRequest(
+            sqls=[
+                PdmSql(
+                    columns=[
+                        SqlColumn(
+                            data_type="STRING",
+                            name="ABC",
+                        ),
+                    ],
+                    statement="select * from abc",
+                    title="My special dataset",
+                ),
+            ],
+        ),
         primary_label_prefix="pl",
         reference_prefix="r",
         secondary_label_prefix="sl",
@@ -309,6 +470,217 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **inherited_entity_conflicts**
+> [IdentifierDuplications] inherited_entity_conflicts(workspace_id)
+
+Finds API identifier conflicts in given workspace hierarchy.
+
+Finds API identifier conflicts in given workspace hierarchy.
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.identifier_duplications import IdentifierDuplications
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Finds API identifier conflicts in given workspace hierarchy.
+        api_response = api_instance.inherited_entity_conflicts(workspace_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->inherited_entity_conflicts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**[IdentifierDuplications]**](IdentifierDuplications.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Searching for conflicting identifiers finished successfully |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_permissions**
+> manage_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.permissions_for_assignee import PermissionsForAssignee
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    dashboard_id = "dashboardId_example" # str | 
+    permissions_for_assignee = [
+        PermissionsForAssignee(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            permissions=[
+                "EDIT",
+            ],
+        ),
+    ] # [PermissionsForAssignee] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.manage_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **dashboard_id** | **str**|  |
+ **permissions_for_assignee** | [**[PermissionsForAssignee]**](PermissionsForAssignee.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **overridden_child_entities**
+> [IdentifierDuplications] overridden_child_entities(workspace_id)
+
+Finds API identifier overrides in given workspace hierarchy.
+
+Finds API identifier overrides in given workspace hierarchy.
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.identifier_duplications import IdentifierDuplications
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Finds API identifier overrides in given workspace hierarchy.
+        api_response = api_instance.overridden_child_entities(workspace_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->overridden_child_entities: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**[IdentifierDuplications]**](IdentifierDuplications.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Searching for overridden identifiers finished successfully |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **particular_platform_usage**
 > [PlatformUsage] particular_platform_usage(platform_usage_request)
 
@@ -370,6 +742,72 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **permissions**
+> DashboardPermissions permissions(workspace_id, dashboard_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_metadata_client
+from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.dashboard_permissions import DashboardPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_metadata_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_metadata_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    dashboard_id = "dashboardId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.permissions(workspace_id, dashboard_id)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling ActionsApi->permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **dashboard_id** | **str**|  |
+
+### Return type
+
+[**DashboardPermissions**](DashboardPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 
@@ -510,7 +948,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resolve_all_settings_without_workspace**
-> [DeclarativeSetting] resolve_all_settings_without_workspace()
+> [ResolvedSetting] resolve_all_settings_without_workspace()
 
 Values for all settings without workspace.
 
@@ -523,7 +961,7 @@ Resolves values for all settings without workspace by current user, organization
 import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import actions_api
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -552,7 +990,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**[DeclarativeSetting]**](DeclarativeSetting.md)
+[**[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 
@@ -645,7 +1083,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **resolve_settings_without_workspace**
-> [DeclarativeSetting] resolve_settings_without_workspace(resolve_settings_request)
+> [ResolvedSetting] resolve_settings_without_workspace(resolve_settings_request)
 
 Values for selected settings without workspace.
 
@@ -658,8 +1096,8 @@ Resolves values for selected settings without workspace by current user, organiz
 import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -694,7 +1132,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[DeclarativeSetting]**](DeclarativeSetting.md)
+[**[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 
@@ -715,7 +1153,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **workspace_resolve_all_settings**
-> [DeclarativeSetting] workspace_resolve_all_settings(workspace_id)
+> [ResolvedSetting] workspace_resolve_all_settings(workspace_id)
 
 Values for all settings.
 
@@ -728,7 +1166,7 @@ Resolves values for all settings in a workspace by current user, workspace, orga
 import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import actions_api
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -761,7 +1199,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[DeclarativeSetting]**](DeclarativeSetting.md)
+[**[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 
@@ -782,7 +1220,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **workspace_resolve_settings**
-> [DeclarativeSetting] workspace_resolve_settings(workspace_id, resolve_settings_request)
+> [ResolvedSetting] workspace_resolve_settings(workspace_id, resolve_settings_request)
 
 Values for selected settings.
 
@@ -795,8 +1233,8 @@ Resolves value for selected settings in a workspace by current user, workspace, 
 import time
 import gooddata_metadata_client
 from gooddata_metadata_client.api import actions_api
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -833,7 +1271,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[DeclarativeSetting]**](DeclarativeSetting.md)
+[**[ResolvedSetting]**](ResolvedSetting.md)
 
 ### Authorization
 

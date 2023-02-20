@@ -17,6 +17,9 @@ from gooddata_scan_client.model.declarative_table import DeclarativeTable
 from gooddata_scan_client.model.declarative_tables import DeclarativeTables
 from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
+from gooddata_scan_client.model.scan_sql_request import ScanSqlRequest
+from gooddata_scan_client.model.scan_sql_response import ScanSqlResponse
+from gooddata_scan_client.model.sql_column import SqlColumn
 from gooddata_scan_client.model.table_warning import TableWarning
 from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_scan_client.model.test_query_duration import TestQueryDuration

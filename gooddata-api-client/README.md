@@ -55,24 +55,31 @@ from gooddata_api_client.model.afm_execution_response import AfmExecutionRespons
 from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
 from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
 from gooddata_api_client.model.api_entitlement import ApiEntitlement
+from gooddata_api_client.model.available_assignees import AvailableAssignees
+from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_api_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_api_client.model.declarative_model import DeclarativeModel
-from gooddata_api_client.model.declarative_setting import DeclarativeSetting
 from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
 from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
 from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_api_client.model.elements_response import ElementsResponse
 from gooddata_api_client.model.entitlements_request import EntitlementsRequest
 from gooddata_api_client.model.execution_result import ExecutionResult
+from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.model.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_api_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
 from gooddata_api_client.model.platform_usage import PlatformUsage
 from gooddata_api_client.model.platform_usage_request import PlatformUsageRequest
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_api_client.model.resolved_setting import ResolvedSetting
 from gooddata_api_client.model.result_cache_metadata import ResultCacheMetadata
 from gooddata_api_client.model.scan_request import ScanRequest
 from gooddata_api_client.model.scan_result_pdm import ScanResultPdm
+from gooddata_api_client.model.scan_sql_request import ScanSqlRequest
+from gooddata_api_client.model.scan_sql_response import ScanSqlResponse
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
-from gooddata_api_client.model.tabular_export_result import TabularExportResult
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_api_client.model.test_request import TestRequest
 from gooddata_api_client.model.test_response import TestResponse
@@ -104,6 +111,8 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+*ActionsApi* | [**available_assignes**](docs/ActionsApi.md#available_assignes) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees | 
+*ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
@@ -114,7 +123,11 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
+*ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+*ActionsApi* | [**manage_permissions**](docs/ActionsApi.md#manage_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions | 
+*ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
+*ActionsApi* | [**permissions**](docs/ActionsApi.md#permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions | 
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *ActionsApi* | [**resolve_all_settings_without_workspace**](docs/ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -123,6 +136,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**retrieve_execution_metadata**](docs/ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 *ActionsApi* | [**retrieve_result**](docs/ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
+*ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *ActionsApi* | [**test_data_source**](docs/ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *ActionsApi* | [**test_data_source_definition**](docs/ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
@@ -263,7 +277,9 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 *LayoutApi* | [**get_pdm_layout**](docs/LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+*LayoutApi* | [**get_user_group_permissions**](docs/LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 *LayoutApi* | [**get_user_groups_layout**](docs/LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
+*LayoutApi* | [**get_user_permissions**](docs/LayoutApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 *LayoutApi* | [**get_users_layout**](docs/LayoutApi.md#get_users_layout) | **GET** /api/v1/layout/users | Get all users
 *LayoutApi* | [**get_users_user_groups_layout**](docs/LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
 *LayoutApi* | [**get_workspace_data_filters_layout**](docs/LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
@@ -279,6 +295,8 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+*LayoutApi* | [**set_user_group_permissions**](docs/LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
+*LayoutApi* | [**set_user_permissions**](docs/LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 *LayoutApi* | [**set_workspace_data_filters_layout**](docs/LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
 *LayoutApi* | [**set_workspace_permissions**](docs/LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *LayoutApi* | [**set_workspaces_layout**](docs/LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
@@ -318,12 +336,14 @@ Class | Method | HTTP request | Description
  - [AttributeHeaderOutAttributeHeader](docs/AttributeHeaderOutAttributeHeader.md)
  - [AttributeItem](docs/AttributeItem.md)
  - [AttributeResultHeader](docs/AttributeResultHeader.md)
+ - [AvailableAssignees](docs/AvailableAssignees.md)
  - [ColumnWarning](docs/ColumnWarning.md)
  - [ComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilter.md)
  - [ComparisonMeasureValueFilterComparisonMeasureValueFilter](docs/ComparisonMeasureValueFilterComparisonMeasureValueFilter.md)
  - [CustomLabel](docs/CustomLabel.md)
  - [CustomMetric](docs/CustomMetric.md)
  - [CustomOverride](docs/CustomOverride.md)
+ - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -332,6 +352,8 @@ Class | Method | HTTP request | Description
  - [DatasetReferenceIdentifier](docs/DatasetReferenceIdentifier.md)
  - [DateFilter](docs/DateFilter.md)
  - [DeclarativeAnalyticalDashboard](docs/DeclarativeAnalyticalDashboard.md)
+ - [DeclarativeAnalyticalDashboardExtension](docs/DeclarativeAnalyticalDashboardExtension.md)
+ - [DeclarativeAnalyticalDashboardPermission](docs/DeclarativeAnalyticalDashboardPermission.md)
  - [DeclarativeAnalytics](docs/DeclarativeAnalytics.md)
  - [DeclarativeAnalyticsLayer](docs/DeclarativeAnalyticsLayer.md)
  - [DeclarativeAttribute](docs/DeclarativeAttribute.md)
@@ -344,6 +366,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeDataSourcePermission](docs/DeclarativeDataSourcePermission.md)
  - [DeclarativeDataSources](docs/DeclarativeDataSources.md)
  - [DeclarativeDataset](docs/DeclarativeDataset.md)
+ - [DeclarativeDatasetSql](docs/DeclarativeDatasetSql.md)
  - [DeclarativeDateDataset](docs/DeclarativeDateDataset.md)
  - [DeclarativeFact](docs/DeclarativeFact.md)
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
@@ -363,7 +386,11 @@ Class | Method | HTTP request | Description
  - [DeclarativeTheme](docs/DeclarativeTheme.md)
  - [DeclarativeUser](docs/DeclarativeUser.md)
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
+ - [DeclarativeUserGroupPermission](docs/DeclarativeUserGroupPermission.md)
+ - [DeclarativeUserGroupPermissions](docs/DeclarativeUserGroupPermissions.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
+ - [DeclarativeUserPermission](docs/DeclarativeUserPermission.md)
+ - [DeclarativeUserPermissions](docs/DeclarativeUserPermissions.md)
  - [DeclarativeUsers](docs/DeclarativeUsers.md)
  - [DeclarativeUsersUserGroups](docs/DeclarativeUsersUserGroups.md)
  - [DeclarativeVisualizationObject](docs/DeclarativeVisualizationObject.md)
@@ -393,13 +420,17 @@ Class | Method | HTTP request | Description
  - [ExecutionResultHeader](docs/ExecutionResultHeader.md)
  - [ExecutionResultPaging](docs/ExecutionResultPaging.md)
  - [ExecutionSettings](docs/ExecutionSettings.md)
+ - [ExportResponse](docs/ExportResponse.md)
  - [FilterBy](docs/FilterBy.md)
  - [FilterDefinition](docs/FilterDefinition.md)
  - [FilterDefinitionForSimpleMeasure](docs/FilterDefinitionForSimpleMeasure.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
+ - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
  - [HeaderGroup](docs/HeaderGroup.md)
+ - [HierarchyObjectIdentification](docs/HierarchyObjectIdentification.md)
+ - [IdentifierDuplications](docs/IdentifierDuplications.md)
  - [InlineFilterDefinition](docs/InlineFilterDefinition.md)
  - [InlineFilterDefinitionInline](docs/InlineFilterDefinitionInline.md)
  - [InlineMeasureDefinition](docs/InlineMeasureDefinition.md)
@@ -412,6 +443,9 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardOutDocument](docs/JsonApiAnalyticalDashboardOutDocument.md)
  - [JsonApiAnalyticalDashboardOutIncludes](docs/JsonApiAnalyticalDashboardOutIncludes.md)
  - [JsonApiAnalyticalDashboardOutList](docs/JsonApiAnalyticalDashboardOutList.md)
+ - [JsonApiAnalyticalDashboardOutMeta](docs/JsonApiAnalyticalDashboardOutMeta.md)
+ - [JsonApiAnalyticalDashboardOutMetaAccessInfo](docs/JsonApiAnalyticalDashboardOutMetaAccessInfo.md)
+ - [JsonApiAnalyticalDashboardOutMetaOrigin](docs/JsonApiAnalyticalDashboardOutMetaOrigin.md)
  - [JsonApiAnalyticalDashboardOutRelationships](docs/JsonApiAnalyticalDashboardOutRelationships.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards](docs/JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins](docs/JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins.md)
@@ -437,6 +471,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAttributeOutDocument](docs/JsonApiAttributeOutDocument.md)
  - [JsonApiAttributeOutIncludes](docs/JsonApiAttributeOutIncludes.md)
  - [JsonApiAttributeOutList](docs/JsonApiAttributeOutList.md)
+ - [JsonApiAttributeOutMeta](docs/JsonApiAttributeOutMeta.md)
  - [JsonApiAttributeOutRelationships](docs/JsonApiAttributeOutRelationships.md)
  - [JsonApiAttributeOutRelationshipsDataset](docs/JsonApiAttributeOutRelationshipsDataset.md)
  - [JsonApiAttributeOutRelationshipsDefaultView](docs/JsonApiAttributeOutRelationshipsDefaultView.md)
@@ -520,6 +555,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutAttributes](docs/JsonApiDatasetOutAttributes.md)
  - [JsonApiDatasetOutAttributesGrainInner](docs/JsonApiDatasetOutAttributesGrainInner.md)
  - [JsonApiDatasetOutAttributesReferencePropertiesInner](docs/JsonApiDatasetOutAttributesReferencePropertiesInner.md)
+ - [JsonApiDatasetOutAttributesSql](docs/JsonApiDatasetOutAttributesSql.md)
  - [JsonApiDatasetOutDocument](docs/JsonApiDatasetOutDocument.md)
  - [JsonApiDatasetOutIncludes](docs/JsonApiDatasetOutIncludes.md)
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)
@@ -610,6 +646,7 @@ Class | Method | HTTP request | Description
  - [JsonApiThemePatch](docs/JsonApiThemePatch.md)
  - [JsonApiThemePatchDocument](docs/JsonApiThemePatchDocument.md)
  - [JsonApiUserGroupIn](docs/JsonApiUserGroupIn.md)
+ - [JsonApiUserGroupInAttributes](docs/JsonApiUserGroupInAttributes.md)
  - [JsonApiUserGroupInDocument](docs/JsonApiUserGroupInDocument.md)
  - [JsonApiUserGroupInRelationships](docs/JsonApiUserGroupInRelationships.md)
  - [JsonApiUserGroupInRelationshipsParents](docs/JsonApiUserGroupInRelationshipsParents.md)
@@ -711,6 +748,9 @@ Class | Method | HTTP request | Description
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [Paging](docs/Paging.md)
  - [Parameter](docs/Parameter.md)
+ - [PdmLdmRequest](docs/PdmLdmRequest.md)
+ - [PdmSql](docs/PdmSql.md)
+ - [PermissionsForAssignee](docs/PermissionsForAssignee.md)
  - [PlatformUsage](docs/PlatformUsage.md)
  - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
  - [PopDataset](docs/PopDataset.md)
@@ -730,6 +770,7 @@ Class | Method | HTTP request | Description
  - [RelativeDateFilter](docs/RelativeDateFilter.md)
  - [RelativeDateFilterRelativeDateFilter](docs/RelativeDateFilterRelativeDateFilter.md)
  - [ResolveSettingsRequest](docs/ResolveSettingsRequest.md)
+ - [ResolvedSetting](docs/ResolvedSetting.md)
  - [RestApiIdentifier](docs/RestApiIdentifier.md)
  - [ResultCacheMetadata](docs/ResultCacheMetadata.md)
  - [ResultDimension](docs/ResultDimension.md)
@@ -737,6 +778,8 @@ Class | Method | HTTP request | Description
  - [ResultSpec](docs/ResultSpec.md)
  - [ScanRequest](docs/ScanRequest.md)
  - [ScanResultPdm](docs/ScanResultPdm.md)
+ - [ScanSqlRequest](docs/ScanSqlRequest.md)
+ - [ScanSqlResponse](docs/ScanSqlResponse.md)
  - [Settings](docs/Settings.md)
  - [SimpleMeasureDefinition](docs/SimpleMeasureDefinition.md)
  - [SimpleMeasureDefinitionMeasure](docs/SimpleMeasureDefinitionMeasure.md)
@@ -747,9 +790,9 @@ Class | Method | HTTP request | Description
  - [SortKeyTotalTotal](docs/SortKeyTotalTotal.md)
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
+ - [SqlColumn](docs/SqlColumn.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
- - [TabularExportResult](docs/TabularExportResult.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
  - [TestQueryDuration](docs/TestQueryDuration.md)
  - [TestRequest](docs/TestRequest.md)
@@ -758,7 +801,11 @@ Class | Method | HTTP request | Description
  - [TotalDimension](docs/TotalDimension.md)
  - [TotalExecutionResultHeader](docs/TotalExecutionResultHeader.md)
  - [TotalResultHeader](docs/TotalResultHeader.md)
+ - [UserAssignee](docs/UserAssignee.md)
+ - [UserGroupAssignee](docs/UserGroupAssignee.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
+ - [UserGroupPermission](docs/UserGroupPermission.md)
+ - [UserPermission](docs/UserPermission.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
 
 

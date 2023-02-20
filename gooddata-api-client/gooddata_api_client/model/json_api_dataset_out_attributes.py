@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_dataset_out_attributes_grain_inner import JsonApiDatasetOutAttributesGrainInner
     from gooddata_api_client.model.json_api_dataset_out_attributes_reference_properties_inner import JsonApiDatasetOutAttributesReferencePropertiesInner
+    from gooddata_api_client.model.json_api_dataset_out_attributes_sql import JsonApiDatasetOutAttributesSql
     globals()['JsonApiDatasetOutAttributesGrainInner'] = JsonApiDatasetOutAttributesGrainInner
     globals()['JsonApiDatasetOutAttributesReferencePropertiesInner'] = JsonApiDatasetOutAttributesReferencePropertiesInner
+    globals()['JsonApiDatasetOutAttributesSql'] = JsonApiDatasetOutAttributesSql
 
 
 class JsonApiDatasetOutAttributes(ModelNormal):
@@ -100,8 +102,10 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             'description': (str,),  # noqa: E501
             'grain': ([JsonApiDatasetOutAttributesGrainInner],),  # noqa: E501
             'reference_properties': ([JsonApiDatasetOutAttributesReferencePropertiesInner],),  # noqa: E501
+            'sql': (JsonApiDatasetOutAttributesSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
+            'workspace_data_filter_columns': ([str],),  # noqa: E501
         }
 
     @cached_property
@@ -116,8 +120,10 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         'description': 'description',  # noqa: E501
         'grain': 'grain',  # noqa: E501
         'reference_properties': 'referenceProperties',  # noqa: E501
+        'sql': 'sql',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
+        'workspace_data_filter_columns': 'workspaceDataFilterColumns',  # noqa: E501
     }
 
     read_only_vars = {
@@ -169,8 +175,10 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
+            sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            workspace_data_filter_columns ([str]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -265,8 +273,10 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
+            sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
+            workspace_data_filter_columns ([str]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
