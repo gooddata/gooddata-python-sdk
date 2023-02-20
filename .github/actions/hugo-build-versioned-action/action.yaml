@@ -22,7 +22,7 @@ runs:
         cd docs
         ../scripts/generate.sh origin master
     - name: Hugo Build
-      uses: .github/actions/hugo-build-action
+      uses: ./.github/actions/hugo-build-action
       with:
         hugo-env: ${{ inputs.hugo-env }}
         working-directory: ${{ inputs.working-directory }}
