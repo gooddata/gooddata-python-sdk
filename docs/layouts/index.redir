@@ -1,3 +1,4 @@
 # Redirect homepage to the latest version
-/ {{ .Site.BaseURL }}/docs/ 301!
-/latest/ {{ .Site.BaseURL }}/docs/ 301
+/ {{ .Site.BaseURL }}/1.2/ 301!
+/latest/ {{ .Site.BaseURL }}/1.2/ 301
+/docs/ {{ .Site.BaseURL }}/1.2/ 301!
