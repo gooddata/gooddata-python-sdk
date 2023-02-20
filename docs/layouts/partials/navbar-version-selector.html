@@ -14,6 +14,11 @@
 </a>
 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 	{{ range .Site.Params.versions }}
-	<a class="dropdown-item{{ if eq ( $.Scratch.Get "activeVersion" ) ( printf "%s" .version ) }} active{{ end }}" href="{{ .url |  relURL }}">{{ .version }}</a>
+	<a
+		class="dropdown-item{{ if eq ( $.Scratch.Get "activeVersion" ) ( printf "%s" .version ) }} active{{ end }}"
+		href="{{ cond (gt (len (findRE "^http(s)?://" .url)) 0) .url (relURL .url) }}"
+	>
+		{{ .version }}
+	</a>
 	{{ end }}
 </div>
