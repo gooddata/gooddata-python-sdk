@@ -175,10 +175,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 104f6f8537437503a072fd1c1afec098cadcc644
+              executionResult: af8653d2df46cfe13b1818cb91d0c605abb8bebe
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/104f6f8537437503a072fd1c1afec098cadcc644/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/af8653d2df46cfe13b1818cb91d0c605abb8bebe/metadata
       body: null
       headers:
         Accept:
@@ -201,7 +201,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1980'
+          - '2046'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -252,16 +252,19 @@ interactions:
                   identifier:
                     id: region
                     type: label
+                showAllValues: false
               - localIdentifier: state
                 label:
                   identifier:
                     id: state
                     type: label
+                showAllValues: false
               - localIdentifier: product_category
                 label:
                   identifier:
                     id: products.category
                     type: label
+                showAllValues: false
             filters: []
             measures:
               - localIdentifier: price
@@ -338,7 +341,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 104f6f8537437503a072fd1c1afec098cadcc644
+              executionResult: af8653d2df46cfe13b1818cb91d0c605abb8bebe
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -355,7 +358,7 @@ interactions:
           resultSize: 7077
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/104f6f8537437503a072fd1c1afec098cadcc644?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/af8653d2df46cfe13b1818cb91d0c605abb8bebe?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

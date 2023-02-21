@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -667,11 +667,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: visitorsGroup
               type: userGroup
               attributes: {}
@@ -682,6 +677,11 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: demoGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           included:
             - id: adminGroup
               type: userGroup

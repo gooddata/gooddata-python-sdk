@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -240,7 +240,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '183'
+          - '52'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -284,8 +284,7 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          error: 'Could not initialize connection to data source; caused by org.postgresql.util.PSQLException:
-            FATAL: password authentication failed for user "demouser"'
+          error: Incorrect credentials
           successful: false
   - request:
       method: POST
@@ -364,5 +363,5 @@ interactions:
       body:
         string:
           queryDurationMillis:
-            simpleSelect: 4
+            simpleSelect: 1
           successful: true

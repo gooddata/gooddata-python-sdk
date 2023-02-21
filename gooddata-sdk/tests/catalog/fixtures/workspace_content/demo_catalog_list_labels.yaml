@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '9350'
+          - '11210'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -85,6 +85,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_channels.category
               type: label
               attributes:
@@ -98,6 +102,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: type
               type: label
               attributes:
@@ -111,6 +119,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_id
               type: label
               attributes:
@@ -124,6 +136,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_name
               type: label
               attributes:
@@ -137,6 +153,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customer_id
               type: label
               attributes:
@@ -150,6 +170,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customer_name
               type: label
               attributes:
@@ -163,6 +187,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: region
               type: label
               attributes:
@@ -176,6 +204,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: state
               type: label
               attributes:
@@ -189,6 +221,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: geo__state__location
               type: label
               attributes:
@@ -201,6 +237,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_id
               type: label
               attributes:
@@ -214,6 +254,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_line_id
               type: label
               attributes:
@@ -227,6 +271,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_status
               type: label
               attributes:
@@ -240,6 +288,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: product_id
               type: label
               attributes:
@@ -253,6 +305,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: product_name
               type: label
               attributes:
@@ -266,6 +322,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: products.category
               type: label
               attributes:
@@ -279,6 +339,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.minute
               type: label
               attributes:
@@ -291,6 +355,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minute
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.hour
               type: label
               attributes:
@@ -303,6 +371,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.day
               type: label
               attributes:
@@ -315,6 +387,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.day
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.week
               type: label
               attributes:
@@ -327,6 +403,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.week
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.month
               type: label
               attributes:
@@ -339,6 +419,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.month
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.quarter
               type: label
               attributes:
@@ -351,6 +435,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarter
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.year
               type: label
               attributes:
@@ -363,6 +451,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.year
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.minuteOfHour
               type: label
               attributes:
@@ -375,6 +467,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.minuteOfHour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.hourOfDay
               type: label
               attributes:
@@ -387,6 +483,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.hourOfDay
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfWeek
               type: label
               attributes:
@@ -399,6 +499,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfWeek
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfMonth
               type: label
               attributes:
@@ -411,6 +515,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfMonth
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfYear
               type: label
               attributes:
@@ -423,6 +531,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.dayOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.weekOfYear
               type: label
               attributes:
@@ -435,6 +547,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.weekOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.monthOfYear
               type: label
               attributes:
@@ -447,6 +563,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.monthOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.quarterOfYear
               type: label
               attributes:
@@ -459,6 +579,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/date.quarterOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/labels?page=1&size=500

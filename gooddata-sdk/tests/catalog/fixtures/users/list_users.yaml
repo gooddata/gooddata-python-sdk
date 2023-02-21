@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -85,7 +85,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRmMWU4YmRjMS0yYmNiLTRkYmYtOTE2Yi02MzMxZjYyZmU4ZjYSBWxvY2Fs
+                authenticationId: CiRjMzhlYjkyNC05OWYyLTRhNTYtOTVmMi01YjFkNTA4ODE1YmESBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -96,7 +96,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRlNTJmYzg3YS04YTUyLTQxYmItYTk5NC00NjQ2YzhhNTRkMjQSBWxvY2Fs
+                authenticationId: CiRlNDAyODExZi0wYTQ0LTQwZWQtYTg3NC01M2EwNGVmZGYwMzcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:

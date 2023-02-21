@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -286,7 +286,7 @@ interactions:
       body:
         string:
           queryDurationMillis:
-            simpleSelect: 8
+            simpleSelect: 1
           successful: true
   - request:
       method: PUT

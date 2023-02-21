@@ -192,10 +192,10 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 54f22a93bdbf640cd62d55dad6e0856b8f6126bf
+              executionResult: 5f28700ca7f94bf54ee12b8fd685f889c8131466
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54f22a93bdbf640cd62d55dad6e0856b8f6126bf/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5f28700ca7f94bf54ee12b8fd685f889c8131466/metadata
       body: null
       headers:
         Accept:
@@ -218,7 +218,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '2323'
+          - '2389'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -269,16 +269,19 @@ interactions:
                   identifier:
                     id: region
                     type: label
+                showAllValues: false
               - localIdentifier: state
                 label:
                   identifier:
                     id: state
                     type: label
+                showAllValues: false
               - localIdentifier: product_category
                 label:
                   identifier:
                     id: products.category
                     type: label
+                showAllValues: false
             filters: []
             measures:
               - localIdentifier: price
@@ -355,7 +358,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 54f22a93bdbf640cd62d55dad6e0856b8f6126bf
+              executionResult: 5f28700ca7f94bf54ee12b8fd685f889c8131466
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -388,7 +391,7 @@ interactions:
           resultSize: 12888
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54f22a93bdbf640cd62d55dad6e0856b8f6126bf?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5f28700ca7f94bf54ee12b8fd685f889c8131466?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2897,7 +2900,7 @@ interactions:
               - 17
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54f22a93bdbf640cd62d55dad6e0856b8f6126bf/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5f28700ca7f94bf54ee12b8fd685f889c8131466/metadata
       body: null
       headers:
         Accept:
@@ -2920,7 +2923,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '2323'
+          - '2389'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -2971,16 +2974,19 @@ interactions:
                   identifier:
                     id: region
                     type: label
+                showAllValues: false
               - localIdentifier: state
                 label:
                   identifier:
                     id: state
                     type: label
+                showAllValues: false
               - localIdentifier: product_category
                 label:
                   identifier:
                     id: products.category
                     type: label
+                showAllValues: false
             filters: []
             measures:
               - localIdentifier: price
@@ -3057,7 +3063,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 54f22a93bdbf640cd62d55dad6e0856b8f6126bf
+              executionResult: 5f28700ca7f94bf54ee12b8fd685f889c8131466
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3090,7 +3096,7 @@ interactions:
           resultSize: 12888
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/54f22a93bdbf640cd62d55dad6e0856b8f6126bf?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5f28700ca7f94bf54ee12b8fd685f889c8131466?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
