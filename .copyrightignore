@@ -16,6 +16,7 @@
 
 # Generated code
 gooddata-*-client/**
+.openapi-generator/custom_templates/**
 
 # IDEA IDE
 .idea/**
@@ -69,7 +70,10 @@ venv/**
 **/*.rst
 
 # Hugo docs
-**/docs/hugo/**
+**/docs/**
 
 # PyBuilder
 **/target/**
+
+# Linting support
+**/.ruff_cache/**
