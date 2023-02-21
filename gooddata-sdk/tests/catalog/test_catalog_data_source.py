@@ -26,6 +26,8 @@ from gooddata_sdk import (
     GoodDataSdk,
     PostgresAttributes,
     RedshiftAttributes,
+    ScanSqlColumn,
+    ScanSqlRequest,
     SnowflakeAttributes,
     TokenCredentialsFromFile,
     VerticaAttributes,
@@ -531,6 +533,24 @@ def test_pdm_store_load(test_config):
     sdk.catalog_data_source.store_pdm_to_disk(test_config["data_source"], path)
     loaded_pdm = sdk.catalog_data_source.load_pdm_from_disk(path)
     assert loaded_pdm == pdm
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "scan_sql.yaml"))
+def test_scan_sql(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = ScanSqlRequest(sql="SELECT * FROM products")
+
+    response = sdk.catalog_data_source.scan_sql(data_source_id, request)
+    response.columns.sort(key=lambda col: col.name)
+
+    assert len(response.columns) == 3
+    assert response.columns == [
+        ScanSqlColumn(name="category", data_type="STRING"),
+        ScanSqlColumn(name="product_id", data_type="INT"),
+        ScanSqlColumn(name="product_name", data_type="STRING"),
+    ]
+    assert len(response.data_preview) == 10
 
 
 """

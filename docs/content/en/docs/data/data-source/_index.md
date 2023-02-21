@@ -35,6 +35,7 @@ See [Connect Data](https://www.gooddata.com/developers/cloud-native/doc/cloud/co
 * [register_upload_notification](./register_upload_notification/)
 * [scan_data_source](./scan_data_source/)
 * [scan_schemata](./scan_schemata/)
+* [scan_sql](./scan_sql/)
 
 
 ## Example
