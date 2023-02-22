@@ -9,6 +9,7 @@ import attr
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
 from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
 from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
+from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDatasetSql
 from gooddata_api_client.model.declarative_fact import DeclarativeFact
 from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
@@ -29,7 +30,9 @@ class CatalogDeclarativeDataset(Base):
     attributes: Optional[List[CatalogDeclarativeAttribute]] = None
     facts: Optional[List[CatalogDeclarativeFact]] = None
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
+    sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[List[str]] = None
+    workspace_data_filter_columns: Optional[List[str]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeDataset]:
@@ -51,6 +54,7 @@ class CatalogDeclarativeAttribute(Base):
     title: str
     source_column: str
     labels: List[CatalogDeclarativeLabel]
+    source_column_data_type: Optional[str] = None
     default_view: Optional[CatalogLabelIdentifier] = None
     sort_column: Optional[str] = None
     sort_direction: Optional[str] = None
@@ -67,6 +71,7 @@ class CatalogDeclarativeFact(Base):
     id: str
     title: str
     source_column: str
+    source_column_data_type: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[List[str]] = None
 
@@ -86,10 +91,21 @@ class CatalogDataSourceTableIdentifier(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeDatasetSql(Base):
+    statement: str
+    data_source_id: str
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeDatasetSql]:
+        return DeclarativeDatasetSql
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeLabel(Base):
     id: str
     title: str
     source_column: str
+    source_column_data_type: Optional[str] = None
     description: Optional[str] = None
     tags: Optional[List[str]] = None
     value_type: Optional[str] = None
@@ -104,6 +120,7 @@ class CatalogDeclarativeReference(Base):
     identifier: CatalogReferenceIdentifier
     multivalue: bool
     source_columns: List[str]
+    source_column_data_types: Optional[List[str]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeReference]:

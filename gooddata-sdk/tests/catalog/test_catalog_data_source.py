@@ -20,15 +20,19 @@ from gooddata_sdk import (
     CatalogDataSourceSnowflake,
     CatalogDataSourceVertica,
     CatalogDeclarativeDataSources,
+    CatalogDeclarativeModel,
+    CatalogGenerateLdmRequest,
+    CatalogPdmLdmRequest,
+    CatalogPdmSql,
     CatalogScanModelRequest,
     ExecutionDefinition,
     GoodDataApiClient,
     GoodDataSdk,
     PostgresAttributes,
     RedshiftAttributes,
-    ScanSqlColumn,
     ScanSqlRequest,
     SnowflakeAttributes,
+    SqlColumn,
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
@@ -54,10 +58,21 @@ def test_register_upload_notification(test_config):
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model.yaml"))
-def test_generate_logical_model(test_config):
+def test_generate_logical_model(test_config: dict):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
     generated_declarative_model = sdk.catalog_data_source.generate_logical_model(test_config["data_source"])
+
+    # NOTE: extend fetched logical model with existing error - remove once geo__state__location will not be
+    # part of workspace_data_filter_columns
+    customers_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "customers"]
+    assert len(customers_datasets) == 1
+    customers_datasets[0].workspace_data_filter_columns = ["geo__state__location"]
+
+    # NOTE: remove after implementation of PDM removal
+    order_lines_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "order_lines"]
+    assert len(order_lines_datasets) == 1
+    order_lines_datasets[0].workspace_data_filter_columns = ["wdf__region", "wdf__state"]
 
     """
     There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
@@ -65,6 +80,61 @@ def test_generate_logical_model(test_config):
     """
     assert declarative_model.ldm.datasets == generated_declarative_model.ldm.datasets
     assert len(declarative_model.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model_sql_datasets.yaml"))
+def test_generate_logical_model_with_sql_datasets(test_config: dict):
+    expected_json_path = _current_dir / "expected" / "declarative_ldm_with_sql_dataset.json"
+
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    # NOTE: regenerate expected_json_path once workspaceDataFilterColumns does not contain geo__state__location
+    # for customers
+    ldm_request = CatalogGenerateLdmRequest(
+        separator="__",
+        wdf_prefix="wdf",
+        pdm=CatalogPdmLdmRequest(
+            sqls=[
+                # Test sql-dataset specific attributes, facts, references
+                CatalogPdmSql(
+                    statement="SELECT * FROM order_lines",
+                    title="Order lines duplicate sql dataset",
+                    columns=[
+                        SqlColumn(name="order_line_id", data_type="STRING"),
+                        SqlColumn(name="order_id", data_type="STRING"),
+                        SqlColumn(name="order_status", data_type="STRING"),
+                        SqlColumn(name="date", data_type="DATE"),
+                        SqlColumn(name="campaign_id", data_type="INT"),
+                        SqlColumn(name="customer_id", data_type="INT"),
+                        SqlColumn(name="product_id", data_type="INT"),
+                        SqlColumn(name="price", data_type="NUMERIC"),
+                        SqlColumn(name="quantity", data_type="NUMERIC"),
+                    ],
+                ),
+                # Test sql-dataset attribute WDFs
+                CatalogPdmSql(
+                    statement="SELECT * FROM v_wdf_customers",
+                    title="Customers sql dataset with WDF",
+                    columns=[
+                        SqlColumn(name="customer_id", data_type="INT"),
+                        SqlColumn(name="customer_name", data_type="STRING"),
+                        SqlColumn(name="state", data_type="STRING"),
+                        SqlColumn(name="region", data_type="STRING"),
+                        # NOTE: regenerate expected_json_path once missing workspaceDataFilterColumns is fixed
+                        SqlColumn(name="wdf__region", data_type="STRING"),
+                    ],
+                ),
+            ]
+        ),
+    )
+    generated_declarative_model = sdk.catalog_data_source.generate_logical_model(
+        test_config["data_source"], ldm_request
+    )
+
+    with open(expected_json_path, "rt") as f:
+        expected_ldm = CatalogDeclarativeModel.from_dict(json.load(f))
+
+    assert expected_ldm.ldm.datasets == generated_declarative_model.ldm.datasets
+    assert len(expected_ldm.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_data_sources_list.yaml"))
@@ -546,9 +616,9 @@ def test_scan_sql(test_config: dict):
 
     assert len(response.columns) == 3
     assert response.columns == [
-        ScanSqlColumn(name="category", data_type="STRING"),
-        ScanSqlColumn(name="product_id", data_type="INT"),
-        ScanSqlColumn(name="product_name", data_type="STRING"),
+        SqlColumn(name="category", data_type="STRING"),
+        SqlColumn(name="product_id", data_type="INT"),
+        SqlColumn(name="product_name", data_type="STRING"),
     ]
     assert len(response.data_preview) == 10
 

@@ -8,10 +8,10 @@ from typing import Any, List, Optional
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_pdm import DeclarativePdm
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
-from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
-from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
-from gooddata_sdk.catalog.data_source.action_requests.scan_sql_request import ScanSqlRequest
-from gooddata_sdk.catalog.data_source.action_responses.scan_sql_response import ScanSqlResponse
+from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import CatalogGenerateLdmRequest
+from gooddata_sdk.catalog.data_source.action_model.requests.scan_model_request import CatalogScanModelRequest
+from gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request import ScanSqlRequest
+from gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response import ScanSqlResponse
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
     BIGQUERY_TYPE,
     CatalogDeclarativeDataSource,
