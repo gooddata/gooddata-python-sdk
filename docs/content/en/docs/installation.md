@@ -4,19 +4,19 @@ linkTitle: "Installation"
 weight: 11
 ---
 
-Before installing, ensure you are using Python `3.7` or newer.
+Before installing, ensure you are using:
+
+* Python `3.7` or newer.
+* GoodData.CN or GoodData Cloud
+* The [pip](https://pypi.org/project/pip/) package management tool
+
+
 
 To install the `gooddata-sdk` Python SDK package, run the following command:
 
 ```bash
-pip install gooddata-sdk
+pip3 install gooddata-sdk
 ```
-
-### Requirements
-
-* Python `3.7` or newer.
-* GoodData.CN or GoodData Cloud
-
 
 {{% alert color="warning" title="Known MacOS issue" %}}
 If you are getting the following message:
