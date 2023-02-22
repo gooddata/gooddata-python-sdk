@@ -2287,6 +2287,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -2296,12 +2297,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -2319,6 +2325,14 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ORIGIN": "origin",
+                        "ACCESSINFO": "accessInfo",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -2339,6 +2353,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -2349,6 +2365,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -2359,10 +2376,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -2462,6 +2481,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -2471,12 +2491,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -2491,6 +2516,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -2511,6 +2542,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -2521,6 +2554,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -2531,10 +2565,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -2689,6 +2725,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -2697,12 +2734,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'origin',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -2710,6 +2752,12 @@ class EntitiesApi(object):
                         "ALL": "ALL",
                         "PARENTS": "PARENTS",
                         "NATIVE": "NATIVE"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -2727,6 +2775,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -2736,6 +2786,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -2745,9 +2796,11 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -2776,6 +2829,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -2784,12 +2838,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'origin',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -2797,6 +2856,12 @@ class EntitiesApi(object):
                         "ALL": "ALL",
                         "PARENTS": "PARENTS",
                         "NATIVE": "NATIVE"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -2814,6 +2879,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -2823,6 +2890,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -2832,9 +2900,11 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -3094,6 +3164,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -3103,12 +3174,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -3123,6 +3199,12 @@ class EntitiesApi(object):
                         "FACTS": "facts",
                         "DATASETS": "datasets",
                         "REFERENCES": "references",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -3143,6 +3225,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3153,6 +3237,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3163,10 +3248,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -3259,6 +3346,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -3268,12 +3356,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -3286,6 +3379,12 @@ class EntitiesApi(object):
 
                         "DATASETS": "datasets",
                         "DATASET": "dataset",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -3306,6 +3405,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3316,6 +3417,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3326,10 +3428,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -3359,6 +3463,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -3368,12 +3473,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -3387,6 +3497,12 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -3407,6 +3523,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3417,6 +3535,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3427,10 +3546,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -3460,6 +3581,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -3469,12 +3591,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -3487,6 +3614,12 @@ class EntitiesApi(object):
 
                         "ATTRIBUTES": "attributes",
                         "ATTRIBUTE": "attribute",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -3507,6 +3640,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3517,6 +3652,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3527,10 +3663,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -3560,6 +3698,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -3569,12 +3708,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -3590,6 +3734,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -3610,6 +3760,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -3620,6 +3772,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -3630,10 +3783,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4010,6 +4165,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4019,12 +4175,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -4040,6 +4201,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -4060,6 +4227,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4070,6 +4239,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4080,10 +4250,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4312,6 +4484,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4320,12 +4493,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'origin',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -4333,6 +4511,12 @@ class EntitiesApi(object):
                         "ALL": "ALL",
                         "PARENTS": "PARENTS",
                         "NATIVE": "NATIVE"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
                     },
                 },
                 'openapi_types': {
@@ -4350,6 +4534,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4359,6 +4545,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4368,9 +4555,11 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4575,6 +4764,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4584,12 +4774,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -4601,6 +4796,14 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ORIGIN": "origin",
+                        "ACCESSINFO": "accessInfo",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -4615,6 +4818,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4622,6 +4827,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4629,9 +4835,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4725,6 +4933,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4734,12 +4943,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -4748,6 +4962,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -4762,6 +4982,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4769,6 +4991,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4776,9 +4999,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4987,6 +5212,7 @@ class EntitiesApi(object):
                     'object_id',
                     'filter',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4995,14 +5221,25 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -5013,20 +5250,25 @@ class EntitiesApi(object):
                         (str,),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'filter': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5052,6 +5294,7 @@ class EntitiesApi(object):
                     'object_id',
                     'filter',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5060,14 +5303,25 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -5078,20 +5332,25 @@ class EntitiesApi(object):
                         (str,),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'filter': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5341,6 +5600,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5350,12 +5610,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -5364,6 +5629,12 @@ class EntitiesApi(object):
                         "FACTS": "facts",
                         "DATASETS": "datasets",
                         "REFERENCES": "references",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -5378,6 +5649,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -5385,6 +5658,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -5392,9 +5666,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5482,6 +5758,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5491,18 +5768,29 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "DATASETS": "datasets",
                         "DATASET": "dataset",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -5517,6 +5805,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -5524,6 +5814,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -5531,9 +5822,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5560,6 +5853,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5569,12 +5863,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -5582,6 +5881,12 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -5596,6 +5901,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -5603,6 +5910,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -5610,9 +5918,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5639,6 +5949,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5648,18 +5959,29 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "ATTRIBUTES": "attributes",
                         "ATTRIBUTE": "attribute",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -5674,6 +5996,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -5681,6 +6005,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -5688,9 +6013,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -5717,6 +6044,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5726,12 +6054,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -5741,6 +6074,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -5755,6 +6094,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -5762,6 +6103,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -5769,9 +6111,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -6227,6 +6571,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -6236,12 +6581,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -6251,6 +6601,12 @@ class EntitiesApi(object):
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -6265,6 +6621,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -6272,6 +6630,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -6279,9 +6638,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -6463,6 +6824,7 @@ class EntitiesApi(object):
                     'object_id',
                     'filter',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -6471,14 +6833,25 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -6489,20 +6862,25 @@ class EntitiesApi(object):
                         (str,),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'filter': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -12584,6 +12962,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -12759,6 +13138,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13009,6 +13389,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13097,6 +13478,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13436,6 +13818,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13606,6 +13989,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13695,6 +14079,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13784,6 +14169,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -13873,6 +14259,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -14374,6 +14761,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -14640,6 +15028,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -14966,6 +15355,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15142,6 +15532,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15479,6 +15870,7 @@ class EntitiesApi(object):
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15567,6 +15959,7 @@ class EntitiesApi(object):
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15911,6 +16304,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -16083,6 +16477,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -16172,6 +16567,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -16261,6 +16657,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -16350,6 +16747,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -16945,6 +17343,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -17211,6 +17610,7 @@ class EntitiesApi(object):
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

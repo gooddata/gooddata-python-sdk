@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -142,7 +142,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -285,7 +285,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -298,7 +298,7 @@ interactions:
           attributes:
             name: test_organization
             hostname: localhost
-            oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+            oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -372,7 +372,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -515,7 +515,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -658,7 +658,7 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -671,7 +671,7 @@ interactions:
           attributes:
             name: Default Organization
             hostname: localhost
-            oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+            oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -745,7 +745,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -888,6 +888,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: cd3baebd-ae96-417e-89e0-a5ea40e0ece4
+              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

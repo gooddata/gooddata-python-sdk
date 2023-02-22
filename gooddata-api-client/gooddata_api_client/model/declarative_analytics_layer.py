@@ -32,11 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
+    from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
     from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
     from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
     from gooddata_api_client.model.declarative_metric import DeclarativeMetric
     from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
     globals()['DeclarativeAnalyticalDashboard'] = DeclarativeAnalyticalDashboard
+    globals()['DeclarativeAnalyticalDashboardExtension'] = DeclarativeAnalyticalDashboardExtension
     globals()['DeclarativeDashboardPlugin'] = DeclarativeDashboardPlugin
     globals()['DeclarativeFilterContext'] = DeclarativeFilterContext
     globals()['DeclarativeMetric'] = DeclarativeMetric
@@ -96,6 +98,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
         """
         lazy_import()
         return {
+            'analytical_dashboard_extensions': ([DeclarativeAnalyticalDashboardExtension],),  # noqa: E501
             'analytical_dashboards': ([DeclarativeAnalyticalDashboard],),  # noqa: E501
             'dashboard_plugins': ([DeclarativeDashboardPlugin],),  # noqa: E501
             'filter_contexts': ([DeclarativeFilterContext],),  # noqa: E501
@@ -109,6 +112,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
 
 
     attribute_map = {
+        'analytical_dashboard_extensions': 'analyticalDashboardExtensions',  # noqa: E501
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
         'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
@@ -157,6 +161,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard_extensions ([DeclarativeAnalyticalDashboardExtension]): A list of dashboard permissions assigned to a related dashboard.. [optional]  # noqa: E501
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501
@@ -247,6 +252,7 @@ class DeclarativeAnalyticsLayer(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            analytical_dashboard_extensions ([DeclarativeAnalyticalDashboardExtension]): A list of dashboard permissions assigned to a related dashboard.. [optional]  # noqa: E501
             analytical_dashboards ([DeclarativeAnalyticalDashboard]): A list of analytical dashboards available in the model.. [optional]  # noqa: E501
             dashboard_plugins ([DeclarativeDashboardPlugin]): A list of dashboard plugins available in the model.. [optional]  # noqa: E501
             filter_contexts ([DeclarativeFilterContext]): A list of filter contexts available in the model.. [optional]  # noqa: E501

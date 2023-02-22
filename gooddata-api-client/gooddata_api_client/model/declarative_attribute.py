@@ -66,6 +66,15 @@ class DeclarativeAttribute(ModelNormal):
             'ASC': "ASC",
             'DESC': "DESC",
         },
+        ('source_column_data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {
@@ -109,6 +118,7 @@ class DeclarativeAttribute(ModelNormal):
             'description': (str,),  # noqa: E501
             'sort_column': (str,),  # noqa: E501
             'sort_direction': (str,),  # noqa: E501
+            'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -126,6 +136,7 @@ class DeclarativeAttribute(ModelNormal):
         'description': 'description',  # noqa: E501
         'sort_column': 'sortColumn',  # noqa: E501
         'sort_direction': 'sortDirection',  # noqa: E501
+        'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
     }
 
@@ -180,6 +191,7 @@ class DeclarativeAttribute(ModelNormal):
             description (str): Attribute description.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -280,6 +292,7 @@ class DeclarativeAttribute(ModelNormal):
             description (str): Attribute description.. [optional]  # noqa: E501
             sort_column (str): Attribute sort column.. [optional]  # noqa: E501
             sort_direction (str): Attribute sort direction.. [optional]  # noqa: E501
+            source_column_data_type (str): A type of the source column. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

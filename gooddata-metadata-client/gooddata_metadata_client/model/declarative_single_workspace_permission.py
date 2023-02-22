@@ -64,6 +64,8 @@ class DeclarativeSingleWorkspacePermission(ModelNormal):
             'MANAGE': "MANAGE",
             'ANALYZE': "ANALYZE",
             'EXPORT': "EXPORT",
+            'EXPORT_TABULAR': "EXPORT_TABULAR",
+            'EXPORT_PDF': "EXPORT_PDF",
             'VIEW': "VIEW",
         },
     }

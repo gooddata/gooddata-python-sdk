@@ -83,6 +83,9 @@ class JsonApiUserInAttributes(ModelNormal):
         """
         return {
             'authentication_id': (str,),  # noqa: E501
+            'email': (str,),  # noqa: E501
+            'firstname': (str,),  # noqa: E501
+            'lastname': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -92,6 +95,9 @@ class JsonApiUserInAttributes(ModelNormal):
 
     attribute_map = {
         'authentication_id': 'authenticationId',  # noqa: E501
+        'email': 'email',  # noqa: E501
+        'firstname': 'firstname',  # noqa: E501
+        'lastname': 'lastname',  # noqa: E501
     }
 
     read_only_vars = {
@@ -136,6 +142,9 @@ class JsonApiUserInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             authentication_id (str): [optional]  # noqa: E501
+            email (str): [optional]  # noqa: E501
+            firstname (str): [optional]  # noqa: E501
+            lastname (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -222,6 +231,9 @@ class JsonApiUserInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             authentication_id (str): [optional]  # noqa: E501
+            email (str): [optional]  # noqa: E501
+            firstname (str): [optional]  # noqa: E501
+            lastname (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

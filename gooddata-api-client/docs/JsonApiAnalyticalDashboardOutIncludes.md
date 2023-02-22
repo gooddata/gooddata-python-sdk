@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiFilterContextOutRelationships**](JsonApiFilterContextOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **attributes** | [**JsonApiDashboardPluginInAttributes**](JsonApiDashboardPluginInAttributes.md) |  | [optional] 

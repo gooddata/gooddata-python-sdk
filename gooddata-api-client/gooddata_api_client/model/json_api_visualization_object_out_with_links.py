@@ -32,11 +32,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
     globals()['ObjectLinks'] = ObjectLinks
@@ -107,6 +109,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -120,6 +123,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -166,6 +170,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -275,6 +280,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """

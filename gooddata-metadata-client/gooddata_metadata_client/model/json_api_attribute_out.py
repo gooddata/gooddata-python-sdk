@@ -32,8 +32,10 @@ from gooddata_metadata_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_metadata_client.model.json_api_attribute_out_attributes import JsonApiAttributeOutAttributes
+    from gooddata_metadata_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_metadata_client.model.json_api_attribute_out_relationships import JsonApiAttributeOutRelationships
     globals()['JsonApiAttributeOutAttributes'] = JsonApiAttributeOutAttributes
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiAttributeOutRelationships'] = JsonApiAttributeOutRelationships
 
 
@@ -101,6 +103,7 @@ class JsonApiAttributeOut(ModelNormal):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiAttributeOutAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'relationships': (JsonApiAttributeOutRelationships,),  # noqa: E501
         }
 
@@ -113,6 +116,7 @@ class JsonApiAttributeOut(ModelNormal):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
 
@@ -162,6 +166,7 @@ class JsonApiAttributeOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeOutAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAttributeOutRelationships): [optional]  # noqa: E501
         """
 
@@ -256,6 +261,7 @@ class JsonApiAttributeOut(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiAttributeOutAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAttributeOutRelationships): [optional]  # noqa: E501
         """
 

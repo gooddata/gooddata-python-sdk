@@ -56,6 +56,15 @@ class JsonApiFactOutAttributes(ModelNormal):
     """
 
     allowed_values = {
+        ('source_column_data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {
@@ -85,6 +94,7 @@ class JsonApiFactOutAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
+            'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -98,6 +108,7 @@ class JsonApiFactOutAttributes(ModelNormal):
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'description': 'description',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
+        'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -146,6 +157,7 @@ class JsonApiFactOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -236,6 +248,7 @@ class JsonApiFactOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

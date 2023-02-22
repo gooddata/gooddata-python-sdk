@@ -95,6 +95,7 @@ class AttributeItem(ModelNormal):
         return {
             'label': (AfmObjectIdentifierLabel,),  # noqa: E501
             'local_identifier': (str,),  # noqa: E501
+            'show_all_values': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -105,6 +106,7 @@ class AttributeItem(ModelNormal):
     attribute_map = {
         'label': 'label',  # noqa: E501
         'local_identifier': 'localIdentifier',  # noqa: E501
+        'show_all_values': 'showAllValues',  # noqa: E501
     }
 
     read_only_vars = {
@@ -152,6 +154,7 @@ class AttributeItem(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            show_all_values (bool): Specifies that the label should be outer-joined.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -243,6 +246,7 @@ class AttributeItem(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            show_all_values (bool): Specifies that the label should be outer-joined.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

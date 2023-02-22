@@ -51,15 +51,20 @@ import gooddata_metadata_client
 from pprint import pprint
 from gooddata_metadata_client.api import actions_api
 from gooddata_metadata_client.model.api_entitlement import ApiEntitlement
+from gooddata_metadata_client.model.available_assignees import AvailableAssignees
+from gooddata_metadata_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_metadata_client.model.declarative_model import DeclarativeModel
-from gooddata_metadata_client.model.declarative_setting import DeclarativeSetting
 from gooddata_metadata_client.model.dependent_entities_request import DependentEntitiesRequest
 from gooddata_metadata_client.model.dependent_entities_response import DependentEntitiesResponse
 from gooddata_metadata_client.model.entitlements_request import EntitlementsRequest
 from gooddata_metadata_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_metadata_client.model.hierarchy_object_identification import HierarchyObjectIdentification
+from gooddata_metadata_client.model.identifier_duplications import IdentifierDuplications
+from gooddata_metadata_client.model.permissions_for_assignee import PermissionsForAssignee
 from gooddata_metadata_client.model.platform_usage import PlatformUsage
 from gooddata_metadata_client.model.platform_usage_request import PlatformUsageRequest
 from gooddata_metadata_client.model.resolve_settings_request import ResolveSettingsRequest
+from gooddata_metadata_client.model.resolved_setting import ResolvedSetting
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_metadata_client.Configuration(
@@ -88,10 +93,16 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
+*ActionsApi* | [**available_assignes**](docs/ActionsApi.md#available_assignes) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees | 
+*ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
+*ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+*ActionsApi* | [**manage_permissions**](docs/ActionsApi.md#manage_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions | 
+*ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
+*ActionsApi* | [**permissions**](docs/ActionsApi.md#permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions | 
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *ActionsApi* | [**resolve_all_settings_without_workspace**](docs/ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
@@ -235,7 +246,9 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 *LayoutApi* | [**get_pdm_layout**](docs/LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+*LayoutApi* | [**get_user_group_permissions**](docs/LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 *LayoutApi* | [**get_user_groups_layout**](docs/LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
+*LayoutApi* | [**get_user_permissions**](docs/LayoutApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 *LayoutApi* | [**get_users_layout**](docs/LayoutApi.md#get_users_layout) | **GET** /api/v1/layout/users | Get all users
 *LayoutApi* | [**get_users_user_groups_layout**](docs/LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
 *LayoutApi* | [**get_workspace_data_filters_layout**](docs/LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
@@ -251,6 +264,8 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+*LayoutApi* | [**set_user_group_permissions**](docs/LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
+*LayoutApi* | [**set_user_permissions**](docs/LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 *LayoutApi* | [**set_workspace_data_filters_layout**](docs/LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
 *LayoutApi* | [**set_workspace_permissions**](docs/LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *LayoutApi* | [**set_workspaces_layout**](docs/LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
@@ -260,9 +275,13 @@ Class | Method | HTTP request | Description
 
  - [ApiEntitlement](docs/ApiEntitlement.md)
  - [AssigneeIdentifier](docs/AssigneeIdentifier.md)
+ - [AvailableAssignees](docs/AvailableAssignees.md)
+ - [DashboardPermissions](docs/DashboardPermissions.md)
  - [DataSourceTableIdentifier](docs/DataSourceTableIdentifier.md)
  - [DatasetReferenceIdentifier](docs/DatasetReferenceIdentifier.md)
  - [DeclarativeAnalyticalDashboard](docs/DeclarativeAnalyticalDashboard.md)
+ - [DeclarativeAnalyticalDashboardExtension](docs/DeclarativeAnalyticalDashboardExtension.md)
+ - [DeclarativeAnalyticalDashboardPermission](docs/DeclarativeAnalyticalDashboardPermission.md)
  - [DeclarativeAnalytics](docs/DeclarativeAnalytics.md)
  - [DeclarativeAnalyticsLayer](docs/DeclarativeAnalyticsLayer.md)
  - [DeclarativeAttribute](docs/DeclarativeAttribute.md)
@@ -275,6 +294,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeDataSourcePermission](docs/DeclarativeDataSourcePermission.md)
  - [DeclarativeDataSources](docs/DeclarativeDataSources.md)
  - [DeclarativeDataset](docs/DeclarativeDataset.md)
+ - [DeclarativeDatasetSql](docs/DeclarativeDatasetSql.md)
  - [DeclarativeDateDataset](docs/DeclarativeDateDataset.md)
  - [DeclarativeFact](docs/DeclarativeFact.md)
  - [DeclarativeFilterContext](docs/DeclarativeFilterContext.md)
@@ -294,7 +314,11 @@ Class | Method | HTTP request | Description
  - [DeclarativeTheme](docs/DeclarativeTheme.md)
  - [DeclarativeUser](docs/DeclarativeUser.md)
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
+ - [DeclarativeUserGroupPermission](docs/DeclarativeUserGroupPermission.md)
+ - [DeclarativeUserGroupPermissions](docs/DeclarativeUserGroupPermissions.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
+ - [DeclarativeUserPermission](docs/DeclarativeUserPermission.md)
+ - [DeclarativeUserPermissions](docs/DeclarativeUserPermissions.md)
  - [DeclarativeUsers](docs/DeclarativeUsers.md)
  - [DeclarativeUsersUserGroups](docs/DeclarativeUsersUserGroups.md)
  - [DeclarativeVisualizationObject](docs/DeclarativeVisualizationObject.md)
@@ -314,7 +338,10 @@ Class | Method | HTTP request | Description
  - [EntityIdentifier](docs/EntityIdentifier.md)
  - [GenerateLdmRequest](docs/GenerateLdmRequest.md)
  - [GrainIdentifier](docs/GrainIdentifier.md)
+ - [GrantedPermission](docs/GrantedPermission.md)
  - [GranularitiesFormatting](docs/GranularitiesFormatting.md)
+ - [HierarchyObjectIdentification](docs/HierarchyObjectIdentification.md)
+ - [IdentifierDuplications](docs/IdentifierDuplications.md)
  - [JsonApiAnalyticalDashboardIn](docs/JsonApiAnalyticalDashboardIn.md)
  - [JsonApiAnalyticalDashboardInAttributes](docs/JsonApiAnalyticalDashboardInAttributes.md)
  - [JsonApiAnalyticalDashboardInDocument](docs/JsonApiAnalyticalDashboardInDocument.md)
@@ -323,6 +350,9 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardOutDocument](docs/JsonApiAnalyticalDashboardOutDocument.md)
  - [JsonApiAnalyticalDashboardOutIncludes](docs/JsonApiAnalyticalDashboardOutIncludes.md)
  - [JsonApiAnalyticalDashboardOutList](docs/JsonApiAnalyticalDashboardOutList.md)
+ - [JsonApiAnalyticalDashboardOutMeta](docs/JsonApiAnalyticalDashboardOutMeta.md)
+ - [JsonApiAnalyticalDashboardOutMetaAccessInfo](docs/JsonApiAnalyticalDashboardOutMetaAccessInfo.md)
+ - [JsonApiAnalyticalDashboardOutMetaOrigin](docs/JsonApiAnalyticalDashboardOutMetaOrigin.md)
  - [JsonApiAnalyticalDashboardOutRelationships](docs/JsonApiAnalyticalDashboardOutRelationships.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards](docs/JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins](docs/JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins.md)
@@ -348,6 +378,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAttributeOutDocument](docs/JsonApiAttributeOutDocument.md)
  - [JsonApiAttributeOutIncludes](docs/JsonApiAttributeOutIncludes.md)
  - [JsonApiAttributeOutList](docs/JsonApiAttributeOutList.md)
+ - [JsonApiAttributeOutMeta](docs/JsonApiAttributeOutMeta.md)
  - [JsonApiAttributeOutRelationships](docs/JsonApiAttributeOutRelationships.md)
  - [JsonApiAttributeOutRelationshipsDataset](docs/JsonApiAttributeOutRelationshipsDataset.md)
  - [JsonApiAttributeOutRelationshipsDefaultView](docs/JsonApiAttributeOutRelationshipsDefaultView.md)
@@ -431,6 +462,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutAttributes](docs/JsonApiDatasetOutAttributes.md)
  - [JsonApiDatasetOutAttributesGrainInner](docs/JsonApiDatasetOutAttributesGrainInner.md)
  - [JsonApiDatasetOutAttributesReferencePropertiesInner](docs/JsonApiDatasetOutAttributesReferencePropertiesInner.md)
+ - [JsonApiDatasetOutAttributesSql](docs/JsonApiDatasetOutAttributesSql.md)
  - [JsonApiDatasetOutDocument](docs/JsonApiDatasetOutDocument.md)
  - [JsonApiDatasetOutIncludes](docs/JsonApiDatasetOutIncludes.md)
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)
@@ -521,6 +553,7 @@ Class | Method | HTTP request | Description
  - [JsonApiThemePatch](docs/JsonApiThemePatch.md)
  - [JsonApiThemePatchDocument](docs/JsonApiThemePatchDocument.md)
  - [JsonApiUserGroupIn](docs/JsonApiUserGroupIn.md)
+ - [JsonApiUserGroupInAttributes](docs/JsonApiUserGroupInAttributes.md)
  - [JsonApiUserGroupInDocument](docs/JsonApiUserGroupInDocument.md)
  - [JsonApiUserGroupInRelationships](docs/JsonApiUserGroupInRelationships.md)
  - [JsonApiUserGroupInRelationshipsParents](docs/JsonApiUserGroupInRelationshipsParents.md)
@@ -612,11 +645,20 @@ Class | Method | HTTP request | Description
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [Parameter](docs/Parameter.md)
+ - [PdmLdmRequest](docs/PdmLdmRequest.md)
+ - [PdmSql](docs/PdmSql.md)
+ - [PermissionsForAssignee](docs/PermissionsForAssignee.md)
  - [PlatformUsage](docs/PlatformUsage.md)
  - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
  - [ReferenceIdentifier](docs/ReferenceIdentifier.md)
  - [ResolveSettingsRequest](docs/ResolveSettingsRequest.md)
+ - [ResolvedSetting](docs/ResolvedSetting.md)
+ - [SqlColumn](docs/SqlColumn.md)
+ - [UserAssignee](docs/UserAssignee.md)
+ - [UserGroupAssignee](docs/UserGroupAssignee.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
+ - [UserGroupPermission](docs/UserGroupPermission.md)
+ - [UserPermission](docs/UserPermission.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
 
 

@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**analytical_dashboard_extensions** | [**[DeclarativeAnalyticalDashboardExtension]**](DeclarativeAnalyticalDashboardExtension.md) | A list of dashboard permissions assigned to a related dashboard. | [optional] 
 **analytical_dashboards** | [**[DeclarativeAnalyticalDashboard]**](DeclarativeAnalyticalDashboard.md) | A list of analytical dashboards available in the model. | [optional] 
 **dashboard_plugins** | [**[DeclarativeDashboardPlugin]**](DeclarativeDashboardPlugin.md) | A list of dashboard plugins available in the model. | [optional] 
 **filter_contexts** | [**[DeclarativeFilterContext]**](DeclarativeFilterContext.md) | A list of filter contexts available in the model. | [optional] 

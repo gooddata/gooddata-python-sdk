@@ -8,8 +8,10 @@ from typing import Any, List, Optional
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.declarative_pdm import DeclarativePdm
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
-from gooddata_sdk.catalog.data_source.action_requests.ldm_request import CatalogGenerateLdmRequest
-from gooddata_sdk.catalog.data_source.action_requests.scan_model_request import CatalogScanModelRequest
+from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import CatalogGenerateLdmRequest
+from gooddata_sdk.catalog.data_source.action_model.requests.scan_model_request import CatalogScanModelRequest
+from gooddata_sdk.catalog.data_source.action_model.requests.scan_sql_request import ScanSqlRequest
+from gooddata_sdk.catalog.data_source.action_model.responses.scan_sql_response import ScanSqlResponse
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
     BIGQUERY_TYPE,
     CatalogDeclarativeDataSource,
@@ -460,6 +462,22 @@ class CatalogDataSourceService(CatalogServiceBase):
         """
         response = self._actions_api.get_data_source_schemata(data_source_id)
         return response.get("schema_names", [])
+
+    def scan_sql(self, data_source_id: str, sql_request: ScanSqlRequest) -> ScanSqlResponse:
+        """Analyze SELECT SQL query in a given request. Return description of SQL result-set as
+        list of column names with GoodData data types and list of example data returned by SELECT query.
+
+        Args:
+            data_source_id (str):
+                Data Source identification string. e.g. "demo"
+            sql_request (ScanSqlRequest):
+                SELECT SQL query to analyze
+
+        Returns:
+            ScanSqlResponse:
+                SELECT query analysis result
+        """
+        return ScanSqlResponse.from_api(self._actions_api.scan_sql(data_source_id, sql_request.to_api()))
 
     def test_data_sources_connection(
         self, declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None

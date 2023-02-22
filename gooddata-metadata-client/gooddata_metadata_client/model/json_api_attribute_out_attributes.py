@@ -77,6 +77,15 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             'ASC': "ASC",
             'DESC': "DESC",
         },
+        ('source_column_data_type',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {
@@ -109,6 +118,7 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             'sort_column': (str,),  # noqa: E501
             'sort_direction': (str,),  # noqa: E501
             'source_column': (str,),  # noqa: E501
+            'source_column_data_type': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
         }
@@ -125,6 +135,7 @@ class JsonApiAttributeOutAttributes(ModelNormal):
         'sort_column': 'sortColumn',  # noqa: E501
         'sort_direction': 'sortDirection',  # noqa: E501
         'source_column': 'sourceColumn',  # noqa: E501
+        'source_column_data_type': 'sourceColumnDataType',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
     }
@@ -176,6 +187,7 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             sort_column (str): [optional]  # noqa: E501
             sort_direction (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """
@@ -269,6 +281,7 @@ class JsonApiAttributeOutAttributes(ModelNormal):
             sort_column (str): [optional]  # noqa: E501
             sort_direction (str): [optional]  # noqa: E501
             source_column (str): [optional]  # noqa: E501
+            source_column_data_type (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
         """

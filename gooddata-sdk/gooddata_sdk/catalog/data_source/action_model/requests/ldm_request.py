@@ -1,12 +1,35 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Optional, Type
+from typing import List, Optional, Type
 
 import attr
 
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
+from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
+from gooddata_api_client.model.pdm_sql import PdmSql
 from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.data_source.action_model.sql_column import SqlColumn
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogPdmSql(Base):
+    statement: str
+    title: str
+    columns: List[SqlColumn]
+
+    @staticmethod
+    def client_class() -> Type[PdmSql]:
+        return PdmSql
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogPdmLdmRequest(Base):
+    sqls: List[CatalogPdmSql]
+
+    @staticmethod
+    def client_class() -> Type[PdmLdmRequest]:
+        return PdmLdmRequest
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -24,6 +47,7 @@ class CatalogGenerateLdmRequest(Base):
     grain_reference_prefix: Optional[str] = None
     denorm_prefix: Optional[str] = None
     wdf_prefix: Optional[str] = None
+    pdm: Optional[CatalogPdmLdmRequest] = None
 
     @staticmethod
     def client_class() -> Type[GenerateLdmRequest]:

@@ -9,7 +9,9 @@ Method | HTTP request | Description
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 [**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 [**get_pdm_layout**](LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+[**get_user_group_permissions**](LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 [**get_user_groups_layout**](LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
+[**get_user_permissions**](LayoutApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 [**get_users_layout**](LayoutApi.md#get_users_layout) | **GET** /api/v1/layout/users | Get all users
 [**get_users_user_groups_layout**](LayoutApi.md#get_users_user_groups_layout) | **GET** /api/v1/layout/usersAndUserGroups | Get all users and user groups
 [**get_workspace_data_filters_layout**](LayoutApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
@@ -25,6 +27,8 @@ Method | HTTP request | Description
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 [**set_pdm_layout**](LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+[**set_user_group_permissions**](LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
+[**set_user_permissions**](LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_data_filters_layout**](LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
 [**set_workspace_permissions**](LayoutApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 [**set_workspaces_layout**](LayoutApi.md#set_workspaces_layout) | **PUT** /api/v1/layout/workspaces | Set all workspaces layout
@@ -368,6 +372,73 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_user_group_permissions**
+> DeclarativeUserGroupPermissions get_user_group_permissions(user_group_id)
+
+Get permissions for the user-group
+
+Retrieve current set of permissions of the user-group in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    user_group_id = "userGroupId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the user-group
+        api_response = api_instance.get_user_group_permissions(user_group_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_user_group_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_group_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_user_groups_layout**
 > DeclarativeUserGroups get_user_groups_layout()
 
@@ -428,6 +499,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved all user groups. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_user_permissions**
+> DeclarativeUserPermissions get_user_permissions(user_id)
+
+Get permissions for the user
+
+Retrieve current set of permissions of the user in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    user_id = "userId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the user
+        api_response = api_instance.get_user_permissions(user_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_user_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -971,10 +1109,20 @@ with gooddata_api_client.ApiClient() as api_client:
         user_groups=[
             DeclarativeUserGroup(
                 id="employees.all",
+                name="admins",
                 parents=[
                     UserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
+                    ),
+                ],
+                permissions=[
+                    DeclarativeUserGroupPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
                     ),
                 ],
             ),
@@ -1049,11 +1197,24 @@ with gooddata_api_client.ApiClient() as api_client:
         users=[
             DeclarativeUser(
                 auth_id="auth_id_example",
+                email="user@example.com",
+                firstname="John",
                 id="employee123",
+                lastname="Wick",
+                permissions=[
+                    DeclarativeUserPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
+                    ),
+                ],
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="timezone",
+                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        type="TIMEZONE",
                     ),
                 ],
                 user_groups=[
@@ -1134,10 +1295,20 @@ with gooddata_api_client.ApiClient() as api_client:
         user_groups=[
             DeclarativeUserGroup(
                 id="employees.all",
+                name="admins",
                 parents=[
                     UserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
+                    ),
+                ],
+                permissions=[
+                    DeclarativeUserGroupPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
                     ),
                 ],
             ),
@@ -1145,11 +1316,24 @@ with gooddata_api_client.ApiClient() as api_client:
         users=[
             DeclarativeUser(
                 auth_id="auth_id_example",
+                email="user@example.com",
+                firstname="John",
                 id="employee123",
+                lastname="Wick",
+                permissions=[
+                    DeclarativeUserPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
+                    ),
+                ],
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="timezone",
+                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        type="TIMEZONE",
                     ),
                 ],
                 user_groups=[
@@ -1229,11 +1413,34 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     declarative_workspace_model = DeclarativeWorkspaceModel(
         analytics=DeclarativeAnalyticsLayer(
+            analytical_dashboard_extensions=[
+                DeclarativeAnalyticalDashboardExtension(
+                    id="revenues-analysis",
+                    permissions=[
+                        DeclarativeAnalyticalDashboardPermission(
+                            assignee=AssigneeIdentifier(
+                                id="id_example",
+                                type="user",
+                            ),
+                            name="EDIT",
+                        ),
+                    ],
+                ),
+            ],
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
                     content={},
                     description="Period to period comparison of revenues in main sectors.",
                     id="revenues-analysis",
+                    permissions=[
+                        DeclarativeAnalyticalDashboardPermission(
+                            assignee=AssigneeIdentifier(
+                                id="id_example",
+                                type="user",
+                            ),
+                            name="EDIT",
+                        ),
+                    ],
                     tags=["Revenues"],
                     title="Revenues analysis",
                 ),
@@ -1291,6 +1498,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     description="Customer name",
                                     id="label.customer_name",
                                     source_column="customer_name",
+                                    source_column_data_type="STRING",
                                     tags=["Customers"],
                                     title="Customer name",
                                     value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
@@ -1299,6 +1507,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",
+                            source_column_data_type="STRING",
                             tags=["Customers"],
                             title="Customer Name",
                         ),
@@ -1314,6 +1523,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
+                            source_column_data_type="NUMERIC",
                             tags=["Customers"],
                             title="Customer order count",
                         ),
@@ -1332,11 +1542,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                 type="DATASET",
                             ),
                             multivalue=False,
+                            source_column_data_types=[
+                                "source_column_data_types_example",
+                            ],
                             source_columns=["customer_id"],
                         ),
                     ],
+                    sql=DeclarativeDatasetSql(
+                        data_source_id="my-postgres",
+                        statement="SELECT * FROM some_table",
+                    ),
                     tags=["Customers"],
                     title="Customers",
+                    workspace_data_filter_columns=[
+                        "workspace_data_filter_columns_example",
+                    ],
                 ),
             ],
             date_instances=[
@@ -1425,11 +1645,34 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     declarative_analytics = DeclarativeAnalytics(
         analytics=DeclarativeAnalyticsLayer(
+            analytical_dashboard_extensions=[
+                DeclarativeAnalyticalDashboardExtension(
+                    id="revenues-analysis",
+                    permissions=[
+                        DeclarativeAnalyticalDashboardPermission(
+                            assignee=AssigneeIdentifier(
+                                id="id_example",
+                                type="user",
+                            ),
+                            name="EDIT",
+                        ),
+                    ],
+                ),
+            ],
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
                     content={},
                     description="Period to period comparison of revenues in main sectors.",
                     id="revenues-analysis",
+                    permissions=[
+                        DeclarativeAnalyticalDashboardPermission(
+                            assignee=AssigneeIdentifier(
+                                id="id_example",
+                                type="user",
+                            ),
+                            name="EDIT",
+                        ),
+                    ],
                     tags=["Revenues"],
                     title="Revenues analysis",
                 ),
@@ -1556,6 +1799,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     description="Customer name",
                                     id="label.customer_name",
                                     source_column="customer_name",
+                                    source_column_data_type="STRING",
                                     tags=["Customers"],
                                     title="Customer name",
                                     value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
@@ -1564,6 +1808,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             sort_column="customer_name",
                             sort_direction="ASC" | "DESC",
                             source_column="customer_name",
+                            source_column_data_type="STRING",
                             tags=["Customers"],
                             title="Customer Name",
                         ),
@@ -1579,6 +1824,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                             id="fact.customer_order_count",
                             source_column="customer_order_count",
+                            source_column_data_type="NUMERIC",
                             tags=["Customers"],
                             title="Customer order count",
                         ),
@@ -1597,11 +1843,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                 type="DATASET",
                             ),
                             multivalue=False,
+                            source_column_data_types=[
+                                "source_column_data_types_example",
+                            ],
                             source_columns=["customer_id"],
                         ),
                     ],
+                    sql=DeclarativeDatasetSql(
+                        data_source_id="my-postgres",
+                        statement="SELECT * FROM some_table",
+                    ),
                     tags=["Customers"],
                     title="Customers",
+                    workspace_data_filter_columns=[
+                        "workspace_data_filter_columns_example",
+                    ],
                 ),
             ],
             date_instances=[
@@ -1780,7 +2036,8 @@ with gooddata_api_client.ApiClient() as api_client:
             settings=[
                 DeclarativeSetting(
                     content={},
-                    id="timezone",
+                    id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                    type="TIMEZONE",
                 ),
             ],
             themes=[
@@ -1794,10 +2051,20 @@ with gooddata_api_client.ApiClient() as api_client:
         user_groups=[
             DeclarativeUserGroup(
                 id="employees.all",
+                name="admins",
                 parents=[
                     UserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
+                    ),
+                ],
+                permissions=[
+                    DeclarativeUserGroupPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
                     ),
                 ],
             ),
@@ -1805,11 +2072,24 @@ with gooddata_api_client.ApiClient() as api_client:
         users=[
             DeclarativeUser(
                 auth_id="auth_id_example",
+                email="user@example.com",
+                firstname="John",
                 id="employee123",
+                lastname="Wick",
+                permissions=[
+                    DeclarativeUserPermission(
+                        assignee=AssigneeIdentifier(
+                            id="id_example",
+                            type="user",
+                        ),
+                        name="SEE",
+                    ),
+                ],
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="timezone",
+                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        type="TIMEZONE",
                     ),
                 ],
                 user_groups=[
@@ -1867,11 +2147,34 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="alpha.sales",
                 model=DeclarativeWorkspaceModel(
                     analytics=DeclarativeAnalyticsLayer(
+                        analytical_dashboard_extensions=[
+                            DeclarativeAnalyticalDashboardExtension(
+                                id="revenues-analysis",
+                                permissions=[
+                                    DeclarativeAnalyticalDashboardPermission(
+                                        assignee=AssigneeIdentifier(
+                                            id="id_example",
+                                            type="user",
+                                        ),
+                                        name="EDIT",
+                                    ),
+                                ],
+                            ),
+                        ],
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
                                 content={},
                                 description="Period to period comparison of revenues in main sectors.",
                                 id="revenues-analysis",
+                                permissions=[
+                                    DeclarativeAnalyticalDashboardPermission(
+                                        assignee=AssigneeIdentifier(
+                                            id="id_example",
+                                            type="user",
+                                        ),
+                                        name="EDIT",
+                                    ),
+                                ],
                                 tags=["Revenues"],
                                 title="Revenues analysis",
                             ),
@@ -1929,6 +2232,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 description="Customer name",
                                                 id="label.customer_name",
                                                 source_column="customer_name",
+                                                source_column_data_type="STRING",
                                                 tags=["Customers"],
                                                 title="Customer name",
                                                 value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
@@ -1937,6 +2241,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         sort_column="customer_name",
                                         sort_direction="ASC" | "DESC",
                                         source_column="customer_name",
+                                        source_column_data_type="STRING",
                                         tags=["Customers"],
                                         title="Customer Name",
                                     ),
@@ -1952,6 +2257,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
                                         source_column="customer_order_count",
+                                        source_column_data_type="NUMERIC",
                                         tags=["Customers"],
                                         title="Customer order count",
                                     ),
@@ -1970,11 +2276,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                             type="DATASET",
                                         ),
                                         multivalue=False,
+                                        source_column_data_types=[
+                                            "source_column_data_types_example",
+                                        ],
                                         source_columns=["customer_id"],
                                     ),
                                 ],
+                                sql=DeclarativeDatasetSql(
+                                    data_source_id="my-postgres",
+                                    statement="SELECT * FROM some_table",
+                                ),
                                 tags=["Customers"],
                                 title="Customers",
+                                workspace_data_filter_columns=[
+                                    "workspace_data_filter_columns_example",
+                                ],
                             ),
                         ],
                         date_instances=[
@@ -2011,7 +2327,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="timezone",
+                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        type="TIMEZONE",
                     ),
                 ],
             ),
@@ -2051,7 +2368,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**201** | Defined all parts of an organization. |  -  |
+**204** | Defined all parts of an organization. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2140,6 +2457,162 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Data source physical mode layout set successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_user_group_permissions**
+> set_user_group_permissions(user_group_id, declarative_user_group_permissions)
+
+Set permissions for the user-group
+
+Set effective permissions for the user-group
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    user_group_id = "userGroupId_example" # str | 
+    declarative_user_group_permissions = DeclarativeUserGroupPermissions(
+        permissions=[
+            DeclarativeUserGroupPermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="SEE",
+            ),
+        ],
+    ) # DeclarativeUserGroupPermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the user-group
+        api_instance.set_user_group_permissions(user_group_id, declarative_user_group_permissions)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_user_group_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_group_id** | **str**|  |
+ **declarative_user_group_permissions** | [**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | User-group permissions successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_user_permissions**
+> set_user_permissions(user_id, declarative_user_permissions)
+
+Set permissions for the user
+
+Set effective permissions for the user
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    user_id = "userId_example" # str | 
+    declarative_user_permissions = DeclarativeUserPermissions(
+        permissions=[
+            DeclarativeUserPermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="SEE",
+            ),
+        ],
+    ) # DeclarativeUserPermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the user
+        api_instance.set_user_permissions(user_id, declarative_user_permissions)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_user_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_id** | **str**|  |
+ **declarative_user_permissions** | [**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | User permissions successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2396,11 +2869,34 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="alpha.sales",
                 model=DeclarativeWorkspaceModel(
                     analytics=DeclarativeAnalyticsLayer(
+                        analytical_dashboard_extensions=[
+                            DeclarativeAnalyticalDashboardExtension(
+                                id="revenues-analysis",
+                                permissions=[
+                                    DeclarativeAnalyticalDashboardPermission(
+                                        assignee=AssigneeIdentifier(
+                                            id="id_example",
+                                            type="user",
+                                        ),
+                                        name="EDIT",
+                                    ),
+                                ],
+                            ),
+                        ],
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
                                 content={},
                                 description="Period to period comparison of revenues in main sectors.",
                                 id="revenues-analysis",
+                                permissions=[
+                                    DeclarativeAnalyticalDashboardPermission(
+                                        assignee=AssigneeIdentifier(
+                                            id="id_example",
+                                            type="user",
+                                        ),
+                                        name="EDIT",
+                                    ),
+                                ],
                                 tags=["Revenues"],
                                 title="Revenues analysis",
                             ),
@@ -2458,6 +2954,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 description="Customer name",
                                                 id="label.customer_name",
                                                 source_column="customer_name",
+                                                source_column_data_type="STRING",
                                                 tags=["Customers"],
                                                 title="Customer name",
                                                 value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
@@ -2466,6 +2963,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         sort_column="customer_name",
                                         sort_direction="ASC" | "DESC",
                                         source_column="customer_name",
+                                        source_column_data_type="STRING",
                                         tags=["Customers"],
                                         title="Customer Name",
                                     ),
@@ -2481,6 +2979,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         description="A number of orders created by the customer - including all orders, even the non-delivered ones.",
                                         id="fact.customer_order_count",
                                         source_column="customer_order_count",
+                                        source_column_data_type="NUMERIC",
                                         tags=["Customers"],
                                         title="Customer order count",
                                     ),
@@ -2499,11 +2998,21 @@ with gooddata_api_client.ApiClient() as api_client:
                                             type="DATASET",
                                         ),
                                         multivalue=False,
+                                        source_column_data_types=[
+                                            "source_column_data_types_example",
+                                        ],
                                         source_columns=["customer_id"],
                                     ),
                                 ],
+                                sql=DeclarativeDatasetSql(
+                                    data_source_id="my-postgres",
+                                    statement="SELECT * FROM some_table",
+                                ),
                                 tags=["Customers"],
                                 title="Customers",
+                                workspace_data_filter_columns=[
+                                    "workspace_data_filter_columns_example",
+                                ],
                             ),
                         ],
                         date_instances=[
@@ -2540,7 +3049,8 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="timezone",
+                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        type="TIMEZONE",
                     ),
                 ],
             ),

@@ -31,12 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_attributes import JsonApiDatasetOutAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships import JsonApiDatasetOutRelationships
     from gooddata_api_client.model.json_api_dataset_out_with_links import JsonApiDatasetOutWithLinks
     from gooddata_api_client.model.json_api_fact_out_with_links import JsonApiFactOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
+    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiDatasetOutAttributes'] = JsonApiDatasetOutAttributes
     globals()['JsonApiDatasetOutRelationships'] = JsonApiDatasetOutRelationships
@@ -106,6 +108,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
         """
         lazy_import()
         return {
+            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'relationships': (JsonApiDatasetOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
             'attributes': (JsonApiDatasetOutAttributes,),  # noqa: E501
@@ -119,6 +122,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
 
 
     attribute_map = {
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
@@ -165,6 +169,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
@@ -273,6 +278,7 @@ class JsonApiDatasetOutIncludes(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
             attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501

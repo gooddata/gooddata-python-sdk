@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1174'
+          - '1414'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -83,6 +83,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: spend
               type: fact
               attributes:
@@ -94,6 +98,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: price
               type: fact
               attributes:
@@ -105,6 +113,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: quantity
               type: fact
               attributes:
@@ -116,6 +128,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/facts?page=1&size=500

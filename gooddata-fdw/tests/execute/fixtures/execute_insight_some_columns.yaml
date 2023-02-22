@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '4481'
+          - '4541'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -179,18 +179,22 @@ interactions:
                     type: metric
               facts:
                 data:
-                  - id: quantity
-                    type: fact
                   - id: price
+                    type: fact
+                  - id: quantity
                     type: fact
               labels:
                 data:
                   - id: products.category
                     type: label
-                  - id: customer_name
-                    type: label
                   - id: product_name
                     type: label
+                  - id: customer_name
+                    type: label
+            meta:
+              origin:
+                originType: NATIVE
+                originId: demo
           included:
             - id: quantity
               type: fact
@@ -447,10 +451,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: d958ec25d29a11ac62d68383c40cd5de891dda0d
+              executionResult: efa89382fcc9b6435be9b283287de6c0a55c11b5
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d958ec25d29a11ac62d68383c40cd5de891dda0d?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/efa89382fcc9b6435be9b283287de6c0a55c11b5?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -75,7 +75,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 82b856ce16e84dcd
+          traceId: e711eff9d1d43c78
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1235,12 +1235,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west
               type: workspace
               attributes:
@@ -1269,6 +1263,12 @@ interactions:
                 name: test_put_declarative_ldm
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_ldm
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace

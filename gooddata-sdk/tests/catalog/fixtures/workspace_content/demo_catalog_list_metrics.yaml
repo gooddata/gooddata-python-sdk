@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '8359'
+          - '9799'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -82,6 +82,10 @@ interactions:
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_active_customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: amount_of_orders
               type: metric
               attributes:
@@ -92,6 +96,10 @@ interactions:
                   maql: SELECT COUNT({attribute/order_id})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_orders
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: amount_of_top_customers
               type: metric
               attributes:
@@ -103,6 +111,10 @@ interactions:
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_top_customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: amount_of_valid_orders
               type: metric
               attributes:
@@ -115,6 +127,10 @@ interactions:
                     IN ("Returned", "Canceled"))
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/amount_of_valid_orders
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_spend
               type: metric
               attributes:
@@ -125,6 +141,10 @@ interactions:
                   maql: SELECT SUM({fact/spend})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_amount
               type: metric
               attributes:
@@ -135,6 +155,10 @@ interactions:
                   maql: SELECT SUM({fact/price}*{fact/quantity})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue
               type: metric
               attributes:
@@ -145,6 +169,10 @@ interactions:
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_from_top_10_customers
               type: metric
               attributes:
@@ -156,6 +184,10 @@ interactions:
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_from_top_10_percent_customers
               type: metric
               attributes:
@@ -167,6 +199,10 @@ interactions:
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_from_top_10_percent_products
               type: metric
               attributes:
@@ -178,6 +214,10 @@ interactions:
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_percent_products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_from_top_10_products
               type: metric
               attributes:
@@ -189,6 +229,10 @@ interactions:
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_from_top_10_products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_in_category
               type: metric
               attributes:
@@ -200,6 +244,10 @@ interactions:
                     ALL OTHER)
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_in_category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: percent_revenue_per_product
               type: metric
               attributes:
@@ -211,6 +259,10 @@ interactions:
                     {attribute/product_id})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue_per_product
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue
               type: metric
               attributes:
@@ -223,6 +275,10 @@ interactions:
                     IN ("Returned", "Canceled"))
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue-clothing
               type: metric
               attributes:
@@ -234,6 +290,10 @@ interactions:
                     ("Clothing")
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-clothing
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue-electronic
               type: metric
               attributes:
@@ -245,6 +305,10 @@ interactions:
                     ( "Electronics")
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-electronic
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue-home
               type: metric
               attributes:
@@ -256,6 +320,10 @@ interactions:
                     ("Home")
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-home
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue-outdoor
               type: metric
               attributes:
@@ -267,6 +335,10 @@ interactions:
                     ("Outdoor")
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue_per_customer
               type: metric
               attributes:
@@ -277,6 +349,10 @@ interactions:
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_customer
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue_per_dollar_spent
               type: metric
               attributes:
@@ -287,6 +363,10 @@ interactions:
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_per_dollar_spent
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue_top_10
               type: metric
               attributes:
@@ -297,6 +377,10 @@ interactions:
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue_top_10_percent
               type: metric
               attributes:
@@ -307,6 +391,10 @@ interactions:
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue_top_10_percent
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: total_revenue
               type: metric
               attributes:
@@ -317,6 +405,10 @@ interactions:
                   maql: SELECT {metric/revenue} BY ALL OTHER
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: total_revenue-no_filters
               type: metric
               attributes:
@@ -327,6 +419,10 @@ interactions:
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/total_revenue-no_filters
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500

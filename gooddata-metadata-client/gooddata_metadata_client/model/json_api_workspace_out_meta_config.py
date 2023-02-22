@@ -84,6 +84,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         return {
             'approximate_count_available': (bool,),  # noqa: E501
             'data_sampling_available': (bool,),  # noqa: E501
+            'show_all_values_on_dates_available': (bool,),  # noqa: E501
         }
 
     @cached_property
@@ -94,6 +95,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
     attribute_map = {
         'approximate_count_available': 'approximateCountAvailable',  # noqa: E501
         'data_sampling_available': 'dataSamplingAvailable',  # noqa: E501
+        'show_all_values_on_dates_available': 'showAllValuesOnDatesAvailable',  # noqa: E501
     }
 
     read_only_vars = {
@@ -111,6 +113,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         Keyword Args:
             approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
+            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -145,6 +148,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
 
         approximate_count_available = kwargs.get('approximate_count_available', False)
         data_sampling_available = kwargs.get('data_sampling_available', False)
+        show_all_values_on_dates_available = kwargs.get('show_all_values_on_dates_available', False)
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -176,6 +180,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
 
         self.approximate_count_available = approximate_count_available
         self.data_sampling_available = data_sampling_available
+        self.show_all_values_on_dates_available = show_all_values_on_dates_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -204,6 +209,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         Keyword Args:
             approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
+            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -238,6 +244,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
 
         approximate_count_available = kwargs.get('approximate_count_available', False)
         data_sampling_available = kwargs.get('data_sampling_available', False)
+        show_all_values_on_dates_available = kwargs.get('show_all_values_on_dates_available', False)
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -267,6 +274,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
 
         self.approximate_count_available = approximate_count_available
         self.data_sampling_available = data_sampling_available
+        self.show_all_values_on_dates_available = show_all_values_on_dates_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

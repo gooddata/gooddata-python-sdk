@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -367,7 +367,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '4809'
+          - '4921'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -545,6 +545,8 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
+                workspaceDataFilterColumns:
+                  - geo__state__location
               - attributes:
                   - description: Order id
                     id: order_id
@@ -617,6 +619,9 @@ interactions:
                 tags:
                   - Order lines
                 title: Order lines
+                workspaceDataFilterColumns:
+                  - wdf__region
+                  - wdf__state
               - attributes:
                   - description: Product id
                     id: product_id

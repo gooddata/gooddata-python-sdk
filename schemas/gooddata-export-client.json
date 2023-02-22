@@ -52,6 +52,17 @@
         },
         "type": "object"
       },
+      "ExportResponse": {
+        "properties": {
+          "exportResult": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "exportResult"
+        ],
+        "type": "object"
+      },
       "Settings": {
         "description": "XLSX specific settings.",
         "properties": {
@@ -107,17 +118,6 @@
           "format"
         ],
         "type": "object"
-      },
-      "TabularExportResult": {
-        "properties": {
-          "exportResult": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "exportResult"
-        ],
-        "type": "object"
       }
     }
   },
@@ -156,7 +156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TabularExportResult"
+                  "$ref": "#/components/schemas/ExportResponse"
                 }
               }
             },
@@ -170,7 +170,7 @@
         "x-gdc-security-info": {
           "description": "Permissions required to execute tabular export.",
           "permissions": [
-            "EXPORT"
+            "EXPORT_TABULAR"
           ]
         }
       }
@@ -240,7 +240,7 @@
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
-            "EXPORT"
+            "EXPORT_TABULAR"
           ]
         }
       }

@@ -1,4 +1,5 @@
 #!/bin/sh
+# (C) 2023 GoodData Corporation
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 htmltest_version=0.14.0

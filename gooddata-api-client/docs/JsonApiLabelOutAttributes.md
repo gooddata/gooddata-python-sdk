@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **description** | **str** |  | [optional] 
 **primary** | **bool** |  | [optional] 
 **source_column** | **str** |  | [optional] 
+**source_column_data_type** | **str** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 
 **value_type** | **str** |  | [optional] 

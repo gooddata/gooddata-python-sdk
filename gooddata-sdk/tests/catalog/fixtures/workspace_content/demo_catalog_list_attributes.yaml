@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -26,7 +26,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '8675'
+          - '10475'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -83,6 +83,10 @@ interactions:
                 sourceColumn: campaign_channel_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_channels.category
               type: attribute
               attributes:
@@ -94,6 +98,10 @@ interactions:
                 sourceColumn: category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: type
               type: attribute
               attributes:
@@ -105,6 +113,10 @@ interactions:
                 sourceColumn: type
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_id
               type: attribute
               attributes:
@@ -116,6 +128,10 @@ interactions:
                 sourceColumn: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: campaign_name
               type: attribute
               attributes:
@@ -127,6 +143,10 @@ interactions:
                 sourceColumn: campaign_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customer_id
               type: attribute
               attributes:
@@ -138,6 +158,10 @@ interactions:
                 sourceColumn: customer_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customer_name
               type: attribute
               attributes:
@@ -149,6 +173,10 @@ interactions:
                 sourceColumn: customer_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: region
               type: attribute
               attributes:
@@ -160,6 +188,10 @@ interactions:
                 sourceColumn: region
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: state
               type: attribute
               attributes:
@@ -171,6 +203,10 @@ interactions:
                 sourceColumn: state
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_id
               type: attribute
               attributes:
@@ -182,6 +218,10 @@ interactions:
                 sourceColumn: order_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_line_id
               type: attribute
               attributes:
@@ -193,6 +233,10 @@ interactions:
                 sourceColumn: order_line_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_status
               type: attribute
               attributes:
@@ -204,6 +248,10 @@ interactions:
                 sourceColumn: order_status
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: product_id
               type: attribute
               attributes:
@@ -215,6 +263,10 @@ interactions:
                 sourceColumn: product_id
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: product_name
               type: attribute
               attributes:
@@ -226,6 +278,10 @@ interactions:
                 sourceColumn: product_name
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: products.category
               type: attribute
               attributes:
@@ -237,6 +293,10 @@ interactions:
                 sourceColumn: category
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.minute
               type: attribute
               attributes:
@@ -248,6 +308,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.hour
               type: attribute
               attributes:
@@ -259,6 +323,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.day
               type: attribute
               attributes:
@@ -270,6 +338,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.week
               type: attribute
               attributes:
@@ -281,6 +353,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.month
               type: attribute
               attributes:
@@ -292,6 +368,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.quarter
               type: attribute
               attributes:
@@ -303,6 +383,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.year
               type: attribute
               attributes:
@@ -314,6 +398,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.minuteOfHour
               type: attribute
               attributes:
@@ -325,6 +413,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.hourOfDay
               type: attribute
               attributes:
@@ -336,6 +428,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfWeek
               type: attribute
               attributes:
@@ -347,6 +443,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfMonth
               type: attribute
               attributes:
@@ -358,6 +458,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.dayOfYear
               type: attribute
               attributes:
@@ -369,6 +473,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.weekOfYear
               type: attribute
               attributes:
@@ -380,6 +488,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.monthOfYear
               type: attribute
               attributes:
@@ -391,6 +503,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: date.quarterOfYear
               type: attribute
               attributes:
@@ -402,6 +518,10 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
           links:
             self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?page=0&size=500
             next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?page=1&size=500
