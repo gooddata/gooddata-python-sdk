@@ -320,14 +320,18 @@ class InsightAttribute:
     def label(self) -> dict[str, Any]:
         return self._a["displayForm"]
 
+    @property
+    def show_all_values(self) -> Optional[bool]:
+        return self._a.get("showAllValues")
+
     def as_computable(self) -> Attribute:
-        return Attribute(local_id=self.local_id, label=_ref_extract(self.label))
+        return Attribute(local_id=self.local_id, label=_ref_extract(self.label), show_all_values=self.show_all_values)
 
     def __str__(self) -> str:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"attribute(local_id={self.local_id})"
+        return f"attribute(local_id={self.local_id}, show_all_values={self.show_all_values})"
 
 
 class InsightFilter:
