@@ -66,3 +66,35 @@ def test_table_with_attribute_metric_and_filter(test_config):
 
     values = list((result["attr1"], result["metric1"]) for result in table.read_all())
     assert len(values) == 2
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "table_with_attribute_show_all_values.yaml"))
+def test_table_with_attribute_show_all_values(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    # get number of months for which demo model contains data
+    dates_table = sdk.tables.for_items(
+        test_config["workspace"],
+        items=[
+            Attribute(local_id="attr1", label="date.month"),
+            SimpleMetric(local_id="metric1", item=ObjId(type="fact", id="quantity")),
+        ],
+    )
+    date_values_count = len([result["attr1"] for result in dates_table.read_all()])
+
+    table_counts = dict()
+    for show_all_values in [True, False]:
+        table = sdk.tables.for_items(
+            test_config["workspace"],
+            items=[
+                Attribute(local_id="attr1", label="date.month", show_all_values=show_all_values),
+                SimpleMetric(local_id="metric1", item=ObjId(type="fact", id="quantity")),
+            ],
+            filters=[PositiveAttributeFilter(label=ObjId(type="label", id="order_status"), values=["Canceled"])],
+        )
+        table_counts[show_all_values] = len([result["attr1"] for result in table.read_all()])
+
+    # table result with show_all_values=True has all dates (even if value is missing due to filtering)
+    # only values missing at the beginning and end of range ar filtered out
+    assert table_counts[True] <= date_values_count
+    # there are filtered dates when show_all_values is False
+    assert table_counts[True] > table_counts[False]

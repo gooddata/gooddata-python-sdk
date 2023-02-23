@@ -3,14 +3,22 @@ from __future__ import annotations
 
 import json
 import os
+from typing import List, Optional
 
 import pytest
 
 from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.execution import compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, PositiveAttributeFilter
-from gooddata_sdk.compute.model.metric import PopDate, PopDateDataset, PopDateMetric, PopDatesetMetric, SimpleMetric
+from gooddata_sdk.compute.model.metric import (
+    Metric,
+    PopDate,
+    PopDateDataset,
+    PopDateMetric,
+    PopDatesetMetric,
+    SimpleMetric,
+)
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -59,11 +67,29 @@ test_inputs = [
         [_simple_metric],
         [_positive_filter],
     ],
+    [
+        "attribute showAllValues True",
+        [Attribute(local_id="attribute_local_id", label="label.id", show_all_values=True)],
+        None,
+        None,
+    ],
+    [
+        "attribute showAllValues False",
+        [Attribute(local_id="attribute_local_id", label="label.id", show_all_values=False)],
+        None,
+        None,
+    ],
 ]
 
 
 @pytest.mark.parametrize("scenario,attributes,metrics,filters", test_inputs)
-def test_attribute_filters_to_api_model(scenario, attributes, metrics, filters, snapshot):
+def test_attribute_filters_to_api_model(
+    scenario: str,
+    attributes: Optional[List[Attribute]],
+    metrics: Optional[List[Metric]],
+    filters: Optional[List[Filter]],
+    snapshot,
+):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "afm")

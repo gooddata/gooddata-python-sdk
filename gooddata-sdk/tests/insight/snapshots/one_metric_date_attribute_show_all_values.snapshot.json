@@ -1,0 +1,46 @@
+{
+    "attributes": [
+        {
+            "label": {
+                "identifier": {
+                    "id": "date.month",
+                    "type": "label"
+                }
+            },
+            "local_identifier": "9675acbab3e3413593134d188798549b",
+            "show_all_values": true
+        }
+    ],
+    "filters": [
+        {
+            "absolute_date_filter": {
+                "_from": "2019-01-01 00:00",
+                "dataset": {
+                    "identifier": {
+                        "id": "date",
+                        "type": "dataset"
+                    }
+                },
+                "to": "2019-12-31 23:59"
+            }
+        }
+    ],
+    "measures": [
+        {
+            "definition": {
+                "measure": {
+                    "aggregation": "SUM",
+                    "compute_ratio": false,
+                    "filters": [],
+                    "item": {
+                        "identifier": {
+                            "id": "quantity",
+                            "type": "fact"
+                        }
+                    }
+                }
+            },
+            "local_identifier": "bfa7ec74e46d40e9a580fc6ffb9d83a1"
+        }
+    ]
+}

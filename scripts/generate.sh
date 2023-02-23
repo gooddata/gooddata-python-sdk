@@ -1,4 +1,5 @@
 #!/bin/bash
+# (C) 2023 GoodData Corporation
 set -e
 shopt -s extglob
 
