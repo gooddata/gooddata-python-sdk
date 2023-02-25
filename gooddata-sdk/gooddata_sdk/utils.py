@@ -8,7 +8,7 @@ import typing
 from collections.abc import KeysView
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, Dict, NamedTuple, Union, cast
+from typing import Any, Callable, Dict, NamedTuple, Tuple, Union, cast
 
 import yaml
 
@@ -221,3 +221,17 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
         raise ValueError(f"Profiles file does not contain profile {profile}.")
     mandatory_profile_content_check(profile, content.get(profile).keys())
     return content.get(profile)
+
+
+def good_pandas_profile_content(
+    profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """
+    This is workaround for GoodPandas. We should only use profile_content in the future.
+    For that we need to unify GoodPandas and GoodDataSdk interface.
+    """
+    content = profile_content(profile, profiles_path)
+    custom_headers = content["custom_headers"]
+    del content["extra_user_agent"]
+    del content["custom_headers"]
+    return content, custom_headers
