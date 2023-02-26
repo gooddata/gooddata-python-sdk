@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -179,9 +181,9 @@ interactions:
                     type: metric
               facts:
                 data:
-                  - id: price
-                    type: fact
                   - id: quantity
+                    type: fact
+                  - id: price
                     type: fact
               labels:
                 data:
@@ -343,6 +345,8 @@ interactions:
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/json
         X-GDC-VALIDATE-RELATIONS:
@@ -362,8 +366,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '1132'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -396,6 +398,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -405,6 +409,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '1132'
       body:
         string:
           executionResponse:
@@ -451,14 +457,16 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: efa89382fcc9b6435be9b283287de6c0a55c11b5
+              executionResult: 5b3245b8d984e9d8704c8875a255c7c79b1cacdf
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/efa89382fcc9b6435be9b283287de6c0a55c11b5?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5b3245b8d984e9d8704c8875a255c7c79b1cacdf?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -476,8 +484,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '4052'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -510,6 +516,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -519,6 +527,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '4052'
       body:
         string:
           data:

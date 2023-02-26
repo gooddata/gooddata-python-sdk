@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -77,6 +79,11 @@ interactions:
               attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+            - id: demoGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
               type: userGroup
               attributes: {}
@@ -87,11 +94,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: visitorsGroup
               type: userGroup
               attributes: {}
@@ -123,6 +125,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -189,7 +193,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: e493dd269112855b
+          traceId: 28f6cc1db9a1d3c9
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups
@@ -205,6 +209,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -282,6 +288,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -368,6 +376,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -436,6 +446,11 @@ interactions:
               attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+            - id: demoGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
               type: userGroup
               attributes: {}
@@ -446,11 +461,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: visitorsGroup
               type: userGroup
               attributes: {}
@@ -490,6 +500,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -557,6 +569,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -625,6 +639,11 @@ interactions:
               attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+            - id: demoGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
               type: userGroup
               attributes: {}
@@ -635,11 +654,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: visitorsGroup
               type: userGroup
               attributes: {}

@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -75,6 +75,8 @@ interactions:
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/json
         X-GDC-VALIDATE-RELATIONS:
@@ -94,8 +96,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '1097'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -129,6 +129,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -138,6 +140,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '1097'
       body:
         string:
           executionResponse:
@@ -194,14 +198,16 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 17d5948b292fdbd56e000f1f6db7870525af60d5
+              executionResult: b62a0762dccbf114067188adf14815993bbdf949
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/17d5948b292fdbd56e000f1f6db7870525af60d5/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b62a0762dccbf114067188adf14815993bbdf949/metadata
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -219,8 +225,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '2407'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -253,6 +257,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -262,6 +268,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '2407'
       body:
         string:
           afm:
@@ -360,7 +368,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 17d5948b292fdbd56e000f1f6db7870525af60d5
+              executionResult: b62a0762dccbf114067188adf14815993bbdf949
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -395,11 +403,13 @@ interactions:
           resultSize: 11840
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/17d5948b292fdbd56e000f1f6db7870525af60d5?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b62a0762dccbf114067188adf14815993bbdf949?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -417,8 +427,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '23291'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -451,6 +459,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -460,6 +470,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '23291'
       body:
         string:
           data:
@@ -1849,11 +1861,13 @@ interactions:
               - 4
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/17d5948b292fdbd56e000f1f6db7870525af60d5/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b62a0762dccbf114067188adf14815993bbdf949/metadata
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -1871,8 +1885,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '2407'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1905,6 +1917,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1914,6 +1928,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '2407'
       body:
         string:
           afm:
@@ -2012,7 +2028,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 17d5948b292fdbd56e000f1f6db7870525af60d5
+              executionResult: b62a0762dccbf114067188adf14815993bbdf949
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -2047,11 +2063,13 @@ interactions:
           resultSize: 11840
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/17d5948b292fdbd56e000f1f6db7870525af60d5?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/b62a0762dccbf114067188adf14815993bbdf949?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -2069,8 +2087,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '23291'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -2103,6 +2119,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2112,6 +2130,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '23291'
       body:
         string:
           data:

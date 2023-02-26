@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -72,6 +74,12 @@ interactions:
       body:
         string:
           data:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west
               type: workspace
               attributes:
@@ -94,12 +102,6 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace

@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -97,6 +99,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -160,6 +164,12 @@ interactions:
       body:
         string:
           data:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west
               type: workspace
               attributes:
@@ -182,12 +192,6 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace
@@ -211,6 +215,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -309,6 +315,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -387,6 +395,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -450,17 +460,12 @@ interactions:
       body:
         string:
           data:
-            - id: demo_west
+            - id: demo
               type: workspace
               attributes:
-                name: Test
-              relationships:
-                parent:
-                  data:
-                    id: demo
-                    type: workspace
+                name: Demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west_california
               type: workspace
               attributes:
@@ -472,12 +477,17 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: demo
+            - id: demo_west
               type: workspace
               attributes:
-                name: Demo
+                name: Test
+              relationships:
+                parent:
+                  data:
+                    id: demo
+                    type: workspace
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
           included:
             - id: demo
               type: workspace
@@ -501,6 +511,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -589,6 +601,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -687,6 +701,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -765,6 +781,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -828,17 +846,12 @@ interactions:
       body:
         string:
           data:
-            - id: demo_west
+            - id: demo
               type: workspace
               attributes:
-                name: Demo West
-              relationships:
-                parent:
-                  data:
-                    id: demo
-                    type: workspace
+                name: Demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west_california
               type: workspace
               attributes:
@@ -850,12 +863,17 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: demo
+            - id: demo_west
               type: workspace
               attributes:
-                name: Demo
+                name: Demo West
+              relationships:
+                parent:
+                  data:
+                    id: demo
+                    type: workspace
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west
           included:
             - id: demo
               type: workspace
@@ -879,6 +897,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:

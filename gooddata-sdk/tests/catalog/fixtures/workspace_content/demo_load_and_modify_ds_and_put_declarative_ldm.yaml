@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -75,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d86e8c0202e22fc9
+          traceId: e621627ea2667901
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -88,6 +90,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -166,6 +170,8 @@ interactions:
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -183,8 +189,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '4826'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -217,6 +221,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -226,6 +232,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '4826'
       body:
         string:
           ldm:
@@ -502,6 +510,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -851,6 +861,8 @@ interactions:
               tags:
                 - Date
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/json
         X-GDC-VALIDATE-RELATIONS:
@@ -920,6 +932,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -1269,6 +1283,8 @@ interactions:
               tags:
                 - Date
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/json
         X-GDC-VALIDATE-RELATIONS:
@@ -1338,6 +1354,8 @@ interactions:
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -1355,8 +1373,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '4826'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -1389,6 +1405,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -1398,6 +1416,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '4826'
       body:
         string:
           ldm:
@@ -1674,6 +1694,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -1737,6 +1759,12 @@ interactions:
       body:
         string:
           data:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west
               type: workspace
               attributes:
@@ -1765,12 +1793,6 @@ interactions:
                 name: demo_testing
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace
@@ -1792,6 +1814,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_testing
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:

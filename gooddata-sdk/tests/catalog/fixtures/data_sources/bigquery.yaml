@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -75,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ba8fb8792ae8c7c9
+          traceId: 24e73a046534525d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -97,6 +99,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -190,6 +194,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -279,6 +285,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/dataSources/test
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
