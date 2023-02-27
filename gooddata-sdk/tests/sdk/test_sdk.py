@@ -1,5 +1,8 @@
 # (C) 2022 GoodData Corporation
+from __future__ import annotations
+
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -14,15 +17,19 @@ def load_profiles_content() -> dict:
         return yaml.safe_load(f)
 
 
+def are_same_check(profile_data: dict[str, Any], sdk: GoodDataSdk):
+    assert profile_data["host"] == sdk.client._hostname
+    assert profile_data["token"] == sdk.client._token
+    assert profile_data["custom_headers"] == sdk.client._custom_headers
+    assert profile_data["extra_user_agent"] in sdk.client._api_client.user_agent
+
+
 def test_default_profile():
     profile = "default"
     sdk = GoodDataSdk.create_from_profile(profiles_path=PROFILES_PATH)
     data = load_profiles_content()
 
-    assert data[profile]["host"] == sdk.client._hostname
-    assert data[profile]["token"] == sdk.client._token
-    assert data[profile]["custom_headers"] == sdk.client._custom_headers
-    assert data[profile]["extra_user_agent"] in sdk.client._api_client.user_agent
+    are_same_check(data[profile], sdk)
 
 
 def test_other_profile():
@@ -30,10 +37,7 @@ def test_other_profile():
     sdk = GoodDataSdk.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
     data = load_profiles_content()
 
-    assert data[profile]["host"] == sdk.client._hostname
-    assert data[profile]["token"] == sdk.client._token
-    assert data[profile]["custom_headers"] == sdk.client._custom_headers
-    assert data[profile]["extra_user_agent"] in sdk.client._api_client.user_agent
+    are_same_check(data[profile], sdk)
 
 
 def test_wrong_profile():
