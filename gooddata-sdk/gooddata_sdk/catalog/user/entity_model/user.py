@@ -52,8 +52,32 @@ class CatalogUser(Base):
         return cls(id=user_id, attributes=attributes, relationships=relationships)
 
     @property
-    def get_user_groups(self) -> List[str]:
-        return self.relationships.get_user_groups if self.relationships is not None else []
+    def user_groups(self) -> List[CatalogUserGroup]:
+        if self.relationships and self.relationships.user_groups:
+            return self.relationships.user_groups.data
+        return []
+
+    def add_user_group(self, user_group: CatalogUserGroup) -> None:
+        if not self.relationships:
+            self.relationships = CatalogUserRelationships(user_groups=CatalogUserGroupsData(data=[user_group]))
+        else:
+            self.relationships.add_user_groups([user_group])
+
+    def add_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
+        if not self.relationships:
+            self.relationships = CatalogUserRelationships(user_groups=CatalogUserGroupsData(data=user_groups))
+        else:
+            self.relationships.add_user_groups(user_groups)
+
+    def remove_user_groups(self) -> None:
+        if self.relationships:
+            self.relationships.user_groups = None
+
+    def replace_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
+        if not self.relationships:
+            self.relationships = CatalogUserRelationships(user_groups=CatalogUserGroupsData(data=user_groups))
+        else:
+            self.relationships.replace_user_groups(user_groups)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -65,9 +89,17 @@ class CatalogUserAttributes(Base):
 class CatalogUserRelationships(Base):
     user_groups: Optional[CatalogUserGroupsData] = None
 
-    @property
-    def get_user_groups(self) -> List[str]:
-        return self.user_groups.get_user_groups if self.user_groups is not None else []
+    def add_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
+        if not self.user_groups:
+            self.user_groups = CatalogUserGroupsData(data=user_groups)
+        else:
+            self.user_groups.data.extend(user_groups)
+
+    def replace_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
+        if not self.user_groups:
+            self.user_groups = CatalogUserGroupsData(data=user_groups)
+        else:
+            self.user_groups.data = user_groups
 
     @classmethod
     def create_user_relationships(cls, user_group_ids: Optional[List[str]]) -> CatalogUserRelationships:
@@ -81,8 +113,4 @@ class CatalogUserRelationships(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroupsData(Base):
-    data: Optional[List[CatalogUserGroup]] = None
-
-    @property
-    def get_user_groups(self) -> List[str]:
-        return [user_group.id for user_group in self.data] if self.data is not None else []
+    data: List[CatalogUserGroup] = attr.field(factory=list)

@@ -41,7 +41,7 @@ def test_get_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user = sdk.catalog_user.get_user(test_config["test_user"])
     assert user.id == test_config["test_user"]
-    assert user.get_user_groups == [test_config["test_user_group"]]
+    assert [i.id for i in user.user_groups] == [test_config["test_user_group"]]
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "create_delete_user.yaml"))
@@ -58,7 +58,7 @@ def test_create_delete_user(test_config):
         user = sdk.catalog_user.get_user(user_id)
         assert len(sdk.catalog_user.list_users()) == 4
         assert user.id == user_id
-        assert user.get_user_groups == user_group_ids
+        assert [i.id for i in user.user_groups] == user_group_ids
         assert user.attributes.authentication_id == authentication_id
     finally:
         sdk.catalog_user.delete_user(user_id)
@@ -77,8 +77,8 @@ def test_update_user(test_config):
         sdk.catalog_user.create_or_update_user(user_e)
         updated_user = sdk.catalog_user.get_user(user_id)
         assert updated_user.attributes.authentication_id == new_auth_id
-        assert len(updated_user.get_user_groups) == len(user_group_ids)
-        assert set(updated_user.get_user_groups) == set(user_group_ids)
+        assert len(updated_user.user_groups) == len(user_group_ids)
+        assert set([i.id for i in updated_user.user_groups]) == set(user_group_ids)
 
     finally:
         sdk.catalog_user.delete_user(user_id)
@@ -365,6 +365,97 @@ def test_load_and_put_declarative_users_user_groups(test_config):
         _assert_users_user_groups_default(users_user_groups_o)
     finally:
         sdk.catalog_user.put_declarative_users_user_groups(users_user_groups_e)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_user_add_user_group.yaml"))
+def test_user_add_user_group(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_1 = sdk.catalog_user.get_user(test_config["test_user"])
+    user_2 = CatalogUser(id="x")
+
+    user_group = CatalogUserGroup(id="xyz")
+
+    # existing user with user groups
+    assert user_1.id == test_config["test_user"]
+    assert [i.id for i in user_1.user_groups] == [test_config["test_user_group"]]
+
+    user_1.add_user_group(user_group)
+    expected_1 = [test_config["test_user_group"]] + [user_group.id]
+    assert [i.id for i in user_1.user_groups] == expected_1
+
+    # base user without user groups
+    assert user_2.user_groups == []
+
+    user_2.add_user_group(user_group)
+    assert [i.id for i in user_2.user_groups] == [user_group.id]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_user_add_user_groups.yaml"))
+def test_user_add_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_1 = sdk.catalog_user.get_user(test_config["test_user"])
+    user_2 = CatalogUser(id="x")
+
+    user_group_1 = CatalogUserGroup(id="abc")
+    user_group_2 = CatalogUserGroup(id="xyz")
+    user_groups = [user_group_1, user_group_2]
+    user_groups_id = [user_group_1.id, user_group_2.id]
+
+    # existing user with user groups
+    assert user_1.id == test_config["test_user"]
+    assert [i.id for i in user_1.user_groups] == [test_config["test_user_group"]]
+
+    user_1.add_user_groups(user_groups)
+    expected = [test_config["test_user_group"]] + user_groups_id
+    assert [i.id for i in user_1.user_groups] == expected
+
+    # base user without user groups
+    assert user_2.user_groups == []
+
+    user_2.add_user_groups(user_groups)
+    assert [i.id for i in user_2.user_groups] == user_groups_id
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_user_remove_user_groups.yaml"))
+def test_user_remove_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_1 = sdk.catalog_user.get_user(test_config["test_user"])
+    user_2 = CatalogUser(id="x")
+
+    # existing user with user groups
+    assert user_1.id == test_config["test_user"]
+    assert [i.id for i in user_1.user_groups] == [test_config["test_user_group"]]
+
+    user_1.remove_user_groups()
+
+    assert user_1.user_groups == []
+
+    # base user without user groups
+    user_2.remove_user_groups()
+
+    assert user_1.user_groups == []
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_user_replace_user_groups.yaml"))
+def test_user_replace_user_groups(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_1 = sdk.catalog_user.get_user(test_config["test_user"])
+    user_2 = CatalogUser(id="x")
+
+    user_group_1 = CatalogUserGroup(id="abc")
+    user_group_2 = CatalogUserGroup(id="xyz")
+    user_groups = [user_group_1, user_group_2]
+
+    # existing user with user groups
+    assert user_1.id == test_config["test_user"]
+    assert [i.id for i in user_1.user_groups] == [test_config["test_user_group"]]
+
+    user_1.replace_user_groups(user_groups)
+    assert user_1.user_groups == user_groups
+
+    # base user without user groups
+    user_2.replace_user_groups(user_groups)
+    assert user_2.user_groups == user_groups
 
 
 # Help functions
