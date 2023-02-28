@@ -16,7 +16,7 @@ endif
 
 
 # linting and formatting tools have configuration in parent dir to support pre-commit - use it
-# flake8 use parent directory to have the same per-file-ignores config parameter for parent and child dirs
+# ruff use parent directory to have the same per-file-ignores config parameter for parent and child dirs
 CURR_DIR_BASE_NAME = $(notdir $(CURDIR))
 
 .PHONY: all
@@ -25,7 +25,7 @@ all:
 
 .PHONY: lint
 lint:
-	(cd ..; flake8 $(CURR_DIR_BASE_NAME))
+	(cd ..; ruff $(CURR_DIR_BASE_NAME))
 
 .PHONY: format
 format:
