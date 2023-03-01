@@ -8,6 +8,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -72,20 +74,10 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRjMzhlYjkyNC05OWYyLTRhNTYtOTVmMi01YjFkNTA4ODE1YmESBWxvY2Fs
+                authenticationId: CiQ0NGQwYTMzZS1lNTNhLTQ4YzctYjIwZS00NjQ3ZWFlZTg4OTMSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -96,7 +88,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRlNDAyODExZi0wYTQ0LTQwZWQtYTg3NC01M2EwNGVmZGYwMzcSBWxvY2Fs
+                authenticationId: CiQ1MjI0OWQwYi1lYmI4LTQ3OWUtOGFiZi1jNzEyNmQzNWUwZTcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -104,6 +96,16 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
+            - id: admin
+              type: user
+              attributes: {}
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
           included:
             - id: adminGroup
               type: userGroup
@@ -125,6 +127,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -191,7 +195,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ac2b01323e69815c
+          traceId: 8524dc2ea46284e6
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -209,6 +213,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -287,6 +293,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -374,6 +382,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -437,20 +447,10 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRjMzhlYjkyNC05OWYyLTRhNTYtOTVmMi01YjFkNTA4ODE1YmESBWxvY2Fs
+                authenticationId: CiQ0NGQwYTMzZS1lNTNhLTQ4YzctYjIwZS00NjQ3ZWFlZTg4OTMSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -461,7 +461,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRlNDAyODExZi0wYTQ0LTQwZWQtYTg3NC01M2EwNGVmZGYwMzcSBWxvY2Fs
+                authenticationId: CiQ1MjI0OWQwYi1lYmI4LTQ3OWUtOGFiZi1jNzEyNmQzNWUwZTcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -469,6 +469,16 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
+            - id: admin
+              type: user
+              attributes: {}
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
             - id: newUser
               type: user
               attributes:
@@ -499,6 +509,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/users/newUser
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -566,6 +578,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -629,20 +643,10 @@ interactions:
       body:
         string:
           data:
-            - id: admin
-              type: user
-              attributes: {}
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRjMzhlYjkyNC05OWYyLTRhNTYtOTVmMi01YjFkNTA4ODE1YmESBWxvY2Fs
+                authenticationId: CiQ0NGQwYTMzZS1lNTNhLTQ4YzctYjIwZS00NjQ3ZWFlZTg4OTMSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -653,7 +657,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRlNDAyODExZi0wYTQ0LTQwZWQtYTg3NC01M2EwNGVmZGYwMzcSBWxvY2Fs
+                authenticationId: CiQ1MjI0OWQwYi1lYmI4LTQ3OWUtOGFiZi1jNzEyNmQzNWUwZTcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -661,6 +665,16 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/demo2
+            - id: admin
+              type: user
+              attributes: {}
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
           included:
             - id: adminGroup
               type: userGroup

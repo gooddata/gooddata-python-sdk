@@ -6,6 +6,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -74,6 +76,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -142,7 +146,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 3bf15725-a47f-4cdc-a519-aa670eb2637b
+              oauthClientId: cb88cb2a-fa2b-42d9-961e-ac28b519e85e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -150,6 +154,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -217,6 +223,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -285,7 +293,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 3bf15725-a47f-4cdc-a519-aa670eb2637b
+              oauthClientId: cb88cb2a-fa2b-42d9-961e-ac28b519e85e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -304,6 +312,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -383,6 +393,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -450,6 +462,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -527,6 +541,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -594,6 +610,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -679,6 +697,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
         X-GDC-VALIDATE-RELATIONS:
@@ -749,7 +769,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
+              oauthClientId: 69e6b203-91b2-4683-b654-3676da2f364e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -757,6 +777,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/organization
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -824,6 +846,8 @@ interactions:
       uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -892,6 +916,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 88e8690d-72a9-406a-a5bb-b7b43a0ca771
+              oauthClientId: 69e6b203-91b2-4683-b654-3676da2f364e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

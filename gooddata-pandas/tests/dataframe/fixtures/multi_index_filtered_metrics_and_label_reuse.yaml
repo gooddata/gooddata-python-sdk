@@ -1,4 +1,4 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -57,6 +57,8 @@ interactions:
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         Content-Type:
           - application/json
         X-GDC-VALIDATE-RELATIONS:
@@ -76,8 +78,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '984'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -111,6 +111,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -120,6 +122,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '984'
       body:
         string:
           executionResponse:
@@ -164,7 +168,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: 1efbc120b18ac2bbaab65e28acbfc0abd1f6453c
+              executionResult: 6cd1fe1615d557688618d3311b7636f21c761dc4
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
@@ -172,6 +176,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -407,9 +413,9 @@ interactions:
               relationships:
                 labels:
                   data:
-                    - id: state
-                      type: label
                     - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
@@ -1204,6 +1210,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -1267,39 +1275,6 @@ interactions:
       body:
         string:
           data:
-            - id: customers
-              type: dataset
-              attributes:
-                title: Customers
-                description: Customers
-                tags:
-                  - Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:customers
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: region
-                      type: attribute
-                    - id: customer_name
-                      type: attribute
-                    - id: customer_id
-                      type: attribute
-                    - id: state
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: order_lines
               type: dataset
               attributes:
@@ -1312,14 +1287,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
                       id: products
                       type: dataset
                     multivalue: false
@@ -1328,11 +1295,11 @@ interactions:
                     sourceColumnDataTypes:
                       - ''
                   - identifier:
-                      id: date
+                      id: campaigns
                       type: dataset
                     multivalue: false
                     sourceColumns:
-                      - date
+                      - campaign_id
                     sourceColumnDataTypes:
                       - ''
                   - identifier:
@@ -1341,6 +1308,14 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - customer_id
+                    sourceColumnDataTypes:
+                      - ''
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - date
                     sourceColumnDataTypes:
                       - ''
                 dataSourceTableId: demo-test-ds:order_lines
@@ -1352,9 +1327,9 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: order_id
-                      type: attribute
                     - id: order_status
+                      type: attribute
+                    - id: order_id
                       type: attribute
                     - id: order_line_id
                       type: attribute
@@ -1366,88 +1341,6 @@ interactions:
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: products
-              type: dataset
-              attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:products
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: products.category
-                      type: attribute
-                    - id: product_id
-                      type: attribute
-                    - id: product_name
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date
-              type: dataset
-              attributes:
-                title: Date
-                description: ''
-                tags:
-                  - Date
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: DATE
-              relationships:
-                attributes:
-                  data:
-                    - id: date.minute
-                      type: attribute
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.month
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.dayOfWeek
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
               meta:
                 origin:
                   originType: NATIVE
@@ -1488,9 +1381,9 @@ interactions:
                       type: attribute
                 facts:
                   data:
-                    - id: budget
-                      type: fact
                     - id: spend
+                      type: fact
+                    - id: budget
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
@@ -1523,6 +1416,121 @@ interactions:
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date
+              type: dataset
+              attributes:
+                title: Date
+                description: ''
+                tags:
+                  - Date
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: DATE
+              relationships:
+                attributes:
+                  data:
+                    - id: date.quarter
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.minute
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: products
+              type: dataset
+              attributes:
+                title: Products
+                description: Products
+                tags:
+                  - Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:products
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: products.category
+                      type: attribute
+                    - id: product_id
+                      type: attribute
+                    - id: product_name
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: customers
+              type: dataset
+              attributes:
+                title: Customers
+                description: Customers
+                tags:
+                  - Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:customers
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: region
+                      type: attribute
+                    - id: customer_name
+                      type: attribute
+                    - id: customer_id
+                      type: attribute
+                    - id: state
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
               meta:
                 origin:
                   originType: NATIVE
@@ -1878,6 +1886,8 @@ interactions:
       headers:
         Accept:
           - application/vnd.gooddata.api+json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -2297,11 +2307,13 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/1efbc120b18ac2bbaab65e28acbfc0abd1f6453c?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6cd1fe1615d557688618d3311b7636f21c761dc4?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:
           - application/json
+        Accept-Encoding:
+          - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -2319,8 +2331,6 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
-        Content-Length:
-          - '923'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -2353,6 +2363,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -2362,6 +2374,8 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '923'
       body:
         string:
           data:

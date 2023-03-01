@@ -20,6 +20,7 @@ def get_vcr() -> vcr.VCR:
         match_on=VCR_MATCH_ON,
         before_record_request=custom_before_request,
         before_record_response=custom_before_response,
+        decode_compressed_response=True,
     )
 
     gd_vcr.register_serializer("custom", CustomSerializerYaml())
