@@ -181,17 +181,17 @@ interactions:
                     type: metric
               facts:
                 data:
-                  - id: quantity
-                    type: fact
                   - id: price
+                    type: fact
+                  - id: quantity
                     type: fact
               labels:
                 data:
-                  - id: products.category
+                  - id: customer_name
                     type: label
                   - id: product_name
                     type: label
-                  - id: customer_name
+                  - id: products.category
                     type: label
             meta:
               origin:
@@ -457,10 +457,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 5b3245b8d984e9d8704c8875a255c7c79b1cacdf
+              executionResult: c30a9d39ff592c98e80f9b04cd752ca11318ba3b
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5b3245b8d984e9d8704c8875a255c7c79b1cacdf?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/c30a9d39ff592c98e80f9b04cd752ca11318ba3b?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

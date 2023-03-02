@@ -72,7 +72,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '603'
+          - '448'
       body:
         string:
           workspaceDataFilters:
@@ -96,14 +96,7 @@ interactions:
               workspace:
                 id: demo_west
                 type: workspace
-              workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
-                  title: Region West California
-                  workspace:
-                    id: demo_west_california
-                    type: workspace
+              workspaceDataFilterSettings: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
@@ -392,7 +385,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 69e6b203-91b2-4683-b654-3676da2f364e
+              oauthClientId: 82ad8224-7ff8-44fa-bc0c-0b660f074fd3
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:

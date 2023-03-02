@@ -92,13 +92,13 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0NGQwYTMzZS1lNTNhLTQ4YzctYjIwZS00NjQ3ZWFlZTg4OTMSBWxvY2Fs
+            - authId: CiRiZmEzYzQxOC0yNTgxLTRlZTYtYTM2ZS1iN2QxMDE2ZmJiNjMSBWxvY2Fs
               id: demo
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ1MjI0OWQwYi1lYmI4LTQ3OWUtOGFiZi1jNzEyNmQzNWUwZTcSBWxvY2Fs
+            - authId: CiQwOTgyZTZlMS00MWZjLTRkOGMtYTZjMC1hOGEzMWI1MjJmNDASBWxvY2Fs
               id: demo2
               settings: []
               userGroups:
@@ -194,13 +194,13 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0NGQwYTMzZS1lNTNhLTQ4YzctYjIwZS00NjQ3ZWFlZTg4OTMSBWxvY2Fs
+            - authId: CiRiZmEzYzQxOC0yNTgxLTRlZTYtYTM2ZS1iN2QxMDE2ZmJiNjMSBWxvY2Fs
               id: demo
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ1MjI0OWQwYi1lYmI4LTQ3OWUtOGFiZi1jNzEyNmQzNWUwZTcSBWxvY2Fs
+            - authId: CiQwOTgyZTZlMS00MWZjLTRkOGMtYTZjMC1hOGEzMWI1MjJmNDASBWxvY2Fs
               id: demo2
               settings: []
               userGroups:

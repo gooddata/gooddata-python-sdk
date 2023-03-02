@@ -72,7 +72,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '603'
+          - '448'
       body:
         string:
           workspaceDataFilters:
@@ -96,14 +96,7 @@ interactions:
               workspace:
                 id: demo_west
                 type: workspace
-              workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
-                  title: Region West California
-                  workspace:
-                    id: demo_west_california
-                    type: workspace
+              workspaceDataFilterSettings: []
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/layout/workspaceDataFilters
@@ -174,7 +167,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '603'
+          - '448'
       body:
         string:
           workspaceDataFilters:
@@ -198,11 +191,4 @@ interactions:
               workspace:
                 id: demo_west
                 type: workspace
-              workspaceDataFilterSettings:
-                - filterValues:
-                    - California
-                  id: region_west_california
-                  title: Region West California
-                  workspace:
-                    id: demo_west_california
-                    type: workspace
+              workspaceDataFilterSettings: []

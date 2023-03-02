@@ -82,22 +82,7 @@ interactions:
                   - campaign_channels
                 type: TABLE
                 columns:
-                  - name: budget
-                    dataType: NUMERIC
-                    isPrimaryKey: false
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: campaign_channel_id
-                    dataType: STRING
-                    isPrimaryKey: true
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: campaign_id
-                    dataType: INT
-                    isPrimaryKey: false
-                    referencedTableId: campaigns
-                    referencedTableColumn: campaign_id
-                  - name: category
+                  - name: type
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
@@ -107,8 +92,23 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: type
+                  - name: category
                     dataType: STRING
+                    isPrimaryKey: false
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: campaign_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
+                  - name: campaign_channel_id
+                    dataType: STRING
+                    isPrimaryKey: true
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: budget
+                    dataType: NUMERIC
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
@@ -122,14 +122,14 @@ interactions:
                   - campaigns
                 type: TABLE
                 columns:
-                  - name: campaign_id
-                    dataType: INT
-                    isPrimaryKey: true
-                    referencedTableId: null
-                    referencedTableColumn: null
                   - name: campaign_name
                     dataType: STRING
                     isPrimaryKey: false
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: campaign_id
+                    dataType: INT
+                    isPrimaryKey: true
                     referencedTableId: null
                     referencedTableColumn: null
               links:
@@ -142,17 +142,7 @@ interactions:
                   - customers
                 type: TABLE
                 columns:
-                  - name: customer_id
-                    dataType: INT
-                    isPrimaryKey: true
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: customer_name
-                    dataType: STRING
-                    isPrimaryKey: false
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: geo__state__location
+                  - name: state
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
@@ -162,9 +152,19 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: state
+                  - name: geo__state__location
                     dataType: STRING
                     isPrimaryKey: false
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: customer_name
+                    dataType: STRING
+                    isPrimaryKey: false
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: customer_id
+                    dataType: INT
+                    isPrimaryKey: true
                     referencedTableId: null
                     referencedTableColumn: null
               links:
@@ -177,37 +177,17 @@ interactions:
                   - order_lines
                 type: TABLE
                 columns:
-                  - name: campaign_id
-                    dataType: INT
-                    isPrimaryKey: false
-                    referencedTableId: campaigns
-                    referencedTableColumn: campaign_id
-                  - name: customer_id
-                    dataType: INT
-                    isPrimaryKey: false
-                    referencedTableId: customers
-                    referencedTableColumn: customer_id
-                  - name: date
-                    dataType: DATE
-                    isPrimaryKey: false
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: order_id
+                  - name: wdf__state
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: order_line_id
-                    dataType: STRING
-                    isPrimaryKey: true
-                    referencedTableId: null
-                    referencedTableColumn: null
-                  - name: order_status
+                  - name: wdf__region
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: price
+                  - name: quantity
                     dataType: NUMERIC
                     isPrimaryKey: false
                     referencedTableId: null
@@ -217,21 +197,41 @@ interactions:
                     isPrimaryKey: false
                     referencedTableId: products
                     referencedTableColumn: product_id
-                  - name: quantity
+                  - name: price
                     dataType: NUMERIC
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: wdf__region
+                  - name: order_status
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: wdf__state
+                  - name: order_line_id
+                    dataType: STRING
+                    isPrimaryKey: true
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: order_id
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
                     referencedTableColumn: null
+                  - name: date
+                    dataType: DATE
+                    isPrimaryKey: false
+                    referencedTableId: null
+                    referencedTableColumn: null
+                  - name: customer_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: customers
+                    referencedTableColumn: customer_id
+                  - name: campaign_id
+                    dataType: INT
+                    isPrimaryKey: false
+                    referencedTableId: campaigns
+                    referencedTableColumn: campaign_id
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds/dataSourceTables/order_lines
             - id: products
@@ -242,7 +242,7 @@ interactions:
                   - products
                 type: TABLE
                 columns:
-                  - name: category
+                  - name: product_name
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
@@ -252,7 +252,7 @@ interactions:
                     isPrimaryKey: true
                     referencedTableId: null
                     referencedTableColumn: null
-                  - name: product_name
+                  - name: category
                     dataType: STRING
                     isPrimaryKey: false
                     referencedTableId: null
