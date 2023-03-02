@@ -626,8 +626,8 @@ interactions:
                   - Order lines
                 title: Order lines
                 workspaceDataFilterColumns:
-                  - wdf__state
                   - wdf__region
+                  - wdf__state
               - attributes:
                   - description: Product id
                     id: product_id

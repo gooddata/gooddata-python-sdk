@@ -198,9 +198,6 @@
         },
         "tags": [
           "Customers"
-        ],
-        "workspaceDataFilterColumns": [
-          "geo__state__location"
         ]
       },
       {
@@ -316,8 +313,8 @@
           "Order lines"
         ],
         "workspaceDataFilterColumns": [
-          "wdf__region",
-          "wdf__state"
+          "wdf__state",
+          "wdf__region"
         ]
       },
       {
@@ -483,8 +480,8 @@
           }
         ],
         "sql": {
-          "statement": "SELECT * FROM order_lines",
-          "dataSourceId": "demo-test-ds"
+          "dataSourceId": "demo-test-ds",
+          "statement": "SELECT * FROM order_lines"
         }
       },
       {
@@ -540,9 +537,12 @@
         ],
         "facts": [],
         "sql": {
-          "statement": "SELECT * FROM v_wdf_customers",
-          "dataSourceId": "demo-test-ds"
-        }
+          "dataSourceId": "demo-test-ds",
+          "statement": "SELECT * FROM v_wdf_customers"
+        },
+        "workspaceDataFilterColumns": [
+          "wdf__region"
+        ]
       }
     ],
     "dateInstances": [

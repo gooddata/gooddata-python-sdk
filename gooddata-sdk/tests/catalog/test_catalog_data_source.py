@@ -63,13 +63,8 @@ def test_generate_logical_model(test_config: dict):
     declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
     generated_declarative_model = sdk.catalog_data_source.generate_logical_model(test_config["data_source"])
 
-    # NOTE: extend fetched logical model with existing error - remove once geo__state__location will not be
-    # part of workspace_data_filter_columns
-    customers_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "customers"]
-    assert len(customers_datasets) == 1
-    customers_datasets[0].workspace_data_filter_columns = ["geo__state__location"]
-
     # NOTE: remove after implementation of PDM removal
+    # NOTE: workspace_data_filter_columns is not sorted by backend
     order_lines_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "order_lines"]
     assert len(order_lines_datasets) == 1
     order_lines_datasets[0].workspace_data_filter_columns = ["wdf__region", "wdf__state"]
@@ -87,8 +82,6 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
     expected_json_path = _current_dir / "expected" / "declarative_ldm_with_sql_dataset.json"
 
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    # NOTE: regenerate expected_json_path once workspaceDataFilterColumns does not contain geo__state__location
-    # for customers
     ldm_request = CatalogGenerateLdmRequest(
         separator="__",
         wdf_prefix="wdf",
@@ -119,7 +112,6 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
                         SqlColumn(name="customer_name", data_type="STRING"),
                         SqlColumn(name="state", data_type="STRING"),
                         SqlColumn(name="region", data_type="STRING"),
-                        # NOTE: regenerate expected_json_path once missing workspaceDataFilterColumns is fixed
                         SqlColumn(name="wdf__region", data_type="STRING"),
                     ],
                 ),

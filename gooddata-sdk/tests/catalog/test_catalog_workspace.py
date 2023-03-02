@@ -214,9 +214,9 @@ def test_update_workspace_valid(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_workspace.yaml"))
 def test_delete_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load"
     workspace_id = "demo_west_california"
 
-    workspace = sdk.catalog_workspace.get_workspace(workspace_id)
     workspaces = sdk.catalog_workspace.list_workspaces()
     assert len(workspaces) == 3
     assert workspace_id in [w.id for w in workspaces]
@@ -227,8 +227,9 @@ def test_delete_workspace(test_config):
         assert len(workspaces) == 2
         assert workspace_id not in [w.id for w in workspaces]
     finally:
-        # Clean up. Create deleted workspace.
-        sdk.catalog_workspace.create_or_update(workspace)
+        # Restore the whole WS hierarchy. WS delete can remove also objects out of WS definition, like
+        # workspace data filter settings
+        sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
         workspaces = sdk.catalog_workspace.list_workspaces()
         assert len(workspaces) == 3
         assert workspace_id in [w.id for w in workspaces]
