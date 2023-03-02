@@ -59,6 +59,9 @@ class DeclarativeTheme(ModelNormal):
     }
 
     validations = {
+        ('name',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

@@ -416,7 +416,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '4921'
+          - '4867'
       body:
         string:
           ldm:
@@ -553,8 +553,6 @@ interactions:
                 tags:
                   - Customers
                 title: Customers
-                workspaceDataFilterColumns:
-                  - geo__state__location
               - attributes:
                   - description: Order id
                     id: order_id

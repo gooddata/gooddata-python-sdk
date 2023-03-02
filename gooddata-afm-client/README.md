@@ -49,7 +49,7 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import time
 import gooddata_afm_client
 from pprint import pprint
-from gooddata_afm_client.api import actions_api
+from gooddata_afm_client.api import computation_api
 from gooddata_afm_client.model.afm_execution import AfmExecution
 from gooddata_afm_client.model.afm_execution_response import AfmExecutionResponse
 from gooddata_afm_client.model.afm_valid_objects_query import AfmValidObjectsQuery
@@ -69,7 +69,7 @@ configuration = gooddata_afm_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_afm_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
+    api_instance = computation_api.ComputationApi(api_client)
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
@@ -94,7 +94,7 @@ with gooddata_afm_client.ApiClient(configuration) as api_client:
         api_response = api_instance.compute_label_elements_post(workspace_id, elements_request, offset=offset, limit=limit, skip_cache=skip_cache)
         pprint(api_response)
     except gooddata_afm_client.ApiException as e:
-        print("Exception when calling ActionsApi->compute_label_elements_post: %s\n" % e)
+        print("Exception when calling ComputationApi->compute_label_elements_post: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -103,6 +103,12 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*ComputationApi* | [**compute_label_elements_post**](docs/ComputationApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
+*ComputationApi* | [**compute_report**](docs/ComputationApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
+*ComputationApi* | [**compute_valid_objects**](docs/ComputationApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+*ComputationApi* | [**explain_afm**](docs/ComputationApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+*ComputationApi* | [**retrieve_execution_metadata**](docs/ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
+*ComputationApi* | [**retrieve_result**](docs/ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects

@@ -130,7 +130,7 @@ interactions:
                         type: label
                 localIdentifier: dim_0
             links:
-              executionResult: fb8c8c93c951e125c18b2038ee3673ff781f643b
+              executionResult: 05e1ec342a9d3e3bbc911cc663643c33ce3fee4e
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels&page=0&size=500
@@ -1237,6 +1237,117 @@ interactions:
       body:
         string:
           data:
+            - id: campaigns
+              type: dataset
+              attributes:
+                title: Campaigns
+                description: Campaigns
+                tags:
+                  - Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:campaigns
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: campaign_name
+                      type: attribute
+                    - id: campaign_id
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: products
+              type: dataset
+              attributes:
+                title: Products
+                description: Products
+                tags:
+                  - Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:products
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: products.category
+                      type: attribute
+                    - id: product_id
+                      type: attribute
+                    - id: product_name
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date
+              type: dataset
+              attributes:
+                title: Date
+                description: ''
+                tags:
+                  - Date
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: DATE
+              relationships:
+                attributes:
+                  data:
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.minute
+                      type: attribute
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.quarter
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_lines
               type: dataset
               attributes:
@@ -1248,22 +1359,6 @@ interactions:
                   - id: order_line_id
                     type: attribute
                 referenceProperties:
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
                   - identifier:
                       id: customers
                       type: dataset
@@ -1278,6 +1373,22 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - date
+                    sourceColumnDataTypes:
+                      - ''
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes:
+                      - ''
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - campaign_id
                     sourceColumnDataTypes:
                       - ''
                 dataSourceTableId: demo-test-ds:order_lines
@@ -1349,117 +1460,6 @@ interactions:
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaigns
-              type: dataset
-              attributes:
-                title: Campaigns
-                description: Campaigns
-                tags:
-                  - Campaigns
-                grain:
-                  - id: campaign_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:campaigns
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: campaign_name
-                      type: attribute
-                    - id: campaign_id
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date
-              type: dataset
-              attributes:
-                title: Date
-                description: ''
-                tags:
-                  - Date
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: DATE
-              relationships:
-                attributes:
-                  data:
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
-                    - id: date.month
-                      type: attribute
-                    - id: date.dayOfWeek
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: products
-              type: dataset
-              attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:products
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: products.category
-                      type: attribute
-                    - id: product_id
-                      type: attribute
-                    - id: product_name
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
               meta:
                 origin:
                   originType: NATIVE
@@ -2269,7 +2269,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/fb8c8c93c951e125c18b2038ee3673ff781f643b?offset=0&limit=1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/05e1ec342a9d3e3bbc911cc663643c33ce3fee4e?offset=0&limit=1000
       body: null
       headers:
         Accept:

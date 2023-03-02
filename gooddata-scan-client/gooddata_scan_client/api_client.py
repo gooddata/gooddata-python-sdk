@@ -802,7 +802,7 @@ class Endpoint(object):
         """ This method is invoked when endpoints are called
         Example:
 
-        api_instance = ActionsApi()
+        api_instance = ScanningApi()
         api_instance.get_data_source_schemata  # this is an instance of the class Endpoint
         api_instance.get_data_source_schemata()  # this invokes api_instance.get_data_source_schemata.__call__()
         which then invokes the callable functions stored in that endpoint at

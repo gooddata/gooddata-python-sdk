@@ -78,6 +78,12 @@ class DeclarativeDataset(ModelNormal):
                 'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('title',): {
+            'max_length': 255,
+        },
+        ('description',): {
+            'max_length': 10000,
+        },
         ('tags',): {
         },
     }

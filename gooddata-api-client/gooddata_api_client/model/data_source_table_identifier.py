@@ -62,6 +62,9 @@ class DataSourceTableIdentifier(ModelNormal):
     }
 
     validations = {
+        ('data_source_id',): {
+            'max_length': 255,
+        },
         ('id',): {
             'regex': {
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501

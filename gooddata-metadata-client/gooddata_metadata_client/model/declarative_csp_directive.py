@@ -59,6 +59,9 @@ class DeclarativeCspDirective(ModelNormal):
     }
 
     validations = {
+        ('directive',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

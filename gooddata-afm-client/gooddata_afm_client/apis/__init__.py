@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from gooddata_afm_client.api.actions_api import ActionsApi
+#   from gooddata_afm_client.api.computation_api import ComputationApi
 #
 # or import this package, but before doing it, use:
 #
@@ -14,4 +14,5 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
+from gooddata_afm_client.api.computation_api import ComputationApi
 from gooddata_afm_client.api.actions_api import ActionsApi

@@ -33,6 +33,7 @@ docs/AttributeItem.md
 docs/AttributeResultHeader.md
 docs/ComparisonMeasureValueFilter.md
 docs/ComparisonMeasureValueFilterComparisonMeasureValueFilter.md
+docs/ComputationApi.md
 docs/DataColumnLocator.md
 docs/DataColumnLocators.md
 docs/DateFilter.md
@@ -102,6 +103,7 @@ docs/TotalResultHeader.md
 gooddata_afm_client/__init__.py
 gooddata_afm_client/api/__init__.py
 gooddata_afm_client/api/actions_api.py
+gooddata_afm_client/api/computation_api.py
 gooddata_afm_client/api_client.py
 gooddata_afm_client/apis/__init__.py
 gooddata_afm_client/configuration.py

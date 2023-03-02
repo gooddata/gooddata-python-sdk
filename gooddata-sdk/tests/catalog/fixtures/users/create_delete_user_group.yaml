@@ -74,11 +74,6 @@ interactions:
       body:
         string:
           data:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
               attributes: {}
@@ -104,6 +99,11 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: adminGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
           included:
             - id: adminGroup
               type: userGroup
@@ -193,7 +193,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 28f6cc1db9a1d3c9
+          traceId: 7e3dcaf901f2a58d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups
@@ -441,11 +441,6 @@ interactions:
       body:
         string:
           data:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
               attributes: {}
@@ -471,6 +466,11 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: adminGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: newUserGroup
               type: userGroup
               attributes: {}
@@ -634,11 +634,6 @@ interactions:
       body:
         string:
           data:
-            - id: adminGroup
-              type: userGroup
-              attributes: {}
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
               attributes: {}
@@ -664,6 +659,11 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: adminGroup
+              type: userGroup
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
           included:
             - id: adminGroup
               type: userGroup

@@ -96,7 +96,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (AvailableAssignees,),
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees',
                 'operation_id': 'available_assignes',
                 'http_method': 'GET',
                 'servers': None,
@@ -417,7 +417,7 @@ class ActionsApi(object):
             settings={
                 'response_type': None,
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions',
                 'operation_id': 'manage_permissions',
                 'http_method': 'POST',
                 'servers': None,
@@ -576,7 +576,7 @@ class ActionsApi(object):
             settings={
                 'response_type': (DashboardPermissions,),
                 'auth': [],
-                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions',
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions',
                 'operation_id': 'permissions',
                 'http_method': 'GET',
                 'servers': None,

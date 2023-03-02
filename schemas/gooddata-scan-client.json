@@ -82,16 +82,19 @@
           "name": {
             "description": "Column name",
             "example": "customer_id",
+            "maxLength": 255,
             "type": "string"
           },
           "referencedTableColumn": {
             "description": "Referenced table (Foreign key)",
             "example": "customer_id",
+            "maxLength": 255,
             "type": "string"
           },
           "referencedTableId": {
             "description": "Referenced table (Foreign key)",
             "example": "customers",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -120,6 +123,7 @@
           "namePrefix": {
             "description": "Table or view name prefix used in scan. Will be stripped when generating LDM.",
             "example": "out_gooddata",
+            "maxLength": 255,
             "type": "string"
           },
           "path": {
@@ -258,6 +262,7 @@
             "description": "Array of rows where each row is another array of string values.",
             "items": {
               "items": {
+                "nullable": true,
                 "type": "string"
               },
               "type": "array"
@@ -385,8 +390,7 @@
           }
         },
         "required": [
-          "type",
-          "url"
+          "type"
         ],
         "type": "object"
       },
@@ -535,6 +539,7 @@
         },
         "summary": "Test connection by data source definition",
         "tags": [
+          "Test Connection",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -623,6 +628,7 @@
         },
         "summary": "Scan a database to get a physical data model (PDM)",
         "tags": [
+          "Scanning",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -675,6 +681,7 @@
         },
         "summary": "Get a list of schema names of a database",
         "tags": [
+          "Scanning",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -829,6 +836,7 @@
         },
         "summary": "Test data source connection by data source id",
         "tags": [
+          "Test Connection",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -847,6 +855,12 @@
     }
   ],
   "tags": [
+    {
+      "name": "Scanning"
+    },
+    {
+      "name": "Test Connection"
+    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

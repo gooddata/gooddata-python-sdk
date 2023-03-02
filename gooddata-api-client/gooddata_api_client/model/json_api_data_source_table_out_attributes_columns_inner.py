@@ -68,6 +68,15 @@ class JsonApiDataSourceTableOutAttributesColumnsInner(ModelNormal):
     }
 
     validations = {
+        ('name',): {
+            'max_length': 255,
+        },
+        ('referenced_table_column',): {
+            'max_length': 255,
+        },
+        ('referenced_table_id',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

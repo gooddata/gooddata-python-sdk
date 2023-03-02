@@ -89,7 +89,7 @@ class ScanSqlResponse(ModelNormal):
         lazy_import()
         return {
             'columns': ([SqlColumn],),  # noqa: E501
-            'data_preview': ([[str]],),  # noqa: E501
+            'data_preview': ([[str, none_type]],),  # noqa: E501
         }
 
     @cached_property
@@ -146,7 +146,7 @@ class ScanSqlResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            data_preview ([[str]]): Array of rows where each row is another array of string values.. [optional]  # noqa: E501
+            data_preview ([[str, none_type]]): Array of rows where each row is another array of string values.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,7 +236,7 @@ class ScanSqlResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            data_preview ([[str]]): Array of rows where each row is another array of string values.. [optional]  # noqa: E501
+            data_preview ([[str, none_type]]): Array of rows where each row is another array of string values.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

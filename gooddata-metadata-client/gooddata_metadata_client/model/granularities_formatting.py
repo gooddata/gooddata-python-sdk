@@ -59,6 +59,12 @@ class GranularitiesFormatting(ModelNormal):
     }
 
     validations = {
+        ('title_base',): {
+            'max_length': 255,
+        },
+        ('title_pattern',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

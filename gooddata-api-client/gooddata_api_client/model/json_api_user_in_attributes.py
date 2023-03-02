@@ -59,6 +59,18 @@ class JsonApiUserInAttributes(ModelNormal):
     }
 
     validations = {
+        ('authentication_id',): {
+            'max_length': 255,
+        },
+        ('email',): {
+            'max_length': 255,
+        },
+        ('firstname',): {
+            'max_length': 255,
+        },
+        ('lastname',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

@@ -63,13 +63,8 @@ def test_generate_logical_model(test_config: dict):
     declarative_model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
     generated_declarative_model = sdk.catalog_data_source.generate_logical_model(test_config["data_source"])
 
-    # NOTE: extend fetched logical model with existing error - remove once geo__state__location will not be
-    # part of workspace_data_filter_columns
-    customers_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "customers"]
-    assert len(customers_datasets) == 1
-    customers_datasets[0].workspace_data_filter_columns = ["geo__state__location"]
-
     # NOTE: remove after implementation of PDM removal
+    # NOTE: workspace_data_filter_columns is not sorted by backend
     order_lines_datasets = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "order_lines"]
     assert len(order_lines_datasets) == 1
     order_lines_datasets[0].workspace_data_filter_columns = ["wdf__region", "wdf__state"]
@@ -87,8 +82,6 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
     expected_json_path = _current_dir / "expected" / "declarative_ldm_with_sql_dataset.json"
 
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    # NOTE: regenerate expected_json_path once workspaceDataFilterColumns does not contain geo__state__location
-    # for customers
     ldm_request = CatalogGenerateLdmRequest(
         separator="__",
         wdf_prefix="wdf",
@@ -119,7 +112,6 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
                         SqlColumn(name="customer_name", data_type="STRING"),
                         SqlColumn(name="state", data_type="STRING"),
                         SqlColumn(name="region", data_type="STRING"),
-                        # NOTE: regenerate expected_json_path once missing workspaceDataFilterColumns is fixed
                         SqlColumn(name="wdf__region", data_type="STRING"),
                     ],
                 ),
@@ -621,6 +613,39 @@ def test_scan_sql(test_config: dict):
         SqlColumn(name="product_name", data_type="STRING"),
     ]
     assert len(response.data_preview) == 10
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "scan_sql_with_nulls_in_preview.yaml"))
+def test_scan_sql_with_nulls_in_preview(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = ScanSqlRequest(sql="SELECT ol.campaign_id FROM order_lines ol ORDER BY campaign_id NULLS FIRST LIMIT 5")
+
+    response = sdk.catalog_data_source.scan_sql(data_source_id, request)
+    response.columns.sort(key=lambda col: col.name)
+
+    assert len(response.columns) == 1
+    assert response.columns == [
+        SqlColumn(name="campaign_id", data_type="INT"),
+    ]
+    assert len(response.data_preview) == 5
+    assert [None] in response.data_preview
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "scan_scan_sql_without_preview.yaml"))
+def test_scan_sql_without_preview(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = ScanSqlRequest(sql="SELECT ol.campaign_id FROM order_lines ol LIMIT 0")
+
+    response = sdk.catalog_data_source.scan_sql(data_source_id, request)
+    response.columns.sort(key=lambda col: col.name)
+
+    assert len(response.columns) == 1
+    assert response.columns == [
+        SqlColumn(name="campaign_id", data_type="INT"),
+    ]
+    assert response.data_preview is None
 
 
 """

@@ -59,6 +59,9 @@ class JsonApiCustomApplicationSettingInAttributes(ModelNormal):
     }
 
     validations = {
+        ('application_name',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

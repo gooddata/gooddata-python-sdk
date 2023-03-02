@@ -65,10 +65,19 @@ class DeclarativeWorkspaceDataFilter(ModelNormal):
     }
 
     validations = {
+        ('column_name',): {
+            'max_length': 255,
+        },
         ('id',): {
             'regex': {
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
+        },
+        ('title',): {
+            'max_length': 255,
+        },
+        ('description',): {
+            'max_length': 10000,
         },
     }
 

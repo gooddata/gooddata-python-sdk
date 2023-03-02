@@ -59,6 +59,24 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('early_access',): {
+            'max_length': 255,
+        },
+        ('hostname',): {
+            'max_length': 255,
+        },
+        ('name',): {
+            'max_length': 255,
+        },
+        ('oauth_client_id',): {
+            'max_length': 255,
+        },
+        ('oauth_issuer_id',): {
+            'max_length': 255,
+        },
+        ('oauth_issuer_location',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

@@ -72,6 +72,18 @@ class DeclarativeUser(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('auth_id',): {
+            'max_length': 255,
+        },
+        ('email',): {
+            'max_length': 255,
+        },
+        ('firstname',): {
+            'max_length': 255,
+        },
+        ('lastname',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property
