@@ -77,3 +77,6 @@ venv/**
 
 # Linting support
 **/.ruff_cache/**
+
+# Test helper files
+gooddata-sdk/tests/catalog/store/**
