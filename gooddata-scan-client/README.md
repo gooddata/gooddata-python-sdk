@@ -49,15 +49,10 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import time
 import gooddata_scan_client
 from pprint import pprint
-from gooddata_scan_client.api import actions_api
+from gooddata_scan_client.api import scanning_api
 from gooddata_scan_client.model.data_source_schemata import DataSourceSchemata
 from gooddata_scan_client.model.scan_request import ScanRequest
 from gooddata_scan_client.model.scan_result_pdm import ScanResultPdm
-from gooddata_scan_client.model.scan_sql_request import ScanSqlRequest
-from gooddata_scan_client.model.scan_sql_response import ScanSqlResponse
-from gooddata_scan_client.model.test_definition_request import TestDefinitionRequest
-from gooddata_scan_client.model.test_request import TestRequest
-from gooddata_scan_client.model.test_response import TestResponse
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
 configuration = gooddata_scan_client.Configuration(
@@ -69,7 +64,7 @@ configuration = gooddata_scan_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_scan_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
+    api_instance = scanning_api.ScanningApi(api_client)
     data_source_id = "myPostgres" # str | Data source id
 
     try:
@@ -77,7 +72,7 @@ with gooddata_scan_client.ApiClient(configuration) as api_client:
         api_response = api_instance.get_data_source_schemata(data_source_id)
         pprint(api_response)
     except gooddata_scan_client.ApiException as e:
-        print("Exception when calling ActionsApi->get_data_source_schemata: %s\n" % e)
+        print("Exception when calling ScanningApi->get_data_source_schemata: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -86,6 +81,10 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*ScanningApi* | [**get_data_source_schemata**](docs/ScanningApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
+*ScanningApi* | [**scan_data_source**](docs/ScanningApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
+*TestConnectionApi* | [**test_data_source**](docs/TestConnectionApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
+*TestConnectionApi* | [**test_data_source_definition**](docs/TestConnectionApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *ActionsApi* | [**get_data_source_schemata**](docs/ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query

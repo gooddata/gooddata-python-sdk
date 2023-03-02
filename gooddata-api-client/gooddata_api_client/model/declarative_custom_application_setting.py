@@ -59,6 +59,9 @@ class DeclarativeCustomApplicationSetting(ModelNormal):
     }
 
     validations = {
+        ('application_name',): {
+            'max_length': 255,
+        },
         ('id',): {
             'regex': {
                 'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501

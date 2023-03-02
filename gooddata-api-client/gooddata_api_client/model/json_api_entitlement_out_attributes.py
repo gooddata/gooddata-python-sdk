@@ -59,6 +59,9 @@ class JsonApiEntitlementOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('value',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

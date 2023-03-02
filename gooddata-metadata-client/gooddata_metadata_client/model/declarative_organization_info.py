@@ -71,10 +71,31 @@ class DeclarativeOrganizationInfo(ModelNormal):
     }
 
     validations = {
+        ('hostname',): {
+            'max_length': 255,
+        },
         ('id',): {
             'regex': {
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
+        },
+        ('name',): {
+            'max_length': 255,
+        },
+        ('early_access',): {
+            'max_length': 255,
+        },
+        ('oauth_client_id',): {
+            'max_length': 255,
+        },
+        ('oauth_client_secret',): {
+            'max_length': 255,
+        },
+        ('oauth_issuer_id',): {
+            'max_length': 255,
+        },
+        ('oauth_issuer_location',): {
+            'max_length': 255,
         },
     }
 

@@ -68,6 +68,9 @@ class DeclarativeTable(ModelNormal):
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('name_prefix',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

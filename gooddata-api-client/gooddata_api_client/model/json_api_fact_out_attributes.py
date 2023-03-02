@@ -68,6 +68,15 @@ class JsonApiFactOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('source_column',): {
+            'max_length': 255,
+        },
+        ('title',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

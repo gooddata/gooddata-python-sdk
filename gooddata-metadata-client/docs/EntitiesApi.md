@@ -182,6 +182,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     include = [
         "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=permissions,origin,accessInfo,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -193,7 +196,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, include=include)
+        api_response = api_instance.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_analytical_dashboards: %s\n" % e)
@@ -207,6 +210,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **json_api_analytical_dashboard_in_document** | [**JsonApiAnalyticalDashboardInDocument**](JsonApiAnalyticalDashboardInDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -488,10 +492,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="customApplicationSetting",
         ),
     ) # JsonApiCustomApplicationSettingInDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_custom_application_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_custom_application_settings: %s\n" % e)
@@ -504,6 +519,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_custom_application_setting_in_document** | [**JsonApiCustomApplicationSettingInDocument**](JsonApiCustomApplicationSettingInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -569,10 +585,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="dashboardPlugin",
         ),
     ) # JsonApiDashboardPluginInDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_dashboard_plugins: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_in_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_dashboard_plugins: %s\n" % e)
@@ -585,6 +612,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_dashboard_plugin_in_document** | [**JsonApiDashboardPluginInDocument**](JsonApiDashboardPluginInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -659,10 +687,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="dataSource",
         ),
     ) # JsonApiDataSourceInDocument | 
+    meta_include = [
+        "metaInclude=permissions,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_data_sources: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_data_sources: %s\n" % e)
@@ -674,6 +713,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **json_api_data_source_in_document** | [**JsonApiDataSourceInDocument**](JsonApiDataSourceInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -742,6 +782,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     include = [
         "include=attributes,datasets,labels",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -753,7 +796,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_in_document, include=include)
+        api_response = api_instance.create_entity_filter_contexts(workspace_id, json_api_filter_context_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_filter_contexts: %s\n" % e)
@@ -767,6 +810,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **json_api_filter_context_in_document** | [**JsonApiFilterContextInDocument**](JsonApiFilterContextInDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -838,6 +882,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     include = [
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -849,7 +896,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_metrics(workspace_id, json_api_metric_in_document, include=include)
+        api_response = api_instance.create_entity_metrics(workspace_id, json_api_metric_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_metrics: %s\n" % e)
@@ -863,6 +910,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **json_api_metric_in_document** | [**JsonApiMetricInDocument**](JsonApiMetricInDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1348,6 +1396,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     include = [
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -1359,7 +1410,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, include=include)
+        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_visualization_objects: %s\n" % e)
@@ -1373,6 +1424,7 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **json_api_visualization_object_in_document** | [**JsonApiVisualizationObjectInDocument**](JsonApiVisualizationObjectInDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1532,10 +1584,21 @@ with gooddata_metadata_client.ApiClient() as api_client:
             type="workspaceSetting",
         ),
     ) # JsonApiWorkspaceSettingInDocument | 
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document)
+        pprint(api_response)
+    except gooddata_metadata_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_workspace_settings: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_workspace_settings: %s\n" % e)
@@ -1548,6 +1611,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **json_api_workspace_setting_in_document** | [**JsonApiWorkspaceSettingInDocument**](JsonApiWorkspaceSettingInDocument.md)|  |
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1616,6 +1680,9 @@ with gooddata_metadata_client.ApiClient() as api_client:
     include = [
         "include=parent",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=config,permissions,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -1627,7 +1694,7 @@ with gooddata_metadata_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document, include=include)
+        api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_metadata_client.ApiException as e:
         print("Exception when calling EntitiesApi->create_entity_workspaces: %s\n" % e)
@@ -1640,6 +1707,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **json_api_workspace_in_document** | [**JsonApiWorkspaceInDocument**](JsonApiWorkspaceInDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 

@@ -122,7 +122,7 @@ class ExecutionResult(ModelNormal):
 
         Args:
             data ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.
-            dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to dimension size. Their order corresponds to the dimension order in the execution result spec.
+            dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to the number of dimensions. Their order corresponds to the dimension order in the execution result spec.
             grand_totals ([ExecutionResultGrandTotal]):
             paging (ExecutionResultPaging):
 
@@ -217,7 +217,7 @@ class ExecutionResult(ModelNormal):
 
         Args:
             data ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}]): A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.
-            dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to dimension size. Their order corresponds to the dimension order in the execution result spec.
+            dimension_headers ([DimensionHeader]): An array containing dimension headers. The size of the array corresponds to the number of dimensions. Their order corresponds to the dimension order in the execution result spec.
             grand_totals ([ExecutionResultGrandTotal]):
             paging (ExecutionResultPaging):
 

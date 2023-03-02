@@ -83,6 +83,21 @@ class DeclarativeAttribute(ModelNormal):
                 'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
+        ('source_column',): {
+            'max_length': 255,
+        },
+        ('title',): {
+            'max_length': 255,
+        },
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('sort_column',): {
+            'max_length': 255,
+        },
+        ('source_column_data_type',): {
+            'max_length': 255,
+        },
         ('tags',): {
         },
     }

@@ -59,6 +59,12 @@ class JsonApiMetricInAttributesContent(ModelNormal):
     }
 
     validations = {
+        ('maql',): {
+            'max_length': 10000,
+        },
+        ('format',): {
+            'max_length': 2048,
+        },
     }
 
     @cached_property

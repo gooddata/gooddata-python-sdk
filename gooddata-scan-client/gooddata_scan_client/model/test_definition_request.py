@@ -105,11 +105,11 @@ class TestDefinitionRequest(ModelNormal):
         lazy_import()
         return {
             'type': (str,),  # noqa: E501
-            'url': (str,),  # noqa: E501
             'parameters': ([DataSourceParameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'token': (str,),  # noqa: E501
+            'url': (str,),  # noqa: E501
             'username': (str,),  # noqa: E501
         }
 
@@ -120,11 +120,11 @@ class TestDefinitionRequest(ModelNormal):
 
     attribute_map = {
         'type': 'type',  # noqa: E501
-        'url': 'url',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
         'schema': 'schema',  # noqa: E501
         'token': 'token',  # noqa: E501
+        'url': 'url',  # noqa: E501
         'username': 'username',  # noqa: E501
     }
 
@@ -135,12 +135,11 @@ class TestDefinitionRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, type, url, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, type, *args, **kwargs):  # noqa: E501
         """TestDefinitionRequest - a model defined in OpenAPI
 
         Args:
             type (str): Type of database, where test should connect to.
-            url (str): URL to database in JDBC format, where test should connect to.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -177,6 +176,7 @@ class TestDefinitionRequest(ModelNormal):
             password (str): Database user password.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
+            url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501
             username (str): Database user name.. [optional]  # noqa: E501
         """
 
@@ -210,7 +210,6 @@ class TestDefinitionRequest(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.type = type
-        self.url = url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -231,12 +230,11 @@ class TestDefinitionRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, type, url, *args, **kwargs):  # noqa: E501
+    def __init__(self, type, *args, **kwargs):  # noqa: E501
         """TestDefinitionRequest - a model defined in OpenAPI
 
         Args:
             type (str): Type of database, where test should connect to.
-            url (str): URL to database in JDBC format, where test should connect to.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -273,6 +271,7 @@ class TestDefinitionRequest(ModelNormal):
             password (str): Database user password.. [optional]  # noqa: E501
             schema (str): Database schema.. [optional]  # noqa: E501
             token (str): Secret for token based authentication for data sources which supports it.. [optional]  # noqa: E501
+            url (str): URL to database in JDBC format, where test should connect to.. [optional]  # noqa: E501
             username (str): Database user name.. [optional]  # noqa: E501
         """
 
@@ -304,7 +303,6 @@ class TestDefinitionRequest(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.type = type
-        self.url = url
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -79,6 +79,24 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
     }
 
     validations = {
+        ('name',): {
+            'max_length': 255,
+        },
+        ('password',): {
+            'max_length': 255,
+        },
+        ('schema',): {
+            'max_length': 255,
+        },
+        ('token',): {
+            'max_length': 10000,
+        },
+        ('url',): {
+            'max_length': 255,
+        },
+        ('username',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

@@ -863,7 +863,7 @@
             "type": "array"
           },
           "dimensionHeaders": {
-            "description": "An array containing dimension headers. The size of the array corresponds to dimension size. Their order corresponds to the dimension order in the execution result spec.",
+            "description": "An array containing dimension headers. The size of the array corresponds to the number of dimensions. Their order corresponds to the dimension order in the execution result spec.",
             "items": {
               "$ref": "#/components/schemas/DimensionHeader"
             },
@@ -1950,6 +1950,7 @@
         },
         "summary": "Valid objects",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2020,6 +2021,7 @@
         },
         "summary": "Executes analytical request and returns link to the result",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2120,6 +2122,7 @@
         },
         "summary": "Get a single execution result",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2170,6 +2173,7 @@
         },
         "summary": "Get a single execution result's metadata.",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2245,6 +2249,7 @@
         },
         "summary": "AFM explain resource.",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2331,6 +2336,7 @@
         },
         "summary": "Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -2349,6 +2355,9 @@
     }
   ],
   "tags": [
+    {
+      "name": "Computation"
+    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

@@ -59,6 +59,15 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
     }
 
     validations = {
+        ('description',): {
+            'max_length': 255,
+        },
+        ('early_access',): {
+            'max_length': 255,
+        },
+        ('name',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

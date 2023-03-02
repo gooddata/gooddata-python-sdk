@@ -154,6 +154,7 @@
           "dataSourceId": {
             "description": "Data source ID.",
             "example": "my-postgres",
+            "maxLength": 255,
             "type": "string"
           },
           "id": {
@@ -204,6 +205,7 @@
           "description": {
             "description": "Analytical dashboard description.",
             "example": "Period to period comparison of revenues in main sectors.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -235,6 +237,7 @@
           "title": {
             "description": "Analytical dashboard title.",
             "example": "Revenues analysis",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -354,6 +357,7 @@
           "description": {
             "description": "Attribute description.",
             "example": "Customer name including first and last name.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -372,6 +376,7 @@
           "sortColumn": {
             "description": "Attribute sort column.",
             "example": "customer_name",
+            "maxLength": 255,
             "type": "string"
           },
           "sortDirection": {
@@ -386,6 +391,7 @@
           "sourceColumn": {
             "description": "A name of the source column that is the primary label",
             "example": "customer_name",
+            "maxLength": 255,
             "type": "string"
           },
           "sourceColumnDataType": {
@@ -400,6 +406,7 @@
               "BOOLEAN"
             ],
             "example": "STRING",
+            "maxLength": 255,
             "type": "string"
           },
           "tags": {
@@ -418,6 +425,7 @@
           "title": {
             "description": "Attribute title.",
             "example": "Customer Name",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -439,6 +447,7 @@
             "type": "string"
           },
           "name": {
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -473,16 +482,19 @@
           "name": {
             "description": "Column name",
             "example": "customer_id",
+            "maxLength": 255,
             "type": "string"
           },
           "referencedTableColumn": {
             "description": "Referenced table (Foreign key)",
             "example": "customer_id",
+            "maxLength": 255,
             "type": "string"
           },
           "referencedTableId": {
             "description": "Referenced table (Foreign key)",
             "example": "customers",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -495,6 +507,7 @@
       "DeclarativeCspDirective": {
         "properties": {
           "directive": {
+            "maxLength": 255,
             "type": "string"
           },
           "sources": {
@@ -516,6 +529,7 @@
           "applicationName": {
             "description": "The application id",
             "example": "Modeler",
+            "maxLength": 255,
             "type": "string"
           },
           "content": {
@@ -543,6 +557,7 @@
           "description": {
             "description": "Dashboard plugin description.",
             "example": "Three dimensional view of data.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -567,6 +582,7 @@
           "title": {
             "description": "Dashboard plugin object title.",
             "example": "3D map renderer",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -608,6 +624,7 @@
           "name": {
             "description": "Name of the data source.",
             "example": "postgres demo",
+            "maxLength": 255,
             "type": "string"
           },
           "parameters": {
@@ -619,6 +636,7 @@
           "password": {
             "description": "Password for the data-source user, property is never returned back.",
             "example": "*****",
+            "maxLength": 255,
             "type": "string"
           },
           "pdm": {
@@ -633,11 +651,13 @@
           "schema": {
             "description": "A scheme/database with the data.",
             "example": "demo",
+            "maxLength": 255,
             "type": "string"
           },
           "token": {
             "description": "Token as an alternative to username and password.",
             "example": "Bigquery service account JSON. Encode it using base64!",
+            "maxLength": 10000,
             "type": "string"
           },
           "type": {
@@ -664,11 +684,13 @@
           "url": {
             "description": "An connection string relevant to type of database.",
             "example": "jdbc:postgresql://postgres:5432/gooddata",
+            "maxLength": 255,
             "type": "string"
           },
           "username": {
             "description": "User with permission connect the data source/database.",
             "example": "demo",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -731,6 +753,7 @@
           "description": {
             "description": "A dataset description.",
             "example": "The customers of ours.",
+            "maxLength": 10000,
             "type": "string"
           },
           "facts": {
@@ -779,6 +802,7 @@
           "title": {
             "description": "A dataset title.",
             "example": "Customers",
+            "maxLength": 255,
             "type": "string"
           },
           "workspaceDataFilterColumns": {
@@ -815,6 +839,10 @@
             "type": "string"
           }
         },
+        "required": [
+          "dataSourceId",
+          "statement"
+        ],
         "type": "object"
       },
       "DeclarativeDateDataset": {
@@ -823,6 +851,7 @@
           "description": {
             "description": "Date dataset description.",
             "example": "A customer order date",
+            "maxLength": 10000,
             "type": "string"
           },
           "granularities": {
@@ -874,6 +903,7 @@
           "title": {
             "description": "Date dataset title.",
             "example": "Date",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -891,6 +921,7 @@
           "description": {
             "description": "Fact description.",
             "example": "A number of orders created by the customer - including all orders, even the non-delivered ones.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -902,6 +933,7 @@
           "sourceColumn": {
             "description": "A name of the source column in the table.",
             "example": "customer_order_count",
+            "maxLength": 255,
             "type": "string"
           },
           "sourceColumnDataType": {
@@ -916,6 +948,7 @@
               "BOOLEAN"
             ],
             "example": "NUMERIC",
+            "maxLength": 255,
             "type": "string"
           },
           "tags": {
@@ -934,6 +967,7 @@
           "title": {
             "description": "Fact title.",
             "example": "Customer order count",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -952,6 +986,7 @@
           "description": {
             "description": "Filter Context description.",
             "example": "Filter Context for Sales team.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -976,6 +1011,7 @@
           "title": {
             "description": "Filter Context title.",
             "example": "Filter Context for Sales team",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -992,6 +1028,7 @@
           "description": {
             "description": "Label description.",
             "example": "Customer name",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -1003,6 +1040,7 @@
           "sourceColumn": {
             "description": "A name of the source column in the table.",
             "example": "customer_name",
+            "maxLength": 255,
             "type": "string"
           },
           "sourceColumnDataType": {
@@ -1017,6 +1055,7 @@
               "BOOLEAN"
             ],
             "example": "STRING",
+            "maxLength": 255,
             "type": "string"
           },
           "tags": {
@@ -1035,6 +1074,7 @@
           "title": {
             "description": "Label title.",
             "example": "Customer name",
+            "maxLength": 255,
             "type": "string"
           },
           "valueType": {
@@ -1085,6 +1125,7 @@
           "description": {
             "description": "Metric description.",
             "example": "Sales for all the data available.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -1109,6 +1150,7 @@
           "title": {
             "description": "Metric title.",
             "example": "Total sales",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -1189,11 +1231,13 @@
           },
           "earlyAccess": {
             "description": "Early access defined on level Organization",
+            "maxLength": 255,
             "type": "string"
           },
           "hostname": {
             "description": "Formal hostname used in deployment.",
             "example": "alpha.com",
+            "maxLength": 255,
             "type": "string"
           },
           "id": {
@@ -1205,23 +1249,28 @@
           "name": {
             "description": "Formal name of the organization.",
             "example": "Alpha corporation",
+            "maxLength": 255,
             "type": "string"
           },
           "oauthClientId": {
             "description": "Identifier of the authentication provider",
+            "maxLength": 255,
             "type": "string"
           },
           "oauthClientSecret": {
             "description": "Communication secret of the authentication provider (never returned back).",
+            "maxLength": 255,
             "type": "string"
           },
           "oauthIssuerId": {
             "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
             "example": "myOidcProvider",
+            "maxLength": 255,
             "type": "string"
           },
           "oauthIssuerLocation": {
             "description": "URI of the authentication provider.",
+            "maxLength": 255,
             "type": "string"
           },
           "permissions": {
@@ -1395,6 +1444,7 @@
           "namePrefix": {
             "description": "Table or view name prefix used in scan. Will be stripped when generating LDM.",
             "example": "out_gooddata",
+            "maxLength": 255,
             "type": "string"
           },
           "path": {
@@ -1449,6 +1499,7 @@
             "type": "string"
           },
           "name": {
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -1464,16 +1515,19 @@
         "properties": {
           "authId": {
             "description": "User identification in the authentication manager.",
+            "maxLength": 255,
             "type": "string"
           },
           "email": {
             "description": "User email address",
             "example": "user@example.com",
+            "maxLength": 255,
             "type": "string"
           },
           "firstname": {
             "description": "User first name",
             "example": "John",
+            "maxLength": 255,
             "type": "string"
           },
           "id": {
@@ -1485,6 +1539,7 @@
           "lastname": {
             "description": "User last name",
             "example": "Wick",
+            "maxLength": 255,
             "type": "string"
           },
           "permissions": {
@@ -1524,6 +1579,7 @@
           "name": {
             "description": "Name of UserGroup",
             "example": "admins",
+            "maxLength": 255,
             "type": "string"
           },
           "parents": {
@@ -1668,6 +1724,7 @@
           "description": {
             "description": "Visualization object description.",
             "example": "Simple number for total goods in current production.",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -1692,6 +1749,7 @@
           "title": {
             "description": "Visualization object title.",
             "example": "Count of goods",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -1714,10 +1772,12 @@
           },
           "description": {
             "description": "Description of the workspace",
+            "maxLength": 255,
             "type": "string"
           },
           "earlyAccess": {
             "description": "Early access defined on level Workspace",
+            "maxLength": 255,
             "type": "string"
           },
           "hierarchyPermissions": {
@@ -1738,6 +1798,7 @@
           "name": {
             "description": "Name of a workspace to view.",
             "example": "Alpha Sales",
+            "maxLength": 255,
             "type": "string"
           },
           "parent": {
@@ -1769,11 +1830,13 @@
           "columnName": {
             "description": "Workspace Data Filters column name. Data are filtered using this physical column.",
             "example": "country_id",
+            "maxLength": 255,
             "type": "string"
           },
           "description": {
             "description": "Workspace Data Filters description.",
             "example": "ID of country",
+            "maxLength": 10000,
             "type": "string"
           },
           "id": {
@@ -1785,6 +1848,7 @@
           "title": {
             "description": "Workspace Data Filters title.",
             "example": "Country ID",
+            "maxLength": 255,
             "type": "string"
           },
           "workspace": {
@@ -1812,6 +1876,7 @@
           "description": {
             "description": "Workspace Data Filters setting description.",
             "example": "ID of country setting",
+            "maxLength": 10000,
             "type": "string"
           },
           "filterValues": {
@@ -1835,6 +1900,7 @@
           "title": {
             "description": "Workspace Data Filters setting title.",
             "example": "Country ID setting",
+            "maxLength": 255,
             "type": "string"
           },
           "workspace": {
@@ -2103,6 +2169,7 @@
             "type": "string"
           },
           "separator": {
+            "default": "__",
             "description": "A separator between prefixes and the names. Default is \"__\".",
             "example": "__",
             "type": "string"
@@ -2125,9 +2192,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "separator"
-        ],
         "type": "object"
       },
       "GrainIdentifier": {
@@ -2180,11 +2244,13 @@
         "properties": {
           "titleBase": {
             "description": "Title base is used as a token in title pattern. If left empty, it is replaced by date dataset title.",
+            "maxLength": 255,
             "type": "string"
           },
           "titlePattern": {
             "description": "This pattern is used to generate the title of attributes and labels that result from the granularities.\nThere are two tokens available: \n* `%titleBase` - represents shared part by all titles, or title of Date Dataset if left empty\n* `%granularityTitle` - represents `DateGranularity` built-in title",
             "example": "%titleBase - %granularityTitle",
+            "maxLength": 255,
             "type": "string"
           }
         },
@@ -2283,6 +2349,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -2292,6 +2359,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -2368,6 +2436,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -2377,6 +2446,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -2639,6 +2709,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -2648,6 +2719,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -2830,6 +2902,7 @@
                 "type": "boolean"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "granularity": {
@@ -2853,6 +2926,7 @@
                 "type": "string"
               },
               "sortColumn": {
+                "maxLength": 255,
                 "type": "string"
               },
               "sortDirection": {
@@ -2863,6 +2937,7 @@
                 "type": "string"
               },
               "sourceColumn": {
+                "maxLength": 255,
                 "type": "string"
               },
               "sourceColumnDataType": {
@@ -2884,6 +2959,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3068,6 +3144,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3119,6 +3196,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3202,6 +3280,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3575,6 +3654,7 @@
           "attributes": {
             "properties": {
               "applicationName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "content": {
@@ -3626,6 +3706,7 @@
           "attributes": {
             "properties": {
               "applicationName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "content": {
@@ -3735,6 +3816,7 @@
           "attributes": {
             "properties": {
               "applicationName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "content": {
@@ -3792,6 +3874,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -3801,6 +3884,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3873,6 +3957,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -3882,6 +3967,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -3993,6 +4079,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -4002,6 +4089,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -4052,9 +4140,11 @@
           "attributes": {
             "properties": {
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "schema": {
+                "maxLength": 255,
                 "type": "string"
               },
               "type": {
@@ -4182,6 +4272,7 @@
                 "type": "boolean"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
@@ -4203,12 +4294,15 @@
                 "type": "array"
               },
               "password": {
+                "maxLength": 255,
                 "type": "string"
               },
               "schema": {
+                "maxLength": 255,
                 "type": "string"
               },
               "token": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "type": {
@@ -4231,9 +4325,11 @@
                 "type": "string"
               },
               "url": {
+                "maxLength": 255,
                 "type": "string"
               },
               "username": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -4312,6 +4408,7 @@
                 "type": "boolean"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
@@ -4333,6 +4430,7 @@
                 "type": "array"
               },
               "schema": {
+                "maxLength": 255,
                 "type": "string"
               },
               "type": {
@@ -4355,9 +4453,11 @@
                 "type": "string"
               },
               "url": {
+                "maxLength": 255,
                 "type": "string"
               },
               "username": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -4466,6 +4566,7 @@
                 "type": "boolean"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
@@ -4487,12 +4588,15 @@
                 "type": "array"
               },
               "password": {
+                "maxLength": 255,
                 "type": "string"
               },
               "schema": {
+                "maxLength": 255,
                 "type": "string"
               },
               "token": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "type": {
@@ -4515,9 +4619,11 @@
                 "type": "string"
               },
               "url": {
+                "maxLength": 255,
                 "type": "string"
               },
               "username": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -4581,12 +4687,15 @@
                       "type": "boolean"
                     },
                     "name": {
+                      "maxLength": 255,
                       "type": "string"
                     },
                     "referencedTableColumn": {
+                      "maxLength": 255,
                       "type": "string"
                     },
                     "referencedTableId": {
+                      "maxLength": 255,
                       "type": "string"
                     }
                   },
@@ -4599,6 +4708,7 @@
                 "type": "array"
               },
               "namePrefix": {
+                "maxLength": 255,
                 "type": "string"
               },
               "path": {
@@ -4719,9 +4829,11 @@
                 "type": "boolean"
               },
               "dataSourceTableId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "grain": {
@@ -4795,6 +4907,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               },
               "type": {
@@ -5000,6 +5113,7 @@
                 "type": "string"
               },
               "value": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5097,9 +5211,11 @@
                 "type": "boolean"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "sourceColumn": {
+                "maxLength": 255,
                 "type": "string"
               },
               "sourceColumnDataType": {
@@ -5121,6 +5237,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5275,6 +5392,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -5284,6 +5402,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5360,6 +5479,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -5369,6 +5489,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5551,6 +5672,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -5560,6 +5682,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5632,12 +5755,14 @@
                 "type": "boolean"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "primary": {
                 "type": "boolean"
               },
               "sourceColumn": {
+                "maxLength": 255,
                 "type": "string"
               },
               "sourceColumnDataType": {
@@ -5659,6 +5784,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               },
               "valueType": {
@@ -5823,9 +5949,11 @@
               "content": {
                 "properties": {
                   "format": {
+                    "maxLength": 2048,
                     "type": "string"
                   },
                   "maql": {
+                    "maxLength": 10000,
                     "type": "string"
                   }
                 },
@@ -5835,6 +5963,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -5844,6 +5973,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -5915,9 +6045,11 @@
               "content": {
                 "properties": {
                   "format": {
+                    "maxLength": 2048,
                     "type": "string"
                   },
                   "maql": {
+                    "maxLength": 10000,
                     "type": "string"
                   }
                 },
@@ -5927,6 +6059,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -5936,6 +6069,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6141,9 +6275,11 @@
               "content": {
                 "properties": {
                   "format": {
+                    "maxLength": 2048,
                     "type": "string"
                   },
                   "maql": {
+                    "maxLength": 10000,
                     "type": "string"
                   }
                 },
@@ -6153,6 +6289,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -6162,6 +6299,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6219,26 +6357,33 @@
                 "type": "array"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "hostname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthClientId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthClientSecret": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerLocation": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6288,23 +6433,29 @@
                 "type": "array"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "hostname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthClientId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerLocation": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6417,26 +6568,33 @@
                 "type": "array"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "hostname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthClientId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthClientSecret": {
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerId": {
                 "description": "Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.",
                 "example": "myOidcProvider",
+                "maxLength": 255,
                 "type": "string"
               },
               "oauthIssuerLocation": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6680,6 +6838,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6731,6 +6890,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6814,6 +6974,7 @@
                 "type": "object"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6858,6 +7019,7 @@
           "attributes": {
             "properties": {
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -6936,6 +7098,7 @@
           "attributes": {
             "properties": {
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7043,6 +7206,7 @@
           "attributes": {
             "properties": {
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7118,15 +7282,19 @@
           "attributes": {
             "properties": {
               "authenticationId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "email": {
+                "maxLength": 255,
                 "type": "string"
               },
               "firstname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "lastname": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7205,15 +7373,19 @@
           "attributes": {
             "properties": {
               "authenticationId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "email": {
+                "maxLength": 255,
                 "type": "string"
               },
               "firstname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "lastname": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7321,15 +7493,19 @@
           "attributes": {
             "properties": {
               "authenticationId": {
+                "maxLength": 255,
                 "type": "string"
               },
               "email": {
+                "maxLength": 255,
                 "type": "string"
               },
               "firstname": {
+                "maxLength": 255,
                 "type": "string"
               },
               "lastname": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7554,6 +7730,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -7563,6 +7740,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7639,6 +7817,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -7648,6 +7827,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7839,6 +8019,7 @@
                 "type": "object"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "tags": {
@@ -7848,6 +8029,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7898,12 +8080,15 @@
           "attributes": {
             "properties": {
               "columnName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -7982,12 +8167,15 @@
           "attributes": {
             "properties": {
               "columnName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -8095,12 +8283,15 @@
           "attributes": {
             "properties": {
               "columnName": {
+                "maxLength": 255,
                 "type": "string"
               },
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -8179,6 +8370,7 @@
           "attributes": {
             "properties": {
               "description": {
+                "maxLength": 10000,
                 "type": "string"
               },
               "filterValues": {
@@ -8188,6 +8380,7 @@
                 "type": "array"
               },
               "title": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -8311,12 +8504,15 @@
           "attributes": {
             "properties": {
               "description": {
+                "maxLength": 255,
                 "type": "string"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -8395,12 +8591,15 @@
           "attributes": {
             "properties": {
               "description": {
+                "maxLength": 255,
                 "type": "string"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -8553,12 +8752,15 @@
           "attributes": {
             "properties": {
               "description": {
+                "maxLength": 255,
                 "type": "string"
               },
               "earlyAccess": {
+                "maxLength": 255,
                 "type": "string"
               },
               "name": {
+                "maxLength": 255,
                 "type": "string"
               }
             },
@@ -9351,6 +9553,7 @@
         },
         "summary": "Info about the platform usage.",
         "tags": [
+          "Usage",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9390,6 +9593,7 @@
         },
         "summary": "Info about the platform usage for particular items.",
         "tags": [
+          "Usage",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9438,6 +9642,7 @@
         },
         "summary": "Generate logical data model (LDM) from physical data model (PDM)",
         "tags": [
+          "Generate Logical Data Model",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9469,6 +9674,7 @@
         },
         "summary": "Register an upload notification",
         "tags": [
+          "Invalidate Cache",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9500,6 +9706,7 @@
         },
         "summary": "Values for all public entitlements.",
         "tags": [
+          "Entitlement",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9539,6 +9746,7 @@
         },
         "summary": "Values for requested public entitlements.",
         "tags": [
+          "Entitlement",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9570,6 +9778,7 @@
         },
         "summary": "Values for all settings without workspace.",
         "tags": [
+          "Reporting - Settings",
           "actions"
         ]
       },
@@ -9602,6 +9811,127 @@
           }
         },
         "summary": "Values for selected settings without workspace.",
+        "tags": [
+          "Reporting - Settings",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees": {
+      "get": {
+        "operationId": "availableAssignes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "dashboardId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailableAssignees"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions": {
+      "post": {
+        "operationId": "managePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "dashboardId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/PermissionsForAssignee"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions": {
+      "get": {
+        "operationId": "permissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "dashboardId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardPermissions"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
         "tags": [
           "actions"
         ]
@@ -9661,126 +9991,6 @@
         }
       }
     },
-    "/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/availableAssignees": {
-      "get": {
-        "operationId": "availableAssignes",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "dashboardId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AvailableAssignees"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/managePermissions": {
-      "post": {
-        "operationId": "managePermissions",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "dashboardId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "items": {
-                  "$ref": "#/components/schemas/PermissionsForAssignee"
-                },
-                "type": "array"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
-    "/api/v1/actions/workspaces/{workspaceId}/dashboards/{dashboardId}/permissions": {
-      "get": {
-        "operationId": "permissions",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "workspaceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "dashboardId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DashboardPermissions"
-                }
-              }
-            },
-            "description": "OK"
-          }
-        },
-        "tags": [
-          "actions"
-        ]
-      }
-    },
     "/api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph": {
       "get": {
         "description": "Computes the dependent entities graph",
@@ -9809,6 +10019,7 @@
         },
         "summary": "Computes the dependent entities graph",
         "tags": [
+          "Dependency Graph",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9855,6 +10066,7 @@
         },
         "summary": "Computes the dependent entities graph from given entry points",
         "tags": [
+          "Dependency Graph",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -9978,6 +10190,7 @@
         },
         "summary": "Values for all settings.",
         "tags": [
+          "Workspaces - Settings",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -10027,6 +10240,7 @@
         },
         "summary": "Values for selected settings.",
         "tags": [
+          "Workspaces - Settings",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -10067,7 +10281,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Cookie Security Configuration",
+          "entities",
+          "organization-controller"
         ]
       },
       "patch": {
@@ -10109,7 +10325,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Cookie Security Configuration",
+          "entities",
+          "organization-controller"
         ]
       },
       "put": {
@@ -10151,7 +10369,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Cookie Security Configuration",
+          "entities",
+          "organization-controller"
         ]
       }
     },
@@ -10229,7 +10449,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -10299,7 +10521,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -10369,7 +10593,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains permissions required to manipulate the Organization.",
@@ -10415,7 +10641,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "post": {
@@ -10443,7 +10671,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -10476,7 +10706,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -10514,7 +10746,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "patch": {
@@ -10556,7 +10790,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -10604,7 +10840,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -10650,7 +10888,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "post": {
@@ -10678,7 +10918,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       }
     },
@@ -10705,7 +10947,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "get": {
@@ -10737,7 +10981,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "patch": {
@@ -10779,7 +11025,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "put": {
@@ -10821,7 +11069,9 @@
           }
         },
         "tags": [
-          "entities"
+          "CSP Directives",
+          "entities",
+          "organization-model-controller"
         ]
       }
     },
@@ -10883,7 +11133,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -10945,7 +11197,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -11013,7 +11267,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -11024,6 +11280,30 @@
       },
       "post": {
         "operationId": "createEntity@DataSources",
+        "parameters": [
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=permissions,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "permissions",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
         "requestBody": {
           "content": {
             "application/vnd.gooddata.api+json": {
@@ -11047,7 +11327,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11101,7 +11383,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "data-source-entities-controller"
         ]
       }
     },
@@ -11143,7 +11427,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "data-source-entities-controller"
         ]
       }
     },
@@ -11170,7 +11456,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11230,7 +11518,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -11278,7 +11568,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11326,7 +11618,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Source - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11372,7 +11666,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Entitlement",
+          "entities",
+          "organization-model-controller"
         ]
       }
     },
@@ -11406,7 +11702,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Entitlement",
+          "entities",
+          "organization-model-controller"
         ]
       }
     },
@@ -11442,7 +11740,8 @@
         },
         "summary": "Get current organization info",
         "tags": [
-          "entities"
+          "entities",
+          "Organization - Entity APIs"
         ]
       }
     },
@@ -11482,7 +11781,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "post": {
@@ -11510,7 +11811,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11543,7 +11846,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11581,7 +11886,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "patch": {
@@ -11623,7 +11930,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11671,7 +11980,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Organization - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11717,7 +12028,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "post": {
@@ -11745,7 +12058,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11778,7 +12093,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11816,7 +12133,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ]
       },
       "patch": {
@@ -11858,7 +12177,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11906,7 +12227,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Appearance",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -11972,7 +12295,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -12028,7 +12353,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12061,7 +12388,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12119,7 +12448,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -12187,7 +12518,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12255,7 +12588,9 @@
           }
         },
         "tags": [
-          "entities"
+          "UserGroups - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12320,7 +12655,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -12375,7 +12712,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12408,7 +12747,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12465,7 +12806,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -12532,7 +12875,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12599,7 +12944,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Users - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -12654,7 +13001,9 @@
         },
         "summary": "List all api tokens for a user",
         "tags": [
-          "entities"
+          "API tokens",
+          "entities",
+          "user-model-controller"
         ]
       },
       "post": {
@@ -12692,7 +13041,9 @@
           }
         },
         "tags": [
-          "entities"
+          "API tokens",
+          "entities",
+          "user-model-controller"
         ]
       }
     },
@@ -12727,7 +13078,9 @@
           }
         },
         "tags": [
-          "entities"
+          "API tokens",
+          "entities",
+          "user-model-controller"
         ]
       },
       "get": {
@@ -12767,7 +13120,9 @@
           }
         },
         "tags": [
-          "entities"
+          "API tokens",
+          "entities",
+          "user-model-controller"
         ]
       },
       "put": {
@@ -12817,7 +13172,9 @@
           }
         },
         "tags": [
-          "entities"
+          "API tokens",
+          "entities",
+          "user-model-controller"
         ]
       }
     },
@@ -12866,7 +13223,9 @@
         },
         "summary": "List all settings for a user",
         "tags": [
-          "entities"
+          "User Settings",
+          "entities",
+          "user-model-controller"
         ]
       },
       "post": {
@@ -12904,7 +13263,9 @@
           }
         },
         "tags": [
-          "entities"
+          "User Settings",
+          "entities",
+          "user-model-controller"
         ]
       }
     },
@@ -12939,7 +13300,9 @@
           }
         },
         "tags": [
-          "entities"
+          "User Settings",
+          "entities",
+          "user-model-controller"
         ]
       },
       "get": {
@@ -12979,7 +13342,9 @@
           }
         },
         "tags": [
-          "entities"
+          "User Settings",
+          "entities",
+          "user-model-controller"
         ]
       },
       "put": {
@@ -13029,7 +13394,9 @@
           }
         },
         "tags": [
-          "entities"
+          "User Settings",
+          "entities",
+          "user-model-controller"
         ]
       }
     },
@@ -13112,7 +13479,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -13143,6 +13512,29 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=config,permissions,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "config",
+                  "permissions",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -13168,7 +13560,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13201,7 +13595,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13282,7 +13678,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -13350,7 +13748,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13418,7 +13818,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Entity APIs",
+          "entities",
+          "organization-model-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13545,7 +13947,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -13589,6 +13993,30 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=permissions,origin,accessInfo,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "permissions",
+                  "origin",
+                  "accessInfo",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -13614,7 +14042,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13660,7 +14090,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13769,7 +14201,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -13855,7 +14289,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -13941,7 +14377,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Dashboards",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -14063,7 +14501,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Attributes",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -14163,7 +14603,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Attributes",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -14257,7 +14699,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -14276,6 +14720,28 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -14301,7 +14767,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -14341,7 +14809,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       },
       "get": {
@@ -14417,7 +14887,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -14478,7 +14950,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       },
       "put": {
@@ -14533,7 +15007,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -14627,7 +15103,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -14646,6 +15124,28 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -14671,7 +15171,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -14717,7 +15219,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -14799,7 +15303,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -14860,7 +15366,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -14921,7 +15429,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Plugins",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -15043,7 +15553,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Datasets",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -15143,7 +15655,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Datasets",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -15257,7 +15771,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Facts",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -15361,7 +15877,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Facts",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -15482,7 +16000,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -15522,6 +16042,28 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -15547,7 +16089,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -15593,7 +16137,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -15696,7 +16242,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -15778,7 +16326,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -15860,7 +16410,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Context Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -15980,7 +16532,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Labels",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -16084,7 +16638,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Labels",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -16207,7 +16763,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -16249,6 +16807,28 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -16274,7 +16854,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16320,7 +16902,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16425,7 +17009,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -16509,7 +17095,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16593,7 +17181,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Metrics",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16716,7 +17306,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -16758,6 +17350,28 @@
               "type": "array"
             },
             "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -16783,7 +17397,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16829,7 +17445,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -16934,7 +17552,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17018,7 +17638,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17102,7 +17724,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Visualization Object",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17200,7 +17824,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17282,7 +17908,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17380,7 +18008,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17444,7 +18074,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17490,7 +18122,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17570,7 +18204,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17651,7 +18287,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17732,7 +18370,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to manage this object type.",
@@ -17832,7 +18472,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -17851,6 +18493,28 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -17876,7 +18540,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -17916,7 +18582,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       },
       "get": {
@@ -17992,7 +18660,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ],
         "x-gdc-security-info": {
           "description": "Contains minimal permission level required to view this object type.",
@@ -18053,7 +18723,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       },
       "put": {
@@ -18108,7 +18780,9 @@
           }
         },
         "tags": [
-          "entities"
+          "Workspaces - Settings",
+          "entities",
+          "workspace-object-controller"
         ]
       }
     },
@@ -18130,7 +18804,8 @@
         },
         "summary": "Get all data sources",
         "tags": [
-          "layout"
+          "layout",
+          "Data Source - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get data sources layout.",
@@ -18159,7 +18834,8 @@
         },
         "summary": "Put all data sources",
         "tags": [
-          "layout"
+          "layout",
+          "Data Source - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set data sources layout.",
@@ -18197,7 +18873,8 @@
         },
         "summary": "Get data source physical model layout",
         "tags": [
-          "layout"
+          "layout",
+          "PDM - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",
@@ -18236,7 +18913,8 @@
         },
         "summary": "Set data source physical model layout",
         "tags": [
-          "layout"
+          "layout",
+          "PDM - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",
@@ -18264,7 +18942,8 @@
         },
         "summary": "Get organization layout",
         "tags": [
-          "layout"
+          "layout",
+          "Organization - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get organization layout.",
@@ -18293,7 +18972,8 @@
         },
         "summary": "Set organization layout",
         "tags": [
-          "layout"
+          "layout",
+          "Organization - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set organization layout.",
@@ -18321,7 +19001,8 @@
         },
         "summary": "Get all user groups",
         "tags": [
-          "layout"
+          "layout",
+          "UserGroups - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get groups layout.",
@@ -18350,7 +19031,8 @@
         },
         "summary": "Put all user groups",
         "tags": [
-          "layout"
+          "layout",
+          "UserGroups - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set groups layout.",
@@ -18455,7 +19137,8 @@
         },
         "summary": "Get all users",
         "tags": [
-          "layout"
+          "layout",
+          "Users - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get users layout.",
@@ -18484,7 +19167,8 @@
         },
         "summary": "Put all users",
         "tags": [
-          "layout"
+          "layout",
+          "Users - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set users layout.",
@@ -18589,7 +19273,8 @@
         },
         "summary": "Get all users and user groups",
         "tags": [
-          "layout"
+          "layout",
+          "UserGroups - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get user/groups layout.",
@@ -18618,7 +19303,8 @@
         },
         "summary": "Put all users and user groups",
         "tags": [
-          "layout"
+          "layout",
+          "UserGroups - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set user/groups layout.",
@@ -18646,7 +19332,8 @@
         },
         "summary": "Get workspace data filters for all workspaces",
         "tags": [
-          "layout"
+          "layout",
+          "Data Filters"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get data filters layout.",
@@ -18675,7 +19362,8 @@
         },
         "summary": "Set all workspace data filters",
         "tags": [
-          "layout"
+          "layout",
+          "Data Filters"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set data filters layout.",
@@ -18703,7 +19391,8 @@
         },
         "summary": "Get all workspaces layout",
         "tags": [
-          "layout"
+          "layout",
+          "Workspaces - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to get workspaces layout.",
@@ -18732,7 +19421,8 @@
         },
         "summary": "Set all workspaces layout",
         "tags": [
-          "layout"
+          "layout",
+          "Workspaces - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set workspaces layout.",
@@ -18770,7 +19460,8 @@
         },
         "summary": "Get workspace layout",
         "tags": [
-          "layout"
+          "layout",
+          "Workspaces - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to read the layout.",
@@ -18809,7 +19500,8 @@
         },
         "summary": "Set workspace layout",
         "tags": [
-          "layout"
+          "layout",
+          "Workspaces - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to modify the layout.",
@@ -18847,7 +19539,8 @@
         },
         "summary": "Get analytics model",
         "tags": [
-          "layout"
+          "layout",
+          "Analytics Model"
         ],
         "x-gdc-security-info": {
           "description": "Permissions to read the analytics layout.",
@@ -18886,7 +19579,8 @@
         },
         "summary": "Set analytics model",
         "tags": [
-          "layout"
+          "layout",
+          "Analytics Model"
         ],
         "x-gdc-security-info": {
           "description": "Permissions to modify the analytics layout.",
@@ -18932,7 +19626,8 @@
         },
         "summary": "Get logical model",
         "tags": [
-          "layout"
+          "layout",
+          "LDM - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to read the logical model.",
@@ -18971,7 +19666,8 @@
         },
         "summary": "Set logical model",
         "tags": [
-          "layout"
+          "layout",
+          "LDM - Declarative APIs"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to alter the logical model.",
@@ -19009,7 +19705,8 @@
         },
         "summary": "Get permissions for the workspace",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -19048,7 +19745,8 @@
         },
         "summary": "Set permissions for the workspace",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -19089,6 +19787,7 @@
         },
         "summary": "Links for all configuration options",
         "tags": [
+          "Options",
           "entities"
         ]
       }
@@ -19120,7 +19819,8 @@
         },
         "summary": "Get all available data source drivers",
         "tags": [
-          "entities"
+          "entities",
+          "Available Drivers"
         ]
       }
     }
@@ -19133,16 +19833,76 @@
   ],
   "tags": [
     {
-      "description": "| interconnected resources representing application state (JSON:API)",
-      "name": "entities"
+      "name": "Workspaces - Settings"
+    },
+    {
+      "name": "Workspaces - Declarative APIs"
+    },
+    {
+      "name": "UserGroups - Declarative APIs"
+    },
+    {
+      "name": "Options"
     },
     {
       "description": "| all-in-one declarative interface (set [PUT] & read [GET] over JSON)",
       "name": "layout"
     },
     {
+      "name": "Generate Logical Data Model"
+    },
+    {
+      "name": "Users - Declarative APIs"
+    },
+    {
+      "name": "Data Filters"
+    },
+    {
+      "name": "Data Source - Declarative APIs"
+    },
+    {
+      "name": "Reporting - Settings"
+    },
+    {
+      "name": "Invalidate Cache"
+    },
+    {
+      "name": "Dependency Graph"
+    },
+    {
+      "name": "Organization - Entity APIs"
+    },
+    {
+      "name": "Organization - Declarative APIs"
+    },
+    {
+      "name": "Permissions"
+    },
+    {
+      "name": "LDM - Declarative APIs"
+    },
+    {
+      "description": "| interconnected resources representing application state (JSON:API)",
+      "name": "entities"
+    },
+    {
+      "name": "Analytics Model"
+    },
+    {
+      "name": "Entitlement"
+    },
+    {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"
+    },
+    {
+      "name": "PDM - Declarative APIs"
+    },
+    {
+      "name": "Usage"
+    },
+    {
+      "name": "Available Drivers"
     }
   ]
 }

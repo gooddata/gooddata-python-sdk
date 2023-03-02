@@ -11,8 +11,10 @@ docs/ScanRequest.md
 docs/ScanResultPdm.md
 docs/ScanSqlRequest.md
 docs/ScanSqlResponse.md
+docs/ScanningApi.md
 docs/SqlColumn.md
 docs/TableWarning.md
+docs/TestConnectionApi.md
 docs/TestDefinitionRequest.md
 docs/TestQueryDuration.md
 docs/TestRequest.md
@@ -20,6 +22,8 @@ docs/TestResponse.md
 gooddata_scan_client/__init__.py
 gooddata_scan_client/api/__init__.py
 gooddata_scan_client/api/actions_api.py
+gooddata_scan_client/api/scanning_api.py
+gooddata_scan_client/api/test_connection_api.py
 gooddata_scan_client/api_client.py
 gooddata_scan_client/apis/__init__.py
 gooddata_scan_client/configuration.py

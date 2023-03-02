@@ -79,6 +79,18 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('name',): {
+            'max_length': 255,
+        },
+        ('schema',): {
+            'max_length': 255,
+        },
+        ('url',): {
+            'max_length': 255,
+        },
+        ('username',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

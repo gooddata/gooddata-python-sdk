@@ -141,6 +141,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'json_api_analytical_dashboard_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -150,12 +151,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -169,6 +175,14 @@ class EntitiesApi(object):
                         "DASHBOARDPLUGINS": "dashboardPlugins",
                         "ALL": "ALL"
                     },
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ORIGIN": "origin",
+                        "ACCESSINFO": "accessInfo",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -177,18 +191,23 @@ class EntitiesApi(object):
                         (JsonApiAnalyticalDashboardInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_analytical_dashboard_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -370,6 +389,7 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_custom_application_setting_in_document',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -378,29 +398,45 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
                     'json_api_custom_application_setting_in_document':
                         (JsonApiCustomApplicationSettingInDocument,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_custom_application_setting_in_document': 'body',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -426,6 +462,7 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_dashboard_plugin_in_document',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -434,29 +471,45 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
                     'json_api_dashboard_plugin_in_document':
                         (JsonApiDashboardPluginInDocument,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_dashboard_plugin_in_document': 'body',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -481,6 +534,7 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'json_api_data_source_in_document',
+                    'meta_include',
                 ],
                 'required': [
                     'json_api_data_source_in_document',
@@ -488,25 +542,41 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'json_api_data_source_in_document':
                         (JsonApiDataSourceInDocument,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'json_api_data_source_in_document': 'body',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -533,6 +603,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'json_api_filter_context_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -542,12 +613,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -555,6 +631,12 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -565,18 +647,23 @@ class EntitiesApi(object):
                         (JsonApiFilterContextInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_filter_context_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -603,6 +690,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'json_api_metric_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -612,12 +700,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -629,6 +722,12 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -637,18 +736,23 @@ class EntitiesApi(object):
                         (JsonApiMetricInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_metric_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -956,6 +1060,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'json_api_visualization_object_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -965,12 +1070,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -982,6 +1092,12 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "ALL": "ALL"
                     },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -990,18 +1106,23 @@ class EntitiesApi(object):
                         (JsonApiVisualizationObjectInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_visualization_object_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1096,6 +1217,7 @@ class EntitiesApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_workspace_setting_in_document',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -1104,29 +1226,45 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
                     'json_api_workspace_setting_in_document':
                         (JsonApiWorkspaceSettingInDocument,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_workspace_setting_in_document': 'body',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1152,6 +1290,7 @@ class EntitiesApi(object):
                 'all': [
                     'json_api_workspace_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'json_api_workspace_in_document',
@@ -1160,12 +1299,17 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
@@ -1174,22 +1318,34 @@ class EntitiesApi(object):
                         "PARENT": "parent",
                         "ALL": "ALL"
                     },
+                    ('meta_include',): {
+
+                        "CONFIG": "config",
+                        "PERMISSIONS": "permissions",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'json_api_workspace_in_document':
                         (JsonApiWorkspaceInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'json_api_workspace_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -9900,6 +10056,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -10236,6 +10393,7 @@ class EntitiesApi(object):
             json_api_custom_application_setting_in_document (JsonApiCustomApplicationSettingInDocument):
 
         Keyword Args:
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -10322,6 +10480,7 @@ class EntitiesApi(object):
             json_api_dashboard_plugin_in_document (JsonApiDashboardPluginInDocument):
 
         Keyword Args:
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -10406,6 +10565,7 @@ class EntitiesApi(object):
             json_api_data_source_in_document (JsonApiDataSourceInDocument):
 
         Keyword Args:
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -10491,6 +10651,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -10578,6 +10739,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -11081,6 +11243,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -11254,6 +11417,7 @@ class EntitiesApi(object):
             json_api_workspace_setting_in_document (JsonApiWorkspaceSettingInDocument):
 
         Keyword Args:
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -11339,6 +11503,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

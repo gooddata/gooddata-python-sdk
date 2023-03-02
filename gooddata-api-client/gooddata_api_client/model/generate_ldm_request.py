@@ -88,7 +88,6 @@ class GenerateLdmRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'separator': (str,),  # noqa: E501
             'date_granularities': (str,),  # noqa: E501
             'denorm_prefix': (str,),  # noqa: E501
             'fact_prefix': (str,),  # noqa: E501
@@ -99,6 +98,7 @@ class GenerateLdmRequest(ModelNormal):
             'primary_label_prefix': (str,),  # noqa: E501
             'reference_prefix': (str,),  # noqa: E501
             'secondary_label_prefix': (str,),  # noqa: E501
+            'separator': (str,),  # noqa: E501
             'table_prefix': (str,),  # noqa: E501
             'view_prefix': (str,),  # noqa: E501
             'wdf_prefix': (str,),  # noqa: E501
@@ -110,7 +110,6 @@ class GenerateLdmRequest(ModelNormal):
 
 
     attribute_map = {
-        'separator': 'separator',  # noqa: E501
         'date_granularities': 'dateGranularities',  # noqa: E501
         'denorm_prefix': 'denormPrefix',  # noqa: E501
         'fact_prefix': 'factPrefix',  # noqa: E501
@@ -121,6 +120,7 @@ class GenerateLdmRequest(ModelNormal):
         'primary_label_prefix': 'primaryLabelPrefix',  # noqa: E501
         'reference_prefix': 'referencePrefix',  # noqa: E501
         'secondary_label_prefix': 'secondaryLabelPrefix',  # noqa: E501
+        'separator': 'separator',  # noqa: E501
         'table_prefix': 'tablePrefix',  # noqa: E501
         'view_prefix': 'viewPrefix',  # noqa: E501
         'wdf_prefix': 'wdfPrefix',  # noqa: E501
@@ -133,11 +133,8 @@ class GenerateLdmRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, separator, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """GenerateLdmRequest - a model defined in OpenAPI
-
-        Args:
-            separator (str): A separator between prefixes and the names. Default is \"__\".
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -180,6 +177,7 @@ class GenerateLdmRequest(ModelNormal):
             primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
             reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
             secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
+            separator (str): A separator between prefixes and the names. Default is \"__\".. [optional] if omitted the server will use the default value of "__"  # noqa: E501
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
@@ -214,7 +212,6 @@ class GenerateLdmRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.separator = separator
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -235,11 +232,8 @@ class GenerateLdmRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, separator, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """GenerateLdmRequest - a model defined in OpenAPI
-
-        Args:
-            separator (str): A separator between prefixes and the names. Default is \"__\".
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -282,6 +276,7 @@ class GenerateLdmRequest(ModelNormal):
             primary_label_prefix (str): Columns starting with this prefix will be considered as primary labels. The prefix is then followed by the value of `separator` parameter. Given the primary label prefix is `pl` and separator is `__`, the columns with name like `pl__country_id` will be considered as primary labels.. [optional]  # noqa: E501
             reference_prefix (str): Columns starting with this prefix will be considered as references. The prefix is then followed by the value of `separator` parameter. Given the reference prefix is `r` and separator is `__`, the columns with name like `r__customer_name` will be considered as references.. [optional]  # noqa: E501
             secondary_label_prefix (str): Columns starting with this prefix will be considered as secondary labels. The prefix is then followed by the value of `separator` parameter. Given the secondary label prefix is `sl` and separator is `__`, the columns with name like `sl__country_id_country_name` will be considered as secondary labels.. [optional]  # noqa: E501
+            separator (str): A separator between prefixes and the names. Default is \"__\".. [optional] if omitted the server will use the default value of "__"  # noqa: E501
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
@@ -314,7 +309,6 @@ class GenerateLdmRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.separator = separator
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

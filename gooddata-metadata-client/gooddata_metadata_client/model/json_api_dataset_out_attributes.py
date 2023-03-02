@@ -71,6 +71,15 @@ class JsonApiDatasetOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('data_source_table_id',): {
+            'max_length': 255,
+        },
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('title',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

@@ -67,6 +67,9 @@ class JsonApiDataSourceTableOutAttributes(ModelNormal):
     }
 
     validations = {
+        ('name_prefix',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

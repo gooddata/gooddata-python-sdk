@@ -802,7 +802,7 @@ class Endpoint(object):
         """ This method is invoked when endpoints are called
         Example:
 
-        api_instance = ActionsApi()
+        api_instance = ComputationApi()
         api_instance.compute_label_elements_post  # this is an instance of the class Endpoint
         api_instance.compute_label_elements_post()  # this invokes api_instance.compute_label_elements_post.__call__()
         which then invokes the callable functions stored in that endpoint at

@@ -59,6 +59,15 @@ class JsonApiWorkspaceDataFilterInAttributes(ModelNormal):
     }
 
     validations = {
+        ('column_name',): {
+            'max_length': 255,
+        },
+        ('description',): {
+            'max_length': 10000,
+        },
+        ('title',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property

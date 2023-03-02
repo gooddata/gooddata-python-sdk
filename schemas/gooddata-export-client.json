@@ -165,6 +165,7 @@
         },
         "summary": "Create tabular export request",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -235,6 +236,7 @@
         },
         "summary": "Retrieve exported files",
         "tags": [
+          "Computation",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -253,6 +255,9 @@
     }
   ],
   "tags": [
+    {
+      "name": "Computation"
+    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"
