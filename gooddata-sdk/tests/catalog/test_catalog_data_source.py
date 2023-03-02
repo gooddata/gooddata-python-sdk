@@ -615,6 +615,39 @@ def test_scan_sql(test_config: dict):
     assert len(response.data_preview) == 10
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "scan_sql_with_nulls_in_preview.yaml"))
+def test_scan_sql_with_nulls_in_preview(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = ScanSqlRequest(sql="SELECT ol.campaign_id FROM order_lines ol ORDER BY campaign_id NULLS FIRST LIMIT 5")
+
+    response = sdk.catalog_data_source.scan_sql(data_source_id, request)
+    response.columns.sort(key=lambda col: col.name)
+
+    assert len(response.columns) == 1
+    assert response.columns == [
+        SqlColumn(name="campaign_id", data_type="INT"),
+    ]
+    assert len(response.data_preview) == 5
+    assert [None] in response.data_preview
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "scan_scan_sql_without_preview.yaml"))
+def test_scan_sql_without_preview(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+    request = ScanSqlRequest(sql="SELECT ol.campaign_id FROM order_lines ol LIMIT 0")
+
+    response = sdk.catalog_data_source.scan_sql(data_source_id, request)
+    response.columns.sort(key=lambda col: col.name)
+
+    assert len(response.columns) == 1
+    assert response.columns == [
+        SqlColumn(name="campaign_id", data_type="INT"),
+    ]
+    assert response.data_preview is None
+
+
 """
 # TODO: commented because Greenplum is supported only for Cloud and it cannot be tested using Docker image.
 @gd_vcr.use_cassette(str(_fixtures_dir / "greenplum.yaml"))
