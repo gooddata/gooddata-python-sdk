@@ -111,7 +111,7 @@ class GoodDataApiClient:
     @property
     def afm_client(self) -> afm_client.ApiClient:
         warn(
-            "This property is deprecated and it will be removed in PythonSDK 2.0. "
+            "This property is deprecated and it will be removed in the upcoming release. "
             "Please use entities_api, layout_api, actions_api properties instead.",
             DeprecationWarning,
             stacklevel=2,
@@ -121,7 +121,7 @@ class GoodDataApiClient:
     @property
     def metadata_client(self) -> metadata_client.ApiClient:
         warn(
-            "This property is deprecated and it will be removed in PythonSDK 2.0. "
+            "This property is deprecated and it will be removed in the upcoming release. "
             "Please use entities_api, layout_api, actions_api properties instead.",
             DeprecationWarning,
             stacklevel=2,
@@ -131,7 +131,7 @@ class GoodDataApiClient:
     @property
     def scan_client(self) -> scan_client.ApiClient:
         warn(
-            "This property is deprecated and it will be removed in PythonSDK 2.0. "
+            "This property is deprecated and it will be removed in the upcoming release. "
             "Please use entities_api, layout_api, actions_api properties instead.",
             DeprecationWarning,
             stacklevel=2,
