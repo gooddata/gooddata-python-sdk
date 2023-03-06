@@ -115,6 +115,6 @@ remove-cassettes:
 .PHONY: new-docs
 new-docs:
 	git submodule update --init --recursive --depth 1; \
-	cd gooddata-sdk/docs/hugo/docs; \
+	cd docs; \
 	npm install; \
 	hugo server
