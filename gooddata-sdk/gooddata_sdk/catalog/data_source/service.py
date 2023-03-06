@@ -46,6 +46,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         data_source: CatalogDataSource,
     ) -> None:
         """Pushes the Data Source to the GoodData environment.
+
         Automatically decides, whether to create or update.
 
         Args:
@@ -186,6 +187,7 @@ class CatalogDataSourceService(CatalogServiceBase):
 
     def store_declarative_data_sources(self, layout_root_path: Path = Path.cwd()) -> None:
         """Store data sources layouts in a directory hierarchy.
+
             gooddata_layouts
             └── organization_id
                     └── data_sources
@@ -228,8 +230,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         credentials_path: Optional[Path] = None,
         test_data_sources: bool = False,
     ) -> None:
-        """This method combines load_declarative_data_sources and put_declarative_data_sources
-            methods to load and set layouts stored using store_declarative_data_sources.
+        """Loads and sets layouts stored using `store_declarative_data_sources`.
+
+        This method combines `load_declarative_data_sources` and `put_declarative_data_sources`
+        methods to load and set layouts stored using `store_declarative_data_sources`.
 
         Args:
             layout_root_path (Optional[Path], optional):
@@ -275,6 +279,7 @@ class CatalogDataSourceService(CatalogServiceBase):
 
     def store_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
         """Store physical data model layout in directory hierarchy for a given data source.
+
         gooddata_layouts
         └── organization_id
                 └── data_sources
@@ -298,8 +303,10 @@ class CatalogDataSourceService(CatalogServiceBase):
     def load_declarative_pdm(
         self, data_source_id: str, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeTables:
-        """Load declarative physical data model layout,
-        which was stored using store_declarative_pdm for a given data source.
+        """Load declarative physical data model layout.
+
+        Load declarative physical data model layout, which was stored using
+        `store_declarative_pdm` for a given data source.
 
         Args:
             data_source_id (str):
@@ -314,8 +321,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         return CatalogDeclarativeTables.load_from_disk(data_source_folder)
 
     def load_and_put_declarative_pdm(self, data_source_id: str, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_pdm and put_declarative_pdm methods
-            to load and set layouts stored using store_declarative_pdm.
+        """Loads and sets layouts stored using `store_declarative_pdm`.
+
+        This method combines load_declarative_pdm and `put_declarative_pdm` methods
+        to load and set layouts stored using `store_declarative_pdm`.
 
         Args:
             data_source_id (str):
@@ -330,11 +339,12 @@ class CatalogDataSourceService(CatalogServiceBase):
 
     def store_pdm_to_disk(self, datasource_id: str, path: Path = Path.cwd()) -> None:
         """Store the physical data model layout in the directory for a given data source.
-            The directory structure below shows the output for the path set to Path("pdm_location").
-            pdm_location
-                └── pdm
-                    ├── table_A.yaml
-                    └── table_B.yaml
+
+        The directory structure below shows the output for the path set to Path("pdm_location").
+        pdm_location
+            └── pdm
+                ├── table_A.yaml
+                └── table_B.yaml
 
         Args:
             datasource_id (str):
@@ -403,6 +413,7 @@ class CatalogDataSourceService(CatalogServiceBase):
         report_warnings: bool = False,
     ) -> CatalogScanResultPdm:
         """Scan data source specified by its id and optionally by specified scan request.
+
         CatalogScanResultPdm contains PDM and warnings. Warnings contain information about
         columns which were not added to the PDM because their data types are not supported.
         Additional parameter report_warnings can be passed to suppress or to report warnings.
@@ -446,8 +457,9 @@ class CatalogDataSourceService(CatalogServiceBase):
         self.put_declarative_pdm(data_source_id, self.scan_data_source(data_source_id, scan_request).pdm)
 
     def scan_schemata(self, data_source_id: str) -> list[str]:
-        """Returns a list of schemas that exist in the database
-        and can be configured in the data source entity. Data source
+        """Returns a list of schemas that exist in the database.
+
+        Can be configured in the data source entity. Data source
         managers like Dremio or Drill can work with multiple schemas
         and schema names can be injected into scan_request to filter
         out tables stored in the different schemas.
@@ -464,8 +476,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         return response.get("schema_names", [])
 
     def scan_sql(self, data_source_id: str, sql_request: ScanSqlRequest) -> ScanSqlResponse:
-        """Analyze SELECT SQL query in a given request. Return description of SQL result-set as
-        list of column names with GoodData data types and list of example data returned by SELECT query.
+        """Analyze SELECT SQL query in a given request.
+
+        Return description of SQL result-set as list of column names with GoodData data types
+        and list of example data returned by SELECT query.
 
         Args:
             data_source_id (str):
@@ -483,11 +497,12 @@ class CatalogDataSourceService(CatalogServiceBase):
         self, declarative_data_sources: CatalogDeclarativeDataSources, credentials_path: Optional[Path] = None
     ) -> None:
         """Tests connection to declarative data sources.
-        If credentials_path is omitted then the connection
+
+        If `credentials_path` is omitted then the connection
         is tested with empty credentials. In case some connection
-        failed the ValueError is raised with information about why
+        failed the `ValueError` is raised with information about why
         the connection to the data source failed, e.g. host
-        unreachable or invalid login or password”.
+        unreachable or invalid login or password.
 
         Args:
             declarative_data_sources (CatalogDeclarativeDataSources):

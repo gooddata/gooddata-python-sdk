@@ -203,6 +203,21 @@ def change_case(dictionary: dict, case: Callable[[str], str]) -> dict:
 
 
 def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView) -> None:
+    """Check, whether the mandatory profile content is valid.
+
+    Args:
+        profile (str):
+            Profile Name
+        profile_content_keys (KeysView):
+            Dictionary keys from loaded configuration file under specific profile.
+
+    Retruns:
+        None
+
+    Raises:
+        ValueError:
+            Missing mandatory parameter or parameters.
+    """
     mandatory_parameters = ["host", "token"]
     missing = []
     for mandatory_parameter in mandatory_parameters:
@@ -214,6 +229,24 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
 
 
 def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> dict[str, Any]:
+    """Get the profile content from a given file.
+
+    Args:
+        profile (str, optional):
+            Profile name. Defaults to "default".
+        profiles_path (Path, optional):
+            File path for the profiles. Defaults to PROFILES_FILE_PATH.
+
+    Raises:
+        ValueError:
+            There is no profile file located for the given path.
+        ValueError:
+            Profile file does not contain the specified profile.
+
+    Returns:
+        dict[str, Any]:
+            Profile content as a dictionary.
+    """
     if not profiles_path.exists():
         raise ValueError(f"There is no profiles file located for path {profiles_path}.")
     content = read_layout_from_file(profiles_path)
@@ -226,9 +259,20 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
 def good_pandas_profile_content(
     profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-    """
+    """Load the profiles for GoodPandas
+
     This is workaround for GoodPandas. We should only use profile_content in the future.
     For that we need to unify GoodPandas and GoodDataSdk interface.
+
+    Args:
+        profile (str, optional):
+            Profile name. Defaults to "default".
+        profiles_path (Path, optional):
+            File path for the profiles. Defaults to PROFILES_FILE_PATH.
+
+    Returns:
+        Tuple[Dict[str, Any], Dict[str, Any]]:
+            The content and custom Headers.
     """
     content = profile_content(profile, profiles_path)
     custom_headers = content["custom_headers"]

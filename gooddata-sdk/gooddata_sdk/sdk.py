@@ -23,6 +23,18 @@ class GoodDataSdk:
 
     @classmethod
     def create_from_profile(cls, profile: str = "default", profiles_path: Path = PROFILES_FILE_PATH) -> GoodDataSdk:
+        """Convenient method to initialize the SDK from config file.
+
+        Args:
+            profile (str, optional):
+                Profile Name. Defaults to "default".
+            profiles_path (Path, optional):
+                File path for the profiles. Defaults to PROFILES_FILE_PATH.
+
+        Returns:
+            GoodDataSdk:
+                Initialized SDK.
+        """
         content = profile_content(profile, profiles_path)
         client = GoodDataApiClient(**content)
         return cls(client)

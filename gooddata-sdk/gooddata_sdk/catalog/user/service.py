@@ -207,8 +207,10 @@ class CatalogUserService(CatalogServiceBase):
         return CatalogDeclarativeUsers.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_users(self, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_users and put_declarative_users
-            methods to load and set layouts stored using store_declarative_users.
+        """Loads and sets the layouts stored using `store_declarative_users`.
+
+        This method combines `load_declarative_users` and `put_declarative_users`
+        methods to load and set layouts stored using `store_declarative_users`.
 
         Args:
             layout_root_path (Path, optional):
@@ -249,7 +251,7 @@ class CatalogUserService(CatalogServiceBase):
         self._layout_api.put_user_groups_layout(user_groups.to_api())
 
     def load_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeUserGroups:
-        """Load declarative users groups layout, which was stored using store_declarative_user_groups.
+        """Load declarative users groups layout, which was stored using `store_declarative_user_groups`.
 
         Args:
             layout_root_path (Path, optional):
@@ -275,8 +277,10 @@ class CatalogUserService(CatalogServiceBase):
         self.get_declarative_user_groups().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_users and put_declarative_users
-            methods to load and set layouts stored using store_declarative_users.
+        """Loads and sets the layouts stored using `store_declarative_users`.
+
+        This method combines load_declarative_users and put_declarative_users
+        methods to load and set layouts stored using store_declarative_users.
 
         Args:
             layout_root_path (Path, optional):
@@ -319,7 +323,7 @@ class CatalogUserService(CatalogServiceBase):
     def load_declarative_users_user_groups(
         self, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeUsersUserGroups:
-        """Load declarative users and user groups layout, which was stored using store_declarative_users_user_groups.
+        """Load declarative users and user groups layout, which was stored using `store_declarative_users_user_groups`.
 
         Args:
             layout_root_path (Path, optional):
@@ -348,8 +352,10 @@ class CatalogUserService(CatalogServiceBase):
         self.get_declarative_users_user_groups().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_users_user_groups(self, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_users and put_declarative_users_user_groups
-            methods to load and set layouts stored using store_declarative_users_user_groups.
+        """Loads and sets the layouts stored using `store_declarative_users_user_groups`.
+
+        This method combines `load_declarative_users` and `put_declarative_users_user_groups`
+        methods to load and set layouts stored using `store_declarative_users_user_groups`.
 
         Args:
             layout_root_path (Path, optional):
