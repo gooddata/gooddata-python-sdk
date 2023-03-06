@@ -143,3 +143,40 @@ CatalogDataSourceGreenplum(
     ),
 )
 ```
+
+### Microsoft SQL Server
+
+```python
+CatalogDataSourceMsSql(
+    id=data_source_id,
+    name=data_source_name,
+    db_specific_attributes=MsSqlAttributes(
+        host=os.environ["MSSQL_HOST"],
+        db_name=os.environ["MSSQL_DBNAME"]
+    ),
+    schema=os.environ["MSSQL_SCHEMA"],
+    credentials=BasicCredentials(
+        username=os.environ["MSSQL_USER"],
+        password=os.environ["MSSQL_PASSWORD"],
+    ),
+)
+```
+
+### Databricks
+
+```python
+CatalogDataSourceDatabricks(
+    id=data_source_id,
+    name=data_source_name,
+    db_specific_attributes=DatabricksAttributes(
+        host=os.environ["DATABRICKS_HOST"],
+        http_path=os.environ["DATABRICKS_HTTP_PATH"]
+    ),
+    schema=xyz,
+    parameters=[{"name":"catalog", "value": os.environ["DATABRICKS_CATALOG"]}],
+    credentials=BasicCredentials(
+        username=os.environ["DATABRICKS_USER"],
+        password=os.environ["DATABRICKS_PASSWORD"],
+    ),
+)
+```

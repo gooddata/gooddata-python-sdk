@@ -206,3 +206,41 @@ class CatalogDataSourceBigQuery(CatalogDataSource):
 class CatalogDataSourceGreenplum(CatalogDataSourcePostgres):
     type: str = "GREENPLUM"
     db_vendor: str = "postgresql"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class MsSqlAttributes(DatabaseAttributes):
+    host: str
+    db_name: str
+    port: str = "1433"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceMsSql(CatalogDataSource):
+    _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port};databaseName={db_name}"
+    type: str = "MSSQL"
+    db_vendor: str = "sqlserver"
+    db_specific_attributes: MsSqlAttributes
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class DatabricksAttributes(DatabaseAttributes):
+    host: str
+    http_path: str
+    port: str = "443"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceDatabricks(CatalogDataSource):
+    _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/default;httpPath={http_path}"
+    type: str = "DATABRICKS"
+    parameters: List[Dict[str, str]]
+    db_specific_attributes: DatabricksAttributes
+
+    def __attrs_post_init__(self) -> None:
+        mandatory_parameter = [parameter.get("name") == "catalog" for parameter in self.parameters]
+        if not any(mandatory_parameter):
+            raise ValueError(f"'catalog' is mandatory parameter for data source type {self.type}")
+
+        self.db_vendor = self.type.lower()
+        self.url = self._make_url()
