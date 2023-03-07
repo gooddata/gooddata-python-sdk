@@ -15,6 +15,8 @@ from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSource,
     CatalogDataSourceBigQuery,
+    CatalogDataSourceDatabricks,
+    CatalogDataSourceMsSql,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
@@ -25,9 +27,11 @@ from gooddata_sdk import (
     CatalogPdmLdmRequest,
     CatalogPdmSql,
     CatalogScanModelRequest,
+    DatabricksAttributes,
     ExecutionDefinition,
     GoodDataApiClient,
     GoodDataSdk,
+    MsSqlAttributes,
     PostgresAttributes,
     RedshiftAttributes,
     ScanSqlRequest,
@@ -746,3 +750,32 @@ def test_allowed_data_source_type(test_config):
         pass
     else:
         assert False, "ValueError was not raised for nonsense database type"
+
+
+def test_catalog_data_source_mssql(test_config):
+    data_source = CatalogDataSourceMsSql(
+        id="test",
+        name="Test",
+        db_specific_attributes=MsSqlAttributes(host="Host", db_name="DbName"),
+        schema="Schema",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demopass",
+        ),
+    )
+    assert data_source.url == "jdbc:sqlserver://Host:1433;databaseName=DbName"
+
+
+def test_catalog_data_source_databricks(test_config):
+    data_source = CatalogDataSourceDatabricks(
+        id="test",
+        name="Test",
+        db_specific_attributes=DatabricksAttributes(host="Host", http_path="xyz123abc"),
+        schema="SCHEMA",
+        parameters=[{"name": "catalog", "value": "super_catalog"}],
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demospass",
+        ),
+    )
+    assert data_source.url == "jdbc:databricks://Host:443/default;httpPath=xyz123abc"
