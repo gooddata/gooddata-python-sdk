@@ -207,7 +207,7 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
 
     Args:
         profile (str):
-            Profile Name
+            Profile name
         profile_content_keys (KeysView):
             Dictionary keys from loaded configuration file under specific profile.
 

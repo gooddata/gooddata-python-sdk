@@ -92,7 +92,7 @@ class CatalogUser(Base):
             self.relationships.add_user_groups(user_groups)
 
     def remove_user_groups(self) -> None:
-        """Clears the User Group Cache.
+        """Clears the User Group from the relationship with the user.
 
         Returns:
             None
@@ -105,7 +105,7 @@ class CatalogUser(Base):
 
         Args:
             user_groups (list[CatalogUserGroup]):
-                New User Groups to be cached.
+                New User Groups to be put into relationship with the user.
         Returns:
             None
         """
@@ -139,7 +139,7 @@ class CatalogUserRelationships(Base):
             self.user_groups.data.extend(user_groups)
 
     def replace_user_groups(self, user_groups: list[CatalogUserGroup]) -> None:
-        """Replace the cached User Groups.
+        """Replace the User Groups in the relationship with the user.
 
         Args:
             user_groups (list[CatalogUserGroup]):
