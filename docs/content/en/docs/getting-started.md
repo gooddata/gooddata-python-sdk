@@ -29,6 +29,27 @@ Start integrating GoodData into your Python application right now.
     sdk = GoodDataSdk.create(host, token)
     ```
 
+    Alternatively, you can create the instance from a config file:
+
+    ```python
+    # The default path to the profiles.yaml file is set to `~/.gooddata/profiles.yaml`
+    # It can be overridden with a custom path
+    profiles= Path("~/my_directory/my_profiles.yaml")
+    # Profile name defaults to `default. It can be overridden with a custom profile
+    sdk = GoodDataSdk.create_from_profile(profile="staging", profiles_path=profiles)
+    ```
+
+    profiles.yaml file structure example:
+
+    ```yaml
+    default:
+        host: http://localhost:3000
+        token: YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz
+        custom_headers: #optional
+            Host: localhost
+        extra_user_agent: xyz #optional
+    ```
+
 1. Start using Python SDK! For example, get a list of all workspaces:
 
     ```python

@@ -11,6 +11,7 @@ Manage workspaces. Entity and Declarative methods are supported.
 
 * [create_or_update](./create_or_update/)
 * [get_workspace](./get_workspace/)
+* [clone_workspace](./clone_workspace/)
 * [delete_workspace](./delete_workspace/)
 * [list_workspaces](./list_workspaces/)
 

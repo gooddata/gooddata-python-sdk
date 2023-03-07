@@ -157,7 +157,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self.get_declarative_workspaces().store_to_disk(self.layout_organization_folder(layout_root_path))
 
     def load_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> CatalogDeclarativeWorkspaces:
-        """Load declarative workspaces layout, which was stored using store_declarative_workspaces
+        """Load declarative workspaces layout, which was stored using `store_declarative_workspaces`
 
         Args:
             layout_root_path (Path, optional):
@@ -169,8 +169,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return CatalogDeclarativeWorkspaces.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_workspaces(self, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_workspaces and put_declarative_workspaces
-        methods to load and set layouts stored using store_declarative_workspaces.
+        """Loads and sets the layouts stored using `store_declarative_workspaces`.
+
+        This method combines `load_declarative_workspaces` and `put_declarative_workspaces`
+        methods to load and set layouts stored using `store_declarative_workspaces`.
 
         Args:
             layout_root_path (Path, optional):
@@ -228,7 +230,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def load_declarative_workspace(
         self, workspace_id: str, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeWorkspaceModel:
-        """Load declarative workspaces layout, which was stored using store_declarative_workspace.
+        """Load declarative workspaces layout, which was stored using `store_declarative_workspace`.
 
         Args:
             workspace_id (str):
@@ -246,8 +248,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return CatalogDeclarativeWorkspaceModel.load_from_disk(workspace_folder=workspace_folder)
 
     def load_and_put_declarative_workspace(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_workspace and put_declarative_workspace methods
-        to load and set layouts stored using store_declarative_workspace.
+        """Loads and sets the layouts stored using `store_declarative_workspace`.
+
+        This method combines `load_declarative_workspace` and `put_declarative_workspace` methods
+        to load and set layouts stored using `store_declarative_workspace`.
 
         Args:
             workspace_id (str):
@@ -273,6 +277,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         upper_case: Optional[bool] = True,
     ) -> None:
         """Clone workspace from existing workspace.
+
         Clones complete workspace content - LDM, ADM, permissions.
 
         If the target workspace already exists, it's content is overwritten.
@@ -359,7 +364,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def put_declarative_workspace_data_filters(
         self, workspace_data_filters: CatalogDeclarativeWorkspaceDataFilters
     ) -> None:
-        """Set workspace data filers layout.
+        """Set workspace data filters layout.
 
         Args:
             workspace_data_filters (CatalogDeclarativeWorkspaceDataFilters):
@@ -387,7 +392,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def load_declarative_workspace_data_filters(
         self, layout_root_path: Path = Path.cwd()
     ) -> CatalogDeclarativeWorkspaceDataFilters:
-        """Loads workspace data filters layout, which was stored using store_declarative_workspace_data_filters.
+        """Loads workspace data filters layout, which was stored using `store_declarative_workspace_data_filters`.
 
         Args:
             layout_root_path (Path, optional):
@@ -400,8 +405,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return CatalogDeclarativeWorkspaceDataFilters.load_from_disk(self.layout_organization_folder(layout_root_path))
 
     def load_and_put_declarative_workspace_data_filters(self, layout_root_path: Path = Path.cwd()) -> None:
-        """This method combines load_declarative_workspace_data_filters and put_declarative_workspace_data_filters
-        methods to load and set layouts stored using store_declarative_workspace_data_filters.
+        """Loads and sets the layouts stored using `store_declarative_workspace_data_filters`.
+
+        This method combines `load_declarative_workspace_data_filters` and `put_declarative_workspace_data_filters`
+        methods to load and set layouts stored using `store_declarative_workspace_data_filters`.
 
         Args:
             layout_root_path (Path, optional):

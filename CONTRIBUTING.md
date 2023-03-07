@@ -40,21 +40,29 @@
 
 ## Coding Conventions
 
-This project uses [flake8](https://flake8.pycqa.org/en/latest/) to ensure basic code sanity and [black](https://github.com/psf/black)
+This project uses [ruff](https://github.com/charliermarsh/ruff) to ensure basic code sanity and [black](https://github.com/psf/black)
 for no-nonsense, consistent formatting.
 
-Both `flake8` and auto-fixing `black` are part of the pre-commit hook that is automatically set up during `make dev`.
+Both `ruff` and auto-fixing `black` are part of the pre-commit hook that is automatically set up during `make dev`.
 
 You can also run the lint and formatter manually:
 
--  To run flake8 run: `make lint`
+-  To run `ruff` run: `make lint`
 -  To reformat code black run: `make format-fix`
 
-**NOTE** If the pre-commit hook finds and auto-corrects some formatting errors, it will not auto-stage
+**NOTE:** If the pre-commit hook finds and auto-corrects some formatting errors, it will not auto-stage
 the updated files and will fail the commit operation. You have to re-drive the commit. This is a well-known and
 unlikely-to-change behavior of the [pre-commit](https://github.com/pre-commit/pre-commit/issues/806) package that this repository uses to manage hooks.
 
-The project documents code by docstrings in rst format. Compliance with rst format may be checked by running `make docs`.
+The project documents code by docstrings in [google-like](https://google.github.io/styleguide/pyguide.html#3-python-style-rules) format.
+
+The project documentation is done in hugo. To contribute:
+
+1. Install [Hugo](https://gohugo.io/)
+
+2. Run `make new-docs`
+
+The documentation is deployed using manually triggered GitHub workflows.
 
 One logical change is done in one commit.
 
@@ -62,7 +70,7 @@ One logical change is done in one commit.
 ## Run tests
 Tests use [tox](https://tox.wiki/en/latest/index.html) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html)
 libraries. Each project has its own `tox.ini`.
-NOTE: Tests are not executed for OpenAPI client projects.
+**NOTE:** Tests are not executed for OpenAPI client projects.
 
 Here are the options how to run the tests:
 - run tests for one sub-project - drill down to sub-project's directory
@@ -78,7 +86,7 @@ Here are the options how to run the tests:
   ```
 - run tests for all non-client projects using `make test` in project root directory
 
-Tests triggered by make can be controlled via these environment variables:
+Tests triggered by `make` can be controlled via these environment variables:
 - `RECREATE_ENVS` - set environment variable `RECREATE_ENVS` to 1 and make will add `--recreate` flag, `--recreate`
   flag is not used otherwise
   ```bash
@@ -114,7 +122,7 @@ When a vcrpy supported test needs to be updated:
 - update a newly generated cassette to the git
 
 ## Run continuous integration tests
-Tests in pull request (PR) are executed using docker. The following is done to make tests environment as close
+Tests in pull request (PR) are executed using docker. The following is done to make test environment as close
 to reproducible as possible:
 - each supported python version has defined python base docker image
 - tox version installed to docker is frozen to specific version
@@ -124,7 +132,7 @@ Above rules give a chance to execute tests on localhost in the same or very simi
 Orchestration is driven by `make test-ci`. Target `test-ci` supports the same features as `make test`, see
 [Run tests](#Run tests) for details.
 
-NOTE: docker tox tests and localhost tox tests are using the same .tox directory. Virtual environments for both test
+**NOTE:** docker tox tests and localhost tox tests are using the same .tox directory. Virtual environments for both test
 types are most likely incompatible due to different base python version. tox is able to recognize it and recreate
 venv automatically. So when docker tox tests are executed after localhost tests or vice-versa envs are recreated.
 
