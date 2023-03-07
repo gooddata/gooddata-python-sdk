@@ -1,0 +1,4 @@
+gooddata-sdk==1.2.0
+pyyaml>=5.1
+attrs~=21.4.0
+cattrs~=22.1.0
