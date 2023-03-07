@@ -103,7 +103,7 @@ check-copyright:
 .PHONY: docs
 docs:
 	RESULT=0; \
-	for project in $(NO_CLIENT_GD_PROJECTS_DIRS); do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
+	for project in gooddata-fdw gooddata-pandas; do $(MAKE) -C $${project} $@ || RESULT=$$?; done; \
 	exit $$RESULT
 
 .PHONY: remove-cassettes

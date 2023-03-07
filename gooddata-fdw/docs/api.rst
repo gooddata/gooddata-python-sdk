@@ -7,4 +7,3 @@ API
    :recursive:
 
    gooddata_fdw
-   gooddata_sdk

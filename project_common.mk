@@ -54,9 +54,6 @@ test:
 test-ci:
 	TEST_CI_PROJECT=$(CURR_DIR_BASE_NAME) $(MAKE) -C .. -f ci_tests.mk test-ci
 
-.PHONY: docs
-docs:
-	tox $(TOX_FLAGS) -e docs
 
 # this is effective for gooddata-sdk only now - it should be part of test fixtures
 # remove this target once implemented in pytest global fixture
