@@ -2,6 +2,8 @@
 
 ## How to release documentation for new versions
 
+* Edit redirects in `./docs/layouts/index.redir`
+* Add the new version to the version picker in `./docs/config/production/params.toml`
 * Create a new branch named `rel/X.Y.Z`
   * This branch now hosts the content for documentation of the X.Y.Z version. Any changes to the content in the branch will be public.
 * Dispatch the Github workflow `netlify-deploy` on the `master` branch
