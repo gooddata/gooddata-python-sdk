@@ -1108,6 +1108,81 @@ interactions:
       body:
         string:
           data:
+            - id: campaign_channels
+              type: dataset
+              attributes:
+                title: Campaign channels
+                description: Campaign channels
+                tags:
+                  - Campaign channels
+                grain:
+                  - id: campaign_channel_id
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes:
+                      - ''
+                dataSourceTableId: demo-test-ds:campaign_channels
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: type
+                      type: attribute
+                    - id: campaign_channels.category
+                      type: attribute
+                    - id: campaign_channel_id
+                      type: attribute
+                facts:
+                  data:
+                    - id: spend
+                      type: fact
+                    - id: budget
+                      type: fact
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaigns
+              type: dataset
+              attributes:
+                title: Campaigns
+                description: Campaigns
+                tags:
+                  - Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:campaigns
+                sql:
+                  statement: null
+                  dataSourceId: null
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: campaign_name
+                      type: attribute
+                    - id: campaign_id
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: customers
               type: dataset
               attributes:
@@ -1153,14 +1228,6 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
@@ -1174,6 +1241,14 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - product_id
+                    sourceColumnDataTypes:
+                      - ''
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
                     sourceColumnDataTypes:
                       - ''
                   - identifier:
@@ -1257,113 +1332,38 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.month
-                      type: attribute
                     - id: date.monthOfYear
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.dayOfWeek
-                      type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.day
                       type: attribute
                     - id: date.quarter
                       type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.minute
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
                     - id: date.year
+                      type: attribute
+                    - id: date.hourOfDay
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_channels
-              type: dataset
-              attributes:
-                title: Campaign channels
-                description: Campaign channels
-                tags:
-                  - Campaign channels
-                grain:
-                  - id: campaign_channel_id
-                    type: attribute
-                referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
-                dataSourceTableId: demo-test-ds:campaign_channels
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: type
-                      type: attribute
-                    - id: campaign_channels.category
-                      type: attribute
-                    - id: campaign_channel_id
-                      type: attribute
-                facts:
-                  data:
-                    - id: budget
-                      type: fact
-                    - id: spend
-                      type: fact
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaigns
-              type: dataset
-              attributes:
-                title: Campaigns
-                description: Campaigns
-                tags:
-                  - Campaigns
-                grain:
-                  - id: campaign_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:campaigns
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: campaign_name
-                      type: attribute
-                    - id: campaign_id
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
               meta:
                 origin:
                   originType: NATIVE

@@ -77,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 2c6cad217192b5a0
+          traceId: 7b5a5856b3cbc87b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1144,6 +1144,12 @@ interactions:
       body:
         string:
           data:
+            - id: demo
+              type: workspace
+              attributes:
+                name: Demo
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
             - id: demo_west
               type: workspace
               attributes:
@@ -1172,12 +1178,6 @@ interactions:
                 name: test_put_declarative_analytics_model
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_analytics_model
-            - id: demo
-              type: workspace
-              attributes:
-                name: Demo
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace

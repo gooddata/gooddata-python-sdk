@@ -81,13 +81,13 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiZmEzYzQxOC0yNTgxLTRlZTYtYTM2ZS1iN2QxMDE2ZmJiNjMSBWxvY2Fs
+            - authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
               id: demo
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQwOTgyZTZlMS00MWZjLTRkOGMtYTZjMC1hOGEzMWI1MjJmNDASBWxvY2Fs
+            - authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
               id: demo2
               settings: []
               userGroups:
@@ -172,13 +172,13 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiZmEzYzQxOC0yNTgxLTRlZTYtYTM2ZS1iN2QxMDE2ZmJiNjMSBWxvY2Fs
+            - authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
               id: demo
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQwOTgyZTZlMS00MWZjLTRkOGMtYTZjMC1hOGEzMWI1MjJmNDASBWxvY2Fs
+            - authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
               id: demo2
               settings: []
               userGroups:
@@ -328,7 +328,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 82ad8224-7ff8-44fa-bc0c-0b660f074fd3
+              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -475,6 +475,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 82ad8224-7ff8-44fa-bc0c-0b660f074fd3
+              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
