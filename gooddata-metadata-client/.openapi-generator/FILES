@@ -66,6 +66,7 @@ docs/DeclarativeUsersUserGroups.md
 docs/DeclarativeVisualizationObject.md
 docs/DeclarativeWorkspace.md
 docs/DeclarativeWorkspaceDataFilter.md
+docs/DeclarativeWorkspaceDataFilterColumn.md
 docs/DeclarativeWorkspaceDataFilterSetting.md
 docs/DeclarativeWorkspaceDataFilters.md
 docs/DeclarativeWorkspaceHierarchyPermission.md
@@ -211,6 +212,7 @@ docs/JsonApiDatasetOutAttributes.md
 docs/JsonApiDatasetOutAttributesGrainInner.md
 docs/JsonApiDatasetOutAttributesReferencePropertiesInner.md
 docs/JsonApiDatasetOutAttributesSql.md
+docs/JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner.md
 docs/JsonApiDatasetOutDocument.md
 docs/JsonApiDatasetOutIncludes.md
 docs/JsonApiDatasetOutList.md
@@ -427,7 +429,7 @@ docs/UserPermission.md
 docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
-docs/VisualizationObjectsApi.md
+docs/VisualizationObjectApi.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
 docs/WorkspacesDeclarativeAPIsApi.md
@@ -476,7 +478,7 @@ gooddata_metadata_client/api/user_model_controller_api.py
 gooddata_metadata_client/api/user_settings_api.py
 gooddata_metadata_client/api/users_declarative_apis_api.py
 gooddata_metadata_client/api/users_entity_apis_api.py
-gooddata_metadata_client/api/visualization_objects_api.py
+gooddata_metadata_client/api/visualization_object_api.py
 gooddata_metadata_client/api/workspace_object_controller_api.py
 gooddata_metadata_client/api/workspaces_declarative_apis_api.py
 gooddata_metadata_client/api/workspaces_entity_apis_api.py
@@ -537,6 +539,7 @@ gooddata_metadata_client/model/declarative_users_user_groups.py
 gooddata_metadata_client/model/declarative_visualization_object.py
 gooddata_metadata_client/model/declarative_workspace.py
 gooddata_metadata_client/model/declarative_workspace_data_filter.py
+gooddata_metadata_client/model/declarative_workspace_data_filter_column.py
 gooddata_metadata_client/model/declarative_workspace_data_filter_setting.py
 gooddata_metadata_client/model/declarative_workspace_data_filters.py
 gooddata_metadata_client/model/declarative_workspace_hierarchy_permission.py
@@ -676,6 +679,7 @@ gooddata_metadata_client/model/json_api_dataset_out_attributes.py
 gooddata_metadata_client/model/json_api_dataset_out_attributes_grain_inner.py
 gooddata_metadata_client/model/json_api_dataset_out_attributes_reference_properties_inner.py
 gooddata_metadata_client/model/json_api_dataset_out_attributes_sql.py
+gooddata_metadata_client/model/json_api_dataset_out_attributes_workspace_data_filter_columns_inner.py
 gooddata_metadata_client/model/json_api_dataset_out_document.py
 gooddata_metadata_client/model/json_api_dataset_out_includes.py
 gooddata_metadata_client/model/json_api_dataset_out_list.py

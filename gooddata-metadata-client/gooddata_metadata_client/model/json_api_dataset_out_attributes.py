@@ -34,9 +34,11 @@ def lazy_import():
     from gooddata_metadata_client.model.json_api_dataset_out_attributes_grain_inner import JsonApiDatasetOutAttributesGrainInner
     from gooddata_metadata_client.model.json_api_dataset_out_attributes_reference_properties_inner import JsonApiDatasetOutAttributesReferencePropertiesInner
     from gooddata_metadata_client.model.json_api_dataset_out_attributes_sql import JsonApiDatasetOutAttributesSql
+    from gooddata_metadata_client.model.json_api_dataset_out_attributes_workspace_data_filter_columns_inner import JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner
     globals()['JsonApiDatasetOutAttributesGrainInner'] = JsonApiDatasetOutAttributesGrainInner
     globals()['JsonApiDatasetOutAttributesReferencePropertiesInner'] = JsonApiDatasetOutAttributesReferencePropertiesInner
     globals()['JsonApiDatasetOutAttributesSql'] = JsonApiDatasetOutAttributesSql
+    globals()['JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner'] = JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner
 
 
 class JsonApiDatasetOutAttributes(ModelNormal):
@@ -114,7 +116,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             'sql': (JsonApiDatasetOutAttributesSql,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
-            'workspace_data_filter_columns': ([str],),  # noqa: E501
+            'workspace_data_filter_columns': ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner],),  # noqa: E501
         }
 
     @cached_property
@@ -187,7 +189,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
-            workspace_data_filter_columns ([str]): [optional]  # noqa: E501
+            workspace_data_filter_columns ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -285,7 +287,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             sql (JsonApiDatasetOutAttributesSql): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
-            workspace_data_filter_columns ([str]): [optional]  # noqa: E501
+            workspace_data_filter_columns ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

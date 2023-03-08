@@ -223,12 +223,12 @@ Class | Method | HTTP request | Description
 *UsersEntityAPIsApi* | [**get_entity_users**](docs/UsersEntityAPIsApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | 
 *UsersEntityAPIsApi* | [**patch_entity_users**](docs/UsersEntityAPIsApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | 
 *UsersEntityAPIsApi* | [**update_entity_users**](docs/UsersEntityAPIsApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | 
-*VisualizationObjectsApi* | [**create_entity_visualization_objects**](docs/VisualizationObjectsApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-*VisualizationObjectsApi* | [**delete_entity_visualization_objects**](docs/VisualizationObjectsApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectsApi* | [**get_all_entities_visualization_objects**](docs/VisualizationObjectsApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-*VisualizationObjectsApi* | [**get_entity_visualization_objects**](docs/VisualizationObjectsApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectsApi* | [**patch_entity_visualization_objects**](docs/VisualizationObjectsApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectsApi* | [**update_entity_visualization_objects**](docs/VisualizationObjectsApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectApi* | [**create_entity_visualization_objects**](docs/VisualizationObjectApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
+*VisualizationObjectApi* | [**delete_entity_visualization_objects**](docs/VisualizationObjectApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectApi* | [**get_all_entities_visualization_objects**](docs/VisualizationObjectApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
+*VisualizationObjectApi* | [**get_entity_visualization_objects**](docs/VisualizationObjectApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectApi* | [**patch_entity_visualization_objects**](docs/VisualizationObjectApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectApi* | [**update_entity_visualization_objects**](docs/VisualizationObjectApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspacesDeclarativeAPIsApi* | [**get_workspace_layout**](docs/WorkspacesDeclarativeAPIsApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
 *WorkspacesDeclarativeAPIsApi* | [**get_workspaces_layout**](docs/WorkspacesDeclarativeAPIsApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
 *WorkspacesDeclarativeAPIsApi* | [**put_workspace_layout**](docs/WorkspacesDeclarativeAPIsApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
@@ -613,6 +613,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeVisualizationObject](docs/DeclarativeVisualizationObject.md)
  - [DeclarativeWorkspace](docs/DeclarativeWorkspace.md)
  - [DeclarativeWorkspaceDataFilter](docs/DeclarativeWorkspaceDataFilter.md)
+ - [DeclarativeWorkspaceDataFilterColumn](docs/DeclarativeWorkspaceDataFilterColumn.md)
  - [DeclarativeWorkspaceDataFilterSetting](docs/DeclarativeWorkspaceDataFilterSetting.md)
  - [DeclarativeWorkspaceDataFilters](docs/DeclarativeWorkspaceDataFilters.md)
  - [DeclarativeWorkspaceHierarchyPermission](docs/DeclarativeWorkspaceHierarchyPermission.md)
@@ -752,6 +753,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutAttributesGrainInner](docs/JsonApiDatasetOutAttributesGrainInner.md)
  - [JsonApiDatasetOutAttributesReferencePropertiesInner](docs/JsonApiDatasetOutAttributesReferencePropertiesInner.md)
  - [JsonApiDatasetOutAttributesSql](docs/JsonApiDatasetOutAttributesSql.md)
+ - [JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner](docs/JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner.md)
  - [JsonApiDatasetOutDocument](docs/JsonApiDatasetOutDocument.md)
  - [JsonApiDatasetOutIncludes](docs/JsonApiDatasetOutIncludes.md)
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)

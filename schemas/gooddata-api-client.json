@@ -1561,7 +1561,7 @@
           "workspaceDataFilterColumns": {
             "description": "An array of workspace data filter columns applied on a workspace.",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/DeclarativeWorkspaceDataFilterColumn"
             },
             "type": "array"
           }
@@ -2620,6 +2620,34 @@
           "id",
           "title",
           "workspaceDataFilterSettings"
+        ],
+        "type": "object"
+      },
+      "DeclarativeWorkspaceDataFilterColumn": {
+        "properties": {
+          "dataType": {
+            "description": "Data type of the column",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "INT",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the column",
+            "example": "customer_id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataType",
+          "name"
         ],
         "type": "object"
       },
@@ -6163,7 +6191,28 @@
               },
               "workspaceDataFilterColumns": {
                 "items": {
-                  "type": "string"
+                  "properties": {
+                    "dataType": {
+                      "enum": [
+                        "INT",
+                        "STRING",
+                        "DATE",
+                        "NUMERIC",
+                        "TIMESTAMP",
+                        "TIMESTAMP_TZ",
+                        "BOOLEAN"
+                      ],
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "dataType",
+                    "name"
+                  ],
+                  "type": "object"
                 },
                 "type": "array"
               }
@@ -11586,8 +11635,7 @@
           }
         },
         "required": [
-          "type",
-          "url"
+          "type"
         ],
         "type": "object"
       },
@@ -20758,7 +20806,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -20849,7 +20897,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -20897,7 +20945,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21004,7 +21052,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21090,7 +21138,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21176,7 +21224,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
