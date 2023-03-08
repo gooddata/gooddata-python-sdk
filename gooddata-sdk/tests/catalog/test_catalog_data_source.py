@@ -40,6 +40,9 @@ from gooddata_sdk import (
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
+    CatalogDeclarativeWorkspaceDataFilterColumn,
+)
 
 gd_vcr = get_vcr()
 
@@ -68,9 +71,14 @@ def test_generate_logical_model(test_config: dict):
     generated_declarative_model = sdk.catalog_data_source.generate_logical_model(test_config["data_source"])
 
     # NOTE: remove after implementation of PDM removal
-    # NOTE: workspace_data_filter_columns is not sorted by backend
-    order_lines_dataset = declarative_model.ldm.datasets[3]
-    order_lines_dataset.workspace_data_filter_columns = ["wdf__region", "wdf__state"]
+    order_lines_dataset = [dataset for dataset in declarative_model.ldm.datasets if dataset.id == "order_lines"]
+    assert len(order_lines_dataset) == 1
+
+    order_lines_dataset = order_lines_dataset[0]
+    order_lines_dataset.workspace_data_filter_columns = [
+        CatalogDeclarativeWorkspaceDataFilterColumn(name="wdf__region", data_type="STRING"),
+        CatalogDeclarativeWorkspaceDataFilterColumn(name="wdf__state", data_type="STRING"),
+    ]
 
     """
     There is a bug in generate_logical_model. It returns in granularities sorted alphabetically,
