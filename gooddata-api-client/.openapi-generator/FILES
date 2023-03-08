@@ -476,6 +476,7 @@ docs/OrganizationModelControllerApi.md
 docs/PDMDeclarativeAPIsApi.md
 docs/Paging.md
 docs/Parameter.md
+docs/PdfExportRequest.md
 docs/PdmLdmRequest.md
 docs/PdmSql.md
 docs/PermissionsApi.md
@@ -546,7 +547,7 @@ docs/UserPermission.md
 docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
-docs/VisualizationObjectApi.md
+docs/VisualizationObjectsApi.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
 docs/WorkspacesDeclarativeAPIsApi.md
@@ -598,7 +599,7 @@ gooddata_api_client/api/user_model_controller_api.py
 gooddata_api_client/api/user_settings_api.py
 gooddata_api_client/api/users_declarative_apis_api.py
 gooddata_api_client/api/users_entity_apis_api.py
-gooddata_api_client/api/visualization_object_api.py
+gooddata_api_client/api/visualization_objects_api.py
 gooddata_api_client/api/workspace_object_controller_api.py
 gooddata_api_client/api/workspaces_declarative_apis_api.py
 gooddata_api_client/api/workspaces_entity_apis_api.py
@@ -1052,6 +1053,7 @@ gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
 gooddata_api_client/model/paging.py
 gooddata_api_client/model/parameter.py
+gooddata_api_client/model/pdf_export_request.py
 gooddata_api_client/model/pdm_ldm_request.py
 gooddata_api_client/model/pdm_sql.py
 gooddata_api_client/model/permissions_for_assignee.py

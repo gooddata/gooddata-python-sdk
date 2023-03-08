@@ -390,7 +390,8 @@
           }
         },
         "required": [
-          "type"
+          "type",
+          "url"
         ],
         "type": "object"
       },
