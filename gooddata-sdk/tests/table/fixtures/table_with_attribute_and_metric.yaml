@@ -128,10 +128,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: bb4596cf6f6dcd49d7ef8847d997a9dd15f50f3a
+              executionResult: 70b533689de4a9ce723ec677bb68de142aa4f51e
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/bb4596cf6f6dcd49d7ef8847d997a9dd15f50f3a?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/70b533689de4a9ce723ec677bb68de142aa4f51e?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

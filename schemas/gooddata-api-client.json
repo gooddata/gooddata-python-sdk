@@ -10534,6 +10534,29 @@
         ],
         "type": "object"
       },
+      "PdfExportRequest": {
+        "description": "Export request object describing the export properties and metadata for pdf exports.",
+        "properties": {
+          "dashboardId": {
+            "description": "Dashboard identifier",
+            "example": "761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
+            "type": "string"
+          },
+          "fileName": {
+            "description": "File name to be used for retrieving the pdf document.",
+            "example": "filename",
+            "type": "string"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/JsonNode"
+          }
+        },
+        "required": [
+          "dashboardId",
+          "fileName"
+        ],
+        "type": "object"
+      },
       "PdmLdmRequest": {
         "description": "PDM additions wrapper.",
         "example": {
@@ -11563,7 +11586,8 @@
           }
         },
         "required": [
-          "type"
+          "type",
+          "url"
         ],
         "type": "object"
       },
@@ -13348,6 +13372,159 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "EXPORT_TABULAR"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual": {
+      "post": {
+        "description": "An visual export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
+        "operationId": "createPdfExport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PdfExportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            },
+            "description": "Visual export request created successfully."
+          }
+        },
+        "summary": "Create visual - pdf export request",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to execute pdf export.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}": {
+      "get": {
+        "description": "Returns 202 until original POST export request is not processed.Returns 200 with exported data once the export is done.",
+        "operationId": "getExportedFile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/pdf": {}
+            },
+            "description": "Binary export result.",
+            "headers": {
+              "Content-Disposition": {
+                "schema": {
+                  "example": "attachment; filename='result.pdf'",
+                  "pattern": "attachment; filename='[^']+'",
+                  "type": "string"
+                },
+                "style": "simple"
+              }
+            }
+          },
+          "202": {
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Request is accepted, provided exportId exists, but export is not yet ready."
+          }
+        },
+        "summary": "Retrieve exported files",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata": {
+      "get": {
+        "description": "This endpoints serves as a cache for user defined metadata for the front end ui to retrieve them, if one was created using the POST ../export/visual endpoint. The metadata structure is not verified. If metadata for given {exportId} has been found, endpoint returns the value 200 else 404.",
+        "operationId": "getMetadata",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "exportId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {}
+            },
+            "description": "Json metadata representation"
+          }
+        },
+        "summary": "Retrieve metadata context",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "EXPORT_PDF"
           ]
         }
       }
@@ -20581,7 +20758,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],
@@ -20672,7 +20849,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],
@@ -20720,7 +20897,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],
@@ -20827,7 +21004,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],
@@ -20913,7 +21090,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],
@@ -20999,7 +21176,7 @@
           }
         },
         "tags": [
-          "Visualization Object",
+          "Visualization Objects",
           "entities",
           "workspace-object-controller"
         ],

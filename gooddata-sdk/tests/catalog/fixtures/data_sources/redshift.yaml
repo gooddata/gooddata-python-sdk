@@ -77,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: cd702d87c6a258fd
+          traceId: 0bd8ea9925338375
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources

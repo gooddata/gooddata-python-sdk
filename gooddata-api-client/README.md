@@ -235,12 +235,12 @@ Class | Method | HTTP request | Description
 *UsersEntityAPIsApi* | [**get_entity_users**](docs/UsersEntityAPIsApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | 
 *UsersEntityAPIsApi* | [**patch_entity_users**](docs/UsersEntityAPIsApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | 
 *UsersEntityAPIsApi* | [**update_entity_users**](docs/UsersEntityAPIsApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | 
-*VisualizationObjectApi* | [**create_entity_visualization_objects**](docs/VisualizationObjectApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-*VisualizationObjectApi* | [**delete_entity_visualization_objects**](docs/VisualizationObjectApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectApi* | [**get_all_entities_visualization_objects**](docs/VisualizationObjectApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-*VisualizationObjectApi* | [**get_entity_visualization_objects**](docs/VisualizationObjectApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectApi* | [**patch_entity_visualization_objects**](docs/VisualizationObjectApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-*VisualizationObjectApi* | [**update_entity_visualization_objects**](docs/VisualizationObjectApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectsApi* | [**create_entity_visualization_objects**](docs/VisualizationObjectsApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
+*VisualizationObjectsApi* | [**delete_entity_visualization_objects**](docs/VisualizationObjectsApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectsApi* | [**get_all_entities_visualization_objects**](docs/VisualizationObjectsApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
+*VisualizationObjectsApi* | [**get_entity_visualization_objects**](docs/VisualizationObjectsApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectsApi* | [**patch_entity_visualization_objects**](docs/VisualizationObjectsApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+*VisualizationObjectsApi* | [**update_entity_visualization_objects**](docs/VisualizationObjectsApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspacesDeclarativeAPIsApi* | [**get_workspace_layout**](docs/WorkspacesDeclarativeAPIsApi.md#get_workspace_layout) | **GET** /api/v1/layout/workspaces/{workspaceId} | Get workspace layout
 *WorkspacesDeclarativeAPIsApi* | [**get_workspaces_layout**](docs/WorkspacesDeclarativeAPIsApi.md#get_workspaces_layout) | **GET** /api/v1/layout/workspaces | Get all workspaces layout
 *WorkspacesDeclarativeAPIsApi* | [**put_workspace_layout**](docs/WorkspacesDeclarativeAPIsApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
@@ -271,12 +271,15 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_objects**](docs/ActionsApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
+*ActionsApi* | [**create_pdf_export**](docs/ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 *ActionsApi* | [**create_tabular_export**](docs/ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 *ActionsApi* | [**explain_afm**](docs/ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
 *ActionsApi* | [**generate_logical_model**](docs/ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
 *ActionsApi* | [**get_data_source_schemata**](docs/ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
+*ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
+*ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
 *ActionsApi* | [**manage_permissions**](docs/ActionsApi.md#manage_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | 
@@ -1031,6 +1034,7 @@ Class | Method | HTTP request | Description
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [Paging](docs/Paging.md)
  - [Parameter](docs/Parameter.md)
+ - [PdfExportRequest](docs/PdfExportRequest.md)
  - [PdmLdmRequest](docs/PdmLdmRequest.md)
  - [PdmSql](docs/PdmSql.md)
  - [PermissionsForAssignee](docs/PermissionsForAssignee.md)

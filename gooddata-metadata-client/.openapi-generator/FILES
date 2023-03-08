@@ -427,7 +427,7 @@ docs/UserPermission.md
 docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
-docs/VisualizationObjectApi.md
+docs/VisualizationObjectsApi.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
 docs/WorkspacesDeclarativeAPIsApi.md
@@ -476,7 +476,7 @@ gooddata_metadata_client/api/user_model_controller_api.py
 gooddata_metadata_client/api/user_settings_api.py
 gooddata_metadata_client/api/users_declarative_apis_api.py
 gooddata_metadata_client/api/users_entity_apis_api.py
-gooddata_metadata_client/api/visualization_object_api.py
+gooddata_metadata_client/api/visualization_objects_api.py
 gooddata_metadata_client/api/workspace_object_controller_api.py
 gooddata_metadata_client/api/workspaces_declarative_apis_api.py
 gooddata_metadata_client/api/workspaces_entity_apis_api.py

@@ -453,6 +453,7 @@ from gooddata_api_client.model.object_links import ObjectLinks
 from gooddata_api_client.model.object_links_container import ObjectLinksContainer
 from gooddata_api_client.model.paging import Paging
 from gooddata_api_client.model.parameter import Parameter
+from gooddata_api_client.model.pdf_export_request import PdfExportRequest
 from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
 from gooddata_api_client.model.pdm_sql import PdmSql
 from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee

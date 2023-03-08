@@ -74,6 +74,111 @@ interactions:
       body:
         string:
           data:
+            - id: campaign_channel_id
+              type: attribute
+              attributes:
+                title: Campaign channel id
+                description: Campaign channel id
+                tags:
+                  - Campaign channels
+                areRelationsValid: true
+                sourceColumn: campaign_channel_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_channels.category
+              type: attribute
+              attributes:
+                title: Category
+                description: Category
+                tags:
+                  - Campaign channels
+                areRelationsValid: true
+                sourceColumn: category
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: type
+              type: attribute
+              attributes:
+                title: Type
+                description: Type
+                tags:
+                  - Campaign channels
+                areRelationsValid: true
+                sourceColumn: type
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_id
+              type: attribute
+              attributes:
+                title: Campaign id
+                description: Campaign id
+                tags:
+                  - Campaigns
+                areRelationsValid: true
+                sourceColumn: campaign_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_name
+              type: attribute
+              attributes:
+                title: Campaign name
+                description: Campaign name
+                tags:
+                  - Campaigns
+                areRelationsValid: true
+                sourceColumn: campaign_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: customer_id
+              type: attribute
+              attributes:
+                title: Customer id
+                description: Customer id
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: customer_id
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: customer_name
+              type: attribute
+              attributes:
+                title: Customer name
+                description: Customer name
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: customer_name
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: region
               type: attribute
               attributes:
@@ -415,111 +520,6 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_channel_id
-              type: attribute
-              attributes:
-                title: Campaign channel id
-                description: Campaign channel id
-                tags:
-                  - Campaign channels
-                areRelationsValid: true
-                sourceColumn: campaign_channel_id
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_channels.category
-              type: attribute
-              attributes:
-                title: Category
-                description: Category
-                tags:
-                  - Campaign channels
-                areRelationsValid: true
-                sourceColumn: category
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: type
-              type: attribute
-              attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
-                areRelationsValid: true
-                sourceColumn: type
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_id
-              type: attribute
-              attributes:
-                title: Campaign id
-                description: Campaign id
-                tags:
-                  - Campaigns
-                areRelationsValid: true
-                sourceColumn: campaign_id
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_name
-              type: attribute
-              attributes:
-                title: Campaign name
-                description: Campaign name
-                tags:
-                  - Campaigns
-                areRelationsValid: true
-                sourceColumn: campaign_name
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customer_id
-              type: attribute
-              attributes:
-                title: Customer id
-                description: Customer id
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: customer_id
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customer_name
-              type: attribute
-              attributes:
-                title: Customer name
-                description: Customer name
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: customer_name
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
               meta:
                 origin:
                   originType: NATIVE
