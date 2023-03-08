@@ -70,8 +70,26 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMetric,
 )
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import CatalogDeclarativeModel
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
+    CatalogDataSourceTableIdentifier,
+    CatalogDeclarativeAttribute,
+    CatalogDeclarativeDataset,
+    CatalogDeclarativeDatasetSql,
+    CatalogDeclarativeFact,
+    CatalogDeclarativeLabel,
+    CatalogDeclarativeReference,
+    CatalogDeclarativeWorkspaceDataFilterColumn,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
+    CatalogDeclarativeDateDataset,
+    CatalogGranularitiesFormatting,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ldm import (
+    CatalogDeclarativeLdm,
+    CatalogDeclarativeModel,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeWorkspace,
     CatalogDeclarativeWorkspaceDataFilter,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceDataFilterSetting,
@@ -86,7 +104,10 @@ from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import 
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
 from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
+    CatalogDependentEntitiesGraph,
+    CatalogDependentEntitiesNode,
     CatalogDependentEntitiesRequest,
+    CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
