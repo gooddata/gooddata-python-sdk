@@ -313,8 +313,8 @@
           "Order lines"
         ],
         "workspaceDataFilterColumns": [
-          "wdf__state",
-          "wdf__region"
+          "wdf__region",
+          "wdf__state"
         ]
       },
       {
