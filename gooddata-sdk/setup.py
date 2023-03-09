@@ -16,6 +16,7 @@ REQUIRES = [
     "pyyaml>=5.1",
     "attrs==21.4.0",
     "cattrs==22.1.0",
+    "brotli==1.0.9",
 ]
 
 
