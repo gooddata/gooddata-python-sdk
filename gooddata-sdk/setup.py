@@ -7,10 +7,10 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-afm-client~=1.2.0",
-    "gooddata-metadata-client~=1.2.0",
-    "gooddata-scan-client~=1.2.0",
-    "gooddata-api-client~=1.2.0",
+    "gooddata-afm-client~=1.3.0",
+    "gooddata-metadata-client~=1.3.0",
+    "gooddata-scan-client~=1.3.0",
+    "gooddata-api-client~=1.3.0",
     'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     "python-dateutil>=2.5.3",
     "pyyaml>=5.1",
@@ -25,7 +25,7 @@ setup(
     description="GoodData.CN Python SDK",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.2.0",
+    version="1.3.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
@@ -35,7 +35,7 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.7.0",
     project_urls={
-        "Documentation": "https://gooddata-sdk.readthedocs.io/en/v1.2.0",
+        "Documentation": "https://gooddata-sdk.readthedocs.io/en/v1.3.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
