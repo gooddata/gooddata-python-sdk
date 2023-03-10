@@ -4,7 +4,7 @@
 
 # ignore all generated code + all snapshots; snapshots must not be processed otherwise they stop matching due to
 # addition of new lines
-exclude: (gooddata-afm-client|gooddata-metadata-client|gooddata-scan-client|gooddata-api-client|.*\.snapshot\..*|.openapi-generator/custom_templates)
+exclude: (gooddata-api-client|.*\.snapshot\..*|.openapi-generator/custom_templates)
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
