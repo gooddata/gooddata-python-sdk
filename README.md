@@ -18,6 +18,33 @@ make dev
 make install
 ```
 
+## Configuration, parametrization
+Create `gooddata.yaml` file to configure so-called data products and environments.
+Check [gooddata_example.yaml](gooddata_example.yaml) file for more details.
+
+Parametrization of each execution can be done using environment variables / tool arguments.
+Use main --help and --help for each use case to learn more.
+
+Example setup of environment variables for local environment (running GoodData Community Edition locally):
+```shell
+export POSTGRES_HOST="localhost"
+export POSTGRES_PORT=5432
+export POSTGRES_USER="demouser"
+export POSTGRES_PASS=demopass
+export POSTGRES_DBNAME=demo
+export INPUT_SCHEMA="input_stage"
+export OUTPUT_SCHEMA="output_stage"
+
+export DBT_PROFILE_DIR="profile"
+export DBT_PROFILE="default"
+export ELT_ENVIRONMENT="dev_local"
+
+export GOODDATA_HOST="http://localhost:3000"
+export GOODDATA_ENVIRONMENT_ID="development"
+unset GOODDATA_UPPER_CASE
+export GOODDATA_TOKEN="YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+```
+
 ## Use cases
 ```shell
 dbt-gooddata --help
