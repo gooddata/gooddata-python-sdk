@@ -7,9 +7,6 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-afm-client~=1.3.0",
-    "gooddata-metadata-client~=1.3.0",
-    "gooddata-scan-client~=1.3.0",
     "gooddata-api-client~=1.3.0",
     'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     "python-dateutil>=2.5.3",

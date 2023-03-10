@@ -15,9 +15,6 @@ Usage:
   $0 <api-client> [specific options]
 
 api-client:
-  gooddata-scan-client
-  gooddata-metadata-client
-  gooddata-afm-client
   gooddata-api-client
 
 Options are:

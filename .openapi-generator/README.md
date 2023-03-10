@@ -1,10 +1,10 @@
 ### OpenAPI generator configuration and customizations
-This directory contains configuration to generate OpenAPI clients together with
+This directory contains configuration to generate OpenAPI client together with
 custom templates for part of generated code. Layout:
 - configs - configuration files
-- custom_templates - custom_templates directory used for all generated clients
+- custom_templates - custom_templates directory used for client
 
-Clients are created using [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator). Python language
+Client is created using [OpenAPI generator](https://github.com/OpenAPITools/openapi-generator). Python language
 was marked as STABLE recently by [PR](https://github.com/OpenAPITools/openapi-generator/pull/11270).
 
 
