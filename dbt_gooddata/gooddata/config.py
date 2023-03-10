@@ -1,3 +1,5 @@
+from typing import Optional
+
 import attrs
 
 from dbt_gooddata.dbt.base import Base
@@ -18,7 +20,7 @@ class GoodDataConfigProduct(Base):
     id: str
     name: str
     environment_setup_id: str
-    model_id: str
+    model_ids: Optional[list[str]]
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfig(Base):

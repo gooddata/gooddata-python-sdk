@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 from time import time
+from typing import Optional
 
 import yaml
 from gooddata_sdk import (
@@ -39,10 +40,10 @@ def generate_and_put_pdm(logger, sdk: GoodDataSdk, data_source_id: str, dbt_tabl
 
 
 def generate_and_put_ldm(
-        sdk: GoodDataSdk, data_source_id: str, workspace_id: str, dbt_tables: DbtModelTables, model_id: str
+    sdk: GoodDataSdk, data_source_id: str, workspace_id: str, dbt_tables: DbtModelTables, model_ids: Optional[list[str]]
 ) -> None:
     # Construct GoodData LDM from dbt models
-    declarative_datasets = dbt_tables.make_declarative_datasets(data_source_id, model_id)
+    declarative_datasets = dbt_tables.make_declarative_datasets(data_source_id, model_ids)
     ldm = CatalogDeclarativeModel.from_dict({"ldm": declarative_datasets}, camel_case=False)
 
     # Deploy logical into target workspace
@@ -68,10 +69,11 @@ def create_workspace(logger, sdk: GoodDataSdk, workspace_id: str, workspace_titl
 
 
 def deploy_ldm(
-        logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables, model_id: str, workspace_id: str
+    logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables,
+    model_ids: Optional[list[str]], workspace_id: str
 ) -> None:
     logger.info(f"Generate and put LDM")
-    generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_id)
+    generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_ids)
 
 
 def upload_notification(logger, sdk: GoodDataSdk, data_source_id: str) -> None:
@@ -91,7 +93,7 @@ def deploy_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: 
     )
 
     logger.info("Append dbt metrics to GoodData metrics")
-    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_id, ldm).make_gooddata_metrics()
+    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_ids, ldm).make_gooddata_metrics()
     adm.analytics.metrics = adm.analytics.metrics + dbt_gooddata_metrics
 
     # Deploy analytics model into target workspace
@@ -110,7 +112,7 @@ def store_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: G
     # TODO - this is hack. Add corresponding functionality into Python SDK
     logger.info("Exclude dbt metrics from stored analytics model, they are already defined in dbt models")
 
-    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_id, ldm).make_gooddata_metrics()
+    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_ids, ldm).make_gooddata_metrics()
     for metric in dbt_gooddata_metrics:
         metric_path = layout_model_dir / "analytics_model" / "metrics" / f"{metric.id}.yaml"
         metric_path.unlink()
@@ -138,9 +140,6 @@ def main():
     with open("gooddata.yml") as fp:
         gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
 
-    # TODO - filter products by args.model_ids
-    #      -  filter environments by args.gooddata_environment_id
-
     if args.method in ["upload_notification", "deploy_models"]:
         dbt_target = DbtProfiles(args).target
         data_source_id = dbt_target.name
@@ -148,7 +147,7 @@ def main():
             # Caches are invalidated only per data source, not per data product
             upload_notification(logger, sdk, data_source_id)
         else:
-            dbt_tables = DbtModelTables(args.gooddata_model_ids, args.gooddata_upper_case)
+            dbt_tables = DbtModelTables(args.gooddata_upper_case)
             if args.gooddata_upper_case:
                 dbt_target.schema = dbt_target.schema.upper()
                 dbt_target.database = dbt_target.database.upper()
@@ -161,7 +160,7 @@ def main():
                         workspace_id = f"{data_product.id}_{environment.id}"
                         workspace_title = f"{data_product.name} ({environment.name})"
                         create_workspace(logger, sdk, workspace_id, workspace_title)
-                        deploy_ldm(logger, sdk, data_source_id, dbt_tables, data_product.model_id, workspace_id)
+                        deploy_ldm(logger, sdk, data_source_id, dbt_tables, data_product.model_ids, workspace_id)
     else:
         for data_product in gd_config.data_products:
             logger.info(f"Process product name={data_product.name}")

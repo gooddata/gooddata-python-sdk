@@ -55,8 +55,8 @@ class DbtModelMetric(DbtModelBase):
 
 
 class DbtModelMetrics:
-    def __init__(self, model_id: Optional[str], ldm: CatalogDeclarativeModel) -> None:
-        self.model_id = model_id
+    def __init__(self, model_ids: Optional[list[str]], ldm: CatalogDeclarativeModel) -> None:
+        self.model_ids = model_ids
         self.ldm = ldm
         with open(DBT_PATH_TO_MANIFEST) as fp:
             self.dbt_catalog = json.load(fp)
@@ -69,7 +69,7 @@ class DbtModelMetrics:
         # Return only gooddata labelled tables marked by model_id (if requested in args)
         return [
             r for r in result
-            if r.meta.gooddata is not None and (not self.model_id or r.meta.gooddata.model_id == self.model_id)
+            if r.meta.gooddata is not None and (not self.model_ids or r.meta.gooddata.model_id in self.model_ids)
         ]
 
     @staticmethod

@@ -29,18 +29,6 @@ def set_environment_id_arg(parser: argparse.ArgumentParser):
                         default=os.getenv("GOODDATA_ENVIRONMENT_ID", "development"))
 
 
-def set_gooddata_model_id_args(parser: argparse.ArgumentParser):
-    model_ids = os.getenv("GOODDATA_MODEL_IDS", None)
-    if model_ids:
-        default = model_ids.split(" ")
-    else:
-        default = []
-    parser.add_argument("-gm", "--gooddata-model-ids",
-                        nargs='+',
-                        help="Model ID specified in meta of dbt models. Models(tables) to be included into GoodData.",
-                        default=default)
-
-
 def set_gooddata_upper_case_args(parser: argparse.ArgumentParser):
     parser.add_argument("-guc", "--gooddata-upper-case",
                         help="Upper case all physical model entities (tables, columns). Valuable for Snowflake!",
@@ -76,7 +64,6 @@ def parse_arguments(description: str):
     deploy_models = subparsers.add_parser("deploy_models")
     set_dbt_args(deploy_models)
     set_environment_id_arg(deploy_models)
-    set_gooddata_model_id_args(deploy_models)
     set_gooddata_upper_case_args(deploy_models)
     deploy_models.set_defaults(method='deploy_models')
 
@@ -86,14 +73,12 @@ def parse_arguments(description: str):
 
     deploy_analytics = subparsers.add_parser("deploy_analytics")
     set_environment_id_arg(deploy_analytics)
-    set_gooddata_model_id_args(deploy_analytics)
     # TODO - now it is no longer needed. Either delete it or utilize it to do not lower_case everything
     set_gooddata_upper_case_args(deploy_analytics)
     deploy_analytics.set_defaults(method='deploy_analytics')
 
     store_analytics = subparsers.add_parser("store_analytics")
     set_environment_id_arg(store_analytics)
-    set_gooddata_model_id_args(store_analytics)
     set_gooddata_upper_case_args(store_analytics)
     store_analytics.set_defaults(method='store_analytics')
 

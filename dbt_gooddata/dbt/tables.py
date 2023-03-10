@@ -141,8 +141,7 @@ class DbtModelTable(DbtModelBase):
 
 
 class DbtModelTables:
-    def __init__(self, model_ids: list[str], upper_case: bool) -> None:
-        self.model_ids = model_ids
+    def __init__(self, upper_case: bool) -> None:
         self.upper_case = upper_case
         with open(DBT_PATH_TO_MANIFEST) as fp:
             self.dbt_catalog = json.load(fp)
@@ -164,13 +163,9 @@ class DbtModelTables:
                         column.meta.gooddata.upper_case_names()
 
         # Return only gooddata labelled tables.
-        # Optionally marked by model_id
-        result = [
-            t for t in tables
-            if t.has_gooddata_metadata() and (len(self.model_ids) == 0 or t.meta.gooddata.model_id in self.model_ids)
-        ]
+        result = [t for t in tables if t.has_gooddata_metadata()]
         if len(result) == 0:
-            raise Exception(f"No tables found in the data source model_ids={self.model_ids}")
+            raise Exception(f"No tables labelled by gooddata meta flag found in the data source")
         else:
             return result
 
@@ -415,9 +410,9 @@ class DbtModelTables:
                 result.append(table)
         return result
 
-    def make_declarative_datasets(self, data_source_id: str, model_id: Optional[str]) -> dict:
+    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[list[str]]) -> dict:
         result = {"datasets": [], "date_instances": []}
-        model_tables = [t for t in self.tables if model_id is None or model_id == t.meta.gooddata.model_id]
+        model_tables = [t for t in self.tables if not model_ids or t.meta.gooddata.model_id in model_ids]
         role_playing_tables = self.find_role_playing_tables(model_tables)
         model_tables_with_roles = self.populate_role_playing_tables(model_tables, role_playing_tables)
 
