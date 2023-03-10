@@ -13,6 +13,7 @@ from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDataset
 from gooddata_api_client.model.declarative_fact import DeclarativeFact
 from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
+from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
@@ -32,7 +33,7 @@ class CatalogDeclarativeDataset(Base):
     data_source_table_id: Optional[CatalogDataSourceTableIdentifier] = None
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[List[str]] = None
-    workspace_data_filter_columns: Optional[List[str]] = None
+    workspace_data_filter_columns: Optional[List[CatalogDeclarativeWorkspaceDataFilterColumn]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeDataset]:
@@ -125,3 +126,13 @@ class CatalogDeclarativeReference(Base):
     @staticmethod
     def client_class() -> Type[DeclarativeReference]:
         return DeclarativeReference
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeWorkspaceDataFilterColumn(Base):
+    name: str
+    data_type: str
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeWorkspaceDataFilterColumn]:
+        return DeclarativeWorkspaceDataFilterColumn

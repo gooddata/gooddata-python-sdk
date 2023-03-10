@@ -313,8 +313,14 @@
           "Order lines"
         ],
         "workspaceDataFilterColumns": [
-          "wdf__region",
-          "wdf__state"
+          {
+            "name": "wdf__region",
+            "dataType": "STRING"
+          },
+          {
+            "name": "wdf__state",
+            "dataType": "STRING"
+          }
         ]
       },
       {
@@ -541,7 +547,10 @@
           "statement": "SELECT * FROM v_wdf_customers"
         },
         "workspaceDataFilterColumns": [
-          "wdf__region"
+          {
+            "name": "wdf__region",
+            "dataType": "STRING"
+          }
         ]
       }
     ],

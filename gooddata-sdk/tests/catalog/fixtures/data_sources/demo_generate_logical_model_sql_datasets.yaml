@@ -112,7 +112,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '8500'
+          - '8587'
       body:
         string:
           ldm:
@@ -322,8 +322,10 @@ interactions:
                   - Order lines
                 title: Order lines
                 workspaceDataFilterColumns:
-                  - wdf__region
-                  - wdf__state
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
               - attributes:
                   - description: Product name
                     id: product_name
@@ -481,7 +483,8 @@ interactions:
                   statement: SELECT * FROM v_wdf_customers
                 title: Customers sql dataset with WDF
                 workspaceDataFilterColumns:
-                  - wdf__region
+                  - dataType: STRING
+                    name: wdf__region
             dateInstances:
               - granularities:
                   - MINUTE
