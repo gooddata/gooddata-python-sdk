@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    "gooddata-sdk==1.2.0",
+    "gooddata-sdk==1.3.0",
     "pyyaml>=5.1",
     "attrs~=21.4.0",
     "cattrs~=22.1.0",
