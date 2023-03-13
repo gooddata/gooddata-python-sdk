@@ -1,1 +1,0 @@
-../OSS LICENSES/LICENSE (gooddata-scan-client).txt

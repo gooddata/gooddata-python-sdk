@@ -5,9 +5,6 @@ pre-commit~=2.14.0
 -r ./fmt-requirements.txt
 -r ./lint-requirements.txt
 
--r ./gooddata-afm-client/requirements.txt
--r ./gooddata-metadata-client/requirements.txt
--r ./gooddata-scan-client/requirements.txt
 -r ./gooddata-api-client/requirements.txt
 -r ./gooddata-sdk/requirements.txt
 -r ./gooddata-pandas/requirements.txt

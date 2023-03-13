@@ -28,7 +28,7 @@ There are three important things to remember:
 ### Type conversion tests
 
 There are a bunch of tests in [compute_model](./compute_model) and [insight](./insight) whose purpose is to verify
-that conversion from internal models to the API models (stored in gooddata-afm-client or gooddata-metadata-client) work
+that conversion from internal models to the API models (stored in gooddata-api-client) work
 as intended.
 
 I was unable (so far) to convert the API model to the actual format that is used when sending requests to the server. The

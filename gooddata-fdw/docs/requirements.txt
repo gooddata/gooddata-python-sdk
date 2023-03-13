@@ -3,9 +3,6 @@ pallets-sphinx-themes
 sphinx-rtd-theme
 # Dependencies to the other projects in the repository
 # CWD_TO_ROOT_RELATIVE defines path to root of repository - it can differ for tox and readthedocs builds
--e${CWD_TO_ROOT_RELATIVE}/gooddata-metadata-client
--e${CWD_TO_ROOT_RELATIVE}/gooddata-afm-client
--e${CWD_TO_ROOT_RELATIVE}/gooddata-scan-client
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-api-client
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-sdk
 -e${CWD_TO_ROOT_RELATIVE}/gooddata-fdw
