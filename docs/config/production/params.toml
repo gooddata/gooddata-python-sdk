@@ -7,13 +7,13 @@
 # - "latestTag" - docker image tag for the latest patch version. Must be changed
 #                 on every patch release of respective branch
 [[versions]]
-    version = "1.3"
-    dirpath = "1.3"
-    url = "/1.3/"
+    version = "1.3.0"
+    dirpath = "1.3.0"
+    url = "/1.3.0/"
 [[versions]]
-    version = "1.2"
-    dirpath = "1.2"
-    url = "/1.2/"
+    version = "1.2.0"
+    dirpath = "1.2.0"
+    url = "/1.2.0/"
 [[versions]]
-    version = "1.1"
+    version = "1.1.0"
     url = "https://gooddata-sdk.readthedocs.io/en/v1.1.0/"

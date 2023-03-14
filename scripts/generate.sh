@@ -40,7 +40,6 @@ git fetch "$remote_name"
 for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
     target_section=${branch#"$remote_name"/}
     target_section=${target_section#rel/}
-    target_section=${target_section%.*}
     if [ "$target_section" == "master" ] ; then
         # handle master branch specially, all contents is copied, not just docs
         target_section=""

@@ -1,4 +1,8 @@
 # Redirect homepage to the latest version
-/ {{ .Site.BaseURL }}/1.3/ 301!
-/latest/ {{ .Site.BaseURL }}/1.3/ 301
-/docs/ {{ .Site.BaseURL }}/1.3/ 301!
+/ {{ .Site.BaseURL }}/1.3.0/ 301!
+/latest/ {{ .Site.BaseURL }}/1.3.0/ 301
+/docs/ {{ .Site.BaseURL }}/1.3.0/ 301!
+
+# Redirect from old URL to new
+/1.2/* {{ .Site.BaseURL }}/1.2.O/:splat 301
+/1.3/* {{ .Site.BaseURL }}/1.3.O/:splat 301
