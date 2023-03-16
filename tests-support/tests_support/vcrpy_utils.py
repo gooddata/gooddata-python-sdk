@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import typing
+from json import JSONDecodeError
 from typing import Any, Optional
 
 import vcr
@@ -43,7 +44,11 @@ class CustomSerializerYaml:
             if request_body is not None:
                 interaction["request"]["body"] = json.dumps(request_body)
             if response_body is not None and response_body["string"] != "":
-                interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
+                try:
+                    interaction["response"]["body"]["string"] = json.dumps(response_body["string"])
+                except TypeError:
+                    # this exception is expected while getting XLSX file content
+                    continue
         return cassette_dict
 
     def serialize(self, cassette_dict: dict[str, Any]) -> str:
@@ -53,7 +58,11 @@ class CustomSerializerYaml:
             if request_body is not None:
                 interaction["request"]["body"] = json.loads(request_body)
             if response_body is not None and response_body["string"] != "":
-                interaction["response"]["body"]["string"] = json.loads(response_body["string"])
+                try:
+                    interaction["response"]["body"]["string"] = json.loads(response_body["string"])
+                except (JSONDecodeError, UnicodeDecodeError):
+                    # these exceptions are expected while getting file content
+                    continue
         return yaml.dump(cassette_dict, Dumper=IndentDumper, sort_keys=False)
 
 
