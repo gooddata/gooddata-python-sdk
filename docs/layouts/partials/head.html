@@ -35,5 +35,8 @@
 {{ if .Site.Params.prism_syntax_highlighting }}
 <!-- stylesheet for Prism -->
 <link rel="stylesheet" href="{{ "/css/prism.css" | relURL }}"/>
+<link rel="stylesheet" href="{{ "/css/prism-extensions.css" | relURL }}"/>
+
 {{ end }}
+{{ partialCached "custom-scripts.html" .}}
 {{ partial "hooks/head-end.html" . }}
