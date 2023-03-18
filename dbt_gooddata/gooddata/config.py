@@ -4,16 +4,19 @@ import attrs
 
 from dbt_gooddata.dbt.base import Base
 
+
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfigEnvironment(Base):
     id: str
     name: str
     elt_environment: str
 
+
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfigEnvironmentSetup(Base):
     id: str
     environments: list[GoodDataConfigEnvironment]
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfigProduct(Base):
@@ -21,6 +24,7 @@ class GoodDataConfigProduct(Base):
     name: str
     environment_setup_id: str
     model_ids: Optional[list[str]]
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfig(Base):

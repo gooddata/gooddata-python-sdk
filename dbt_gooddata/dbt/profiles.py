@@ -1,15 +1,20 @@
 import os
-from typing import Optional
-import attrs
 import re
-import yaml
+from typing import Optional
 from urllib.parse import quote_plus
 
-from dbt_gooddata.dbt.base import Base
+import attrs
+import yaml
 from gooddata_sdk import (
-    BasicCredentials, CatalogDataSourcePostgres, PostgresAttributes,
-    CatalogDataSourceSnowflake, SnowflakeAttributes,
+    BasicCredentials,
+    CatalogDataSourcePostgres,
+    CatalogDataSourceSnowflake,
+    PostgresAttributes,
+    SnowflakeAttributes,
 )
+
+from dbt_gooddata.dbt.base import Base
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtOutputPostgreSQL(Base):
@@ -29,7 +34,7 @@ class DbtOutputPostgreSQL(Base):
             db_specific_attributes=PostgresAttributes(
                 host=self.host,
                 # TODO - adopt this in Python SDK
-                db_name=quote_plus(self.dbname)
+                db_name=quote_plus(self.dbname),
             ),
             # Schema name is collected from dbt manifest from relevant tables
             schema=schema_name,
@@ -38,6 +43,7 @@ class DbtOutputPostgreSQL(Base):
                 password=self.password,
             ),
         )
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtOutputSnowflake(Base):
@@ -117,9 +123,7 @@ class DbtProfiles:
                 self.inject_env_vars(output_def)
                 dbt_output = self.to_data_class(output, output_def)
                 outputs.append(dbt_output)
-            profiles.append(
-                DbtProfile(name=profile, outputs=outputs)
-            )
+            profiles.append(DbtProfile(name=profile, outputs=outputs))
         return profiles
 
     @property

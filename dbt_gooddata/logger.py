@@ -8,7 +8,7 @@ def get_logger(name, debug=False):
     logger.setLevel(level)
     if len(logger.handlers) == 0:
         channel = logging.StreamHandler(stream=sys.stdout)
-        formatter = logging.Formatter(fmt='%(levelname)-8s: %(name)s : %(asctime)-15s - %(message)s')
+        formatter = logging.Formatter(fmt="%(levelname)-8s: %(name)s : %(asctime)-15s - %(message)s")
         channel.setFormatter(formatter)
         logger.addHandler(channel)
     return logger

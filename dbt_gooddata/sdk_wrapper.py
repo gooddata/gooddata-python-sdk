@@ -1,5 +1,6 @@
 from logging import Logger
 from typing import Optional
+
 from gooddata_sdk import GoodDataSdk
 
 

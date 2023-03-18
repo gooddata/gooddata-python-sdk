@@ -1,14 +1,21 @@
 import copy
 import json
-from typing import Optional
-import attrs
 import re
+from typing import Optional
+
+import attrs
+from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
 
 from dbt_gooddata.dbt.base import (
-    Base, DATE_GRANULARITIES, TIMESTAMP_GRANULARITIES, GoodDataLdmTypes,
-    TIMESTAMP_DATA_TYPES, DATETIME_DATA_TYPES, DBT_PATH_TO_MANIFEST, NUMERIC_DATA_TYPES
+    DATE_GRANULARITIES,
+    DATETIME_DATA_TYPES,
+    DBT_PATH_TO_MANIFEST,
+    NUMERIC_DATA_TYPES,
+    TIMESTAMP_DATA_TYPES,
+    TIMESTAMP_GRANULARITIES,
+    Base,
+    GoodDataLdmTypes,
 )
-from gooddata_sdk import CatalogDeclarativeTables, CatalogDeclarativeTable, CatalogDeclarativeColumn
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -58,8 +65,8 @@ class DbtModelBase(Base):
     # Solution: use result of generateLdm as a master template, and override based on dbt metadata only if necessary
     @staticmethod
     def beautify_title(name: str) -> str:
-        re_invalid_chars = re.compile(r'[^a-z0-9 ]', re.I)
-        re_spaces = re.compile(r'\s+')
+        re_invalid_chars = re.compile(r"[^a-z0-9 ]", re.I)
+        re_spaces = re.compile(r"\s+")
         if name == name.upper():
             # Snowflake-like DBs expose upper-case by default
             name = name.lower()
@@ -106,19 +113,23 @@ class DbtModelColumn(DbtModelBase):
         return self.meta is not None and self.meta.gooddata is not None
 
     def gooddata_is_fact(self) -> bool:
-        return (self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value) or \
-            self.is_number()
+        return (
+            self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value
+        ) or self.is_number()
 
     def gooddata_is_attribute(self) -> bool:
         valid_ldm_types = [GoodDataLdmTypes.ATTRIBUTE.value, GoodDataLdmTypes.PRIMARY_KEY.value]
         # Without GD metadata, attribute is default unless it is DATETIME data type
-        return (not self.has_gooddata_metadata() and not self.is_date()) \
-            or (self.has_gooddata_metadata() and self.meta.gooddata.ldm_type in valid_ldm_types)
+        return (not self.has_gooddata_metadata() and not self.is_date()) or (
+            self.has_gooddata_metadata() and self.meta.gooddata.ldm_type in valid_ldm_types
+        )
 
     def gooddata_is_label(self, attribute_column_name: str) -> bool:
-        return self.has_gooddata_metadata() \
-            and self.meta.gooddata.ldm_type == GoodDataLdmTypes.LABEL.value \
+        return (
+            self.has_gooddata_metadata()
+            and self.meta.gooddata.ldm_type == GoodDataLdmTypes.LABEL.value
             and attribute_column_name == self.meta.gooddata.attribute_column
+        )
 
     def is_date(self) -> bool:
         gooddata_date = self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == "date"
@@ -129,6 +140,7 @@ class DbtModelColumn(DbtModelBase):
 
     def is_reference(self) -> bool:
         return self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == GoodDataLdmTypes.REFERENCE.value
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelTable(DbtModelBase):
@@ -165,7 +177,7 @@ class DbtModelTables:
         # Return only gooddata labelled tables.
         result = [t for t in tables if t.has_gooddata_metadata()]
         if len(result) == 0:
-            raise Exception(f"No tables labelled by gooddata meta flag found in the data source")
+            raise Exception("No tables labelled by gooddata meta flag found in the data source")
         else:
             return result
 
@@ -184,7 +196,7 @@ class DbtModelTables:
         if len(schemas) > 1:
             raise Exception(f"Unsupported feature: GoodData does not support multiple schemas - {schemas=}")
         elif len(schemas) < 1:
-            raise Exception(f"No schema found")
+            raise Exception("No schema found")
         else:
             schema_name = next(iter(schemas))
             if self.upper_case:
@@ -218,16 +230,15 @@ class DbtModelTables:
                 scan_column = self.get_scan_column(scan_table, column.name)
                 column.data_type = column.data_type or scan_column.data_type
 
-                columns.append({
-                    "name": column.name,
-                    "data_type": column.data_type
-                })
-            result["tables"].append({
-                "id": table.name,
-                "path": [self.schema_name, table.name],
-                "type": "TABLE",
-                "columns": columns,
-            })
+                columns.append({"name": column.name, "data_type": column.data_type})
+            result["tables"].append(
+                {
+                    "id": table.name,
+                    "path": [self.schema_name, table.name],
+                    "type": "TABLE",
+                    "columns": columns,
+                }
+            )
         return result
 
     @staticmethod
@@ -295,11 +306,13 @@ class DbtModelTables:
             elif column.is_date():
                 referenced_object_id = column.gooddata_ldm_id
             if referenced_object_id is not None:
-                references.append({
-                    "identifier": {"id": referenced_object_id, "type": "dataset"},
-                    "multivalue": False,
-                    "source_columns": [column.name]
-                })
+                references.append(
+                    {
+                        "identifier": {"id": referenced_object_id, "type": "dataset"},
+                        "multivalue": False,
+                        "source_columns": [column.name],
+                    }
+                )
         return references
 
     @staticmethod
@@ -307,14 +320,16 @@ class DbtModelTables:
         facts = []
         for column in table.columns.values():
             if column.gooddata_is_fact():
-                facts.append({
-                    "id": column.gooddata_ldm_id,
-                    # TODO - all titles filled from dbt descriptions, incorrect! No title in dbt models.
-                    "title": column.gooddata_ldm_title,
-                    "description": column.gooddata_ldm_description,
-                    "source_column": column.name,
-                    "tags": [table.description] + column.tags,
-                })
+                facts.append(
+                    {
+                        "id": column.gooddata_ldm_id,
+                        # TODO - all titles filled from dbt descriptions, incorrect! No title in dbt models.
+                        "title": column.gooddata_ldm_title,
+                        "description": column.gooddata_ldm_description,
+                        "source_column": column.name,
+                        "tags": [table.description] + column.tags,
+                    }
+                )
         return facts
 
     @staticmethod
@@ -322,14 +337,16 @@ class DbtModelTables:
         labels = []
         for column in table.columns.values():
             if column.gooddata_is_label(attribute_column.name):
-                labels.append({
-                    "id": column.gooddata_ldm_id,
-                    "title": column.gooddata_ldm_title,
-                    "description": column.gooddata_ldm_description,
-                    "source_column": column.name,
-                    "value_type": column.meta.gooddata.label_type,
-                    "tags": [table.description] + column.tags,
-                })
+                labels.append(
+                    {
+                        "id": column.gooddata_ldm_id,
+                        "title": column.gooddata_ldm_title,
+                        "description": column.gooddata_ldm_description,
+                        "source_column": column.name,
+                        "value_type": column.meta.gooddata.label_type,
+                        "tags": [table.description] + column.tags,
+                    }
+                )
         return labels
 
     def make_attributes(self, table: DbtModelTable) -> list[dict]:
@@ -337,14 +354,16 @@ class DbtModelTables:
         for column in table.columns.values():
             # Default is attribute
             if column.gooddata_is_attribute():
-                attributes.append({
-                    "id": column.gooddata_ldm_id,
-                    "title": column.gooddata_ldm_title,
-                    "description": column.gooddata_ldm_description,
-                    "source_column": column.name,
-                    "tags": [table.description] + column.tags,
-                    "labels": self.make_labels(table, column)
-                })
+                attributes.append(
+                    {
+                        "id": column.gooddata_ldm_id,
+                        "title": column.gooddata_ldm_title,
+                        "description": column.gooddata_ldm_description,
+                        "source_column": column.name,
+                        "tags": [table.description] + column.tags,
+                        "labels": self.make_labels(table, column),
+                    }
+                )
         return attributes
 
     def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: list[dict]) -> list[dict]:
@@ -356,17 +375,19 @@ class DbtModelTables:
                     granularities = DATE_GRANULARITIES + TIMESTAMP_GRANULARITIES
                 else:
                     granularities = DATE_GRANULARITIES
-                date_datasets.append({
-                    "id": column.gooddata_ldm_id,
-                    "title": self.get_ldm_title(column),
-                    "description": column.description,
-                    "tags": [table.description] + column.tags,
-                    "granularities": granularities,
-                    "granularities_formatting": {
-                        "title_base": "",
-                        "title_pattern": "%titleBase - %granularityTitle"
-                    },
-                })
+                date_datasets.append(
+                    {
+                        "id": column.gooddata_ldm_id,
+                        "title": self.get_ldm_title(column),
+                        "description": column.description,
+                        "tags": [table.description] + column.tags,
+                        "granularities": granularities,
+                        "granularities_formatting": {
+                            "title_base": "",
+                            "title_pattern": "%titleBase - %granularityTitle",
+                        },
+                    }
+                )
         return date_datasets
 
     def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: dict, result: dict) -> dict:
@@ -375,21 +396,23 @@ class DbtModelTables:
         facts = self.make_facts(table)
         attributes = self.make_attributes(table)
 
-        result["datasets"].append({
-            "id": table.gooddata_ldm_id,
-            "title": table.gooddata_ldm_title,
-            "description": table.description,
-            "tags": [table.description] + table.tags,
-            "data_source_table_id": {
-                "data_source_id": data_source_id,
-                "id": table.name,  # TODO - may not be unique
-                "type": "dataSource"
-            },
-            "grain": grain,
-            "references": references,
-            "facts": facts,
-            "attributes": attributes,
-        })
+        result["datasets"].append(
+            {
+                "id": table.gooddata_ldm_id,
+                "title": table.gooddata_ldm_title,
+                "description": table.description,
+                "tags": [table.description] + table.tags,
+                "data_source_table_id": {
+                    "data_source_id": data_source_id,
+                    "id": table.name,  # TODO - may not be unique
+                    "type": "dataSource",
+                },
+                "grain": grain,
+                "references": references,
+                "facts": facts,
+                "attributes": attributes,
+            }
+        )
 
         date_datasets = self.make_date_datasets(table, result["date_instances"])
         result["date_instances"] = result["date_instances"] + date_datasets
