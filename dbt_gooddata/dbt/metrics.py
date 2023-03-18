@@ -5,12 +5,7 @@ import re
 
 from dbt_gooddata.dbt.base import Base, DBT_PATH_TO_MANIFEST
 from dbt_gooddata.dbt.tables import DbtModelBase
-# TODO - add CatalogDeclarativeMetric to gooddata_sdk.__init__.py
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
-    CatalogDeclarativeMetric
-)
-from gooddata_sdk import CatalogDeclarativeModel
-
+from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeMetric
 
 DBT_TO_GD_CALC_METHODS = {
     "count_distinct": "COUNT",
