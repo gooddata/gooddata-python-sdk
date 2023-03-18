@@ -128,6 +128,10 @@ src = "gooddata-sdk/setup.py"
 search = '"Documentation": "https://www.gooddata.com/docs/python-sdk/{current_version}"'
 
 [[tool.tbump.file]]
+src = "gooddata-sdk/README.md"
+search = "https://www.gooddata.com/docs/python-sdk/{current_version}"
+
+[[tool.tbump.file]]
 src = "gooddata-pandas/setup.py"
 search = '"Documentation": "https://gooddata-pandas.readthedocs.io/en/v{current_version}"'
 
