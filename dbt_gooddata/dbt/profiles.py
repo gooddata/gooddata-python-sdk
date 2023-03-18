@@ -100,13 +100,13 @@ class DbtProfiles:
     @staticmethod
     def to_data_class(output: str, output_def: dict) -> DbtOutput:
         db_type = output_def["type"]
-        if db_type == "postgres":
-            data_class = DbtOutputPostgreSQL.from_dict({"name": output} | output_def)
-        elif db_type == "snowflake":
-            data_class = DbtOutputSnowflake.from_dict({"name": output} | output_def)
-        else:
-            raise Exception(f"Unsupported database type {output=} {db_type=}")
-        return data_class
+        match db_type:
+            case "postgres":
+                return DbtOutputPostgreSQL.from_dict({"name": output} | output_def)
+            case "snowflake":
+                return DbtOutputSnowflake.from_dict({"name": output} | output_def)
+            case _:
+                raise Exception(f"Unsupported database type {output=} {db_type=}")
 
     @property
     def profiles(self) -> list[DbtProfile]:
