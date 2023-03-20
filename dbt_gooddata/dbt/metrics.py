@@ -1,16 +1,12 @@
 import json
-from typing import Optional
-import attrs
 import re
+from typing import Optional
 
-from dbt_gooddata.dbt.base import Base, DBT_PATH_TO_MANIFEST
+import attrs
+from gooddata_sdk import CatalogDeclarativeMetric, CatalogDeclarativeModel
+
+from dbt_gooddata.dbt.base import DBT_PATH_TO_MANIFEST, Base
 from dbt_gooddata.dbt.tables import DbtModelBase
-# TODO - add CatalogDeclarativeMetric to gooddata_sdk.__init__.py
-from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
-    CatalogDeclarativeMetric
-)
-from gooddata_sdk import CatalogDeclarativeModel
-
 
 DBT_TO_GD_CALC_METHODS = {
     "count_distinct": "COUNT",
@@ -25,6 +21,7 @@ DBT_TO_GD_FILTER_OPERATORS = {
     "is": "=",
     "is not": "<>",
 }
+
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataMetricProps(Base):
@@ -68,7 +65,8 @@ class DbtModelMetrics:
             result.append(DbtModelMetric.from_dict(metric_def))
         # Return only gooddata labelled tables marked by model_id (if requested in args)
         return [
-            r for r in result
+            r
+            for r in result
             if r.meta.gooddata is not None and (not self.model_ids or r.meta.gooddata.model_id in self.model_ids)
         ]
 
@@ -114,7 +112,7 @@ class DbtModelMetrics:
             return f" {{{final_entity_type}/{full_entity_name}}}"
 
     def resolve_entities_in_expression(self, expression: str, table_name: str):
-        re_split = re.compile(r'\s+')
+        re_split = re.compile(r"\s+")
         tokens = re_split.split(expression)
         result_tokens = []
         for token in tokens:
@@ -153,7 +151,7 @@ class DbtModelMetrics:
                         "format": dbt_metric.meta.gooddata.format,
                         "maql": gd_maql,
                     },
-                    "tags": dbt_metric.tags
+                    "tags": dbt_metric.tags,
                 }
                 gd_metrics.append(CatalogDeclarativeMetric.from_dict(metric_dict))
             else:

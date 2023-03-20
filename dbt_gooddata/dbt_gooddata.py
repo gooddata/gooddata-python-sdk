@@ -5,18 +5,20 @@ from typing import Optional
 
 import yaml
 from gooddata_sdk import (
+    CatalogDeclarativeModel,
+    CatalogDeclarativeTables,
+    CatalogScanModelRequest,
+    CatalogWorkspace,
     GoodDataSdk,
-    CatalogDeclarativeTables, CatalogWorkspace, CatalogDeclarativeModel, CatalogScanModelRequest
 )
 
-from dbt_gooddata.dbt.metrics import DbtModelMetrics
-from dbt_gooddata.dbt.tables import DbtModelTables
-from dbt_gooddata.dbt.profiles import DbtProfiles, DbtOutput
 from dbt_gooddata.args import parse_arguments
+from dbt_gooddata.dbt.metrics import DbtModelMetrics
+from dbt_gooddata.dbt.profiles import DbtOutput, DbtProfiles
+from dbt_gooddata.dbt.tables import DbtModelTables
 from dbt_gooddata.gooddata.config import GoodDataConfig, GoodDataConfigProduct
 from dbt_gooddata.logger import get_logger
 from dbt_gooddata.sdk_wrapper import GoodDataSdkWrapper
-
 
 GOODDATA_LAYOUTS_DIR = Path("gooddata_layouts")
 
@@ -29,9 +31,7 @@ def generate_and_put_pdm(logger, sdk: GoodDataSdk, data_source_id: str, dbt_tabl
     # GoodData caches the metadata to reduce querying them (costly) in runtime.
     scan_request = CatalogScanModelRequest(scan_tables=True, scan_views=True)
     logger.info(f"Scan data source {data_source_id=}")
-    scan_pdm = sdk.catalog_data_source.scan_data_source(
-        data_source_id, scan_request, report_warnings=True
-    ).pdm
+    scan_pdm = sdk.catalog_data_source.scan_data_source(data_source_id, scan_request, report_warnings=True).pdm
 
     logger.info(f"Generate and put PDM {data_source_id=}")
     pdm = dbt_tables.make_pdm(scan_pdm)
@@ -51,13 +51,13 @@ def generate_and_put_ldm(
 
 
 def register_data_source(
-        logger, sdk: GoodDataSdk, data_source_id: str, dbt_target: DbtOutput, dbt_tables: DbtModelTables
+    logger, sdk: GoodDataSdk, data_source_id: str, dbt_target: DbtOutput, dbt_tables: DbtModelTables
 ):
     logger.info(f"Register data source {data_source_id=} schema={dbt_tables.schema_name}")
     data_source = dbt_target.to_gooddata(data_source_id, dbt_tables.schema_name)
     sdk.catalog_data_source.create_or_update_data_source(data_source)
 
-    logger.info(f"Generate and put PDM")
+    logger.info("Generate and put PDM")
     generate_and_put_pdm(logger, sdk, data_source_id, dbt_tables)
 
 
@@ -69,10 +69,14 @@ def create_workspace(logger, sdk: GoodDataSdk, workspace_id: str, workspace_titl
 
 
 def deploy_ldm(
-    logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables,
-    model_ids: Optional[list[str]], workspace_id: str
+    logger,
+    sdk: GoodDataSdk,
+    data_source_id: str,
+    dbt_tables: DbtModelTables,
+    model_ids: Optional[list[str]],
+    workspace_id: str,
 ) -> None:
-    logger.info(f"Generate and put LDM")
+    logger.info("Generate and put LDM")
     generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_ids)
 
 
@@ -88,9 +92,7 @@ def deploy_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: 
     ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
 
     logger.info("Read analytics model from disk")
-    adm = sdk.catalog_workspace_content.load_analytics_model_from_disk(
-        GOODDATA_LAYOUTS_DIR / data_product.id
-    )
+    adm = sdk.catalog_workspace_content.load_analytics_model_from_disk(GOODDATA_LAYOUTS_DIR / data_product.id)
 
     logger.info("Append dbt metrics to GoodData metrics")
     dbt_gooddata_metrics = DbtModelMetrics(data_product.model_ids, ldm).make_gooddata_metrics()
@@ -127,7 +129,7 @@ def test_insights(logger, sdk: GoodDataSdk, workspace_id: str) -> None:
             start = time()
             sdk.tables.for_insight(workspace_id, insight)
             duration = int((time() - start) * 1000)
-            logger.info(f"Test successful insight=\"{insight.title}\" duration={duration}(ms) ...")
+            logger.info(f'Test successful insight="{insight.title}" duration={duration}(ms) ...')
         except RuntimeError:
             sys.exit()
 
