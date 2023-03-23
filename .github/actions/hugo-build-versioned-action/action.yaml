@@ -16,6 +16,10 @@ inputs:
     required: false
     description: Preview of the master branch
     default: no
+  fetch-from:
+    required: false
+    description: repo to fetch the versions from
+    default: origin
 
 runs:
   using: "composite"
@@ -24,7 +28,7 @@ runs:
       shell: bash
       run: |
         cd docs
-        ../scripts/generate.sh origin master ${{ inputs.keep_master}}
+        ../scripts/generate.sh {{ inputs.fetch-from }} master ${{ inputs.keep_master}}
     - name: Hugo Build
       uses: ./.github/actions/hugo-build-action
       with:
