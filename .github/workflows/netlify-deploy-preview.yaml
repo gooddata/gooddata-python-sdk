@@ -24,7 +24,7 @@ jobs:
       - name: Generate Versioned Docs
         uses: ./.github/actions/hugo-build-versioned-action
         with:
-          BASE_URL: https://preview-$GITHUB_PR_NUMBER--$NETLIFY_SITE_NAME.netlify.app
+          base-url: https://preview-$GITHUB_PR_NUMBER--$NETLIFY_SITE_NAME.netlify.app
           keep_master: keep_master
       - name: Publish
         uses: netlify/actions/cli@master
