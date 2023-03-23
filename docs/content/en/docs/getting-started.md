@@ -4,6 +4,8 @@ linkTitle: "Getting Started"
 weight: 12
 ---
 
+Hello I am an edit from a PR!
+
 Start integrating GoodData into your Python application right now.
 
 ## Quick Start
