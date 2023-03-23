@@ -37,4 +37,4 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            https://preview-$GITHUB_PR_NUMBER--$NETLIFY_SITE_NAME.netlify.app/
+            https://preview-${{ vars.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/
