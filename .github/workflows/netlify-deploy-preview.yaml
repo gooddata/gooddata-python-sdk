@@ -1,7 +1,7 @@
-name: Netlify Draft Deploy 
+name: Netlify Draft Deploy
 on:
   pull_request_target:
-    branches: 
+    branches:
       - 'rel/**'
       - master
       - INFRA-1578-test-branch
@@ -21,8 +21,8 @@ jobs:
           submodules: recursive
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
-      - name: Hugo Build
-        uses: ./.github/actions/hugo-build-action
+      - name: Generate Versioned Docs
+        uses: ./.github/actions/hugo-build-versioned-action
         with:
           BASE_URL: https://preview-$GITHUB_PR_NUMBER--$NETLIFY_SITE_NAME.netlify.app
       - name: Publish
@@ -32,4 +32,3 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_PREVIEW_AUTH_TOKEN }}
-

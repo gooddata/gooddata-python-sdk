@@ -17,10 +17,10 @@ runs:
   using: "composite"
   steps:
     - name: Generate Versioned Documentation
-      shell: bash 
+      shell: bash
       run: |
         cd docs
-        ../scripts/generate.sh origin master
+        ../scripts/generate.sh origin ${{ github.ref_name }}
     - name: Hugo Build
       uses: ./.github/actions/hugo-build-action
       with:
