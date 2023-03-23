@@ -3,6 +3,9 @@
 set -e
 shopt -s extglob
 
+echo "You've been injected!!"
+
+
 content_dir=versioned_docs
 # Name of the remote hosting the main repo (gitlab.com/gooddata/gdc-tiger-docs)
 remote_name=${1:-origin}
