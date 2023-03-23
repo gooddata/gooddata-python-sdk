@@ -364,6 +364,7 @@ def convert_execution_response_to_dataframe(
     result_size_dimensions_limits: ResultSizeDimensions,
     result_size_bytes_limit: Optional[int] = None,
     use_local_ids_in_headers: bool = False,
+    page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
     """
     Converts execution result to a pandas dataframe, maintaining the dimensionality of the result.
@@ -380,6 +381,7 @@ def convert_execution_response_to_dataframe(
         result_cache_metadata=result_cache_metadata,
         result_size_dimensions_limits=result_size_dimensions_limits,
         result_size_bytes_limit=result_size_bytes_limit,
+        page_size=page_size,
     )
     full_data = _merge_grand_totals_into_data(extract)
     full_headers = _merge_grand_total_headers_into_headers(extract)

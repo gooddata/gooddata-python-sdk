@@ -444,7 +444,10 @@ with gooddata_api_client.ApiClient() as api_client:
                                 tags=["Customers"],
                                 title="Customers",
                                 workspace_data_filter_columns=[
-                                    "workspace_data_filter_columns_example",
+                                    DeclarativeWorkspaceDataFilterColumn(
+                                        data_type="INT",
+                                        name="customer_id",
+                                    ),
                                 ],
                             ),
                         ],

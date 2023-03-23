@@ -416,7 +416,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '4867'
+          - '4925'
       body:
         string:
           ldm:
@@ -626,8 +626,10 @@ interactions:
                   - Order lines
                 title: Order lines
                 workspaceDataFilterColumns:
-                  - wdf__region
-                  - wdf__state
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
               - attributes:
                   - description: Product id
                     id: product_id

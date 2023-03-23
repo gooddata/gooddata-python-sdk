@@ -7,7 +7,12 @@ import pandas
 
 from gooddata_api_client import models
 from gooddata_pandas.data_access import compute_and_extract
-from gooddata_pandas.result_convertor import DataFrameMetadata, LabelOverrides, convert_execution_response_to_dataframe
+from gooddata_pandas.result_convertor import (
+    _DEFAULT_PAGE_SIZE,
+    DataFrameMetadata,
+    LabelOverrides,
+    convert_execution_response_to_dataframe,
+)
 from gooddata_pandas.utils import (
     ColumnsDef,
     DefaultInsightColumnNaming,
@@ -250,6 +255,7 @@ class DataFrameFactory:
         label_overrides: Optional[LabelOverrides] = None,
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
+        page_size: int = _DEFAULT_PAGE_SIZE,
     ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution definition. The data frame will respect the dimensionality
@@ -278,7 +284,7 @@ class DataFrameFactory:
         :param exec_def: execution definition
         :param label_overrides: label overrides for metrics and attributes
         :param result_size_dimensions_limits: A tuple containing maximum size of result dimensions. Optional.
-        :param result_size_bytes_limits: Maximum size of result in bytes. Optional.
+        :param result_size_bytes_limit: Maximum size of result in bytes. Optional.
         :return: tuple holding DataFrame and DataFrame metadata
         """
         if label_overrides is None:
@@ -293,6 +299,7 @@ class DataFrameFactory:
             label_overrides=label_overrides,
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
+            page_size=page_size,
         )
 
     def for_exec_result_id(
@@ -303,6 +310,7 @@ class DataFrameFactory:
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
         use_local_ids_in_headers: bool = False,
+        page_size: int = _DEFAULT_PAGE_SIZE,
     ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         """
         Creates a data frame using an execution result's metadata identified by result_id. The data frame will respect
@@ -356,4 +364,5 @@ class DataFrameFactory:
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
             use_local_ids_in_headers=use_local_ids_in_headers,
+            page_size=page_size,
         )
