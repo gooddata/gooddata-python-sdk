@@ -1,7 +1,14 @@
 # (C) 2022 GoodData Corporation
-from gooddata_sdk import GoodDataApiClient
+from typing import List
+
+from gooddata_sdk import (
+    CatalogAvailableAssignees,
+    CatalogDashboardPermissions,
+    CatalogDeclarativeWorkspacePermissions,
+    CatalogPermissionsForAssignee,
+    GoodDataApiClient,
+)
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
-from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeWorkspacePermissions
 
 
 class CatalogPermissionService(CatalogServiceBase):
@@ -37,4 +44,59 @@ class CatalogPermissionService(CatalogServiceBase):
         """
         self._layout_api.set_workspace_permissions(
             workspace_id=workspace_id, declarative_workspace_permissions=declarative_workspace_permissions.to_api()
+        )
+
+    def list_available_assignees(self, workspace_id: str, dashboard_id: str) -> CatalogAvailableAssignees:
+        """Provide list of users and groups available to assign some dashboard permission
+
+        Args:
+            workspace_id (str):
+                Workspace identification string. e.g. "demo"
+            dashboard_id (str):
+                Dashboard identification string. e.g. "campaign"
+        Returns:
+            CatalogAvailableAssignees:
+                Object containing users and user groups
+        """
+        return CatalogAvailableAssignees.from_dict(
+            self._actions_api.available_assignes(workspace_id, dashboard_id, _check_return_type=False), camel_case=False
+        )
+
+    def list_dashboard_permissions(self, workspace_id: str, dashboard_id: str) -> CatalogDashboardPermissions:
+        """Provide list of users and user groups with granted dashboard permissions for particular dashboard
+
+        Args:
+            workspace_id (str):
+                Workspace identification string. e.g. "demo"
+            dashboard_id (str):
+                Dashboard identification string. e.g. "campaign"
+        Returns:
+            CatalogDashboardPermissions:
+                Object containing users and user groups and granted dashboard permissions
+        """
+        return CatalogDashboardPermissions.from_dict(
+            self._actions_api.permissions(workspace_id, dashboard_id, _check_return_type=False), camel_case=False
+        )
+
+    def manage_dashboard_permissions(
+        self, workspace_id: str, dashboard_id: str, permissions_for_assignee: List[CatalogPermissionsForAssignee]
+    ) -> None:
+        """Provide managing dashboard permissions for user and user groups.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string. e.g. "demo"
+            dashboard_id (str):
+                Dashboard identification string. e.g. "campaign"
+            permissions_for_assignee ([CatalogPermissionsForAssignee]):
+                Object containing List of users and user group and desired dashboard permissions. Set empty list
+                permissions for user/user group means remove dashboard permissions.
+        Returns:
+            None
+        """
+        self._actions_api.manage_permissions(
+            workspace_id,
+            dashboard_id,
+            [permission.to_api() for permission in permissions_for_assignee],
+            _check_return_type=False,
         )

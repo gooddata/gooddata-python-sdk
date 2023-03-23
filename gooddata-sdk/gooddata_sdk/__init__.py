@@ -51,6 +51,21 @@ from gooddata_sdk.catalog.export.request import ExportRequest
 from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
+from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
+    CatalogAvailableAssignees,
+    CatalogUserAssignee,
+    CatalogUserGroupAssignee,
+)
+from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions import (
+    CatalogDashboardPermissions,
+    CatalogGrantedPermission,
+    CatalogUserGroupPermission,
+    CatalogUserPermission,
+)
+from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
+    CatalogDashboardAssigneeIdentifier,
+    CatalogPermissionsForAssignee,
+)
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogAssigneeIdentifier,
     CatalogDeclarativeDataSourcePermission,
