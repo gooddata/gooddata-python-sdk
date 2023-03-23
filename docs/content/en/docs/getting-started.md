@@ -4,6 +4,8 @@ linkTitle: "Getting Started"
 weight: 12
 ---
 
+A test change, to be sure if the PR magic works!
+
 Start integrating GoodData into your Python application right now.
 
 ## Quick Start
