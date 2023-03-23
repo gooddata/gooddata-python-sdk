@@ -12,6 +12,10 @@ inputs:
     required: false
     description: Environment variable
     default: production
+  keep_master:
+    required: false
+    description: Preview of the master branch
+    default: no
 
 runs:
   using: "composite"
@@ -20,7 +24,7 @@ runs:
       shell: bash
       run: |
         cd docs
-        ../scripts/generate.sh origin ${{ github.ref_name }}
+        ../scripts/generate.sh origin ${{ github.ref_name }} ${{ inputs.keep_master}}
     - name: Hugo Build
       uses: ./.github/actions/hugo-build-action
       with:
