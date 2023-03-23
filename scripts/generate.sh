@@ -33,6 +33,7 @@ pushd "$REPO_ROOT/docs"
 
 rm -rf ${content_dir:?}/*
 
+git remote add upstream https://github.com/gooddata/gooddata-python-sdk
 
 git fetch "$remote_name"
 

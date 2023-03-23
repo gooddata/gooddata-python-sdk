@@ -10,7 +10,10 @@ jobs:
         with:
           submodules: recursive
       - name: Generate Versioned Docs
-        uses: ./.github/actions/hugo-build-versioned-action
+        uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@INFRA-1578-test-branch
       - name: htmltest
         run: |
-          scripts/htmltest -c docs/.htmltest.yml docs/public
+          rm htmltest.sh
+          wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
+          chmod +x ./htmltest.sh
+          ./htmltest.sh -c docs/.htmltest.yml docs/public
