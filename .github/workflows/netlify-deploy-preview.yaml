@@ -4,6 +4,7 @@ on:
     branches: 
       - 'rel/**'
       - master
+      - INFRA-1578-test-branch
     paths:
       - 'docs/**'
 
