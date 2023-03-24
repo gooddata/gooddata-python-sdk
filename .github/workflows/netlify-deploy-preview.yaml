@@ -1,0 +1,40 @@
+name: Netlify Deploy Preview
+on:
+  pull_request_target:
+    branches:
+      - 'rel/**'
+      - master
+    paths:
+      - 'docs/**'
+
+env:
+  GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
+  NETLIFY_SITE_NAME: ${{ github.event.repository.name }}
+jobs:
+  netlify-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Generate Versioned Docs
+        uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
+        with:
+          base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
+          keep-master: keep_master
+          fetch-from: upstream
+      - name: Publish
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy -d docs/public --alias=preview-${{ env.GITHUB_PR_NUMBER }}
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_PREVIEW_AUTH_TOKEN }}
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/
