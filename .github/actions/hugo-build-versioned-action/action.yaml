@@ -28,7 +28,7 @@ runs:
       shell: bash
       run: |
         cd docs
-        rm generate.sh
+        rm -f generate.sh
         wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/generate.sh
         chmod +x ./generate.sh
         ./generate.sh ${{ inputs.fetch-from }} master ${{ inputs.keep-master}}

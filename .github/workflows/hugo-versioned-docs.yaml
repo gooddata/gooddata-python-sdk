@@ -13,7 +13,7 @@ jobs:
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
       - name: htmltest
         run: |
-          rm htmltest.sh
+          rm -f htmltest.sh
           wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
           chmod +x ./htmltest.sh
           ./htmltest.sh -c docs/.htmltest.yml docs/public
