@@ -24,7 +24,7 @@ jobs:
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
         with:
           base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
-          keep_master: keep_master
+          keep-master: keep_master
           fetch-from: upstream
       - name: Publish
         uses: netlify/actions/cli@master

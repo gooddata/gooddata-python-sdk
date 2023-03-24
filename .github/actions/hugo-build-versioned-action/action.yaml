@@ -12,7 +12,7 @@ inputs:
     required: false
     description: Environment variable
     default: production
-  keep_master:
+  keep-master:
     required: false
     description: Preview of the master branch
     default: no
@@ -31,7 +31,7 @@ runs:
         rm generate.sh
         wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/generate.sh
         chmod +x ./generate.sh
-        ./generate.sh ${{ inputs.fetch-from }} master ${{ inputs.keep_master}}
+        ./generate.sh ${{ inputs.fetch-from }} master ${{ inputs.keep-master}}
     - name: Hugo Build
       uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-action@master
       with:
