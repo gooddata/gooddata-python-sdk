@@ -32,7 +32,7 @@ Either by one call:
 
 ```Python
 # Load and put on server the stored layout
-sdk.catalog_workspaces.load_and_put_declarative_workspaces(
+sdk.catalog_workspace.load_and_put_declarative_workspace(
     layout_root_path=Path.cwd()
 )
 ```
@@ -41,11 +41,11 @@ Or by two separate calls:
 
 ```Python
 # Load a declarative workspace
-declarative_workspaces = sdk.catalog_workspace.load_declarative_workspaces(
+declarative_workspaces = sdk.catalog_workspace.load_declarative_workspace(
     layout_root_path=Path.cwd()
 )
 # Set the layout
-sdk.catalog_workspace.put_declarative_workspaces(
+sdk.catalog_workspace.put_declarative_workspace(
     workspace=declarative_workspaces
 )
 ```
