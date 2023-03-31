@@ -9,6 +9,8 @@ from tests_support.vcrpy_utils import get_vcr
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,
+    CatalogDeclarativeUserDataFilter,
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
@@ -17,6 +19,7 @@ from gooddata_sdk import (
     GoodDataSdk,
     PostgresAttributes,
 )
+from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import recreate_directory
 
 gd_vcr = get_vcr()
@@ -56,6 +59,14 @@ def _empty_workspace_data_filters(sdk: GoodDataSdk) -> None:
     assert empty_workspace_data_filters_e.to_dict(camel_case=True) == empty_workspace_data_filters_o.to_dict(
         camel_case=True
     )
+
+
+def _empty_user_data_filters(workspace_id: str, sdk: GoodDataSdk) -> None:
+    empty_user_data_filters_e = CatalogDeclarativeUserDataFilters.from_dict({"user_data_filters": []}, camel_case=False)
+    sdk.catalog_workspace.put_declarative_user_data_filters(workspace_id, empty_user_data_filters_e)
+    empty_user_data_filters_o = sdk.catalog_workspace.get_declarative_user_data_filters(workspace_id)
+    assert empty_user_data_filters_e == empty_user_data_filters_o
+    assert empty_user_data_filters_e.to_dict(camel_case=True) == empty_user_data_filters_o.to_dict(camel_case=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.yaml"))
@@ -410,6 +421,89 @@ def test_put_declarative_workspace_data_filters(test_config):
             data = json.load(f)
         declarative_workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data)
         sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_user_data_filters.yaml"))
+def test_get_declarative_user_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
+    layout_api = client.layout_api
+
+    declarative_user_data_filters = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+    user_data_filters = declarative_user_data_filters.user_data_filters
+
+    assert len(user_data_filters) == 0
+    assert user_data_filters == []
+
+    assert declarative_user_data_filters.to_dict(camel_case=True) == layout_api.get_user_data_filters(
+        test_config["workspace"]
+    ).to_dict(camel_case=True)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_user_data_filters.yaml"))
+def test_store_declarative_user_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "store"
+    recreate_directory(path)
+
+    declarative_user_data_filters_e = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+    sdk.catalog_workspace.store_declarative_user_data_filters(test_config["workspace"], path)
+    declarative_user_data_filters_o = sdk.catalog_workspace.load_declarative_user_data_filters(path)
+
+    assert declarative_user_data_filters_e == declarative_user_data_filters_o
+    assert declarative_user_data_filters_e.to_dict(camel_case=True) == declarative_user_data_filters_o.to_dict(
+        camel_case=True
+    )
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_user_data_filters.yaml"))
+def test_load_and_put_declarative_user_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "load"
+    expected_json_path = _current_dir / "expected" / "declarative_user_data_filters.json"
+    user_data_filters_e = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+
+    try:
+        _empty_user_data_filters(test_config["workspace"], sdk)
+
+        sdk.catalog_workspace.load_and_put_declarative_user_data_filters(test_config["workspace"], path)
+        user_data_filters_o = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+        assert user_data_filters_e == user_data_filters_o
+        assert user_data_filters_e.to_dict(camel_case=True) == user_data_filters_o.to_dict(camel_case=True)
+    finally:
+        with open(expected_json_path) as f:
+            data = json.load(f)
+        workspace_data_filters_o = CatalogDeclarativeUserDataFilters.from_dict(data, camel_case=True)
+        sdk.catalog_workspace.put_declarative_user_data_filters(test_config["workspace"], workspace_data_filters_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_user_data_filters.yaml"))
+def test_put_declarative_user_data_filters(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    user_data_filters_e = CatalogDeclarativeUserDataFilters(
+        user_data_filters=[
+            CatalogDeclarativeUserDataFilter(
+                id="user_data_filter",
+                title="youwillnotsee",
+                maql="FALSE",
+                user=CatalogUserIdentifier(id="demo", type="user"),
+            )
+        ]
+    )
+
+    try:
+        sdk.catalog_workspace.put_declarative_user_data_filters(test_config["workspace"], user_data_filters_e)
+        user_data_filters_o = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+
+        assert user_data_filters_e == user_data_filters_o
+        assert user_data_filters_e.to_dict() == user_data_filters_o.to_dict()
+    finally:
+        sdk.catalog_workspace.put_declarative_user_data_filters(
+            test_config["workspace"], user_data_filters=CatalogDeclarativeUserDataFilters(user_data_filters=[])
+        )
+        user_data_filters = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
+        assert len(user_data_filters.user_data_filters) == 0
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.yaml"))

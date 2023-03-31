@@ -105,6 +105,8 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ld
     CatalogDeclarativeModel,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeUserDataFilter,
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspace,
     CatalogDeclarativeWorkspaceDataFilter,
     CatalogDeclarativeWorkspaceDataFilters,

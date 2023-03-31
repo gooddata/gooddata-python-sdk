@@ -2676,7 +2676,8 @@
           "name": "VIEW"
         }
       ],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     },
     {
       "customApplicationSettings": [],
@@ -2701,7 +2702,8 @@
         "type": "workspace"
       },
       "permissions": [],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     },
     {
       "customApplicationSettings": [],
@@ -2726,7 +2728,8 @@
         "type": "workspace"
       },
       "permissions": [],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     }
   ],
   "workspaceDataFilters": [

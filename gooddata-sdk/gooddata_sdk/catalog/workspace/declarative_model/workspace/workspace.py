@@ -6,6 +6,8 @@ from typing import Any, List, Optional, Type
 
 import attr
 
+from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
+from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
 from gooddata_api_client.model.declarative_workspace import DeclarativeWorkspace
 from gooddata_api_client.model.declarative_workspace_data_filter import DeclarativeWorkspaceDataFilter
 from gooddata_api_client.model.declarative_workspace_data_filter_setting import DeclarativeWorkspaceDataFilterSetting
@@ -13,7 +15,11 @@ from gooddata_api_client.model.declarative_workspace_data_filters import Declara
 from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.identifier import (
+    CatalogUserGroupIdentifier,
+    CatalogUserIdentifier,
+    CatalogWorkspaceIdentifier,
+)
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
@@ -27,6 +33,7 @@ from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_lay
 
 LAYOUT_WORKSPACES_DIR = "workspaces"
 LAYOUT_WORKSPACES_DATA_FILTERS_DIR = "workspaces_data_filters"
+LAYOUT_USER_DATA_FILTERS_DIR = "user_data_filters"
 
 
 def get_workspace_folder(workspace_id: str, layout_organization_folder: Path) -> Path:
@@ -65,6 +72,7 @@ class CatalogDeclarativeWorkspace(Base):
     hierarchy_permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
     early_access: Optional[str] = None
     settings: List[CatalogDeclarativeSetting] = attr.field(factory=list)
+    user_data_filters: List[CatalogDeclarativeUserDataFilter] = attr.field(factory=list)
     custom_application_settings: List[CatalogDeclarativeCustomApplicationSetting] = attr.field(factory=list)
 
     @staticmethod
@@ -179,6 +187,67 @@ class CatalogDeclarativeWorkspaceDataFilter(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeUserDataFilters(Base):
+    user_data_filters: List[CatalogDeclarativeUserDataFilter]
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeUserDataFilters]:
+        return DeclarativeUserDataFilters
+
+    def store_to_disk(self, layout_organization_folder: Path) -> None:
+        user_data_filters_folder = CatalogDeclarativeWorkspaces.user_data_filters_folder(layout_organization_folder)
+        create_directory(user_data_filters_folder)
+        for user_data_filter in self.user_data_filters:
+            user_data_filter.store_to_disk(user_data_filters_folder)
+
+    @classmethod
+    def load_from_disk(cls, layout_organization_folder: Path) -> CatalogDeclarativeUserDataFilters:
+        user_data_filters_files = get_sorted_yaml_files(
+            CatalogDeclarativeWorkspaces.user_data_filters_folder(layout_organization_folder)
+        )
+        user_data_filters = []
+        for user_data_filters_file in user_data_filters_files:
+            user_data_filters.append(CatalogDeclarativeUserDataFilter.load_from_disk(user_data_filters_file))
+        return cls(user_data_filters=user_data_filters)
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeUserDataFilter(Base):
+    id: str
+    title: str
+    maql: str
+    user: Optional[CatalogUserIdentifier] = None
+    user_group: Optional[CatalogUserGroupIdentifier] = None
+    description: Optional[str] = None
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeUserDataFilter]:
+        return DeclarativeUserDataFilter
+
+    def store_to_disk(self, user_data_filters_folder: Path) -> None:
+        user_data_filter_file = user_data_filters_folder / f"{self.id}.yaml"
+        write_layout_to_file(user_data_filter_file, self.to_api().to_dict(camel_case=True))
+
+    @classmethod
+    def load_from_disk(cls, user_data_filter_file: Path) -> CatalogDeclarativeUserDataFilter:
+        user_data_filter = read_layout_from_file(user_data_filter_file)
+        return CatalogDeclarativeUserDataFilter.from_dict(user_data_filter, camel_case=True)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], camel_case: bool = True) -> CatalogDeclarativeUserDataFilter:
+        """
+        :param data:    Data loaded for example from the file.
+        :param camel_case:  True if the variable names in the input
+                        data are serialized names as specified in the OpenAPI document.
+                        False if the variables names in the input data are python
+                        variable names in PEP-8 snake case.
+        :return:    CatalogDeclarativeUserDataFilter object.
+        """
+        declarative_user_data_filter = DeclarativeUserDataFilter.from_dict(data, camel_case)
+        return cls.from_api(declarative_user_data_filter)
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeWorkspaces(Base):
     workspaces: List[CatalogDeclarativeWorkspace]
     workspace_data_filters: List[CatalogDeclarativeWorkspaceDataFilter]
@@ -194,6 +263,10 @@ class CatalogDeclarativeWorkspaces(Base):
     @staticmethod
     def workspace_data_filters_folder(layout_organization_folder: Path) -> Path:
         return layout_organization_folder / LAYOUT_WORKSPACES_DATA_FILTERS_DIR
+
+    @staticmethod
+    def user_data_filters_folder(layout_organization_folder: Path) -> Path:
+        return layout_organization_folder / LAYOUT_USER_DATA_FILTERS_DIR
 
     def store_to_disk(self, layout_organization_folder: Path) -> None:
         workspaces_folder = self.workspaces_folder(layout_organization_folder)

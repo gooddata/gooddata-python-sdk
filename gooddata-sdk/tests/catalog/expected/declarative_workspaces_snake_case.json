@@ -2666,6 +2666,7 @@
         }
       ],
       "settings": [],
+      "user_data_filters": [],
       "custom_application_settings": []
     },
     {
@@ -2690,6 +2691,7 @@
       "permissions": [],
       "hierarchy_permissions": [],
       "settings": [],
+      "user_data_filters": [],
       "custom_application_settings": []
     },
     {
@@ -2714,6 +2716,7 @@
       "permissions": [],
       "hierarchy_permissions": [],
       "settings": [],
+      "user_data_filters": [],
       "custom_application_settings": []
     }
   ],

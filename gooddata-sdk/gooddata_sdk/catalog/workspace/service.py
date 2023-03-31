@@ -11,6 +11,7 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
@@ -421,3 +422,87 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self.layout_organization_folder(layout_root_path)
         )
         self.put_declarative_workspace_data_filters(declarative_workspace_data_filters)
+
+    def get_declarative_user_data_filters(self, workspace_id: str) -> CatalogDeclarativeUserDataFilters:
+        """Retrieve a user data filers layout.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+
+        Returns:
+            CatalogDeclarativeUserDataFilters:
+                Object containing List of declarative user data filters.
+        """
+        return CatalogDeclarativeUserDataFilters.from_api(self._layout_api.get_user_data_filters(workspace_id))
+
+    def put_declarative_user_data_filters(
+        self, workspace_id: str, user_data_filters: CatalogDeclarativeUserDataFilters
+    ) -> None:
+        """Set user data filters layout.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+            user_data_filters (CatalogDeclarativeUserDataFilters):
+                Object containing List of declarative user data filters.
+
+        Returns:
+            None
+        """
+        self._layout_api.set_user_data_filters(
+            workspace_id=workspace_id, declarative_user_data_filters=user_data_filters.to_api()
+        )
+
+    def store_declarative_user_data_filters(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        """Store user data filters layout in a directory hierarchy.
+
+        Args:
+            workspace_id (str):
+                id of the related workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        self.get_declarative_user_data_filters(workspace_id).store_to_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+
+    def load_declarative_user_data_filters(
+        self, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeUserDataFilters:
+        """Loads user data filters layout, which was stored using `store_declarative_user_data_filters`.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            CatalogDeclarativeUserDataFilters:
+                Object containing List of declarative user data filters.
+        """
+        return CatalogDeclarativeUserDataFilters.load_from_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_and_put_declarative_user_data_filters(
+        self, workspace_id: str, layout_root_path: Path = Path.cwd()
+    ) -> None:
+        """Loads and sets the layouts stored using `store_declarative_user_data_filters`.
+
+        This method combines `load_declarative_user_data_filters` and `put_declarative_user_data_filters`
+        methods to load and set layouts stored using `store_declarative_user_data_filters`.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        declarative_user_data_filters = CatalogDeclarativeUserDataFilters.load_from_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+        self.put_declarative_user_data_filters(workspace_id, declarative_user_data_filters)

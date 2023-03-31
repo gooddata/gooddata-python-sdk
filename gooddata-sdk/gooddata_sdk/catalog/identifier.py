@@ -10,6 +10,7 @@ from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+from gooddata_api_client.model.user_identifier import UserIdentifier
 from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
@@ -60,6 +61,16 @@ class CatalogUserGroupIdentifier(Base):
     @staticmethod
     def client_class() -> Type[UserGroupIdentifier]:
         return UserGroupIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogUserIdentifier(Base):
+    id: str
+    type: str = attr.field(validator=value_in_allowed)
+
+    @staticmethod
+    def client_class() -> Type[UserIdentifier]:
+        return UserIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)
