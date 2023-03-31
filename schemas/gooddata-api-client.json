@@ -194,7 +194,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -232,7 +232,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -260,7 +260,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -291,7 +291,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -319,7 +319,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -964,7 +964,7 @@
           "id": {
             "description": "Analytical dashboard ID.",
             "example": "revenues-analysis",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "permissions": {
@@ -1006,7 +1006,7 @@
           "id": {
             "description": "Analytical dashboard ID.",
             "example": "revenues-analysis",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "permissions": {
@@ -1116,7 +1116,7 @@
           "id": {
             "description": "Attribute ID.",
             "example": "attr.customers.customer_name",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "labels": {
@@ -1291,7 +1291,7 @@
           "id": {
             "description": "Custom Application Setting ID.",
             "example": "modeler.demo",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           }
         },
@@ -1316,7 +1316,7 @@
           "id": {
             "description": "Dashboard plugin object ID.",
             "example": "dashboard-plugin-1",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "tags": {
@@ -1526,7 +1526,7 @@
           "id": {
             "description": "The Dataset ID. This ID is further used to refer to this instance of dataset.",
             "example": "customers",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "references": {
@@ -1561,7 +1561,7 @@
           "workspaceDataFilterColumns": {
             "description": "An array of workspace data filter columns applied on a workspace.",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/DeclarativeWorkspaceDataFilterColumn"
             },
             "type": "array"
           }
@@ -1637,7 +1637,7 @@
           "id": {
             "description": "Date dataset ID.",
             "example": "date",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "tags": {
@@ -1680,7 +1680,7 @@
           "id": {
             "description": "Fact ID.",
             "example": "fact.customer_order_count",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "sourceColumn": {
@@ -1745,7 +1745,7 @@
           "id": {
             "description": "Filter Context ID.",
             "example": "filter-sales",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "tags": {
@@ -1787,7 +1787,7 @@
           "id": {
             "description": "Label ID.",
             "example": "label.customer_name",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "sourceColumn": {
@@ -1884,7 +1884,7 @@
           "id": {
             "description": "Metric ID.",
             "example": "total-sales",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "tags": {
@@ -2131,7 +2131,7 @@
           },
           "id": {
             "description": "Setting ID.",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -2320,6 +2320,75 @@
         ],
         "type": "object"
       },
+      "DeclarativeUserDataFilter": {
+        "description": "User Data Filters serving the filtering of what data users can see in workspaces.",
+        "properties": {
+          "description": {
+            "description": "User Data Filters setting description.",
+            "example": "ID of country setting",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "id": {
+            "description": "User Data Filters ID. This ID is further used to refer to this instance.",
+            "example": "country_id_setting",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "maql": {
+            "description": "Expression in MAQL specifying the User Data Filter",
+            "example": "{label/country} = \"USA\" AND {label/date.year} = THIS(YEAR)",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Revenues"
+            ],
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"Revenues\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "User Data Filters setting title.",
+            "example": "Country ID setting",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserIdentifier"
+          },
+          "userGroup": {
+            "$ref": "#/components/schemas/UserGroupIdentifier"
+          }
+        },
+        "required": [
+          "id",
+          "maql",
+          "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeUserDataFilters": {
+        "description": "Declarative form of user data filters.",
+        "properties": {
+          "userDataFilters": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserDataFilter"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "userDataFilters"
+        ],
+        "type": "object"
+      },
       "DeclarativeUserGroup": {
         "description": "A user-group and its properties",
         "properties": {
@@ -2483,7 +2552,7 @@
           "id": {
             "description": "Visualization object ID.",
             "example": "visualization-1",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "tags": {
@@ -2563,10 +2632,23 @@
             },
             "type": "array"
           },
+          "prefix": {
+            "description": "Custom prefix of entity identifiers in workspace",
+            "maxLength": 255,
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
           "settings": {
             "description": "A list of workspace settings.",
             "items": {
               "$ref": "#/components/schemas/DeclarativeSetting"
+            },
+            "type": "array"
+          },
+          "userDataFilters": {
+            "description": "A list of workspace user data filters.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeUserDataFilter"
             },
             "type": "array"
           }
@@ -2620,6 +2702,34 @@
           "id",
           "title",
           "workspaceDataFilterSettings"
+        ],
+        "type": "object"
+      },
+      "DeclarativeWorkspaceDataFilterColumn": {
+        "properties": {
+          "dataType": {
+            "description": "Data type of the column",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "INT",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the column",
+            "example": "customer_id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dataType",
+          "name"
         ],
         "type": "object"
       },
@@ -2927,6 +3037,7 @@
           },
           "label": {
             "description": "Requested label.",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "patternFilter": {
@@ -3026,6 +3137,8 @@
       "EntityIdentifier": {
         "properties": {
           "id": {
+            "description": "Object identifier.",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -3385,7 +3498,7 @@
           "id": {
             "description": "Grain ID.",
             "example": "attr.customers.customer_name",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -3612,7 +3725,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -3699,7 +3812,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -3972,7 +4085,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -4212,7 +4325,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -4914,7 +5027,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -4966,7 +5079,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -5072,7 +5185,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -5137,7 +5250,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -5220,7 +5333,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -5342,7 +5455,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -6163,7 +6276,28 @@
               },
               "workspaceDataFilterColumns": {
                 "items": {
-                  "type": "string"
+                  "properties": {
+                    "dataType": {
+                      "enum": [
+                        "INT",
+                        "STRING",
+                        "DATE",
+                        "NUMERIC",
+                        "TIMESTAMP",
+                        "TIMESTAMP_TZ",
+                        "BOOLEAN"
+                      ],
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "dataType",
+                    "name"
+                  ],
+                  "type": "object"
                 },
                 "type": "array"
               }
@@ -6176,7 +6310,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -6490,7 +6624,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -6655,7 +6789,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -6742,7 +6876,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -6935,7 +7069,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -7047,7 +7181,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -7229,7 +7363,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -7325,7 +7459,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -7552,7 +7686,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -8250,6 +8384,433 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiThemePatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterIn": {
+        "description": "JSON:API representation of userDataFilter entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "maql": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "maql"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "user": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "userGroup": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "userDataFilter"
+            ],
+            "example": "userDataFilter",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiUserDataFilterIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterOut": {
+        "description": "JSON:API representation of userDataFilter entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "maql": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "maql"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "attributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "datasets": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiDatasetToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "facts": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFactToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "labels": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiLabelToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "metrics": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "user": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "userGroup": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "userDataFilter"
+            ],
+            "example": "userDataFilter",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiUserDataFilterOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserDataFilterOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserGroupOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiMetricOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiUserDataFilterOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserDataFilterOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserDataFilterOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserDataFilterOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiUserDataFilterPatch": {
+        "description": "JSON:API representation of patching userDataFilter entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "maql": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "user": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "userGroup": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "userDataFilter"
+            ],
+            "example": "userDataFilter",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiUserDataFilterPatch"
           }
         },
         "required": [
@@ -8993,7 +9554,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -9080,7 +9641,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -9282,7 +9843,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -9341,7 +9902,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "relationships": {
@@ -9428,7 +9989,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "relationships": {
@@ -9544,7 +10105,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "relationships": {
@@ -9633,7 +10194,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "relationships": {
@@ -9758,6 +10319,12 @@
               "name": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "prefix": {
+                "description": "Custom prefix of entity identifiers in workspace",
+                "maxLength": 255,
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type": "string"
               }
             },
             "type": "object"
@@ -9844,6 +10411,12 @@
               },
               "name": {
                 "maxLength": 255,
+                "type": "string"
+              },
+              "prefix": {
+                "description": "Custom prefix of entity identifiers in workspace",
+                "maxLength": 255,
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               }
             },
@@ -10006,6 +10579,12 @@
               "name": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "prefix": {
+                "description": "Custom prefix of entity identifiers in workspace",
+                "maxLength": 255,
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "type": "string"
               }
             },
             "type": "object"
@@ -10084,7 +10663,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -10139,7 +10718,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "meta": {
@@ -10252,7 +10831,7 @@
           "id": {
             "description": "API identifier of an object",
             "example": "id1",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -10301,7 +10880,7 @@
           "id": {
             "description": "Label ID.",
             "example": "label_id",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -10919,7 +11498,7 @@
           "id": {
             "description": "Reference ID.",
             "example": "customers",
-            "pattern": "^(?:(?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -11052,7 +11631,7 @@
         "properties": {
           "id": {
             "example": "sample_item.price",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -11586,8 +12165,7 @@
           }
         },
         "required": [
-          "type",
-          "url"
+          "type"
         ],
         "type": "object"
       },
@@ -11811,6 +12389,10 @@
       },
       "UserGroupIdentifier": {
         "description": "A user group identifier.",
+        "example": {
+          "id": "admins",
+          "type": "userGroup"
+        },
         "properties": {
           "id": {
             "description": "Identifier of the user group.",
@@ -11854,6 +12436,34 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "UserIdentifier": {
+        "description": "A user identifier.",
+        "example": {
+          "id": "example123",
+          "type": "user"
+        },
+        "properties": {
+          "id": {
+            "description": "User identifier.",
+            "example": "employee123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "user"
+            ],
+            "example": "user",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -12314,6 +12924,7 @@
         },
         "summary": "Collect metadata about SQL query",
         "tags": [
+          "Scanning",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -20645,6 +21256,533 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/userDataFilters": {
+      "get": {
+        "operationId": "getAllEntities@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;user.id==321;userGroup.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=user,userGroup,facts,attributes,labels,metrics,datasets",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "metrics",
+                  "datasets",
+                  "user",
+                  "userGroup",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=user,userGroup,facts,attributes,labels,metrics,datasets",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "metrics",
+                  "datasets",
+                  "user",
+                  "userGroup",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiUserDataFilterInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;user.id==321;userGroup.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;user.id==321;userGroup.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=user,userGroup,facts,attributes,labels,metrics,datasets",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "metrics",
+                  "datasets",
+                  "user",
+                  "userGroup",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;user.id==321;userGroup.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=user,userGroup,facts,attributes,labels,metrics,datasets",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "metrics",
+                  "datasets",
+                  "user",
+                  "userGroup",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiUserDataFilterPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@UserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;user.id==321;userGroup.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=user,userGroup,facts,attributes,labels,metrics,datasets",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "users",
+                  "userGroups",
+                  "facts",
+                  "attributes",
+                  "labels",
+                  "metrics",
+                  "datasets",
+                  "user",
+                  "userGroup",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiUserDataFilterInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserDataFilterOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/visualizationObjects": {
       "get": {
         "operationId": "getAllEntities@VisualizationObjects",
@@ -20758,7 +21896,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -20849,7 +21987,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -20897,7 +22035,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21004,7 +22142,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21090,7 +22228,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -21176,7 +22314,7 @@
           }
         },
         "tags": [
-          "Visualization Objects",
+          "Visualization Object",
           "entities",
           "workspace-object-controller"
         ],
@@ -23208,6 +24346,85 @@
         }
       }
     },
+    "/api/v1/layout/workspaces/{workspaceId}/userDataFilters": {
+      "get": {
+        "description": "Retrieve current user data filters assigned to the workspace.",
+        "operationId": "getUserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeclarativeUserDataFilters"
+                }
+              }
+            },
+            "description": "Retrieved current user data filters."
+          }
+        },
+        "summary": "Get user data filters",
+        "tags": [
+          "layout",
+          "User Data Filters"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions to read the user data filters.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "Set user data filters assigned to the workspace.",
+        "operationId": "setUserDataFilters",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeclarativeUserDataFilters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "User data filters successfully set."
+          }
+        },
+        "summary": "Set user data filters",
+        "tags": [
+          "layout",
+          "User Data Filters"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions to modify the user data filters.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/options": {
       "get": {
         "description": "Retrieves links for all options for different configurations.",
@@ -23340,6 +24557,9 @@
     },
     {
       "name": "Usage"
+    },
+    {
+      "name": "User Data Filters"
     },
     {
       "name": "UserGroups - Declarative APIs"

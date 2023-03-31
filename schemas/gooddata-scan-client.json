@@ -390,8 +390,7 @@
           }
         },
         "required": [
-          "type",
-          "url"
+          "type"
         ],
         "type": "object"
       },
@@ -767,6 +766,7 @@
         },
         "summary": "Collect metadata about SQL query",
         "tags": [
+          "Scanning",
           "actions"
         ],
         "x-gdc-security-info": {

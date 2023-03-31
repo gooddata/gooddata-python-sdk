@@ -68,6 +68,12 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         ('name',): {
             'max_length': 255,
         },
+        ('prefix',): {
+            'max_length': 255,
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -94,6 +100,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'prefix': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -105,6 +112,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'prefix': 'prefix',  # noqa: E501
     }
 
     read_only_vars = {
@@ -151,6 +159,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -239,6 +248,7 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
             description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 [**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 [**get_pdm_layout**](LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+[**get_user_data_filters**](LayoutApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
 [**get_user_group_permissions**](LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 [**get_user_groups_layout**](LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
 [**get_user_permissions**](LayoutApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
@@ -27,6 +28,7 @@ Method | HTTP request | Description
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 [**set_pdm_layout**](LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+[**set_user_data_filters**](LayoutApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
 [**set_user_group_permissions**](LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 [**set_user_permissions**](LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_data_filters_layout**](LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
@@ -369,6 +371,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved data source physical mode layout. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_user_data_filters**
+> DeclarativeUserDataFilters get_user_data_filters(workspace_id)
+
+Get user data filters
+
+Retrieve current user data filters assigned to the workspace.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get user data filters
+        api_response = api_instance.get_user_data_filters(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_user_data_filters: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeUserDataFilters**](DeclarativeUserDataFilters.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current user data filters. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1213,7 +1282,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),
                 ],
@@ -1332,7 +1401,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),
                 ],
@@ -2042,7 +2111,7 @@ with gooddata_api_client.ApiClient() as api_client:
             settings=[
                 DeclarativeSetting(
                     content={},
-                    id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                    id="/6bUUGjjNSwg0_bs",
                     type="TIMEZONE",
                 ),
             ],
@@ -2094,7 +2163,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),
                 ],
@@ -2333,11 +2402,29 @@ with gooddata_api_client.ApiClient() as api_client:
                         name="MANAGE",
                     ),
                 ],
+                prefix="/6bUUGjjNSwg0_bs",
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
+                    ),
+                ],
+                user_data_filters=[
+                    DeclarativeUserDataFilter(
+                        description="ID of country setting",
+                        id="country_id_setting",
+                        maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
+                        tags=["Revenues"],
+                        title="Country ID setting",
+                        user=UserIdentifier(
+                            id="employee123",
+                            type="user",
+                        ),
+                        user_group=UserGroupIdentifier(
+                            id="group.admins",
+                            type="userGroup",
+                        ),
                     ),
                 ],
             ),
@@ -2466,6 +2553,92 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Data source physical mode layout set successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_user_data_filters**
+> set_user_data_filters(workspace_id, declarative_user_data_filters)
+
+Set user data filters
+
+Set user data filters assigned to the workspace.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    declarative_user_data_filters = DeclarativeUserDataFilters(
+        user_data_filters=[
+            DeclarativeUserDataFilter(
+                description="ID of country setting",
+                id="country_id_setting",
+                maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
+                tags=["Revenues"],
+                title="Country ID setting",
+                user=UserIdentifier(
+                    id="employee123",
+                    type="user",
+                ),
+                user_group=UserGroupIdentifier(
+                    id="group.admins",
+                    type="userGroup",
+                ),
+            ),
+        ],
+    ) # DeclarativeUserDataFilters | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set user data filters
+        api_instance.set_user_data_filters(workspace_id, declarative_user_data_filters)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_user_data_filters: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **declarative_user_data_filters** | [**DeclarativeUserDataFilters**](DeclarativeUserDataFilters.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | User data filters successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -3058,11 +3231,29 @@ with gooddata_api_client.ApiClient() as api_client:
                         name="MANAGE",
                     ),
                 ],
+                prefix="/6bUUGjjNSwg0_bs",
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
+                    ),
+                ],
+                user_data_filters=[
+                    DeclarativeUserDataFilter(
+                        description="ID of country setting",
+                        id="country_id_setting",
+                        maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
+                        tags=["Revenues"],
+                        title="Country ID setting",
+                        user=UserIdentifier(
+                            id="employee123",
+                            type="user",
+                        ),
+                        user_group=UserGroupIdentifier(
+                            id="group.admins",
+                            type="userGroup",
+                        ),
                     ),
                 ],
             ),

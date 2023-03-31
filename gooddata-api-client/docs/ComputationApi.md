@@ -53,7 +53,7 @@ with gooddata_api_client.ApiClient() as api_client:
         filter_by=FilterBy(
             label_type="REQUESTED",
         ),
-        label="label_example",
+        label="/6bUUGjjNSwg0_bs",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
     ) # ElementsRequest | 

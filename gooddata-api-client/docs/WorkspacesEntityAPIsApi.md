@@ -44,6 +44,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
@@ -375,6 +376,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
@@ -471,6 +473,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
