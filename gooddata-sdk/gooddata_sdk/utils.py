@@ -279,3 +279,12 @@ def good_pandas_profile_content(
     del content["extra_user_agent"]
     del content["custom_headers"]
     return content, custom_headers
+
+
+def safeget(dictionary: dict, keys: list[str]) -> Any:
+    for key in keys:
+        try:
+            dictionary = dictionary[key]
+        except KeyError:
+            return None
+    return dictionary

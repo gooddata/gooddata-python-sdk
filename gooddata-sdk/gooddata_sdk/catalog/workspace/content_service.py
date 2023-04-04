@@ -143,7 +143,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             self._entities_api.get_all_entities_metrics, workspace_id, _check_return_type=False
         )
         metrics = load_all_entities(get_metrics)
-        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
+        catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
         return catalog_metrics
 
     def get_facts_catalog(self, workspace_id: str) -> list[CatalogFact]:

@@ -145,7 +145,7 @@ class CatalogWorkspaceContent:
         attribute_side_loads = SideLoads(attributes.included)
 
         # metrics are not associated to any dataset, so can construct them right away
-        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
+        catalog_metrics = [CatalogMetric(**metric) for metric in metrics.data]
 
         # now the rest requires some joins...
         # first construct the dataset's leaves - facts
