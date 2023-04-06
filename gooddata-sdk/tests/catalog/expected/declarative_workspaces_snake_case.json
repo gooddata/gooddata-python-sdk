@@ -741,6 +741,7 @@
               "description": ""
             }
           ],
+          "analytical_dashboard_extensions": [],
           "dashboard_plugins": [
             {
               "id": "dashboard_plugin_1",
@@ -2679,6 +2680,7 @@
         },
         "analytics": {
           "analytical_dashboards": [],
+          "analytical_dashboard_extensions": [],
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],
@@ -2704,6 +2706,7 @@
         },
         "analytics": {
           "analytical_dashboards": [],
+          "analytical_dashboard_extensions": [],
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],

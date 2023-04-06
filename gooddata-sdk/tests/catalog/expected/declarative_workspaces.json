@@ -367,6 +367,7 @@
               "title": "Product & Category"
             }
           ],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [
             {
               "content": {
@@ -2686,6 +2687,7 @@
       "model": {
         "analytics": {
           "analyticalDashboards": [],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
@@ -2712,6 +2714,7 @@
       "model": {
         "analytics": {
           "analyticalDashboards": [],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
