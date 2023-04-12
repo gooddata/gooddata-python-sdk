@@ -1,6 +1,10 @@
 {{/* This shortcode can be handy if you need to provide a link to latest dirpath of the versioned documentation, defaults to "docs". */}}
 {{- if .Site.Params.versions -}}
-  {{- (index .Site.Params.versions 0).dirpath -}}
+  {{- if .Site.Params.devVersion }}
+    {{- (index .Site.Params.versions 1).dirpath -}}
+  {{- else -}}
+    {{- (index .Site.Params.versions 0).dirpath -}}
+  {{- end -}}}
 {{- else -}}
 docs
 {{- end -}}
