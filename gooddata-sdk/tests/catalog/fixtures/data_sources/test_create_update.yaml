@@ -43,7 +43,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -130,7 +130,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -163,7 +163,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 953b45d656919749
+          traceId: 352ef4e9b5c42201
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -221,7 +221,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -306,7 +306,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -391,7 +391,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -489,7 +489,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -572,7 +572,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -602,17 +602,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo-test-ds
-              type: dataSource
-              attributes:
-                url: jdbc:postgresql://localhost:5432/demo
-                username: demouser
-                enableCaching: false
-                name: demo-test-ds
-                type: POSTGRESQL
-                schema: demo
-              links:
-                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
             - id: test
               type: dataSource
               attributes:
@@ -624,6 +613,17 @@ interactions:
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/test
+            - id: demo-test-ds
+              type: dataSource
+              attributes:
+                url: jdbc:postgresql://localhost:5432/demo
+                username: demouser
+                enableCaching: false
+                name: demo-test-ds
+                type: POSTGRESQL
+                schema: demo
+              links:
+                self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
           links:
             self: http://localhost:3000/api/v1/entities/dataSources?page=0&size=500
             next: http://localhost:3000/api/v1/entities/dataSources?page=1&size=500
@@ -665,7 +665,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -736,7 +736,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

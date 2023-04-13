@@ -81,7 +81,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -112,7 +112,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '8587'
+          - '8256'
       body:
         string:
           ldm:
@@ -486,29 +486,6 @@ interactions:
                   - dataType: STRING
                     name: wdf__region
             dateInstances:
-              - granularities:
-                  - MINUTE
-                  - HOUR
-                  - DAY
-                  - WEEK
-                  - MONTH
-                  - QUARTER
-                  - YEAR
-                  - MINUTE_OF_HOUR
-                  - HOUR_OF_DAY
-                  - DAY_OF_WEEK
-                  - DAY_OF_MONTH
-                  - DAY_OF_YEAR
-                  - WEEK_OF_YEAR
-                  - MONTH_OF_YEAR
-                  - QUARTER_OF_YEAR
-                granularitiesFormatting:
-                  titleBase: ''
-                  titlePattern: '%titleBase - %granularityTitle'
-                id: date
-                tags:
-                  - Date
-                title: Date
               - granularities:
                   - MINUTE
                   - HOUR

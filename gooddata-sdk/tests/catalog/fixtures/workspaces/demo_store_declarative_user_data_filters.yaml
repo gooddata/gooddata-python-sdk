@@ -2,27 +2,22 @@
 version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
-      body:
-        - assigneeIdentifier:
-            id: visitorsGroup
-            type: userGroup
-          permissions:
-            - VIEW
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
+      body: null
       headers:
+        Accept:
+          - application/json
         Accept-Encoding:
           - br, gzip, deflate
-        Content-Type:
-          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
       status:
-        code: 204
-        message: No Content
+        code: 200
+        message: OK
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -65,6 +60,8 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
+        Transfer-Encoding:
+          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -74,11 +71,14 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
+        content-length:
+          - '22'
       body:
-        string: ''
+        string:
+          userDataFilters: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -146,37 +146,25 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '113'
+          - '22'
       body:
         string:
-          userGroups:
-            - id: visitorsGroup
-              name: null
-              permissions:
-                - level: VIEW
-                  source: direct
-          users: []
+          userDataFilters: []
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
-      body:
-        - assigneeIdentifier:
-            id: visitorsGroup
-            type: userGroup
-          permissions: []
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
+      body: null
       headers:
         Accept-Encoding:
           - br, gzip, deflate
-        Content-Type:
-          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
       status:
-        code: 204
-        message: No Content
+        code: 302
+        message: Found
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -186,6 +174,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -198,13 +188,13 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
           - aio
+        Location:
+          - /api/v1/entities/admin/organizations/default
         Permission-Policy:
           - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
             'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
@@ -231,11 +221,9 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
       body: null
       headers:
-        Accept:
-          - application/json
         Accept-Encoding:
           - br, gzip, deflate
         X-GDC-VALIDATE-RELATIONS:
@@ -255,6 +243,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -268,7 +258,7 @@ interactions:
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
-          - application/json
+          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -287,8 +277,6 @@ interactions:
         Set-Cookie:
           - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
             GMT; HttpOnly; SameSite=Lax
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
@@ -298,9 +286,161 @@ interactions:
         X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
-        content-length:
-          - '28'
       body:
         string:
-          userGroups: []
-          users: []
+          data:
+            id: default
+            type: organization
+            attributes:
+              name: Default Organization
+              hostname: localhost
+              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+          links:
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/organization
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 302
+        message: Found
+      headers:
+        Access-Control-Allow-Credentials:
+          - 'true'
+        Access-Control-Expose-Headers:
+          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '0'
+        Content-Security-Policy:
+          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
+            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
+            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
+            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
+            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
+            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
+            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
+            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
+            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
+            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
+            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        DATE: *id001
+        Expires:
+          - '0'
+        GoodData-Deployment:
+          - aio
+        Location:
+          - /api/v1/entities/admin/organizations/default
+        Permission-Policy:
+          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
+            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
+            'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Server:
+          - nginx
+        Set-Cookie:
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - 1 ; mode=block
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/entities/admin/organizations/default
+      body: null
+      headers:
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 200
+        message: OK
+      headers:
+        Access-Control-Allow-Credentials:
+          - 'true'
+        Access-Control-Expose-Headers:
+          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '255'
+        Content-Security-Policy:
+          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
+            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
+            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
+            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
+            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
+            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
+            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
+            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
+            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
+            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
+            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+        Content-Type:
+          - application/vnd.gooddata.api+json
+        DATE: *id001
+        Expires:
+          - '0'
+        GoodData-Deployment:
+          - aio
+        Permission-Policy:
+          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
+            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
+            'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Server:
+          - nginx
+        Set-Cookie:
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - 1 ; mode=block
+      body:
+        string:
+          data:
+            id: default
+            type: organization
+            attributes:
+              name: Default Organization
+              hostname: localhost
+              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+          links:
+            self: http://localhost:3000/api/v1/entities/admin/organizations/default

@@ -2,27 +2,22 @@
 version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/dependentEntitiesGraph
-      body:
-        identifiers:
-          - id: campaign_channel_id
-            type: attribute
+      method: GET
+      uri: http://localhost:3000/api/v1/options
+      body: null
       headers:
         Accept:
           - application/json
         Accept-Encoding:
           - br, gzip, deflate
-        Content-Type:
-          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
       status:
-        code: 200
-        message: OK
+        code: 401
+        message: Unauthorized
       headers:
         Access-Control-Allow-Credentials:
           - 'true'
@@ -32,6 +27,8 @@ interactions:
           - no-cache, no-store, max-age=0, must-revalidate
         Connection:
           - keep-alive
+        Content-Length:
+          - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -44,9 +41,7 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -62,34 +57,16 @@ interactions:
           - no-referrer
         Server:
           - nginx
-        Set-Cookie:
-          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
-            GMT; HttpOnly; SameSite=Lax
-        Transfer-Encoding:
-          - chunked
         Vary:
           - Origin
           - Access-Control-Request-Method
           - Access-Control-Request-Headers
+        WWW-Authenticate:
+          - Bearer error="invalid_token", error_description="Unable to lookup user
+            details for provided Bearer token", error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
-        content-length:
-          - '275'
       body:
-        string:
-          graph:
-            edges:
-              - - id: campaign_channel_id
-                  type: attribute
-                - id: campaign_channels
-                  type: dataset
-            nodes:
-              - id: campaign_channel_id
-                title: Campaign channel id
-                type: attribute
-              - id: campaign_channels
-                title: Campaign channels
-                type: dataset
+        string: ''

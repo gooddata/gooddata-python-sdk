@@ -2,14 +2,16 @@
 version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body:
-        - assigneeIdentifier:
-            id: visitorsGroup
-            type: userGroup
-          permissions:
-            - VIEW
+        userDataFilters:
+          - id: user_data_filter
+            maql: 'FALSE'
+            title: youwillnotsee
+            user:
+              id: demo
+              type: user
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -78,7 +80,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -146,24 +148,21 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '113'
+          - '121'
       body:
         string:
-          userGroups:
-            - id: visitorsGroup
-              name: null
-              permissions:
-                - level: VIEW
-                  source: direct
-          users: []
+          userDataFilters:
+            - id: user_data_filter
+              maql: 'FALSE'
+              title: youwillnotsee
+              user:
+                id: demo
+                type: user
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
+      method: PUT
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body:
-        - assigneeIdentifier:
-            id: visitorsGroup
-            type: userGroup
-          permissions: []
+        userDataFilters: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -231,7 +230,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/permissions
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -299,8 +298,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '28'
+          - '22'
       body:
         string:
-          userGroups: []
-          users: []
+          userDataFilters: []

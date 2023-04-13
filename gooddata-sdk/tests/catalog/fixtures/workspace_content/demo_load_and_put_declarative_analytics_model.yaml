@@ -43,7 +43,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -77,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 18f3f34c1fe1cb9f
+          traceId: 5fe57efeff730faa
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -127,7 +127,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -203,7 +203,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -810,7 +810,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -879,7 +879,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -909,10 +909,11 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '27355'
+          - '27390'
       body:
         string:
           analytics:
+            analyticalDashboardExtensions: []
             analyticalDashboards:
               - content:
                   filterContextRef:
@@ -2257,7 +2258,7 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -2328,7 +2329,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -2363,7 +2364,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
+              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -2597,6 +2598,7 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
+          analyticalDashboardExtensions: []
           dashboardPlugins:
             - content:
                 url: https://www.example.com
@@ -3709,7 +3711,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -3778,7 +3780,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -3808,10 +3810,11 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '27355'
+          - '27390'
       body:
         string:
           analytics:
+            analyticalDashboardExtensions: []
             analyticalDashboards:
               - content:
                   filterContextRef:
@@ -5160,7 +5163,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -5278,7 +5281,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

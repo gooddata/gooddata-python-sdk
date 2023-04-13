@@ -2,34 +2,14 @@
 version: 1
 interactions:
   - request:
-      method: POST
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute
-      body:
-        execution:
-          attributes: []
-          filters: []
-          measures:
-            - definition:
-                measure:
-                  item:
-                    identifier:
-                      id: order_amount
-                      type: metric
-                  computeRatio: false
-                  filters: []
-              localIdentifier: metric1
-        resultSpec:
-          dimensions:
-            - itemIdentifiers:
-                - measureGroup
-              localIdentifier: dim_0
+      method: GET
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
+      body: null
       headers:
         Accept:
           - application/json
         Accept-Encoding:
           - br, gzip, deflate
-        Content-Type:
-          - application/json
         X-GDC-VALIDATE-RELATIONS:
           - 'true'
         X-Requested-With:
@@ -92,22 +72,13 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '245'
+          - '22'
       body:
         string:
-          executionResponse:
-            dimensions:
-              - headers:
-                  - measureGroupHeaders:
-                      - localIdentifier: metric1
-                        format: $#,##0
-                        name: Order Amount
-                localIdentifier: dim_0
-            links:
-              executionResult: bf26f97383d5b04cda5032829185a1bbd8f1a86c
+          userDataFilters: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/bf26f97383d5b04cda5032829185a1bbd8f1a86c?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/userDataFilters
       body: null
       headers:
         Accept:
@@ -175,21 +146,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '176'
+          - '22'
       body:
         string:
-          data:
-            - 516058.34
-          dimensionHeaders:
-            - headerGroups:
-                - headers:
-                    - measureHeader:
-                        measureIndex: 0
-          grandTotals: []
-          paging:
-            count:
-              - 1
-            offset:
-              - 0
-            total:
-              - 1
+          userDataFilters: []
