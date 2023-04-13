@@ -14,6 +14,7 @@ from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
+    CatalogUserDataFilter,
     CatalogWorkspace,
     GoodDataApiClient,
     GoodDataSdk,
@@ -421,6 +422,51 @@ def test_put_declarative_workspace_data_filters(test_config):
             data = json.load(f)
         declarative_workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data)
         sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_life_cycle.yaml"))
+def test_user_data_filters_life_cycle(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
+    assert len(user_data_filters) == 0
+
+    try:
+        user_data_filter = CatalogUserDataFilter.init(
+            user_data_filter_id=test_config["test_new_user_data_filter"],
+            maql='{label/order_status} IN ("returned")',
+            title="test_new_user_data_filter",
+            user_id=test_config["demo_user"],
+        )
+        sdk.catalog_workspace.create_or_update_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter=user_data_filter
+        )
+        user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
+        assert len(user_data_filters) == 1
+        assert user_data_filters[0].id == user_data_filter.id
+
+        get_filter = sdk.catalog_workspace.get_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter_id=user_data_filter.id
+        )
+
+        assert get_filter is not None
+        assert get_filter.id == user_data_filter.id
+        assert get_filter.user_id == test_config["demo_user"]
+        assert get_filter.user_group_id is None
+        assert get_filter.label_ids == ["order_status"]
+
+        sdk.catalog_workspace.delete_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter_id=get_filter.id
+        )
+
+        user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
+        assert len(user_data_filters) == 0
+    finally:
+        sdk.catalog_workspace.delete_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter_id=test_config["test_new_user_data_filter"]
+        )
+
+        user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
+        assert len(user_data_filters) == 0
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_user_data_filters.yaml"))

@@ -128,6 +128,11 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
 )
+from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
+    CatalogUserDataFilter,
+    CatalogUserDataFilterAttributes,
+    CatalogUserDataFilterRelationships,
+)
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
