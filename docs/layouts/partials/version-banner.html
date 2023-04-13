@@ -19,7 +19,7 @@
 
 <!-- In case of the dev version, we want to provide different banner, as it is unstable. -->
 {{ if (eq $currentVersion $devVersion) }}
-  <div class="alert alert-warning" role="alert">
+  <div class="alert alert-label alert-label-warning" role="warning">
     {{ with resources.Get "icons/icon-info.svg" }}
       {{ ( . | minify).Content | safeHTML }}
     {{ end }}
