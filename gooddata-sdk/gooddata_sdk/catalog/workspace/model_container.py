@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, List, Union
+from typing import List, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
@@ -17,7 +17,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
-from gooddata_sdk.utils import AllPagedEntities, IdObjType, SideLoads
+from gooddata_sdk.utils import AllPagedEntities, IdObjType
 
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
@@ -123,15 +123,6 @@ class CatalogWorkspaceContent:
             metrics=new_metrics,
         )
 
-    @staticmethod
-    def _create_attr_labels(attr_id: str, label_ids: dict[str, Any], raw_labels: SideLoads) -> list[CatalogLabel]:
-        labels = [(label_id, raw_labels.find(label_id)) for label_id in label_ids]
-        missing_labels = [label_id for label_id, label_data in labels if not label_data]
-        if len(missing_labels) > 0:
-            raise ValueError(f"Definition of label(s) [{','.join(missing_labels)}] not found for attribute {attr_id}")
-
-        return [CatalogLabel(label_data) for _, label_data in labels if label_data]
-
     @classmethod
     def create_workspace_content_catalog(
         cls,
@@ -140,44 +131,15 @@ class CatalogWorkspaceContent:
         attributes: AllPagedEntities,
         metrics: AllPagedEntities,
     ) -> CatalogWorkspaceContent:
-        # prep: dataset query gets attributes and facts side loaded, shove them into a map for easier access
-        dataset_side_loads = SideLoads(datasets.included)
-        attribute_side_loads = SideLoads(attributes.included)
+        catalog_datasets = [
+            CatalogDataset.from_api(d, side_loads=datasets.included, related_entities=attributes) for d in datasets.data
+        ]
 
-        # metrics are not associated to any dataset, so can construct them right away
-        catalog_metrics = [CatalogMetric(**metric) for metric in metrics.data]
-
-        # now the rest requires some joins...
-        # first construct the dataset's leaves - facts
-        catalog_facts = {fact["id"]: CatalogFact(fact) for fact in dataset_side_loads.all_for_type("fact")}
-
-        # then build all attributes & their labels, map them attr.id => attribute
-        catalog_attributes = dict()
-        for attr in attributes.data:
-            attr_id: str = attr["id"]
-            label_ids: dict[str, Any] = attr["relationships"]["labels"]["data"]
-            catalog_attributes[attr_id] = CatalogAttribute(
-                attr,
-                cls._create_attr_labels(attr_id, label_ids, attribute_side_loads),
-            )
-
-        # finally go through all datasets, find related attributes and facts
-        catalog_datasets = dict()
-        for dataset in datasets.data:
-            dataset_id = dataset["id"]
-            rels = dataset["relationships"]
-            attribute_ids = rels["attributes"]["data"] if "attributes" in rels else []
-            fact_ids = rels["facts"]["data"] if "facts" in rels else []
-
-            catalog_datasets[dataset_id] = CatalogDataset(
-                dataset,
-                [catalog_attributes[attr_id_obj["id"]] for attr_id_obj in attribute_ids],
-                [catalog_facts[fact_id_obj["id"]] for fact_id_obj in fact_ids],
-            )
+        catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
 
         return cls(
             valid_obj_fun=valid_obj_fun,
-            datasets=list(catalog_datasets.values()),
+            datasets=list(catalog_datasets),
             metrics=catalog_metrics,
         )
 

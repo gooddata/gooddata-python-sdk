@@ -3,24 +3,47 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, ClassVar, Dict, Optional, Type
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
 import attr
 
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, JsonApiEntityBase
 from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.utils import AllPagedEntities
+
+T = TypeVar("T", bound="AttrCatalogEntity")
 
 
 @attr.s(auto_attribs=True)
-class AttrCatalogEntity(Base):
+class AttrCatalogEntity:
+    json_api_entity: JsonApiEntityBase
     id: str
     type: str
-    meta: Optional[Dict[str, Any]] = attr.field(repr=False)
-    attributes: Optional[Dict[str, Any]] = attr.field(repr=False)
-    links: Optional[Dict[str, Any]] = attr.field(repr=False)
-    obj_id: Optional[ObjId] = attr.field(
-        init=False, default=attr.Factory(lambda self: ObjId(self.id, type=self.type), takes_self=True), repr=False
-    )
+    obj_id: ObjId
+    title: Optional[str]
+    description: Optional[str]
+    tags: Optional[List[str]]
+
+    @classmethod
+    def from_api(
+        cls: Type[T],
+        entity: Dict[str, Any],
+        side_loads: Optional[List[Any]] = None,
+        related_entities: Optional[AllPagedEntities] = None,
+    ) -> T:
+        """
+        Creates GoodData object from AttrCatalogEntityJsonApi.
+        """
+        json_api_entity = JsonApiEntityBase.from_api(entity, side_loads, related_entities)
+        return cls(
+            json_api_entity=json_api_entity,
+            id=json_api_entity.id,
+            type=json_api_entity.type,
+            obj_id=ObjId(json_api_entity.id, type=json_api_entity.type),
+            title=json_api_entity.attributes.get("title"),
+            description=json_api_entity.attributes.get("description"),
+            tags=json_api_entity.attributes.get("tags", []),
+        )
 
 
 class CatalogEntity:

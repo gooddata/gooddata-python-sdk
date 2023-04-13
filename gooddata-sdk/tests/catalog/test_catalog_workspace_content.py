@@ -16,6 +16,7 @@ from gooddata_sdk import (
     CatalogWorkspace,
     DataSourceValidator,
     GoodDataSdk,
+    ObjId,
 )
 from gooddata_sdk.utils import recreate_directory
 
@@ -264,9 +265,11 @@ def test_catalog_load(test_config):
 
     assert catalog.get_metric("order_amount") is not None
     assert catalog.get_metric("revenue") is not None
-    assert catalog.get_dataset("customers") is not None
     assert catalog.get_dataset("order_lines") is not None
     assert catalog.get_dataset("products") is not None
+    customer = catalog.get_dataset("customers")
+    assert customer is not None
+    assert customer.find_label_attribute(ObjId(id="region", type="label"))
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_availability.yaml"))

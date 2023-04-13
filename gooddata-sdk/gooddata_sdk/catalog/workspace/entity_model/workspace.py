@@ -26,9 +26,7 @@ class CatalogWorkspace(Base):
     def from_api(cls, entity: dict[str, Any]) -> CatalogWorkspace:
         ea = entity["attributes"]
         er = entity.get("relationships")
-        return cls(
-            workspace_id=entity["id"], name=ea["name"], parent_id=safeget(er, ["parent", "data", "id"]) if er else None
-        )
+        return cls(workspace_id=entity["id"], name=ea["name"], parent_id=safeget(er, ["parent", "data", "id"]))
 
     def to_api(self) -> JsonApiWorkspaceInDocument:
         kwargs = dict()

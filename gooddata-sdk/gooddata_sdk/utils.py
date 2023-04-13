@@ -4,15 +4,15 @@ from __future__ import annotations
 import functools
 import os
 import re
-import typing
 from collections.abc import KeysView
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, Dict, NamedTuple, Tuple, Union, cast
+from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
 
 import yaml
 
 from gooddata_api_client import ApiAttributeError
+from gooddata_api_client.model_utils import OpenApiModel
 from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
@@ -157,7 +157,7 @@ def recreate_directory(path: Path) -> None:
 
 
 class IndentDumper(yaml.SafeDumper):
-    @typing.no_type_check
+    @no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
         return super(IndentDumper, self).increase_indent(flow, False)
 
@@ -281,10 +281,28 @@ def good_pandas_profile_content(
     return content, custom_headers
 
 
-def safeget(dictionary: dict, keys: list[str]) -> Any:
-    for key in keys:
-        try:
-            dictionary = dictionary[key]
-        except KeyError:
+def safeget(var: Any, path: List[str]) -> Any:
+    if len(path) == 0:
+        # base case: we have reached the innermost key
+        return var
+    elif not isinstance(var, (dict, OpenApiModel)):
+        # base case: var is not a dictionary, so we can't proceed
+        # in this repository, we also use OpenApiModel objects, which support "to_dict"
+        return None
+    else:
+        # recursive case: we still have keys to traverse
+        key = path[0]
+        if key in var:
+            return safeget(var[key], path[1:])
+        else:
             return None
-    return dictionary
+
+
+def safeget_list(var: Any, path: List[str]) -> List[Any]:
+    result = safeget(var, path)
+    if isinstance(result, list):
+        return result
+    elif result is None:
+        return []
+    else:
+        raise Exception("safeget_list: result is not iterable! result={0}".format(result))
