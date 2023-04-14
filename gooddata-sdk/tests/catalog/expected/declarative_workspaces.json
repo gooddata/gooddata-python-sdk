@@ -367,6 +367,7 @@
               "title": "Product & Category"
             }
           ],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [
             {
               "content": {
@@ -2676,7 +2677,8 @@
           "name": "VIEW"
         }
       ],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     },
     {
       "customApplicationSettings": [],
@@ -2685,6 +2687,7 @@
       "model": {
         "analytics": {
           "analyticalDashboards": [],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
@@ -2701,7 +2704,8 @@
         "type": "workspace"
       },
       "permissions": [],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     },
     {
       "customApplicationSettings": [],
@@ -2710,6 +2714,7 @@
       "model": {
         "analytics": {
           "analyticalDashboards": [],
+          "analyticalDashboardExtensions": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
@@ -2726,7 +2731,8 @@
         "type": "workspace"
       },
       "permissions": [],
-      "settings": []
+      "settings": [],
+      "userDataFilters": []
     }
   ],
   "workspaceDataFilters": [

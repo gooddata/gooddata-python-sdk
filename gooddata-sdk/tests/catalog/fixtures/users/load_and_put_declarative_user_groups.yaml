@@ -41,7 +41,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,23 +72,26 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '402'
+          - '453'
       body:
         string:
           users:
             - id: admin
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+            - authId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
               id: demo
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+            - authId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
               id: demo2
+              permissions: []
               settings: []
               userGroups:
                 - id: demoGroup
@@ -133,7 +136,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -163,20 +166,24 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '202'
+          - '270'
       body:
         string:
           userGroups:
             - id: adminGroup
+              permissions: []
             - id: adminQA1Group
               parents:
                 - id: adminGroup
                   type: userGroup
+              permissions: []
             - id: demoGroup
+              permissions: []
             - id: visitorsGroup
               parents:
                 - id: demoGroup
                   type: userGroup
+              permissions: []
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/users?include=userGroups&page=0&size=500
@@ -219,7 +226,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -252,7 +259,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+                authenticationId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -273,7 +280,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+                authenticationId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -333,7 +340,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -368,6 +375,7 @@ interactions:
       body:
         userGroups:
           - id: adminGroup
+            permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -404,7 +412,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -471,7 +479,7 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -542,7 +550,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -577,7 +585,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
+              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -586,15 +594,19 @@ interactions:
       body:
         userGroups:
           - id: adminGroup
+            permissions: []
           - id: adminQA1Group
             parents:
               - id: adminGroup
                 type: userGroup
+            permissions: []
           - id: demoGroup
+            permissions: []
           - id: visitorsGroup
             parents:
               - id: demoGroup
                 type: userGroup
+            permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -631,7 +643,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -700,7 +712,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -730,35 +742,43 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '202'
+          - '270'
       body:
         string:
           userGroups:
             - id: adminGroup
+              permissions: []
             - id: adminQA1Group
               parents:
                 - id: adminGroup
                   type: userGroup
+              permissions: []
             - id: demoGroup
+              permissions: []
             - id: visitorsGroup
               parents:
                 - id: demoGroup
                   type: userGroup
+              permissions: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/userGroups
       body:
         userGroups:
           - id: adminGroup
+            permissions: []
           - id: adminQA1Group
             parents:
               - id: adminGroup
                 type: userGroup
+            permissions: []
           - id: demoGroup
+            permissions: []
           - id: visitorsGroup
             parents:
               - id: demoGroup
                 type: userGroup
+            permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -795,7 +815,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -834,18 +854,21 @@ interactions:
               - id: adminGroup
                 type: userGroup
             settings: []
+            permissions: []
           - id: demo
-            authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+            authId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
+            permissions: []
           - id: demo2
-            authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+            authId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
             settings: []
+            permissions: []
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -882,7 +905,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

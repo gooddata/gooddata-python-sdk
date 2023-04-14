@@ -1,0 +1,13 @@
+{
+  "userDataFilters": [
+    {
+      "id": "user_data_filter",
+      "maql": "FALSE",
+      "title": "youwillnotsee",
+      "user": {
+        "id": "demo",
+        "type": "user"
+      }
+    }
+  ]
+}

@@ -72,7 +72,7 @@ class JsonApiLabelOut(ModelNormal):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }

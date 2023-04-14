@@ -43,7 +43,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -160,7 +160,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/problem+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -193,7 +193,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 2bad68ae2099b893
+          traceId: 35b1936f07923f1b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups
@@ -246,7 +246,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -323,7 +323,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -411,7 +411,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -441,16 +441,6 @@ interactions:
       body:
         string:
           data:
-            - id: newUserGroup
-              type: userGroup
-              attributes: {}
-              relationships:
-                parents:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
             - id: adminGroup
               type: userGroup
               attributes: {}
@@ -481,6 +471,16 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: newUserGroup
+              type: userGroup
+              attributes: {}
+              relationships:
+                parents:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
           included:
             - id: adminGroup
               type: userGroup
@@ -533,7 +533,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -604,7 +604,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

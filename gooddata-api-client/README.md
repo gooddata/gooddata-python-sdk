@@ -137,15 +137,21 @@ Class | Method | HTTP request | Description
 *DashboardsApi* | [**get_entity_analytical_dashboards**](docs/DashboardsApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
 *DashboardsApi* | [**patch_entity_analytical_dashboards**](docs/DashboardsApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
 *DashboardsApi* | [**update_entity_analytical_dashboards**](docs/DashboardsApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | 
+*DataFiltersApi* | [**create_entity_user_data_filters**](docs/DataFiltersApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *DataFiltersApi* | [**create_entity_workspace_data_filters**](docs/DataFiltersApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
+*DataFiltersApi* | [**delete_entity_user_data_filters**](docs/DataFiltersApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *DataFiltersApi* | [**delete_entity_workspace_data_filters**](docs/DataFiltersApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
+*DataFiltersApi* | [**get_all_entities_user_data_filters**](docs/DataFiltersApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *DataFiltersApi* | [**get_all_entities_workspace_data_filter_settings**](docs/DataFiltersApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | 
 *DataFiltersApi* | [**get_all_entities_workspace_data_filters**](docs/DataFiltersApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
+*DataFiltersApi* | [**get_entity_user_data_filters**](docs/DataFiltersApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *DataFiltersApi* | [**get_entity_workspace_data_filter_settings**](docs/DataFiltersApi.md#get_entity_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | 
 *DataFiltersApi* | [**get_entity_workspace_data_filters**](docs/DataFiltersApi.md#get_entity_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *DataFiltersApi* | [**get_workspace_data_filters_layout**](docs/DataFiltersApi.md#get_workspace_data_filters_layout) | **GET** /api/v1/layout/workspaceDataFilters | Get workspace data filters for all workspaces
+*DataFiltersApi* | [**patch_entity_user_data_filters**](docs/DataFiltersApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *DataFiltersApi* | [**patch_entity_workspace_data_filters**](docs/DataFiltersApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *DataFiltersApi* | [**set_workspace_data_filters_layout**](docs/DataFiltersApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
+*DataFiltersApi* | [**update_entity_user_data_filters**](docs/DataFiltersApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *DataFiltersApi* | [**update_entity_workspace_data_filters**](docs/DataFiltersApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *DataSourceDeclarativeAPIsApi* | [**get_data_sources_layout**](docs/DataSourceDeclarativeAPIsApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 *DataSourceDeclarativeAPIsApi* | [**put_data_sources_layout**](docs/DataSourceDeclarativeAPIsApi.md#put_data_sources_layout) | **PUT** /api/v1/layout/dataSources | Put all data sources
@@ -208,6 +214,7 @@ Class | Method | HTTP request | Description
 *ReportingSettingsApi* | [**resolve_settings_without_workspace**](docs/ReportingSettingsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 *ScanningApi* | [**get_data_source_schemata**](docs/ScanningApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 *ScanningApi* | [**scan_data_source**](docs/ScanningApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
+*ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *TestConnectionApi* | [**test_data_source**](docs/TestConnectionApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *TestConnectionApi* | [**test_data_source_definition**](docs/TestConnectionApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *UsageApi* | [**all_platform_usage**](docs/UsageApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
@@ -222,6 +229,8 @@ Class | Method | HTTP request | Description
 *UserGroupsEntityAPIsApi* | [**get_entity_user_groups**](docs/UserGroupsEntityAPIsApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | 
 *UserGroupsEntityAPIsApi* | [**patch_entity_user_groups**](docs/UserGroupsEntityAPIsApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | 
 *UserGroupsEntityAPIsApi* | [**update_entity_user_groups**](docs/UserGroupsEntityAPIsApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | 
+*UserDataFiltersApi* | [**get_user_data_filters**](docs/UserDataFiltersApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
+*UserDataFiltersApi* | [**set_user_data_filters**](docs/UserDataFiltersApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
 *UserSettingsApi* | [**create_entity_user_settings**](docs/UserSettingsApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | 
 *UserSettingsApi* | [**delete_entity_user_settings**](docs/UserSettingsApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *UserSettingsApi* | [**get_all_entities_user_settings**](docs/UserSettingsApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
@@ -312,6 +321,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**create_entity_metrics**](docs/EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | 
 *EntitiesApi* | [**create_entity_organization_settings**](docs/EntitiesApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | 
 *EntitiesApi* | [**create_entity_themes**](docs/EntitiesApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | 
+*EntitiesApi* | [**create_entity_user_data_filters**](docs/EntitiesApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *EntitiesApi* | [**create_entity_user_groups**](docs/EntitiesApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | 
 *EntitiesApi* | [**create_entity_user_settings**](docs/EntitiesApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | 
 *EntitiesApi* | [**create_entity_users**](docs/EntitiesApi.md#create_entity_users) | **POST** /api/v1/entities/users | 
@@ -330,6 +340,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**delete_entity_metrics**](docs/EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
 *EntitiesApi* | [**delete_entity_organization_settings**](docs/EntitiesApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**delete_entity_themes**](docs/EntitiesApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | 
+*EntitiesApi* | [**delete_entity_user_data_filters**](docs/EntitiesApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *EntitiesApi* | [**delete_entity_user_groups**](docs/EntitiesApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | 
 *EntitiesApi* | [**delete_entity_user_settings**](docs/EntitiesApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**delete_entity_users**](docs/EntitiesApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | 
@@ -355,6 +366,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_metrics**](docs/EntitiesApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | 
 *EntitiesApi* | [**get_all_entities_organization_settings**](docs/EntitiesApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | 
 *EntitiesApi* | [**get_all_entities_themes**](docs/EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | 
+*EntitiesApi* | [**get_all_entities_user_data_filters**](docs/EntitiesApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *EntitiesApi* | [**get_all_entities_user_groups**](docs/EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | 
 *EntitiesApi* | [**get_all_entities_user_settings**](docs/EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 *EntitiesApi* | [**get_all_entities_users**](docs/EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | 
@@ -385,6 +397,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_organization_settings**](docs/EntitiesApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**get_entity_organizations**](docs/EntitiesApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | 
 *EntitiesApi* | [**get_entity_themes**](docs/EntitiesApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | 
+*EntitiesApi* | [**get_entity_user_data_filters**](docs/EntitiesApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *EntitiesApi* | [**get_entity_user_groups**](docs/EntitiesApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | 
 *EntitiesApi* | [**get_entity_user_settings**](docs/EntitiesApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**get_entity_users**](docs/EntitiesApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | 
@@ -406,6 +419,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_organization_settings**](docs/EntitiesApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**patch_entity_organizations**](docs/EntitiesApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | 
 *EntitiesApi* | [**patch_entity_themes**](docs/EntitiesApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | 
+*EntitiesApi* | [**patch_entity_user_data_filters**](docs/EntitiesApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *EntitiesApi* | [**patch_entity_user_groups**](docs/EntitiesApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | 
 *EntitiesApi* | [**patch_entity_users**](docs/EntitiesApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | 
 *EntitiesApi* | [**patch_entity_visualization_objects**](docs/EntitiesApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
@@ -425,6 +439,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_organization_settings**](docs/EntitiesApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | 
 *EntitiesApi* | [**update_entity_organizations**](docs/EntitiesApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | 
 *EntitiesApi* | [**update_entity_themes**](docs/EntitiesApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | 
+*EntitiesApi* | [**update_entity_user_data_filters**](docs/EntitiesApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *EntitiesApi* | [**update_entity_user_groups**](docs/EntitiesApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | 
 *EntitiesApi* | [**update_entity_user_settings**](docs/EntitiesApi.md#update_entity_user_settings) | **PUT** /api/v1/entities/users/{userId}/userSettings/{id} | 
 *EntitiesApi* | [**update_entity_users**](docs/EntitiesApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | 
@@ -437,6 +452,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 *LayoutApi* | [**get_pdm_layout**](docs/LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
+*LayoutApi* | [**get_user_data_filters**](docs/LayoutApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
 *LayoutApi* | [**get_user_group_permissions**](docs/LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 *LayoutApi* | [**get_user_groups_layout**](docs/LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
 *LayoutApi* | [**get_user_permissions**](docs/LayoutApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
@@ -455,6 +471,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
+*LayoutApi* | [**set_user_data_filters**](docs/LayoutApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
 *LayoutApi* | [**set_user_group_permissions**](docs/LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 *LayoutApi* | [**set_user_permissions**](docs/LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 *LayoutApi* | [**set_workspace_data_filters_layout**](docs/LayoutApi.md#set_workspace_data_filters_layout) | **PUT** /api/v1/layout/workspaceDataFilters | Set all workspace data filters
@@ -533,6 +550,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**create_entity_dashboard_plugins**](docs/WorkspaceObjectControllerApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | 
 *WorkspaceObjectControllerApi* | [**create_entity_filter_contexts**](docs/WorkspaceObjectControllerApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | 
 *WorkspaceObjectControllerApi* | [**create_entity_metrics**](docs/WorkspaceObjectControllerApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | 
+*WorkspaceObjectControllerApi* | [**create_entity_user_data_filters**](docs/WorkspaceObjectControllerApi.md#create_entity_user_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *WorkspaceObjectControllerApi* | [**create_entity_visualization_objects**](docs/WorkspaceObjectControllerApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
 *WorkspaceObjectControllerApi* | [**create_entity_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
 *WorkspaceObjectControllerApi* | [**create_entity_workspace_settings**](docs/WorkspaceObjectControllerApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | 
@@ -541,6 +559,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**delete_entity_dashboard_plugins**](docs/WorkspaceObjectControllerApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *WorkspaceObjectControllerApi* | [**delete_entity_filter_contexts**](docs/WorkspaceObjectControllerApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *WorkspaceObjectControllerApi* | [**delete_entity_metrics**](docs/WorkspaceObjectControllerApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*WorkspaceObjectControllerApi* | [**delete_entity_user_data_filters**](docs/WorkspaceObjectControllerApi.md#delete_entity_user_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**delete_entity_visualization_objects**](docs/WorkspaceObjectControllerApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspaceObjectControllerApi* | [**delete_entity_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**delete_entity_workspace_settings**](docs/WorkspaceObjectControllerApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
@@ -553,6 +572,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**get_all_entities_filter_contexts**](docs/WorkspaceObjectControllerApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | 
 *WorkspaceObjectControllerApi* | [**get_all_entities_labels**](docs/WorkspaceObjectControllerApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | 
 *WorkspaceObjectControllerApi* | [**get_all_entities_metrics**](docs/WorkspaceObjectControllerApi.md#get_all_entities_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics | 
+*WorkspaceObjectControllerApi* | [**get_all_entities_user_data_filters**](docs/WorkspaceObjectControllerApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | 
 *WorkspaceObjectControllerApi* | [**get_all_entities_visualization_objects**](docs/WorkspaceObjectControllerApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
 *WorkspaceObjectControllerApi* | [**get_all_entities_workspace_data_filter_settings**](docs/WorkspaceObjectControllerApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | 
 *WorkspaceObjectControllerApi* | [**get_all_entities_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | 
@@ -566,6 +586,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**get_entity_filter_contexts**](docs/WorkspaceObjectControllerApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *WorkspaceObjectControllerApi* | [**get_entity_labels**](docs/WorkspaceObjectControllerApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | 
 *WorkspaceObjectControllerApi* | [**get_entity_metrics**](docs/WorkspaceObjectControllerApi.md#get_entity_metrics) | **GET** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*WorkspaceObjectControllerApi* | [**get_entity_user_data_filters**](docs/WorkspaceObjectControllerApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**get_entity_visualization_objects**](docs/WorkspaceObjectControllerApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspaceObjectControllerApi* | [**get_entity_workspace_data_filter_settings**](docs/WorkspaceObjectControllerApi.md#get_entity_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | 
 *WorkspaceObjectControllerApi* | [**get_entity_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#get_entity_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
@@ -575,6 +596,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**patch_entity_dashboard_plugins**](docs/WorkspaceObjectControllerApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *WorkspaceObjectControllerApi* | [**patch_entity_filter_contexts**](docs/WorkspaceObjectControllerApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *WorkspaceObjectControllerApi* | [**patch_entity_metrics**](docs/WorkspaceObjectControllerApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*WorkspaceObjectControllerApi* | [**patch_entity_user_data_filters**](docs/WorkspaceObjectControllerApi.md#patch_entity_user_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**patch_entity_visualization_objects**](docs/WorkspaceObjectControllerApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspaceObjectControllerApi* | [**patch_entity_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**patch_entity_workspace_settings**](docs/WorkspaceObjectControllerApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
@@ -583,6 +605,7 @@ Class | Method | HTTP request | Description
 *WorkspaceObjectControllerApi* | [**update_entity_dashboard_plugins**](docs/WorkspaceObjectControllerApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | 
 *WorkspaceObjectControllerApi* | [**update_entity_filter_contexts**](docs/WorkspaceObjectControllerApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | 
 *WorkspaceObjectControllerApi* | [**update_entity_metrics**](docs/WorkspaceObjectControllerApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | 
+*WorkspaceObjectControllerApi* | [**update_entity_user_data_filters**](docs/WorkspaceObjectControllerApi.md#update_entity_user_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**update_entity_visualization_objects**](docs/WorkspaceObjectControllerApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
 *WorkspaceObjectControllerApi* | [**update_entity_workspace_data_filters**](docs/WorkspaceObjectControllerApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | 
 *WorkspaceObjectControllerApi* | [**update_entity_workspace_settings**](docs/WorkspaceObjectControllerApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
@@ -671,6 +694,8 @@ Class | Method | HTTP request | Description
  - [DeclarativeTables](docs/DeclarativeTables.md)
  - [DeclarativeTheme](docs/DeclarativeTheme.md)
  - [DeclarativeUser](docs/DeclarativeUser.md)
+ - [DeclarativeUserDataFilter](docs/DeclarativeUserDataFilter.md)
+ - [DeclarativeUserDataFilters](docs/DeclarativeUserDataFilters.md)
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
  - [DeclarativeUserGroupPermission](docs/DeclarativeUserGroupPermission.md)
  - [DeclarativeUserGroupPermissions](docs/DeclarativeUserGroupPermissions.md)
@@ -933,6 +958,19 @@ Class | Method | HTTP request | Description
  - [JsonApiThemeOutWithLinks](docs/JsonApiThemeOutWithLinks.md)
  - [JsonApiThemePatch](docs/JsonApiThemePatch.md)
  - [JsonApiThemePatchDocument](docs/JsonApiThemePatchDocument.md)
+ - [JsonApiUserDataFilterIn](docs/JsonApiUserDataFilterIn.md)
+ - [JsonApiUserDataFilterInAttributes](docs/JsonApiUserDataFilterInAttributes.md)
+ - [JsonApiUserDataFilterInDocument](docs/JsonApiUserDataFilterInDocument.md)
+ - [JsonApiUserDataFilterInRelationships](docs/JsonApiUserDataFilterInRelationships.md)
+ - [JsonApiUserDataFilterOut](docs/JsonApiUserDataFilterOut.md)
+ - [JsonApiUserDataFilterOutDocument](docs/JsonApiUserDataFilterOutDocument.md)
+ - [JsonApiUserDataFilterOutIncludes](docs/JsonApiUserDataFilterOutIncludes.md)
+ - [JsonApiUserDataFilterOutList](docs/JsonApiUserDataFilterOutList.md)
+ - [JsonApiUserDataFilterOutRelationships](docs/JsonApiUserDataFilterOutRelationships.md)
+ - [JsonApiUserDataFilterOutWithLinks](docs/JsonApiUserDataFilterOutWithLinks.md)
+ - [JsonApiUserDataFilterPatch](docs/JsonApiUserDataFilterPatch.md)
+ - [JsonApiUserDataFilterPatchAttributes](docs/JsonApiUserDataFilterPatchAttributes.md)
+ - [JsonApiUserDataFilterPatchDocument](docs/JsonApiUserDataFilterPatchDocument.md)
  - [JsonApiUserGroupIn](docs/JsonApiUserGroupIn.md)
  - [JsonApiUserGroupInAttributes](docs/JsonApiUserGroupInAttributes.md)
  - [JsonApiUserGroupInDocument](docs/JsonApiUserGroupInDocument.md)
@@ -1094,6 +1132,7 @@ Class | Method | HTTP request | Description
  - [UserGroupAssignee](docs/UserGroupAssignee.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
  - [UserGroupPermission](docs/UserGroupPermission.md)
+ - [UserIdentifier](docs/UserIdentifier.md)
  - [UserPermission](docs/UserPermission.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
 

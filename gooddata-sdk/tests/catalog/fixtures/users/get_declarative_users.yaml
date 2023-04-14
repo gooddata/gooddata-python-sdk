@@ -41,7 +41,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,23 +72,26 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '402'
+          - '453'
       body:
         string:
           users:
             - id: admin
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+            - authId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
               id: demo
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+            - authId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
               id: demo2
+              permissions: []
               settings: []
               userGroups:
                 - id: demoGroup
@@ -133,7 +136,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -163,23 +166,26 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '402'
+          - '453'
       body:
         string:
           users:
             - id: admin
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+            - authId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
               id: demo
+              permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+            - authId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
               id: demo2
+              permissions: []
               settings: []
               userGroups:
                 - id: demoGroup

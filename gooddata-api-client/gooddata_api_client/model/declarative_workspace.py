@@ -34,12 +34,14 @@ def lazy_import():
     from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+    from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
     from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
     globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
+    globals()['DeclarativeUserDataFilter'] = DeclarativeUserDataFilter
     globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
     globals()['DeclarativeWorkspaceModel'] = DeclarativeWorkspaceModel
     globals()['WorkspaceIdentifier'] = WorkspaceIdentifier
@@ -87,6 +89,12 @@ class DeclarativeWorkspace(ModelNormal):
         ('early_access',): {
             'max_length': 255,
         },
+        ('prefix',): {
+            'max_length': 255,
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -121,7 +129,9 @@ class DeclarativeWorkspace(ModelNormal):
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
             'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
+            'prefix': (str,),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
+            'user_data_filters': ([DeclarativeUserDataFilter],),  # noqa: E501
         }
 
     @cached_property
@@ -139,7 +149,9 @@ class DeclarativeWorkspace(ModelNormal):
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'prefix': 'prefix',  # noqa: E501
         'settings': 'settings',  # noqa: E501
+        'user_data_filters': 'userDataFilters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -194,7 +206,9 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -293,7 +307,9 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

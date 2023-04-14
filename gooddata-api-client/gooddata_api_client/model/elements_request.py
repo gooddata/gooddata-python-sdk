@@ -67,6 +67,11 @@ class ElementsRequest(ModelNormal):
     }
 
     validations = {
+        ('label',): {
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property

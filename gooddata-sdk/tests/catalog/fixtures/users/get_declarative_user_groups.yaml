@@ -41,7 +41,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,20 +72,24 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '202'
+          - '270'
       body:
         string:
           userGroups:
             - id: adminGroup
+              permissions: []
             - id: adminQA1Group
               parents:
                 - id: adminGroup
                   type: userGroup
+              permissions: []
             - id: demoGroup
+              permissions: []
             - id: visitorsGroup
               parents:
                 - id: demoGroup
                   type: userGroup
+              permissions: []
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/layout/userGroups
@@ -126,7 +130,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -156,17 +160,21 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '202'
+          - '270'
       body:
         string:
           userGroups:
             - id: adminGroup
+              permissions: []
             - id: adminQA1Group
               parents:
                 - id: adminGroup
                   type: userGroup
+              permissions: []
             - id: demoGroup
+              permissions: []
             - id: visitorsGroup
               parents:
                 - id: demoGroup
                   type: userGroup
+              permissions: []

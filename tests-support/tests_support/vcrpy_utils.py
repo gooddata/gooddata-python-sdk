@@ -10,7 +10,7 @@ import vcr
 import yaml
 
 VCR_MATCH_ON = ("method", "scheme", "host", "port", "path", "query", "body")
-NON_STATIC_HEADERS = ["Date", "X-GDC-TRACE-ID"]
+NON_STATIC_HEADERS = ["DATE", "X-GDC-TRACE-ID"]
 HEADERS_STR = "headers"
 PLACEHOLDER = ["PLACEHOLDER"]
 
@@ -85,8 +85,13 @@ def custom_before_response(
         placeholder = PLACEHOLDER
 
     if response.get(headers_str) is not None:
-        response[headers_str] = {header: response[headers_str][header] for header in sorted(response[headers_str])}
-        for header in non_static_headers:
-            if response[headers_str].get(header)[0] is not None:
-                response[headers_str][header] = placeholder
+        unified_headers = {}
+        for header in sorted(response[headers_str]):
+            (header, value) = resolve_header(header, non_static_headers, placeholder, response[headers_str])
+            unified_headers[header] = value
+        response[headers_str] = unified_headers
     return response
+
+
+def resolve_header(header: str, non_static_headers: list[str], placeholder: str, response_headers: dict[str, Any]):
+    return (header.upper(), placeholder) if header.upper() in non_static_headers else (header, response_headers[header])

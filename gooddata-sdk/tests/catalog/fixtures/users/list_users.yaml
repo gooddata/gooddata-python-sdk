@@ -43,7 +43,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -87,7 +87,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ0MWM2ZTkwMy0zMGRhLTRjMTMtYmFjNS1mYTVjMzViZGZkYWESBWxvY2Fs
+                authenticationId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -98,7 +98,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRhNTk5YjQ0OC00MmUzLTQ2OTYtYTYyOC0zMzgwY2Y3ZjQ3ZDYSBWxvY2Fs
+                authenticationId: CiRmOGEzNjAyNC0xYzRlLTQyMmYtYWZlYi1kZWUzN2UxZjU0NDUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:

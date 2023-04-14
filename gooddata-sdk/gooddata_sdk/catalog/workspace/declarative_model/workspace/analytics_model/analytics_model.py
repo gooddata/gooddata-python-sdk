@@ -7,12 +7,14 @@ from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 import attr
 
 from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
+from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
 from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_api_client.model.declarative_analytics_layer import DeclarativeAnalyticsLayer
 from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+from gooddata_sdk import CatalogDeclarativeWorkspaceHierarchyPermission
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
 
@@ -27,6 +29,7 @@ AnalyticsObjects = Union[
 
 LAYOUT_ANALYTICS_MODEL_DIR = "analytics_model"
 LAYOUT_ANALYTICAL_DASHBOARDS_DIR = "analytical_dashboards"
+LAYOUT_ANALYTICAL_DASHBOARD_EXTENSIONS_DIR = "analytical_dashboard_extensions"
 LAYOUT_DASHBOARD_PLUGINS_DIR = "dashboard_plugins"
 LAYOUT_FILTER_CONTEXTS_DIR = "filter_contexts"
 LAYOUT_METRICS_DIR = "metrics"
@@ -54,6 +57,7 @@ class CatalogDeclarativeAnalytics(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticsLayer(Base):
     analytical_dashboards: List[CatalogDeclarativeAnalyticalDashboard] = attr.field(factory=list)
+    analytical_dashboard_extensions: List[CatalogDeclarativeAnalyticalDashboardExtension] = attr.field(factory=list)
     dashboard_plugins: List[CatalogDeclarativeDashboardPlugin] = attr.field(factory=list)
     filter_contexts: List[CatalogDeclarativeFilterContext] = attr.field(factory=list)
     metrics: List[CatalogDeclarativeMetric] = attr.field(factory=list)
@@ -72,6 +76,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     @staticmethod
     def get_analytical_dashboards_folder(analytics_model_folder: Path) -> Path:
         folder = analytics_model_folder / LAYOUT_ANALYTICAL_DASHBOARDS_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
+    def get_analytical_dashboard_extensions_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / LAYOUT_ANALYTICAL_DASHBOARD_EXTENSIONS_DIR
         create_directory(folder)
         return folder
 
@@ -103,6 +113,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
         analytical_dashboards_folder = self.get_analytical_dashboards_folder(analytics_model_folder)
+        analytical_dashboard_extensions_folder = self.get_analytical_dashboard_extensions_folder(analytics_model_folder)
         dashboard_plugins_folder = self.get_dashboard_plugins_folder(analytics_model_folder)
         filter_contexts_folder = self.get_filter_contexts_folder(analytics_model_folder)
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
@@ -110,6 +121,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder)
+
+        for analytical_dashboard_extension in self.analytical_dashboard_extensions:
+            analytical_dashboard_extension.store_to_disk(analytical_dashboard_extensions_folder)
 
         for dashboard_plugin in self.dashboard_plugins:
             dashboard_plugin.store_to_disk(dashboard_plugins_folder)
@@ -127,12 +141,14 @@ class CatalogDeclarativeAnalyticsLayer(Base):
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
         analytical_dashboards_folder = cls.get_analytical_dashboards_folder(analytics_model_folder)
+        analytical_dashboard_extensions_folder = cls.get_analytical_dashboard_extensions_folder(analytics_model_folder)
         dashboard_plugins_folder = cls.get_dashboard_plugins_folder(analytics_model_folder)
         filter_contexts_folder = cls.get_filter_contexts_folder(analytics_model_folder)
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
+        analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
         dashboard_plugin_files = get_sorted_yaml_files(dashboard_plugins_folder)
         filter_context_files = get_sorted_yaml_files(filter_contexts_folder)
         metric_files = get_sorted_yaml_files(metrics_folder)
@@ -141,6 +157,10 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
             for analytical_dashboard_file in analytical_dashboard_files
+        ]
+        analytical_dashboard_extensions = [
+            CatalogDeclarativeAnalyticalDashboardExtension.load_from_disk(analytical_dashboard_extension_file)
+            for analytical_dashboard_extension_file in analytical_dashboard_extension_files
         ]
         dashboard_plugins = [
             CatalogDeclarativeDashboardPlugin.load_from_disk(dashboard_plugin_file)
@@ -157,6 +177,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         ]
         return cls(
             analytical_dashboards=analytical_dashboards,
+            analytical_dashboard_extensions=analytical_dashboard_extensions,
             dashboard_plugins=dashboard_plugins,
             filter_contexts=filter_contexts,
             metrics=metrics,
@@ -202,6 +223,16 @@ class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBase):
     @staticmethod
     def client_class() -> Type[DeclarativeDashboardPlugin]:
         return DeclarativeDashboardPlugin
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsBase):
+    id: str
+    permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission]
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeAnalyticalDashboardExtension]:
+        return DeclarativeAnalyticalDashboardExtension
 
 
 @attr.s(auto_attribs=True, kw_only=True)

@@ -8,17 +8,20 @@ from typing import List, Optional
 import attrs
 
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_sdk import CatalogUserDataFilter
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspaceDataFilters,
     CatalogDeclarativeWorkspaceModel,
     CatalogDeclarativeWorkspaces,
     get_workspace_folder,
 )
+from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import CatalogUserDataFilterDocument
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities
+from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
 
 class CatalogWorkspaceService(CatalogServiceBase):
@@ -421,3 +424,168 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self.layout_organization_folder(layout_root_path)
         )
         self.put_declarative_workspace_data_filters(declarative_workspace_data_filters)
+
+    def list_user_data_filters(self, workspace_id: str) -> List[CatalogUserDataFilter]:
+        """list all user data filers.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+
+        Returns:
+            List[CatalogUserDataFilter]:
+                List of user data filter entities.
+        """
+        get_user_data_filters = functools.partial(
+            self._entities_api.get_all_entities_user_data_filters,
+            workspace_id,
+            _check_return_type=False,
+            include=["ALL"],
+        )
+        user_data_filters = load_all_entities_dict(get_user_data_filters, camel_case=False)
+        return [CatalogUserDataFilter.from_dict(v, camel_case=False) for v in user_data_filters["data"]]
+
+    def create_or_update_user_data_filter(self, workspace_id: str, user_data_filter: CatalogUserDataFilter) -> None:
+        """Create a new user data filter or overwrite an existing one.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            user_data_filter (CatalogUserDataFilter):
+                UserDataFilter entity object.
+
+        Returns:
+            None
+        """
+        user_data_filter_document = CatalogUserDataFilterDocument(data=user_data_filter)
+        try:
+            self.get_user_data_filter(workspace_id=workspace_id, user_data_filter_id=user_data_filter.id)
+            self._entities_api.update_entity_user_data_filters(
+                workspace_id=workspace_id,
+                object_id=user_data_filter.id,
+                json_api_user_data_filter_in_document=user_data_filter_document.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_user_data_filters(
+                workspace_id=workspace_id, json_api_user_data_filter_in_document=user_data_filter_document.to_api()
+            )
+
+    def get_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> CatalogUserDataFilter:
+        """Get user data filter by its id.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            user_data_filter_id (str):
+                String containing id of the user data filter.
+
+        Returns:
+            CatalogUserDataFilter:
+                UserDataFilter entity object.
+        """
+        user_data_filter_dict = self._entities_api.get_entity_user_data_filters(
+            workspace_id=workspace_id,
+            object_id=user_data_filter_id,
+            include=["ALL"],
+            _check_return_type=False,
+        ).data
+
+        return CatalogUserDataFilter.from_dict(user_data_filter_dict, camel_case=False)
+
+    def delete_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> None:
+        """Delete user data filter.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace.
+            user_data_filter_id (str):
+                String containing id of the deleting user data filter.
+
+        Returns:
+            None
+        """
+        self._entities_api.delete_entity_user_data_filters(workspace_id=workspace_id, object_id=user_data_filter_id)
+
+    def get_declarative_user_data_filters(self, workspace_id: str) -> CatalogDeclarativeUserDataFilters:
+        """Retrieve a user data filers layout.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+
+        Returns:
+            CatalogDeclarativeUserDataFilters:
+                Object containing List of declarative user data filters.
+        """
+        return CatalogDeclarativeUserDataFilters.from_api(self._layout_api.get_user_data_filters(workspace_id))
+
+    def put_declarative_user_data_filters(
+        self, workspace_id: str, user_data_filters: CatalogDeclarativeUserDataFilters
+    ) -> None:
+        """Set user data filters layout.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+            user_data_filters (CatalogDeclarativeUserDataFilters):
+                Object containing List of declarative user data filters.
+
+        Returns:
+            None
+        """
+        self._layout_api.set_user_data_filters(
+            workspace_id=workspace_id, declarative_user_data_filters=user_data_filters.to_api()
+        )
+
+    def store_declarative_user_data_filters(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
+        """Store user data filters layout in a directory hierarchy.
+
+        Args:
+            workspace_id (str):
+                id of the related workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        self.get_declarative_user_data_filters(workspace_id).store_to_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+
+    def load_declarative_user_data_filters(
+        self, layout_root_path: Path = Path.cwd()
+    ) -> CatalogDeclarativeUserDataFilters:
+        """Loads user data filters layout, which was stored using `store_declarative_user_data_filters`.
+
+        Args:
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            CatalogDeclarativeUserDataFilters:
+                Object containing List of declarative user data filters.
+        """
+        return CatalogDeclarativeUserDataFilters.load_from_disk(self.layout_organization_folder(layout_root_path))
+
+    def load_and_put_declarative_user_data_filters(
+        self, workspace_id: str, layout_root_path: Path = Path.cwd()
+    ) -> None:
+        """Loads and sets the layouts stored using `store_declarative_user_data_filters`.
+
+        This method combines `load_declarative_user_data_filters` and `put_declarative_user_data_filters`
+        methods to load and set layouts stored using `store_declarative_user_data_filters`.
+
+        Args:
+            workspace_id (str):
+                String containing id of the workspace
+            layout_root_path (Path, optional):
+                Path to the root of the layout directory. Defaults to Path.cwd().
+
+        Returns:
+            None
+        """
+        declarative_user_data_filters = CatalogDeclarativeUserDataFilters.load_from_disk(
+            self.layout_organization_folder(layout_root_path)
+        )
+        self.put_declarative_user_data_filters(workspace_id, declarative_user_data_filters)

@@ -48,6 +48,7 @@ from gooddata_api_client.api.test_connection_api import TestConnectionApi
 from gooddata_api_client.api.usage_api import UsageApi
 from gooddata_api_client.api.user_groups_declarative_apis_api import UserGroupsDeclarativeAPIsApi
 from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntityAPIsApi
+from gooddata_api_client.api.user_data_filters_api import UserDataFiltersApi
 from gooddata_api_client.api.user_settings_api import UserSettingsApi
 from gooddata_api_client.api.users_declarative_apis_api import UsersDeclarativeAPIsApi
 from gooddata_api_client.api.users_entity_apis_api import UsersEntityAPIsApi

@@ -41,7 +41,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,10 +72,11 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32180'
+          - '32215'
       body:
         string:
           analytics:
+            analyticalDashboardExtensions: []
             analyticalDashboards:
               - content:
                   filterContextRef:
@@ -1689,7 +1690,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -1719,10 +1720,11 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32180'
+          - '32215'
       body:
         string:
           analytics:
+            analyticalDashboardExtensions: []
             analyticalDashboards:
               - content:
                   filterContextRef:

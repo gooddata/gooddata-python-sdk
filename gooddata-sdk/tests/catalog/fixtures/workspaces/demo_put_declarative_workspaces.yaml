@@ -41,7 +41,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,7 +72,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33878'
+          - '34046'
       body:
         string:
           workspaceDataFilters:
@@ -118,6 +118,7 @@ interactions:
               id: demo
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards:
                     - content:
                         filterContextRef:
@@ -1703,11 +1704,13 @@ interactions:
                     type: userGroup
                   name: VIEW
               settings: []
+              userDataFilters: []
             - customApplicationSettings: []
               hierarchyPermissions: []
               id: demo_west
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []
@@ -1722,11 +1725,13 @@ interactions:
                 type: workspace
               permissions: []
               settings: []
+              userDataFilters: []
             - customApplicationSettings: []
               hierarchyPermissions: []
               id: demo_west_california
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []
@@ -1741,6 +1746,7 @@ interactions:
                 type: workspace
               permissions: []
               settings: []
+              userDataFilters: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaces
@@ -1783,7 +1789,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -1852,7 +1858,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -2418,6 +2424,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                analyticalDashboardExtensions: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -3517,6 +3524,7 @@ interactions:
                   type: userGroup
                 name: ANALYZE
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
           - id: demo_west
             name: Demo West
@@ -3526,6 +3534,7 @@ interactions:
                 dateInstances: []
               analytics:
                 analyticalDashboards: []
+                analyticalDashboardExtensions: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -3536,6 +3545,7 @@ interactions:
             permissions: []
             hierarchyPermissions: []
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
           - id: demo_west_california
             name: Demo West California
@@ -3545,6 +3555,7 @@ interactions:
                 dateInstances: []
               analytics:
                 analyticalDashboards: []
+                analyticalDashboardExtensions: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -3555,6 +3566,7 @@ interactions:
             permissions: []
             hierarchyPermissions: []
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
       headers:
         Accept-Encoding:
@@ -3592,7 +3604,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -3661,7 +3673,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -3691,7 +3703,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33878'
+          - '34046'
       body:
         string:
           workspaceDataFilters:
@@ -3737,6 +3749,7 @@ interactions:
               id: demo
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards:
                     - content:
                         filterContextRef:
@@ -5322,11 +5335,13 @@ interactions:
                     type: userGroup
                   name: VIEW
               settings: []
+              userDataFilters: []
             - customApplicationSettings: []
               hierarchyPermissions: []
               id: demo_west
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []
@@ -5341,11 +5356,13 @@ interactions:
                 type: workspace
               permissions: []
               settings: []
+              userDataFilters: []
             - customApplicationSettings: []
               hierarchyPermissions: []
               id: demo_west_california
               model:
                 analytics:
+                  analyticalDashboardExtensions: []
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []
@@ -5360,6 +5377,7 @@ interactions:
                 type: workspace
               permissions: []
               settings: []
+              userDataFilters: []
   - request:
       method: PUT
       uri: http://localhost:3000/api/v1/layout/workspaces
@@ -5891,6 +5909,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                analyticalDashboardExtensions: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -6990,6 +7009,7 @@ interactions:
                   type: userGroup
                 name: ANALYZE
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
           - id: demo_west
             name: Demo West
@@ -6999,6 +7019,7 @@ interactions:
                 dateInstances: []
               analytics:
                 analyticalDashboards: []
+                analyticalDashboardExtensions: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -7009,6 +7030,7 @@ interactions:
             permissions: []
             hierarchyPermissions: []
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
           - id: demo_west_california
             name: Demo West California
@@ -7018,6 +7040,7 @@ interactions:
                 dateInstances: []
               analytics:
                 analyticalDashboards: []
+                analyticalDashboardExtensions: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -7028,6 +7051,7 @@ interactions:
             permissions: []
             hierarchyPermissions: []
             settings: []
+            userDataFilters: []
             customApplicationSettings: []
       headers:
         Accept-Encoding:
@@ -7065,7 +7089,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

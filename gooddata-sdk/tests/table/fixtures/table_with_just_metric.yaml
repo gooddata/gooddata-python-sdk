@@ -61,7 +61,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -104,10 +104,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: 12eae1e09d4b6bb550f9bc684b55b694afdace2f
+              executionResult: bf26f97383d5b04cda5032829185a1bbd8f1a86c
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/12eae1e09d4b6bb550f9bc684b55b694afdace2f?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/bf26f97383d5b04cda5032829185a1bbd8f1a86c?offset=0&limit=256
       body: null
       headers:
         Accept:
@@ -145,7 +145,7 @@ interactions:
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:

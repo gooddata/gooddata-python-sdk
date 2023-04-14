@@ -105,6 +105,8 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ld
     CatalogDeclarativeModel,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeUserDataFilter,
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspace,
     CatalogDeclarativeWorkspaceDataFilter,
     CatalogDeclarativeWorkspaceDataFilters,
@@ -125,6 +127,11 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
+)
+from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
+    CatalogUserDataFilter,
+    CatalogUserDataFilterAttributes,
+    CatalogUserDataFilterRelationships,
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient

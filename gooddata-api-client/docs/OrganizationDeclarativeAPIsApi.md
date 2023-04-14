@@ -191,7 +191,7 @@ with gooddata_api_client.ApiClient() as api_client:
             settings=[
                 DeclarativeSetting(
                     content={},
-                    id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                    id="/6bUUGjjNSwg0_bs",
                     type="TIMEZONE",
                 ),
             ],
@@ -243,7 +243,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
                     ),
                 ],
@@ -482,11 +482,29 @@ with gooddata_api_client.ApiClient() as api_client:
                         name="MANAGE",
                     ),
                 ],
+                prefix="/6bUUGjjNSwg0_bs",
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
+                    ),
+                ],
+                user_data_filters=[
+                    DeclarativeUserDataFilter(
+                        description="ID of country setting",
+                        id="country_id_setting",
+                        maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
+                        tags=["Revenues"],
+                        title="Country ID setting",
+                        user=UserIdentifier(
+                            id="employee123",
+                            type="user",
+                        ),
+                        user_group=UserGroupIdentifier(
+                            id="group.admins",
+                            type="userGroup",
+                        ),
                     ),
                 ],
             ),

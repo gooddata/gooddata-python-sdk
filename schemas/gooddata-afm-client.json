@@ -149,7 +149,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -187,7 +187,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -215,7 +215,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -246,7 +246,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -274,7 +274,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -745,6 +745,7 @@
           },
           "label": {
             "description": "Requested label.",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "patternFilter": {
@@ -1563,7 +1564,7 @@
         "properties": {
           "id": {
             "example": "sample_item.price",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
