@@ -34,5 +34,5 @@ def column_data_type_for(attribute: Optional[CatalogAttribute]) -> str:
     if not attribute:
         return Converter.DEFAULT_DB_DATA_TYPE
 
-    converter = AttributeConverterStore.find_converter(attribute.dataset.data_type, attribute.granularity)
+    converter = AttributeConverterStore.find_converter(attribute.dataset.dataset_type, attribute.granularity)
     return converter.db_data_type()

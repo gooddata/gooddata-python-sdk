@@ -3,15 +3,47 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, ClassVar, Optional, Type, TypeVar
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
 import attr
 
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, JsonApiEntityBase
 from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.utils import AllPagedEntities
 
-T = TypeVar("T", bound="CatalogTypeEntity")
-U = TypeVar("U", bound="CatalogTitleEntity")
+T = TypeVar("T", bound="AttrCatalogEntity")
+
+
+@attr.s(auto_attribs=True)
+class AttrCatalogEntity:
+    json_api_entity: JsonApiEntityBase
+    id: str
+    type: str
+    obj_id: ObjId
+    title: Optional[str]
+    description: Optional[str]
+    tags: Optional[List[str]]
+
+    @classmethod
+    def from_api(
+        cls: Type[T],
+        entity: Dict[str, Any],
+        side_loads: Optional[List[Any]] = None,
+        related_entities: Optional[AllPagedEntities] = None,
+    ) -> T:
+        """
+        Creates GoodData object from AttrCatalogEntityJsonApi.
+        """
+        json_api_entity = JsonApiEntityBase.from_api(entity, side_loads, related_entities)
+        return cls(
+            json_api_entity=json_api_entity,
+            id=json_api_entity.id,
+            type=json_api_entity.type,
+            obj_id=ObjId(json_api_entity.id, type=json_api_entity.type),
+            title=json_api_entity.attributes.get("title"),
+            description=json_api_entity.attributes.get("description"),
+            tags=json_api_entity.attributes.get("tags", []),
+        )
 
 
 class CatalogEntity:
@@ -41,77 +73,6 @@ class CatalogEntity:
     @property
     def obj_id(self) -> ObjId:
         return self._obj_id
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
-
-
-# TODO - rewrite to data classes once it is possible
-# 1. Inheritance does not work, if attributes with defaults are used in parents
-#   https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
-#   fixed in Python 3.10, but now we have to support older python versions
-# 2. Generated attributes are not detected consistently in Sphinx, DOC generation fails
-class CatalogNameEntity:
-    def __init__(self, id: str, name: str):
-        self.id = id
-        self.name = name
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, name={self.name})"
-
-
-class CatalogTypeEntity:
-    def __init__(self, id: str, type: str):
-        self.id = id
-        self.type = type
-
-    @classmethod
-    def from_api(cls: Type[T], entity: dict[str, Any]) -> T:
-        return cls(
-            entity["id"],
-            entity["type"],
-        )
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, type={self.type})"
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, self.__class__):
-            return False
-        return self.id == other.id and self.type == other.type
-
-
-class CatalogTitleEntity:
-    def __init__(self, id: str, title: str):
-        self.id = id
-        self.title = title
-
-    @classmethod
-    def from_api(cls: Type[U], entity: dict[str, Any]) -> U:
-        return cls(
-            entity["id"],
-            entity["title"],
-        )
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, self.__class__):
-            return False
-        return self.id == other.id and self.title == other.title
 
 
 @attr.s(auto_attribs=True, kw_only=True)

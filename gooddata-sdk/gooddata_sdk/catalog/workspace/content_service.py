@@ -71,7 +71,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         get_attributes = functools.partial(
             self._entities_api.get_all_entities_attributes,
             workspace_id,
-            include=["labels"],
+            include=["labels", "datasets"],
             _check_return_type=False,
         )
 
@@ -101,11 +101,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         get_attributes = functools.partial(
             self._entities_api.get_all_entities_attributes,
             workspace_id,
+            include=["labels"],
             _check_return_type=False,
         )
         attributes = load_all_entities(get_attributes)
-        # Empty labels list is set. It will be changed in the future.
-        catalog_attributes = [CatalogAttribute(attribute, []) for attribute in attributes.data]
+        catalog_attributes = [CatalogAttribute.from_api(a, side_loads=attributes.included) for a in attributes.data]
         return catalog_attributes
 
     def get_labels_catalog(self, workspace_id: str) -> list[CatalogLabel]:
@@ -125,7 +125,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             _check_return_type=False,
         )
         labels = load_all_entities(get_labels)
-        catalog_labels = [CatalogLabel(label) for label in labels.data]
+        catalog_labels = [CatalogLabel.from_api(label) for label in labels.data]
         return catalog_labels
 
     def get_metrics_catalog(self, workspace_id: str) -> list[CatalogMetric]:
@@ -143,7 +143,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             self._entities_api.get_all_entities_metrics, workspace_id, _check_return_type=False
         )
         metrics = load_all_entities(get_metrics)
-        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
+        catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
         return catalog_metrics
 
     def get_facts_catalog(self, workspace_id: str) -> list[CatalogFact]:
@@ -159,7 +159,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         """
         get_facts = functools.partial(self._entities_api.get_all_entities_facts, workspace_id, _check_return_type=False)
         facts = load_all_entities(get_facts)
-        catalog_facts = [CatalogFact(fact) for fact in facts.data]
+        catalog_facts = [CatalogFact.from_api(fact) for fact in facts.data]
         return catalog_facts
 
     def get_dependent_entities_graph(self, workspace_id: str) -> CatalogDependentEntitiesResponse:

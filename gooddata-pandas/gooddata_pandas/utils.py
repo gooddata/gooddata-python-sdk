@@ -75,7 +75,7 @@ def _to_attribute(val: LabelItemDef, local_id: Optional[str] = None) -> Attribut
 
 
 def _typed_attribute_value(ct_attr: CatalogAttribute, value: Any) -> Any:
-    converter = AttributeConverterStore.find_converter(ct_attr.dataset.data_type, ct_attr.granularity)
+    converter = AttributeConverterStore.find_converter(ct_attr.dataset.dataset_type, ct_attr.granularity)
     return converter.to_external_type(value)
 
 
