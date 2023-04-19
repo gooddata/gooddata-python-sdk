@@ -209,8 +209,7 @@ class DbtModelTables:
         for table in scan_pdm.tables:
             if table.id.lower() == table_name.lower():
                 return table
-        # Scan can find more tables being a part of ELT, which we do not want to use for analytics.
-        # Such tables are skipped because we do not prepare schema.yml for them.
+        raise Exception(f"get_scan_table table={table_name} not found in scan!")
 
     @staticmethod
     def get_scan_column(table: CatalogDeclarativeTable, column_name: str) -> CatalogDeclarativeColumn:
