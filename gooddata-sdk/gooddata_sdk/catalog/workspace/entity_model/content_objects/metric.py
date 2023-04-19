@@ -19,7 +19,7 @@ class CatalogMetric(AttrCatalogEntity):
 
     @property
     def format(self) -> Optional[str]:
-        return safeget(self.json_api_entity.attributes, ["content", "format"])
+        return safeget(self.json_api_attributes, ["content", "format"])
 
     def as_computable(self) -> Metric:
         return SimpleMetric(local_id=self.id, item=self.obj_id)

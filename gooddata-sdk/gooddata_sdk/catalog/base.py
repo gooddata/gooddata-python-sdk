@@ -108,9 +108,9 @@ class JsonApiEntityBase:
         return NotImplemented
 
     @staticmethod
-    def client_class() -> Any:
+    def to_api() -> Any:
         return NotImplemented
 
     @staticmethod
-    def to_api() -> Any:
+    def client_class() -> Any:
         return NotImplemented
