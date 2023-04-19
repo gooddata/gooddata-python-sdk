@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import List
 
+import yaml
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
@@ -692,3 +694,50 @@ def test_clone_workspace(test_config):
         sdk.catalog_workspace.delete_workspace(default_cloned_ws_id)
         sdk.catalog_workspace.delete_workspace(custom_cloned_ws_id)
         delete_data_source(sdk, test_config["data_source2"])
+
+
+def _translate_batch(to_translate: List[str]) -> List[str]:
+    return [("Rozpočet" if x == "Budget" else x) for x in to_translate]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_translate_workspace.yaml"))
+def test_translate_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    source_ws_id = test_config["workspace"]
+    path_to_layouts = _current_dir / "translate"
+    recreate_directory(path_to_layouts)
+    path_to_config = _current_dir / "config" / "test_translate.yaml"
+    with open(path_to_config) as fp:
+        config = yaml.safe_load(fp)
+    from_lang = config["from_language"]
+    to_configs = config["to"]
+
+    for to_config in to_configs:
+        new_workspace_id = f"{source_ws_id}_{to_config['language']}"
+        try:
+            sdk.catalog_workspace.generate_localized_workspaces(
+                source_ws_id,
+                to_lang=to_config["language"],
+                to_locale=to_config["locale"],
+                from_lang=from_lang,
+                translator_func=_translate_batch,
+                provision_workspace=True,
+                layout_root_path=path_to_layouts,
+            )
+            new_workspace = sdk.catalog_workspace.load_declarative_workspace(new_workspace_id, path_to_layouts)
+            for dataset in new_workspace.ldm.datasets:
+                for fact in dataset.facts:
+                    if fact.id == "budget":
+                        assert fact.title == "Rozpočet"
+
+            # Run second time without translation function. Previous execution created translation file, which is used.
+            sdk.catalog_workspace.generate_localized_workspaces(
+                source_ws_id,
+                to_lang=to_config["language"],
+                to_locale=to_config["locale"],
+                from_lang=from_lang,
+                provision_workspace=True,
+                layout_root_path=path_to_layouts,
+            )
+        finally:
+            sdk.catalog_workspace.delete_workspace(new_workspace_id)
