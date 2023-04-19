@@ -164,7 +164,7 @@ class IndentDumper(yaml.SafeDumper):
 
 def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
     with open(path, "w", encoding="utf-8") as fp:
-        yaml.dump(content, fp, indent=2, Dumper=IndentDumper)
+        yaml.dump(content, fp, indent=2, Dumper=IndentDumper, allow_unicode=True)
 
 
 def read_layout_from_file(path: Path) -> Any:

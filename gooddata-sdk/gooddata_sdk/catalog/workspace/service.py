@@ -2,8 +2,13 @@
 from __future__ import annotations
 
 import functools
+import logging
+import re
+from copy import deepcopy
+from math import ceil
 from pathlib import Path
-from typing import List, Optional
+from time import time
+from typing import Any, Callable, Dict, List, Optional, Set
 
 import attrs
 
@@ -18,10 +23,13 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     CatalogDeclarativeWorkspaces,
     get_workspace_folder,
 )
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import CatalogUserDataFilterDocument
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
+from gooddata_sdk.utils import load_all_entities, load_all_entities_dict, read_layout_from_file, write_layout_to_file
+
+logger = logging.getLogger(__name__)
 
 
 class CatalogWorkspaceService(CatalogServiceBase):
@@ -119,6 +127,39 @@ class CatalogWorkspaceService(CatalogServiceBase):
         )
         workspaces = load_all_entities(get_workspaces)
         return [CatalogWorkspace.from_api(w) for w in workspaces.data]
+
+    def create_or_update_workspace_setting(self, workspace_id: str, workspace_setting: CatalogWorkspaceSetting) -> None:
+        """Create a new workspace setting or overwrite an existing workspace setting with the same id.
+
+        Args:
+            workspace_id (str)
+                ID of workspace where we create the setting
+            workspace_setting (CatalogWorkspaceSetting):
+                Catalog Workspace Setting object to be created or updated.
+
+        Returns:
+            None
+        """
+        try:
+            self.get_workspace_setting(workspace_id, workspace_setting.id)
+            self._entities_api.update_entity_workspace_settings(
+                workspace_id,
+                workspace_setting.id,
+                workspace_setting.to_api(),
+            )
+        except NotFoundException:
+            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api())
+
+    def delete_workspace_setting(self, workspace_id: str, workspace_setting_id: str) -> None:
+        try:
+            self._entities_api.delete_entity_workspace_settings(workspace_id, workspace_setting_id)
+        except NotFoundException:
+            pass
+
+    def get_workspace_setting(self, workspace_id: str, workspace_setting_id: str) -> CatalogWorkspaceSetting:
+        return CatalogWorkspaceSetting.from_api(
+            self._entities_api.get_entity_workspace_settings(workspace_id, workspace_setting_id).data
+        )
 
     # Declarative methods - workspaces
 
@@ -349,6 +390,258 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self._permissions_service.put_declarative_permissions(
             final_target_workspace_id, self._permissions_service.get_declarative_permissions(source_workspace_id)
         )
+
+    def generate_localized_workspaces(
+        self,
+        workspace_id: str,
+        to_lang: str,
+        to_locale: str,
+        from_lang: str = "en",
+        translator_func: Optional[Callable] = None,
+        layout_root_path: Path = Path.cwd(),
+        provision_workspace: bool = False,
+    ) -> None:
+        """
+        Generate layouts of new workspaces based on the source workspace.
+        All texts (titles, ...) will be translated to different languages if requested.
+        Translation YAML files are created for each language containing pairs of source and target texts.
+        If translation is not requested, source and target texts are identical. Users must translate it manually.
+        We recommend to translate using a third party service and polish the result manually.
+
+        :param workspace_id: ID of source workspace which we clone and translate all texts in it
+        :param to_lang: ISO lang name (IETF BCP 47)
+        :param to_locale: ISO lang code and country code (IETF BCP 47, e.g. en-US, cs-CZ, ...).
+                          Check GoodData documentation for what codes are supported.
+        :param from_lang: from which language we are going to translate
+        :param translator_func: 3rd party service capable of translating a batch of strings to various languages
+        :param layout_root_path: folder, where to store all layout YAML files (of new translated workspaces)
+        :param provision_workspace: Should new workspace for the target language be provisioned?
+                                     Including setting of corresponding locales.
+        :return: None
+        """
+        logger.info(f"generate_localized_workspaces START from_lang={from_lang} to_lang={to_lang}")
+        layout_organization_folder = self.layout_organization_folder(layout_root_path)
+        workspace_folder = get_workspace_folder(workspace_id, layout_organization_folder)
+        translation_file_path = workspace_folder / f"translations_{to_lang}.yml"
+        already_translated = self.read_translation_file(translation_file_path)
+        # Get current WS and its content definitions
+        workspace = self.get_workspace(workspace_id)
+        workspace_content = self.get_declarative_workspace(workspace_id)
+        # Get all texts from WS definition to be translated. Skip already translated.
+        to_translate = self.get_texts_to_translate(workspace, workspace_content, already_translated)
+        # Backup current workspace
+        workspace_content.store_to_disk(workspace_folder)
+        # Translate, if requested, otherwise fill in already translated or 1:1 copy of original texts
+        translated = self.translate_if_requested(
+            to_translate, translator_func, to_lang, from_lang, already_translated, translation_file_path
+        )
+        # Create new workspace definition with translated texts
+        new_workspace = deepcopy(workspace)
+        new_workspace_content = deepcopy(workspace_content)
+        self.set_translated_texts(workspace, new_workspace, new_workspace_content, to_lang, translated)
+        workspace_new_folder = get_workspace_folder(new_workspace.id, layout_organization_folder)
+        # Store layouts of new workspace to disk
+        new_workspace_content.store_to_disk(workspace_new_folder)
+        # Provision new WS if requested
+        if provision_workspace:
+            self.provision_workspace_with_locales(new_workspace, new_workspace_content, to_locale)
+
+    @staticmethod
+    def translate_in_batches(
+        to_translate: Set[str], to_lang: str, from_lang: str, translator_func: Callable, batch_size: int = 100
+    ) -> Dict[str, str]:
+        start = time()
+        # Group the values into batches
+        value_batches = [list(to_translate)[i : i + batch_size] for i in range(0, len(to_translate), batch_size)]
+        num_of_batches = ceil(float(len(to_translate)) / batch_size)
+        logger.info(
+            f"Going to translate {len(to_translate)} tokens from {from_lang} "
+            f"into {to_lang} language in {num_of_batches} batches"
+        )
+        result = {}
+        # Create a list to store the translated values
+        translated_values = []
+        # Loop through each value batch
+        for i, batch in enumerate(value_batches):
+            logger.info(f"Batch {i + 1}/{num_of_batches}")
+            # Translate the batch using the Google Cloud Translation API
+            api_result = translator_func(batch)
+            # Extract the translated values and add them to the list
+            translated_values.extend(api_result)
+        # Update the data dictionary with the translated values
+        for key, value in zip(to_translate, translated_values):
+            result[key] = value
+        duration = int((time() - start) * 1000)
+        logger.info(f"Translation finished duration={duration}")
+        return result
+
+    @staticmethod
+    def read_translation_file(translation_file_path: Path) -> Dict[str, str]:
+        # Read already existing translation file, if it exists
+        already_translated = {}
+        if translation_file_path.is_file():
+            already_translated = read_layout_from_file(translation_file_path)
+        return already_translated
+
+    def provision_workspace_with_locales(
+        self, new_workspace: CatalogWorkspace, new_workspace_content: CatalogDeclarativeWorkspaceModel, to_locale: str
+    ) -> None:
+        logger.info(f"Provision workspace with locales workspace_id={new_workspace.id}")
+        self.create_or_update(new_workspace)
+        self.put_declarative_workspace(new_workspace.id, new_workspace_content)
+        # TODO - remove deletes after the fix is delivered to dev_latest
+        self.delete_workspace_setting(new_workspace.id, "locale")
+        self.delete_workspace_setting(new_workspace.id, "formatLocale")
+        self.create_or_update_workspace_setting(
+            new_workspace.id, CatalogWorkspaceSetting(id="locale", content={"value": to_locale})
+        )
+        self.create_or_update_workspace_setting(
+            new_workspace.id, CatalogWorkspaceSetting(id="formatLocale", content={"value": to_locale})
+        )
+
+    def translate_if_requested(
+        self,
+        to_translate: Set[str],
+        translator_func: Optional[Callable],
+        to_lang: str,
+        from_lang: str,
+        already_translated: Dict[str, str],
+        translation_file_path: Path,
+    ) -> Dict[str, str]:
+        if to_translate and translator_func:
+            translated = {
+                **self.translate_in_batches(to_translate, to_lang, from_lang, translator_func),
+                **already_translated,
+            }
+            # Write translation file
+            write_layout_to_file(translation_file_path, translated)
+        elif already_translated:
+            logger.info("Nothing to translate, but translation file exists, so we can apply it.")
+            translated = already_translated
+        else:
+            logger.info(
+                "No translation function specified, no translation file exists."
+                f"Creating translation file with {from_lang}:{from_lang} mapping."
+                "Translate texts manually in this file and run this function again."
+            )
+            translated = {}
+            for x in to_translate:
+                translated[x] = x
+            write_layout_to_file(translation_file_path, translated)
+        return translated
+
+    @staticmethod
+    def add_title_description(to_translate: Set[str], title: str, description: Optional[str]) -> None:
+        to_translate.add(title)
+        if description:
+            to_translate.add(description)
+
+    def add_title_description_tags(
+        self, to_translate: Set[str], title: str, description: Optional[str], tags: Optional[List[str]]
+    ) -> None:
+        self.add_title_description(to_translate, title, description)
+        if tags:
+            to_translate.update(set(tags))
+
+    @staticmethod
+    def set_title_description(workspace_object: Any, translated: Dict[str, str]) -> None:
+        workspace_object.title = translated[workspace_object.title]
+        if workspace_object.description:
+            workspace_object.description = translated[workspace_object.description]
+
+    def set_title_description_tags(self, workspace_object: Any, translated: Dict[str, str]) -> None:
+        self.set_title_description(workspace_object, translated)
+        workspace_object.tags = [translated[x] for x in workspace_object.tags]
+
+    def get_texts_to_translate(
+        self,
+        workspace: CatalogWorkspace,
+        workspace_content: CatalogDeclarativeWorkspaceModel,
+        already_translated: Dict[str, str],
+    ) -> Set[str]:
+        # We translate each string just once. Collect all strings into a set()
+        to_translate = set()
+        to_translate.add(workspace.name)
+        if workspace_content.ldm:
+            for dataset in workspace_content.ldm.datasets:
+                self.add_title_description(to_translate, dataset.title, dataset.description)
+                for attribute in dataset.attributes or []:
+                    self.add_title_description_tags(
+                        to_translate, attribute.title, attribute.description, attribute.tags
+                    )
+                    for label in attribute.labels:
+                        self.add_title_description_tags(to_translate, label.title, label.description, label.tags)
+                for fact in dataset.facts or []:
+                    self.add_title_description_tags(to_translate, fact.title, fact.description, fact.tags)
+        if workspace_content.analytics:
+            for metric in workspace_content.analytics.metrics or []:
+                self.add_title_description(to_translate, metric.title, metric.description)
+        if workspace_content.analytics:
+            for insight in workspace_content.analytics.visualization_objects or []:
+                self.add_title_description(to_translate, insight.title, insight.description)
+                for bucket in insight.content["buckets"]:
+                    for item in bucket["items"]:
+                        if "measure" in item:
+                            if "alias" in item["measure"]:
+                                to_translate.add(item["measure"]["alias"])
+        if workspace_content.analytics:
+            for dashboard in workspace_content.analytics.analytical_dashboards or []:
+                self.add_title_description(to_translate, dashboard.title, dashboard.description)
+                # Hack: translate titles in free-form, which is not processed intentionally by this SDK
+                for section in dashboard.content["layout"]["sections"]:
+                    for item in section["items"]:
+                        title = item["widget"]["title"]
+                        description = item["widget"]["description"]
+                        self.add_title_description(to_translate, title, description)
+
+        # Translate texts, which have not been translated yet
+        if already_translated:
+            to_translate = to_translate - set(already_translated.keys())
+        return to_translate
+
+    def set_translated_texts(
+        self,
+        workspace: CatalogWorkspace,
+        new_workspace: CatalogWorkspace,
+        new_workspace_content: CatalogDeclarativeWorkspaceModel,
+        lang: str,
+        translated: Dict[str, str],
+    ) -> None:
+        # TODO - WS ID/NAME may not be handled if provisioning of WS is not requested
+        lang_for_id = re.sub(r"[^a-zA-Z0-9_]", "_", lang)
+        new_workspace.id = f"{workspace.id}_{lang_for_id}"
+        new_workspace.name = f"{translated[workspace.name]} ({lang})"
+        # LDM
+        if new_workspace_content.ldm:
+            for dataset in new_workspace_content.ldm.datasets:
+                self.set_title_description(dataset, translated)
+                for attribute in dataset.attributes or []:
+                    self.set_title_description_tags(attribute, translated)
+                    for label in attribute.labels or []:
+                        self.set_title_description_tags(label, translated)
+                for fact in dataset.facts or []:
+                    self.set_title_description_tags(fact, translated)
+        # ADM
+        if new_workspace_content.analytics:
+            for metric in new_workspace_content.analytics.metrics or []:
+                self.set_title_description(metric, translated)
+        if new_workspace_content.analytics:
+            for insight in new_workspace_content.analytics.visualization_objects or []:
+                self.set_title_description(insight, translated)
+                for bucket in insight.content["buckets"]:
+                    for item in bucket["items"]:
+                        if "measure" in item:
+                            if "alias" in item["measure"]:
+                                item["measure"]["alias"] = translated[item["measure"]["alias"]]
+        if new_workspace_content.analytics:
+            for dashboard in new_workspace_content.analytics.analytical_dashboards or []:
+                self.set_title_description(dashboard, translated)
+                # Hack: translate titles in free-form, which is not processed intentionally by this SDK
+                for section in dashboard.content["layout"]["sections"]:
+                    for item in section["items"]:
+                        item["widget"]["title"] = translated[item["widget"]["title"]]
+                        if item["widget"]["description"]:
+                            item["widget"]["description"] = translated[item["widget"]["description"]]
 
     # Declarative methods - workspace data filters
 

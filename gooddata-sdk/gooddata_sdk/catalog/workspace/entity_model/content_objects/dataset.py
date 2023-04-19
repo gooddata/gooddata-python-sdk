@@ -25,11 +25,11 @@ class CatalogLabel(AttrCatalogEntity):
 
     @property
     def primary(self) -> bool:
-        return safeget(self.json_api_entity.attributes, ["primary"])
+        return safeget(self.json_api_attributes, ["primary"])
 
     @property
     def value_type(self) -> bool:
-        return safeget(self.json_api_entity.attributes, ["valueType"])
+        return safeget(self.json_api_attributes, ["valueType"])
 
     def as_computable(self) -> Attribute:
         return Attribute(local_id=self.id, label=self.id)
@@ -45,28 +45,24 @@ class CatalogAttribute(AttrCatalogEntity):
 
     @property
     def labels(self) -> list[CatalogLabel]:
-        related_label_ids = [
-            x.get("id") for x in (safeget_list(self.json_api_entity.relationships, ["labels", "data"]))
-        ]
+        related_label_ids = [x.get("id") for x in (safeget_list(self.json_api_relationships, ["labels", "data"]))]
         return [
             CatalogLabel.from_api(sl)
-            for sl in self.json_api_entity.side_loads
+            for sl in self.json_api_side_loads
             if sl["type"] == "label" and sl["id"] in related_label_ids
         ]
 
     @property
     def dataset(self) -> CatalogDataset:
-        related_dataset_id = safeget(self.json_api_entity.relationships, ["dataset", "data", "id"])
+        related_dataset_id = safeget(self.json_api_relationships, ["dataset", "data", "id"])
         sl_dataset = next(
-            iter(
-                [d for d in self.json_api_entity.side_loads if d["type"] == "dataset" and d["id"] == related_dataset_id]
-            )
+            iter([d for d in self.json_api_side_loads if d["type"] == "dataset" and d["id"] == related_dataset_id])
         )
         return CatalogDataset.from_api(sl_dataset)
 
     @property
     def granularity(self) -> Union[str, None]:
-        return self.json_api_entity.attributes.get("granularity")
+        return self.json_api_attributes.get("granularity")
 
     def primary_label(self) -> Union[CatalogLabel, None]:
         # use cast as mypy is not applying next, it claims, type is filter[CatalogLabel]
@@ -107,15 +103,13 @@ class CatalogFact(AttrCatalogEntity):
 class CatalogDataset(AttrCatalogEntity):
     @property
     def dataset_type(self) -> str:
-        return self.json_api_entity.attributes["type"]
+        return self.json_api_attributes["type"]
 
     def generate_attributes_from_api(self) -> list[CatalogAttribute]:
-        related_attribute_ids = [
-            x.get("id") for x in safeget_list(self.json_api_entity.relationships, ["attributes", "data"])
-        ]
+        related_attribute_ids = [x.get("id") for x in safeget_list(self.json_api_relationships, ["attributes", "data"])]
         related_attributes = [
-            CatalogAttribute.from_api(x, side_loads=self.json_api_entity.related_entities_side_loads)
-            for x in self.json_api_entity.related_entities_data
+            CatalogAttribute.from_api(x, side_loads=self.json_api_related_entities_side_loads)
+            for x in self.json_api_related_entities_data
             if x["id"] in related_attribute_ids
         ]
         return related_attributes
@@ -126,10 +120,10 @@ class CatalogDataset(AttrCatalogEntity):
     )
 
     def generate_facts_from_api(self) -> list[CatalogFact]:
-        related_fact_ids = [x.get("id") for x in safeget_list(self.json_api_entity.relationships, ["facts", "data"])]
+        related_fact_ids = [x.get("id") for x in safeget_list(self.json_api_relationships, ["facts", "data"])]
         return [
             CatalogFact.from_api(sl)
-            for sl in self.json_api_entity.side_loads
+            for sl in self.json_api_side_loads
             if sl["type"] == "fact" and sl["id"] in related_fact_ids
         ]
 

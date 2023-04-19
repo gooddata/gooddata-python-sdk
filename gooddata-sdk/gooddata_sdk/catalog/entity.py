@@ -16,13 +16,48 @@ T = TypeVar("T", bound="AttrCatalogEntity")
 
 @attr.s(auto_attribs=True)
 class AttrCatalogEntity:
-    json_api_entity: JsonApiEntityBase
     id: str
-    type: str
-    obj_id: ObjId
-    title: Optional[str]
-    description: Optional[str]
-    tags: Optional[List[str]]
+
+    type: str = attr.field(default=attr.Factory(lambda self: self._get_type(), takes_self=True))
+
+    def _get_type(self) -> str:
+        allowed_values = getattr(self.client_class(), "allowed_values")
+        if allowed_values:
+            values = list(allowed_values.get(("type",), {}).values())
+            if len(values) > 0:
+                return values[0]
+        raise ValueError(f"Unable to extract type from ${self.client_class().__name__}")
+
+    # Optional, because write use case -
+    # we need to pass only ID and some properties in attributes when creating an instance of this class
+    json_api_entity: Optional[JsonApiEntityBase] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+    @property
+    def json_api_attributes(self) -> Dict[str, Any]:
+        return self.json_api_entity.attributes if self.json_api_entity else {}
+
+    @property
+    def json_api_relationships(self) -> Dict[str, Any]:
+        return self.json_api_entity.relationships if self.json_api_entity and self.json_api_entity.relationships else {}
+
+    @property
+    def json_api_side_loads(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.side_loads if self.json_api_entity else []
+
+    @property
+    def json_api_related_entities_data(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.related_entities_data if self.json_api_entity else []
+
+    @property
+    def json_api_related_entities_side_loads(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.related_entities_side_loads if self.json_api_entity else []
+
+    @property
+    def obj_id(self) -> ObjId:
+        return ObjId(self.id, type=self.type)
 
     @classmethod
     def from_api(
@@ -36,14 +71,16 @@ class AttrCatalogEntity:
         """
         json_api_entity = JsonApiEntityBase.from_api(entity, side_loads, related_entities)
         return cls(
-            json_api_entity=json_api_entity,
             id=json_api_entity.id,
-            type=json_api_entity.type,
-            obj_id=ObjId(json_api_entity.id, type=json_api_entity.type),
+            json_api_entity=json_api_entity,
             title=json_api_entity.attributes.get("title"),
             description=json_api_entity.attributes.get("description"),
             tags=json_api_entity.attributes.get("tags", []),
         )
+
+    @staticmethod
+    def client_class() -> Any:
+        return NotImplemented
 
 
 class CatalogEntity:
