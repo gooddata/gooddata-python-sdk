@@ -43,6 +43,26 @@ class CatalogWorkspaceContent:
         return self._datasets
 
     @property
+    def facts(self) -> list[CatalogFact]:
+        return [f for d in self._datasets for f in d.facts]
+
+    @property
+    def attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes]
+
+    @property
+    def date_attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes if a.granularity]
+
+    @property
+    def standard_attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes if not a.granularity]
+
+    @property
+    def labels(self) -> list[CatalogLabel]:
+        return [x for d in self._datasets for a in d.attributes for x in a.labels]
+
+    @property
     def metrics(self) -> list[CatalogMetric]:
         return self._metrics
 
