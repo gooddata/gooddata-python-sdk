@@ -176,4 +176,4 @@ from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
 
 # by default don't log anything
-logging.getLogger().addHandler(logging.NullHandler())
+logging.getLogger(__name__).addHandler(logging.NullHandler())
