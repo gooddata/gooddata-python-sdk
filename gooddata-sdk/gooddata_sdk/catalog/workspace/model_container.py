@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import List, Union
+from typing import List, Optional, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
@@ -28,11 +28,11 @@ ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], Executio
 class CatalogWorkspaceContent:
     def __init__(
         self,
-        valid_obj_fun: functools.partial[dict[str, set[str]]],
+        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
         datasets: list[CatalogDataset],
         metrics: list[CatalogMetric],
     ) -> None:
-        self._valid_obf_fun = valid_obj_fun
+        self._valid_obj_fun = valid_obj_fun
         self._datasets = datasets
         self._metrics = metrics
         self._metric_idx = dict([(str(m.obj_id), m) for m in metrics])
@@ -97,13 +97,26 @@ class CatalogWorkspaceContent:
         return None
 
     def _valid_objects(self, ctx: ValidObjectsInputType) -> ValidObjects:
-        return self._valid_obf_fun(ctx)
+        if self._valid_obj_fun:
+            return self._valid_obj_fun(ctx)
+        else:
+            return ValidObjects()
+
+    def filter_by_valid_objects(
+        self, valid_objects: dict[str, set[str]]
+    ) -> tuple[List[CatalogDataset], List[CatalogMetric]]:
+        new_datasets = list(filter(None, [d.filter_dataset(valid_objects) for d in self.datasets]))
+        new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
+        return new_datasets, new_metrics
 
     def catalog_with_valid_objects(self, ctx: ValidObjectsInputType) -> CatalogWorkspaceContent:
         """
         Returns a new instance of catalog which contains only those datasets (attributes and facts) that are valid in
-        the provided context. The context is composed of one more more entities of the semantic model and
+        the provided context. The context is composed of one or more entities of the semantic model and
         the filtered catalog will contain only those entities that can be safely added on top of that existing context.
+
+        If valid_objects_func is not set, return the current state.
+        It is useful when apps need to cache this container using pickle - the func cannot be pickled.
 
         :param ctx: existing context. you can specify context in one of the following ways:
 
@@ -112,13 +125,13 @@ class CatalogWorkspaceContent:
          - the entire execution definition that is used to compute analytics
 
         """
-        valid_objects = self._valid_objects(ctx)
-
-        new_datasets = list(filter(None, [d.filter_dataset(valid_objects) for d in self.datasets]))
-        new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
-
+        new_datasets = self.datasets
+        new_metrics = self.metrics
+        if self._valid_obj_fun:
+            valid_objects = self._valid_objects(ctx)
+            new_datasets, new_metrics = self.filter_by_valid_objects(valid_objects)
         return CatalogWorkspaceContent(
-            self._valid_obf_fun,
+            self._valid_obj_fun,
             datasets=new_datasets,
             metrics=new_metrics,
         )
@@ -126,7 +139,7 @@ class CatalogWorkspaceContent:
     @classmethod
     def create_workspace_content_catalog(
         cls,
-        valid_obj_fun: functools.partial[dict[str, set[str]]],
+        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
         datasets: AllPagedEntities,
         attributes: AllPagedEntities,
         metrics: AllPagedEntities,

@@ -50,12 +50,16 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     # Entities methods
 
-    def get_full_catalog(self, workspace_id: str) -> CatalogWorkspaceContent:
+    def get_full_catalog(self, workspace_id: str, inject_valid_objects_func: bool = True) -> CatalogWorkspaceContent:
         """Retrieves catalog for a workspace. Catalog contains all data sets and metrics defined in that workspace.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            inject_valid_objects_func (bool)
+                Should valid_objects func be injected into the result container?
+                When turned off, it enables pickling of the result, which is useful e.g. in Streamlit caching
+                In such a case, developers must call compute_valid_objects in this service.
 
         Returns:
             CatalogWorkspaceContent:
@@ -83,7 +87,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         datasets = load_all_entities(get_datasets)
         metrics = load_all_entities(get_metrics)
 
-        valid_obj_fun = functools.partial(self.compute_valid_objects, workspace_id)
+        valid_obj_fun = None
+        if inject_valid_objects_func:
+            valid_obj_fun = functools.partial(self.compute_valid_objects, workspace_id)
 
         return CatalogWorkspaceContent.create_workspace_content_catalog(valid_obj_fun, datasets, attributes, metrics)
 
