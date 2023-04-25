@@ -573,6 +573,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         self.add_title_description_tags(to_translate, label.title, label.description, label.tags)
                 for fact in dataset.facts or []:
                     self.add_title_description_tags(to_translate, fact.title, fact.description, fact.tags)
+            for date_dataset in workspace_content.ldm.date_instances:
+                self.add_title_description_tags(
+                    to_translate, date_dataset.title, date_dataset.description, date_dataset.tags
+                )
         if workspace_content.analytics:
             for metric in workspace_content.analytics.metrics or []:
                 self.add_title_description(to_translate, metric.title, metric.description)
@@ -621,6 +625,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         self.set_title_description_tags(label, translated)
                 for fact in dataset.facts or []:
                     self.set_title_description_tags(fact, translated)
+            for date_dataset in new_workspace_content.ldm.date_instances:
+                self.set_title_description_tags(date_dataset, translated)
         # ADM
         if new_workspace_content.analytics:
             for metric in new_workspace_content.analytics.metrics or []:
