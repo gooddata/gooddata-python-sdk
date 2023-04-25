@@ -21,6 +21,8 @@ IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
 PROFILES_FILE = "profiles.yaml"
 PROFILES_DIRECTORY = ".gooddata"
 PROFILES_FILE_PATH = Path.home() / PROFILES_DIRECTORY / PROFILES_FILE
+SDK_PROFILE_MANDATORY_KEYS = ["host", "token"]
+SDK_PROFILE_KEYS = SDK_PROFILE_MANDATORY_KEYS + ["custom_headers", "extra_user_agent"]
 
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
@@ -218,9 +220,8 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
         ValueError:
             Missing mandatory parameter or parameters.
     """
-    mandatory_parameters = ["host", "token"]
     missing = []
-    for mandatory_parameter in mandatory_parameters:
+    for mandatory_parameter in SDK_PROFILE_MANDATORY_KEYS:
         if mandatory_parameter not in profile_content_keys:
             missing.append(mandatory_parameter)
     if missing:
@@ -252,8 +253,8 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
     content = read_layout_from_file(profiles_path)
     if not content.get(profile):
         raise ValueError(f"Profiles file does not contain profile {profile}.")
-    mandatory_profile_content_check(profile, content.get(profile).keys())
-    return content.get(profile)
+    mandatory_profile_content_check(profile, content[profile].keys())
+    return {key: content[profile][key] for key in content[profile] if key in SDK_PROFILE_KEYS}
 
 
 def good_pandas_profile_content(
@@ -275,9 +276,8 @@ def good_pandas_profile_content(
             The content and custom Headers.
     """
     content = profile_content(profile, profiles_path)
-    custom_headers = content["custom_headers"]
-    del content["extra_user_agent"]
-    del content["custom_headers"]
+    custom_headers = content.pop("custom_headers", {})
+    content.pop("extra_user_agent", None)
     return content, custom_headers
 
 
