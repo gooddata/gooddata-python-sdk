@@ -326,7 +326,7 @@ class DbtModelTables:
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
-                        "tags": [table.description] + column.tags,
+                        "tags": [table.gooddata_ldm_title] + column.tags,
                     }
                 )
         return facts
@@ -343,7 +343,7 @@ class DbtModelTables:
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
                         "value_type": column.meta.gooddata.label_type,
-                        "tags": [table.description] + column.tags,
+                        "tags": [table.gooddata_ldm_title] + column.tags,
                     }
                 )
         return labels
@@ -359,7 +359,7 @@ class DbtModelTables:
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
-                        "tags": [table.description] + column.tags,
+                        "tags": [table.gooddata_ldm_title] + column.tags,
                         "labels": self.make_labels(table, column),
                     }
                 )
@@ -379,7 +379,7 @@ class DbtModelTables:
                         "id": column.gooddata_ldm_id,
                         "title": self.get_ldm_title(column),
                         "description": column.description,
-                        "tags": [table.description] + column.tags,
+                        "tags": [table.gooddata_ldm_title] + column.tags,
                         "granularities": granularities,
                         "granularities_formatting": {
                             "title_base": "",
@@ -400,7 +400,7 @@ class DbtModelTables:
                 "id": table.gooddata_ldm_id,
                 "title": table.gooddata_ldm_title,
                 "description": table.description,
-                "tags": [table.description] + table.tags,
+                "tags": [table.gooddata_ldm_title] + table.tags,
                 "data_source_table_id": {
                     "data_source_id": data_source_id,
                     "id": table.name,  # TODO - may not be unique
