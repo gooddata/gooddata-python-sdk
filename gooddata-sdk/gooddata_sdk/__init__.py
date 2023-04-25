@@ -121,6 +121,7 @@ from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import 
     CatalogLabel,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
 from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesGraph,
     CatalogDependentEntitiesNode,
