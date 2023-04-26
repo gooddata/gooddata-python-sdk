@@ -32,7 +32,7 @@ setup(
     packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.7.0",
     project_urls={
-        "Documentation": "https://www.gooddata.com/docs/python-sdk/1.3",
+        "Documentation": "https://www.gooddata.com/docs/python-sdk/1.3.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
     },
     classifiers=[
