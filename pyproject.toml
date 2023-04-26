@@ -55,7 +55,9 @@ regex = '''
   (?P<minor>\d+)
   \.
   (?P<patch>\d+)
-  (a(?P<alpha>\d+))?
+  ((a(?P<alpha>\d+))?
+  |
+  (\.dev(?P<dev>\d+))?)
   '''
 
 [[tool.tbump.field]]
@@ -123,7 +125,7 @@ src = ".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
 src = "gooddata-sdk/setup.py"
-search = '"Documentation": "https://gooddata-sdk.readthedocs.io/en/v{current_version}"'
+search = '"Documentation": "https://www.gooddata.com/docs/python-sdk/{current_version}"'
 
 [[tool.tbump.file]]
 src = "gooddata-pandas/setup.py"
