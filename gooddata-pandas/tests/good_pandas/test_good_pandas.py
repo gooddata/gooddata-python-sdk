@@ -20,7 +20,8 @@ def load_profiles_content() -> dict:
 def are_same_check(profile_data: dict[str, Any], good_pandas: GoodPandas):
     assert profile_data["host"] == good_pandas.sdk.client._hostname
     assert profile_data["token"] == good_pandas.sdk.client._token
-    assert profile_data["custom_headers"] == good_pandas.sdk.client._custom_headers
+    if "custom_headers" in profile_data:
+        assert profile_data["custom_headers"] == good_pandas.sdk.client._custom_headers
 
 
 def test_default_profile():
@@ -47,3 +48,35 @@ def test_wrong_profile():
         assert True
     else:
         assert False, "The ValueError was expected to be raised."
+
+
+def test_correct_1_profile():
+    profile = "correct_1"
+    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
+    data = load_profiles_content()
+
+    are_same_check(data[profile], sdk)
+
+
+def test_correct_2_profile():
+    profile = "correct_2"
+    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
+    data = load_profiles_content()
+
+    are_same_check(data[profile], sdk)
+
+
+def test_correct_3_profile():
+    profile = "correct_3"
+    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
+    data = load_profiles_content()
+
+    are_same_check(data[profile], sdk)
+
+
+def test_correct_4_profile():
+    profile = "correct_4"
+    sdk = GoodPandas.create_from_profile(profile=profile, profiles_path=PROFILES_PATH)
+    data = load_profiles_content()
+
+    are_same_check(data[profile], sdk)
