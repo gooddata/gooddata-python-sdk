@@ -13,7 +13,7 @@ if [[ $latest_version =~ ^[0-9]+\.[0-9]+\.[0-9]+\.dev[0-9]+$ ]]; then
     dev_num="${dev_part#dev}"
 
     # increment the dev component and convert it back to a string
-    ((dev_num++))
+    ((dev_num=dev_num+1))
 
     # combine the components back into a single version number string
     echo "$x.$y.$z.dev$dev_num"
@@ -21,7 +21,7 @@ elif [[ $latest_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     # split the version number string into its components
     IFS='.' read -r x y z <<< "$latest_version"
     # increment the last version
-    ((z++))
+    ((z=z+1))
     echo "$x.$y.$z.dev1"
 else
     echo "Error occurred $latest_version does not match N.N.N nor N.N.N.devN pattern."
