@@ -1,6 +1,5 @@
 import json
 import os
-from pathlib import Path
 
 import pkgutil
 import importlib
@@ -8,6 +7,7 @@ import sys
 from types import ModuleType, FunctionType
 import inspect
 from docstring_parser import parse
+
 
 def docstring_data(docstr: str):
     parsed_docstr = parse(docstr)
@@ -56,8 +56,8 @@ def function_data(func: FunctionType) -> dict:
     }
 
 
-def object_data(object: type) -> dict:
-    data = {key: value for key, value in inspect.getmembers(object)}
+def object_data(obj: type) -> dict:
+    data = {key: value for key, value in inspect.getmembers(obj)}
     ret = {
         "docstring": data["__doc__"],
         "docstring_parsed": docstring_data(inspect.getdoc(object)),
@@ -72,13 +72,13 @@ def object_data(object: type) -> dict:
 def file_data(module: ModuleType) -> dict:
     data = {}
     objects = vars(module)
-    for name, object in objects.items():
-        if isinstance(object, type):
-            data[name] = object_data(object)
+    for name, obj in objects.items():
+        if isinstance(obj, type):
+            data[name] = object_data(obj)
     return data
 
 
-def parse_package(object, data):
+def parse_package(obj, data=None):
     """
     Parse the package and it's submodules into a dict object, that
     can be converted into a json
@@ -92,20 +92,20 @@ def parse_package(object, data):
             }
         }
 
-    :param object: package object
+    :param obj: package object
     :param data: optional parameter for recursive calling
     :return: data of package
     """
     if not data:
         data = {}
-    if isinstance(object, ModuleType):
-        iterator = pkgutil.iter_modules(object.__path__)
+    if isinstance(obj, ModuleType):
+        iterator = pkgutil.iter_modules(obj.__path__)
         for item in iterator:
             if item.ispkg:
                 data[item.name] = {}
-                parse_package(vars(object)[item.name], data[item.name])
+                parse_package(vars(obj)[item.name], data[item.name])
             else:
-                module = vars(object)[item.name]
+                module = vars(obj)[item.name]
                 data[item.name] = file_data(module)
 
     return data
@@ -123,6 +123,7 @@ def import_submodules(pkg_name):
         name: importlib.import_module(pkg_name + '.' + name)
         for loader, name, is_pkg in pkgutil.walk_packages(package.__path__)
     }
+
 
 if __name__ == '__main__':
     import gooddata_sdk
