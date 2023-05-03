@@ -36,15 +36,13 @@ sdk.catalog_workspace.load_and_put_declarative_workspaces(
 
 Or by two separate calls:
 
-```Python
+```python
 # Load a declarative workspace
-declarative_workspace = sdk.catalog_workspace.load_declarative_workspace(
-    workspace_id="123",
+declarative_workspace = sdk.catalog_workspace.load_declarative_workspaces(
     layout_root_path=Path.cwd()
 )
 # Set the layout
-sdk.catalog_workspace.put_declarative_workspace(
-    workspace_id="123",
+sdk.catalog_workspace.put_declarative_workspaces(
     workspace=declarative_workspace
     )
 ```

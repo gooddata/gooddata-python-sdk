@@ -29,7 +29,7 @@ Object Containing declarative Logical Data Model
 
 ```Python
 # Get declarative Logical Data Model
-declarative_ldm = sdk.get_declarative_ldm(workspace_id="123")
+declarative_ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id="123")
 
 # CatalogDeclarativeModel(
 #    ldm=CatalogDeclarativeLdm(
