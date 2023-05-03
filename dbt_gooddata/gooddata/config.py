@@ -31,7 +31,15 @@ class GoodDataConfig(Base):
     environment_setups: list[GoodDataConfigEnvironmentSetup]
     data_products: list[GoodDataConfigProduct]
 
+    @property
+    def all_model_ids(self) -> list[str]:
+        result = []
+        for product in self.data_products:
+            result.extend(product.model_ids)
+        return result
+
     def get_environment_workspaces(self, environment_setup_id: str) -> list[GoodDataConfigEnvironment]:
         for env_setup in self.environment_setups:
             if env_setup.id == environment_setup_id:
                 return env_setup.environments
+        return []

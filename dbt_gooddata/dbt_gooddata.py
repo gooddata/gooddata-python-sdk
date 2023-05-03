@@ -149,7 +149,7 @@ def main():
             # Caches are invalidated only per data source, not per data product
             upload_notification(logger, sdk, data_source_id)
         else:
-            dbt_tables = DbtModelTables(args.gooddata_upper_case)
+            dbt_tables = DbtModelTables(args.gooddata_upper_case, gd_config.all_model_ids)
             if args.gooddata_upper_case:
                 dbt_target.schema = dbt_target.schema.upper()
                 dbt_target.database = dbt_target.database.upper()

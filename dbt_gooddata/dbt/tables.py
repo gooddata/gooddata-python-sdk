@@ -153,14 +153,14 @@ class DbtModelTable(DbtModelBase):
 
 
 class DbtModelTables:
-    def __init__(self, upper_case: bool) -> None:
+    def __init__(self, upper_case: bool, all_model_ids: list[str]) -> None:
         self.upper_case = upper_case
         with open(DBT_PATH_TO_MANIFEST) as fp:
             self.dbt_catalog = json.load(fp)
 
-        self.tables = self.read_dbt_models()
+        self.tables = self.read_dbt_models(all_model_ids)
 
-    def read_dbt_models(self) -> list[DbtModelTable]:
+    def read_dbt_models(self, all_model_ids: list[str]) -> list[DbtModelTable]:
         tables = []
         for model_name, model_def in self.dbt_catalog["nodes"].items():
             tables.append(DbtModelTable.from_dict(model_def))
@@ -175,7 +175,7 @@ class DbtModelTables:
                         column.meta.gooddata.upper_case_names()
 
         # Return only gooddata labelled tables.
-        result = [t for t in tables if t.has_gooddata_metadata()]
+        result = [t for t in tables if t.has_gooddata_metadata() and t.meta.gooddata.model_id in all_model_ids]
         if len(result) == 0:
             raise Exception("No tables labelled by gooddata meta flag found in the data source")
         else:
@@ -209,14 +209,16 @@ class DbtModelTables:
         for table in scan_pdm.tables:
             if table.id.lower() == table_name.lower():
                 return table
-        raise Exception(f"get_scan_table table={table_name} not found in scan!")
+        scan_tables = [s.id for s in scan_pdm.tables]
+        raise Exception(f"get_scan_table table={table_name} not found in scan! {scan_tables=}")
 
     @staticmethod
     def get_scan_column(table: CatalogDeclarativeTable, column_name: str) -> CatalogDeclarativeColumn:
         for column in table.columns:
             if column.name.lower() == column_name.lower():
                 return column
-        raise Exception(f"get_scan_column table={table.id} column={column_name} not found in scan")
+        scan_columns = [s.name for s in table.columns]
+        raise Exception(f"get_scan_column table={table.id} column={column_name} not found in scan. {scan_columns=}")
 
     def make_pdm(self, scan_pdm: CatalogDeclarativeTables) -> dict:
         self.set_data_types(scan_pdm)
