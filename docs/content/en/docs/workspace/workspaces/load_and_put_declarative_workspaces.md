@@ -42,9 +42,7 @@ declarative_workspaces = sdk.catalog_workspace.load_declarative_workspaces(
     layout_root_path=Path.cwd()
 )
 # Set the layout
-sdk.catalog_workspace.put_declarative_workspaces(
-    workspace=declarative_workspaces
-    )
+sdk.catalog_workspace.put_declarative_workspaces(declarative_workspaces)
 ```
 
 The result is identical.

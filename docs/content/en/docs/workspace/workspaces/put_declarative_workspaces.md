@@ -28,5 +28,5 @@ declarative_workspaces = sdk.catalog_workspace.get_declarative_workspaces()
 # ...
 
 # Set the layout and hierachy
-sdk.catalog_workspace.put_declarative_workspaces(workspace=declarative_workspaces)
+sdk.catalog_workspace.put_declarative_workspaces(declarative_workspaces)
 ```
