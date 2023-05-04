@@ -98,8 +98,7 @@ columns:
     meta:
       gooddata:
         ldm_type: fact/attribute/label/date/reference/primary_key
-        referenced_table: <table name, target of reference (FK)>
-        label_type: TEXT/HYPERLINK/GEO(?) 
-        attribute_column: <column name of attribute of this label>
+        referenced_table: <table name, target of reference (FK), if ldm_type=reference>
+        label_type: TEXT/HYPERLINK/GEO_LATITUDE/GEO_LONGITUDE
+        attribute_column: <column name of attribute of label, if ldm_type=label>
 ```
-
