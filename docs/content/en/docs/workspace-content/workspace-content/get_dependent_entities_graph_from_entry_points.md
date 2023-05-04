@@ -28,7 +28,7 @@ Dependent entities graph containing nodes and edges.
 
 ## Example
 
-```Python
+```python
 # Get the identiffies
 identifiers=[CatalogEntityIdentifier(id="campaign_channel_id", type="attribute")]
 # Get dependent entities

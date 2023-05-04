@@ -20,7 +20,7 @@ Declarative Workspaces object including all the workspaces for given organizatio
 
 ## Example
 
-```Python
+```python
 # Load declarative workspaces
 declarative_workspaces = sdk.catalog_workspace.get_declarative_workspaces()
 

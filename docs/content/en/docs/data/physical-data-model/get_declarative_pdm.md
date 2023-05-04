@@ -25,7 +25,7 @@ Physical Data Model object.
 
 ## Example
 
-```Python
+```python
 # Get Physical Data Model in declarative form
 declarative_tables = sdk.catalog_data_source.get_declarative_pdm(data_source_id="123")
 ```

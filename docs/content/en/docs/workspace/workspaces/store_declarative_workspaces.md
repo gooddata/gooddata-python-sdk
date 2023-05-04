@@ -50,7 +50,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Store workspace layout and hierarchy
 sdk.catalog_workspace.store_declarative_workspaces(layout_root_path=Path.cwd())
 ```

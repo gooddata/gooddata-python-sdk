@@ -23,7 +23,7 @@ All available insights, each insight will contain side loaded metadata about the
 
 ## Example
 
-```Python
+```python
 # Get all visualizations
 insights = sdk.insights.get_insights(workspace_id="123")
 ```

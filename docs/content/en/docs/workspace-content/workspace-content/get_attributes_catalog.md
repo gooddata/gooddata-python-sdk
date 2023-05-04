@@ -25,7 +25,7 @@ List of all attributes in a given workspace.
 
 ## Example
 
-```Python
+```python
 # Get attributes
 attributes = sdk.catalog_workspace_content.get_attributes_catalog(workspace_id="123")
 

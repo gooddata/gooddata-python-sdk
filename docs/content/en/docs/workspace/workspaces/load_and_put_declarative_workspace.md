@@ -30,7 +30,7 @@ The load and put can be done two ways.
 
 Either by one call:
 
-```Python
+```python
 # Load and put on server the stored layout
 sdk.catalog_workspace.load_and_put_declarative_workspace(
     layout_root_path=Path.cwd()
@@ -39,7 +39,7 @@ sdk.catalog_workspace.load_and_put_declarative_workspace(
 
 Or by two separate calls:
 
-```Python
+```python
 # Load a declarative workspace
 declarative_workspaces = sdk.catalog_workspace.load_declarative_workspace(
     layout_root_path=Path.cwd()

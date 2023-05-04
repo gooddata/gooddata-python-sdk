@@ -20,7 +20,7 @@ Object containing List of declarative workspace data filters.
 
 ## Example
 
-```Python
+```python
 # Fetch the workspace data filters
 declarative_workspace_filters = sdk.catalog_workspace.get_declarative_workspace_data_filters()
 # CatalogDeclarativeWorkspaceDataFilters(

@@ -25,7 +25,7 @@ Object containing List of declarative workspace data filters.
 
 ## Example
 
-```Python
+```python
 # Load the workspace data filters
 declarative_workspace_filters = sdk.catalog_workspace.load_declarative_workspace_data_filters(
     layout_root_path=Path.cwd()

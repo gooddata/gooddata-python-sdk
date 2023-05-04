@@ -23,7 +23,7 @@ Object Containing declarative Logical Data Model.
 
 ## Example
 
-```Python
+```python
 # Get the stored Logical Data model
 logical_model = sdk.catalog_workspace_content.load_ldm_from_disk(path=Path.cwd())
 ```

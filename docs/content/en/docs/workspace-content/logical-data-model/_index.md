@@ -21,7 +21,7 @@ See [Create a Logical Data Model](https://www.gooddata.com/developers/cloud-nati
 
 ## Example
 
-```Python
+```python
 from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 

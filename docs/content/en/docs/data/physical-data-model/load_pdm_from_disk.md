@@ -24,7 +24,7 @@ Physical Data Model object.
 
 ## Example
 
-```Python
+```python
 # Load Physical Data Model from disk
 sdk.catalog_data_source.load_pdm_from_disk(path=Path("xyz"))
 ```
