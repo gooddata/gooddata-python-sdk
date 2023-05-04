@@ -33,7 +33,12 @@ pushd "$REPO_ROOT/docs"
 
 rm -rf ${content_dir:?}/*
 
-git remote add upstream https://github.com/gooddata/gooddata-python-sdk
+# Add upstream if it doesn't exist
+if ! git config remote.upstream.url >/dev/null; then
+  git remote add upstream https://github.com/gooddata/gooddata-python-sdk
+else
+  echo "Upstream already exists, skipping add."
+fi
 
 git fetch "$remote_name"
 

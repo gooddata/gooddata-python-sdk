@@ -87,6 +87,30 @@
                 text-decoration: underline;
             }
         }
+
+        &-warning {
+            border-left-color: $color-alert-warning !important;
+            background-color: $color-alert-warning-bg;
+            color: black;
+
+            a {
+                &,
+                &:hover,
+                &:focus,
+                &:active {
+                    color: black;
+                    text-decoration: underline;
+                }
+            }
+            svg path {
+                    fill: $color-alert-warning !important;
+            }
+
+            &::before{
+                background-color: $color-alert-warning !important;
+            }
+
+        }
     }
 }
 
