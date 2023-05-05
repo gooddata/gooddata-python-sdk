@@ -25,7 +25,7 @@ List of all metrics in a given workspace.
 
 ## Example
 
-```Python
+```python
 # Get all metrics
 metrics = sdk.catalog_workspace_content.get_metrics_catalog(workspace_id="123")
 ```

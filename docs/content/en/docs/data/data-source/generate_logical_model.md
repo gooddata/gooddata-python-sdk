@@ -33,7 +33,7 @@ Object Containing declarative Logical Data Model
 
 ## Example
 
-```Python
+```python
 # Generate Logical data source
 logical_model = sdk.catalog_data_source.generate_logical_model(data_source_id="demo-test-ds")
 ```

@@ -36,7 +36,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Store logical data model
 sdk.catalog_workspace_content.store_declarative_ldm(workspace_id="123", layout_root_path=Path.cwd())
 ```

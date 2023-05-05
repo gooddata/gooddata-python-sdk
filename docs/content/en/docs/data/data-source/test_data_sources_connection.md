@@ -42,7 +42,7 @@ Check API references for possible errors of data source connections.
 
 ## Example
 
-```Python
+```python
 # Get data sources
 declarative_data_sources = sdk.catalog_data_source.get_declarative_data_sources()
 

@@ -20,7 +20,7 @@ See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cl
 ## Example
 List, create and delete users and user groups:
 
-```Python
+```python
 from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 

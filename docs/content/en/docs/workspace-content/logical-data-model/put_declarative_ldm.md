@@ -30,7 +30,7 @@ Object that manages validation, whether each data_source_id in LDM corresponds t
 
 ## Example
 
-```Python
+```python
 # Generate logical data model
 logical_model = sdk.catalog_data_source.generate_logical_model(data_source_id="demo-test-ds")
 

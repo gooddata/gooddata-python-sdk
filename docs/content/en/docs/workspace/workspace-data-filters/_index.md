@@ -19,7 +19,7 @@ See [Set Up Data Filters in Workspaces](https://www.gooddata.com/developers/clou
 
 ## Example
 
-```Python
+```python
 from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 

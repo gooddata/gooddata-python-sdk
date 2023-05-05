@@ -38,7 +38,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Store the analytics model to disk
 sdk.catalog_workspace_content.store_analytics_model_to_disk(
         workspace_id="123",

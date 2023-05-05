@@ -31,7 +31,7 @@ List of schema names for the given data source specified by its id.
 
 ## Example
 
-```Python
+```python
 # Scan schemata
 sdk.catalog_data_source.scan_schemata(data_source_id="123")
 # [

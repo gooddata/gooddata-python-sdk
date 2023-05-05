@@ -23,7 +23,7 @@ List of all data sources in the whole organization.
 
 {{% /parameters-block %}}
 
-```Python
+```python
 # List all data sources
 data_sources = sdk.catalog_data_source.list_data_sources()
 

@@ -29,7 +29,7 @@ A single Insight object contains side loaded metadata about the entities it refe
 
 ## Example
 
-```Python
+```python
 # Get all visualizations
 insights = sdk.insights.get_insights(workspace_id="123")
 ```

@@ -32,7 +32,7 @@ The load and put can be done two ways.
 
 Either by one call:
 
-```Python
+```python
 # Load and  put logical data model.
 sdk.catalog_workspace_content.load_and_put_declarative_ldm(
     workspace_id="123",
@@ -43,7 +43,7 @@ sdk.catalog_workspace_content.load_and_put_declarative_ldm(
 
 Or by two separate calls:
 
-```Python
+```python
 # Load stored declarative Logical Data Model
 logical_model = sdk.catalog_workspace_content.load_declarative_ldm(
     workspace_id="123",

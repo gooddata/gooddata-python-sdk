@@ -25,7 +25,7 @@ Options for the Scan Request. Defaults to CatalogScanModelRequest().
 
 ## Example
 
-```Python
+```python
 # scan and put Physical Data Model to server
 sdk.catalog_data_source.scan_and_put_pdm(data_source_id="demo-test-ds")
 ```

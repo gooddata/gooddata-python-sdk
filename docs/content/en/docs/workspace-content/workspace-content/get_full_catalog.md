@@ -25,7 +25,7 @@ Object containing all data sets and metrics.
 
 ## Example
 
-```Python
+```python
 # Get full catalog
 workspace_content = sdk.catalog_workspace_content.get_full_catalog(workspace_id="123")
 

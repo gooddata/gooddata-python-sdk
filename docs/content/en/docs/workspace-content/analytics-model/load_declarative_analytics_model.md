@@ -28,7 +28,7 @@ Object Containing declarative Analytical Model
 
 ## Example
 
-```Python
+```python
 # Get analytics layout
 declarative_analytics = sdk.catalog_workspace_content.load_declarative_analytics_model(
     workspace_id="123",

@@ -31,7 +31,7 @@ Visualization data wrapper object.
 
 ## Example
 
-```Python
+```python
 # Get the items
 items=[SimpleMetric(local_id="metric1", item=ObjId(type="metric", id="order_amount"))]
 # Get the items as Execution Table

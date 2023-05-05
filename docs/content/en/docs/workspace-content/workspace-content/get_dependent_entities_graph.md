@@ -34,7 +34,7 @@ Dependent entities graph containing nodes and edges.
 ## Example
 
 
-```Python
+```python
 # Get dependent entities Graph
 sdk.catalog_workspace_content.get_dependent_entities_graph_from_entry_points(
     workspace_id="123"

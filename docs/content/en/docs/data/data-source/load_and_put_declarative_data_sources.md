@@ -34,7 +34,7 @@ The load and put can be done two ways.
 
 Either by one call:
 
-```Python
+```python
 # Load and put declarative data sources
 sdk.catalog_data_source.load_and_put_declarative_data_sources(
     layout_root_path=Path("abc"),
@@ -43,7 +43,7 @@ sdk.catalog_data_source.load_and_put_declarative_data_sources(
 ```
 Or by two separate calls:
 
-```Python
+```python
 # Load the data source
 data_sources = sdk.catalog_data_source.get_declarative_data_sources()
 

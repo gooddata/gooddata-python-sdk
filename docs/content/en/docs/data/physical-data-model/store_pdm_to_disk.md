@@ -31,7 +31,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().().
 
 ## Example
 
-```Python
+```python
 # Store Physical Data Model to disk
 sdk.catalog_data_source.store_pdm_to_disk(data_source_id="123",layour_root_path=Path.cwd())
 ```
