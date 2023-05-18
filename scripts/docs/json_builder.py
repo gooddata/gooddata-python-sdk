@@ -50,6 +50,7 @@ def signature_data(sig: inspect.Signature) -> dict:
 def function_data(func: FunctionType) -> dict:
     data = {key: value for key, value in inspect.getmembers(func)}
     return {
+        "kind": "function",
         "docstring": inspect.getdoc(func),
         "docstring_parsed": docstring_data(inspect.getdoc(func)),
         "signature": signature_data(inspect.signature(func))
@@ -59,6 +60,7 @@ def function_data(func: FunctionType) -> dict:
 def object_data(obj: type) -> dict:
     data = {key: value for key, value in inspect.getmembers(obj)}
     ret = {
+        "kind": "class",
         "docstring": data["__doc__"],
         "docstring_parsed": docstring_data(inspect.getdoc(object)),
         "functions": {}
