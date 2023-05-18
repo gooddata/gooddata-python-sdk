@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 import gooddata_api_client.models as afm_models
+from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.types import ValidObjects
@@ -27,6 +28,7 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
@@ -36,6 +38,8 @@ ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, C
 
 # Use typing collection types to support python < py3.9
 ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
+
+LabelElementsInputType = Union[str, ObjId]
 
 
 class CatalogWorkspaceContentService(CatalogServiceBase):
@@ -521,3 +525,27 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             items_of_type.add(available["id"])
 
         return by_type
+
+    def get_label_elements(self, workspace_id: str, label_id: LabelElementsInputType) -> List[str]:
+        """
+        Get existing values for a label.
+        Under-the-hood, it basically executes SELECT DISTINCT <label_column_name> from corresponding table.
+        Values are automatically sorted lexicographically.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo".
+            label_id (str):
+                Label ID. We support string or ObjId types.
+                String may not contain "label/" prefix, we append it if necessary.
+        Returns:
+            list of label values
+        """
+        # API expects ID without type prefix
+        parts = str(label_id).split("/")
+        if len(parts) == 2:
+            label_id = parts[1]
+        request = ElementsRequest(label=label_id)
+        # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
+        values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
+        return [v["title"] for v in values["elements"]]
