@@ -27,7 +27,13 @@ from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setti
 from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import CatalogUserDataFilterDocument
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
-from gooddata_sdk.utils import load_all_entities, load_all_entities_dict, read_layout_from_file, write_layout_to_file
+from gooddata_sdk.utils import (
+    create_directory,
+    load_all_entities,
+    load_all_entities_dict,
+    read_layout_from_file,
+    write_layout_to_file,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -160,6 +166,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return CatalogWorkspaceSetting.from_api(
             self._entities_api.get_entity_workspace_settings(workspace_id, workspace_setting_id).data
         )
+
+    def list_workspace_settings(self, workspace_id: str) -> List[CatalogWorkspaceSetting]:
+        get_workspace_settings = functools.partial(
+            self._entities_api.get_all_entities_workspace_settings,
+            workspace_id,
+            _check_return_type=False,
+        )
+        workspace_settings = load_all_entities(get_workspace_settings).data
+        return [CatalogWorkspaceSetting.from_api(ws) for ws in workspace_settings]
 
     # Declarative methods - workspaces
 
@@ -398,8 +413,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
         to_locale: str,
         from_lang: str = "en",
         translator_func: Optional[Callable] = None,
-        layout_root_path: Path = Path.cwd(),
-        provision_workspace: bool = False,
+        layout_root_path: Optional[Path] = None,
+        provision_workspace: Optional[bool] = False,
+        store_layouts: Optional[bool] = False,
     ) -> None:
         """
         Generate layouts of new workspaces based on the source workspace.
@@ -415,13 +431,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
         :param from_lang: from which language we are going to translate
         :param translator_func: 3rd party service capable of translating a batch of strings to various languages
         :param layout_root_path: folder, where to store all layout YAML files (of new translated workspaces)
+                                 if empty, they are stored to:
+                                 <CURRENT_DIR>/<LAYOUT_ROOT_FOLDER>/<organization_id>/
+                                   <LAYOUT_WORKSPACES_DIR>/<workspace_id>
+                                 else they are stored to <layout_root_path>/<workspace_id>
+                                 If not empty, the caller is responsible to create the whole directory structure
         :param provision_workspace: Should new workspace for the target language be provisioned?
                                      Including setting of corresponding locales.
+        :param store_layouts: Store declarative layouts of all workspaces to disk
         :return: None
         """
         logger.info(f"generate_localized_workspaces START from_lang={from_lang} to_lang={to_lang}")
-        layout_organization_folder = self.layout_organization_folder(layout_root_path)
-        workspace_folder = get_workspace_folder(workspace_id, layout_organization_folder)
+        workspace_folder = self.create_custom_workspace_folder(workspace_id, layout_root_path)
         translation_file_path = workspace_folder / f"translations_{to_lang}.yml"
         already_translated = self.read_translation_file(translation_file_path)
         # Get current WS and its content definitions
@@ -429,22 +450,34 @@ class CatalogWorkspaceService(CatalogServiceBase):
         workspace_content = self.get_declarative_workspace(workspace_id)
         # Get all texts from WS definition to be translated. Skip already translated.
         to_translate = self.get_texts_to_translate(workspace, workspace_content, already_translated)
-        # Backup current workspace
-        workspace_content.store_to_disk(workspace_folder)
+        if store_layouts:
+            # Backup current workspace
+            workspace_content.store_to_disk(workspace_folder)
         # Translate, if requested, otherwise fill in already translated or 1:1 copy of original texts
         translated = self.translate_if_requested(
             to_translate, translator_func, to_lang, from_lang, already_translated, translation_file_path
         )
+
         # Create new workspace definition with translated texts
         new_workspace = deepcopy(workspace)
         new_workspace_content = deepcopy(workspace_content)
         self.set_translated_texts(workspace, new_workspace, new_workspace_content, to_lang, translated)
-        workspace_new_folder = get_workspace_folder(new_workspace.id, layout_organization_folder)
-        # Store layouts of new workspace to disk
-        new_workspace_content.store_to_disk(workspace_new_folder)
+        workspace_new_folder = self.create_custom_workspace_folder(new_workspace.id, layout_root_path)
+        if store_layouts:
+            # Store layouts of new workspace to disk
+            new_workspace_content.store_to_disk(workspace_new_folder)
         # Provision new WS if requested
         if provision_workspace:
-            self.provision_workspace_with_locales(new_workspace, new_workspace_content, to_locale)
+            self.provision_workspace_with_locales(workspace_id, new_workspace, new_workspace_content, to_locale)
+
+    def create_custom_workspace_folder(self, workspace_id: str, layout_root_path: Optional[Path]) -> Path:
+        if layout_root_path:
+            workspace_folder = layout_root_path / workspace_id
+        else:
+            layout_organization_folder = self.layout_organization_folder(Path.cwd())
+            workspace_folder = get_workspace_folder(workspace_id, layout_organization_folder)
+        create_directory(workspace_folder)
+        return workspace_folder
 
     @staticmethod
     def translate_in_batches(
@@ -484,14 +517,27 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return already_translated
 
     def provision_workspace_with_locales(
-        self, new_workspace: CatalogWorkspace, new_workspace_content: CatalogDeclarativeWorkspaceModel, to_locale: str
+        self,
+        source_workspace_id: str,
+        new_workspace: CatalogWorkspace,
+        new_workspace_content: CatalogDeclarativeWorkspaceModel,
+        to_locale: str,
     ) -> None:
         logger.info(f"Provision workspace with locales workspace_id={new_workspace.id}")
         self.create_or_update(new_workspace)
         self.put_declarative_workspace(new_workspace.id, new_workspace_content)
-        # TODO - remove deletes after the fix is delivered to dev_latest
+        # TODO - uncomment the copy after the fix is fully released
+        #      - list_workspace_settings is failing with 500 error too :-(
+        # Copy settings from source workspace
+        # current_settings = self.list_workspace_settings(source_workspace_id)
+        # for setting in current_settings:
+        #     # TODO - remove delete after the fix is fully released
+        #     self.delete_workspace_setting(new_workspace.id, setting.id)
+        #     self.create_or_update_workspace_setting(new_workspace.id, setting)
+        # TODO - remove deletes after the fix is fully released
         self.delete_workspace_setting(new_workspace.id, "locale")
         self.delete_workspace_setting(new_workspace.id, "formatLocale")
+        # Create/update locale settings to target language
         self.create_or_update_workspace_setting(
             new_workspace.id, CatalogWorkspaceSetting(id="locale", content={"value": to_locale})
         )
