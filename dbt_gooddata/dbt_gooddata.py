@@ -88,15 +88,8 @@ def upload_notification(logger, sdk: GoodDataSdk, data_source_id: str) -> None:
 def deploy_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct) -> None:
     logger.info(f"Deploy analytics {workspace_id=}")
 
-    logger.info("Get LDM")
-    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-
     logger.info("Read analytics model from disk")
     adm = sdk.catalog_workspace_content.load_analytics_model_from_disk(GOODDATA_LAYOUTS_DIR / data_product.id)
-
-    logger.info("Append dbt metrics to GoodData metrics")
-    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_ids, ldm).make_gooddata_metrics()
-    adm.analytics.metrics = adm.analytics.metrics + dbt_gooddata_metrics
 
     # Deploy analytics model into target workspace
     logger.info("Load analytics model into GoodData")
@@ -107,17 +100,6 @@ def store_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: G
     logger.info("Store analytics model to disk")
     layout_model_dir = GOODDATA_LAYOUTS_DIR / data_product.id
     sdk.catalog_workspace_content.store_analytics_model_to_disk(workspace_id, layout_model_dir)
-
-    logger.info("Get LDM")
-    ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-
-    # TODO - this is hack. Add corresponding functionality into Python SDK
-    logger.info("Exclude dbt metrics from stored analytics model, they are already defined in dbt models")
-
-    dbt_gooddata_metrics = DbtModelMetrics(data_product.model_ids, ldm).make_gooddata_metrics()
-    for metric in dbt_gooddata_metrics:
-        metric_path = layout_model_dir / "analytics_model" / "metrics" / f"{metric.id}.yaml"
-        metric_path.unlink()
 
 
 def test_insights(logger, sdk: GoodDataSdk, workspace_id: str) -> None:
