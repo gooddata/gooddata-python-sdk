@@ -11,7 +11,7 @@ REQUIRES = [
 setup(
     name="dbt-gooddata",
     description="dbt plugin for GoodData",
-    version="0.3.6",
+    version="0.3.7",
     author="GoodData",
     license="MIT",
     install_requires=REQUIRES,

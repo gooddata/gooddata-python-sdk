@@ -9,8 +9,10 @@ from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,
     CatalogDataSourceSnowflake,
+    CatalogDataSourceVertica,
     PostgresAttributes,
     SnowflakeAttributes,
+    VerticaAttributes,
 )
 
 from dbt_gooddata.dbt.base import Base
@@ -33,6 +35,7 @@ class DbtOutputPostgreSQL(Base):
             name=self.title,
             db_specific_attributes=PostgresAttributes(
                 host=self.host,
+                port=self.port,
                 # TODO - adopt this in Python SDK
                 db_name=quote_plus(self.dbname),
             ),
@@ -76,7 +79,37 @@ class DbtOutputSnowflake(Base):
         )
 
 
-DbtOutput = DbtOutputPostgreSQL | DbtOutputSnowflake
+@attrs.define(auto_attribs=True, kw_only=True)
+class DbtOutputVertica(Base):
+    name: str
+    title: str
+    host: str
+    port: str
+    username: str
+    password: str = attrs.field(repr=lambda value: "***")
+    database: str
+    schema: str
+
+    def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourceVertica:
+        return CatalogDataSourceVertica(
+            id=data_source_id,
+            name=self.title,
+            db_specific_attributes=VerticaAttributes(
+                host=self.host,
+                port=self.port,
+                # TODO - adopt this in Python SDK
+                db_name=quote_plus(self.database),
+            ),
+            # Schema name is collected from dbt manifest from relevant tables
+            schema=schema_name,
+            credentials=BasicCredentials(
+                username=self.username,
+                password=self.password,
+            ),
+        )
+
+
+DbtOutput = DbtOutputPostgreSQL | DbtOutputSnowflake | DbtOutputVertica
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -111,6 +144,8 @@ class DbtProfiles:
                 return DbtOutputPostgreSQL.from_dict({"name": output} | output_def)
             case "snowflake":
                 return DbtOutputSnowflake.from_dict({"name": output} | output_def)
+            case "vertica":
+                return DbtOutputVertica.from_dict({"name": output} | output_def)
             case _:
                 raise Exception(f"Unsupported database type {output=} {db_type=}")
 
