@@ -431,11 +431,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
         :param from_lang: from which language we are going to translate
         :param translator_func: 3rd party service capable of translating a batch of strings to various languages
         :param layout_root_path: folder, where to store all layout YAML files (of new translated workspaces)
+                                 Also, the translation files are stored there.
                                  if empty, they are stored to:
                                  <CURRENT_DIR>/<LAYOUT_ROOT_FOLDER>/<organization_id>/
                                    <LAYOUT_WORKSPACES_DIR>/<workspace_id>
-                                 else they are stored to <layout_root_path>/<workspace_id>
-                                 If not empty, the caller is responsible to create the whole directory structure
+                                 else they are stored to <layout_root_path>/
         :param provision_workspace: Should new workspace for the target language be provisioned?
                                      Including setting of corresponding locales.
         :param store_layouts: Store declarative layouts of all workspaces to disk
@@ -472,7 +472,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     def create_custom_workspace_folder(self, workspace_id: str, layout_root_path: Optional[Path]) -> Path:
         if layout_root_path:
-            workspace_folder = layout_root_path / workspace_id
+            workspace_folder = layout_root_path
         else:
             layout_organization_folder = self.layout_organization_folder(Path.cwd())
             workspace_folder = get_workspace_folder(workspace_id, layout_organization_folder)
