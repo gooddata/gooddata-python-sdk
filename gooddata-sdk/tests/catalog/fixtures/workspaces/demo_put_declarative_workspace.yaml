@@ -77,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 027670e6e761cac4
+          traceId: 4c2ef1efe7624787
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -233,7 +233,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -246,7 +246,13 @@ interactions:
                       type: filterContext
                   layout:
                     sections:
-                      - items:
+                      - header:
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
+                          title: Spend breakdown and Revenue
+                        items:
                           - size:
                               xl:
                                 gridWidth: 6
@@ -2091,7 +2097,13 @@ interactions:
                     type: filterContext
                 layout:
                   sections:
-                    - items:
+                    - header:
+                        description: The first insight shows a breakdown of spend
+                          by category and campaign. The second shows revenue per $
+                          spend, for each campaign, to demonstrate, how campaigns
+                          are successful.
+                        title: Spend breakdown and Revenue
+                      items:
                         - size:
                             xl:
                               gridWidth: 6
@@ -3420,8 +3432,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -3521,7 +3531,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -3534,7 +3544,13 @@ interactions:
                       type: filterContext
                   layout:
                     sections:
-                      - items:
+                      - header:
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
+                          title: Spend breakdown and Revenue
+                        items:
                           - size:
                               xl:
                                 gridWidth: 6
@@ -5257,8 +5273,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'

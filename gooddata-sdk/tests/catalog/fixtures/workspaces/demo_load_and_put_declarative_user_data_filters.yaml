@@ -115,8 +115,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -364,7 +362,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+              oauthClientId: dd144f68-494f-46c4-b220-b4517b9e7241
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -406,8 +404,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -556,8 +552,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'

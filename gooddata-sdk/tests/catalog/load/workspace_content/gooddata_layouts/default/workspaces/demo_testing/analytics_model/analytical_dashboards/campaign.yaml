@@ -6,7 +6,12 @@ content:
       type: filterContext
   layout:
     sections:
-      - items:
+      - header:
+          description: The first insight shows a breakdown of spend by category and
+            campaign. The second shows revenue per $ spend, for each campaign, to
+            demonstrate, how campaigns are successful.
+          title: Spend breakdown and Revenue
+        items:
           - size:
               xl:
                 gridWidth: 6

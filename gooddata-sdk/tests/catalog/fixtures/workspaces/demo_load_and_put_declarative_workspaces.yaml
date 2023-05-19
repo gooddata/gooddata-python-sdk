@@ -41,8 +41,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: &id001
           - PLACEHOLDER
         Expires:
@@ -292,7 +290,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+              oauthClientId: dd144f68-494f-46c4-b220-b4517b9e7241
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -608,7 +606,13 @@ interactions:
                           type: filterContext
                       layout:
                         sections:
-                          - items:
+                          - header:
+                              description: The first insight shows a breakdown of
+                                spend by category and campaign. The second shows revenue
+                                per $ spend, for each campaign, to demonstrate, how
+                                campaigns are successful.
+                              title: Spend breakdown and Revenue
+                            items:
                               - size:
                                   xl:
                                     gridWidth: 6
@@ -2004,8 +2008,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -2105,7 +2107,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '34046'
+          - '34285'
       body:
         string:
           workspaceDataFilters:
@@ -2160,7 +2162,13 @@ interactions:
                             type: filterContext
                         layout:
                           sections:
-                            - items:
+                            - header:
+                                description: The first insight shows a breakdown of
+                                  spend by category and campaign. The second shows
+                                  revenue per $ spend, for each campaign, to demonstrate,
+                                  how campaigns are successful.
+                                title: Spend breakdown and Revenue
+                              items:
                                 - size:
                                     xl:
                                       gridWidth: 6
@@ -4095,6 +4103,12 @@ interactions:
                         type: IDashboardLayout
                         sections:
                           - type: IDashboardLayoutSection
+                            header:
+                              title: Spend breakdown and Revenue
+                              description: The first insight shows a breakdown of
+                                spend by category and campaign. The second shows revenue
+                                per $ spend, for each campaign, to demonstrate, how
+                                campaigns are successful.
                             items:
                               - type: IDashboardLayoutItem
                                 size:
@@ -5489,8 +5503,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'

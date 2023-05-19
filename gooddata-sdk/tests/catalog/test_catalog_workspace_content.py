@@ -328,3 +328,16 @@ def test_analytics_store_load(test_config):
     sdk.catalog_workspace_content.store_analytics_model_to_disk(test_config["workspace"], path)
     loaded_analytics_model = sdk.catalog_workspace_content.load_analytics_model_from_disk(path)
     assert loaded_analytics_model == analytics_model
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "label_elements.yaml"))
+def test_label_elements(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    label_values = sdk.catalog_workspace_content.get_label_elements(test_config["workspace"], "order_status")
+    assert label_values == ["Canceled", "Delivered", "Returned"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(test_config["workspace"], "label/order_status")
+    assert label_values == ["Canceled", "Delivered", "Returned"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], ObjId(id="order_status", type="label")
+    )
+    assert label_values == ["Canceled", "Delivered", "Returned"]

@@ -72,7 +72,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -85,7 +85,13 @@ interactions:
                       type: filterContext
                   layout:
                     sections:
-                      - items:
+                      - header:
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
+                          title: Spend breakdown and Revenue
+                        items:
                           - size:
                               xl:
                                 gridWidth: 6
@@ -1794,7 +1800,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+              oauthClientId: dd144f68-494f-46c4-b220-b4517b9e7241
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -1867,7 +1873,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -1880,7 +1886,13 @@ interactions:
                       type: filterContext
                   layout:
                     sections:
-                      - items:
+                      - header:
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
+                          title: Spend breakdown and Revenue
+                        items:
                           - size:
                               xl:
                                 gridWidth: 6
@@ -3589,6 +3601,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: ad8c2756-02b2-4d3c-b648-022083d1e2b9
+              oauthClientId: dd144f68-494f-46c4-b220-b4517b9e7241
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

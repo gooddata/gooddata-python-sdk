@@ -10,6 +10,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -84,6 +86,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -148,7 +152,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 04bbce1f3550bebe
+          traceId: 145c83657e17738b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -171,6 +175,8 @@ interactions:
           - br, gzip, deflate
         Content-Type:
           - application/vnd.gooddata.api+json
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -235,8 +241,8 @@ interactions:
             id: newUserDataFilter
             type: userDataFilter
             attributes:
-              maql: '{label/order_status} IN ("returned")'
               title: test_new_user_data_filter
+              maql: '{label/order_status} IN ("returned")'
             meta:
               origin:
                 originType: NATIVE
@@ -252,6 +258,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -268,7 +276,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1176'
+          - '1201'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -316,8 +324,9 @@ interactions:
             - id: newUserDataFilter
               type: userDataFilter
               attributes:
-                maql: '{label/order_status} IN ("returned")'
                 title: test_new_user_data_filter
+                areRelationsValid: true
+                maql: '{label/order_status} IN ("returned")'
               relationships:
                 user:
                   data:
@@ -349,7 +358,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
+                authenticationId: CiQyYTJmMmEyYy05YzJkLTQyMmUtYmU2Ny04NTNjYTNkMDRlMTASBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
           links:
@@ -364,6 +373,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -380,7 +391,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '962'
+          - '987'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
@@ -428,8 +439,9 @@ interactions:
             id: newUserDataFilter
             type: userDataFilter
             attributes:
-              maql: '{label/order_status} IN ("returned")'
               title: test_new_user_data_filter
+              areRelationsValid: true
+              maql: '{label/order_status} IN ("returned")'
             relationships:
               user:
                 data:
@@ -447,7 +459,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ4MDQ4MzdjZi1iNjk0LTRjZmItOGJiNC0yZTgzZDMwNTc2ZDYSBWxvY2Fs
+                authenticationId: CiQyYTJmMmEyYy05YzJkLTQyMmUtYmU2Ny04NTNjYTNkMDRlMTASBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
             - id: order_status
@@ -471,6 +483,8 @@ interactions:
       headers:
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -498,8 +512,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -538,6 +550,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -609,6 +623,8 @@ interactions:
       headers:
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
@@ -636,8 +652,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -676,6 +690,8 @@ interactions:
           - application/vnd.gooddata.api+json
         Accept-Encoding:
           - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
         X-Requested-With:
           - XMLHttpRequest
     response:
