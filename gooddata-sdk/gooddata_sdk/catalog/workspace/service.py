@@ -634,7 +634,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         if "measure" in item:
                             if "alias" in item["measure"]:
                                 to_translate.add(item["measure"]["alias"])
-        if workspace_content.analytics:
             for dashboard in workspace_content.analytics.analytical_dashboards or []:
                 self.add_title_description(to_translate, dashboard.title, dashboard.description)
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
@@ -642,6 +641,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
                     for item in section["items"]:
                         title = item["widget"]["title"]
                         description = item["widget"]["description"]
+                        self.add_title_description(to_translate, title, description)
+                    if "header" in section:
+                        title = section["header"]["title"]
+                        description = section["header"]["description"]
                         self.add_title_description(to_translate, title, description)
 
         # Translate texts, which have not been translated yet
@@ -685,7 +688,6 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         if "measure" in item:
                             if "alias" in item["measure"]:
                                 item["measure"]["alias"] = translated[item["measure"]["alias"]]
-        if new_workspace_content.analytics:
             for dashboard in new_workspace_content.analytics.analytical_dashboards or []:
                 self.set_title_description(dashboard, translated)
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
@@ -694,6 +696,10 @@ class CatalogWorkspaceService(CatalogServiceBase):
                         item["widget"]["title"] = translated[item["widget"]["title"]]
                         if item["widget"]["description"]:
                             item["widget"]["description"] = translated[item["widget"]["description"]]
+                    if "header" in section:
+                        section["header"]["title"] = translated[section["header"]["title"]]
+                        if section["header"]["description"]:
+                            section["header"]["description"] = translated[section["header"]["description"]]
 
     # Declarative methods - workspace data filters
 

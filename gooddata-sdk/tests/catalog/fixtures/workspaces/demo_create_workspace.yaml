@@ -193,7 +193,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 0d45bb375f3a1119
+          traceId: 1eda7c329b24cbdb
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -664,8 +664,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'

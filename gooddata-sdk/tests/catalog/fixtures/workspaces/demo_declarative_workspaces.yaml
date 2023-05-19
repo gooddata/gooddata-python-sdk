@@ -72,7 +72,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '34046'
+          - '34285'
       body:
         string:
           workspaceDataFilters:
@@ -129,6 +129,12 @@ interactions:
                           type: IDashboardLayout
                           sections:
                             - type: IDashboardLayoutSection
+                              header:
+                                title: Spend breakdown and Revenue
+                                description: The first insight shows a breakdown of
+                                  spend by category and campaign. The second shows
+                                  revenue per $ spend, for each campaign, to demonstrate,
+                                  how campaigns are successful.
                               items:
                                 - type: IDashboardLayoutItem
                                   size:
@@ -1817,7 +1823,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '34046'
+          - '34285'
       body:
         string:
           workspaceDataFilters:
@@ -1874,6 +1880,12 @@ interactions:
                           type: IDashboardLayout
                           sections:
                             - type: IDashboardLayoutSection
+                              header:
+                                title: Spend breakdown and Revenue
+                                description: The first insight shows a breakdown of
+                                  spend by category and campaign. The second shows
+                                  revenue per $ spend, for each campaign, to demonstrate,
+                                  how campaigns are successful.
                               items:
                                 - type: IDashboardLayoutItem
                                   size:

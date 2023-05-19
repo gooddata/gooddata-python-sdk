@@ -77,7 +77,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: f1fb87b8f694c1f9
+          traceId: 2fa9009e14b2b255
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -244,7 +244,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -259,6 +259,12 @@ interactions:
                     type: IDashboardLayout
                     sections:
                       - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
                         items:
                           - type: IDashboardLayoutItem
                             size:
@@ -1975,7 +1981,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 74a93990044267fd
+          traceId: 4a5f9ae99f5d50a3
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
@@ -2051,7 +2057,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4c5147cbec739e4f
+          traceId: 07b872679a193091
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -2419,6 +2425,12 @@ interactions:
                   type: IDashboardLayout
                   sections:
                     - type: IDashboardLayoutSection
+                      header:
+                        title: Spend breakdown and Revenue
+                        description: The first insight shows a breakdown of spend
+                          by category and campaign. The second shows revenue per $
+                          spend, for each campaign, to demonstrate, how campaigns
+                          are successful.
                       items:
                         - type: IDashboardLayoutItem
                           size:
@@ -3746,8 +3758,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -3924,8 +3934,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -4103,7 +4111,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32235'
+          - '32474'
       body:
         string:
           analytics:
@@ -4118,6 +4126,12 @@ interactions:
                     type: IDashboardLayout
                     sections:
                       - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
                         items:
                           - type: IDashboardLayoutItem
                             size:
@@ -5751,7 +5765,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -5766,6 +5780,12 @@ interactions:
                     type: IDashboardLayout
                     sections:
                       - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
                         items:
                           - type: IDashboardLayoutItem
                             size:
@@ -7482,7 +7502,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 92e79f7c7d823a11
+          traceId: 717ad2f55b734adb
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
@@ -7558,7 +7578,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4e2dd3e31f46dda8
+          traceId: 1f415391084c340a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -7926,6 +7946,12 @@ interactions:
                   type: IDashboardLayout
                   sections:
                     - type: IDashboardLayoutSection
+                      header:
+                        title: Spend breakdown and Revenue
+                        description: The first insight shows a breakdown of spend
+                          by category and campaign. The second shows revenue per $
+                          spend, for each campaign, to demonstrate, how campaigns
+                          are successful.
                       items:
                         - type: IDashboardLayoutItem
                           size:
@@ -9253,8 +9279,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -9431,8 +9455,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -9792,7 +9814,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32215'
+          - '32454'
       body:
         string:
           analytics:
@@ -9807,6 +9829,12 @@ interactions:
                     type: IDashboardLayout
                     sections:
                       - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
+                          description: The first insight shows a breakdown of spend
+                            by category and campaign. The second shows revenue per
+                            $ spend, for each campaign, to demonstrate, how campaigns
+                            are successful.
                         items:
                           - type: IDashboardLayoutItem
                             size:
@@ -11808,6 +11836,12 @@ interactions:
                   type: IDashboardLayout
                   sections:
                     - type: IDashboardLayoutSection
+                      header:
+                        title: Spend breakdown and Revenue
+                        description: The first insight shows a breakdown of spend
+                          by category and campaign. The second shows revenue per $
+                          spend, for each campaign, to demonstrate, how campaigns
+                          are successful.
                       items:
                         - type: IDashboardLayoutItem
                           size:
@@ -13135,8 +13169,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -13313,8 +13345,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/json
         DATE: *id001
         Expires:
           - '0'
@@ -13508,8 +13538,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -13697,8 +13725,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
@@ -13764,8 +13790,6 @@ interactions:
             blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
             *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
             media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Content-Type:
-          - application/vnd.gooddata.api+json
         DATE: *id001
         Expires:
           - '0'
