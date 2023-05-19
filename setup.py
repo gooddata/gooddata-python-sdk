@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 REQUIRES = [
-    "gooddata-sdk==1.3.1.dev1",
+    "gooddata-sdk==1.3.1.dev3",
     "pyyaml>=5.1",
     "attrs~=21.4.0",
     "cattrs~=22.1.0",
@@ -11,7 +11,7 @@ REQUIRES = [
 setup(
     name="dbt-gooddata",
     description="dbt plugin for GoodData",
-    version="0.3.7",
+    version="0.3.8",
     author="GoodData",
     license="MIT",
     install_requires=REQUIRES,

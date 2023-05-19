@@ -19,11 +19,24 @@ class GoodDataConfigEnvironmentSetup(Base):
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
+class GoodDataConfigLocalizationTo(Base):
+    locale: str
+    language: str
+
+
+@attrs.define(auto_attribs=True, kw_only=True)
+class GoodDataConfigLocalization(Base):
+    from_language: str
+    to: list[GoodDataConfigLocalizationTo]
+
+
+@attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfigProduct(Base):
     id: str
     name: str
     environment_setup_id: str
-    model_ids: Optional[list[str]]
+    model_ids: Optional[list[str]] = []
+    localization: Optional[GoodDataConfigLocalization] = None
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

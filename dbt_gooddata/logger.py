@@ -4,11 +4,6 @@ import sys
 
 def get_logger(name, debug=False):
     level = logging.INFO if not debug else logging.DEBUG
+    logging.basicConfig(level=level, format="%(levelname)-8s: %(name)s : %(asctime)-15s - %(message)s")
     logger = logging.getLogger(name)
-    logger.setLevel(level)
-    if len(logger.handlers) == 0:
-        channel = logging.StreamHandler(stream=sys.stdout)
-        formatter = logging.Formatter(fmt="%(levelname)-8s: %(name)s : %(asctime)-15s - %(message)s")
-        channel.setFormatter(formatter)
-        logger.addHandler(channel)
     return logger

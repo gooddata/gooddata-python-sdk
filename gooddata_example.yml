@@ -21,3 +21,10 @@ data_products:
     model_id: github
      - github
      - faa
+    localization:
+      from_language: en
+      to:
+        - locale: fr-FR
+          language: fr
+        - locale: zh-Hans
+          language: "chinese (simplified)"
