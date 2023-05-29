@@ -12,5 +12,8 @@
     "url": "git+ssh://git@gitlab.com/gooddata/gdc-tiger-docs.git"
   },
   "author": "Tiger Team",
-  "homepage": "https://gitlab.com/gooddata/gdc-tiger-docs#readme"
+  "homepage": "https://gitlab.com/gooddata/gdc-tiger-docs#readme",
+  "scripts": {
+    "preinstall": "set"
+  }
 }
