@@ -47,7 +47,13 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.entity import AttrCatalogEntity, BasicCredentials, TokenCredentialsFromFile
-from gooddata_sdk.catalog.export.request import ExportRequest
+from gooddata_sdk.catalog.export.request import (
+    ExportCustomLabel,
+    ExportCustomMetric,
+    ExportCustomOverride,
+    ExportRequest,
+    ExportSettings,
+)
 from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService

@@ -7,12 +7,12 @@ from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
 from gooddata_sdk import ExportRequest, GoodDataApiClient
+from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 
 
-class ExportService:
+class ExportService(CatalogServiceBase):
     def __init__(self, api_client: GoodDataApiClient) -> None:
-        self._entities_api = api_client.entities_api
-        self._actions_api = api_client.actions_api
+        super(ExportService, self).__init__(api_client)
 
     @staticmethod
     def _get_exported_content(
