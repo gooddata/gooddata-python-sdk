@@ -49,6 +49,10 @@ class ExecutionTable:
         self._pages = [first_page]
 
     @property
+    def result_id(self) -> str:
+        return self._response.result_id
+
+    @property
     def attributes(self) -> list[Attribute]:
         return self._exec_def.attributes
 
