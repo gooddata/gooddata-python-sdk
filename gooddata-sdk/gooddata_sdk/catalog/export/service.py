@@ -127,7 +127,8 @@ class ExportService:
                 The ID of the target Dashboard.
 
         Returns:
-            bool: Returns true, if the dashboard exists.
+            bool:
+                Returns true, if the dashboard exists.
 
         Note:
             This is needed due to the fact that exporters do not check existence of the dashboard id.
@@ -249,3 +250,91 @@ class ExportService:
         self._export_common(
             workspace_id, export_request.to_api(), file_path, create_func, get_func, timeout, retry, max_retry
         )
+
+    @staticmethod
+    def _custom_overrides_labels(exec_table: ExecutionTable, metrics_format: str = "#,##0") -> ExportCustomOverride:
+        """
+        Insights by default use generated hash as local_id therefore we might want to use dummy logic to replace it.
+        For attributes by label.id
+        For metrics by item.id
+        """
+        labels = {
+            attribute.local_id: ExportCustomLabel(title=attribute.label.id) for attribute in exec_table.attributes
+        }
+        metrics = {
+            metric.local_id: ExportCustomMetric(
+                title=metric.item.id if isinstance(metric, SimpleMetric) else metric.local_id, format=metrics_format
+            )
+            for metric in exec_table.metrics
+        }
+        return ExportCustomOverride(labels=labels, metrics=metrics)
+
+    def export_tabular_by_insight_id(
+        self,
+        workspace_id: str,
+        insight_id: str,
+        file_format: str,
+        use_labels: bool = True,
+        file_name: Optional[str] = None,
+        settings: Optional[ExportSettings] = None,
+        custom_override: Optional[ExportCustomOverride] = None,
+        store_path: Union[str, Path] = Path.cwd(),
+        timeout: float = 60.0,
+        retry: float = 0.2,
+        max_retry: float = 5.0,
+    ) -> None:
+        """
+        Exports the tabular data for an insight by its ID.
+
+        Args:
+            workspace_id (str):
+                The workspace ID containing the insight.
+            insight_id (str):
+                The insight ID.
+            file_format (str):
+                The format of the exported file (e.g., 'csv', 'pdf', etc.).
+            use_labels (Optional[bool], optional):
+                Whether to use labels for the export. Defaults to True.
+            file_name (Optional[str], optional):
+                The file name for the exported table. Defaults to None.
+            settings (Optional[ExportSettings], optional):
+                Configuration settings for the export. Defaults to None.
+            custom_override (Optional[ExportCustomOverride], optional):
+                Custom settings to override the default settings. Defaults to None.
+            store_path (Union[str, Path], optional):
+                The path to store the exported file. Defaults to Path.cwd().
+            timeout (float, optional):
+                The allowed time in seconds for the export operation. Defaults to 60.0.
+            retry (float, optional):
+                The retry interval in seconds. Defaults to 0.2.
+            max_retry (float, optional):
+                The maximum number of retry attempts. Defaults to 5.0.
+
+        Raises:
+            NotFoundException: Workspace or insight could not be found.
+
+        """
+        try:
+            insight = InsightService(self._client).get_insight(workspace_id=workspace_id, insight_id=insight_id)
+            exec_table = TableService(self._client).for_insight(workspace_id=workspace_id, insight=insight)
+            custom_override = self._custom_overrides_labels(exec_table) if use_labels else custom_override
+            file_name = file_name if file_name is not None else insight.title
+            export_request = ExportRequest(
+                format=file_format,
+                execution_result=exec_table.result_id,
+                file_name=file_name,
+                settings=settings,
+                custom_override=custom_override,
+            )
+            self.export_tabular(
+                workspace_id=workspace_id,
+                export_request=export_request,
+                store_path=store_path,
+                timeout=timeout,
+                retry=retry,
+                max_retry=max_retry,
+            )
+        except NotFoundException:
+            print(
+                f"Either workspace workspace_id='{workspace_id}' or insight insight_id='{insight_id}' does not exist."
+            )
