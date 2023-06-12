@@ -18,8 +18,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+          path: 'PR-tmp'
+      - name: Get only changed docs
+        run: |
+          rsync --delete -av PR-tmp/docs/content/en/ docs/content/en/
+          rm -rf PR-tmp
       - name: Generate Versioned Docs
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
         with:
