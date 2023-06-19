@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Union
+from typing import Union, dict
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
@@ -79,6 +79,21 @@ class Filter(ExecModelEntity):
     @property
     def apply_on_result(self) -> Union[bool, None]:
         return self._apply_on_result
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "Filter":
+        """Creates a new Filter instance from a dictionary.
+
+        Args: data (dict):
+            A dictionary containing the filter data, with key:
+          'apply_on_result' (Optional[bool]):
+            whether the Filter is applied
+
+        Returns: Filter:
+            A new Filter instance with its apply_on_result set."""
+        filter_obj = cls()
+        filter_obj._apply_on_result = data.get("apply_on_result")
+        return filter_obj
 
     def is_noop(self) -> bool:
         raise NotImplementedError()

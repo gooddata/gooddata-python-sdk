@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Optional, Tuple, Union, dict
 
 from attrs import define, field
 
@@ -25,6 +25,27 @@ class TotalDimension:
     items: list[str] = field(factory=list)
     """items to use during total calculation"""
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "TotalDimension":
+        """
+        Converts a dictionary to a TotalDimension object.
+
+        Args:
+            data (dict):
+                A dictionary containing the following keys:
+                -'idx' (int):
+                    Index of dimension in which to calculate the total
+                -'items' (list of str):
+                    Items to use during total calculation
+
+        Returns:
+            TotalDimension:
+                A TotalDimension object with its 'idx' and 'items' attributes set.
+        """
+        idx = data.get("idx")
+        items = data.get("items")
+        return cls(idx=idx, items=items)
+
 
 @define
 class TotalDefinition:
@@ -38,6 +59,33 @@ class TotalDefinition:
     """local identifier of the measure to calculate total for"""
 
     total_dims: list[TotalDimension]
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "TotalDefinition":
+        """
+        Create a TotalDefinition instance from a dictionary.
+
+        Args:
+            data (dict):
+                Dictionary containing the following keys:
+                - local_id (str):
+                    Total's local identifier.
+                - aggregation (str):
+                    Aggregation function (case insensitive); one of SUM, MIN, MAX, MED, AVG.
+                - metric_local_id (str):
+                    Local identifier of the measure to calculate total for.
+                - total_dims (list):
+                    List of TotalDimension instances or dictionaries that can be converted to TotalDimension.
+
+        Returns:
+            TotalDefinition:
+                A TotalDefinition instance created from the input dictionary.
+        """
+        local_id = data["local_id"]
+        aggregation = data["aggregation"]
+        metric_local_id = data["metric_local_id"]
+        total_dims = [TotalDimension.from_dict(dim_data) for dim_data in data["total_dims"]]
+        return cls(local_id, aggregation, metric_local_id, total_dims)
 
 
 class ExecutionDefinition:
@@ -54,6 +102,57 @@ class ExecutionDefinition:
         self._filters = filters or []
         self._dimensions = [dim for dim in dimensions if dim is not None]
         self._totals = totals
+
+    @classmethod
+    def from_dict(cls, input_dict: dict):
+        """
+        Create an ExecutionDefinition instance from a dictionary.
+
+        Args:
+            input_dict (dict):
+                A dictionary containing the following keys:
+            - attributes (list[dict]):
+                List of dictionaries containing the following keys:
+                - local_id' (str):
+                    identifier of the attribute within the execution
+                - label (str):
+                    identifier of the label to use for slicing or dicing;
+                    specified either as ObjId or str containing the label id
+                - show_all_values (Optional[bool]):
+                    request show all values functionality for a given attribute
+            - metrics (list[dict]):
+                List of dictionaries containing the key:
+                - local_id (str):
+                    Metric ID.
+
+            - filters (list[dict]):
+            List of Dictionaries dictionary containing the key:
+                - 'apply_on_result' (Optional[bool]):
+                    Whether the Filter is applied
+            - dimensions (list[Optional[list[str]]]):
+                List of two lists, where the first list represents attributes in rows and the second list
+                represents attributes in columns. The second list also includes a 'measureGroup' constant,
+                if the metrics are non-empty.
+            - totals (list[dict]):
+                List of dictionaries containing the following keys:
+                - local_id (str): Total's local identifier.
+                - aggregation (str):
+                    Aggregation function (case insensitive); one of SUM, MIN, MAX, MED, AVG.
+                - metric_local_id (str):
+                    Local identifier of the measure to calculate total for.
+                - total_dims (list):
+                    List of TotalDimension instances or dictionaries that can be converted to TotalDimension.
+
+        Returns:
+            ExecutionDefinition: An instance of ExecutionDefinition constructed using the input_dict's entries.
+        """
+        attributes = [Attribute.from_dict(attr) for attr in input_dict.get("attributes", [])]
+        metrics = [Metric.from_dict(m) for m in input_dict.get("metrics", [])]
+        filters = [Filter.from_dict(f) for f in input_dict.get("filters", [])]
+        dimensions = input_dict.get("dimensions", [])
+        totals = [TotalDefinition.from_dict(t) for t in input_dict.get("totals", [])]
+
+        return cls(attributes, metrics, filters, dimensions, totals)
 
     @property
     def attributes(self) -> list[Attribute]:

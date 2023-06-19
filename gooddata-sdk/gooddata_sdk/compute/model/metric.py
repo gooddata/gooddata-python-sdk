@@ -26,6 +26,22 @@ class Metric(ExecModelEntity):
     def local_id(self) -> str:
         return self._local_id
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "Metric":
+        """
+        Instantiate a Metric class from a dictionary.
+
+        Args:
+            data (dict):
+                Dictionary containing the key:
+                - local_id (str): Metric ID.
+
+        Returns:
+            Metric:
+                A Metric class instance with its local_id set.
+        """
+        return cls(local_id=data["local_id"])
+
     def as_api_model(self) -> afm_models.MeasureItem:
         definition = self._body_as_api_model()
 
