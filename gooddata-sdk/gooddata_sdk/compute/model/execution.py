@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional, Tuple, Union, dict
+from typing import Any, Optional, Tuple, Union
 
 from attrs import define, field
 

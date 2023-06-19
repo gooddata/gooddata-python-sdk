@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Optional, Union, dict
+from typing import Any, Optional, Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_sdk.compute.model.base import ExecModelEntity, ObjId

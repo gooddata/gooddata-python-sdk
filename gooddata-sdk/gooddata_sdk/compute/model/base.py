@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Union, dict
+from typing import Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
