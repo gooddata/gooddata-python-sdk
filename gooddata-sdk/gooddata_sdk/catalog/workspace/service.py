@@ -577,13 +577,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
         return translated
 
     @staticmethod
-    def add_title_description(to_translate: Set[str], title: str, description: Optional[str]) -> None:
-        to_translate.add(title)
+    def add_title_description(to_translate: Set[str], title: Optional[str], description: Optional[str]) -> None:
+        if title:
+            to_translate.add(title)
         if description:
             to_translate.add(description)
 
     def add_title_description_tags(
-        self, to_translate: Set[str], title: str, description: Optional[str], tags: Optional[List[str]]
+        self, to_translate: Set[str], title: Optional[str], description: Optional[str], tags: Optional[List[str]]
     ) -> None:
         self.add_title_description(to_translate, title, description)
         if tags:
@@ -591,13 +592,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     @staticmethod
     def set_title_description(workspace_object: Any, translated: Dict[str, str]) -> None:
-        workspace_object.title = translated[workspace_object.title]
+        if workspace_object.title:
+            workspace_object.title = translated[workspace_object.title]
         if workspace_object.description:
             workspace_object.description = translated[workspace_object.description]
 
     def set_title_description_tags(self, workspace_object: Any, translated: Dict[str, str]) -> None:
         self.set_title_description(workspace_object, translated)
-        workspace_object.tags = [translated[x] for x in workspace_object.tags]
+        if workspace_object.tags:
+            workspace_object.tags = [translated[x] for x in workspace_object.tags]
 
     def get_texts_to_translate(
         self,
@@ -639,12 +642,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
                 for section in dashboard.content["layout"]["sections"]:
                     for item in section["items"]:
-                        title = item["widget"]["title"]
-                        description = item["widget"]["description"]
+                        title = item["widget"].get("title")
+                        description = item["widget"].get("description")
                         self.add_title_description(to_translate, title, description)
                     if "header" in section:
-                        title = section["header"]["title"]
-                        description = section["header"]["description"]
+                        title = section["header"].get("title")
+                        description = section["header"].get("description")
                         self.add_title_description(to_translate, title, description)
 
         # Translate texts, which have not been translated yet
@@ -693,13 +696,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 # Hack: translate titles in free-form, which is not processed intentionally by this SDK
                 for section in dashboard.content["layout"]["sections"]:
                     for item in section["items"]:
-                        item["widget"]["title"] = translated[item["widget"]["title"]]
-                        if item["widget"]["description"]:
-                            item["widget"]["description"] = translated[item["widget"]["description"]]
+                        if "title" in item["widget"]:
+                            item["widget"]["title"] = translated.get(item["widget"]["title"])
+                        if "description" in item["widget"]:
+                            item["widget"]["description"] = translated.get(item["widget"]["description"])
                     if "header" in section:
-                        section["header"]["title"] = translated[section["header"]["title"]]
-                        if section["header"]["description"]:
-                            section["header"]["description"] = translated[section["header"]["description"]]
+                        if "title" in section["header"]:
+                            section["header"]["title"] = translated.get(section["header"]["title"])
+                        if "description" in section["header"]:
+                            section["header"]["description"] = translated.get(section["header"]["description"])
 
     # Declarative methods - workspace data filters
 
