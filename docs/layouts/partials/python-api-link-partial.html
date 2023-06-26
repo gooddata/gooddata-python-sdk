@@ -1,0 +1,18 @@
+{{ $orig_name := .}}
+
+{{ $links := getJSON "layouts/shortcodes/data/links.json" }}
+
+{{/* We have to handle the case of Optional[name] or list[name] */}}
+{{ $name := $orig_name }}
+{{ $name := replace $name "]" "" }}
+{{ $name := replace $name "Optional[" "" }}
+{{ $name := replace $name "list[" "" }}
+{{ $name := replace $name "List[" "" }}
+
+{{ $link := index $links (trim $name " ") }}
+{{ if $link }}
+    {{ $a_html := (printf "<a href=\"%s\">%s</a>" $link $name) }}
+    {{ replace $orig_name $name $a_html | safeHTML}}
+{{ else }}
+    {{ $name }}
+{{ end }}

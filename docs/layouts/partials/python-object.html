@@ -1,0 +1,26 @@
+{{ $objData := .object }}
+{{ $path := .path }}
+
+
+<div class="python-ref {{ if (eq $objData.kind "function") }} python-ref-func {{ else }} python-ref-class {{ end }}">
+    {{ if (eq $objData.kind "function") }}
+    <h3> {{index (last 2 $path) 0}}.{{ (index (last 1 $path) 0) }} -> {{ partial "python-api-link-partial.html" $objData.signature.return_type}} </h3>
+    <div class="python-ref-description">
+        <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
+        <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
+    </div>
+
+    {{ if gt (len $objData.docstring_parsed.params)  0 }}<h4> Parameters </h4>{{ end }}
+    <ul>
+        {{range $objData.docstring_parsed.params}}
+            <li> {{ .arg_name }}: {{ partial "python-api-link-partial.html"  .type_name }} </li>
+        {{end}}
+    </ul>
+    {{ else if (eq $objData.kind "class") }}
+    <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} </h1>
+    <div class="python-ref-description">
+        <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
+        <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
+    </div>
+    {{end}}
+</div>

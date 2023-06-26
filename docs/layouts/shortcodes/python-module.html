@@ -1,0 +1,37 @@
+{{ $path := split (.Get 0) "."  }}
+{{ $data := getJSON "layouts/shortcodes/data/data.json" }}
+
+{{ $currentData := $data}}
+{{ range $path }}
+    {{ if (eq $currentData.kind "class") }}
+        {{ $currentData = $currentData.functions }}
+    {{ end }}
+    {{$currentData = index $currentData .}}
+{{ end }}
+
+{{ $moduleData := $currentData }}
+
+
+<div class="python-api-ref">
+    Module at path: {{ $path }} <br>
+
+
+    {{ range $name, $object := $moduleData }}
+        {{ if eq $name "kind" }}
+            {{/* Skip the `kind` field in data.json */}}
+        {{ else }}
+        {{ partial "python-object.html" (dict "object" $object "path" (append (slice $name) $path)) }}
+
+        {{/* And display the functions */}}
+        <h3> Methods: </h3>
+        {{ with $object }}
+            {{ if (eq .kind "class") }}
+                {{ range $funcName, $funcObj := .functions }}
+                    {{ partial "python-object.html" (dict "object" $funcObj "path" (append (slice $name $funcName) $path)) }}
+                {{ end }}
+            {{ end }}
+        {{ end}}
+    {{ end }}
+    <div style="margin-bottom: 3rem"></div>
+    {{ end }}
+</div>

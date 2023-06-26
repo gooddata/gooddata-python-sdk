@@ -4,7 +4,28 @@ linkTitle: "Testing"
 weight: 12
 ---
 
-{{<python "sdk.CatalogOrganizationService.update_name">}}
+<style>
+    .python-ref-func {
+        padding-left: 3rem;
+    }
+    .python-ref-description {
+        padding-left: 3rem;
+    }
+</style>
 
-{{<python "sdk.CatalogOrganizationService.update_oidc_parameters">}}
-{{<python "sdk.CatalogOrganizationService">}}
+# Link example
+{{< python-api-link "CatalogWorkspaceService" >}}
+
+#
+#
+#
+#
+
+# Single object example
+{{< python "sdk.CatalogWorkspaceService" >}}
+# 
+# 
+# 
+# Module example
+{{< python-module "sdk" >}}
+

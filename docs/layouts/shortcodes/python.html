@@ -13,20 +13,5 @@
 
 
 <div class="python-ref">
-    {{ if (eq $objData.kind "function") }}
-    <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} -> {{$objData.signature.return_type}} </h1>
-    <p> {{ $objData.docstring_parsed.short_description }}</p>
-    <p> {{ $objData.docstring_parsed.long_description }}</p>
-    <h4> Parameters </h4>
-    <ul>
-        {{range $objData.docstring_parsed.params}}
-            <li> {{ .arg_name }}: {{ .type_name }} </li>
-        {{end}}
-    </ul>
-    {{ else if (eq $objData.kind "class") }}
-    <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} </h1>
-    {{end}}
-    <p> {{ $objData.docstring_parsed.short_description }}</p>
-    <p> {{ $objData.docstring_parsed.long_description }}</p>
-
+    {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
 </div>
