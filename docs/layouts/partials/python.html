@@ -1,0 +1,21 @@
+{{ $path := split . "." }}
+{{ $data := getJSON "layouts/shortcodes/data/data.json" }}
+
+{{ $currentData := $data}}
+{{ range $path }}
+    {{ if (eq $currentData.kind "class") }}
+        {{ $currentData = $currentData.functions }}
+    {{ end }}
+    {{ if $currentData }}
+        {{$currentData = index $currentData .}}
+    {{ else }}
+        Failed to render: {{ $path }}
+    {{ end}}
+{{ end }}
+
+{{ $objData := $currentData }}
+
+
+<div class="python-ref">
+    {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
+</div>
