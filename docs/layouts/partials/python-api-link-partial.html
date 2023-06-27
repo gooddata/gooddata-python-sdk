@@ -9,9 +9,10 @@
 {{ $name := replace $name "list[" "" }}
 {{ $name := replace $name "List[" "" }}
 
-{{ $link := index $links (trim $name " ") }}
-{{ if $link }}
-    {{ $a_html := (printf "<a href=\"%s\">%s</a>" $link $name) }}
+{{ $data := index $links (trim $name " ") }}
+{{ if $data }}
+    {{ $path := $data.path }}
+    {{ $a_html := (printf "<a href=\"#%s\">%s</a>" $path $name) }}
     {{ replace $orig_name $name $a_html | safeHTML}}
 {{ else }}
     {{ $name }}

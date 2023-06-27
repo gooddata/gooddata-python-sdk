@@ -26,6 +26,6 @@ weight: 12
 # 
 # 
 # 
-# Module example
-{{< python-module "sdk" >}}
 
+# API REF
+{{< python-api-ref >}}

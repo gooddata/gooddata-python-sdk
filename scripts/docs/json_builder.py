@@ -8,12 +8,25 @@ from importlib.machinery import ModuleSpec
 from types import ModuleType, FunctionType
 import inspect
 from typing import Dict
+import re
 
 from docstring_parser import parse
+from docstring_parser.common import DocstringStyle
+
+
+def docstring_fixes(docstr: str) -> str:
+    docstr = re.sub(r"Args:[\n ]*None", "", docstr)  # Fix for Args: None in docstrings, which is not valid
+    return docstr
 
 
 def docstring_data(docstr: str):
-    parsed_docstr = parse(docstr)
+    if docstr is None:
+        return {}
+    docstr = docstring_fixes(docstr)
+    try:
+        parsed_docstr = parse(docstr, style=DocstringStyle.GOOGLE)
+    except:
+        return {}
     params_data = []
     for doc_param in parsed_docstr.params:
         params_data.append({
@@ -144,8 +157,9 @@ def generate_links(module_data: dict) -> Dict[str, str]:
     Generate links for the objects for the json data:
         Example:
         {
-            "AFM" : compute.model.attribute.afm_models.AFM,
-            "Class2" : path.in.json.Class2
+            "AFM" : {"path": "compute.model.attribute.afm_models.AFM", "kind": "class"},
+            "Class2" : {"path": "path.in.json.Class2", "kind": "class"},
+            "func1" : {"path": "path.in.json.func1", "kind": "function"}
         }
     :param data: dict with the module data
     :return:
@@ -155,11 +169,16 @@ def generate_links(module_data: dict) -> Dict[str, str]:
     def _recursive_find_classes(data: dict, path: str):
         if data.get("kind", None) in ["class", "function"]:
             # Last item in path corresponds to the class name
-            links[path.split(".")[-1]] = path
+            links[path.split(".")[-1]] = {"path": path, "kind": data["kind"]}
 
         for key, val in data.items():
             if isinstance(val, dict):
-                _recursive_find_classes(val, path + "." + key)
+                if key == "functions":
+                    _recursive_find_classes(val, path)
+                elif path != "":
+                    _recursive_find_classes(val, path + "." + key)
+                else:
+                    _recursive_find_classes(val, key)
 
     _recursive_find_classes(module_data, "")
 

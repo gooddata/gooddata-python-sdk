@@ -1,0 +1,14 @@
+{{ $data := getJSON "layouts/shortcodes/data/data.json" }}
+{{ $links := getJSON "layouts/shortcodes/data/links.json" }}
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+<div class="python-api-ref-link">
+    {{ range $name, $data := $links }}
+        {{ $path := $data.path }}
+        <span style="top: -250px; position: relative;" id="{{ $path }}"></span>
+        {{ partial "python.html" $path }}
+    {{ end }}
+</div>
