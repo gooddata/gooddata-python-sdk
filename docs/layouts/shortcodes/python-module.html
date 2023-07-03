@@ -15,23 +15,13 @@
 <div class="python-api-ref">
     Module at path: {{ $path }} <br>
 
-
-    {{ range $name, $object := $moduleData }}
-        {{ if eq $name "kind" }}
-            {{/* Skip the `kind` field in data.json */}}
-        {{ else }}
-        {{ partial "python-object.html" (dict "object" $object "path" (append (slice $name) $path)) }}
-
-        {{/* And display the functions */}}
-        <h3> Methods: </h3>
-        {{ with $object }}
-            {{ if (eq .kind "class") }}
-                {{ range $funcName, $funcObj := .functions }}
-                    {{ partial "python-object.html" (dict "object" $funcObj "path" (append (slice $name $funcName) $path)) }}
-                {{ end }}
+    Contains the following objects
+    <ul>
+        {{ range $objName, $objData := $moduleData }}
+            {{ if ne $objName "kind" }}
+                <li> {{$objData.kind}}: {{partial "python-api-link-partial.html" $objName}} </li>
             {{ end }}
-        {{ end}}
-    {{ end }}
+        {{ end }}
+    </ul>
     <div style="margin-bottom: 3rem"></div>
-    {{ end }}
 </div>

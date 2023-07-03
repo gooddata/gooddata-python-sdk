@@ -27,5 +27,11 @@ weight: 12
 # 
 # 
 
+# Single Class
+{{< python-class "sdk.CatalogWorkspaceService" >}}s
+
+# Module listing
+{{< python-module "sdk" >}}
+
 # API REF
 {{< python-api-ref >}}

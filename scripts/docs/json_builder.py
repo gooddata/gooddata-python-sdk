@@ -57,9 +57,13 @@ def signature_data(sig: inspect.Signature) -> dict:
             annotation = None
         params_data.append([str(param), str(annotation)])
 
+    return_annotation = sig.return_annotation
+    if return_annotation == inspect.Parameter.empty:
+        return_annotation = None
+
     return {
         "params": params_data,
-        "return_type": str(sig.return_annotation)
+        "return_type": str(return_annotation)
     }
 
 
@@ -123,6 +127,7 @@ def parse_package(obj, data=None):
     """
     if not data:
         data = {}
+    data["kind"] = "module"
     if isinstance(obj, ModuleType):
         iterator = pkgutil.iter_modules(obj.__path__)
         for item in iterator:
@@ -182,15 +187,7 @@ def generate_links(module_data: dict) -> Dict[str, str]:
 
     _recursive_find_classes(module_data, "")
 
-    #  The dict has to be sorted in order of longest keys to shortest
-    #  to properly generate links. Example:
-    #      GoodApi : link1, GoodApiClient : link2
-    #  then if GoodApiClient was a match in text it would be matched first
-    #  and ruin the link for GoodApiClient
-    #
-    #  Note: This requires Python 3.7+ to work (ordered dict as a default),
-    #  but that's standard by now
-    sorted_keys = sorted(links, key=lambda key: len(key), reverse=True)
+    sorted_keys = sorted(links, key=lambda key: links[key]["path"], reverse=True)
     links = {key: links[key] for key in sorted_keys}
     return links
 
