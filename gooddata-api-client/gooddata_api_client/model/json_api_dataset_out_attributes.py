@@ -35,10 +35,12 @@ def lazy_import():
     from gooddata_api_client.model.json_api_dataset_out_attributes_reference_properties_inner import JsonApiDatasetOutAttributesReferencePropertiesInner
     from gooddata_api_client.model.json_api_dataset_out_attributes_sql import JsonApiDatasetOutAttributesSql
     from gooddata_api_client.model.json_api_dataset_out_attributes_workspace_data_filter_columns_inner import JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner
+    from gooddata_api_client.model.json_api_dataset_out_attributes_workspace_data_filter_properties_inner import JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner
     globals()['JsonApiDatasetOutAttributesGrainInner'] = JsonApiDatasetOutAttributesGrainInner
     globals()['JsonApiDatasetOutAttributesReferencePropertiesInner'] = JsonApiDatasetOutAttributesReferencePropertiesInner
     globals()['JsonApiDatasetOutAttributesSql'] = JsonApiDatasetOutAttributesSql
     globals()['JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner'] = JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner
+    globals()['JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner'] = JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner
 
 
 class JsonApiDatasetOutAttributes(ModelNormal):
@@ -110,6 +112,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             'type': (str,),  # noqa: E501
             'are_relations_valid': (bool,),  # noqa: E501
             'data_source_table_id': (str,),  # noqa: E501
+            'data_source_table_path': ([str],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'grain': ([JsonApiDatasetOutAttributesGrainInner],),  # noqa: E501
             'reference_properties': ([JsonApiDatasetOutAttributesReferencePropertiesInner],),  # noqa: E501
@@ -117,6 +120,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
             'workspace_data_filter_columns': ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner],),  # noqa: E501
+            'workspace_data_filter_properties': ([JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner],),  # noqa: E501
         }
 
     @cached_property
@@ -128,6 +132,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         'type': 'type',  # noqa: E501
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'data_source_table_id': 'dataSourceTableId',  # noqa: E501
+        'data_source_table_path': 'dataSourceTablePath',  # noqa: E501
         'description': 'description',  # noqa: E501
         'grain': 'grain',  # noqa: E501
         'reference_properties': 'referenceProperties',  # noqa: E501
@@ -135,6 +140,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
         'workspace_data_filter_columns': 'workspaceDataFilterColumns',  # noqa: E501
+        'workspace_data_filter_properties': 'workspaceDataFilterProperties',  # noqa: E501
     }
 
     read_only_vars = {
@@ -183,6 +189,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             data_source_table_id (str): [optional]  # noqa: E501
+            data_source_table_path ([str]): Path to database table.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
@@ -190,6 +197,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
             workspace_data_filter_columns ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner]): [optional]  # noqa: E501
+            workspace_data_filter_properties ([JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -281,6 +289,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
             data_source_table_id (str): [optional]  # noqa: E501
+            data_source_table_path ([str]): Path to database table.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             grain ([JsonApiDatasetOutAttributesGrainInner]): [optional]  # noqa: E501
             reference_properties ([JsonApiDatasetOutAttributesReferencePropertiesInner]): [optional]  # noqa: E501
@@ -288,6 +297,7 @@ class JsonApiDatasetOutAttributes(ModelNormal):
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
             workspace_data_filter_columns ([JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner]): [optional]  # noqa: E501
+            workspace_data_filter_properties ([JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

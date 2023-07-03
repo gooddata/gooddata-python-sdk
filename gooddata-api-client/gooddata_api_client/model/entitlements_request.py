@@ -57,8 +57,10 @@ class EntitlementsRequest(ModelNormal):
 
     allowed_values = {
         ('entitlements_name',): {
+            'CACHESTRATEGY': "CacheStrategy",
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'EXTRACACHE': "ExtraCache",
             'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",

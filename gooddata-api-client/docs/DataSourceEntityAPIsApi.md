@@ -4,22 +4,24 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_data_sources**](DataSourceEntityAPIsApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | 
-[**delete_entity_data_sources**](DataSourceEntityAPIsApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | 
-[**get_all_entities_data_source_identifiers**](DataSourceEntityAPIsApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | 
+[**create_entity_data_sources**](DataSourceEntityAPIsApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
+[**delete_entity_data_sources**](DataSourceEntityAPIsApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
+[**get_all_entities_data_source_identifiers**](DataSourceEntityAPIsApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
 [**get_all_entities_data_source_tables**](DataSourceEntityAPIsApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
-[**get_all_entities_data_sources**](DataSourceEntityAPIsApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | 
-[**get_entity_data_source_identifiers**](DataSourceEntityAPIsApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | 
+[**get_all_entities_data_sources**](DataSourceEntityAPIsApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
+[**get_entity_data_source_identifiers**](DataSourceEntityAPIsApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
 [**get_entity_data_source_tables**](DataSourceEntityAPIsApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
-[**get_entity_data_sources**](DataSourceEntityAPIsApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | 
-[**patch_entity_data_sources**](DataSourceEntityAPIsApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | 
-[**update_entity_data_sources**](DataSourceEntityAPIsApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | 
+[**get_entity_data_sources**](DataSourceEntityAPIsApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
+[**patch_entity_data_sources**](DataSourceEntityAPIsApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
+[**update_entity_data_sources**](DataSourceEntityAPIsApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
 
 
 # **create_entity_data_sources**
 > JsonApiDataSourceOutDocument create_entity_data_sources(json_api_data_source_in_document)
 
+Post Data Sources
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -73,6 +75,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Data Sources
         api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -81,6 +84,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Data Sources
         api_response = api_instance.create_entity_data_sources(json_api_data_source_in_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -120,7 +124,9 @@ No authorization required
 # **delete_entity_data_sources**
 > delete_entity_data_sources(id)
 
+Delete Data Source entity
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -146,6 +152,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Data Source entity
         api_instance.delete_entity_data_sources(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling DataSourceEntityAPIsApi->delete_entity_data_sources: %s\n" % e)
@@ -153,6 +160,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Data Source entity
         api_instance.delete_entity_data_sources(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling DataSourceEntityAPIsApi->delete_entity_data_sources: %s\n" % e)
@@ -191,7 +199,7 @@ No authorization required
 # **get_all_entities_data_source_identifiers**
 > JsonApiDataSourceIdentifierOutList get_all_entities_data_source_identifiers()
 
-
+Get all Data Source Identifiers
 
 ### Example
 
@@ -226,6 +234,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Data Source Identifiers
         api_response = api_instance.get_all_entities_data_source_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -350,7 +359,9 @@ No authorization required
 # **get_all_entities_data_sources**
 > JsonApiDataSourceOutList get_all_entities_data_sources()
 
+Get Data Source entities
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -385,6 +396,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Data Source entities
         api_response = api_instance.get_all_entities_data_sources(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -427,7 +439,7 @@ No authorization required
 # **get_entity_data_source_identifiers**
 > JsonApiDataSourceIdentifierOutDocument get_entity_data_source_identifiers(id)
 
-
+Get Data Source Identifier
 
 ### Example
 
@@ -457,6 +469,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Data Source Identifier
         api_response = api_instance.get_entity_data_source_identifiers(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -465,6 +478,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Data Source Identifier
         api_response = api_instance.get_entity_data_source_identifiers(id, filter=filter, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -581,7 +595,9 @@ No authorization required
 # **get_entity_data_sources**
 > JsonApiDataSourceOutDocument get_entity_data_sources(id)
 
+Get Data Source entity
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -611,6 +627,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Data Source entity
         api_response = api_instance.get_entity_data_sources(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -619,6 +636,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Data Source entity
         api_response = api_instance.get_entity_data_sources(id, filter=filter, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -659,7 +677,9 @@ No authorization required
 # **patch_entity_data_sources**
 > JsonApiDataSourceOutDocument patch_entity_data_sources(id, json_api_data_source_patch_document)
 
+Patch Data Source entity
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -712,6 +732,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Data Source entity
         api_response = api_instance.patch_entity_data_sources(id, json_api_data_source_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -720,6 +741,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Data Source entity
         api_response = api_instance.patch_entity_data_sources(id, json_api_data_source_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -760,7 +782,9 @@ No authorization required
 # **update_entity_data_sources**
 > JsonApiDataSourceOutDocument update_entity_data_sources(id, json_api_data_source_in_document)
 
+Put Data Source entity
 
+Data Source - represents data source for the workspace
 
 ### Example
 
@@ -813,6 +837,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Data Source entity
         api_response = api_instance.update_entity_data_sources(id, json_api_data_source_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -821,6 +846,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Data Source entity
         api_response = api_instance.update_entity_data_sources(id, json_api_data_source_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

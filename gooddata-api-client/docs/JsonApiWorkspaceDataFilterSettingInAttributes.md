@@ -1,4 +1,4 @@
-# JsonApiWorkspaceDataFilterSettingOutAttributes
+# JsonApiWorkspaceDataFilterSettingInAttributes
 
 
 ## Properties

@@ -787,7 +787,7 @@ class AppearanceApi(object):
         json_api_color_palette_in_document,
         **kwargs
     ):
-        """create_entity_color_palettes  # noqa: E501
+        """Post Color Pallettes  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -869,7 +869,7 @@ class AppearanceApi(object):
         json_api_theme_in_document,
         **kwargs
     ):
-        """create_entity_themes  # noqa: E501
+        """Post Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -951,7 +951,7 @@ class AppearanceApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_color_palettes  # noqa: E501
+        """Delete a Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1034,7 +1034,7 @@ class AppearanceApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_themes  # noqa: E501
+        """Delete Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1116,7 +1116,7 @@ class AppearanceApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_color_palettes  # noqa: E501
+        """Get all Color Pallettes  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1197,7 +1197,7 @@ class AppearanceApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_themes  # noqa: E501
+        """Get all Theming entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1279,7 +1279,7 @@ class AppearanceApi(object):
         id,
         **kwargs
     ):
-        """get_entity_color_palettes  # noqa: E501
+        """Get Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1362,7 +1362,7 @@ class AppearanceApi(object):
         id,
         **kwargs
     ):
-        """get_entity_themes  # noqa: E501
+        """Get Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1446,7 +1446,7 @@ class AppearanceApi(object):
         json_api_color_palette_patch_document,
         **kwargs
     ):
-        """patch_entity_color_palettes  # noqa: E501
+        """Patch Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1533,7 +1533,7 @@ class AppearanceApi(object):
         json_api_theme_patch_document,
         **kwargs
     ):
-        """patch_entity_themes  # noqa: E501
+        """Patch Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1620,7 +1620,7 @@ class AppearanceApi(object):
         json_api_color_palette_in_document,
         **kwargs
     ):
-        """update_entity_color_palettes  # noqa: E501
+        """Put Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1707,7 +1707,7 @@ class AppearanceApi(object):
         json_api_theme_in_document,
         **kwargs
     ):
-        """update_entity_themes  # noqa: E501
+        """Put Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_user_groups**](UserGroupsEntityAPIsApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | 
-[**delete_entity_user_groups**](UserGroupsEntityAPIsApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | 
-[**get_all_entities_user_groups**](UserGroupsEntityAPIsApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | 
-[**get_entity_user_groups**](UserGroupsEntityAPIsApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | 
-[**patch_entity_user_groups**](UserGroupsEntityAPIsApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | 
-[**update_entity_user_groups**](UserGroupsEntityAPIsApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | 
+[**create_entity_user_groups**](UserGroupsEntityAPIsApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | Post User Group entities
+[**delete_entity_user_groups**](UserGroupsEntityAPIsApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
+[**get_all_entities_user_groups**](UserGroupsEntityAPIsApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
+[**get_entity_user_groups**](UserGroupsEntityAPIsApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
+[**patch_entity_user_groups**](UserGroupsEntityAPIsApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
+[**update_entity_user_groups**](UserGroupsEntityAPIsApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
 
 
 # **create_entity_user_groups**
 > JsonApiUserGroupOutDocument create_entity_user_groups(json_api_user_group_in_document)
 
+Post User Group entities
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -63,6 +65,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post User Group entities
         api_response = api_instance.create_entity_user_groups(json_api_user_group_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -71,6 +74,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post User Group entities
         api_response = api_instance.create_entity_user_groups(json_api_user_group_in_document, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -110,7 +114,9 @@ No authorization required
 # **delete_entity_user_groups**
 > delete_entity_user_groups(id)
 
+Delete UserGroup entity
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -136,6 +142,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete UserGroup entity
         api_instance.delete_entity_user_groups(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserGroupsEntityAPIsApi->delete_entity_user_groups: %s\n" % e)
@@ -143,6 +150,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete UserGroup entity
         api_instance.delete_entity_user_groups(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserGroupsEntityAPIsApi->delete_entity_user_groups: %s\n" % e)
@@ -181,7 +189,9 @@ No authorization required
 # **get_all_entities_user_groups**
 > JsonApiUserGroupOutList get_all_entities_user_groups()
 
+Get UserGroup entities
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -216,6 +226,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get UserGroup entities
         api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -258,7 +269,9 @@ No authorization required
 # **get_entity_user_groups**
 > JsonApiUserGroupOutDocument get_entity_user_groups(id)
 
+Get UserGroup entity
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -288,6 +301,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get UserGroup entity
         api_response = api_instance.get_entity_user_groups(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -296,6 +310,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get UserGroup entity
         api_response = api_instance.get_entity_user_groups(id, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -336,7 +351,9 @@ No authorization required
 # **patch_entity_user_groups**
 > JsonApiUserGroupOutDocument patch_entity_user_groups(id, json_api_user_group_patch_document)
 
+Patch UserGroup entity
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -386,6 +403,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch UserGroup entity
         api_response = api_instance.patch_entity_user_groups(id, json_api_user_group_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -394,6 +412,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch UserGroup entity
         api_response = api_instance.patch_entity_user_groups(id, json_api_user_group_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -435,7 +454,9 @@ No authorization required
 # **update_entity_user_groups**
 > JsonApiUserGroupOutDocument update_entity_user_groups(id, json_api_user_group_in_document)
 
+Put UserGroup entity
 
+User Group - creates tree-like structure for categorizing users
 
 ### Example
 
@@ -485,6 +506,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put UserGroup entity
         api_response = api_instance.update_entity_user_groups(id, json_api_user_group_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -493,6 +515,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put UserGroup entity
         api_response = api_instance.update_entity_user_groups(id, json_api_user_group_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

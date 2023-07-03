@@ -60,6 +60,15 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
     """
 
     allowed_values = {
+        ('source_column_data_types',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {

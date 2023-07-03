@@ -26,6 +26,7 @@ from gooddata_api_client.model.json_api_metric_in_document import JsonApiMetricI
 from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
 from gooddata_api_client.model.json_api_metric_out_list import JsonApiMetricOutList
 from gooddata_api_client.model.json_api_metric_patch_document import JsonApiMetricPatchDocument
+from gooddata_api_client.model.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
 
 
 class MetricsApi(object):
@@ -51,13 +52,13 @@ class MetricsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_metric_in_document',
+                    'json_api_metric_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_metric_in_document',
+                    'json_api_metric_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -95,8 +96,8 @@ class MetricsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_metric_in_document':
-                        (JsonApiMetricInDocument,),
+                    'json_api_metric_post_optional_id_document':
+                        (JsonApiMetricPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -109,7 +110,7 @@ class MetricsApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_metric_in_document': 'body',
+                    'json_api_metric_post_optional_id_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
@@ -574,20 +575,20 @@ class MetricsApi(object):
     def create_entity_metrics(
         self,
         workspace_id,
-        json_api_metric_in_document,
+        json_api_metric_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_metrics  # noqa: E501
+        """Post Metrics  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_metrics(workspace_id, json_api_metric_in_document, async_req=True)
+        >>> thread = api.create_entity_metrics(workspace_id, json_api_metric_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_metric_in_document (JsonApiMetricInDocument):
+            json_api_metric_post_optional_id_document (JsonApiMetricPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -655,8 +656,8 @@ class MetricsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_metric_in_document'] = \
-            json_api_metric_in_document
+        kwargs['json_api_metric_post_optional_id_document'] = \
+            json_api_metric_post_optional_id_document
         return self.create_entity_metrics_endpoint.call_with_http_info(**kwargs)
 
     def delete_entity_metrics(
@@ -665,7 +666,7 @@ class MetricsApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_metrics  # noqa: E501
+        """Delete a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -751,7 +752,7 @@ class MetricsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_metrics  # noqa: E501
+        """Get all Metrics  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -842,7 +843,7 @@ class MetricsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_metrics  # noqa: E501
+        """Get a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -933,7 +934,7 @@ class MetricsApi(object):
         json_api_metric_patch_document,
         **kwargs
     ):
-        """patch_entity_metrics  # noqa: E501
+        """Patch a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1025,7 +1026,7 @@ class MetricsApi(object):
         json_api_metric_in_document,
         **kwargs
     ):
-        """update_entity_metrics  # noqa: E501
+        """Put a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

@@ -64,6 +64,7 @@ class ResolvedSetting(ModelNormal):
             'LOCALE': "LOCALE",
             'FORMAT_LOCALE': "FORMAT_LOCALE",
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+            'WEEK_START': "WEEK_START",
         },
     }
 

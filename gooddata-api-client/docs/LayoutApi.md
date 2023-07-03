@@ -1088,7 +1088,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="customers",
                             name_prefix="out_gooddata",
                             path=["table_schema","table_name"],
-                            type="VIEW",
+                            type="TABLE",
                         ),
                     ],
                 ),
@@ -1584,6 +1584,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     data_source_table_id=DataSourceTableIdentifier(
                         data_source_id="my-postgres",
                         id="customers",
+                        path=["table_schema","table_name"],
                         type="dataSource",
                     ),
                     description="The customers of ours.",
@@ -1612,7 +1613,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             multivalue=False,
                             source_column_data_types=[
-                                "source_column_data_types_example",
+                                "INT",
                             ],
                             source_columns=["customer_id"],
                         ),
@@ -1627,6 +1628,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
                             name="customer_id",
+                        ),
+                    ],
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="WORKSPACE_DATA_FILTER",
+                            ),
                         ),
                     ],
                 ),
@@ -1888,6 +1899,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     data_source_table_id=DataSourceTableIdentifier(
                         data_source_id="my-postgres",
                         id="customers",
+                        path=["table_schema","table_name"],
                         type="dataSource",
                     ),
                     description="The customers of ours.",
@@ -1916,7 +1928,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             multivalue=False,
                             source_column_data_types=[
-                                "source_column_data_types_example",
+                                "INT",
                             ],
                             source_columns=["customer_id"],
                         ),
@@ -1931,6 +1943,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
                             name="customer_id",
+                        ),
+                    ],
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="WORKSPACE_DATA_FILTER",
+                            ),
                         ),
                     ],
                 ),
@@ -2055,7 +2077,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="customers",
                             name_prefix="out_gooddata",
                             path=["table_schema","table_name"],
-                            type="VIEW",
+                            type="TABLE",
                         ),
                     ],
                 ),
@@ -2324,6 +2346,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 data_source_table_id=DataSourceTableIdentifier(
                                     data_source_id="my-postgres",
                                     id="customers",
+                                    path=["table_schema","table_name"],
                                     type="dataSource",
                                 ),
                                 description="The customers of ours.",
@@ -2352,7 +2375,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         ),
                                         multivalue=False,
                                         source_column_data_types=[
-                                            "source_column_data_types_example",
+                                            "INT",
                                         ],
                                         source_columns=["customer_id"],
                                     ),
@@ -2367,6 +2390,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",
                                         name="customer_id",
+                                    ),
+                                ],
+                                workspace_data_filter_references=[
+                                    DeclarativeWorkspaceDataFilterReferences(
+                                        filter_column="filter_id",
+                                        filter_column_data_type="INT",
+                                        filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                            id="country_id",
+                                            type="WORKSPACE_DATA_FILTER",
+                                        ),
                                     ),
                                 ],
                             ),
@@ -2512,7 +2545,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="customers",
                     name_prefix="out_gooddata",
                     path=["table_schema","table_name"],
-                    type="VIEW",
+                    type="TABLE",
                 ),
             ],
         ),
@@ -3153,6 +3186,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 data_source_table_id=DataSourceTableIdentifier(
                                     data_source_id="my-postgres",
                                     id="customers",
+                                    path=["table_schema","table_name"],
                                     type="dataSource",
                                 ),
                                 description="The customers of ours.",
@@ -3181,7 +3215,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                         ),
                                         multivalue=False,
                                         source_column_data_types=[
-                                            "source_column_data_types_example",
+                                            "INT",
                                         ],
                                         source_columns=["customer_id"],
                                     ),
@@ -3196,6 +3230,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",
                                         name="customer_id",
+                                    ),
+                                ],
+                                workspace_data_filter_references=[
+                                    DeclarativeWorkspaceDataFilterReferences(
+                                        filter_column="filter_id",
+                                        filter_column_data_type="INT",
+                                        filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                            id="country_id",
+                                            type="WORKSPACE_DATA_FILTER",
+                                        ),
                                     ),
                                 ],
                             ),

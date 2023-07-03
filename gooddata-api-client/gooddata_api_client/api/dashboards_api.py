@@ -26,6 +26,7 @@ from gooddata_api_client.model.json_api_analytical_dashboard_in_document import 
 from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from gooddata_api_client.model.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
 from gooddata_api_client.model.json_api_analytical_dashboard_patch_document import JsonApiAnalyticalDashboardPatchDocument
+from gooddata_api_client.model.json_api_analytical_dashboard_post_optional_id_document import JsonApiAnalyticalDashboardPostOptionalIdDocument
 
 
 class DashboardsApi(object):
@@ -51,13 +52,13 @@ class DashboardsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_analytical_dashboard_in_document',
+                    'json_api_analytical_dashboard_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_analytical_dashboard_in_document',
+                    'json_api_analytical_dashboard_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -99,8 +100,8 @@ class DashboardsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_analytical_dashboard_in_document':
-                        (JsonApiAnalyticalDashboardInDocument,),
+                    'json_api_analytical_dashboard_post_optional_id_document':
+                        (JsonApiAnalyticalDashboardPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -113,7 +114,7 @@ class DashboardsApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_analytical_dashboard_in_document': 'body',
+                    'json_api_analytical_dashboard_post_optional_id_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
@@ -590,20 +591,20 @@ class DashboardsApi(object):
     def create_entity_analytical_dashboards(
         self,
         workspace_id,
-        json_api_analytical_dashboard_in_document,
+        json_api_analytical_dashboard_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_analytical_dashboards  # noqa: E501
+        """Post Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, async_req=True)
+        >>> thread = api.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_analytical_dashboard_in_document (JsonApiAnalyticalDashboardInDocument):
+            json_api_analytical_dashboard_post_optional_id_document (JsonApiAnalyticalDashboardPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -671,8 +672,8 @@ class DashboardsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_analytical_dashboard_in_document'] = \
-            json_api_analytical_dashboard_in_document
+        kwargs['json_api_analytical_dashboard_post_optional_id_document'] = \
+            json_api_analytical_dashboard_post_optional_id_document
         return self.create_entity_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
 
     def delete_entity_analytical_dashboards(
@@ -681,7 +682,7 @@ class DashboardsApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_analytical_dashboards  # noqa: E501
+        """Delete a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -767,7 +768,7 @@ class DashboardsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_analytical_dashboards  # noqa: E501
+        """Get all Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -858,7 +859,7 @@ class DashboardsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_analytical_dashboards  # noqa: E501
+        """Get a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -949,7 +950,7 @@ class DashboardsApi(object):
         json_api_analytical_dashboard_patch_document,
         **kwargs
     ):
-        """patch_entity_analytical_dashboards  # noqa: E501
+        """Patch a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1041,7 +1042,7 @@ class DashboardsApi(object):
         json_api_analytical_dashboard_in_document,
         **kwargs
     ):
-        """update_entity_analytical_dashboards  # noqa: E501
+        """Put Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
