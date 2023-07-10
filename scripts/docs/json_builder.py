@@ -33,7 +33,8 @@ def docstring_data(docstr: str):
             'arg_name': doc_param.arg_name,
             'default': doc_param.default,
             'is_optional': doc_param.is_optional,
-            'type_name': doc_param.type_name
+            'type_name': doc_param.type_name,
+            "description": doc_param.description,
         })
 
     data = {
@@ -43,8 +44,11 @@ def docstring_data(docstr: str):
         "examples": str(parsed_docstr.examples)
     }
     if parsed_docstr.returns:
-        data["returns"]: parsed_docstr.returns.type_name
-
+        data["returns"] = {
+            "type_name": parsed_docstr.returns.type_name,
+            "description": parsed_docstr.returns.description,
+            "return_name": parsed_docstr.returns.return_name
+        }
     return data
 
 

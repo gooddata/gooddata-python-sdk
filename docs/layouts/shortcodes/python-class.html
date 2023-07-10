@@ -13,7 +13,10 @@
 
 <div class="python-ref">
   {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
-  {{ range $func := $objData.functions }}
-    {{ partial "python-object.html" (dict "object" $func "path" $path) }}
-  {{ end }}
+  <h2>Methods</h2>
+  <ul>
+    {{ range $name, $func := $objData.functions }}
+      <li>{{ partial "python-api-link-partial.html" $name }}</li>
+    {{ end }}
+  </ul>
 </div>

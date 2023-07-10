@@ -1,5 +1,6 @@
 ---
-title: "Class"
+title: "NAME"
+no_list: true
 ---
 
 {{< python-class "PATH" >}}
