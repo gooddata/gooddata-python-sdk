@@ -15,8 +15,11 @@
   {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
   <h2>Methods</h2>
   <ul>
+
     {{ range $name, $func := $objData.functions }}
-      <li>{{ partial "python-api-link-partial.html" $name }}</li>
+      {{ if not (hasPrefix $name "_") }}
+        <li>{{ partial "python-api-link-partial.html" $name }}</li>
+      {{ end }}
     {{ end }}
   </ul>
 </div>

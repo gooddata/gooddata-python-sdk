@@ -4,444 +4,428 @@
         "kind": "function"
     },
     "CatalogDataSourceService": {
-        "path": "/docs/sdk/catalogdatasourceservice",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice",
         "kind": "class"
     },
-    "__init__": {
-        "path": "/docs/sdk/gooddatasdk/__init__",
-        "kind": "function"
-    },
-    "_credentials_from_file": {
-        "path": "/docs/sdk/catalogdatasourceservice/_credentials_from_file",
-        "kind": "function"
-    },
     "create_or_update_data_source": {
-        "path": "/docs/sdk/catalogdatasourceservice/create_or_update_data_source",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/create_or_update_data_source",
         "kind": "function"
     },
     "data_source_folder": {
-        "path": "/docs/sdk/catalogdatasourceservice/data_source_folder",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/data_source_folder",
         "kind": "function"
     },
     "delete_data_source": {
-        "path": "/docs/sdk/catalogdatasourceservice/delete_data_source",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/delete_data_source",
         "kind": "function"
     },
     "generate_logical_model": {
-        "path": "/docs/sdk/catalogdatasourceservice/generate_logical_model",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/generate_logical_model",
         "kind": "function"
     },
     "get_data_source": {
-        "path": "/docs/sdk/catalogdatasourceservice/get_data_source",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/get_data_source",
         "kind": "function"
     },
     "get_declarative_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/get_declarative_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/get_declarative_data_sources",
         "kind": "function"
     },
     "get_declarative_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/get_declarative_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/get_declarative_pdm",
         "kind": "function"
     },
     "get_organization": {
-        "path": "/docs/sdk/catalogworkspaceservice/get_organization",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/get_organization",
         "kind": "function"
     },
     "layout_organization_folder": {
-        "path": "/docs/sdk/catalogworkspaceservice/layout_organization_folder",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/layout_organization_folder",
         "kind": "function"
     },
     "list_data_source_tables": {
-        "path": "/docs/sdk/catalogdatasourceservice/list_data_source_tables",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/list_data_source_tables",
         "kind": "function"
     },
     "list_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/list_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/list_data_sources",
         "kind": "function"
     },
     "load_and_put_declarative_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/load_and_put_declarative_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/load_and_put_declarative_data_sources",
         "kind": "function"
     },
     "load_and_put_declarative_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/load_and_put_declarative_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/load_and_put_declarative_pdm",
         "kind": "function"
     },
     "load_declarative_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/load_declarative_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/load_declarative_data_sources",
         "kind": "function"
     },
     "load_declarative_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/load_declarative_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/load_declarative_pdm",
         "kind": "function"
     },
     "load_pdm_from_disk": {
-        "path": "/docs/sdk/catalogdatasourceservice/load_pdm_from_disk",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/load_pdm_from_disk",
         "kind": "function"
     },
     "patch_data_source_attributes": {
-        "path": "/docs/sdk/catalogdatasourceservice/patch_data_source_attributes",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/patch_data_source_attributes",
         "kind": "function"
     },
     "put_declarative_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/put_declarative_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/put_declarative_data_sources",
         "kind": "function"
     },
     "put_declarative_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/put_declarative_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/put_declarative_pdm",
         "kind": "function"
     },
     "register_upload_notification": {
-        "path": "/docs/sdk/catalogdatasourceservice/register_upload_notification",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/register_upload_notification",
         "kind": "function"
     },
     "report_warnings": {
-        "path": "/docs/sdk/catalogdatasourceservice/report_warnings",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/report_warnings",
         "kind": "function"
     },
     "scan_and_put_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/scan_and_put_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/scan_and_put_pdm",
         "kind": "function"
     },
     "scan_data_source": {
-        "path": "/docs/sdk/catalogdatasourceservice/scan_data_source",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/scan_data_source",
         "kind": "function"
     },
     "scan_schemata": {
-        "path": "/docs/sdk/catalogdatasourceservice/scan_schemata",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/scan_schemata",
         "kind": "function"
     },
     "scan_sql": {
-        "path": "/docs/sdk/catalogdatasourceservice/scan_sql",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/scan_sql",
         "kind": "function"
     },
     "store_declarative_data_sources": {
-        "path": "/docs/sdk/catalogdatasourceservice/store_declarative_data_sources",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/store_declarative_data_sources",
         "kind": "function"
     },
     "store_declarative_pdm": {
-        "path": "/docs/sdk/catalogdatasourceservice/store_declarative_pdm",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/store_declarative_pdm",
         "kind": "function"
     },
     "store_pdm_to_disk": {
-        "path": "/docs/sdk/catalogdatasourceservice/store_pdm_to_disk",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/store_pdm_to_disk",
         "kind": "function"
     },
     "test_data_sources_connection": {
-        "path": "/docs/sdk/catalogdatasourceservice/test_data_sources_connection",
+        "path": "/docs/catalog/data_source/validation/data_source/catalogdatasourceservice/test_data_sources_connection",
         "kind": "function"
     },
     "CatalogOrganizationService": {
-        "path": "/docs/sdk/catalogorganizationservice",
+        "path": "/docs/catalog/organization/service/catalogorganizationservice",
         "kind": "class"
     },
     "update_name": {
-        "path": "/docs/sdk/catalogorganizationservice/update_name",
+        "path": "/docs/catalog/organization/service/catalogorganizationservice/update_name",
         "kind": "function"
     },
     "update_oidc_parameters": {
-        "path": "/docs/sdk/catalogorganizationservice/update_oidc_parameters",
+        "path": "/docs/catalog/organization/service/catalogorganizationservice/update_oidc_parameters",
         "kind": "function"
     },
     "CatalogPermissionService": {
-        "path": "/docs/sdk/catalogpermissionservice",
+        "path": "/docs/catalog/workspace/service/catalogpermissionservice",
         "kind": "class"
     },
     "get_declarative_permissions": {
-        "path": "/docs/sdk/catalogpermissionservice/get_declarative_permissions",
+        "path": "/docs/catalog/workspace/service/catalogpermissionservice/get_declarative_permissions",
         "kind": "function"
     },
     "put_declarative_permissions": {
-        "path": "/docs/sdk/catalogpermissionservice/put_declarative_permissions",
+        "path": "/docs/catalog/workspace/service/catalogpermissionservice/put_declarative_permissions",
         "kind": "function"
     },
     "CatalogUserService": {
-        "path": "/docs/sdk/cataloguserservice",
+        "path": "/docs/catalog/user/service/cataloguserservice",
         "kind": "class"
     },
     "create_or_update_user": {
-        "path": "/docs/sdk/cataloguserservice/create_or_update_user",
+        "path": "/docs/catalog/user/service/cataloguserservice/create_or_update_user",
         "kind": "function"
     },
     "create_or_update_user_group": {
-        "path": "/docs/sdk/cataloguserservice/create_or_update_user_group",
+        "path": "/docs/catalog/user/service/cataloguserservice/create_or_update_user_group",
         "kind": "function"
     },
     "delete_user": {
-        "path": "/docs/sdk/cataloguserservice/delete_user",
+        "path": "/docs/catalog/user/service/cataloguserservice/delete_user",
         "kind": "function"
     },
     "delete_user_group": {
-        "path": "/docs/sdk/cataloguserservice/delete_user_group",
+        "path": "/docs/catalog/user/service/cataloguserservice/delete_user_group",
         "kind": "function"
     },
     "get_declarative_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/get_declarative_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/get_declarative_user_groups",
         "kind": "function"
     },
     "get_declarative_users": {
-        "path": "/docs/sdk/cataloguserservice/get_declarative_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/get_declarative_users",
         "kind": "function"
     },
     "get_declarative_users_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/get_declarative_users_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/get_declarative_users_user_groups",
         "kind": "function"
     },
     "get_user": {
-        "path": "/docs/sdk/cataloguserservice/get_user",
+        "path": "/docs/catalog/user/service/cataloguserservice/get_user",
         "kind": "function"
     },
     "get_user_group": {
-        "path": "/docs/sdk/cataloguserservice/get_user_group",
+        "path": "/docs/catalog/user/service/cataloguserservice/get_user_group",
         "kind": "function"
     },
     "list_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/list_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/list_user_groups",
         "kind": "function"
     },
     "list_users": {
-        "path": "/docs/sdk/cataloguserservice/list_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/list_users",
         "kind": "function"
     },
     "load_and_put_declarative_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/load_and_put_declarative_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_and_put_declarative_user_groups",
         "kind": "function"
     },
     "load_and_put_declarative_users": {
-        "path": "/docs/sdk/cataloguserservice/load_and_put_declarative_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_and_put_declarative_users",
         "kind": "function"
     },
     "load_and_put_declarative_users_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/load_and_put_declarative_users_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_and_put_declarative_users_user_groups",
         "kind": "function"
     },
     "load_declarative_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/load_declarative_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_declarative_user_groups",
         "kind": "function"
     },
     "load_declarative_users": {
-        "path": "/docs/sdk/cataloguserservice/load_declarative_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_declarative_users",
         "kind": "function"
     },
     "load_declarative_users_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/load_declarative_users_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/load_declarative_users_user_groups",
         "kind": "function"
     },
     "put_declarative_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/put_declarative_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/put_declarative_user_groups",
         "kind": "function"
     },
     "put_declarative_users": {
-        "path": "/docs/sdk/cataloguserservice/put_declarative_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/put_declarative_users",
         "kind": "function"
     },
     "put_declarative_users_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/put_declarative_users_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/put_declarative_users_user_groups",
         "kind": "function"
     },
     "store_declarative_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/store_declarative_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/store_declarative_user_groups",
         "kind": "function"
     },
     "store_declarative_users": {
-        "path": "/docs/sdk/cataloguserservice/store_declarative_users",
+        "path": "/docs/catalog/user/service/cataloguserservice/store_declarative_users",
         "kind": "function"
     },
     "store_declarative_users_user_groups": {
-        "path": "/docs/sdk/cataloguserservice/store_declarative_users_user_groups",
+        "path": "/docs/catalog/user/service/cataloguserservice/store_declarative_users_user_groups",
         "kind": "function"
     },
     "CatalogWorkspaceContentService": {
-        "path": "/docs/sdk/catalogworkspacecontentservice",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice",
         "kind": "class"
     },
-    "_prepare_afm_for_availability": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/_prepare_afm_for_availability",
-        "kind": "function"
-    },
     "compute_valid_objects": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/compute_valid_objects",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/compute_valid_objects",
         "kind": "function"
     },
     "get_attributes_catalog": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_attributes_catalog",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_attributes_catalog",
         "kind": "function"
     },
     "get_declarative_analytics_model": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_declarative_analytics_model",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_declarative_analytics_model",
         "kind": "function"
     },
     "get_declarative_ldm": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_declarative_ldm",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_declarative_ldm",
         "kind": "function"
     },
     "get_dependent_entities_graph": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_dependent_entities_graph",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_dependent_entities_graph",
         "kind": "function"
     },
     "get_dependent_entities_graph_from_entry_points": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_dependent_entities_graph_from_entry_points",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_dependent_entities_graph_from_entry_points",
         "kind": "function"
     },
     "get_facts_catalog": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_facts_catalog",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_facts_catalog",
         "kind": "function"
     },
     "get_full_catalog": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_full_catalog",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_full_catalog",
         "kind": "function"
     },
     "get_labels_catalog": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_labels_catalog",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_labels_catalog",
         "kind": "function"
     },
     "get_metrics_catalog": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/get_metrics_catalog",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/get_metrics_catalog",
         "kind": "function"
     },
     "layout_workspace_folder": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/layout_workspace_folder",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/layout_workspace_folder",
         "kind": "function"
     },
     "load_analytics_model_from_disk": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_analytics_model_from_disk",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_analytics_model_from_disk",
         "kind": "function"
     },
     "load_and_put_declarative_analytics_model": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_and_put_declarative_analytics_model",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_and_put_declarative_analytics_model",
         "kind": "function"
     },
     "load_and_put_declarative_ldm": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_and_put_declarative_ldm",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_and_put_declarative_ldm",
         "kind": "function"
     },
     "load_declarative_analytics_model": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_declarative_analytics_model",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_declarative_analytics_model",
         "kind": "function"
     },
     "load_declarative_ldm": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_declarative_ldm",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_declarative_ldm",
         "kind": "function"
     },
     "load_ldm_from_disk": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/load_ldm_from_disk",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/load_ldm_from_disk",
         "kind": "function"
     },
     "put_declarative_analytics_model": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/put_declarative_analytics_model",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/put_declarative_analytics_model",
         "kind": "function"
     },
     "put_declarative_ldm": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/put_declarative_ldm",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/put_declarative_ldm",
         "kind": "function"
     },
     "store_analytics_model_to_disk": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/store_analytics_model_to_disk",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/store_analytics_model_to_disk",
         "kind": "function"
     },
     "store_declarative_analytics_model": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/store_declarative_analytics_model",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/store_declarative_analytics_model",
         "kind": "function"
     },
     "store_declarative_ldm": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/store_declarative_ldm",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/store_declarative_ldm",
         "kind": "function"
     },
     "store_ldm_to_disk": {
-        "path": "/docs/sdk/catalogworkspacecontentservice/store_ldm_to_disk",
+        "path": "/docs/catalog/workspace/content_service/catalogworkspacecontentservice/store_ldm_to_disk",
         "kind": "function"
     },
     "CatalogWorkspaceService": {
-        "path": "/docs/sdk/catalogworkspaceservice",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice",
         "kind": "class"
     },
     "clone_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/clone_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/clone_workspace",
         "kind": "function"
     },
     "create_or_update": {
-        "path": "/docs/sdk/catalogworkspaceservice/create_or_update",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/create_or_update",
         "kind": "function"
     },
     "delete_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/delete_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/delete_workspace",
         "kind": "function"
     },
     "get_declarative_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/get_declarative_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/get_declarative_workspace",
         "kind": "function"
     },
     "get_declarative_workspace_data_filters": {
-        "path": "/docs/sdk/catalogworkspaceservice/get_declarative_workspace_data_filters",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/get_declarative_workspace_data_filters",
         "kind": "function"
     },
     "get_declarative_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/get_declarative_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/get_declarative_workspaces",
         "kind": "function"
     },
     "get_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/get_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/get_workspace",
         "kind": "function"
     },
     "list_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/list_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/list_workspaces",
         "kind": "function"
     },
     "load_and_put_declarative_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_and_put_declarative_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_and_put_declarative_workspace",
         "kind": "function"
     },
     "load_and_put_declarative_workspace_data_filters": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_and_put_declarative_workspace_data_filters",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_and_put_declarative_workspace_data_filters",
         "kind": "function"
     },
     "load_and_put_declarative_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_and_put_declarative_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_and_put_declarative_workspaces",
         "kind": "function"
     },
     "load_declarative_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_declarative_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_declarative_workspace",
         "kind": "function"
     },
     "load_declarative_workspace_data_filters": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_declarative_workspace_data_filters",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_declarative_workspace_data_filters",
         "kind": "function"
     },
     "load_declarative_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/load_declarative_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/load_declarative_workspaces",
         "kind": "function"
     },
     "put_declarative_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/put_declarative_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/put_declarative_workspace",
         "kind": "function"
     },
     "put_declarative_workspace_data_filters": {
-        "path": "/docs/sdk/catalogworkspaceservice/put_declarative_workspace_data_filters",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/put_declarative_workspace_data_filters",
         "kind": "function"
     },
     "put_declarative_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/put_declarative_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/put_declarative_workspaces",
         "kind": "function"
     },
     "store_declarative_workspace": {
-        "path": "/docs/sdk/catalogworkspaceservice/store_declarative_workspace",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/store_declarative_workspace",
         "kind": "function"
     },
     "store_declarative_workspace_data_filters": {
-        "path": "/docs/sdk/catalogworkspaceservice/store_declarative_workspace_data_filters",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/store_declarative_workspace_data_filters",
         "kind": "function"
     },
     "store_declarative_workspaces": {
-        "path": "/docs/sdk/catalogworkspaceservice/store_declarative_workspaces",
+        "path": "/docs/catalog/workspace/service/catalogworkspaceservice/store_declarative_workspaces",
         "kind": "function"
     },
     "GoodDataApiClient": {
-        "path": "/docs/sdk/gooddataapiclient",
+        "path": "/docs/catalog/workspace/service/gooddataapiclient",
         "kind": "class"
-    },
-    "_set_default_headers": {
-        "path": "/docs/sdk/gooddataapiclient/_set_default_headers",
-        "kind": "function"
     },
     "ComputeService": {
         "path": "/docs/sdk/computeservice",
@@ -490,5 +474,861 @@
     "GoodDataSdk": {
         "path": "/docs/sdk/gooddatasdk",
         "kind": "class"
+    },
+    "catalog": {
+        "path": "/docs/catalog",
+        "kind": "function"
+    },
+    "base": {
+        "path": "/docs/catalog/base",
+        "kind": "function"
+    },
+    "Base": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/base",
+        "kind": "class"
+    },
+    "client_class": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces/client_class",
+        "kind": "function"
+    },
+    "to_api": {
+        "path": "/docs/catalog/workspace/service/catalogworkspace/to_api",
+        "kind": "function"
+    },
+    "to_dict": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces/to_dict",
+        "kind": "function"
+    },
+    "catalog_service_base": {
+        "path": "/docs/catalog/catalog_service_base",
+        "kind": "function"
+    },
+    "CatalogOrganization": {
+        "path": "/docs/catalog/organization/entity_model/organization/catalogorganization",
+        "kind": "class"
+    },
+    "CatalogServiceBase": {
+        "path": "/docs/catalog/workspace/service/catalogservicebase",
+        "kind": "class"
+    },
+    "data_source": {
+        "path": "/docs/catalog/data_source/validation/data_source",
+        "kind": "function"
+    },
+    "action_model": {
+        "path": "/docs/catalog/data_source/action_model",
+        "kind": "function"
+    },
+    "requests": {
+        "path": "/docs/catalog/data_source/action_model/requests",
+        "kind": "function"
+    },
+    "ldm_request": {
+        "path": "/docs/catalog/data_source/action_model/requests/ldm_request",
+        "kind": "function"
+    },
+    "SqlColumn": {
+        "path": "/docs/catalog/data_source/action_model/sql_column/sqlcolumn",
+        "kind": "class"
+    },
+    "CatalogPdmSql": {
+        "path": "/docs/catalog/data_source/action_model/requests/ldm_request/catalogpdmsql",
+        "kind": "class"
+    },
+    "CatalogPdmLdmRequest": {
+        "path": "/docs/catalog/data_source/action_model/requests/ldm_request/catalogpdmldmrequest",
+        "kind": "class"
+    },
+    "CatalogGenerateLdmRequest": {
+        "path": "/docs/catalog/data_source/service/cataloggenerateldmrequest",
+        "kind": "class"
+    },
+    "scan_model_request": {
+        "path": "/docs/catalog/data_source/action_model/requests/scan_model_request",
+        "kind": "function"
+    },
+    "CatalogScanModelRequest": {
+        "path": "/docs/catalog/data_source/service/catalogscanmodelrequest",
+        "kind": "class"
+    },
+    "scan_sql_request": {
+        "path": "/docs/catalog/data_source/action_model/requests/scan_sql_request",
+        "kind": "function"
+    },
+    "ScanSqlRequest": {
+        "path": "/docs/catalog/data_source/service/scansqlrequest",
+        "kind": "class"
+    },
+    "responses": {
+        "path": "/docs/catalog/data_source/action_model/responses",
+        "kind": "function"
+    },
+    "scan_sql_response": {
+        "path": "/docs/catalog/data_source/action_model/responses/scan_sql_response",
+        "kind": "function"
+    },
+    "ScanSqlResponse": {
+        "path": "/docs/catalog/data_source/service/scansqlresponse",
+        "kind": "class"
+    },
+    "sql_column": {
+        "path": "/docs/catalog/data_source/action_model/sql_column",
+        "kind": "function"
+    },
+    "declarative_model": {
+        "path": "/docs/catalog/workspace/declarative_model",
+        "kind": "function"
+    },
+    "CatalogDeclarativeTables": {
+        "path": "/docs/catalog/data_source/service/catalogdeclarativetables",
+        "kind": "class"
+    },
+    "store_to_disk": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces/store_to_disk",
+        "kind": "function"
+    },
+    "TokenCredentialsFromFile": {
+        "path": "/docs/catalog/entity/tokencredentialsfromfile",
+        "kind": "class"
+    },
+    "to_api_args": {
+        "path": "/docs/catalog/entity/basiccredentials/to_api_args",
+        "kind": "function"
+    },
+    "token_from_file": {
+        "path": "/docs/catalog/entity/tokencredentialsfromfile/token_from_file",
+        "kind": "function"
+    },
+    "CatalogParameter": {
+        "path": "/docs/catalog/parameter/catalogparameter",
+        "kind": "class"
+    },
+    "CatalogDeclarativeDataSourcePermission": {
+        "path": "/docs/catalog/permission/declarative_model/permission/catalogdeclarativedatasourcepermission",
+        "kind": "class"
+    },
+    "CatalogDeclarativeDataSources": {
+        "path": "/docs/catalog/data_source/service/catalogdeclarativedatasources",
+        "kind": "class"
+    },
+    "data_sources_folder": {
+        "path": "/docs/catalog/data_source/service/catalogdeclarativedatasources/data_sources_folder",
+        "kind": "function"
+    },
+    "CatalogDeclarativeDataSource": {
+        "path": "/docs/catalog/data_source/service/catalogdeclarativedatasource",
+        "kind": "class"
+    },
+    "to_test_request": {
+        "path": "/docs/catalog/data_source/service/catalogdeclarativedatasource/to_test_request",
+        "kind": "function"
+    },
+    "physical_model": {
+        "path": "/docs/catalog/data_source/declarative_model/physical_model",
+        "kind": "function"
+    },
+    "column": {
+        "path": "/docs/catalog/data_source/declarative_model/physical_model/column",
+        "kind": "function"
+    },
+    "CatalogDeclarativeColumn": {
+        "path": "/docs/catalog/data_source/declarative_model/physical_model/table/catalogdeclarativecolumn",
+        "kind": "class"
+    },
+    "pdm": {
+        "path": "/docs/catalog/data_source/declarative_model/physical_model/pdm",
+        "kind": "function"
+    },
+    "CatalogDeclarativeTable": {
+        "path": "/docs/catalog/data_source/declarative_model/physical_model/table/catalogdeclarativetable",
+        "kind": "class"
+    },
+    "CatalogScanResultPdm": {
+        "path": "/docs/catalog/data_source/service/catalogscanresultpdm",
+        "kind": "class"
+    },
+    "table": {
+        "path": "/docs/catalog/data_source/entity_model/content_objects/table",
+        "kind": "function"
+    },
+    "entity_model": {
+        "path": "/docs/catalog/workspace/entity_model",
+        "kind": "function"
+    },
+    "content_objects": {
+        "path": "/docs/catalog/workspace/entity_model/content_objects",
+        "kind": "function"
+    },
+    "CatalogDataSourceTable": {
+        "path": "/docs/catalog/data_source/service/catalogdatasourcetable",
+        "kind": "class"
+    },
+    "CatalogDataSourceTableAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/content_objects/table/catalogdatasourcetableattributes",
+        "kind": "class"
+    },
+    "CatalogDataSourceTableColumn": {
+        "path": "/docs/catalog/data_source/entity_model/content_objects/table/catalogdatasourcetablecolumn",
+        "kind": "class"
+    },
+    "BasicCredentials": {
+        "path": "/docs/catalog/entity/basiccredentials",
+        "kind": "class"
+    },
+    "Credentials": {
+        "path": "/docs/catalog/entity/credentials",
+        "kind": "class"
+    },
+    "TokenCredentials": {
+        "path": "/docs/catalog/entity/tokencredentials",
+        "kind": "class"
+    },
+    "CatalogDataSourceBase": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcebase",
+        "kind": "class"
+    },
+    "CatalogDataSource": {
+        "path": "/docs/catalog/data_source/service/catalogdatasource",
+        "kind": "class"
+    },
+    "DatabaseAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/databaseattributes",
+        "kind": "class"
+    },
+    "PostgresAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/postgresattributes",
+        "kind": "class"
+    },
+    "RedshiftAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/redshiftattributes",
+        "kind": "class"
+    },
+    "VerticaAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/verticaattributes",
+        "kind": "class"
+    },
+    "GreenplumAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/greenplumattributes",
+        "kind": "class"
+    },
+    "CatalogDataSourcePostgres": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcepostgres",
+        "kind": "class"
+    },
+    "CatalogDataSourceRedshift": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourceredshift",
+        "kind": "class"
+    },
+    "CatalogDataSourceVertica": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcevertica",
+        "kind": "class"
+    },
+    "SnowflakeAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/snowflakeattributes",
+        "kind": "class"
+    },
+    "CatalogDataSourceSnowflake": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcesnowflake",
+        "kind": "class"
+    },
+    "CatalogDataSourceBigQuery": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcebigquery",
+        "kind": "class"
+    },
+    "CatalogDataSourceGreenplum": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcegreenplum",
+        "kind": "class"
+    },
+    "MsSqlAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/mssqlattributes",
+        "kind": "class"
+    },
+    "CatalogDataSourceMsSql": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcemssql",
+        "kind": "class"
+    },
+    "DatabricksAttributes": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/databricksattributes",
+        "kind": "class"
+    },
+    "CatalogDataSourceDatabricks": {
+        "path": "/docs/catalog/data_source/entity_model/data_source/catalogdatasourcedatabricks",
+        "kind": "class"
+    },
+    "service": {
+        "path": "/docs/catalog/workspace/service",
+        "kind": "function"
+    },
+    "CatalogDeclarativeModel": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/ldm/catalogdeclarativemodel",
+        "kind": "class"
+    },
+    "validation": {
+        "path": "/docs/catalog/data_source/validation",
+        "kind": "function"
+    },
+    "DataSourceValidator": {
+        "path": "/docs/catalog/workspace/content_service/datasourcevalidator",
+        "kind": "class"
+    },
+    "validate_data_source_ids": {
+        "path": "/docs/catalog/workspace/content_service/datasourcevalidator/validate_data_source_ids",
+        "kind": "function"
+    },
+    "validate_ldm": {
+        "path": "/docs/catalog/workspace/content_service/datasourcevalidator/validate_ldm",
+        "kind": "function"
+    },
+    "entity": {
+        "path": "/docs/catalog/entity",
+        "kind": "function"
+    },
+    "ObjId": {
+        "path": "/docs/catalog/workspace/model_container/objid",
+        "kind": "class"
+    },
+    "as_afm_id": {
+        "path": "/docs/catalog/workspace/model_container/objid/as_afm_id",
+        "kind": "function"
+    },
+    "as_afm_id_attribute": {
+        "path": "/docs/catalog/workspace/model_container/objid/as_afm_id_attribute",
+        "kind": "function"
+    },
+    "as_afm_id_dataset": {
+        "path": "/docs/catalog/workspace/model_container/objid/as_afm_id_dataset",
+        "kind": "function"
+    },
+    "as_afm_id_label": {
+        "path": "/docs/catalog/workspace/model_container/objid/as_afm_id_label",
+        "kind": "function"
+    },
+    "as_identifier": {
+        "path": "/docs/catalog/workspace/model_container/objid/as_identifier",
+        "kind": "function"
+    },
+    "CatalogEntity": {
+        "path": "/docs/catalog/workspace/entity_model/content_objects/metric/catalogentity",
+        "kind": "class"
+    },
+    "CatalogNameEntity": {
+        "path": "/docs/catalog/workspace/entity_model/workspace/catalognameentity",
+        "kind": "class"
+    },
+    "CatalogTypeEntity": {
+        "path": "/docs/catalog/entity/catalogtypeentity",
+        "kind": "class"
+    },
+    "CatalogTitleEntity": {
+        "path": "/docs/catalog/entity/catalogtitleentity",
+        "kind": "class"
+    },
+    "identifier": {
+        "path": "/docs/catalog/identifier",
+        "kind": "function"
+    },
+    "CatalogWorkspaceIdentifier": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogworkspaceidentifier",
+        "kind": "class"
+    },
+    "CatalogReferenceIdentifier": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogreferenceidentifier",
+        "kind": "class"
+    },
+    "CatalogGrainIdentifier": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/cataloggrainidentifier",
+        "kind": "class"
+    },
+    "CatalogAssigneeIdentifier": {
+        "path": "/docs/catalog/permission/declarative_model/permission/catalogassigneeidentifier",
+        "kind": "class"
+    },
+    "CatalogUserGroupIdentifier": {
+        "path": "/docs/catalog/user/declarative_model/user_group/catalogusergroupidentifier",
+        "kind": "class"
+    },
+    "CatalogLabelIdentifier": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/cataloglabelidentifier",
+        "kind": "class"
+    },
+    "organization": {
+        "path": "/docs/catalog/organization/entity_model/organization",
+        "kind": "function"
+    },
+    "CatalogOrganizationDocument": {
+        "path": "/docs/catalog/organization/service/catalogorganizationdocument",
+        "kind": "class"
+    },
+    "CatalogOrganizationAttributes": {
+        "path": "/docs/catalog/organization/entity_model/organization/catalogorganizationattributes",
+        "kind": "class"
+    },
+    "parameter": {
+        "path": "/docs/catalog/parameter",
+        "kind": "function"
+    },
+    "permission": {
+        "path": "/docs/catalog/permission/declarative_model/permission",
+        "kind": "function"
+    },
+    "CatalogDeclarativeSingleWorkspacePermission": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativesingleworkspacepermission",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspaceHierarchyPermission": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeworkspacehierarchypermission",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspacePermissions": {
+        "path": "/docs/catalog/permission/service/catalogdeclarativeworkspacepermissions",
+        "kind": "class"
+    },
+    "setting": {
+        "path": "/docs/catalog/setting",
+        "kind": "function"
+    },
+    "CatalogDeclarativeSetting": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativesetting",
+        "kind": "class"
+    },
+    "CatalogDeclarativeCustomApplicationSetting": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativecustomapplicationsetting",
+        "kind": "class"
+    },
+    "types": {
+        "path": "/docs/catalog/types",
+        "kind": "function"
+    },
+    "user": {
+        "path": "/docs/catalog/user/entity_model/user",
+        "kind": "function"
+    },
+    "CatalogDeclarativeUsers": {
+        "path": "/docs/catalog/user/service/catalogdeclarativeusers",
+        "kind": "class"
+    },
+    "CatalogDeclarativeUser": {
+        "path": "/docs/catalog/user/declarative_model/user_and_user_groups/catalogdeclarativeuser",
+        "kind": "class"
+    },
+    "user_and_user_groups": {
+        "path": "/docs/catalog/user/declarative_model/user_and_user_groups",
+        "kind": "function"
+    },
+    "CatalogDeclarativeUserGroup": {
+        "path": "/docs/catalog/user/declarative_model/user_group/catalogdeclarativeusergroup",
+        "kind": "class"
+    },
+    "CatalogDeclarativeUserGroups": {
+        "path": "/docs/catalog/user/service/catalogdeclarativeusergroups",
+        "kind": "class"
+    },
+    "CatalogDeclarativeUsersUserGroups": {
+        "path": "/docs/catalog/user/service/catalogdeclarativeusersusergroups",
+        "kind": "class"
+    },
+    "user_group": {
+        "path": "/docs/catalog/user/entity_model/user_group",
+        "kind": "function"
+    },
+    "CatalogUserGroup": {
+        "path": "/docs/catalog/user/service/catalogusergroup",
+        "kind": "class"
+    },
+    "CatalogUserDocument": {
+        "path": "/docs/catalog/user/service/cataloguserdocument",
+        "kind": "class"
+    },
+    "update_user": {
+        "path": "/docs/catalog/user/service/cataloguserdocument/update_user",
+        "kind": "function"
+    },
+    "CatalogUser": {
+        "path": "/docs/catalog/user/service/cataloguser",
+        "kind": "class"
+    },
+    "add_user_group": {
+        "path": "/docs/catalog/user/service/cataloguser/add_user_group",
+        "kind": "function"
+    },
+    "add_user_groups": {
+        "path": "/docs/catalog/user/service/cataloguser/add_user_groups",
+        "kind": "function"
+    },
+    "remove_user_groups": {
+        "path": "/docs/catalog/user/service/cataloguser/remove_user_groups",
+        "kind": "function"
+    },
+    "replace_user_groups": {
+        "path": "/docs/catalog/user/service/cataloguser/replace_user_groups",
+        "kind": "function"
+    },
+    "CatalogUserAttributes": {
+        "path": "/docs/catalog/user/entity_model/user/cataloguserattributes",
+        "kind": "class"
+    },
+    "CatalogUserRelationships": {
+        "path": "/docs/catalog/user/entity_model/user/cataloguserrelationships",
+        "kind": "class"
+    },
+    "CatalogUserGroupsData": {
+        "path": "/docs/catalog/user/entity_model/user/catalogusergroupsdata",
+        "kind": "class"
+    },
+    "CatalogUserGroupDocument": {
+        "path": "/docs/catalog/user/service/catalogusergroupdocument",
+        "kind": "class"
+    },
+    "update_user_group": {
+        "path": "/docs/catalog/user/service/catalogusergroupdocument/update_user_group",
+        "kind": "function"
+    },
+    "CatalogUserGroupRelationships": {
+        "path": "/docs/catalog/user/entity_model/user_group/catalogusergrouprelationships",
+        "kind": "class"
+    },
+    "CatalogUserGroupParents": {
+        "path": "/docs/catalog/user/entity_model/user_group/catalogusergroupparents",
+        "kind": "class"
+    },
+    "workspace": {
+        "path": "/docs/catalog/workspace/entity_model/workspace",
+        "kind": "function"
+    },
+    "content_service": {
+        "path": "/docs/catalog/workspace/content_service",
+        "kind": "function"
+    },
+    "CatalogDeclarativeAnalytics": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativeanalytics",
+        "kind": "class"
+    },
+    "CatalogAttribute": {
+        "path": "/docs/catalog/workspace/model_container/catalogattribute",
+        "kind": "class"
+    },
+    "as_computable": {
+        "path": "/docs/catalog/workspace/model_container/catalogmetric/as_computable",
+        "kind": "function"
+    },
+    "find_label": {
+        "path": "/docs/catalog/workspace/model_container/catalogattribute/find_label",
+        "kind": "function"
+    },
+    "primary_label": {
+        "path": "/docs/catalog/workspace/model_container/catalogattribute/primary_label",
+        "kind": "function"
+    },
+    "CatalogFact": {
+        "path": "/docs/catalog/workspace/model_container/catalogfact",
+        "kind": "class"
+    },
+    "CatalogLabel": {
+        "path": "/docs/catalog/workspace/model_container/cataloglabel",
+        "kind": "class"
+    },
+    "CatalogMetric": {
+        "path": "/docs/catalog/workspace/model_container/catalogmetric",
+        "kind": "class"
+    },
+    "CatalogDependentEntitiesRequest": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/catalogdependententitiesrequest",
+        "kind": "class"
+    },
+    "CatalogDependentEntitiesResponse": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/catalogdependententitiesresponse",
+        "kind": "class"
+    },
+    "CatalogWorkspaceContent": {
+        "path": "/docs/catalog/workspace/model_container/catalogworkspacecontent",
+        "kind": "class"
+    },
+    "catalog_with_valid_objects": {
+        "path": "/docs/catalog/workspace/model_container/catalogworkspacecontent/catalog_with_valid_objects",
+        "kind": "function"
+    },
+    "find_label_attribute": {
+        "path": "/docs/catalog/workspace/model_container/catalogworkspacecontent/find_label_attribute",
+        "kind": "function"
+    },
+    "get_dataset": {
+        "path": "/docs/catalog/workspace/model_container/catalogworkspacecontent/get_dataset",
+        "kind": "function"
+    },
+    "get_metric": {
+        "path": "/docs/catalog/workspace/model_container/catalogworkspacecontent/get_metric",
+        "kind": "function"
+    },
+    "Attribute": {
+        "path": "/docs/catalog/workspace/model_container/attribute",
+        "kind": "class"
+    },
+    "as_api_model": {
+        "path": "/docs/catalog/workspace/model_container/metric/as_api_model",
+        "kind": "function"
+    },
+    "has_same_label": {
+        "path": "/docs/catalog/workspace/model_container/attribute/has_same_label",
+        "kind": "function"
+    },
+    "ExecutionDefinition": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition",
+        "kind": "class"
+    },
+    "has_attributes": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition/has_attributes",
+        "kind": "function"
+    },
+    "has_filters": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition/has_filters",
+        "kind": "function"
+    },
+    "has_metrics": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition/has_metrics",
+        "kind": "function"
+    },
+    "is_one_dim": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition/is_one_dim",
+        "kind": "function"
+    },
+    "is_two_dim": {
+        "path": "/docs/catalog/workspace/model_container/executiondefinition/is_two_dim",
+        "kind": "function"
+    },
+    "Filter": {
+        "path": "/docs/catalog/workspace/model_container/filter",
+        "kind": "class"
+    },
+    "is_noop": {
+        "path": "/docs/catalog/workspace/model_container/filter/is_noop",
+        "kind": "function"
+    },
+    "Metric": {
+        "path": "/docs/catalog/workspace/model_container/metric",
+        "kind": "class"
+    },
+    "analytics_model": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model",
+        "kind": "function"
+    },
+    "CatalogDeclarativeAnalyticsLayer": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer",
+        "kind": "class"
+    },
+    "get_analytical_dashboards_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_analytical_dashboards_folder",
+        "kind": "function"
+    },
+    "get_analytics_model_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_analytics_model_folder",
+        "kind": "function"
+    },
+    "get_dashboard_plugins_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_dashboard_plugins_folder",
+        "kind": "function"
+    },
+    "get_filter_contexts_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_filter_contexts_folder",
+        "kind": "function"
+    },
+    "get_metrics_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_metrics_folder",
+        "kind": "function"
+    },
+    "get_visualization_objects_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeanalyticslayer/get_visualization_objects_folder",
+        "kind": "function"
+    },
+    "CatalogAnalyticsBase": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/cataloganalyticsbase",
+        "kind": "class"
+    },
+    "CatalogDeclarativeAnalyticalDashboard": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativeanalyticaldashboard",
+        "kind": "class"
+    },
+    "CatalogDeclarativeDashboardPlugin": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativedashboardplugin",
+        "kind": "class"
+    },
+    "CatalogDeclarativeFilterContext": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativefiltercontext",
+        "kind": "class"
+    },
+    "CatalogDeclarativeMetric": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativemetric",
+        "kind": "class"
+    },
+    "CatalogDeclarativeVisualizationObject": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/analytics_model/analytics_model/catalogdeclarativevisualizationobject",
+        "kind": "class"
+    },
+    "logical_model": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model",
+        "kind": "function"
+    },
+    "dataset": {
+        "path": "/docs/catalog/workspace/entity_model/content_objects/dataset",
+        "kind": "function"
+    },
+    "CatalogDeclarativeDataset": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/ldm/catalogdeclarativedataset",
+        "kind": "class"
+    },
+    "CatalogDeclarativeAttribute": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdeclarativeattribute",
+        "kind": "class"
+    },
+    "CatalogDeclarativeFact": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdeclarativefact",
+        "kind": "class"
+    },
+    "CatalogDataSourceTableIdentifier": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdatasourcetableidentifier",
+        "kind": "class"
+    },
+    "CatalogDeclarativeDatasetSql": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdeclarativedatasetsql",
+        "kind": "class"
+    },
+    "CatalogDeclarativeLabel": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdeclarativelabel",
+        "kind": "class"
+    },
+    "CatalogDeclarativeReference": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/dataset/dataset/catalogdeclarativereference",
+        "kind": "class"
+    },
+    "date_dataset": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/date_dataset/date_dataset",
+        "kind": "function"
+    },
+    "CatalogDeclarativeDateDataset": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/ldm/catalogdeclarativedatedataset",
+        "kind": "class"
+    },
+    "CatalogGranularitiesFormatting": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/date_dataset/date_dataset/cataloggranularitiesformatting",
+        "kind": "class"
+    },
+    "ldm": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/logical_model/ldm",
+        "kind": "function"
+    },
+    "CatalogDeclarativeLdm": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm",
+        "kind": "class"
+    },
+    "change_tables_columns_case": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm/change_tables_columns_case",
+        "kind": "function"
+    },
+    "get_datasets_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm/get_datasets_folder",
+        "kind": "function"
+    },
+    "get_date_instances_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm/get_date_instances_folder",
+        "kind": "function"
+    },
+    "get_ldm_folder": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm/get_ldm_folder",
+        "kind": "function"
+    },
+    "modify_mapped_data_source": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeldm/modify_mapped_data_source",
+        "kind": "function"
+    },
+    "CatalogDeclarativeWorkspaceModel": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspacemodel",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspace": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeworkspace",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspaceDataFilterSetting": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeworkspacedatafiltersetting",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspaceDataFilters": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspacedatafilters",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspaceDataFilter": {
+        "path": "/docs/catalog/workspace/declarative_model/workspace/workspace/catalogdeclarativeworkspacedatafilter",
+        "kind": "class"
+    },
+    "CatalogDeclarativeWorkspaces": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces",
+        "kind": "class"
+    },
+    "workspace_data_filters_folder": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces/workspace_data_filters_folder",
+        "kind": "function"
+    },
+    "workspaces_folder": {
+        "path": "/docs/catalog/workspace/service/catalogdeclarativeworkspaces/workspaces_folder",
+        "kind": "function"
+    },
+    "SimpleMetric": {
+        "path": "/docs/catalog/workspace/entity_model/content_objects/metric/simplemetric",
+        "kind": "class"
+    },
+    "CatalogDataset": {
+        "path": "/docs/catalog/workspace/model_container/catalogdataset",
+        "kind": "class"
+    },
+    "filter_dataset": {
+        "path": "/docs/catalog/workspace/model_container/catalogdataset/filter_dataset",
+        "kind": "function"
+    },
+    "metric": {
+        "path": "/docs/catalog/workspace/entity_model/content_objects/metric",
+        "kind": "function"
+    },
+    "graph_objects": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects",
+        "kind": "function"
+    },
+    "graph": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph",
+        "kind": "function"
+    },
+    "CatalogDependentEntitiesGraph": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/catalogdependententitiesgraph",
+        "kind": "class"
+    },
+    "CatalogDependentEntitiesNode": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/catalogdependententitiesnode",
+        "kind": "class"
+    },
+    "CatalogEntityIdentifier": {
+        "path": "/docs/catalog/workspace/entity_model/graph_objects/graph/catalogentityidentifier",
+        "kind": "class"
+    },
+    "CatalogWorkspace": {
+        "path": "/docs/catalog/workspace/service/catalogworkspace",
+        "kind": "class"
+    },
+    "model_container": {
+        "path": "/docs/catalog/workspace/model_container",
+        "kind": "function"
+    },
+    "AllPagedEntities": {
+        "path": "/docs/catalog/workspace/model_container/allpagedentities",
+        "kind": "class"
+    },
+    "SideLoads": {
+        "path": "/docs/catalog/workspace/model_container/sideloads",
+        "kind": "class"
+    },
+    "all_for_type": {
+        "path": "/docs/catalog/workspace/model_container/sideloads/all_for_type",
+        "kind": "function"
+    },
+    "find": {
+        "path": "/docs/catalog/workspace/model_container/sideloads/find",
+        "kind": "function"
     }
 }

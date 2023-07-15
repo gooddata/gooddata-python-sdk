@@ -1,6 +1,7 @@
 import argparse
 import json
 from pathlib import Path
+from typing import List, Optional
 
 # Template variables:
 #   PATH: replace with path to object
@@ -39,6 +40,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
             if ".functions" in obj_module_import_path:
                 obj_module_import_path = obj_module_import_path.replace(".functions", "")
 
+            # Create files based on the kind of the data: module/class/function
             if kind == "module":
                 (dir_root / name).mkdir(exist_ok=True)
                 (dir_root / name / "_index.md").open("w+").write(
@@ -60,12 +62,16 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                     "kind": "class"
                 }
             elif name == "functions":
+                # Class objects in the json contain a field "functions" with the functions of the class
                 for func_name, func in obj.items():
+                    if func_name.startswith("_"):
+                        continue  # Skip magic and private methods
+
                     (dir_root / f"{func_name}.md").open("w+").write(
                         FUNCTION_TEMPLATE_STRING
-                            .replace("PATH", obj_module_import_path + f".{func_name}")
-                            .replace("NAME", func_name)
-                            .replace("PARENT", module_import_path.split(".")[-1])
+                        .replace("PATH", obj_module_import_path + f".{func_name}")
+                        .replace("NAME", func_name)
+                        .replace("PARENT", module_import_path.split(".")[-1])
                     )
                     links[func_name] = {
                         "path": f"{url_root}/{func_name}".lower(),  # Lowercase for Hugo
@@ -83,7 +89,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
     return links
 
 
-def change_json_root(data: dict, json_start_path: str) -> dict:
+def change_json_root(data: dict, json_start_paths: Optional[List[str]]) -> dict:
     """
     Change the root of the json data to the specified path
 
@@ -94,18 +100,27 @@ def change_json_root(data: dict, json_start_path: str) -> dict:
             "sdk": {sdk-data}
             "other": {...}
             }
-        json_start_path: "root.sdk"
+        json_start_path: ["root.sdk"]
     output:
         "sdk": sdk-data
+
+    In case of multiple start_paths, all the paths
+    will be put to the root of the json
 
     :param data: dict with the module data
     :param json_start_path: path to the object in the json data
     :return:
     """
-    if json_start_path:
-        for part in json_start_path.split("."):
-            data = data[part]
-        return {json_start_path.split(".")[-1]: data}
+    if json_start_paths:
+        new_json = {}
+        for json_start_path in json_start_paths:
+            new_root_data = data
+            for part in json_start_path.split("."):
+                new_root_data = new_root_data[part]
+            new_json[json_start_path.split(".")[-1]] = new_root_data
+        return new_json
+
+    # If no start path is specified, return the original data
     return data
 
 
@@ -113,12 +128,14 @@ def main():
     parser = argparse.ArgumentParser(description='Process a JSON file')
     parser.add_argument('file', metavar='FILE', help='path to the JSON file', default="data.json")
     parser.add_argument('output', metavar='FILE', help='root directory of the output', default="apiref")
-    parser.add_argument('--json_start_path', default="", required=False,
+    parser.add_argument('--json_start_path', default="", required=False, nargs="*",
                         help="Example: sdk.CatalogUserService, "
-                             "would only generate markdown tree for that object")
+                             "would only generate markdown tree for that object,"
+                             "can use multiple start paths, by including the argument multiple times")
     parser.add_argument('--url_root', default="", required=False,
                         help="url root path for the apiref")
     args = parser.parse_args()
+    print(f"Json start path is f{args.json_start_path}")
 
     file_path = args.file
     data = process_json_file(file_path)

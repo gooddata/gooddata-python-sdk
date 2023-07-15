@@ -13,6 +13,8 @@ import re
 from docstring_parser import parse
 from docstring_parser.common import DocstringStyle
 
+LOG = open("log.txt", "w+")
+
 
 def docstring_fixes(docstr: str) -> str:
     docstr = re.sub(r"Args:[\n ]*None", "", docstr)  # Fix for Args: None in docstrings, which is not valid
@@ -26,7 +28,10 @@ def docstring_data(docstr: str):
     try:
         parsed_docstr = parse(docstr, style=DocstringStyle.GOOGLE)
     except:
-        return {}
+        raise ValueError("Invalid docstring: " + docstr)
+    if ":param" in docstr:
+        raise ValueError("Invalid docstring (numpy): " + docstr)
+
     params_data = []
     for doc_param in parsed_docstr.params:
         params_data.append({
@@ -72,10 +77,16 @@ def signature_data(sig: inspect.Signature) -> dict:
 
 
 def function_data(func: FunctionType) -> dict:
+    try:
+        docstr_data = docstring_data(inspect.getdoc(func))
+    except ValueError:
+        LOG.write(str(inspect.getmodule(func)) + ":" + str(func))  # logging invalid docstrings
+        LOG.write("\n")
+        docstr_data = {}
     return {
         "kind": "function",
         "docstring": inspect.getdoc(func),
-        "docstring_parsed": docstring_data(inspect.getdoc(func)),
+        "docstring_parsed": docstr_data,
         "signature": signature_data(inspect.signature(func))
     }
 
@@ -203,6 +214,6 @@ if __name__ == '__main__':
     import_submodules(MODULE_NAME)
     res = parse_package(gooddata_sdk)
     open("data.json", "w+").write(json.dumps(res))
-    open("links.json", "w+").write(json.dumps(generate_links(res)))
+    open("links_data.json", "w+").write(json.dumps(generate_links(res)))
 
-    print(f"Saved json and links to {os.getcwd()}")
+    print(f"Saved data.json and links_data.json to {os.getcwd()}")
