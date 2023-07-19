@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 REQUIRES = [
     "gooddata-sdk~=1.3.0",
     "pandas>=1.0.0,<2.0.0",
-    'importlib-metadata >= 1.0 ; python_version >= "3.7"',
+    'importlib-metadata >= 1.0 ; python_version >= "3.8"',
 ]
 
 setup(
@@ -34,10 +34,10 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Database",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",
