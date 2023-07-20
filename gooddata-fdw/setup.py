@@ -8,7 +8,6 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "gooddata-sdk~=1.3.0",
-    'importlib-metadata >= 1.0 ; python_version >= "3.8"',
     #    "multicorn>=1.4.0",
 ]
 
