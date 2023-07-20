@@ -62,8 +62,7 @@ jobs:
             fmt-requirements.txt
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r lint-requirements.txt -r fmt-requirements.txt
+          make dev
       - name: Pep8 check
         run: |
           make lint

@@ -232,7 +232,6 @@ def _extract_from_attributes_and_maybe_metrics(
     col_to_metric_idx: dict[str, int],
     index_to_attr_idx: Optional[dict[str, int]] = None,
 ) -> tuple[dict, dict]:
-
     exec_def = response.exec_def
     offset = [0 for _ in exec_def.dimensions]
     limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]

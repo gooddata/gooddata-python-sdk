@@ -16,7 +16,6 @@ from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
 
 class CatalogUserService(CatalogServiceBase):
-
     # Entity methods for users
 
     def create_or_update_user(self, user: CatalogUser) -> None:
