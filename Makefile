@@ -20,22 +20,22 @@ dev:
 
 .PHONY: lint
 lint:
-	ruff .
+	.venv/bin/ruff .
 
 .PHONY: format
 format:
-	black --check .
-	isort --check .
+	.venv/bin/black --check .
+	.venv/bin/isort --check .
 
 .PHONY: format-diff
 format-diff:
-	black --diff .
-	isort --diff .
+	.venv/bin/black --diff .
+	.venv/bin/isort --diff .
 
 .PHONY: format-fix
 format-fix:
-	black .
-	isort .
+	.venv/bin/black .
+	.venv/bin/isort .
 
 
 define download_client

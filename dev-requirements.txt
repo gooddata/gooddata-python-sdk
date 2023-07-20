@@ -1,6 +1,6 @@
 -r ./tox-requirements.txt
-tbump~=6.9.0
-pre-commit~=2.14.0
+tbump~=6.10.0
+pre-commit~=3.3.3
 
 -r ./fmt-requirements.txt
 -r ./lint-requirements.txt
