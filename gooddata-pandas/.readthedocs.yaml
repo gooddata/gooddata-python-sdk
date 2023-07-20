@@ -12,8 +12,8 @@ build:
     python: "3.11"
 
 sphinx:
-  configuration: docs/conf.py
+  configuration: gooddata-pandas/docs/conf.py
 
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: gooddata-pandas/docs/requirements.txt
