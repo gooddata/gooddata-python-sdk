@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-IN_TEST_ENVS = py310,py39,py38,py37
+IN_TEST_ENVS = py311,py310,py39,py38
 ifdef TEST_ENVS
 	IN_TEST_ENVS = $(TEST_ENVS)
 endif
@@ -35,10 +35,6 @@ endif
 
 
 # Targets to build docker file for each python version
-.PHONY: test-ci-py37-build
-test-ci-py37-build: Dockerfile
-	docker build --build-arg "PY_TAG=3.7.12-slim-bullseye" --build-arg "ENV_TAG=py37" -t python-sdk:py37 .
-
 .PHONY: test-ci-py38-build
 test-ci-py38-build: Dockerfile
 	docker build --build-arg "PY_TAG=3.8.12-slim-bullseye" --build-arg "ENV_TAG=py38" -t python-sdk:py38 .
@@ -50,6 +46,10 @@ test-ci-py39-build: Dockerfile
 .PHONY: test-ci-py310-build
 test-ci-py310-build: Dockerfile
 	docker build --build-arg "PY_TAG=3.10.4-slim-bullseye" --build-arg "ENV_TAG=py310" -t python-sdk:py310 .
+
+.PHONY: test-ci-py311-build
+test-ci-py311-build: Dockerfile
+	docker build --build-arg "PY_TAG=3.11.0-slim-bullseye" --build-arg "ENV_TAG=py311" -t python-sdk:py311 .
 
 
 # test-ci target triggers unit tests for each requested environment

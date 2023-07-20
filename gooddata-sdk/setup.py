@@ -8,14 +8,12 @@ long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "gooddata-api-client~=1.3.0",
-    'importlib-metadata >= 1.0 ; python_version >= "3.7"',
     "python-dateutil>=2.5.3",
     "pyyaml>=5.1",
     "attrs==21.4.0",
     "cattrs==22.1.0",
     "brotli==1.0.9",
 ]
-
 
 setup(
     name="gooddata-sdk",
@@ -30,7 +28,7 @@ setup(
     license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
-    python_requires=">=3.7.0",
+    python_requires=">=3.8.0",
     project_urls={
         "Documentation": "https://www.gooddata.com/docs/python-sdk/1.3.0",
         "Source": "https://github.com/gooddata/gooddata-python-sdk",
@@ -39,10 +37,10 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Database",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",

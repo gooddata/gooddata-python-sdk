@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-1. Ensure you have at minimum Python 3.10 installed; Python 3.9, 3.8 and 3.7 are optional for multi-environment tests
+1. Ensure you have at minimum Python 3.11 installed; Python 3.10, 3.9 and 3.8 are optional for multi-environment tests
 
    This repo uses [tox](https://tox.readthedocs.io/en/latest/) and by default will try to run tests against all
    supported versions. If you have only subset of supported python interpreters installed, see
@@ -21,7 +21,7 @@
     source .venv/bin/activate
     ```
 
-   The `make dev` command will create a new Python 3.9 virtual environment in the `.venv` directory, install all
+   The `make dev` command will create a new Python 3.11 virtual environment in the `.venv` directory, install all
    third party dependencies into it and setup git hooks.
 
    Additionally, if you use [direnv](https://direnv.net/) you can run `direnv allow .envrc` to enable automatic
@@ -95,7 +95,7 @@ Tests triggered by `make` can be controlled via these environment variables:
 - `TEST_ENVS` - define tox test environments (targets) as comma-separated list, by default all tox default targets are
   executed
   ```bash
-  TEST_ENVS=py310,py39 make test
+  TEST_ENVS=py311,py310 make test
   ```
 - `ADD_ARGS` - send additional arguments to pytest tool, useful for pin-pointing just part of tests
   ```bash
