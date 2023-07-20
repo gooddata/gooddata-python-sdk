@@ -88,7 +88,6 @@ def create_entity(entity_id, entity_data, entity_type, api_path, action):
 
 
 def update_layout():
-
     user_groups = read_data_from_file(fixtures_dir / "user_groups.json")
     user_auth = read_data_from_file(fixtures_dir / "user_auth.json")
     user = read_data_from_file(fixtures_dir / "user.json")
