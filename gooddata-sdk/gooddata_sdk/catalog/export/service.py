@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import time
 from pathlib import Path
-from typing import Callable, Optional, Union
+from typing import Callable, Optional, Tuple, Union
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
@@ -144,41 +144,42 @@ class ExportService(CatalogServiceBase):
         }
         return ExportCustomOverride(labels=labels, metrics=metrics)
 
+    def _get_insight_exec_table(self, workspace_id: str, insight_id: str) -> Tuple[ExecutionTable, str]:
+        try:
+            insight = InsightService(self._client).get_insight(workspace_id=workspace_id, insight_id=insight_id)
+            return TableService(self._client).for_insight(workspace_id=workspace_id, insight=insight), insight.title
+        except NotFoundException:
+            raise ValueError(
+                f"Either workspace workspace_id='{workspace_id}' or insight insight_id='{insight_id}' does not exist."
+            )
+
     def export_tabular_by_insight_id(
         self,
         workspace_id: str,
         insight_id: str,
         file_format: str,
-        use_labels: bool = True,
         file_name: Optional[str] = None,
         settings: Optional[ExportSettings] = None,
-        custom_override: Optional[ExportCustomOverride] = None,
         store_path: Union[str, Path] = Path.cwd(),
         timeout: float = 60.0,
         retry: float = 0.2,
         max_retry: float = 5.0,
     ) -> None:
-        try:
-            insight = InsightService(self._client).get_insight(workspace_id=workspace_id, insight_id=insight_id)
-            exec_table = TableService(self._client).for_insight(workspace_id=workspace_id, insight=insight)
-            custom_override = self._custom_overrides_labels(exec_table) if use_labels else custom_override
-            file_name = file_name if file_name is not None else insight.title
-            export_request = ExportRequest(
-                format=file_format,
-                execution_result=exec_table.result_id,
-                file_name=file_name,
-                settings=settings,
-                custom_override=custom_override,
-            )
-            self.export_tabular(
-                workspace_id=workspace_id,
-                export_request=export_request,
-                store_path=store_path,
-                timeout=timeout,
-                retry=retry,
-                max_retry=max_retry,
-            )
-        except NotFoundException:
-            print(
-                f"Either workspace workspace_id='{workspace_id}' or insight insight_id='{insight_id}' does not exist."
-            )
+        exec_table, insight_tile = self._get_insight_exec_table(workspace_id, insight_id)
+        custom_override = self._custom_overrides_labels(exec_table)
+        file_name = file_name if file_name is not None else insight_tile
+        export_request = ExportRequest(
+            format=file_format,
+            execution_result=exec_table.result_id,
+            file_name=file_name,
+            settings=settings,
+            custom_override=custom_override,
+        )
+        self.export_tabular(
+            workspace_id=workspace_id,
+            export_request=export_request,
+            store_path=store_path,
+            timeout=timeout,
+            retry=retry,
+            max_retry=max_retry,
+        )
