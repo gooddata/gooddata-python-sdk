@@ -111,7 +111,7 @@ class JsonApiCustomApplicationSettingInAttributes(ModelNormal):
 
         Args:
             application_name (str):
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}):
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -202,7 +202,7 @@ class JsonApiCustomApplicationSettingInAttributes(ModelNormal):
 
         Args:
             application_name (str):
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}):
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

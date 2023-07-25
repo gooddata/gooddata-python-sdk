@@ -102,6 +102,7 @@ class GenerateLdmRequest(ModelNormal):
             'table_prefix': (str,),  # noqa: E501
             'view_prefix': (str,),  # noqa: E501
             'wdf_prefix': (str,),  # noqa: E501
+            'workspace_id': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -124,6 +125,7 @@ class GenerateLdmRequest(ModelNormal):
         'table_prefix': 'tablePrefix',  # noqa: E501
         'view_prefix': 'viewPrefix',  # noqa: E501
         'wdf_prefix': 'wdfPrefix',  # noqa: E501
+        'workspace_id': 'workspaceId',  # noqa: E501
     }
 
     read_only_vars = {
@@ -181,6 +183,7 @@ class GenerateLdmRequest(ModelNormal):
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
+            workspace_id (str): Optional workspace id.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -280,6 +283,7 @@ class GenerateLdmRequest(ModelNormal):
             table_prefix (str): Tables starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the table prefix is `out_table` and separator is `__`, the table with name like `out_table__customers` will be scanned.. [optional]  # noqa: E501
             view_prefix (str): Views starting with this prefix will be included. The prefix is then followed by the value of `separator` parameter. Given the view prefix is `out_view` and separator is `__`, the table with name like `out_view__us_customers` will be scanned.. [optional]  # noqa: E501
             wdf_prefix (str): Column serving as workspace data filter. No labels are auto generated for such columns.. [optional]  # noqa: E501
+            workspace_id (str): Optional workspace id.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

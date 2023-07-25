@@ -392,8 +392,10 @@
           },
           "name": {
             "enum": [
+              "CacheStrategy",
               "Contract",
               "CustomTheming",
+              "ExtraCache",
               "PdfExports",
               "ManagedOIDC",
               "UiLocalization",
@@ -904,6 +906,19 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
+          "path": {
+            "description": "Path to table.",
+            "example": [
+              "table_schema",
+              "table_name"
+            ],
+            "items": {
+              "example": "table_name",
+              "type": "string"
+            },
+            "nullable": true,
+            "type": "array"
+          },
           "type": {
             "description": "Data source entity type.",
             "enum": [
@@ -929,6 +944,30 @@
             "enum": [
               "dataset"
             ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "DatasetWorkspaceDataFilterIdentifier": {
+        "description": "Identifier of a workspace data filter.",
+        "properties": {
+          "id": {
+            "description": "Workspace Data Filters ID.",
+            "example": "country_id",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Filter type.",
+            "enum": [
+              "workspaceDataFilter"
+            ],
+            "example": "workspaceDataFilter",
             "type": "string"
           }
         },
@@ -1559,9 +1598,16 @@
             "type": "string"
           },
           "workspaceDataFilterColumns": {
-            "description": "An array of workspace data filter columns applied on a workspace.",
+            "description": "An array of columns which are available for match to implicit workspace data filters.",
             "items": {
               "$ref": "#/components/schemas/DeclarativeWorkspaceDataFilterColumn"
+            },
+            "type": "array"
+          },
+          "workspaceDataFilterReferences": {
+            "description": "An array of explicit workspace data filters.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeWorkspaceDataFilterReferences"
             },
             "type": "array"
           }
@@ -1571,6 +1617,28 @@
           "id",
           "references",
           "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeDatasetExtension": {
+        "description": "A dataset extension properties.",
+        "properties": {
+          "id": {
+            "description": "The Dataset ID. This ID is further used to refer to this instance of dataset.",
+            "example": "customers",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "workspaceDataFilterReferences": {
+            "description": "An array of explicit workspace data filters.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeWorkspaceDataFilterReferences"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id"
         ],
         "type": "object"
       },
@@ -1853,6 +1921,13 @@
       "DeclarativeLdm": {
         "description": "A logical data model (LDM) representation.",
         "properties": {
+          "datasetExtensions": {
+            "description": "An array containing extensions for datasets defined in parent workspaces.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeDatasetExtension"
+            },
+            "type": "array"
+          },
           "datasets": {
             "description": "An array containing datasets.",
             "items": {
@@ -2076,6 +2151,7 @@
         "type": "object"
       },
       "DeclarativePdm": {
+        "deprecated": true,
         "description": "A physical data model (PDM) representation for single data source.",
         "properties": {
           "pdm": {
@@ -2101,6 +2177,15 @@
           "sourceColumnDataTypes": {
             "description": "An array of source column data types for a given reference.",
             "items": {
+              "enum": [
+                "INT",
+                "STRING",
+                "DATE",
+                "NUMERIC",
+                "TIMESTAMP",
+                "TIMESTAMP_TZ",
+                "BOOLEAN"
+              ],
               "type": "string"
             },
             "type": "array"
@@ -2143,7 +2228,8 @@
               "WHITE_LABELING",
               "LOCALE",
               "FORMAT_LOCALE",
-              "MAPBOX_TOKEN"
+              "MAPBOX_TOKEN",
+              "WEEK_START"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -2214,7 +2300,7 @@
           },
           "type": {
             "description": "Table type: TABLE or VIEW.",
-            "example": "VIEW",
+            "example": "TABLE",
             "type": "string"
           }
         },
@@ -2227,6 +2313,7 @@
         "type": "object"
       },
       "DeclarativeTables": {
+        "deprecated": true,
         "description": "A physical data model (PDM) tables.",
         "properties": {
           "tables": {
@@ -2585,6 +2672,11 @@
       "DeclarativeWorkspace": {
         "description": "A declarative form of a particular workspace.",
         "properties": {
+          "cacheExtraLimit": {
+            "description": "Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.",
+            "format": "int64",
+            "type": "integer"
+          },
           "customApplicationSettings": {
             "description": "A list of workspace custom settings.",
             "items": {
@@ -2730,6 +2822,38 @@
         "required": [
           "dataType",
           "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeWorkspaceDataFilterReferences": {
+        "properties": {
+          "filterColumn": {
+            "description": "Filter column name",
+            "example": "filter_id",
+            "type": "string"
+          },
+          "filterColumnDataType": {
+            "description": "Filter column data type",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "INT",
+            "type": "string"
+          },
+          "filterId": {
+            "$ref": "#/components/schemas/DatasetWorkspaceDataFilterIdentifier"
+          }
+        },
+        "required": [
+          "filterColumn",
+          "filterColumnDataType",
+          "filterId"
         ],
         "type": "object"
       },
@@ -2904,6 +3028,20 @@
             "type": "string"
           },
           "type": {
+            "enum": [
+              "analyticalDashboard",
+              "attribute",
+              "dashboardPlugin",
+              "dataset",
+              "fact",
+              "label",
+              "metric",
+              "userDataFilter",
+              "prompt",
+              "visualizationObject",
+              "filterContext"
+            ],
+            "example": "metric",
             "type": "string"
           }
         },
@@ -3111,8 +3249,10 @@
           "entitlementsName": {
             "items": {
               "enum": [
+                "CacheStrategy",
                 "Contract",
                 "CustomTheming",
+                "ExtraCache",
                 "PdfExports",
                 "ManagedOIDC",
                 "UiLocalization",
@@ -3142,6 +3282,20 @@
             "type": "string"
           },
           "type": {
+            "enum": [
+              "analyticalDashboard",
+              "attribute",
+              "dashboardPlugin",
+              "dataset",
+              "fact",
+              "label",
+              "metric",
+              "userDataFilter",
+              "prompt",
+              "visualizationObject",
+              "filterContext"
+            ],
+            "example": "metric",
             "type": "string"
           }
         },
@@ -3369,9 +3523,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "labelType"
-        ],
         "type": "object"
       },
       "FilterDefinition": {
@@ -3487,6 +3638,10 @@
           "wdfPrefix": {
             "description": "Column serving as workspace data filter. No labels are auto generated for such columns.",
             "example": "wdf",
+            "type": "string"
+          },
+          "workspaceId": {
+            "description": "Optional workspace id.",
             "type": "string"
           }
         },
@@ -3695,7 +3850,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -3782,7 +3937,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -4055,7 +4210,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -4107,6 +4262,73 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiAnalyticalDashboardPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAnalyticalDashboardPostOptionalId": {
+        "description": "JSON:API representation of analyticalDashboard entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+                "example": {
+                  "identifier": {
+                    "id": "label.leaf",
+                    "type": "label"
+                  },
+                  "someBoolProp": false
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "analyticalDashboard"
+            ],
+            "example": "analyticalDashboard",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAnalyticalDashboardPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardPostOptionalId"
           }
         },
         "required": [
@@ -4498,6 +4720,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -4550,6 +4774,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -4634,6 +4860,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -5015,6 +5243,8 @@
                 "type": "string"
               },
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               }
             },
@@ -5067,6 +5297,8 @@
                 "type": "string"
               },
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               }
             },
@@ -5177,6 +5409,8 @@
                 "type": "string"
               },
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               }
             },
@@ -5215,6 +5449,59 @@
         ],
         "type": "object"
       },
+      "JsonApiCustomApplicationSettingPostOptionalId": {
+        "description": "JSON:API representation of customApplicationSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "applicationName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
+                "type": "object"
+              }
+            },
+            "required": [
+              "applicationName",
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "customApplicationSetting"
+            ],
+            "example": "customApplicationSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiCustomApplicationSettingPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiCustomApplicationSettingPostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiDashboardPluginIn": {
         "description": "JSON:API representation of dashboardPlugin entity.",
         "properties": {
@@ -5224,7 +5511,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "url": "<plugin-url>"
                 },
@@ -5307,7 +5594,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "url": "<plugin-url>"
                 },
@@ -5429,7 +5716,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "url": "<plugin-url>"
                 },
@@ -5477,6 +5764,69 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiDashboardPluginPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiDashboardPluginPostOptionalId": {
+        "description": "JSON:API representation of dashboardPlugin entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+                "example": {
+                  "url": "<plugin-url>"
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "dashboardPlugin"
+            ],
+            "example": "dashboardPlugin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiDashboardPluginPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiDashboardPluginPostOptionalId"
           }
         },
         "required": [
@@ -6189,6 +6539,18 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "dataSourceTablePath": {
+                "description": "Path to database table.",
+                "example": [
+                  "schema",
+                  "table"
+                ],
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                "type": "array"
+              },
               "description": {
                 "maxLength": 10000,
                 "type": "string"
@@ -6198,6 +6560,10 @@
                   "properties": {
                     "id": {
                       "type": "string"
+                    },
+                    "order": {
+                      "format": "int32",
+                      "type": "integer"
                     },
                     "type": {
                       "enum": [
@@ -6209,6 +6575,7 @@
                   },
                   "required": [
                     "id",
+                    "order",
                     "type"
                   ],
                   "type": "object"
@@ -6226,6 +6593,15 @@
                     },
                     "sourceColumnDataTypes": {
                       "items": {
+                        "enum": [
+                          "INT",
+                          "STRING",
+                          "DATE",
+                          "NUMERIC",
+                          "TIMESTAMP",
+                          "TIMESTAMP_TZ",
+                          "BOOLEAN"
+                        ],
                         "type": "string"
                       },
                       "type": "array"
@@ -6255,6 +6631,10 @@
                     "type": "string"
                   }
                 },
+                "required": [
+                  "dataSourceId",
+                  "statement"
+                ],
                 "type": "object"
               },
               "tags": {
@@ -6296,6 +6676,38 @@
                   "required": [
                     "dataType",
                     "name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "workspaceDataFilterProperties": {
+                "items": {
+                  "description": "Workspace data filter properties.",
+                  "properties": {
+                    "filterColumn": {
+                      "type": "string"
+                    },
+                    "filterColumnDataType": {
+                      "enum": [
+                        "INT",
+                        "STRING",
+                        "DATE",
+                        "NUMERIC",
+                        "TIMESTAMP",
+                        "TIMESTAMP_TZ",
+                        "BOOLEAN"
+                      ],
+                      "type": "string"
+                    },
+                    "workspaceDataFilterIdentifier": {
+                      "$ref": "#/components/schemas/DatasetWorkspaceDataFilterIdentifier"
+                    }
+                  },
+                  "required": [
+                    "filterColumn",
+                    "filterColumnDataType",
+                    "workspaceDataFilterIdentifier"
                   ],
                   "type": "object"
                 },
@@ -6373,6 +6785,17 @@
                   "data"
                 ],
                 "type": "object"
+              },
+              "workspaceDataFilters": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
               }
             },
             "type": "object"
@@ -6425,6 +6848,9 @@
           },
           {
             "$ref": "#/components/schemas/JsonApiDatasetOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterOutWithLinks"
           }
         ]
       },
@@ -6759,7 +7185,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -6846,7 +7272,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -7039,7 +7465,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -7098,12 +7524,273 @@
         ],
         "type": "object"
       },
+      "JsonApiFilterContextPostOptionalId": {
+        "description": "JSON:API representation of filterContext entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+                "example": {
+                  "identifier": {
+                    "id": "label.leaf",
+                    "type": "label"
+                  },
+                  "someBoolProp": false
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "filterContext"
+            ],
+            "example": "filterContext",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiFilterContextPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiFilterContextPostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiFilterContextToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
           "$ref": "#/components/schemas/JsonApiFilterContextLinkage"
         },
         "type": "array"
+      },
+      "JsonApiJwkIn": {
+        "description": "JSON:API representation of jwk entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "content": {
+                "description": "Specification of the cryptographic key",
+                "example": {
+                  "alg": "RS256",
+                  "kyt": "RSA",
+                  "use": "sig"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/RsaSpecification"
+                  }
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "jwk"
+            ],
+            "example": "jwk",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiJwkIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkOut": {
+        "description": "JSON:API representation of jwk entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "content": {
+                "description": "Specification of the cryptographic key",
+                "example": {
+                  "alg": "RS256",
+                  "kyt": "RSA",
+                  "use": "sig"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/RsaSpecification"
+                  }
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "jwk"
+            ],
+            "example": "jwk",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiJwkOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiJwkOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiJwkOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiJwkPatch": {
+        "description": "JSON:API representation of patching jwk entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "content": {
+                "description": "Specification of the cryptographic key",
+                "example": {
+                  "alg": "RS256",
+                  "kyt": "RSA",
+                  "use": "sig"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/RsaSpecification"
+                  }
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "jwk"
+            ],
+            "example": "jwk",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiJwkPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiJwkPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiLabelLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
@@ -7716,6 +8403,82 @@
         ],
         "type": "object"
       },
+      "JsonApiMetricPostOptionalId": {
+        "description": "JSON:API representation of metric entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "properties": {
+                  "format": {
+                    "maxLength": 2048,
+                    "type": "string"
+                  },
+                  "maql": {
+                    "maxLength": 10000,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "maql"
+                ],
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "content"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "metric"
+            ],
+            "example": "metric",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiMetricPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiMetricPostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiMetricToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
@@ -7809,6 +8572,23 @@
                   "type": "string"
                 },
                 "type": "array"
+              },
+              "cacheSettings": {
+                "properties": {
+                  "cacheStrategy": {
+                    "enum": [
+                      "DURABLE",
+                      "EPHEMERAL"
+                    ],
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "extraCacheBudget": {
+                    "format": "int64",
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
               },
               "earlyAccess": {
                 "maxLength": 255,
@@ -8016,6 +8796,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -8026,7 +8808,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -8071,6 +8854,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -8081,7 +8866,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -8158,6 +8944,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -8168,7 +8956,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -8213,6 +9002,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -8265,6 +9056,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -8349,6 +9142,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "name": {
@@ -8811,6 +9606,97 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiUserDataFilterPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterPostOptionalId": {
+        "description": "JSON:API representation of userDataFilter entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "maql": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "maql"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "user": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "userGroup": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserGroupToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "userDataFilter"
+            ],
+            "example": "userDataFilter",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserDataFilterPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiUserDataFilterPostOptionalId"
           }
         },
         "required": [
@@ -9370,6 +10256,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -9380,7 +10268,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -9425,6 +10314,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -9435,7 +10326,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -9524,7 +10416,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -9611,7 +10503,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -9813,7 +10705,7 @@
                 "type": "boolean"
               },
               "content": {
-                "description": "Free-form JSON content.",
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
                 "example": {
                   "identifier": {
                     "id": "label.leaf",
@@ -9865,6 +10757,73 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiVisualizationObjectPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiVisualizationObjectPostOptionalId": {
+        "description": "JSON:API representation of visualizationObject entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 250000 characters.",
+                "example": {
+                  "identifier": {
+                    "id": "label.leaf",
+                    "type": "label"
+                  },
+                  "someBoolProp": false
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "visualizationObject"
+            ],
+            "example": "visualizationObject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiVisualizationObjectPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectPostOptionalId"
           }
         },
         "required": [
@@ -10150,6 +11109,76 @@
         ],
         "type": "object"
       },
+      "JsonApiWorkspaceDataFilterSettingIn": {
+        "description": "JSON:API representation of workspaceDataFilterSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "filterValues": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "workspaceDataFilter": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "workspaceDataFilterSetting"
+            ],
+            "example": "workspaceDataFilterSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWorkspaceDataFilterSettingInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiWorkspaceDataFilterSettingLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
         "properties": {
@@ -10287,10 +11316,87 @@
           }
         ]
       },
+      "JsonApiWorkspaceDataFilterSettingPatch": {
+        "description": "JSON:API representation of patching workspaceDataFilterSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "filterValues": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "workspaceDataFilter": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "workspaceDataFilterSetting"
+            ],
+            "example": "workspaceDataFilterSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWorkspaceDataFilterSettingPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiWorkspaceDataFilterSettingToManyLinkage": {
         "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "items": {
           "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingLinkage"
+        },
+        "type": "array"
+      },
+      "JsonApiWorkspaceDataFilterToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterLinkage"
         },
         "type": "array"
       },
@@ -10308,6 +11414,10 @@
         "properties": {
           "attributes": {
             "properties": {
+              "cacheExtraLimit": {
+                "format": "int64",
+                "type": "integer"
+              },
               "description": {
                 "maxLength": 255,
                 "type": "string"
@@ -10401,6 +11511,10 @@
         "properties": {
           "attributes": {
             "properties": {
+              "cacheExtraLimit": {
+                "format": "int64",
+                "type": "integer"
+              },
               "description": {
                 "maxLength": 255,
                 "type": "string"
@@ -10448,11 +11562,6 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "approximateCountAvailable",
-                  "dataSamplingAvailable",
-                  "showAllValuesOnDatesAvailable"
-                ],
                 "type": "object"
               },
               "permissions": {
@@ -10568,6 +11677,10 @@
         "properties": {
           "attributes": {
             "properties": {
+              "cacheExtraLimit": {
+                "format": "int64",
+                "type": "integer"
+              },
               "description": {
                 "maxLength": 255,
                 "type": "string"
@@ -10643,6 +11756,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -10653,7 +11768,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -10698,6 +11814,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -10708,7 +11826,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -10811,6 +11930,8 @@
           "attributes": {
             "properties": {
               "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
                 "type": "object"
               },
               "type": {
@@ -10821,7 +11942,8 @@
                   "WHITE_LABELING",
                   "LOCALE",
                   "FORMAT_LOCALE",
-                  "MAPBOX_TOKEN"
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
                 ],
                 "type": "string"
               }
@@ -10860,6 +11982,63 @@
         ],
         "type": "object"
       },
+      "JsonApiWorkspaceSettingPostOptionalId": {
+        "description": "JSON:API representation of workspaceSetting entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {},
+                "type": "object"
+              },
+              "type": {
+                "enum": [
+                  "TIMEZONE",
+                  "ACTIVE_THEME",
+                  "ACTIVE_COLOR_PALETTE",
+                  "WHITE_LABELING",
+                  "LOCALE",
+                  "FORMAT_LOCALE",
+                  "MAPBOX_TOKEN",
+                  "WEEK_START"
+                ],
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "workspaceSetting"
+            ],
+            "example": "workspaceSetting",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWorkspaceSettingPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWorkspaceSettingPostOptionalId"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonApiWorkspaceToOneLinkage": {
         "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
         "nullable": true,
@@ -10870,8 +12049,8 @@
         ]
       },
       "JsonNode": {
-        "description": "Custom setting content in JSON format.",
-        "example": {},
+        "description": "A definition of the metric in JSON format.",
+        "example": "{ \"content\": { \"maql\": \"SELECT 1\", \"format\": \"%0.2f\" } \"}",
         "type": "object"
       },
       "LabelIdentifier": {
@@ -11138,37 +12317,18 @@
       },
       "PdmLdmRequest": {
         "description": "PDM additions wrapper.",
-        "example": {
-          "sqls": [
-            {
-              "columns": [
-                {
-                  "dataType": "STRING",
-                  "name": "ABC"
-                }
-              ],
-              "statement": "select * from abc",
-              "title": "My special dataset"
-            }
-          ]
-        },
         "properties": {
           "sqls": {
             "description": "List of SQL datasets.",
-            "example": [
-              {
-                "columns": [
-                  {
-                    "dataType": "STRING",
-                    "name": "ABC"
-                  }
-                ],
-                "statement": "select * from abc",
-                "title": "My special dataset"
-              }
-            ],
             "items": {
               "$ref": "#/components/schemas/PdmSql"
+            },
+            "type": "array"
+          },
+          "tables": {
+            "description": "List of physical database tables.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeTable"
             },
             "type": "array"
           }
@@ -11177,27 +12337,9 @@
       },
       "PdmSql": {
         "description": "SQL dataset definition.",
-        "example": [
-          {
-            "columns": [
-              {
-                "dataType": "STRING",
-                "name": "ABC"
-              }
-            ],
-            "statement": "select * from abc",
-            "title": "My special dataset"
-          }
-        ],
         "properties": {
           "columns": {
             "description": "Columns defining SQL dataset.",
-            "example": [
-              {
-                "dataType": "STRING",
-                "name": "ABC"
-              }
-            ],
             "items": {
               "$ref": "#/components/schemas/SqlColumn"
             },
@@ -11615,7 +12757,8 @@
               "WHITE_LABELING",
               "LOCALE",
               "FORMAT_LOCALE",
-              "MAPBOX_TOKEN"
+              "MAPBOX_TOKEN",
+              "WEEK_START"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -11717,6 +12860,62 @@
         },
         "required": [
           "dimensions"
+        ],
+        "type": "object"
+      },
+      "RsaSpecification": {
+        "properties": {
+          "alg": {
+            "enum": [
+              "RS256",
+              "RS384",
+              "RS512"
+            ],
+            "type": "string"
+          },
+          "e": {
+            "type": "string"
+          },
+          "kid": {
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^[^.]",
+            "type": "string"
+          },
+          "kty": {
+            "enum": [
+              "RSA"
+            ],
+            "type": "string"
+          },
+          "n": {
+            "type": "string"
+          },
+          "use": {
+            "enum": [
+              "sig"
+            ],
+            "type": "string"
+          },
+          "x5c": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "x5t": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alg",
+          "e",
+          "kid",
+          "kty",
+          "n",
+          "use",
+          "x5c",
+          "x5t"
         ],
         "type": "object"
       },
@@ -12010,12 +13209,6 @@
       },
       "SqlColumn": {
         "description": "A SQL query result column.",
-        "example": [
-          {
-            "dataType": "STRING",
-            "name": "ABC"
-          }
-        ],
         "properties": {
           "dataType": {
             "description": "Column type",
@@ -13172,7 +14365,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees": {
       "get": {
-        "operationId": "availableAssignes",
+        "operationId": "availableAssignees",
         "parameters": [
           {
             "in": "path",
@@ -13203,14 +14396,16 @@
             "description": "OK"
           }
         },
+        "summary": "Get Available Assignees",
         "tags": [
+          "Permissions",
           "actions"
         ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions": {
       "post": {
-        "operationId": "managePermissions",
+        "operationId": "manageDashboardPermissions",
         "parameters": [
           {
             "in": "path",
@@ -13233,6 +14428,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "description": "An array of permissions assignments",
                 "items": {
                   "$ref": "#/components/schemas/PermissionsForAssignee"
                 },
@@ -13247,14 +14443,16 @@
             "description": "No Content"
           }
         },
+        "summary": "Manage Permissions for a Dashboard",
         "tags": [
+          "Permissions",
           "actions"
         ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions": {
       "get": {
-        "operationId": "permissions",
+        "operationId": "dashboardPermissions",
         "parameters": [
           {
             "in": "path",
@@ -13285,7 +14483,9 @@
             "description": "OK"
           }
         },
+        "summary": "Get Dashboard Permissions",
         "tags": [
+          "Permissions",
           "actions"
         ]
       }
@@ -13308,6 +14508,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "description": "An array of object identifications",
                 "items": {
                   "$ref": "#/components/schemas/HierarchyObjectIdentification"
                 },
@@ -13720,7 +14921,7 @@
             }
           },
           {
-            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
+            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
             "in": "query",
             "name": "explainType",
             "required": false,
@@ -13728,6 +14929,7 @@
               "enum": [
                 "MAQL",
                 "GRPC_MODEL",
+                "GRPC_MODEL_SVG",
                 "WDF",
                 "QT",
                 "QT_SVG",
@@ -13757,7 +14959,7 @@
               "application/sql": {},
               "application/zip": {
                 "schema": {
-                  "description": "ZIP with MAQL, GRPC_MODEL, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
+                  "description": "ZIP with MAQL, GRPC_MODEL, GRPC_MODEL_SVG, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
                   "format": "binary",
                   "type": "string"
                 }
@@ -14025,6 +15227,7 @@
         },
         "summary": "Create visual - pdf export request",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -14088,6 +15291,7 @@
         },
         "summary": "Retrieve exported files",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -14130,6 +15334,7 @@
         },
         "summary": "Retrieve metadata context",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -14343,6 +15548,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get CookieSecurityConfiguration",
         "tags": [
           "Cookie Security Configuration",
           "entities",
@@ -14387,6 +15593,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch CookieSecurityConfiguration",
         "tags": [
           "Cookie Security Configuration",
           "entities",
@@ -14431,6 +15638,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put CookieSecurityConfiguration",
         "tags": [
           "Cookie Security Configuration",
           "entities",
@@ -14511,6 +15719,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Organizations",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -14583,6 +15792,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Organization",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -14655,6 +15865,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Organization",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -14703,6 +15914,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Color Pallettes",
         "tags": [
           "Appearance",
           "entities",
@@ -14733,6 +15945,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Color Pallettes",
         "tags": [
           "Appearance",
           "entities",
@@ -14768,6 +15981,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Color Pallette",
         "tags": [
           "Appearance",
           "entities",
@@ -14808,6 +16022,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Color Pallette",
         "tags": [
           "Appearance",
           "entities",
@@ -14852,6 +16067,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Color Pallette",
         "tags": [
           "Appearance",
           "entities",
@@ -14902,6 +16118,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Color Pallette",
         "tags": [
           "Appearance",
           "entities",
@@ -14917,6 +16134,7 @@
     },
     "/api/v1/entities/cspDirectives": {
       "get": {
+        "description": " Context Security Police Directive",
         "operationId": "getAllEntities@CspDirectives",
         "parameters": [
           {
@@ -14950,6 +16168,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -14957,6 +16176,7 @@
         ]
       },
       "post": {
+        "description": " Context Security Police Directive",
         "operationId": "createEntity@CspDirectives",
         "requestBody": {
           "content": {
@@ -14980,6 +16200,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -14989,6 +16210,7 @@
     },
     "/api/v1/entities/cspDirectives/{id}": {
       "delete": {
+        "description": " Context Security Police Directive",
         "operationId": "deleteEntity@CspDirectives",
         "parameters": [
           {
@@ -15009,6 +16231,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -15016,6 +16239,7 @@
         ]
       },
       "get": {
+        "description": " Context Security Police Directive",
         "operationId": "getEntity@CspDirectives",
         "parameters": [
           {
@@ -15043,6 +16267,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -15050,6 +16275,7 @@
         ]
       },
       "patch": {
+        "description": " Context Security Police Directive",
         "operationId": "patchEntity@CspDirectives",
         "parameters": [
           {
@@ -15087,6 +16313,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -15094,6 +16321,7 @@
         ]
       },
       "put": {
+        "description": " Context Security Police Directive",
         "operationId": "updateEntity@CspDirectives",
         "parameters": [
           {
@@ -15131,6 +16359,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put CSP Directives",
         "tags": [
           "CSP Directives",
           "entities",
@@ -15195,6 +16424,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Data Source Identifiers",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15259,6 +16489,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Data Source Identifier",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15274,6 +16505,7 @@
     },
     "/api/v1/entities/dataSources": {
       "get": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "getAllEntities@DataSources",
         "parameters": [
           {
@@ -15329,6 +16561,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Data Source entities",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15342,6 +16575,7 @@
         }
       },
       "post": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "createEntity@DataSources",
         "parameters": [
           {
@@ -15389,6 +16623,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Data Sources",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15498,6 +16733,7 @@
     },
     "/api/v1/entities/dataSources/{id}": {
       "delete": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "deleteEntity@DataSources",
         "parameters": [
           {
@@ -15518,6 +16754,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete Data Source entity",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15531,6 +16768,7 @@
         }
       },
       "get": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "getEntity@DataSources",
         "parameters": [
           {
@@ -15580,6 +16818,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Data Source entity",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15593,6 +16832,7 @@
         }
       },
       "patch": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "patchEntity@DataSources",
         "parameters": [
           {
@@ -15630,6 +16870,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Data Source entity",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15643,6 +16884,7 @@
         }
       },
       "put": {
+        "description": "Data Source - represents data source for the workspace",
         "operationId": "updateEntity@DataSources",
         "parameters": [
           {
@@ -15680,6 +16922,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Data Source entity",
         "tags": [
           "Data Source - Entity APIs",
           "entities",
@@ -15695,6 +16938,7 @@
     },
     "/api/v1/entities/entitlements": {
       "get": {
+        "description": "Space of the shared interest",
         "operationId": "getAllEntities@Entitlements",
         "parameters": [
           {
@@ -15728,6 +16972,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Entitlements",
         "tags": [
           "Entitlement",
           "entities",
@@ -15737,6 +16982,7 @@
     },
     "/api/v1/entities/entitlements/{id}": {
       "get": {
+        "description": "Space of the shared interest",
         "operationId": "getEntity@Entitlements",
         "parameters": [
           {
@@ -15764,8 +17010,238 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Entitlement",
         "tags": [
           "Entitlement",
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/jwks": {
+      "get": {
+        "description": "Returns all JSON web keys - used to verify JSON web tokens (Jwts)",
+        "operationId": "getAllEntities@Jwks",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=content==JwkSpecificationValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiJwkOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Jwks",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "description": "Creates JSON web key - used to verify JSON web tokens (Jwts)",
+        "operationId": "createEntity@Jwks",
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiJwkInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiJwkOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Jwks",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/jwks/{id}": {
+      "delete": {
+        "description": "Deletes JSON web key - used to verify JSON web tokens (Jwts)",
+        "operationId": "deleteEntity@Jwks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=content==JwkSpecificationValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete Jwk",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "get": {
+        "description": "Returns JSON web key - used to verify JSON web tokens (Jwts)",
+        "operationId": "getEntity@Jwks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=content==JwkSpecificationValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiJwkOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get Jwk",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "description": "Patches JSON web key - used to verify JSON web tokens (Jwts)",
+        "operationId": "patchEntity@Jwks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=content==JwkSpecificationValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiJwkPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiJwkOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch Jwk",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "put": {
+        "description": "Updates JSON web key - used to verify JSON web tokens (Jwts)",
+        "operationId": "updateEntity@Jwks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=content==JwkSpecificationValue",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiJwkInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiJwkOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put Jwk",
+        "tags": [
           "entities",
           "organization-model-controller"
         ]
@@ -15803,8 +17279,8 @@
         },
         "summary": "Get current organization info",
         "tags": [
-          "entities",
-          "Organization - Entity APIs"
+          "Organization - Entity APIs",
+          "entities"
         ]
       }
     },
@@ -15843,6 +17319,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Organization entities",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -15873,6 +17350,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Organization Setting entities",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -15908,6 +17386,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete Organization entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -15948,6 +17427,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Organization entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -15992,6 +17472,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Organization entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -16042,6 +17523,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Organization entity",
         "tags": [
           "Organization - Entity APIs",
           "entities",
@@ -16090,6 +17572,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Theming entities",
         "tags": [
           "Appearance",
           "entities",
@@ -16120,6 +17603,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Theming",
         "tags": [
           "Appearance",
           "entities",
@@ -16155,6 +17639,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete Theming",
         "tags": [
           "Appearance",
           "entities",
@@ -16195,6 +17680,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Theming",
         "tags": [
           "Appearance",
           "entities",
@@ -16239,6 +17725,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Theming",
         "tags": [
           "Appearance",
           "entities",
@@ -16289,6 +17776,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Theming",
         "tags": [
           "Appearance",
           "entities",
@@ -16304,6 +17792,7 @@
     },
     "/api/v1/entities/userGroups": {
       "get": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "getAllEntities@UserGroups",
         "parameters": [
           {
@@ -16357,6 +17846,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get UserGroup entities",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16370,6 +17860,7 @@
         }
       },
       "post": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "createEntity@UserGroups",
         "parameters": [
           {
@@ -16415,6 +17906,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post User Group entities",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16430,6 +17922,7 @@
     },
     "/api/v1/entities/userGroups/{id}": {
       "delete": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "deleteEntity@UserGroups",
         "parameters": [
           {
@@ -16450,6 +17943,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete UserGroup entity",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16463,6 +17957,7 @@
         }
       },
       "get": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "getEntity@UserGroups",
         "parameters": [
           {
@@ -16510,6 +18005,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get UserGroup entity",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16523,6 +18019,7 @@
         }
       },
       "patch": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "patchEntity@UserGroups",
         "parameters": [
           {
@@ -16580,6 +18077,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch UserGroup entity",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16593,6 +18091,7 @@
         }
       },
       "put": {
+        "description": "User Group - creates tree-like structure for categorizing users",
         "operationId": "updateEntity@UserGroups",
         "parameters": [
           {
@@ -16650,6 +18149,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put UserGroup entity",
         "tags": [
           "UserGroups - Entity APIs",
           "entities",
@@ -16665,6 +18165,7 @@
     },
     "/api/v1/entities/users": {
       "get": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "getAllEntities@Users",
         "parameters": [
           {
@@ -16717,6 +18218,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get User entities",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -16730,6 +18232,7 @@
         }
       },
       "post": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "createEntity@Users",
         "parameters": [
           {
@@ -16774,6 +18277,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post User entities",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -16789,6 +18293,7 @@
     },
     "/api/v1/entities/users/{id}": {
       "delete": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "deleteEntity@Users",
         "parameters": [
           {
@@ -16809,6 +18314,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete User entity",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -16822,6 +18328,7 @@
         }
       },
       "get": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "getEntity@Users",
         "parameters": [
           {
@@ -16868,6 +18375,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get User entity",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -16881,6 +18389,7 @@
         }
       },
       "patch": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "patchEntity@Users",
         "parameters": [
           {
@@ -16937,6 +18446,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch User entity",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -16950,6 +18460,7 @@
         }
       },
       "put": {
+        "description": "User - represents entity interacting with platform",
         "operationId": "updateEntity@Users",
         "parameters": [
           {
@@ -17006,6 +18517,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put User entity",
         "tags": [
           "Users - Entity APIs",
           "entities",
@@ -17103,6 +18615,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post a new API token for the user",
         "tags": [
           "API tokens",
           "entities",
@@ -17140,6 +18653,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete an API Token for a user",
         "tags": [
           "API tokens",
           "entities",
@@ -17182,6 +18696,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get an API Token for a user",
         "tags": [
           "API tokens",
           "entities",
@@ -17234,6 +18749,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put new API token for the user",
         "tags": [
           "API tokens",
           "entities",
@@ -17325,6 +18841,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post new user settings for the user",
         "tags": [
           "User Settings",
           "entities",
@@ -17362,6 +18879,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a setting for a user",
         "tags": [
           "User Settings",
           "entities",
@@ -17404,6 +18922,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a setting for a user",
         "tags": [
           "User Settings",
           "entities",
@@ -17456,6 +18975,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put new user settings for the user",
         "tags": [
           "User Settings",
           "entities",
@@ -17465,6 +18985,7 @@
     },
     "/api/v1/entities/workspaces": {
       "get": {
+        "description": "Space of the shared interest",
         "operationId": "getAllEntities@Workspaces",
         "parameters": [
           {
@@ -17541,6 +19062,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Workspace entities",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -17554,6 +19076,7 @@
         }
       },
       "post": {
+        "description": "Space of the shared interest",
         "operationId": "createEntity@Workspaces",
         "parameters": [
           {
@@ -17622,6 +19145,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Workspace entities",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -17637,6 +19161,7 @@
     },
     "/api/v1/entities/workspaces/{id}": {
       "delete": {
+        "description": "Space of the shared interest",
         "operationId": "deleteEntity@Workspaces",
         "parameters": [
           {
@@ -17657,6 +19182,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete Workspace entity",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -17670,6 +19196,7 @@
         }
       },
       "get": {
+        "description": "Space of the shared interest",
         "operationId": "getEntity@Workspaces",
         "parameters": [
           {
@@ -17740,6 +19267,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get Workspace entity",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -17753,6 +19281,7 @@
         }
       },
       "patch": {
+        "description": "Space of the shared interest",
         "operationId": "patchEntity@Workspaces",
         "parameters": [
           {
@@ -17810,6 +19339,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch Workspace entity",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -17823,6 +19353,7 @@
         }
       },
       "put": {
+        "description": "Space of the shared interest",
         "operationId": "updateEntity@Workspaces",
         "parameters": [
           {
@@ -17880,6 +19411,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Workspace entity",
         "tags": [
           "Workspaces - Entity APIs",
           "entities",
@@ -18009,6 +19541,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Dashboards",
         "tags": [
           "Dashboards",
           "entities",
@@ -18086,7 +19619,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiAnalyticalDashboardInDocument"
+                "$ref": "#/components/schemas/JsonApiAnalyticalDashboardPostOptionalIdDocument"
               }
             }
           },
@@ -18104,6 +19637,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Dashboards",
         "tags": [
           "Dashboards",
           "entities",
@@ -18152,6 +19686,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Dashboard",
         "tags": [
           "Dashboards",
           "entities",
@@ -18263,6 +19798,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Dashboard",
         "tags": [
           "Dashboards",
           "entities",
@@ -18351,6 +19887,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Dashboard",
         "tags": [
           "Dashboards",
           "entities",
@@ -18439,6 +19976,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put Dashboards",
         "tags": [
           "Dashboards",
           "entities",
@@ -18563,6 +20101,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Attributes",
         "tags": [
           "Attributes",
           "entities",
@@ -18665,6 +20204,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Attribute",
         "tags": [
           "Attributes",
           "entities",
@@ -18761,6 +20301,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Custom Application Settings",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -18811,7 +20352,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiCustomApplicationSettingInDocument"
+                "$ref": "#/components/schemas/JsonApiCustomApplicationSettingPostOptionalIdDocument"
               }
             }
           },
@@ -18829,6 +20370,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Custom Application Settings",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -18871,6 +20413,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Custom Application Setting",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -18949,6 +20492,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Custom Application Setting",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -19012,6 +20556,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Custom Application Setting",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -19069,6 +20614,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Custom Application Setting",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -19165,6 +20711,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Plugins",
         "tags": [
           "Plugins",
           "entities",
@@ -19215,7 +20762,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiDashboardPluginInDocument"
+                "$ref": "#/components/schemas/JsonApiDashboardPluginPostOptionalIdDocument"
               }
             }
           },
@@ -19233,6 +20780,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Plugins",
         "tags": [
           "Plugins",
           "entities",
@@ -19281,6 +20829,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Plugin",
         "tags": [
           "Plugins",
           "entities",
@@ -19365,6 +20914,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Plugin",
         "tags": [
           "Plugins",
           "entities",
@@ -19428,6 +20978,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Plugin",
         "tags": [
           "Plugins",
           "entities",
@@ -19491,6 +21042,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Plugin",
         "tags": [
           "Plugins",
           "entities",
@@ -19542,7 +21094,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=attributes,facts,references",
+            "example": "include=attributes,facts,references,workspaceDataFilters",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19553,6 +21105,7 @@
                   "attributes",
                   "facts",
                   "datasets",
+                  "workspaceDataFilters",
                   "references",
                   "ALL"
                 ],
@@ -19615,6 +21168,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Datasets",
         "tags": [
           "Datasets",
           "entities",
@@ -19653,7 +21207,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=attributes,facts,references",
+            "example": "include=attributes,facts,references,workspaceDataFilters",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19664,6 +21218,7 @@
                   "attributes",
                   "facts",
                   "datasets",
+                  "workspaceDataFilters",
                   "references",
                   "ALL"
                 ],
@@ -19717,6 +21272,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Dataset",
         "tags": [
           "Datasets",
           "entities",
@@ -19833,6 +21389,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Facts",
         "tags": [
           "Facts",
           "entities",
@@ -19939,6 +21496,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Fact",
         "tags": [
           "Facts",
           "entities",
@@ -20062,6 +21620,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Context Filters",
         "tags": [
           "Context Filters",
           "entities",
@@ -20133,7 +21692,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiFilterContextInDocument"
+                "$ref": "#/components/schemas/JsonApiFilterContextPostOptionalIdDocument"
               }
             }
           },
@@ -20151,6 +21710,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Context Filters",
         "tags": [
           "Context Filters",
           "entities",
@@ -20199,6 +21759,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Context Filter",
         "tags": [
           "Context Filters",
           "entities",
@@ -20304,6 +21865,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Context Filter",
         "tags": [
           "Context Filters",
           "entities",
@@ -20388,6 +21950,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Context Filter",
         "tags": [
           "Context Filters",
           "entities",
@@ -20472,6 +22035,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Context Filter",
         "tags": [
           "Context Filters",
           "entities",
@@ -20594,6 +22158,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Labels",
         "tags": [
           "Labels",
           "entities",
@@ -20700,6 +22265,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Label",
         "tags": [
           "Labels",
           "entities",
@@ -20825,6 +22391,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Metrics",
         "tags": [
           "Metrics",
           "entities",
@@ -20898,7 +22465,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiMetricInDocument"
+                "$ref": "#/components/schemas/JsonApiMetricPostOptionalIdDocument"
               }
             }
           },
@@ -20916,6 +22483,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Metrics",
         "tags": [
           "Metrics",
           "entities",
@@ -20964,6 +22532,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Metric",
         "tags": [
           "Metrics",
           "entities",
@@ -21071,6 +22640,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Metric",
         "tags": [
           "Metrics",
           "entities",
@@ -21157,6 +22727,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Metric",
         "tags": [
           "Metrics",
           "entities",
@@ -21243,6 +22814,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Metric",
         "tags": [
           "Metrics",
           "entities",
@@ -21372,6 +22944,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all User Data Filters",
         "tags": [
           "Data Filters",
           "entities",
@@ -21443,7 +23016,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiUserDataFilterInDocument"
+                "$ref": "#/components/schemas/JsonApiUserDataFilterPostOptionalIdDocument"
               }
             }
           },
@@ -21461,6 +23034,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post User Data Filters",
         "tags": [
           "Data Filters",
           "entities",
@@ -21503,6 +23077,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a User Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -21608,6 +23183,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a User Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -21692,6 +23268,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a User Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -21776,6 +23353,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a User Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -21895,6 +23473,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Visualization Objects",
         "tags": [
           "Visualization Object",
           "entities",
@@ -21968,7 +23547,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiVisualizationObjectInDocument"
+                "$ref": "#/components/schemas/JsonApiVisualizationObjectPostOptionalIdDocument"
               }
             }
           },
@@ -21986,6 +23565,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Visualization Objects",
         "tags": [
           "Visualization Object",
           "entities",
@@ -22034,6 +23614,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Visualization Object",
         "tags": [
           "Visualization Object",
           "entities",
@@ -22141,6 +23722,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Visualization Object",
         "tags": [
           "Visualization Object",
           "entities",
@@ -22227,6 +23809,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Visualization Object",
         "tags": [
           "Visualization Object",
           "entities",
@@ -22313,6 +23896,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Visualization Object",
         "tags": [
           "Visualization Object",
           "entities",
@@ -22413,6 +23997,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Settings for Workspace Data Filters",
         "tags": [
           "Data Filters",
           "entities",
@@ -22424,9 +24009,123 @@
             "VIEW"
           ]
         }
+      },
+      "post": {
+        "operationId": "createEntity@WorkspaceDataFilterSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=workspaceDataFilter",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "workspaceDataFilters",
+                  "workspaceDataFilter",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Settings for Workspace Data Filters",
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@WorkspaceDataFilterSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;workspaceDataFilter.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete a Settings for Workspace Data Filter",
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
       "get": {
         "operationId": "getEntity@WorkspaceDataFilterSettings",
         "parameters": [
@@ -22497,6 +24196,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Setting for Workspace Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -22506,6 +24206,174 @@
           "description": "Contains minimal permission level required to view this object type.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@WorkspaceDataFilterSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;workspaceDataFilter.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=workspaceDataFilter",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "workspaceDataFilters",
+                  "workspaceDataFilter",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Settings for Workspace Data Filter",
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@WorkspaceDataFilterSettings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;workspaceDataFilter.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=workspaceDataFilter",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "workspaceDataFilters",
+                  "workspaceDataFilter",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWorkspaceDataFilterSettingOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put a Settings for Workspace Data Filter",
+        "tags": [
+          "Data Filters",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
           ]
         }
       }
@@ -22597,6 +24465,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Workspace Data Filters",
         "tags": [
           "Data Filters",
           "entities",
@@ -22663,6 +24532,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Workspace Data Filters",
         "tags": [
           "Data Filters",
           "entities",
@@ -22711,6 +24581,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Workspace Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -22793,6 +24664,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Workspace Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -22876,6 +24748,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Workspace Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -22959,6 +24832,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Workspace Data Filter",
         "tags": [
           "Data Filters",
           "entities",
@@ -23061,6 +24935,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Setting for Workspaces",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23111,7 +24986,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiWorkspaceSettingInDocument"
+                "$ref": "#/components/schemas/JsonApiWorkspaceSettingPostOptionalIdDocument"
               }
             }
           },
@@ -23129,6 +25004,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Post Settings for Workspaces",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23171,6 +25047,7 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete a Setting for Workspace",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23249,6 +25126,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get a Setting for Workspace",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23312,6 +25190,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch a Setting for Workspace",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23369,6 +25248,7 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put a Setting for a Workspace",
         "tags": [
           "Workspaces - Settings",
           "entities",
@@ -23418,7 +25298,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Defined all data sources."
           }
         },
@@ -23437,6 +25317,7 @@
     },
     "/api/v1/layout/dataSources/{dataSourceId}/physicalModel": {
       "get": {
+        "deprecated": true,
         "description": "Retrieve complete layout of tables with their columns",
         "operationId": "getPdmLayout",
         "parameters": [
@@ -23474,6 +25355,7 @@
         }
       },
       "put": {
+        "deprecated": true,
         "description": "Sets complete layout of tables with their columns under corresponding Data Source.",
         "operationId": "setPdmLayout",
         "parameters": [
@@ -23615,7 +25497,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Defined all user groups."
           }
         },
@@ -23751,7 +25633,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Defined all users."
           }
         },
@@ -23887,7 +25769,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "204": {
             "description": "Defined all users and user groups."
           }
         },
@@ -24216,8 +26098,8 @@
         },
         "summary": "Get logical model",
         "tags": [
-          "layout",
-          "LDM - Declarative APIs"
+          "LDM - Declarative APIs",
+          "layout"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to read the logical model.",
@@ -24256,8 +26138,8 @@
         },
         "summary": "Set logical model",
         "tags": [
-          "layout",
-          "LDM - Declarative APIs"
+          "LDM - Declarative APIs",
+          "layout"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to alter the logical model.",
@@ -24479,6 +26361,9 @@
                   }
                 },
                 "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
                   "type": "object"
                 }
               }
@@ -24501,78 +26386,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Analytics Model"
-    },
-    {
-      "name": "Available Drivers"
-    },
-    {
-      "name": "Computation"
-    },
-    {
-      "name": "Data Filters"
-    },
-    {
-      "name": "Data Source - Declarative APIs"
-    },
-    {
-      "name": "Dependency Graph"
-    },
-    {
-      "name": "Entitlement"
-    },
-    {
-      "name": "Generate Logical Data Model"
-    },
-    {
-      "name": "Invalidate Cache"
-    },
-    {
-      "name": "LDM - Declarative APIs"
-    },
-    {
-      "name": "Options"
-    },
-    {
-      "name": "Organization - Declarative APIs"
-    },
-    {
-      "name": "Organization - Entity APIs"
-    },
-    {
-      "name": "PDM - Declarative APIs"
-    },
-    {
-      "name": "Permissions"
-    },
-    {
-      "name": "Reporting - Settings"
-    },
-    {
-      "name": "Scanning"
-    },
-    {
-      "name": "Test Connection"
-    },
-    {
-      "name": "Usage"
-    },
-    {
-      "name": "User Data Filters"
-    },
-    {
-      "name": "UserGroups - Declarative APIs"
-    },
-    {
-      "name": "Users - Declarative APIs"
-    },
-    {
-      "name": "Workspaces - Declarative APIs"
-    },
-    {
-      "name": "Workspaces - Settings"
-    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

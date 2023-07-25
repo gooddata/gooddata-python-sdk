@@ -96,6 +96,7 @@ class DataSourceTableIdentifier(ModelNormal):
             'data_source_id': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
+            'path': ([str], none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -107,6 +108,7 @@ class DataSourceTableIdentifier(ModelNormal):
         'data_source_id': 'dataSourceId',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
+        'path': 'path',  # noqa: E501
     }
 
     read_only_vars = {
@@ -155,6 +157,7 @@ class DataSourceTableIdentifier(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            path ([str], none_type): Path to table.. [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataSource")
@@ -249,6 +252,7 @@ class DataSourceTableIdentifier(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            path ([str], none_type): Path to table.. [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dataSource")

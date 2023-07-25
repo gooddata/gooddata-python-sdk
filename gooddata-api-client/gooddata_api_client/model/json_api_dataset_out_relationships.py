@@ -34,9 +34,11 @@ def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_dataset_out_relationships_attributes import JsonApiDatasetOutRelationshipsAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships_facts import JsonApiDatasetOutRelationshipsFacts
+    from gooddata_api_client.model.json_api_dataset_out_relationships_workspace_data_filters import JsonApiDatasetOutRelationshipsWorkspaceDataFilters
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiDatasetOutRelationshipsAttributes'] = JsonApiDatasetOutRelationshipsAttributes
     globals()['JsonApiDatasetOutRelationshipsFacts'] = JsonApiDatasetOutRelationshipsFacts
+    globals()['JsonApiDatasetOutRelationshipsWorkspaceDataFilters'] = JsonApiDatasetOutRelationshipsWorkspaceDataFilters
 
 
 class JsonApiDatasetOutRelationships(ModelNormal):
@@ -95,6 +97,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
             'attributes': (JsonApiDatasetOutRelationshipsAttributes,),  # noqa: E501
             'facts': (JsonApiDatasetOutRelationshipsFacts,),  # noqa: E501
             'references': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
+            'workspace_data_filters': (JsonApiDatasetOutRelationshipsWorkspaceDataFilters,),  # noqa: E501
         }
 
     @cached_property
@@ -106,6 +109,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
         'attributes': 'attributes',  # noqa: E501
         'facts': 'facts',  # noqa: E501
         'references': 'references',  # noqa: E501
+        'workspace_data_filters': 'workspaceDataFilters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -152,6 +156,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
             attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            workspace_data_filters (JsonApiDatasetOutRelationshipsWorkspaceDataFilters): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -240,6 +245,7 @@ class JsonApiDatasetOutRelationships(ModelNormal):
             attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
             facts (JsonApiDatasetOutRelationshipsFacts): [optional]  # noqa: E501
             references (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
+            workspace_data_filters (JsonApiDatasetOutRelationshipsWorkspaceDataFilters): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

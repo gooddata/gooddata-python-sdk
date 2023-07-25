@@ -87,6 +87,7 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
         """
         return {
             'id': (str,),  # noqa: E501
+            'order': (int,),  # noqa: E501
             'type': (str,),  # noqa: E501
         }
 
@@ -97,6 +98,7 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
 
     attribute_map = {
         'id': 'id',  # noqa: E501
+        'order': 'order',  # noqa: E501
         'type': 'type',  # noqa: E501
     }
 
@@ -107,11 +109,12 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, type, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, id, order, type, *args, **kwargs):  # noqa: E501
         """JsonApiDatasetOutAttributesGrainInner - a model defined in OpenAPI
 
         Args:
             id (str):
+            order (int):
             type (str):
 
         Keyword Args:
@@ -177,6 +180,7 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.order = order
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -198,11 +202,12 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, id, order, type, *args, **kwargs):  # noqa: E501
         """JsonApiDatasetOutAttributesGrainInner - a model defined in OpenAPI
 
         Args:
             id (str):
+            order (int):
             type (str):
 
         Keyword Args:
@@ -266,6 +271,7 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.id = id
+        self.order = order
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**cache_extra_limit** | **int** |  | [optional] 
 **description** | **str** |  | [optional] 
 **early_access** | **str** |  | [optional] 
 **name** | **str** |  | [optional] 

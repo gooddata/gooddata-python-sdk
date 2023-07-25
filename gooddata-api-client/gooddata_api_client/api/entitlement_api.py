@@ -260,8 +260,9 @@ class EntitlementApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_entitlements  # noqa: E501
+        """Get Entitlements  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -342,8 +343,9 @@ class EntitlementApi(object):
         id,
         **kwargs
     ):
-        """get_entity_entitlements  # noqa: E501
+        """Get Entitlement  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

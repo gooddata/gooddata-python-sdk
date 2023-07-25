@@ -110,7 +110,7 @@ class JsonApiColorPaletteInAttributes(ModelNormal):
         """JsonApiColorPaletteInAttributes - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}):
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.
             name (str):
 
         Keyword Args:
@@ -201,7 +201,7 @@ class JsonApiColorPaletteInAttributes(ModelNormal):
         """JsonApiColorPaletteInAttributes - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}):
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.
             name (str):
 
         Keyword Args:

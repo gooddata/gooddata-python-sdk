@@ -764,8 +764,9 @@ class DataSourceEntityAPIsApi(object):
         json_api_data_source_in_document,
         **kwargs
     ):
-        """create_entity_data_sources  # noqa: E501
+        """Post Data Sources  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -847,8 +848,9 @@ class DataSourceEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_data_sources  # noqa: E501
+        """Delete Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -929,7 +931,7 @@ class DataSourceEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_data_source_identifiers  # noqa: E501
+        """Get all Data Source Identifiers  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1097,8 +1099,9 @@ class DataSourceEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_data_sources  # noqa: E501
+        """Get Data Source entities  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1180,7 +1183,7 @@ class DataSourceEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_data_source_identifiers  # noqa: E501
+        """Get Data Source Identifier  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1351,8 +1354,9 @@ class DataSourceEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_data_sources  # noqa: E501
+        """Get Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1436,8 +1440,9 @@ class DataSourceEntityAPIsApi(object):
         json_api_data_source_patch_document,
         **kwargs
     ):
-        """patch_entity_data_sources  # noqa: E501
+        """Patch Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -1523,8 +1528,9 @@ class DataSourceEntityAPIsApi(object):
         json_api_data_source_in_document,
         **kwargs
     ):
-        """update_entity_data_sources  # noqa: E501
+        """Put Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

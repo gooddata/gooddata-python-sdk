@@ -150,7 +150,7 @@ class JsonApiDashboardPluginInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -240,7 +240,7 @@ class JsonApiDashboardPluginInAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.. [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501

@@ -1021,9 +1021,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "labelType"
-        ],
         "type": "object"
       },
       "FilterDefinition": {
@@ -2201,7 +2198,7 @@
             }
           },
           {
-            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
+            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
             "in": "query",
             "name": "explainType",
             "required": false,
@@ -2209,6 +2206,7 @@
               "enum": [
                 "MAQL",
                 "GRPC_MODEL",
+                "GRPC_MODEL_SVG",
                 "WDF",
                 "QT",
                 "QT_SVG",
@@ -2238,7 +2236,7 @@
               "application/sql": {},
               "application/zip": {
                 "schema": {
-                  "description": "ZIP with MAQL, GRPC_MODEL, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
+                  "description": "ZIP with MAQL, GRPC_MODEL, GRPC_MODEL_SVG, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
                   "format": "binary",
                   "type": "string"
                 }
@@ -2356,9 +2354,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Computation"
-    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

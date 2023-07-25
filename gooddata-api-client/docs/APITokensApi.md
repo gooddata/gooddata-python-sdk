@@ -4,17 +4,17 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_api_tokens**](APITokensApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | 
-[**delete_entity_api_tokens**](APITokensApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | 
+[**create_entity_api_tokens**](APITokensApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | Post a new API token for the user
+[**delete_entity_api_tokens**](APITokensApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | Delete an API Token for a user
 [**get_all_entities_api_tokens**](APITokensApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
-[**get_entity_api_tokens**](APITokensApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | 
-[**update_entity_api_tokens**](APITokensApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | 
+[**get_entity_api_tokens**](APITokensApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | Get an API Token for a user
+[**update_entity_api_tokens**](APITokensApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | Put new API token for the user
 
 
 # **create_entity_api_tokens**
 > JsonApiApiTokenOutDocument create_entity_api_tokens(user_id, json_api_api_token_in_document)
 
-
+Post a new API token for the user
 
 ### Example
 
@@ -47,6 +47,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post a new API token for the user
         api_response = api_instance.create_entity_api_tokens(user_id, json_api_api_token_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -86,7 +87,7 @@ No authorization required
 # **delete_entity_api_tokens**
 > delete_entity_api_tokens(user_id, id)
 
-
+Delete an API Token for a user
 
 ### Example
 
@@ -113,6 +114,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete an API Token for a user
         api_instance.delete_entity_api_tokens(user_id, id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling APITokensApi->delete_entity_api_tokens: %s\n" % e)
@@ -120,6 +122,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete an API Token for a user
         api_instance.delete_entity_api_tokens(user_id, id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling APITokensApi->delete_entity_api_tokens: %s\n" % e)
@@ -243,7 +246,7 @@ No authorization required
 # **get_entity_api_tokens**
 > JsonApiApiTokenOutDocument get_entity_api_tokens(user_id, id)
 
-
+Get an API Token for a user
 
 ### Example
 
@@ -271,6 +274,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get an API Token for a user
         api_response = api_instance.get_entity_api_tokens(user_id, id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -279,6 +283,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get an API Token for a user
         api_response = api_instance.get_entity_api_tokens(user_id, id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -319,7 +324,7 @@ No authorization required
 # **update_entity_api_tokens**
 > JsonApiApiTokenOutDocument update_entity_api_tokens(user_id, id, json_api_api_token_in_document)
 
-
+Put new API token for the user
 
 ### Example
 
@@ -354,6 +359,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put new API token for the user
         api_response = api_instance.update_entity_api_tokens(user_id, id, json_api_api_token_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -362,6 +368,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put new API token for the user
         api_response = api_instance.update_entity_api_tokens(user_id, id, json_api_api_token_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_all_entities_entitlements**](EntitlementApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | 
-[**get_entity_entitlements**](EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | 
+[**get_all_entities_entitlements**](EntitlementApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
+[**get_entity_entitlements**](EntitlementApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
 [**resolve_all_entitlements**](EntitlementApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_requested_entitlements**](EntitlementApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
 
@@ -13,7 +13,9 @@ Method | HTTP request | Description
 # **get_all_entities_entitlements**
 > JsonApiEntitlementOutList get_all_entities_entitlements()
 
+Get Entitlements
 
+Space of the shared interest
 
 ### Example
 
@@ -45,6 +47,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Entitlements
         api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -86,7 +89,9 @@ No authorization required
 # **get_entity_entitlements**
 > JsonApiEntitlementOutDocument get_entity_entitlements(id)
 
+Get Entitlement
 
+Space of the shared interest
 
 ### Example
 
@@ -113,6 +118,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Entitlement
         api_response = api_instance.get_entity_entitlements(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -121,6 +127,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Entitlement
         api_response = api_instance.get_entity_entitlements(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -250,7 +257,7 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = entitlement_api.EntitlementApi(api_client)
     entitlements_request = EntitlementsRequest(
         entitlements_name=[
-            "Contract",
+            "CacheStrategy",
         ],
     ) # EntitlementsRequest | 
 

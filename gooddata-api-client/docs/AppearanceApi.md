@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_color_palettes**](AppearanceApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | 
-[**create_entity_themes**](AppearanceApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | 
-[**delete_entity_color_palettes**](AppearanceApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | 
-[**delete_entity_themes**](AppearanceApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | 
-[**get_all_entities_color_palettes**](AppearanceApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | 
-[**get_all_entities_themes**](AppearanceApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | 
-[**get_entity_color_palettes**](AppearanceApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | 
-[**get_entity_themes**](AppearanceApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | 
-[**patch_entity_color_palettes**](AppearanceApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | 
-[**patch_entity_themes**](AppearanceApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | 
-[**update_entity_color_palettes**](AppearanceApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | 
-[**update_entity_themes**](AppearanceApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | 
+[**create_entity_color_palettes**](AppearanceApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
+[**create_entity_themes**](AppearanceApi.md#create_entity_themes) | **POST** /api/v1/entities/themes | Post Theming
+[**delete_entity_color_palettes**](AppearanceApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
+[**delete_entity_themes**](AppearanceApi.md#delete_entity_themes) | **DELETE** /api/v1/entities/themes/{id} | Delete Theming
+[**get_all_entities_color_palettes**](AppearanceApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
+[**get_all_entities_themes**](AppearanceApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
+[**get_entity_color_palettes**](AppearanceApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
+[**get_entity_themes**](AppearanceApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
+[**patch_entity_color_palettes**](AppearanceApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
+[**patch_entity_themes**](AppearanceApi.md#patch_entity_themes) | **PATCH** /api/v1/entities/themes/{id} | Patch Theming
+[**update_entity_color_palettes**](AppearanceApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
+[**update_entity_themes**](AppearanceApi.md#update_entity_themes) | **PUT** /api/v1/entities/themes/{id} | Put Theming
 
 
 # **create_entity_color_palettes**
 > JsonApiColorPaletteOutDocument create_entity_color_palettes(json_api_color_palette_in_document)
 
-
+Post Color Pallettes
 
 ### Example
 
@@ -57,6 +57,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Color Pallettes
         api_response = api_instance.create_entity_color_palettes(json_api_color_palette_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -95,7 +96,7 @@ No authorization required
 # **create_entity_themes**
 > JsonApiThemeOutDocument create_entity_themes(json_api_theme_in_document)
 
-
+Post Theming
 
 ### Example
 
@@ -131,6 +132,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Theming
         api_response = api_instance.create_entity_themes(json_api_theme_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -169,7 +171,7 @@ No authorization required
 # **delete_entity_color_palettes**
 > delete_entity_color_palettes(id)
 
-
+Delete a Color Pallette
 
 ### Example
 
@@ -195,6 +197,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Color Pallette
         api_instance.delete_entity_color_palettes(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AppearanceApi->delete_entity_color_palettes: %s\n" % e)
@@ -202,6 +205,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete a Color Pallette
         api_instance.delete_entity_color_palettes(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AppearanceApi->delete_entity_color_palettes: %s\n" % e)
@@ -240,7 +244,7 @@ No authorization required
 # **delete_entity_themes**
 > delete_entity_themes(id)
 
-
+Delete Theming
 
 ### Example
 
@@ -266,6 +270,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Theming
         api_instance.delete_entity_themes(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AppearanceApi->delete_entity_themes: %s\n" % e)
@@ -273,6 +278,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Theming
         api_instance.delete_entity_themes(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling AppearanceApi->delete_entity_themes: %s\n" % e)
@@ -311,7 +317,7 @@ No authorization required
 # **get_all_entities_color_palettes**
 > JsonApiColorPaletteOutList get_all_entities_color_palettes()
 
-
+Get all Color Pallettes
 
 ### Example
 
@@ -343,6 +349,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Color Pallettes
         api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -384,7 +391,7 @@ No authorization required
 # **get_all_entities_themes**
 > JsonApiThemeOutList get_all_entities_themes()
 
-
+Get all Theming entities
 
 ### Example
 
@@ -416,6 +423,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Theming entities
         api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -457,7 +465,7 @@ No authorization required
 # **get_entity_color_palettes**
 > JsonApiColorPaletteOutDocument get_entity_color_palettes(id)
 
-
+Get Color Pallette
 
 ### Example
 
@@ -484,6 +492,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Color Pallette
         api_response = api_instance.get_entity_color_palettes(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -492,6 +501,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Color Pallette
         api_response = api_instance.get_entity_color_palettes(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -531,7 +541,7 @@ No authorization required
 # **get_entity_themes**
 > JsonApiThemeOutDocument get_entity_themes(id)
 
-
+Get Theming
 
 ### Example
 
@@ -558,6 +568,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Theming
         api_response = api_instance.get_entity_themes(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -566,6 +577,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Theming
         api_response = api_instance.get_entity_themes(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -605,7 +617,7 @@ No authorization required
 # **patch_entity_color_palettes**
 > JsonApiColorPaletteOutDocument patch_entity_color_palettes(id, json_api_color_palette_patch_document)
 
-
+Patch Color Pallette
 
 ### Example
 
@@ -643,6 +655,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Color Pallette
         api_response = api_instance.patch_entity_color_palettes(id, json_api_color_palette_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -651,6 +664,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Color Pallette
         api_response = api_instance.patch_entity_color_palettes(id, json_api_color_palette_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -691,7 +705,7 @@ No authorization required
 # **patch_entity_themes**
 > JsonApiThemeOutDocument patch_entity_themes(id, json_api_theme_patch_document)
 
-
+Patch Theming
 
 ### Example
 
@@ -729,6 +743,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Theming
         api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -737,6 +752,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Theming
         api_response = api_instance.patch_entity_themes(id, json_api_theme_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -777,7 +793,7 @@ No authorization required
 # **update_entity_color_palettes**
 > JsonApiColorPaletteOutDocument update_entity_color_palettes(id, json_api_color_palette_in_document)
 
-
+Put Color Pallette
 
 ### Example
 
@@ -815,6 +831,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Color Pallette
         api_response = api_instance.update_entity_color_palettes(id, json_api_color_palette_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -823,6 +840,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Color Pallette
         api_response = api_instance.update_entity_color_palettes(id, json_api_color_palette_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -863,7 +881,7 @@ No authorization required
 # **update_entity_themes**
 > JsonApiThemeOutDocument update_entity_themes(id, json_api_theme_in_document)
 
-
+Put Theming
 
 ### Example
 
@@ -901,6 +919,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Theming
         api_response = api_instance.update_entity_themes(id, json_api_theme_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -909,6 +928,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Theming
         api_response = api_instance.update_entity_themes(id, json_api_theme_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

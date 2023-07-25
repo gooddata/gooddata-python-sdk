@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_attributes import JsonApiWorkspaceDataFilterSettingOutAttributes
-    from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_relationships import JsonApiWorkspaceDataFilterSettingOutRelationships
-    globals()['JsonApiWorkspaceDataFilterSettingOutAttributes'] = JsonApiWorkspaceDataFilterSettingOutAttributes
-    globals()['JsonApiWorkspaceDataFilterSettingOutRelationships'] = JsonApiWorkspaceDataFilterSettingOutRelationships
+    from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_attributes import JsonApiWorkspaceDataFilterSettingInAttributes
+    from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_relationships import JsonApiWorkspaceDataFilterSettingInRelationships
+    globals()['JsonApiWorkspaceDataFilterSettingInAttributes'] = JsonApiWorkspaceDataFilterSettingInAttributes
+    globals()['JsonApiWorkspaceDataFilterSettingInRelationships'] = JsonApiWorkspaceDataFilterSettingInRelationships
 
 
 class JsonApiWorkspaceDataFilterSettingOut(ModelNormal):
@@ -100,8 +100,8 @@ class JsonApiWorkspaceDataFilterSettingOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiWorkspaceDataFilterSettingOutAttributes,),  # noqa: E501
-            'relationships': (JsonApiWorkspaceDataFilterSettingOutRelationships,),  # noqa: E501
+            'attributes': (JsonApiWorkspaceDataFilterSettingInAttributes,),  # noqa: E501
+            'relationships': (JsonApiWorkspaceDataFilterSettingInRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -161,8 +161,8 @@ class JsonApiWorkspaceDataFilterSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceDataFilterSettingOutAttributes): [optional]  # noqa: E501
-            relationships (JsonApiWorkspaceDataFilterSettingOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceDataFilterSettingInAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceDataFilterSettingInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceDataFilterSetting")
@@ -255,8 +255,8 @@ class JsonApiWorkspaceDataFilterSettingOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceDataFilterSettingOutAttributes): [optional]  # noqa: E501
-            relationships (JsonApiWorkspaceDataFilterSettingOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceDataFilterSettingInAttributes): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceDataFilterSettingInRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "workspaceDataFilterSetting")

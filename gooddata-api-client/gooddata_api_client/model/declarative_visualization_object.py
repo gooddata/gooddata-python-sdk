@@ -126,7 +126,7 @@ class DeclarativeVisualizationObject(ModelNormal):
         """DeclarativeVisualizationObject - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Visualization object ID.
             title (str): Visualization object title.
 
@@ -221,7 +221,7 @@ class DeclarativeVisualizationObject(ModelNormal):
         """DeclarativeVisualizationObject - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Visualization object ID.
             title (str): Visualization object title.
 

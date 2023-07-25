@@ -30,6 +30,7 @@ from gooddata_api_client.api.data_source_entity_apis_api import DataSourceEntity
 from gooddata_api_client.api.datasets_api import DatasetsApi
 from gooddata_api_client.api.dependency_graph_api import DependencyGraphApi
 from gooddata_api_client.api.entitlement_api import EntitlementApi
+from gooddata_api_client.api.exporting_api import ExportingApi
 from gooddata_api_client.api.facts_api import FactsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi

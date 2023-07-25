@@ -108,12 +108,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
     def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """JsonApiWorkspaceOutMetaConfig - a model defined in OpenAPI
 
-        Args:
-
         Keyword Args:
-            approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
-            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
-            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -144,11 +139,11 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
+            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
+            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
-        approximate_count_available = kwargs.get('approximate_count_available', False)
-        data_sampling_available = kwargs.get('data_sampling_available', False)
-        show_all_values_on_dates_available = kwargs.get('show_all_values_on_dates_available', False)
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -178,9 +173,6 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.approximate_count_available = approximate_count_available
-        self.data_sampling_available = data_sampling_available
-        self.show_all_values_on_dates_available = show_all_values_on_dates_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -204,12 +196,7 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
     def __init__(self, *args, **kwargs):  # noqa: E501
         """JsonApiWorkspaceOutMetaConfig - a model defined in OpenAPI
 
-        Args:
-
         Keyword Args:
-            approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
-            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
-            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. defaults to False  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -240,11 +227,11 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            approximate_count_available (bool): is approximate count enabled - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
+            data_sampling_available (bool): is sampling enabled - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
+            show_all_values_on_dates_available (bool): is 'show all values' displayed for dates - based on type of data-source connected to this workspace. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
-        approximate_count_available = kwargs.get('approximate_count_available', False)
-        data_sampling_available = kwargs.get('data_sampling_available', False)
-        show_all_values_on_dates_available = kwargs.get('show_all_values_on_dates_available', False)
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -272,9 +259,6 @@ class JsonApiWorkspaceOutMetaConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.approximate_count_available = approximate_count_available
-        self.data_sampling_available = data_sampling_available
-        self.show_all_values_on_dates_available = show_all_values_on_dates_available
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
