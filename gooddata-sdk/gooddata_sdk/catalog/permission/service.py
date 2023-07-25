@@ -59,7 +59,8 @@ class CatalogPermissionService(CatalogServiceBase):
                 Object containing users and user groups
         """
         return CatalogAvailableAssignees.from_dict(
-            self._actions_api.available_assignes(workspace_id, dashboard_id, _check_return_type=False), camel_case=False
+            self._actions_api.available_assignees(workspace_id, dashboard_id, _check_return_type=False),
+            camel_case=False,
         )
 
     def list_dashboard_permissions(self, workspace_id: str, dashboard_id: str) -> CatalogDashboardPermissions:
@@ -75,7 +76,8 @@ class CatalogPermissionService(CatalogServiceBase):
                 Object containing users and user groups and granted dashboard permissions
         """
         return CatalogDashboardPermissions.from_dict(
-            self._actions_api.permissions(workspace_id, dashboard_id, _check_return_type=False), camel_case=False
+            self._actions_api.dashboard_permissions(workspace_id, dashboard_id, _check_return_type=False),
+            camel_case=False,
         )
 
     def manage_dashboard_permissions(
@@ -94,7 +96,7 @@ class CatalogPermissionService(CatalogServiceBase):
         Returns:
             None
         """
-        self._actions_api.manage_permissions(
+        self._actions_api.manage_dashboard_permissions(
             workspace_id,
             dashboard_id,
             [permission.to_api() for permission in permissions_for_assignee],

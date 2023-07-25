@@ -154,7 +154,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 workspace_setting.to_api(),
             )
         except NotFoundException:
-            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api())
+            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_post_api())
 
     def delete_workspace_setting(self, workspace_id: str, workspace_setting_id: str) -> None:
         try:
@@ -823,7 +823,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
             )
         except NotFoundException:
             self._entities_api.create_entity_user_data_filters(
-                workspace_id=workspace_id, json_api_user_data_filter_in_document=user_data_filter_document.to_api()
+                workspace_id=workspace_id,
+                json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_post_api(),
             )
 
     def get_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> CatalogUserDataFilter:
