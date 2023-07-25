@@ -1815,7 +1815,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: bbbace798937f70a
+          traceId: be7b526bdb96c2c6
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -3760,14 +3760,14 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 402f75ac8405f5ac
+          traceId: f8364904d34f3be8
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
       body:
         data:
-          id: locale
           type: workspaceSetting
+          id: locale
           attributes:
             content:
               value: cs-CZ
@@ -3932,14 +3932,14 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 65c75632a0b0cab1
+          traceId: 17013af6f915fb01
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
       body:
         data:
-          id: formatLocale
           type: workspaceSetting
+          id: formatLocale
           attributes:
             content:
               value: cs-CZ
@@ -4175,7 +4175,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: dd144f68-494f-46c4-b220-b4517b9e7241
+              oauthClientId: 7610ecf2-e15c-46c6-a1c0-97a513ff7b41
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -7938,14 +7938,14 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d8459e029b74910c
+          traceId: 6341f64b8e9cb8e6
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
       body:
         data:
-          id: locale
           type: workspaceSetting
+          id: locale
           attributes:
             content:
               value: cs-CZ
@@ -8110,14 +8110,14 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5ca1c9030dabaaa2
+          traceId: da742f62b94a8645
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_cs/workspaceSettings
       body:
         data:
-          id: formatLocale
           type: workspaceSetting
+          id: formatLocale
           attributes:
             content:
               value: cs-CZ
@@ -8279,12 +8279,12 @@ interactions:
       body:
         string:
           data:
-            - id: demo
+            - id: demo_cs
               type: workspace
               attributes:
-                name: Demo
+                name: Demo (cs)
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_cs
             - id: demo_west
               type: workspace
               attributes:
@@ -8307,12 +8307,12 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
-            - id: demo_cs
+            - id: demo
               type: workspace
               attributes:
-                name: Demo (cs)
+                name: Demo
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_cs
+                self: http://localhost:3000/api/v1/entities/workspaces/demo
           included:
             - id: demo
               type: workspace

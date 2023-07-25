@@ -161,12 +161,12 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: d7462eaacb02b86e06198ba7d0803969ccabffe3
+              executionResult: 1a41d049063ef9b6a948251db9f9534dfe6bca5b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: d7462eaacb02b86e06198ba7d0803969ccabffe3
+        executionResult: 1a41d049063ef9b6a948251db9f9534dfe6bca5b
         fileName: test_xlsx
         format: XLSX
         customOverride:
@@ -251,10 +251,81 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: 0fc35d0a2cf006010792a59e00bada6cbeee723c
+          exportResult: 9576a15897876b6df5e8ce231dbd704872a34593
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/0fc35d0a2cf006010792a59e00bada6cbeee723c
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9576a15897876b6df5e8ce231dbd704872a34593
+      body: null
+      headers:
+        Accept:
+          - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
+        Accept-Encoding:
+          - br, gzip, deflate
+        X-GDC-VALIDATE-RELATIONS:
+          - 'true'
+        X-Requested-With:
+          - XMLHttpRequest
+    response:
+      status:
+        code: 202
+        message: Accepted
+      headers:
+        Access-Control-Allow-Credentials:
+          - 'true'
+        Access-Control-Expose-Headers:
+          - Content-Disposition, Content-Length, Content-Range, Set-Cookie
+        Cache-Control:
+          - no-cache, no-store, max-age=0, must-revalidate
+        Connection:
+          - keep-alive
+        Content-Length:
+          - '0'
+        Content-Security-Policy:
+          - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
+        DATE: *id001
+        Expires:
+          - '0'
+        GoodData-Deployment:
+          - aio
+        Permission-Policy:
+          - geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera
+            'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'none'; payment
+            'none';
+        Pragma:
+          - no-cache
+        Referrer-Policy:
+          - no-referrer
+        Server:
+          - nginx
+        Set-Cookie:
+          - SPRING_REDIRECT_URI=; Path=/; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00
+            GMT; HttpOnly; SameSite=Lax
+        Vary:
+          - Origin
+          - Access-Control-Request-Method
+          - Access-Control-Request-Headers
+        X-Content-Type-Options:
+          - nosniff
+        X-GDC-TRACE-ID: *id001
+        X-XSS-Protection:
+          - 1 ; mode=block
+      body:
+        string: ''
+  - request:
+      method: GET
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9576a15897876b6df5e8ce231dbd704872a34593
       body: null
       headers:
         Accept:
@@ -283,7 +354,7 @@ interactions:
         Content-Disposition:
           - attachment;filename*=utf-8''test_xlsx.xlsx
         Content-Length:
-          - '7610'
+          - '7609'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -396,22 +467,22 @@ interactions:
           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
-          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
+          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
@@ -437,29 +508,29 @@ interactions:
           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
-          8D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwBtVJz6JQEAAFACAAARAAAA
-          ZG9jUHJvcHMvY29yZS54bWydkstqwzAQRff9CqO9Lb8airAdaEtWDRSa0tKdkCaOqPVAUuv476s4
-          iZOAV12O7p0zdwZVy73sol+wTmhVoyxJUQSKaS5UW6P3zSp+QJHzVHHaaQU1GsChZXNXMUOYtvBq
-          tQHrBbgogJQjzNRo570hGDu2A0ldEhwqiFttJfWhtC02lH3TFnCepgsswVNOPcUHYGwmIjohOZuQ
-          5sd2I4AzDB1IUN7hLMnwxevBSjfbMCpXTin8YGDWehYn996Jydj3fdIXozXkz/Dn+uVtXDUW6nAq
-          BqipOCPMAvXaNhW+LsLhOur8Opx4K4A/DkGfeTstcuwDHoUA5Bj3rHwUT8+bFWryNC/idBGn5SbL
-          SV6S+/LrMPKm/wKUpyH/Jp4Bx9y3n6D5A1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRv
-          Y1Byb3BzL2FwcC54bWydUsFO4zAQvfMVke/UabVaocoxWpVd9bCISi1wXBln0lh1bMszRClfj5Oq
-          IYU94dObN0/PzzMWt11jsxYiGu8KNp/lLAOnfWncvmCPuz/XNyxDUq5U1jso2BGQ3corsYk+QCQD
-          mCUHhwWricKSc9Q1NApnqe1Sp/KxUZTKuOe+qoyGO69fG3DEF3n+k0NH4Eoor8NoyE6Oy5a+a1p6
-          3efDp90xJD8pfoVgjVaUHinvjY4efUXZ706DFXzaFMloC/o1GjrKXPBpKbZaWVglY1kpiyD4ByHW
-          oPqZbZSJKEVLyxY0+ZiheUtTW7DsRSH0cQrWqmiUI3aSnYoB24AU5bOPB6wBCAUfyQFOtVNsfsj5
-          IEjgUsjHIAlfRtwZsoAP1UZF+k/i+TTxkIFNMhIg/essdl8ini/7ZL/yTVAuzZCP6K9xB3wMO3+n
-          CM4TvSTFtlYRyrSEceIjIdYpWrS9flUrt4fyrPna6Pf/dPrjcr6Y5ekMaz9zgn98Z/kOUEsBAhQD
-          FAAAAAgAAAA/AGFdSTpPAQAAjwQAABMAAAAAAAAAAAAAAICBAAAAAFtDb250ZW50X1R5cGVzXS54
-          bWxQSwECFAMUAAAACAAAAD8A8p9J2ukAAABLAgAACwAAAAAAAAAAAAAAgIGAAQAAX3JlbHMvLnJl
-          bHNQSwECFAMUAAAACAAAAD8ARHVb8OgAAAC5AgAAGgAAAAAAAAAAAAAAgIGSAgAAeGwvX3JlbHMv
-          d29ya2Jvb2sueG1sLnJlbHNQSwECFAMUAAAACAAAAD8ApzA+QlsHAABQIwAAGAAAAAAAAAAAAAAA
-          gIGyAwAAeGwvd29ya3NoZWV0cy9zaGVldDEueG1sUEsBAhQDFAAAAAgAAAA/AAjizPlMAQAAKQIA
-          AA8AAAAAAAAAAAAAAICBQwsAAHhsL3dvcmtib29rLnhtbFBLAQIUAxQAAAAIAAAAPwBbh3NUDwIA
-          ACwGAAAUAAAAAAAAAAAAAACAgbwMAAB4bC9zaGFyZWRTdHJpbmdzLnhtbFBLAQIUAxQAAAAIAAAA
-          PwCrSpO5HgMAALMTAAANAAAAAAAAAAAAAACAgf0OAAB4bC9zdHlsZXMueG1sUEsBAhQDFAAAAAgA
-          AAA/ABj6RlSwBQAAUhsAABMAAAAAAAAAAAAAAICBRhIAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwEC
-          FAMUAAAACAAAAD8AbVSc+iUBAABQAgAAEQAAAAAAAAAAAAAAgIEnGAAAZG9jUHJvcHMvY29yZS54
-          bWxQSwECFAMUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAAAAAAAAAAAAgIF7GQAAZG9jUHJvcHMv
-          YXBwLnhtbFBLBQYAAAAACgAKAIACAAAkGwAAAAA=
+          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
+          cHAueG1sUEsFBgAAAAAKAAoAgAIAACMbAAAAAA==

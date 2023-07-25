@@ -363,10 +363,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 5a4690e8becb1658c218306939a14025328b8d0f
+              executionResult: 3d0d64272a526bb50021702e5d04ee0177abcd86
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5a4690e8becb1658c218306939a14025328b8d0f?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/3d0d64272a526bb50021702e5d04ee0177abcd86?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -436,12 +436,10 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '1419'
+          - '1430'
       body:
         string:
           data:
-            - - 55.0
-              - 84.3002
             - - 87.0
               - 249.6326923076923
             - - 87.0
@@ -464,12 +462,11 @@ interactions:
               - 247.32333333333332
             - - 58.0
               - 113.54166666666667
+            - - 76.0
+              - 213.47925373134328
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2022-07
-                        primaryLabelValue: 2022-07
                     - attributeHeader:
                         labelValue: 2022-08
                         primaryLabelValue: 2022-08
@@ -503,6 +500,9 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-06
                         primaryLabelValue: 2023-06
+                    - attributeHeader:
+                        labelValue: 2023-07
+                        primaryLabelValue: 2023-07
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -524,7 +524,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 5a4690e8becb1658c218306939a14025328b8d0f
+        executionResult: 3d0d64272a526bb50021702e5d04ee0177abcd86
         fileName: Customers Trend
         format: CSV
         customOverride:
@@ -609,10 +609,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: 999b2b83201a21514126076bc3b02cc775d5bdde
+          exportResult: f287626023a2ffe575d2048cfd2223284f397244
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/999b2b83201a21514126076bc3b02cc775d5bdde
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f287626023a2ffe575d2048cfd2223284f397244
       body: null
       headers:
         Accept:
@@ -683,7 +683,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/999b2b83201a21514126076bc3b02cc775d5bdde
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f287626023a2ffe575d2048cfd2223284f397244
       body: null
       headers:
         Accept:
@@ -712,7 +712,7 @@ interactions:
         Content-Disposition:
           - attachment;filename*=utf-8''Customers%20Trend.csv
         Content-Length:
-          - '436'
+          - '447'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -759,8 +759,6 @@ interactions:
       body:
         string: '"date.month","amount_of_active_customers","revenue_per_customer"
 
-          "2022-07",55.0,84.3002
-
           "2022-08",87.0,249.6326923076923
 
           "2022-09",87.0,208.97644736842105
@@ -782,5 +780,7 @@ interactions:
           "2023-05",54.0,247.32333333333332
 
           "2023-06",58.0,113.54166666666667
+
+          "2023-07",76.0,213.47925373134328
 
           '

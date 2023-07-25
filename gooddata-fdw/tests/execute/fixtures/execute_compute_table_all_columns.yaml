@@ -92,19 +92,21 @@ interactions:
           - keep-alive
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -182,10 +184,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 6eecd351e6b9d0b9cefc312e56f0e2f1ccd74125
+              executionResult: 87e035a3cb3244205b3f16e2a0d35a9799ab6e80
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6eecd351e6b9d0b9cefc312e56f0e2f1ccd74125?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/87e035a3cb3244205b3f16e2a0d35a9799ab6e80?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -211,19 +213,21 @@ interactions:
           - keep-alive
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
