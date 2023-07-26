@@ -10,6 +10,9 @@
 
 2. Create your fork of `gooddata-python-sdk` repository
 
+
+
+
 3. Clone and setup environment:
 
     ```bash
