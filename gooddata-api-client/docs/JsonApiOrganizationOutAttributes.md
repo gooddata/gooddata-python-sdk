@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **allowed_origins** | **[str]** |  | [optional] 
+**cache_settings** | [**JsonApiOrganizationOutAttributesCacheSettings**](JsonApiOrganizationOutAttributesCacheSettings.md) |  | [optional] 
 **early_access** | **str** |  | [optional] 
 **hostname** | **str** |  | [optional] 
 **name** | **str** |  | [optional] 

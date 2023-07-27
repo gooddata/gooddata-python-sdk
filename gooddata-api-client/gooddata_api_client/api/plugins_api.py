@@ -26,6 +26,7 @@ from gooddata_api_client.model.json_api_dashboard_plugin_in_document import Json
 from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from gooddata_api_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
 from gooddata_api_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_api_client.model.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
 
 
 class PluginsApi(object):
@@ -51,12 +52,12 @@ class PluginsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_dashboard_plugin_in_document',
+                    'json_api_dashboard_plugin_post_optional_id_document',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_dashboard_plugin_in_document',
+                    'json_api_dashboard_plugin_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -84,8 +85,8 @@ class PluginsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_dashboard_plugin_in_document':
-                        (JsonApiDashboardPluginInDocument,),
+                    'json_api_dashboard_plugin_post_optional_id_document':
+                        (JsonApiDashboardPluginPostOptionalIdDocument,),
                     'meta_include':
                         ([str],),
                 },
@@ -95,7 +96,7 @@ class PluginsApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_dashboard_plugin_in_document': 'body',
+                    'json_api_dashboard_plugin_post_optional_id_document': 'body',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -494,20 +495,20 @@ class PluginsApi(object):
     def create_entity_dashboard_plugins(
         self,
         workspace_id,
-        json_api_dashboard_plugin_in_document,
+        json_api_dashboard_plugin_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_dashboard_plugins  # noqa: E501
+        """Post Plugins  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_in_document, async_req=True)
+        >>> thread = api.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_dashboard_plugin_in_document (JsonApiDashboardPluginInDocument):
+            json_api_dashboard_plugin_post_optional_id_document (JsonApiDashboardPluginPostOptionalIdDocument):
 
         Keyword Args:
             meta_include ([str]): Include Meta objects.. [optional]
@@ -574,8 +575,8 @@ class PluginsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_dashboard_plugin_in_document'] = \
-            json_api_dashboard_plugin_in_document
+        kwargs['json_api_dashboard_plugin_post_optional_id_document'] = \
+            json_api_dashboard_plugin_post_optional_id_document
         return self.create_entity_dashboard_plugins_endpoint.call_with_http_info(**kwargs)
 
     def delete_entity_dashboard_plugins(
@@ -584,7 +585,7 @@ class PluginsApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_dashboard_plugins  # noqa: E501
+        """Delete a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -670,7 +671,7 @@ class PluginsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_dashboard_plugins  # noqa: E501
+        """Get all Plugins  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -760,7 +761,7 @@ class PluginsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_dashboard_plugins  # noqa: E501
+        """Get a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -850,7 +851,7 @@ class PluginsApi(object):
         json_api_dashboard_plugin_patch_document,
         **kwargs
     ):
-        """patch_entity_dashboard_plugins  # noqa: E501
+        """Patch a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -941,7 +942,7 @@ class PluginsApi(object):
         json_api_dashboard_plugin_in_document,
         **kwargs
     ):
-        """update_entity_dashboard_plugins  # noqa: E501
+        """Put a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

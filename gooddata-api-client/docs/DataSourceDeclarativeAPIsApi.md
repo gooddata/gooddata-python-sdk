@@ -135,7 +135,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="customers",
                             name_prefix="out_gooddata",
                             path=["table_schema","table_name"],
-                            type="VIEW",
+                            type="TABLE",
                         ),
                     ],
                 ),
@@ -190,7 +190,7 @@ No authorization required
 
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | Defined all data sources. |  -  |
+**204** | Defined all data sources. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

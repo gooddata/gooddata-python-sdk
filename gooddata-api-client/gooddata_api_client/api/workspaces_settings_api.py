@@ -26,10 +26,12 @@ from gooddata_api_client.model.json_api_custom_application_setting_in_document i
 from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from gooddata_api_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
 from gooddata_api_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
+from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
 from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
 from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from gooddata_api_client.model.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
 from gooddata_api_client.model.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
+from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
 from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 from gooddata_api_client.model.resolved_setting import ResolvedSetting
 
@@ -57,12 +59,12 @@ class WorkspacesSettingsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_custom_application_setting_in_document',
+                    'json_api_custom_application_setting_post_optional_id_document',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_custom_application_setting_in_document',
+                    'json_api_custom_application_setting_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -90,8 +92,8 @@ class WorkspacesSettingsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_custom_application_setting_in_document':
-                        (JsonApiCustomApplicationSettingInDocument,),
+                    'json_api_custom_application_setting_post_optional_id_document':
+                        (JsonApiCustomApplicationSettingPostOptionalIdDocument,),
                     'meta_include':
                         ([str],),
                 },
@@ -101,7 +103,7 @@ class WorkspacesSettingsApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_custom_application_setting_in_document': 'body',
+                    'json_api_custom_application_setting_post_optional_id_document': 'body',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -130,12 +132,12 @@ class WorkspacesSettingsApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_workspace_setting_in_document',
+                    'json_api_workspace_setting_post_optional_id_document',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_workspace_setting_in_document',
+                    'json_api_workspace_setting_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -163,8 +165,8 @@ class WorkspacesSettingsApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_workspace_setting_in_document':
-                        (JsonApiWorkspaceSettingInDocument,),
+                    'json_api_workspace_setting_post_optional_id_document':
+                        (JsonApiWorkspaceSettingPostOptionalIdDocument,),
                     'meta_include':
                         ([str],),
                 },
@@ -174,7 +176,7 @@ class WorkspacesSettingsApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_workspace_setting_in_document': 'body',
+                    'json_api_workspace_setting_post_optional_id_document': 'body',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -1056,20 +1058,20 @@ class WorkspacesSettingsApi(object):
     def create_entity_custom_application_settings(
         self,
         workspace_id,
-        json_api_custom_application_setting_in_document,
+        json_api_custom_application_setting_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_custom_application_settings  # noqa: E501
+        """Post Custom Application Settings  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document, async_req=True)
+        >>> thread = api.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_custom_application_setting_in_document (JsonApiCustomApplicationSettingInDocument):
+            json_api_custom_application_setting_post_optional_id_document (JsonApiCustomApplicationSettingPostOptionalIdDocument):
 
         Keyword Args:
             meta_include ([str]): Include Meta objects.. [optional]
@@ -1136,27 +1138,27 @@ class WorkspacesSettingsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_custom_application_setting_in_document'] = \
-            json_api_custom_application_setting_in_document
+        kwargs['json_api_custom_application_setting_post_optional_id_document'] = \
+            json_api_custom_application_setting_post_optional_id_document
         return self.create_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_workspace_settings(
         self,
         workspace_id,
-        json_api_workspace_setting_in_document,
+        json_api_workspace_setting_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_workspace_settings  # noqa: E501
+        """Post Settings for Workspaces  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document, async_req=True)
+        >>> thread = api.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_workspace_setting_in_document (JsonApiWorkspaceSettingInDocument):
+            json_api_workspace_setting_post_optional_id_document (JsonApiWorkspaceSettingPostOptionalIdDocument):
 
         Keyword Args:
             meta_include ([str]): Include Meta objects.. [optional]
@@ -1223,8 +1225,8 @@ class WorkspacesSettingsApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_workspace_setting_in_document'] = \
-            json_api_workspace_setting_in_document
+        kwargs['json_api_workspace_setting_post_optional_id_document'] = \
+            json_api_workspace_setting_post_optional_id_document
         return self.create_entity_workspace_settings_endpoint.call_with_http_info(**kwargs)
 
     def delete_entity_custom_application_settings(
@@ -1233,7 +1235,7 @@ class WorkspacesSettingsApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_custom_application_settings  # noqa: E501
+        """Delete a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1320,7 +1322,7 @@ class WorkspacesSettingsApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_workspace_settings  # noqa: E501
+        """Delete a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1406,7 +1408,7 @@ class WorkspacesSettingsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_custom_application_settings  # noqa: E501
+        """Get all Custom Application Settings  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1495,7 +1497,7 @@ class WorkspacesSettingsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_workspace_settings  # noqa: E501
+        """Get all Setting for Workspaces  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1585,7 +1587,7 @@ class WorkspacesSettingsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_custom_application_settings  # noqa: E501
+        """Get a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1674,7 +1676,7 @@ class WorkspacesSettingsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_workspace_settings  # noqa: E501
+        """Get a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1764,7 +1766,7 @@ class WorkspacesSettingsApi(object):
         json_api_custom_application_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_custom_application_settings  # noqa: E501
+        """Patch a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1855,7 +1857,7 @@ class WorkspacesSettingsApi(object):
         json_api_workspace_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_workspace_settings  # noqa: E501
+        """Patch a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1946,7 +1948,7 @@ class WorkspacesSettingsApi(object):
         json_api_custom_application_setting_in_document,
         **kwargs
     ):
-        """update_entity_custom_application_settings  # noqa: E501
+        """Put a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -2037,7 +2039,7 @@ class WorkspacesSettingsApi(object):
         json_api_workspace_setting_in_document,
         **kwargs
     ):
-        """update_entity_workspace_settings  # noqa: E501
+        """Put a Setting for a Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

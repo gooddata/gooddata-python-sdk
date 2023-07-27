@@ -83,6 +83,7 @@
             "description": "Column name",
             "example": "customer_id",
             "maxLength": 255,
+            "pattern": "^[^\u0000]*$",
             "type": "string"
           },
           "referencedTableColumn": {
@@ -140,7 +141,7 @@
           },
           "type": {
             "description": "Table type: TABLE or VIEW.",
-            "example": "VIEW",
+            "example": "TABLE",
             "type": "string"
           }
         },
@@ -856,12 +857,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Scanning"
-    },
-    {
-      "name": "Test Connection"
-    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

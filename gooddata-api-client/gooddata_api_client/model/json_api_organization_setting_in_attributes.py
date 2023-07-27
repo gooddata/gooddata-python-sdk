@@ -64,6 +64,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'LOCALE': "LOCALE",
             'FORMAT_LOCALE': "FORMAT_LOCALE",
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+            'WEEK_START': "WEEK_START",
         },
     }
 
@@ -146,7 +147,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.. [optional]  # noqa: E501
             type (str): [optional]  # noqa: E501
         """
 
@@ -233,7 +234,7 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 15000 characters.. [optional]  # noqa: E501
             type (str): [optional]  # noqa: E501
         """
 

@@ -4,22 +4,22 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_organization_settings**](OrganizationEntityAPIsApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | 
-[**delete_entity_organization_settings**](OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | 
-[**get_all_entities_organization_settings**](OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | 
-[**get_entity_organization_settings**](OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | 
-[**get_entity_organizations**](OrganizationEntityAPIsApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | 
+[**create_entity_organization_settings**](OrganizationEntityAPIsApi.md#create_entity_organization_settings) | **POST** /api/v1/entities/organizationSettings | Post Organization Setting entities
+[**delete_entity_organization_settings**](OrganizationEntityAPIsApi.md#delete_entity_organization_settings) | **DELETE** /api/v1/entities/organizationSettings/{id} | Delete Organization entity
+[**get_all_entities_organization_settings**](OrganizationEntityAPIsApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
+[**get_entity_organization_settings**](OrganizationEntityAPIsApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
+[**get_entity_organizations**](OrganizationEntityAPIsApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
 [**get_organization**](OrganizationEntityAPIsApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
-[**patch_entity_organization_settings**](OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | 
-[**patch_entity_organizations**](OrganizationEntityAPIsApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | 
-[**update_entity_organization_settings**](OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | 
-[**update_entity_organizations**](OrganizationEntityAPIsApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | 
+[**patch_entity_organization_settings**](OrganizationEntityAPIsApi.md#patch_entity_organization_settings) | **PATCH** /api/v1/entities/organizationSettings/{id} | Patch Organization entity
+[**patch_entity_organizations**](OrganizationEntityAPIsApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
+[**update_entity_organization_settings**](OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
+[**update_entity_organizations**](OrganizationEntityAPIsApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 
 
 # **create_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument create_entity_organization_settings(json_api_organization_setting_in_document)
 
-
+Post Organization Setting entities
 
 ### Example
 
@@ -55,6 +55,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Organization Setting entities
         api_response = api_instance.create_entity_organization_settings(json_api_organization_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -93,7 +94,7 @@ No authorization required
 # **delete_entity_organization_settings**
 > delete_entity_organization_settings(id)
 
-
+Delete Organization entity
 
 ### Example
 
@@ -119,6 +120,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Organization entity
         api_instance.delete_entity_organization_settings(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationEntityAPIsApi->delete_entity_organization_settings: %s\n" % e)
@@ -126,6 +128,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Organization entity
         api_instance.delete_entity_organization_settings(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationEntityAPIsApi->delete_entity_organization_settings: %s\n" % e)
@@ -164,7 +167,7 @@ No authorization required
 # **get_all_entities_organization_settings**
 > JsonApiOrganizationSettingOutList get_all_entities_organization_settings()
 
-
+Get Organization entities
 
 ### Example
 
@@ -196,6 +199,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Organization entities
         api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -237,7 +241,7 @@ No authorization required
 # **get_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument get_entity_organization_settings(id)
 
-
+Get Organization entity
 
 ### Example
 
@@ -264,6 +268,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Organization entity
         api_response = api_instance.get_entity_organization_settings(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -272,6 +277,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Organization entity
         api_response = api_instance.get_entity_organization_settings(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -311,7 +317,7 @@ No authorization required
 # **get_entity_organizations**
 > JsonApiOrganizationOutDocument get_entity_organizations(id)
 
-
+Get Organizations
 
 ### Example
 
@@ -344,6 +350,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Organizations
         api_response = api_instance.get_entity_organizations(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -352,6 +359,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Organizations
         api_response = api_instance.get_entity_organizations(id, filter=filter, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -461,7 +469,7 @@ No authorization required
 # **patch_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
 
-
+Patch Organization entity
 
 ### Example
 
@@ -499,6 +507,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Organization entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -507,6 +516,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Organization entity
         api_response = api_instance.patch_entity_organization_settings(id, json_api_organization_setting_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -547,7 +557,7 @@ No authorization required
 # **patch_entity_organizations**
 > JsonApiOrganizationOutDocument patch_entity_organizations(id, json_api_organization_patch_document)
 
-
+Patch Organization
 
 ### Example
 
@@ -596,6 +606,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Organization
         api_response = api_instance.patch_entity_organizations(id, json_api_organization_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -604,6 +615,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Organization
         api_response = api_instance.patch_entity_organizations(id, json_api_organization_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -645,7 +657,7 @@ No authorization required
 # **update_entity_organization_settings**
 > JsonApiOrganizationSettingOutDocument update_entity_organization_settings(id, json_api_organization_setting_in_document)
 
-
+Put Organization entity
 
 ### Example
 
@@ -683,6 +695,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Organization entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -691,6 +704,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Organization entity
         api_response = api_instance.update_entity_organization_settings(id, json_api_organization_setting_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -731,7 +745,7 @@ No authorization required
 # **update_entity_organizations**
 > JsonApiOrganizationOutDocument update_entity_organizations(id, json_api_organization_in_document)
 
-
+Put Organization
 
 ### Example
 
@@ -780,6 +794,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Organization
         api_response = api_instance.update_entity_organizations(id, json_api_organization_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -788,6 +803,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Organization
         api_response = api_instance.update_entity_organizations(id, json_api_organization_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

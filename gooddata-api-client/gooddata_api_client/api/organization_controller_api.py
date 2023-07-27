@@ -503,7 +503,7 @@ class OrganizationControllerApi(object):
         id,
         **kwargs
     ):
-        """get_entity_cookie_security_configurations  # noqa: E501
+        """Get CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -586,7 +586,7 @@ class OrganizationControllerApi(object):
         id,
         **kwargs
     ):
-        """get_entity_organizations  # noqa: E501
+        """Get Organizations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -672,7 +672,7 @@ class OrganizationControllerApi(object):
         json_api_cookie_security_configuration_patch_document,
         **kwargs
     ):
-        """patch_entity_cookie_security_configurations  # noqa: E501
+        """Patch CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -759,7 +759,7 @@ class OrganizationControllerApi(object):
         json_api_organization_patch_document,
         **kwargs
     ):
-        """patch_entity_organizations  # noqa: E501
+        """Patch Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -847,7 +847,7 @@ class OrganizationControllerApi(object):
         json_api_cookie_security_configuration_in_document,
         **kwargs
     ):
-        """update_entity_cookie_security_configurations  # noqa: E501
+        """Put CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -934,7 +934,7 @@ class OrganizationControllerApi(object):
         json_api_organization_in_document,
         **kwargs
     ):
-        """update_entity_organizations  # noqa: E501
+        """Put Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

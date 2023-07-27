@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **table_prefix** | **str** | Tables starting with this prefix will be included. The prefix is then followed by the value of &#x60;separator&#x60; parameter. Given the table prefix is &#x60;out_table&#x60; and separator is &#x60;__&#x60;, the table with name like &#x60;out_table__customers&#x60; will be scanned. | [optional] 
 **view_prefix** | **str** | Views starting with this prefix will be included. The prefix is then followed by the value of &#x60;separator&#x60; parameter. Given the view prefix is &#x60;out_view&#x60; and separator is &#x60;__&#x60;, the table with name like &#x60;out_view__us_customers&#x60; will be scanned. | [optional] 
 **wdf_prefix** | **str** | Column serving as workspace data filter. No labels are auto generated for such columns. | [optional] 
+**workspace_id** | **str** | Optional workspace id. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

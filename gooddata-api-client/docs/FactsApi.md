@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_all_entities_facts**](FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | 
-[**get_entity_facts**](FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | 
+[**get_all_entities_facts**](FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
+[**get_entity_facts**](FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 
 
 # **get_all_entities_facts**
 > JsonApiFactOutList get_all_entities_facts(workspace_id)
 
-
+Get all Facts
 
 ### Example
 
@@ -51,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Facts
         api_response = api_instance.get_all_entities_facts(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -59,6 +60,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Facts
         api_response = api_instance.get_all_entities_facts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -105,7 +107,7 @@ No authorization required
 # **get_entity_facts**
 > JsonApiFactOutDocument get_entity_facts(workspace_id, object_id)
 
-
+Get a Fact
 
 ### Example
 
@@ -140,6 +142,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Fact
         api_response = api_instance.get_entity_facts(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -148,6 +151,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Fact
         api_response = api_instance.get_entity_facts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

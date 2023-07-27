@@ -64,6 +64,7 @@ class ResolvedSetting(ModelNormal):
             'LOCALE': "LOCALE",
             'FORMAT_LOCALE': "FORMAT_LOCALE",
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
+            'WEEK_START': "WEEK_START",
         },
     }
 
@@ -151,7 +152,7 @@ class ResolvedSetting(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.. [optional]  # noqa: E501
             type (str): Type of the setting.. [optional]  # noqa: E501
         """
 
@@ -242,7 +243,7 @@ class ResolvedSetting(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.. [optional]  # noqa: E501
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.. [optional]  # noqa: E501
             type (str): Type of the setting.. [optional]  # noqa: E501
         """
 

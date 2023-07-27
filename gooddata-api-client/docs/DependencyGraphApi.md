@@ -108,7 +108,7 @@ with gooddata_api_client.ApiClient() as api_client:
         identifiers=[
             EntityIdentifier(
                 id="/6bUUGjjNSwg0_bs",
-                type="type_example",
+                type="metric",
             ),
         ],
     ) # DependentEntitiesRequest | 

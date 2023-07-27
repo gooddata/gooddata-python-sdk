@@ -57,8 +57,10 @@ class ApiEntitlement(ModelNormal):
 
     allowed_values = {
         ('name',): {
+            'CACHESTRATEGY': "CacheStrategy",
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'EXTRACACHE': "ExtraCache",
             'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",

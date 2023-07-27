@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_all_entities_labels**](LabelsApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | 
-[**get_entity_labels**](LabelsApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | 
+[**get_all_entities_labels**](LabelsApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
+[**get_entity_labels**](LabelsApi.md#get_entity_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels/{objectId} | Get a Label
 
 
 # **get_all_entities_labels**
 > JsonApiLabelOutList get_all_entities_labels(workspace_id)
 
-
+Get all Labels
 
 ### Example
 
@@ -51,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Labels
         api_response = api_instance.get_all_entities_labels(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -59,6 +60,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Labels
         api_response = api_instance.get_all_entities_labels(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -105,7 +107,7 @@ No authorization required
 # **get_entity_labels**
 > JsonApiLabelOutDocument get_entity_labels(workspace_id, object_id)
 
-
+Get a Label
 
 ### Example
 
@@ -140,6 +142,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Label
         api_response = api_instance.get_entity_labels(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -148,6 +151,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Label
         api_response = api_instance.get_entity_labels(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

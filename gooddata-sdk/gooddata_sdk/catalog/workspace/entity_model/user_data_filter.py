@@ -7,6 +7,9 @@ import attr
 
 from gooddata_api_client.model.json_api_user_data_filter_in import JsonApiUserDataFilterIn
 from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import (
+    JsonApiUserDataFilterPostOptionalIdDocument,
+)
 from gooddata_sdk.catalog.base import Base
 
 
@@ -17,6 +20,10 @@ class CatalogUserDataFilterDocument(Base):
     @staticmethod
     def client_class() -> Type[JsonApiUserDataFilterInDocument]:
         return JsonApiUserDataFilterInDocument
+
+    def to_post_api(self) -> JsonApiUserDataFilterPostOptionalIdDocument:
+        dictionary = self._get_snake_dict()
+        return JsonApiUserDataFilterPostOptionalIdDocument.from_dict(dictionary, camel_case=False)
 
 
 def _proces_entity_list_output(list_entity_data: Optional[Dict[str, List[CatalogEntityIdentifier]]]) -> List[str]:

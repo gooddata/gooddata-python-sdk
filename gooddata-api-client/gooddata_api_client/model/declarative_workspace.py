@@ -122,6 +122,7 @@ class DeclarativeWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'cache_extra_limit': (int,),  # noqa: E501
             'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
@@ -142,6 +143,7 @@ class DeclarativeWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
         'custom_application_settings': 'customApplicationSettings',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
@@ -199,6 +201,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
@@ -300,6 +303,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501

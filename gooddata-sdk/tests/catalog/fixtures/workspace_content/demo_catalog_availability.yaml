@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -27,19 +28,21 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '25702'
+          - '25472'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: &id001
@@ -285,9 +288,9 @@ interactions:
                     type: dataset
                 labels:
                   data:
-                    - id: state
-                      type: label
                     - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
@@ -856,43 +859,37 @@ interactions:
                 grain:
                   - id: order_line_id
                     type: attribute
+                    order: 0
                 referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes:
-                      - ''
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - date
-                    sourceColumnDataTypes:
-                      - ''
+                    sourceColumnDataTypes: []
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes: []
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes: []
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes: []
                 dataSourceTableId: demo-test-ds:order_lines
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -929,6 +926,7 @@ interactions:
                 grain:
                   - id: campaign_channel_id
                     type: attribute
+                    order: 0
                 referenceProperties:
                   - identifier:
                       id: campaigns
@@ -936,12 +934,8 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
+                    sourceColumnDataTypes: []
                 dataSourceTableId: demo-test-ds:campaign_channels
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
@@ -1022,10 +1016,8 @@ interactions:
                 grain:
                   - id: campaign_id
                     type: attribute
+                    order: 0
                 dataSourceTableId: demo-test-ds:campaigns
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
@@ -1075,10 +1067,8 @@ interactions:
                 grain:
                   - id: customer_id
                     type: attribute
+                    order: 0
                 dataSourceTableId: demo-test-ds:customers
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
@@ -1195,10 +1185,8 @@ interactions:
                 grain:
                   - id: product_id
                     type: attribute
+                    order: 0
                 dataSourceTableId: demo-test-ds:products
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
@@ -1231,9 +1219,6 @@ interactions:
                 description: ''
                 tags:
                   - Date
-                sql:
-                  statement: null
-                  dataSourceId: null
                 type: DATE
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
@@ -1326,19 +1311,21 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '13851'
+          - '13631'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -1371,85 +1358,6 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_channels
-              type: dataset
-              attributes:
-                title: Campaign channels
-                description: Campaign channels
-                tags:
-                  - Campaign channels
-                grain:
-                  - id: campaign_channel_id
-                    type: attribute
-                referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
-                dataSourceTableId: demo-test-ds:campaign_channels
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: type
-                      type: attribute
-                    - id: campaign_channels.category
-                      type: attribute
-                    - id: campaign_channel_id
-                      type: attribute
-                facts:
-                  data:
-                    - id: spend
-                      type: fact
-                    - id: budget
-                      type: fact
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customers
-              type: dataset
-              attributes:
-                title: Customers
-                description: Customers
-                tags:
-                  - Customers
-                grain:
-                  - id: customer_id
-                    type: attribute
-                dataSourceTableId: demo-test-ds:customers
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: region
-                      type: attribute
-                    - id: customer_name
-                      type: attribute
-                    - id: customer_id
-                      type: attribute
-                    - id: state
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: order_lines
               type: dataset
               attributes:
@@ -1460,43 +1368,37 @@ interactions:
                 grain:
                   - id: order_line_id
                     type: attribute
+                    order: 0
                 referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes:
-                      - ''
-                  - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes:
-                      - ''
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - date
-                    sourceColumnDataTypes:
-                      - ''
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes: null
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes: null
                 dataSourceTableId: demo-test-ds:order_lines
-                sql:
-                  statement: null
-                  dataSourceId: null
                 areRelationsValid: true
                 type: NORMAL
               relationships:
@@ -1520,6 +1422,112 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: campaigns
+              type: dataset
+              attributes:
+                title: Campaigns
+                description: Campaigns
+                tags:
+                  - Campaigns
+                grain:
+                  - id: campaign_id
+                    type: attribute
+                    order: 0
+                dataSourceTableId: demo-test-ds:campaigns
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: campaign_name
+                      type: attribute
+                    - id: campaign_id
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: customers
+              type: dataset
+              attributes:
+                title: Customers
+                description: Customers
+                tags:
+                  - Customers
+                grain:
+                  - id: customer_id
+                    type: attribute
+                    order: 0
+                dataSourceTableId: demo-test-ds:customers
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: region
+                      type: attribute
+                    - id: customer_name
+                      type: attribute
+                    - id: customer_id
+                      type: attribute
+                    - id: state
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date
+              type: dataset
+              attributes:
+                title: Date
+                description: ''
+                tags:
+                  - Date
+                areRelationsValid: true
+                type: DATE
+              relationships:
+                attributes:
+                  data:
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.quarter
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.minute
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.day
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.hourOfDay
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: products
               type: dataset
               attributes:
@@ -1530,10 +1538,8 @@ interactions:
                 grain:
                   - id: product_id
                     type: attribute
+                    order: 0
                 dataSourceTableId: demo-test-ds:products
-                sql:
-                  statement: null
-                  dataSourceId: null
                 areRelationsValid: true
                 type: NORMAL
               relationships:
@@ -1551,82 +1557,45 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: campaigns
+            - id: campaign_channels
               type: dataset
               attributes:
-                title: Campaigns
-                description: Campaigns
+                title: Campaign channels
+                description: Campaign channels
                 tags:
-                  - Campaigns
+                  - Campaign channels
                 grain:
-                  - id: campaign_id
+                  - id: campaign_channel_id
                     type: attribute
-                dataSourceTableId: demo-test-ds:campaigns
-                sql:
-                  statement: null
-                  dataSourceId: null
+                    order: 0
+                referenceProperties:
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes: null
+                dataSourceTableId: demo-test-ds:campaign_channels
                 areRelationsValid: true
                 type: NORMAL
               relationships:
                 attributes:
                   data:
-                    - id: campaign_name
+                    - id: type
                       type: attribute
-                    - id: campaign_id
+                    - id: campaign_channels.category
                       type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date
-              type: dataset
-              attributes:
-                title: Date
-                description: ''
-                tags:
-                  - Date
-                sql:
-                  statement: null
-                  dataSourceId: null
-                areRelationsValid: true
-                type: DATE
-              relationships:
-                attributes:
+                    - id: campaign_channel_id
+                      type: attribute
+                facts:
                   data:
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.month
-                      type: attribute
-                    - id: date.dayOfWeek
-                      type: attribute
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.hourOfDay
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.week
-                      type: attribute
+                    - id: spend
+                      type: fact
+                    - id: budget
+                      type: fact
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
               meta:
                 origin:
                   originType: NATIVE
@@ -2005,16 +1974,18 @@ interactions:
           - '9799'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
         DATE: *id001
@@ -2047,6 +2018,34 @@ interactions:
       body:
         string:
           data:
+            - id: order_amount
+              type: metric
+              attributes:
+                title: Order Amount
+                areRelationsValid: true
+                content:
+                  format: $#,##0
+                  maql: SELECT SUM({fact/price}*{fact/quantity})
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: percent_revenue
+              type: metric
+              attributes:
+                title: '% Revenue'
+                areRelationsValid: true
+                content:
+                  format: '#,##0.0%'
+                  maql: SELECT {metric/revenue} / {metric/total_revenue}
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: amount_of_active_customers
               type: metric
               attributes:
@@ -2116,34 +2115,6 @@ interactions:
                   maql: SELECT SUM({fact/spend})
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/campaign_spend
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_amount
-              type: metric
-              attributes:
-                title: Order Amount
-                areRelationsValid: true
-                content:
-                  format: $#,##0
-                  maql: SELECT SUM({fact/price}*{fact/quantity})
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/order_amount
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: percent_revenue
-              type: metric
-              attributes:
-                title: '% Revenue'
-                areRelationsValid: true
-                content:
-                  format: '#,##0.0%'
-                  maql: SELECT {metric/revenue} / {metric/total_revenue}
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/percent_revenue
               meta:
                 origin:
                   originType: NATIVE
@@ -2448,16 +2419,18 @@ interactions:
           - keep-alive
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
         DATE: *id001

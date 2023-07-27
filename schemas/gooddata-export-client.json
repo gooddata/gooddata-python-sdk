@@ -313,6 +313,7 @@
         },
         "summary": "Create visual - pdf export request",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -376,6 +377,7 @@
         },
         "summary": "Retrieve exported files",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -418,6 +420,7 @@
         },
         "summary": "Retrieve metadata context",
         "tags": [
+          "Exporting",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -436,9 +439,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Computation"
-    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

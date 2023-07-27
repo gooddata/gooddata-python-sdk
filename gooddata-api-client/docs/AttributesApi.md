@@ -4,14 +4,14 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_all_entities_attributes**](AttributesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | 
-[**get_entity_attributes**](AttributesApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | 
+[**get_all_entities_attributes**](AttributesApi.md#get_all_entities_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes | Get all Attributes
+[**get_entity_attributes**](AttributesApi.md#get_entity_attributes) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributes/{objectId} | Get a Attribute
 
 
 # **get_all_entities_attributes**
 > JsonApiAttributeOutList get_all_entities_attributes(workspace_id)
 
-
+Get all Attributes
 
 ### Example
 
@@ -51,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Attributes
         api_response = api_instance.get_all_entities_attributes(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -59,6 +60,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Attributes
         api_response = api_instance.get_all_entities_attributes(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -105,7 +107,7 @@ No authorization required
 # **get_entity_attributes**
 > JsonApiAttributeOutDocument get_entity_attributes(workspace_id, object_id)
 
-
+Get a Attribute
 
 ### Example
 
@@ -140,6 +142,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Attribute
         api_response = api_instance.get_entity_attributes(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -148,6 +151,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Attribute
         api_response = api_instance.get_entity_attributes(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

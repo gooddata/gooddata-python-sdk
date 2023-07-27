@@ -414,8 +414,9 @@ class CSPDirectivesApi(object):
         json_api_csp_directive_in_document,
         **kwargs
     ):
-        """create_entity_csp_directives  # noqa: E501
+        """Post CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -496,8 +497,9 @@ class CSPDirectivesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_csp_directives  # noqa: E501
+        """Delete CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -578,8 +580,9 @@ class CSPDirectivesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_csp_directives  # noqa: E501
+        """Get CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -660,8 +663,9 @@ class CSPDirectivesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_csp_directives  # noqa: E501
+        """Get CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -744,8 +748,9 @@ class CSPDirectivesApi(object):
         json_api_csp_directive_patch_document,
         **kwargs
     ):
-        """patch_entity_csp_directives  # noqa: E501
+        """Patch CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -831,8 +836,9 @@ class CSPDirectivesApi(object):
         json_api_csp_directive_in_document,
         **kwargs
     ):
-        """update_entity_csp_directives  # noqa: E501
+        """Put CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

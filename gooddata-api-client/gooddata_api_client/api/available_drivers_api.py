@@ -37,7 +37,7 @@ class AvailableDriversApi(object):
         self.api_client = api_client
         self.get_data_source_drivers_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': ({str: (str,)},),
                 'auth': [],
                 'endpoint_path': '/api/v1/options/availableDrivers',
                 'operation_id': 'get_data_source_drivers',
@@ -125,7 +125,7 @@ class AvailableDriversApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            {str: (str,)}
                 If the method is called asynchronously, returns the request
                 thread.
         """

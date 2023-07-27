@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
+    from gooddata_api_client.model.declarative_dataset_extension import DeclarativeDatasetExtension
     from gooddata_api_client.model.declarative_date_dataset import DeclarativeDateDataset
     globals()['DeclarativeDataset'] = DeclarativeDataset
+    globals()['DeclarativeDatasetExtension'] = DeclarativeDatasetExtension
     globals()['DeclarativeDateDataset'] = DeclarativeDateDataset
 
 
@@ -90,6 +92,7 @@ class DeclarativeLdm(ModelNormal):
         """
         lazy_import()
         return {
+            'dataset_extensions': ([DeclarativeDatasetExtension],),  # noqa: E501
             'datasets': ([DeclarativeDataset],),  # noqa: E501
             'date_instances': ([DeclarativeDateDataset],),  # noqa: E501
         }
@@ -100,6 +103,7 @@ class DeclarativeLdm(ModelNormal):
 
 
     attribute_map = {
+        'dataset_extensions': 'datasetExtensions',  # noqa: E501
         'datasets': 'datasets',  # noqa: E501
         'date_instances': 'dateInstances',  # noqa: E501
     }
@@ -145,6 +149,7 @@ class DeclarativeLdm(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dataset_extensions ([DeclarativeDatasetExtension]): An array containing extensions for datasets defined in parent workspaces.. [optional]  # noqa: E501
             datasets ([DeclarativeDataset]): An array containing datasets.. [optional]  # noqa: E501
             date_instances ([DeclarativeDateDataset]): An array containing date-related datasets.. [optional]  # noqa: E501
         """
@@ -232,6 +237,7 @@ class DeclarativeLdm(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            dataset_extensions ([DeclarativeDatasetExtension]): An array containing extensions for datasets defined in parent workspaces.. [optional]  # noqa: E501
             datasets ([DeclarativeDataset]): An array containing datasets.. [optional]  # noqa: E501
             date_instances ([DeclarativeDateDataset]): An array containing date-related datasets.. [optional]  # noqa: E501
         """

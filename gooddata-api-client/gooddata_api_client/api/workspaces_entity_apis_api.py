@@ -533,8 +533,9 @@ class WorkspacesEntityAPIsApi(object):
         json_api_workspace_in_document,
         **kwargs
     ):
-        """create_entity_workspaces  # noqa: E501
+        """Post Workspace entities  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -617,8 +618,9 @@ class WorkspacesEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_workspaces  # noqa: E501
+        """Delete Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -699,8 +701,9 @@ class WorkspacesEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_workspaces  # noqa: E501
+        """Get Workspace entities  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -783,8 +786,9 @@ class WorkspacesEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_workspaces  # noqa: E501
+        """Get Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -869,8 +873,9 @@ class WorkspacesEntityAPIsApi(object):
         json_api_workspace_patch_document,
         **kwargs
     ):
-        """patch_entity_workspaces  # noqa: E501
+        """Patch Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -957,8 +962,9 @@ class WorkspacesEntityAPIsApi(object):
         json_api_workspace_in_document,
         **kwargs
     ):
-        """update_entity_workspaces  # noqa: E501
+        """Put Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

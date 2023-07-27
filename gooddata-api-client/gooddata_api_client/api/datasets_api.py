@@ -90,6 +90,7 @@ class DatasetsApi(object):
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
                         "DATASETS": "datasets",
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",
                         "ALL": "ALL"
                     },
@@ -200,6 +201,7 @@ class DatasetsApi(object):
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
                         "DATASETS": "datasets",
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",
                         "ALL": "ALL"
                     },
@@ -259,7 +261,7 @@ class DatasetsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_datasets  # noqa: E501
+        """Get all Datasets  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -350,7 +352,7 @@ class DatasetsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_datasets  # noqa: E501
+        """Get a Dataset  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

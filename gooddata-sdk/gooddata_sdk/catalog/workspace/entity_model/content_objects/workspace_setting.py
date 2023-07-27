@@ -9,6 +9,10 @@ from gooddata_api_client.model.json_api_organization_setting_in_attributes impor
 from gooddata_api_client.model.json_api_workspace_setting_in import JsonApiWorkspaceSettingIn
 from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
 from gooddata_api_client.model.json_api_workspace_setting_out import JsonApiWorkspaceSettingOut
+from gooddata_api_client.model.json_api_workspace_setting_post_optional_id import JsonApiWorkspaceSettingPostOptionalId
+from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import (
+    JsonApiWorkspaceSettingPostOptionalIdDocument,
+)
 from gooddata_sdk.catalog.entity import AttrCatalogEntity
 from gooddata_sdk.utils import safeget
 
@@ -27,6 +31,16 @@ class CatalogWorkspaceSetting(AttrCatalogEntity):
     def to_api(self) -> JsonApiWorkspaceSettingInDocument:
         return JsonApiWorkspaceSettingInDocument(
             data=JsonApiWorkspaceSettingIn(
+                id=self.id,
+                attributes=JsonApiOrganizationSettingInAttributes(
+                    content=self.content,
+                ),
+            )
+        )
+
+    def to_post_api(self) -> JsonApiWorkspaceSettingPostOptionalIdDocument:
+        return JsonApiWorkspaceSettingPostOptionalIdDocument(
+            data=JsonApiWorkspaceSettingPostOptionalId(
                 id=self.id,
                 attributes=JsonApiOrganizationSettingInAttributes(
                     content=self.content,

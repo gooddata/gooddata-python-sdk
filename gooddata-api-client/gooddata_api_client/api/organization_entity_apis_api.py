@@ -732,7 +732,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """create_entity_organization_settings  # noqa: E501
+        """Post Organization Setting entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -814,7 +814,7 @@ class OrganizationEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_organization_settings  # noqa: E501
+        """Delete Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -896,7 +896,7 @@ class OrganizationEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_organization_settings  # noqa: E501
+        """Get Organization entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -978,7 +978,7 @@ class OrganizationEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_organization_settings  # noqa: E501
+        """Get Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1061,7 +1061,7 @@ class OrganizationEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_organizations  # noqa: E501
+        """Get Organizations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1226,7 +1226,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_organization_settings  # noqa: E501
+        """Patch Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1313,7 +1313,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_patch_document,
         **kwargs
     ):
-        """patch_entity_organizations  # noqa: E501
+        """Patch Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1401,7 +1401,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """update_entity_organization_settings  # noqa: E501
+        """Put Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -1488,7 +1488,7 @@ class OrganizationEntityAPIsApi(object):
         json_api_organization_in_document,
         **kwargs
     ):
-        """update_entity_organizations  # noqa: E501
+        """Put Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

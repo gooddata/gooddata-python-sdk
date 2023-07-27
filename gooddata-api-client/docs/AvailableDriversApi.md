@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_data_source_drivers**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_data_source_drivers()
+> {str: (str,)} get_data_source_drivers()
 
 Get all available data source drivers
 
@@ -49,7 +49,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+**{str: (str,)}**
 
 ### Authorization
 

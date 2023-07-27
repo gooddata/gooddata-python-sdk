@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_entity_cookie_security_configurations**](OrganizationControllerApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
-[**get_entity_organizations**](OrganizationControllerApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | 
-[**patch_entity_cookie_security_configurations**](OrganizationControllerApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
-[**patch_entity_organizations**](OrganizationControllerApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | 
-[**update_entity_cookie_security_configurations**](OrganizationControllerApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | 
-[**update_entity_organizations**](OrganizationControllerApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | 
+[**get_entity_cookie_security_configurations**](OrganizationControllerApi.md#get_entity_cookie_security_configurations) | **GET** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Get CookieSecurityConfiguration
+[**get_entity_organizations**](OrganizationControllerApi.md#get_entity_organizations) | **GET** /api/v1/entities/admin/organizations/{id} | Get Organizations
+[**patch_entity_cookie_security_configurations**](OrganizationControllerApi.md#patch_entity_cookie_security_configurations) | **PATCH** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Patch CookieSecurityConfiguration
+[**patch_entity_organizations**](OrganizationControllerApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
+[**update_entity_cookie_security_configurations**](OrganizationControllerApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
+[**update_entity_organizations**](OrganizationControllerApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
 
 
 # **get_entity_cookie_security_configurations**
 > JsonApiCookieSecurityConfigurationOutDocument get_entity_cookie_security_configurations(id)
 
-
+Get CookieSecurityConfiguration
 
 ### Example
 
@@ -42,6 +42,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get CookieSecurityConfiguration
         api_response = api_instance.get_entity_cookie_security_configurations(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -50,6 +51,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get CookieSecurityConfiguration
         api_response = api_instance.get_entity_cookie_security_configurations(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -89,7 +91,7 @@ No authorization required
 # **get_entity_organizations**
 > JsonApiOrganizationOutDocument get_entity_organizations(id)
 
-
+Get Organizations
 
 ### Example
 
@@ -122,6 +124,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Organizations
         api_response = api_instance.get_entity_organizations(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -130,6 +133,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Organizations
         api_response = api_instance.get_entity_organizations(id, filter=filter, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -171,7 +175,7 @@ No authorization required
 # **patch_entity_cookie_security_configurations**
 > JsonApiCookieSecurityConfigurationOutDocument patch_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_patch_document)
 
-
+Patch CookieSecurityConfiguration
 
 ### Example
 
@@ -209,6 +213,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch CookieSecurityConfiguration
         api_response = api_instance.patch_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -217,6 +222,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch CookieSecurityConfiguration
         api_response = api_instance.patch_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -257,7 +263,7 @@ No authorization required
 # **patch_entity_organizations**
 > JsonApiOrganizationOutDocument patch_entity_organizations(id, json_api_organization_patch_document)
 
-
+Patch Organization
 
 ### Example
 
@@ -306,6 +312,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Organization
         api_response = api_instance.patch_entity_organizations(id, json_api_organization_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -314,6 +321,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Organization
         api_response = api_instance.patch_entity_organizations(id, json_api_organization_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -355,7 +363,7 @@ No authorization required
 # **update_entity_cookie_security_configurations**
 > JsonApiCookieSecurityConfigurationOutDocument update_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_in_document)
 
-
+Put CookieSecurityConfiguration
 
 ### Example
 
@@ -393,6 +401,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put CookieSecurityConfiguration
         api_response = api_instance.update_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -401,6 +410,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put CookieSecurityConfiguration
         api_response = api_instance.update_entity_cookie_security_configurations(id, json_api_cookie_security_configuration_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -441,7 +451,7 @@ No authorization required
 # **update_entity_organizations**
 > JsonApiOrganizationOutDocument update_entity_organizations(id, json_api_organization_in_document)
 
-
+Put Organization
 
 ### Example
 
@@ -490,6 +500,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Organization
         api_response = api_instance.update_entity_organizations(id, json_api_organization_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -498,6 +509,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Organization
         api_response = api_instance.update_entity_organizations(id, json_api_organization_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

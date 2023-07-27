@@ -377,7 +377,7 @@ class APITokensApi(object):
         json_api_api_token_in_document,
         **kwargs
     ):
-        """create_entity_api_tokens  # noqa: E501
+        """Post a new API token for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -463,7 +463,7 @@ class APITokensApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_api_tokens  # noqa: E501
+        """Delete an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -636,7 +636,7 @@ class APITokensApi(object):
         id,
         **kwargs
     ):
-        """get_entity_api_tokens  # noqa: E501
+        """Get an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -724,7 +724,7 @@ class APITokensApi(object):
         json_api_api_token_in_document,
         **kwargs
     ):
-        """update_entity_api_tokens  # noqa: E501
+        """Put new API token for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

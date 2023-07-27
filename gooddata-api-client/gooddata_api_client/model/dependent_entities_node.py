@@ -56,6 +56,19 @@ class DependentEntitiesNode(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'ANALYTICALDASHBOARD': "analyticalDashboard",
+            'ATTRIBUTE': "attribute",
+            'DASHBOARDPLUGIN': "dashboardPlugin",
+            'DATASET': "dataset",
+            'FACT': "fact",
+            'LABEL': "label",
+            'METRIC': "metric",
+            'USERDATAFILTER': "userDataFilter",
+            'PROMPT': "prompt",
+            'VISUALIZATIONOBJECT': "visualizationObject",
+            'FILTERCONTEXT': "filterContext",
+        },
     }
 
     validations = {

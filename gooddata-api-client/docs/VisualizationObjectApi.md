@@ -4,18 +4,18 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_visualization_objects**](VisualizationObjectApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-[**delete_entity_visualization_objects**](VisualizationObjectApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-[**get_all_entities_visualization_objects**](VisualizationObjectApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | 
-[**get_entity_visualization_objects**](VisualizationObjectApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-[**patch_entity_visualization_objects**](VisualizationObjectApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
-[**update_entity_visualization_objects**](VisualizationObjectApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | 
+[**create_entity_visualization_objects**](VisualizationObjectApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Post Visualization Objects
+[**delete_entity_visualization_objects**](VisualizationObjectApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Delete a Visualization Object
+[**get_all_entities_visualization_objects**](VisualizationObjectApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
+[**get_entity_visualization_objects**](VisualizationObjectApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
+[**patch_entity_visualization_objects**](VisualizationObjectApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
+[**update_entity_visualization_objects**](VisualizationObjectApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
 
 
 # **create_entity_visualization_objects**
-> JsonApiVisualizationObjectOutDocument create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document)
+> JsonApiVisualizationObjectOutDocument create_entity_visualization_objects(workspace_id, json_api_visualization_object_post_optional_id_document)
 
-
+Post Visualization Objects
 
 ### Example
 
@@ -25,7 +25,7 @@ import time
 import gooddata_api_client
 from gooddata_api_client.api import visualization_object_api
 from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
-from gooddata_api_client.model.json_api_visualization_object_in_document import JsonApiVisualizationObjectInDocument
+from gooddata_api_client.model.json_api_visualization_object_post_optional_id_document import JsonApiVisualizationObjectPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -39,8 +39,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = visualization_object_api.VisualizationObjectApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    json_api_visualization_object_in_document = JsonApiVisualizationObjectInDocument(
-        data=JsonApiVisualizationObjectIn(
+    json_api_visualization_object_post_optional_id_document = JsonApiVisualizationObjectPostOptionalIdDocument(
+        data=JsonApiVisualizationObjectPostOptionalId(
             attributes=JsonApiAnalyticalDashboardInAttributes(
                 are_relations_valid=True,
                 content={},
@@ -53,7 +53,7 @@ with gooddata_api_client.ApiClient() as api_client:
             id="id1",
             type="visualizationObject",
         ),
-    ) # JsonApiVisualizationObjectInDocument | 
+    ) # JsonApiVisualizationObjectPostOptionalIdDocument | 
     include = [
         "include=facts,attributes,labels,metrics,datasets",
     ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
@@ -63,7 +63,8 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document)
+        # Post Visualization Objects
+        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualizationObjectApi->create_entity_visualization_objects: %s\n" % e)
@@ -71,7 +72,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, include=include, meta_include=meta_include)
+        # Post Visualization Objects
+        api_response = api_instance.create_entity_visualization_objects(workspace_id, json_api_visualization_object_post_optional_id_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualizationObjectApi->create_entity_visualization_objects: %s\n" % e)
@@ -83,7 +85,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **json_api_visualization_object_in_document** | [**JsonApiVisualizationObjectInDocument**](JsonApiVisualizationObjectInDocument.md)|  |
+ **json_api_visualization_object_post_optional_id_document** | [**JsonApiVisualizationObjectPostOptionalIdDocument**](JsonApiVisualizationObjectPostOptionalIdDocument.md)|  |
  **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
  **meta_include** | **[str]**| Include Meta objects. | [optional]
 
@@ -112,7 +114,7 @@ No authorization required
 # **delete_entity_visualization_objects**
 > delete_entity_visualization_objects(workspace_id, object_id)
 
-
+Delete a Visualization Object
 
 ### Example
 
@@ -139,6 +141,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Visualization Object
         api_instance.delete_entity_visualization_objects(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualizationObjectApi->delete_entity_visualization_objects: %s\n" % e)
@@ -146,6 +149,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete a Visualization Object
         api_instance.delete_entity_visualization_objects(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling VisualizationObjectApi->delete_entity_visualization_objects: %s\n" % e)
@@ -185,7 +189,7 @@ No authorization required
 # **get_all_entities_visualization_objects**
 > JsonApiVisualizationObjectOutList get_all_entities_visualization_objects(workspace_id)
 
-
+Get all Visualization Objects
 
 ### Example
 
@@ -225,6 +229,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Visualization Objects
         api_response = api_instance.get_all_entities_visualization_objects(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -233,6 +238,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Visualization Objects
         api_response = api_instance.get_all_entities_visualization_objects(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -279,7 +285,7 @@ No authorization required
 # **get_entity_visualization_objects**
 > JsonApiVisualizationObjectOutDocument get_entity_visualization_objects(workspace_id, object_id)
 
-
+Get a Visualization Object
 
 ### Example
 
@@ -314,6 +320,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Visualization Object
         api_response = api_instance.get_entity_visualization_objects(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -322,6 +329,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Visualization Object
         api_response = api_instance.get_entity_visualization_objects(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -365,7 +373,7 @@ No authorization required
 # **patch_entity_visualization_objects**
 > JsonApiVisualizationObjectOutDocument patch_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_patch_document)
 
-
+Patch a Visualization Object
 
 ### Example
 
@@ -412,6 +420,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Visualization Object
         api_response = api_instance.patch_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -420,6 +429,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Visualization Object
         api_response = api_instance.patch_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -462,7 +472,7 @@ No authorization required
 # **update_entity_visualization_objects**
 > JsonApiVisualizationObjectOutDocument update_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_in_document)
 
-
+Put a Visualization Object
 
 ### Example
 
@@ -509,6 +519,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Visualization Object
         api_response = api_instance.update_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -517,6 +528,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Visualization Object
         api_response = api_instance.update_entity_visualization_objects(workspace_id, object_id, json_api_visualization_object_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

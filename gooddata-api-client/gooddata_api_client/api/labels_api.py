@@ -255,7 +255,7 @@ class LabelsApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_labels  # noqa: E501
+        """Get all Labels  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -346,7 +346,7 @@ class LabelsApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_labels  # noqa: E501
+        """Get a Label  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
