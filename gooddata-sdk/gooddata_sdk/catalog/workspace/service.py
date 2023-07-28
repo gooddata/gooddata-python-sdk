@@ -146,15 +146,18 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Returns:
             None
         """
-        try:
-            self.get_workspace_setting(workspace_id, workspace_setting.id)
-            self._entities_api.update_entity_workspace_settings(
-                workspace_id,
-                workspace_setting.id,
-                workspace_setting.to_api(),
-            )
-        except NotFoundException:
-            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_post_api())
+        if workspace_setting.id is None:
+            self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api(True))
+        else:
+            try:
+                self.get_workspace_setting(workspace_id, workspace_setting.id)
+                self._entities_api.update_entity_workspace_settings(
+                    workspace_id,
+                    workspace_setting.id,
+                    workspace_setting.to_api(),
+                )
+            except NotFoundException:
+                self._entities_api.create_entity_workspace_settings(workspace_id, workspace_setting.to_api(True))
 
     def delete_workspace_setting(self, workspace_id: str, workspace_setting_id: str) -> None:
         try:
@@ -814,18 +817,24 @@ class CatalogWorkspaceService(CatalogServiceBase):
             None
         """
         user_data_filter_document = CatalogUserDataFilterDocument(data=user_data_filter)
-        try:
-            self.get_user_data_filter(workspace_id=workspace_id, user_data_filter_id=user_data_filter.id)
-            self._entities_api.update_entity_user_data_filters(
-                workspace_id=workspace_id,
-                object_id=user_data_filter.id,
-                json_api_user_data_filter_in_document=user_data_filter_document.to_api(),
-            )
-        except NotFoundException:
+        if user_data_filter.id is None:
             self._entities_api.create_entity_user_data_filters(
                 workspace_id=workspace_id,
-                json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_post_api(),
+                json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_api(True),
             )
+        else:
+            try:
+                self.get_user_data_filter(workspace_id=workspace_id, user_data_filter_id=user_data_filter.id)
+                self._entities_api.update_entity_user_data_filters(
+                    workspace_id=workspace_id,
+                    object_id=user_data_filter.id,
+                    json_api_user_data_filter_in_document=user_data_filter_document.to_api(),
+                )
+            except NotFoundException:
+                self._entities_api.create_entity_user_data_filters(
+                    workspace_id=workspace_id,
+                    json_api_user_data_filter_post_optional_id_document=user_data_filter_document.to_api(True),
+                )
 
     def get_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> CatalogUserDataFilter:
         """Get user data filter by its id.

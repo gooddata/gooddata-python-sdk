@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any
+from typing import Type, Union
 
 import attr
 
@@ -19,8 +19,10 @@ from gooddata_sdk.utils import safeget
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogWorkspaceSetting(AttrCatalogEntity):
+    id: str = attr.field(default=None)
+
     @staticmethod
-    def client_class() -> Any:
+    def client_class() -> Type[JsonApiWorkspaceSettingOut]:
         return JsonApiWorkspaceSettingOut
 
     content: dict = attr.field(
@@ -28,22 +30,23 @@ class CatalogWorkspaceSetting(AttrCatalogEntity):
         default=attr.Factory(lambda self: safeget(self.json_api_entity.attributes, ["content"]), takes_self=True),
     )
 
-    def to_api(self) -> JsonApiWorkspaceSettingInDocument:
-        return JsonApiWorkspaceSettingInDocument(
-            data=JsonApiWorkspaceSettingIn(
-                id=self.id,
-                attributes=JsonApiOrganizationSettingInAttributes(
-                    content=self.content,
-                ),
-            )
+    def _attributes(self) -> JsonApiOrganizationSettingInAttributes:
+        return JsonApiOrganizationSettingInAttributes(
+            content=self.content,
         )
 
-    def to_post_api(self) -> JsonApiWorkspaceSettingPostOptionalIdDocument:
-        return JsonApiWorkspaceSettingPostOptionalIdDocument(
-            data=JsonApiWorkspaceSettingPostOptionalId(
-                id=self.id,
-                attributes=JsonApiOrganizationSettingInAttributes(
-                    content=self.content,
-                ),
+    def to_api(
+        self, post: bool = False
+    ) -> Union[JsonApiWorkspaceSettingInDocument, JsonApiWorkspaceSettingPostOptionalIdDocument]:
+        if not post and self.id is None:
+            raise ValueError(
+                f"The combination for {post=} and {self.id=} is not valid. Id can be None only for post=True."
             )
-        )
+        if post:
+            return JsonApiWorkspaceSettingPostOptionalIdDocument(
+                data=JsonApiWorkspaceSettingPostOptionalId(id=self.id, attributes=self._attributes())
+            )
+        else:
+            return JsonApiWorkspaceSettingInDocument(
+                data=JsonApiWorkspaceSettingIn(id=self.id, attributes=self._attributes())
+            )
