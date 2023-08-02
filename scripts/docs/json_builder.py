@@ -10,6 +10,7 @@ import inspect
 from typing import Dict
 import re
 
+import docstring_parser
 from docstring_parser import parse
 from docstring_parser.common import DocstringStyle
 
@@ -27,7 +28,7 @@ def docstring_data(docstr: str):
     docstr = docstring_fixes(docstr)
     try:
         parsed_docstr = parse(docstr, style=DocstringStyle.GOOGLE)
-    except:
+    except docstring_parser.common.ParseError:
         raise ValueError("Invalid docstring: " + docstr)
     if ":param" in docstr:
         raise ValueError("Invalid docstring (numpy): " + docstr)
@@ -102,6 +103,9 @@ def object_data(obj: type) -> dict:
     for key, value in data.items():
         if isinstance(value, FunctionType):
             ret["functions"][key] = function_data(value)
+        # if inspect.isclass(value) and key != "__class__":
+        #     ret["classes"][key] = object_data(value)
+
     return ret
 
 

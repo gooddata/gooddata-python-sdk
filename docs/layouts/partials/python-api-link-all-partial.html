@@ -26,4 +26,10 @@
     {{ end }}
 {{ end }}
 
+{{/* Remove backticks around links */}}
+{{ $leadingBacktickRemovalPattern := "`<a" }}
+{{ $trailingBacktickRemovalPattern := "</a>`" }}
+{{ $paragraph = replaceRE $leadingBacktickRemovalPattern "<a" $paragraph}}
+{{ $paragraph = replaceRE $trailingBacktickRemovalPattern "</a>" $paragraph}}
+
 {{ $paragraph | safeHTML }}

@@ -30,8 +30,14 @@ def create_file_structure(data: dict, root: Path, url_root: str):
         """
         dir_root.mkdir(exist_ok=True)
         for name, obj in data_root.items():
+            # There are entries in the json, that are not dicts (ex: the field `kind`)
             if not isinstance(obj, dict):
                 continue
+
+            # If an object already has a page, skip it
+            if name in links:
+                continue
+
             kind = obj.get("kind", None)
 
             obj_module_import_path = module_import_path + f".{name}" if module_import_path != "" else name

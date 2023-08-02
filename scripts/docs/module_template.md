@@ -1,6 +1,6 @@
 ---
 title: "NAME"
 linkTitle: "NAME"
-no_link: true
+no_list: true
 ---
 {{< python-module "PATH" >}}
