@@ -14,6 +14,7 @@ on:
       - '*.mk'
       - 'Makefile'
       - '!docs/**'
+      - 'gooddata-api-client/**'
   push:
     branches:
       - master
@@ -28,6 +29,7 @@ on:
       - '*.mk'
       - 'Makefile'
       - '!docs/**'
+      - 'gooddata-api-client/**'
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
