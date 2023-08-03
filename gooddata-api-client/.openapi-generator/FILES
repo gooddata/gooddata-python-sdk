@@ -84,6 +84,8 @@ docs/DeclarativeDatasetSql.md
 docs/DeclarativeDateDataset.md
 docs/DeclarativeFact.md
 docs/DeclarativeFilterContext.md
+docs/DeclarativeJwk.md
+docs/DeclarativeJwkSpecification.md
 docs/DeclarativeLabel.md
 docs/DeclarativeLdm.md
 docs/DeclarativeMetric.md
@@ -93,6 +95,7 @@ docs/DeclarativeOrganizationInfo.md
 docs/DeclarativeOrganizationPermission.md
 docs/DeclarativePdm.md
 docs/DeclarativeReference.md
+docs/DeclarativeRsaSpecification.md
 docs/DeclarativeSetting.md
 docs/DeclarativeSingleWorkspacePermission.md
 docs/DeclarativeTable.md
@@ -737,6 +740,8 @@ gooddata_api_client/model/declarative_dataset_sql.py
 gooddata_api_client/model/declarative_date_dataset.py
 gooddata_api_client/model/declarative_fact.py
 gooddata_api_client/model/declarative_filter_context.py
+gooddata_api_client/model/declarative_jwk.py
+gooddata_api_client/model/declarative_jwk_specification.py
 gooddata_api_client/model/declarative_label.py
 gooddata_api_client/model/declarative_ldm.py
 gooddata_api_client/model/declarative_metric.py
@@ -746,6 +751,7 @@ gooddata_api_client/model/declarative_organization_info.py
 gooddata_api_client/model/declarative_organization_permission.py
 gooddata_api_client/model/declarative_pdm.py
 gooddata_api_client/model/declarative_reference.py
+gooddata_api_client/model/declarative_rsa_specification.py
 gooddata_api_client/model/declarative_setting.py
 gooddata_api_client/model/declarative_single_workspace_permission.py
 gooddata_api_client/model/declarative_table.py

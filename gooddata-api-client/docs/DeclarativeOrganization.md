@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **organization** | [**DeclarativeOrganizationInfo**](DeclarativeOrganizationInfo.md) |  | 
 **data_sources** | [**[DeclarativeDataSource]**](DeclarativeDataSource.md) |  | [optional] 
+**jwks** | [**[DeclarativeJwk]**](DeclarativeJwk.md) |  | [optional] 
 **user_groups** | [**[DeclarativeUserGroup]**](DeclarativeUserGroup.md) |  | [optional] 
 **users** | [**[DeclarativeUser]**](DeclarativeUser.md) |  | [optional] 
 **workspace_data_filters** | [**[DeclarativeWorkspaceDataFilter]**](DeclarativeWorkspaceDataFilter.md) |  | [optional] 

@@ -155,6 +155,12 @@ with gooddata_api_client.ApiClient() as api_client:
                 username="demo",
             ),
         ],
+        jwks=[
+            DeclarativeJwk(
+                content=DeclarativeJwkSpecification(),
+                id="jwk-1",
+            ),
+        ],
         organization=DeclarativeOrganizationInfo(
             color_palettes=[
                 DeclarativeColorPalette(

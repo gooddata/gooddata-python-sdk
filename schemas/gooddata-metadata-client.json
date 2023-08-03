@@ -1091,6 +1091,34 @@
         ],
         "type": "object"
       },
+      "DeclarativeJwk": {
+        "description": "A declarative form of the JWK.",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/DeclarativeJwkSpecification"
+          },
+          "id": {
+            "description": "JWK object ID.",
+            "example": "jwk-1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "id"
+        ],
+        "type": "object"
+      },
+      "DeclarativeJwkSpecification": {
+        "description": "Declarative specification of the cryptographic key.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DeclarativeRsaSpecification"
+          }
+        ],
+        "type": "object"
+      },
       "DeclarativeLabel": {
         "description": "A attribute label.",
         "properties": {
@@ -1252,6 +1280,12 @@
           "dataSources": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeDataSource"
+            },
+            "type": "array"
+          },
+          "jwks": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeJwk"
             },
             "type": "array"
           },
@@ -1453,6 +1487,74 @@
           "identifier",
           "multivalue",
           "sourceColumns"
+        ],
+        "type": "object"
+      },
+      "DeclarativeRsaSpecification": {
+        "description": "Declarative specification of the cryptographic key.",
+        "properties": {
+          "alg": {
+            "description": "Algorithm intended for use with the key.",
+            "enum": [
+              "RS256",
+              "RS384",
+              "RS512"
+            ],
+            "example": "RS256",
+            "type": "string"
+          },
+          "e": {
+            "description": "parameter contains the exponent value for the RSA public key.",
+            "type": "string"
+          },
+          "kid": {
+            "description": "Parameter is used to match a specific key.",
+            "example": "key.001",
+            "maxLength": 255,
+            "pattern": "^[^.]",
+            "type": "string"
+          },
+          "kty": {
+            "description": "Key type parameter",
+            "enum": [
+              "RSA"
+            ],
+            "example": "RSA",
+            "type": "string"
+          },
+          "n": {
+            "description": "Parameter contains the modulus value for the RSA public key.",
+            "type": "string"
+          },
+          "use": {
+            "description": "Parameter identifies the intended use of the public key.",
+            "enum": [
+              "sig"
+            ],
+            "example": "sig",
+            "type": "string"
+          },
+          "x5c": {
+            "description": "Parameter contains a chain of one or more PKIX certificates.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "x5t": {
+            "description": "Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "alg",
+          "e",
+          "kid",
+          "kty",
+          "n",
+          "use",
+          "x5c",
+          "x5t"
         ],
         "type": "object"
       },
