@@ -17,7 +17,6 @@ def process_json_file(file_path) -> dict:
         return json.load(json_file)
 
 
-
 def create_file_structure(data: dict, root: Path, url_root: str):
     links = {}
 

@@ -6,7 +6,7 @@ import pkgutil
 import re
 import sys
 from types import FunctionType, ModuleType
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 import docstring_parser
 from docstring_parser import parse
@@ -145,15 +145,19 @@ def module_data(module: ModuleType) -> dict:
     :param module:
     :return:
     """
-    data = {"kind": "module"}
+    data: dict[str, Any] = {"kind": "module"}
     objects = vars(module)
     for name, obj in objects.items():
+        obj_module = inspect.getmodule(obj)
+        if obj_module is None:
+            continue
+
         if isinstance(obj, type):
             # Filter out non-gooddata libraries
-            if MODULE_NAME in inspect.getmodule(obj).__name__:
+            if MODULE_NAME in obj_module.__name__:
                 data[name] = object_data(obj)
         elif isinstance(obj, ModuleType):
-            if MODULE_NAME in inspect.getmodule(obj).__name__:
+            if MODULE_NAME in obj_module.__name__:
                 data[name] = module_data(obj)
     return data
 
@@ -208,7 +212,7 @@ def import_submodules(pkg_name):
     }
 
 
-def generate_links(module_data: dict) -> Dict[str, str]:
+def generate_links(module_data: dict) -> Dict[str, dict[str, str]]:
     """
     Generate links for the objects for the json data:
         Example:
@@ -232,7 +236,7 @@ def generate_links(module_data: dict) -> Dict[str, str]:
                 if key == "functions":
                     _recursive_find_classes(val, path)
                 elif path != "":
-                    _recursive_find_classes(val, path + "." + key)
+                    _recursive_find_classes(val, f"{path}.{key}")
                 else:
                     _recursive_find_classes(val, key)
 
