@@ -1,64 +1,86 @@
+import importlib
+import inspect
 import json
 import os
-
 import pkgutil
-import importlib
-import sys
-from importlib.machinery import ModuleSpec
-from types import ModuleType, FunctionType
-import inspect
-from typing import Dict
 import re
+import sys
+from types import FunctionType, ModuleType
+from typing import Dict, Any, Optional
 
 import docstring_parser
 from docstring_parser import parse
 from docstring_parser.common import DocstringStyle
 
 LOG = open("log.txt", "w+")
+# regex patterns for `docstring_fixes` function
+docstr_fix_none_pattern = re.compile(r"Args:[\n ]*None")
 
 
 def docstring_fixes(docstr: str) -> str:
-    docstr = re.sub(r"Args:[\n ]*None", "", docstr)  # Fix for Args: None in docstrings, which is not valid
+    """
+    Sometimes GD docstrings use invalid formatting, which the parser is unable to parse
+    This function fixes those issues
+    :param docstr: docstring to fix
+    :return: fixed docstring
+    """
+    # Fix for Args: None in docstrings, which is not valid
+    docstr = docstr_fix_none_pattern.sub("", docstr)
     return docstr
 
 
-def docstring_data(docstr: str):
+def docstring_data(docstr: Optional[str]) -> dict[str, Any]:
+    """
+    Parse the docstring and return the parser data in a dict
+    :param docstr:
+    :return:
+    :raises ValueError: if the docstring is invalid (= not Google style)
+    """
     if docstr is None:
         return {}
     docstr = docstring_fixes(docstr)
     try:
         parsed_docstr = parse(docstr, style=DocstringStyle.GOOGLE)
     except docstring_parser.common.ParseError:
-        raise ValueError("Invalid docstring: " + docstr)
+        raise ValueError(f"Invalid docstring: {docstr}")
     if ":param" in docstr:
-        raise ValueError("Invalid docstring (numpy): " + docstr)
+        # Some numpy style docstrings are parsed without throwing an error
+        # but the parsed data is invalid, this is a quick way to detect those
+        raise ValueError(f"Invalid docstring (numpy): docstr")
 
-    params_data = []
+    params_data: list[dict[str, str | bool | None]] = []
     for doc_param in parsed_docstr.params:
-        params_data.append({
-            'arg_name': doc_param.arg_name,
-            'default': doc_param.default,
-            'is_optional': doc_param.is_optional,
-            'type_name': doc_param.type_name,
-            "description": doc_param.description,
-        })
+        params_data.append(
+            {
+                "arg_name": doc_param.arg_name,
+                "default": doc_param.default,
+                "is_optional": doc_param.is_optional,
+                "type_name": doc_param.type_name,
+                "description": doc_param.description,
+            }
+        )
 
-    data = {
+    data: dict[str, Any] = {
         "params": params_data,
         "long_description": parsed_docstr.long_description,
         "short_description": parsed_docstr.short_description,
-        "examples": str(parsed_docstr.examples)
+        "examples": str(parsed_docstr.examples),
     }
     if parsed_docstr.returns:
         data["returns"] = {
             "type_name": parsed_docstr.returns.type_name,
             "description": parsed_docstr.returns.description,
-            "return_name": parsed_docstr.returns.return_name
+            "return_name": parsed_docstr.returns.return_name,
         }
     return data
 
 
 def signature_data(sig: inspect.Signature) -> dict:
+    """
+    Parse the signature object and return the contained data in a formatted dict
+    :param sig:
+    :return:
+    """
     params_data = []
 
     for name, param in sig.parameters.items():
@@ -71,45 +93,58 @@ def signature_data(sig: inspect.Signature) -> dict:
     if return_annotation == inspect.Parameter.empty:
         return_annotation = None
 
-    return {
-        "params": params_data,
-        "return_type": str(return_annotation)
-    }
+    return {"params": params_data, "return_type": str(return_annotation)}
 
 
 def function_data(func: FunctionType) -> dict:
+    """
+    Parse the function object and return information about the function in a formatted dict
+    :param func: Function object to be analysed
+    :return:
+    """
     try:
         docstr_data = docstring_data(inspect.getdoc(func))
     except ValueError:
-        LOG.write(str(inspect.getmodule(func)) + ":" + str(func))  # logging invalid docstrings
-        LOG.write("\n")
+        print(f"WARN: Invalid docstring in func {str(inspect.getmodule(func))}: {str(func)}")
         docstr_data = {}
     return {
         "kind": "function",
         "docstring": inspect.getdoc(func),
         "docstring_parsed": docstr_data,
-        "signature": signature_data(inspect.signature(func))
+        "signature": signature_data(inspect.signature(func)),
     }
 
 
 def object_data(obj: type) -> dict:
+    """
+    Parse the class object and return information about the class in a formatted dict
+    :param obj: class object to be analysed
+    :return:
+    """
     data = {key: value for key, value in inspect.getmembers(obj)}
-    ret = {
+    ret: dict[str, Any] = {
         "kind": "class",
         "docstring": inspect.getdoc(object),
         "docstring_parsed": docstring_data(inspect.getdoc(object)),
-        "functions": {}
+        "functions": {},
     }
     for key, value in data.items():
         if isinstance(value, FunctionType):
             ret["functions"][key] = function_data(value)
+        # As of now, there are no subclasses in the gooddata package,
+        # and the data would not be handled correctly
         # if inspect.isclass(value) and key != "__class__":
         #     ret["classes"][key] = object_data(value)
 
     return ret
 
 
-def file_data(module: ModuleType) -> dict:
+def module_data(module: ModuleType) -> dict:
+    """
+    Parse a module object and return formatted docstring data about it's contents
+    :param module:
+    :return:
+    """
     data = {"kind": "module"}
     objects = vars(module)
     for name, obj in objects.items():
@@ -118,11 +153,8 @@ def file_data(module: ModuleType) -> dict:
             if MODULE_NAME in inspect.getmodule(obj).__name__:
                 data[name] = object_data(obj)
         elif isinstance(obj, ModuleType):
-            try:
-                if MODULE_NAME in inspect.getmodule(obj).__name__:
-                    data[name] = file_data(obj)
-            except AttributeError:
-                pass
+            if MODULE_NAME in inspect.getmodule(obj).__name__:
+                data[name] = module_data(obj)
     return data
 
 
@@ -157,7 +189,7 @@ def parse_package(obj, data=None):
                 data[item.name].update(parse_package(vars(obj)[item.name]))
             else:
                 module = vars(obj)[item.name]
-                data[item.name].update(file_data(module))
+                data[item.name].update(module_data(module))
 
     return data
 
@@ -171,7 +203,7 @@ def import_submodules(pkg_name):
     package = sys.modules[pkg_name]
 
     return {
-        name: importlib.import_module(pkg_name + '.' + name)
+        name: importlib.import_module(f"{pkg_name}.{name}")
         for loader, name, is_pkg in pkgutil.walk_packages(package.__path__)
     }
 
@@ -185,7 +217,7 @@ def generate_links(module_data: dict) -> Dict[str, str]:
             "Class2" : {"path": "path.in.json.Class2", "kind": "class"},
             "func1" : {"path": "path.in.json.func1", "kind": "function"}
         }
-    :param data: dict with the module data
+    :param module_data: dict with the module data
     :return:
     """
     links = {}
@@ -211,7 +243,7 @@ def generate_links(module_data: dict) -> Dict[str, str]:
     return links
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import gooddata_sdk
 
     MODULE_NAME = "gooddata_sdk"  # This global variable is needed in further parsing
