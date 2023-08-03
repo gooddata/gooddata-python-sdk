@@ -28,6 +28,9 @@ User entity object.
 sdk.catalog_user.create_or_update_user(
     CatalogUser.init(
         user_id="abc",
+        firstname="John",
+        lastname="Doe",
+        email="john.doe@email.com",
         authentication_id="xyz",
         user_group_ids=["demoGroup"]
     )

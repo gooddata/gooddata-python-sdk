@@ -79,7 +79,7 @@ interactions:
             id: demo2
             type: user
             attributes:
-              authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+              authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
             relationships:
               userGroups:
                 data:
@@ -170,7 +170,7 @@ interactions:
             id: demo2
             type: user
             attributes:
-              authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+              authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
             relationships:
               userGroups:
                 data:
@@ -192,6 +192,9 @@ interactions:
           id: demo2
           type: user
           attributes:
+            firstname: Michael
+            lastname: Scott
+            email: m.scott@dundermifflin.us
             authenticationId: demo2_123
           relationships:
             userGroups:
@@ -225,7 +228,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '152'
+          - '228'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -276,6 +279,9 @@ interactions:
             type: user
             attributes:
               authenticationId: demo2_123
+              firstname: Michael
+              lastname: Scott
+              email: m.scott@dundermifflin.us
           links:
             self: http://localhost:3000/api/v1/entities/users/demo2
   - request:
@@ -305,7 +311,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '578'
+          - '654'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -356,6 +362,9 @@ interactions:
             type: user
             attributes:
               authenticationId: demo2_123
+              firstname: Michael
+              lastname: Scott
+              email: m.scott@dundermifflin.us
             relationships:
               userGroups:
                 data:
@@ -520,7 +529,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 80fc2ceca4c24c25
+          traceId: 833662fcd22e0944
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -529,7 +538,7 @@ interactions:
           id: demo2
           type: user
           attributes:
-            authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
           relationships:
             userGroups:
               data:
@@ -610,7 +619,7 @@ interactions:
             id: demo2
             type: user
             attributes:
-              authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+              authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
           links:
             self: http://localhost:3000/api/v1/entities/users/demo2
   - request:
@@ -690,7 +699,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -711,7 +720,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
