@@ -2,7 +2,7 @@
 title: "for_insight"
 linkTitle: "for_insight"
 weight: 10
-superheading: "table."
+superheading: "tables."
 ---
 
 
