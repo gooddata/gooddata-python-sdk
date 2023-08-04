@@ -31,7 +31,7 @@ Either by one call:
 
 ```python
 # Load and put on server the stored layout
-sdk.catalog_workspace.load_and_put_declarative_analytics_model(
+sdk.catalog_workspace_content.load_and_put_declarative_analytics_model(
     workspace_id="123",
     layout_root_path=Path.cwd()
 )
