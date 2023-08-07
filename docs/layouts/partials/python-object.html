@@ -7,7 +7,7 @@
 
 {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $objData}}
 <p><code>
-    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "python-api-link-partial.html" $objData.signature.return_type}}
+    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "python-api-link-partial.html" $objData.signature.return_annotation}}
 </code></p>
 
 {{ if $objData.docstring_parsed}}
