@@ -1,6 +1,6 @@
 ---
 title: "NAME"
-linkTitle: "NAME"
+linkTitle: "LINK"
 superheading: "PARENT."
 weight: 100
 ---

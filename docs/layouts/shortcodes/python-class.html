@@ -11,15 +11,46 @@
 
 {{ $objData := $currentData }}
 
-<div class="python-ref">
-  {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
-  <h2>Methods</h2>
-  <ul>
+{{ $publicMethodsCounter := 0 }}
+{{ range $name, $func := $objData.functions }}
+  {{ if and (not (hasPrefix $name "_"))}}
+    {{ $publicMethodsCounter = add $publicMethodsCounter 1 }}
+  {{ end }}
+{{ end }}
 
-    {{ range $name, $func := $objData.functions }}
-      {{ if not (hasPrefix $name "_") }}
-        <li>{{ partial "python-api-link-partial.html" $name }}</li>
-      {{ end }}
+
+<div class="python-ref">
+{{ partial "python-object.html" (dict "object" $objData "path" $path) }}
+<h2>Methods</h2>
+{{ if gt $publicMethodsCounter 0 }}
+
+
+<table class="gd-docs-parameters-block">
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+{{ range $name, $func := $objData.functions }}
+  <tr>
+
+      {{ if and (not (hasPrefix $name "_"))}}
+        {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $func}}
+        <td>{{ partial "python-api-link-partial.html" $name }}({{- $parenthesisArgsString -}})</td>
+        {{ if $func.docstring_parsed }}
+        <td>{{ partial "python-api-link-all-partial.html" $func.docstring_parsed.short_description }}</td>
+        {{ else }}
+        <td><i>None</i></td>
+        {{ end }}
     {{ end }}
-  </ul>
+  </tr>
+{{ end }}
+</tbody>
+</table>
+{{ else}}
+  <i> None </i>
+  {{ end }}
+
 </div>

@@ -6,12 +6,21 @@ from typing import List, Optional
 # Template variables:
 #   PATH: replace with path to object
 #   NAME: replace with name of the object
+#   LINK: link title for the page
 #   PARENT: replace with parent name (only for functions)
 MODULE_TEMPLATE_STRING = Path("module_template.md").read_text()
 CLASS_TEMPLATE_STRING = Path("class_template.md").read_text()
 FUNCTION_TEMPLATE_STRING = Path("function_template.md").read_text()
 
-
+def shorten_name(name: str, max_len=30) -> str:
+    """
+    Shorten the name of the object, if it is too long
+    :param name:
+    :return:
+    """
+    if len(name) > max_len:
+        return name[:max_len-3] + "..."
+    return name
 def process_json_file(file_path) -> dict:
     with open(file_path) as json_file:
         return json.load(json_file)
@@ -49,13 +58,18 @@ def create_file_structure(data: dict, root: Path, url_root: str):
             if kind == "module":
                 (dir_root / name).mkdir(exist_ok=True)
                 (dir_root / name / "_index.md").open("w+").write(
-                    MODULE_TEMPLATE_STRING.replace("PATH", obj_module_import_path).replace("NAME", name)
+                    MODULE_TEMPLATE_STRING.replace("PATH", obj_module_import_path)
+                    .replace("NAME", name)
+                    .replace("LINK", shorten_name(name))
                 )
                 links[name] = {"path": f"{url_root}/{name}".lower(), "kind": "function"}  # Lowercase for Hugo
             elif kind == "class":
                 (dir_root / name).mkdir(exist_ok=True)
                 (dir_root / name / "_index.md").open("w+").write(
-                    CLASS_TEMPLATE_STRING.replace("PATH", obj_module_import_path).replace("NAME", name)
+                    CLASS_TEMPLATE_STRING.replace("PATH", obj_module_import_path)
+                    .replace("NAME", name)
+                    .replace("LINK", shorten_name(name))
+                    .replace("PARENT", module_import_path.split(".")[-1])
                 )
                 links[name] = {"path": f"{url_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
             elif name == "functions":
@@ -67,6 +81,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                     (dir_root / f"{func_name}.md").open("w+").write(
                         FUNCTION_TEMPLATE_STRING.replace("PATH", obj_module_import_path + f".{func_name}")
                         .replace("NAME", func_name)
+                        .replace("LINK", shorten_name(func_name))
                         .replace("PARENT", module_import_path.split(".")[-1])
                     )
                     links[func_name] = {
@@ -129,8 +144,8 @@ def main():
         required=False,
         nargs="*",
         help="Example: sdk.CatalogUserService, "
-        "would only generate markdown tree for that object,"
-        "can use multiple start paths, by including the argument multiple times",
+             "would only generate markdown tree for that object,"
+             "can use multiple start paths, by including the argument multiple times",
     )
     parser.add_argument("--url_root", default="", required=False, help="url root path for the apiref")
     args = parser.parse_args()

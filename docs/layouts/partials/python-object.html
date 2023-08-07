@@ -3,25 +3,22 @@
 
 
 <div class="python-ref {{ if (eq $objData.kind " function") }} python-ref-func {{ else }} python-ref-class {{ end }}">
-{{ if (eq $objData.kind "function") }}
+{{ if and (eq $objData.kind "function")}}
 
-{{/* Create the parenthesis string for signature. Example "(text: str, number: int) */}}
-{{ $parenthesisArgsString := "" }}
-{{ range $objData.docstring_parsed.params}}
-    {{ $parenthesisArgsString = print $parenthesisArgsString .arg_name ": " .type_name ", " }}
-{{ end }}
-{{ $parenthesisArgsString := strings.TrimRight ", " $parenthesisArgsString }}
-
+{{ $parenthesisArgsString := partial "python-function-parenthesis.html" $objData}}
 <p><code>
-    {{ (index (last 1 $path) 0) }}({{ $parenthesisArgsString }}) -> {{ partial "python-api-link-partial.html" $objData.signature.return_type}}
+    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "python-api-link-partial.html" $objData.signature.return_type}}
 </code></p>
 
+{{ if $objData.docstring_parsed}}
 <div class="python-ref-description">
     <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
     <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
 </div>
+{{ end }}
 
 <h4> Parameters </h4>
+{{ if $objData.docstring_parsed }}
 {{ if (index $objData.docstring_parsed "params") }}
 {{ if (gt (len $objData.docstring_parsed.params)  0) }}
     <table class="gd-docs-parameters-block">
@@ -67,9 +64,15 @@
 {{ else }}
     <i> None </i>
 {{ end }}
+{{ else }}
+    <i> None </i>
+{{ end }}
 
 <h4> Returns </h4>
-{{ if or $objData.docstring_parsed.returns.type_name (ne $objData.signature.return_type "None") }}
+{{ if $objData.docstring_parsed }}
+{{ if not $objData.docstring_parsed.returns }}
+<i> None </i>
+{{ else if or $objData.docstring_parsed.returns.type_name (ne $objData.signature.return_type "None") }}
 {{ $typeName := "" }}
 {{ if $objData.docstring_parsed.returns.type_name }}
     {{ $typeName = $objData.docstring_parsed.returns.type_name }}
@@ -104,12 +107,17 @@
 {{ else }}
 <i> None </i>
 {{ end }}
+{{ else }}
+<i> None </i>
+{{ end }}
 
-{{ else if (eq $objData.kind "class") }}
+{{ else if and (eq $objData.kind "class") }}
 <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} </h1>
+{{ if $objData.docstring_parsed }}
 <div class="python-ref-description">
     <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
     <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
 </div>
+{{ end }}
 {{end}}
 </div>
