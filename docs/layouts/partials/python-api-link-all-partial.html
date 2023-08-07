@@ -21,7 +21,7 @@
     {{ end}}
     {{ $matches := findRE $name $paragraph}}
     {{ if gt (len $matches) 0 }}
-        {{ $a_html := (printf "$1<a href=\"%s\/">%s</a>$3" $path $name) }}
+        {{ $a_html := (printf "$1<a href=\"%s/\">%s</a>$3" $path $name) }}
         {{ $paragraph = replaceRE $pattern $a_html $paragraph | safeHTML}}
     {{ end }}
 {{ end }}
