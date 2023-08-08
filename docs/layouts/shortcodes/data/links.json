@@ -71,6 +71,10 @@
         "path": "/docs/api-reference/sdk/catalogdatasourceservice/load_pdm_from_disk",
         "kind": "function"
     },
+    "organization_id": {
+        "path": "/docs/api-reference/catalog/catalog_service_base/catalogservicebase/organization_id",
+        "kind": "function"
+    },
     "patch_data_source_attributes": {
         "path": "/docs/api-reference/sdk/catalogdatasourceservice/patch_data_source_attributes",
         "kind": "function"
@@ -427,6 +431,34 @@
         "path": "/docs/api-reference/sdk/gooddataapiclient",
         "kind": "class"
     },
+    "actions_api": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/actions_api",
+        "kind": "function"
+    },
+    "afm_client": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/afm_client",
+        "kind": "function"
+    },
+    "custom_headers": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/custom_headers",
+        "kind": "function"
+    },
+    "entities_api": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/entities_api",
+        "kind": "function"
+    },
+    "layout_api": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/layout_api",
+        "kind": "function"
+    },
+    "metadata_client": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/metadata_client",
+        "kind": "function"
+    },
+    "scan_client": {
+        "path": "/docs/api-reference/sdk/gooddataapiclient/scan_client",
+        "kind": "function"
+    },
     "ComputeService": {
         "path": "/docs/api-reference/sdk/computeservice",
         "kind": "class"
@@ -455,6 +487,10 @@
         "path": "/docs/api-reference/sdk/supportservice",
         "kind": "class"
     },
+    "is_available": {
+        "path": "/docs/api-reference/sdk/supportservice/is_available",
+        "kind": "function"
+    },
     "wait_till_available": {
         "path": "/docs/api-reference/sdk/supportservice/wait_till_available",
         "kind": "function"
@@ -474,6 +510,50 @@
     "GoodDataSdk": {
         "path": "/docs/api-reference/sdk/gooddatasdk",
         "kind": "class"
+    },
+    "catalog_data_source": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_data_source",
+        "kind": "function"
+    },
+    "catalog_organization": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_organization",
+        "kind": "function"
+    },
+    "catalog_permission": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_permission",
+        "kind": "function"
+    },
+    "catalog_user": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_user",
+        "kind": "function"
+    },
+    "catalog_workspace": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_workspace",
+        "kind": "function"
+    },
+    "catalog_workspace_content": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/catalog_workspace_content",
+        "kind": "function"
+    },
+    "client": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/client",
+        "kind": "function"
+    },
+    "compute": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/compute",
+        "kind": "function"
+    },
+    "insights": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/insights",
+        "kind": "function"
+    },
+    "support": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/support",
+        "kind": "function"
+    },
+    "tables": {
+        "path": "/docs/api-reference/sdk/gooddatasdk/tables",
+        "kind": "function"
     },
     "catalog": {
         "path": "/docs/api-reference/catalog",
@@ -651,6 +731,10 @@
         "path": "/docs/api-reference/catalog/data_source/service/catalogdatasource",
         "kind": "class"
     },
+    "url_template": {
+        "path": "/docs/api-reference/catalog/data_source/service/catalogdatasource/url_template",
+        "kind": "function"
+    },
     "TokenCredentialsFromFile": {
         "path": "/docs/api-reference/catalog/data_source/service/tokencredentialsfromfile",
         "kind": "class"
@@ -699,9 +783,29 @@
         "path": "/docs/api-reference/catalog/entity/objid/as_identifier",
         "kind": "function"
     },
+    "id": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/id",
+        "kind": "function"
+    },
+    "type": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/type",
+        "kind": "function"
+    },
     "CatalogEntity": {
         "path": "/docs/api-reference/catalog/entity/catalogentity",
         "kind": "class"
+    },
+    "description": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/description",
+        "kind": "function"
+    },
+    "obj_id": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/obj_id",
+        "kind": "function"
+    },
+    "title": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/title",
+        "kind": "function"
     },
     "CatalogNameEntity": {
         "path": "/docs/api-reference/catalog/entity/catalognameentity",
@@ -823,8 +927,20 @@
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogmetric/as_computable",
         "kind": "function"
     },
+    "dataset": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/catalogattribute/dataset",
+        "kind": "function"
+    },
     "find_label": {
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogattribute/find_label",
+        "kind": "function"
+    },
+    "granularity": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/catalogattribute/granularity",
+        "kind": "function"
+    },
+    "labels": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/catalogattribute/labels",
         "kind": "function"
     },
     "primary_label": {
@@ -839,9 +955,17 @@
         "path": "/docs/api-reference/catalog/workspace/content_service/cataloglabel",
         "kind": "class"
     },
+    "primary": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/cataloglabel/primary",
+        "kind": "function"
+    },
     "CatalogMetric": {
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogmetric",
         "kind": "class"
+    },
+    "format": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/catalogmetric/format",
+        "kind": "function"
     },
     "CatalogDependentEntitiesRequest": {
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogdependententitiesrequest",
@@ -859,6 +983,10 @@
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogworkspacecontent/catalog_with_valid_objects",
         "kind": "function"
     },
+    "datasets": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/catalogworkspacecontent/datasets",
+        "kind": "function"
+    },
     "find_label_attribute": {
         "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/find_label_attribute",
         "kind": "function"
@@ -869,6 +997,10 @@
     },
     "get_metric": {
         "path": "/docs/api-reference/catalog/workspace/content_service/catalogworkspacecontent/get_metric",
+        "kind": "function"
+    },
+    "metrics": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/executiondefinition/metrics",
         "kind": "function"
     },
     "Attribute": {
@@ -883,9 +1015,33 @@
         "path": "/docs/api-reference/catalog/workspace/content_service/attribute/has_same_label",
         "kind": "function"
     },
+    "label": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/attribute/label",
+        "kind": "function"
+    },
+    "local_id": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/metric/local_id",
+        "kind": "function"
+    },
+    "show_all_values": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/attribute/show_all_values",
+        "kind": "function"
+    },
     "ExecutionDefinition": {
         "path": "/docs/api-reference/catalog/workspace/content_service/executiondefinition",
         "kind": "class"
+    },
+    "attributes": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/attributes",
+        "kind": "function"
+    },
+    "dimensions": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/executiondefinition/dimensions",
+        "kind": "function"
+    },
+    "filters": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/executiondefinition/filters",
+        "kind": "function"
     },
     "has_attributes": {
         "path": "/docs/api-reference/catalog/workspace/content_service/executiondefinition/has_attributes",
@@ -911,6 +1067,10 @@
         "path": "/docs/api-reference/catalog/workspace/content_service/filter",
         "kind": "class"
     },
+    "apply_on_result": {
+        "path": "/docs/api-reference/catalog/workspace/content_service/filter/apply_on_result",
+        "kind": "function"
+    },
     "is_noop": {
         "path": "/docs/api-reference/catalog/workspace/content_service/filter/is_noop",
         "kind": "function"
@@ -926,6 +1086,14 @@
     "CatalogDataset": {
         "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset",
         "kind": "class"
+    },
+    "data_type": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/data_type",
+        "kind": "function"
+    },
+    "facts": {
+        "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/facts",
+        "kind": "function"
     },
     "filter_dataset": {
         "path": "/docs/api-reference/catalog/workspace/model_container/catalogdataset/filter_dataset",

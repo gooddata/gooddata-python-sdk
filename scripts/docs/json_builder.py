@@ -8,9 +8,9 @@ import sys
 from types import FunctionType, ModuleType
 from typing import Any, Dict, Optional
 
+import cattrs
 import docstring_parser
 from attr import define
-import cattrs
 from docstring_parser import parse
 from docstring_parser.common import DocstringStyle
 
@@ -19,24 +19,24 @@ from docstring_parser.common import DocstringStyle
 @define
 class ParamsData:
     arg_name: str
-    default: str
-    is_optional: bool
-    type_name: str
-    description: str
+    default: str | None
+    is_optional: bool | None
+    type_name: str | None
+    description: str | None
 
 
 @define
 class ReturnData:
-    type_name: str
-    description: str
-    return_name: str
+    type_name: str | None
+    description: str | None
+    return_name: str | None
 
 
 @define
 class DocstringData:
     params: list[ParamsData]
-    long_description: str
-    short_description: str
+    long_description: str | None
+    short_description: str | None
     examples: str
     returns: Optional[ReturnData] = None
 
@@ -49,19 +49,19 @@ class SignatureData:
 
 @define
 class FunctionData:
-    docstring: str
+    docstring: str | None
     signature: SignatureData
+    is_property: bool = False
     docstring_parsed: Optional[DocstringData] = None
     kind: str = "function"
 
 
 @define
 class ClassData:
-    docstring: str
+    docstring: str | None
     functions: dict[str, FunctionData]
     docstring_parsed: Optional[DocstringData] = None
     kind: str = "class"
-
 
 
 # regex patterns for `docstring_fixes` function
@@ -107,7 +107,8 @@ def docstring_data(docstr: Optional[str]) -> Optional[DocstringData]:
                 default=doc_param.default,
                 is_optional=doc_param.is_optional,
                 type_name=doc_param.type_name,
-                description=doc_param.description)
+                description=doc_param.description,
+            )
         )
     data = DocstringData(
         params=params_data,
@@ -145,10 +146,11 @@ def signature_data(sig: inspect.Signature) -> SignatureData:
     return SignatureData(params=sig_params_data, return_annotation=str(return_annotation))
 
 
-def function_data(func: FunctionType) -> FunctionData:
+def function_data(func: FunctionType, is_property: bool = False) -> FunctionData:
     """
     Parse the function object and return information about the function in a formatted dict
     :param func: Function object to be analysed
+    :param is_property: Whether the function is a property
     :return:
     """
     try:
@@ -160,6 +162,7 @@ def function_data(func: FunctionType) -> FunctionData:
         docstring=inspect.getdoc(func),
         docstring_parsed=docstr_data,
         signature=signature_data(inspect.signature(func)),
+        is_property=is_property,
     )
 
 
@@ -178,6 +181,11 @@ def class_data(obj: type) -> ClassData:
     for key, value in data.items():
         if isinstance(value, FunctionType):
             ret.functions[key] = function_data(value)
+        elif isinstance(value, property):
+            for attr in ("fget", "fset", "fdel"):
+                if hasattr(value, attr) and getattr(value, attr) is not None:
+                    ret.functions[key] = function_data(getattr(value, attr), is_property=True)
+
         # As of now, there are no subclasses in the gooddata package,
         # and the data would not be handled correctly
         # if inspect.isclass(value) and key != "__class__":

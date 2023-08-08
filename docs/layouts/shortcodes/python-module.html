@@ -13,13 +13,22 @@
 
 
 <div class="python-api-ref">
-    Contains the following objects
-    <ul>
-        {{ range $objName, $objData := $moduleData }}
+    <table class="gd-docs-parameters-block">
+    <thead>
+    <tr>
+    <th>Type</th>
+    <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ range $objName, $objData := $moduleData }}
             {{ if ne $objName "kind" }}
-                <li> {{$objData.kind}}: {{partial "python-api-link-partial.html" $objName}} </li>
+                <tr>
+                    <td>{{$objData.kind}}</td>
+                    <td>{{partial "python-api-link-partial.html" $objName}} </td>
+                </tr>
             {{ end }}
         {{ end }}
-    </ul>
-    <div style="margin-bottom: 3rem"></div>
+    </tbody>
+    </table>
 </div>

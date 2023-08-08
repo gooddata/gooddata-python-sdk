@@ -38,7 +38,12 @@
 
       {{ if and (not (hasPrefix $name "_"))}}
         {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $func}}
-        <td>{{ partial "python-api-link-partial.html" $name }}({{- $parenthesisArgsString -}})</td>
+
+        <td>{{ partial "python-api-link-partial.html" $name }}
+          {{ if not $func.is_property}}
+            ({{- $parenthesisArgsString -}})
+          {{ end }}
+        </td>
         {{ if $func.docstring_parsed }}
         <td>{{ partial "python-api-link-all-partial.html" $func.docstring_parsed.short_description }}</td>
         {{ else }}

@@ -12,6 +12,7 @@ MODULE_TEMPLATE_STRING = Path("module_template.md").read_text()
 CLASS_TEMPLATE_STRING = Path("class_template.md").read_text()
 FUNCTION_TEMPLATE_STRING = Path("function_template.md").read_text()
 
+
 def shorten_name(name: str, max_len=30) -> str:
     """
     Shorten the name of the object, if it is too long
@@ -19,8 +20,10 @@ def shorten_name(name: str, max_len=30) -> str:
     :return:
     """
     if len(name) > max_len:
-        return name[:max_len-3] + "..."
+        return name[: max_len - 3] + "..."
     return name
+
+
 def process_json_file(file_path) -> dict:
     with open(file_path) as json_file:
         return json.load(json_file)
@@ -144,8 +147,8 @@ def main():
         required=False,
         nargs="*",
         help="Example: sdk.CatalogUserService, "
-             "would only generate markdown tree for that object,"
-             "can use multiple start paths, by including the argument multiple times",
+        "would only generate markdown tree for that object,"
+        "can use multiple start paths, by including the argument multiple times",
     )
     parser.add_argument("--url_root", default="", required=False, help="url root path for the apiref")
     args = parser.parse_args()
