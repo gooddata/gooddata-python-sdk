@@ -105,7 +105,10 @@ class CatalogDataSourceService(CatalogServiceBase):
         # TODO - workaround solution getting data source type from backend
         #      - once backend accepts empty value in this field (enum), remove this code
         current_ds = self.get_data_source(data_source_id)
+
+        # Both or neither of the two (type, url) have to be defined in single patch call
         attributes["type"] = attributes.get("type", current_ds.type)
+        attributes["url"] = attributes.get("url", current_ds.url)
 
         self._entities_api.patch_entity_data_sources(
             data_source_id, CatalogDataSource.to_api_patch(data_source_id, attributes)
