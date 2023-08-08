@@ -79,7 +79,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -90,7 +90,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -199,7 +199,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5b07aa654c52ccfb
+          traceId: c84b0a084433996a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -208,6 +208,9 @@ interactions:
           id: newUser
           type: user
           attributes:
+            firstname: john
+            lastname: doe
+            email: john.doe@email.com
             authenticationId: newUser_auth_id
           relationships:
             userGroups:
@@ -239,7 +242,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '162'
+          - '227'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -290,6 +293,9 @@ interactions:
             type: user
             attributes:
               authenticationId: newUser_auth_id
+              firstname: john
+              lastname: doe
+              email: john.doe@email.com
           links:
             self: http://localhost:3000/api/v1/entities/users/newUser
   - request:
@@ -319,7 +325,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '406'
+          - '471'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -370,6 +376,9 @@ interactions:
             type: user
             attributes:
               authenticationId: newUser_auth_id
+              firstname: john
+              lastname: doe
+              email: john.doe@email.com
             relationships:
               userGroups:
                 data:
@@ -410,7 +419,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1453'
+          - '1518'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -460,7 +469,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -471,7 +480,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -493,6 +502,9 @@ interactions:
               type: user
               attributes:
                 authenticationId: newUser_auth_id
+                firstname: john
+                lastname: doe
+                email: john.doe@email.com
               relationships:
                 userGroups:
                   data:
@@ -658,7 +670,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -669,7 +681,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:

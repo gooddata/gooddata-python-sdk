@@ -48,17 +48,30 @@ def test_get_user(test_config):
 def test_create_delete_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_new_user"]
+    firstname = "john"
+    lastname = "doe"
+    email = "john.doe@email.com"
     authentication_id = f"{user_id}_auth_id"
     user_group_ids = [test_config["test_user_group"]]
 
     try:
         assert len(sdk.catalog_user.list_users()) == 3
-        user_e = CatalogUser.init(user_id=user_id, authentication_id=authentication_id, user_group_ids=user_group_ids)
+        user_e = CatalogUser.init(
+            user_id=user_id,
+            firstname=firstname,
+            lastname=lastname,
+            email=email,
+            authentication_id=authentication_id,
+            user_group_ids=user_group_ids,
+        )
         sdk.catalog_user.create_or_update_user(user_e)
         user = sdk.catalog_user.get_user(user_id)
         assert len(sdk.catalog_user.list_users()) == 4
         assert user.id == user_id
         assert [i.id for i in user.user_groups] == user_group_ids
+        assert user.attributes.firstname == firstname
+        assert user.attributes.lastname == lastname
+        assert user.attributes.email == email
         assert user.attributes.authentication_id == authentication_id
     finally:
         sdk.catalog_user.delete_user(user_id)
@@ -70,12 +83,25 @@ def test_update_user(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     user_id = test_config["test_user"]
     user = sdk.catalog_user.get_user(user_id)
+    new_firstname = "Michael"
+    new_lastname = "Scott"
+    new_email = "m.scott@dundermifflin.us"
     new_auth_id = f"{user_id}_123"
     user_group_ids = ["demoGroup", "visitorsGroup"]
     try:
-        user_e = CatalogUser.init(user_id=user_id, authentication_id=new_auth_id, user_group_ids=user_group_ids)
+        user_e = CatalogUser.init(
+            user_id=user_id,
+            firstname=new_firstname,
+            lastname=new_lastname,
+            email=new_email,
+            authentication_id=new_auth_id,
+            user_group_ids=user_group_ids,
+        )
         sdk.catalog_user.create_or_update_user(user_e)
         updated_user = sdk.catalog_user.get_user(user_id)
+        assert updated_user.attributes.firstname == new_firstname
+        assert updated_user.attributes.lastname == new_lastname
+        assert updated_user.attributes.email == new_email
         assert updated_user.attributes.authentication_id == new_auth_id
         assert len(updated_user.user_groups) == len(user_group_ids)
         assert set([i.id for i in updated_user.user_groups]) == set(user_group_ids)
