@@ -72,8 +72,11 @@ def docstring_fixes(docstr: str) -> str:
     """
     Sometimes GD docstrings use invalid formatting, which the parser is unable to parse
     This function fixes those issues
-    :param docstr: docstring to fix
-    :return: fixed docstring
+
+    Args:
+        docstr: docstring to fix
+    Returns:
+        str: fixed docstring
     """
     # Fix for Args: None in docstrings, which is not valid
     docstr = docstr_fix_none_pattern.sub("", docstr)
@@ -83,9 +86,15 @@ def docstring_fixes(docstr: str) -> str:
 def docstring_data(docstr: Optional[str]) -> Optional[DocstringData]:
     """
     Parse the docstring and return the parser data in a dict
-    :param docstr:
-    :return:
-    :raises ValueError: if the docstring is invalid (= not Google style)
+
+    Args:
+        docstr (Optional[str]): docstring to parse
+
+    Returns:
+        DocstringData: parsed docstring data
+
+    Raises:
+        ValueError: if the docstring is invalid (= not Google style)
     """
     if docstr is None:
         return None
@@ -128,8 +137,12 @@ def docstring_data(docstr: Optional[str]) -> Optional[DocstringData]:
 def signature_data(sig: inspect.Signature) -> SignatureData:
     """
     Parse the signature object and return the contained data in a formatted dict
-    :param sig:
-    :return:
+
+    Args:
+        sig: Signature object to be analysed
+
+    Returns:
+        SignatureData: parsed signature data
     """
     sig_params_data = []
 
@@ -149,9 +162,13 @@ def signature_data(sig: inspect.Signature) -> SignatureData:
 def function_data(func: FunctionType, is_property: bool = False) -> FunctionData:
     """
     Parse the function object and return information about the function in a formatted dict
-    :param func: Function object to be analysed
-    :param is_property: Whether the function is a property
-    :return:
+
+    Args:
+        func: Function object to be analysed
+        is_property: Whether the function is a property
+
+    Returns:
+        FunctionData: parsed function data
     """
     try:
         docstr_data = docstring_data(inspect.getdoc(func))
@@ -169,8 +186,11 @@ def function_data(func: FunctionType, is_property: bool = False) -> FunctionData
 def class_data(obj: type) -> ClassData:
     """
     Parse the class object and return information about the class in a formatted dict
-    :param obj: class object to be analysed
-    :return:
+
+    Args:
+        obj(type): class object to be analysed
+    Returns:
+        ClassData: parsed class data
     """
     data = {key: value for key, value in inspect.getmembers(obj)}
     ret = ClassData(
@@ -196,9 +216,11 @@ def class_data(obj: type) -> ClassData:
 
 def module_data(module: ModuleType) -> dict:
     """
-    Parse a module object and return formatted docstring data about it's contents
-    :param module:
-    :return:
+    Parse a module object and return formatted docstring data about its contents
+    Args:
+        module (ModuleType): module object to be analysed
+    Returns:
+        dict: parsed module data
     """
     data: dict[str, Any] = {"kind": "module"}
     objects = vars(module)
@@ -217,12 +239,19 @@ def module_data(module: ModuleType) -> dict:
     return data
 
 
-def parse_package(obj, data=None):
+def parse_package(obj: ModuleType, data=None):
     """
-    Parse the package and it's submodules into a dict object, that
+    Parse the package and its submodules into a dict object, that
     can be converted into a json
 
-    example return:
+    Args:
+        obj (ModuleType): package object
+        data (dict): optional parameter for recursive calling
+    Returns:
+        dict: data of package
+
+
+    Example:
         {
         "submodule1": {
             "file1": {
@@ -230,10 +259,6 @@ def parse_package(obj, data=None):
                 }
             }
         }
-
-    :param obj: package object
-    :param data: optional parameter for recursive calling
-    :return: data of package
     """
     if not data:
         data = {}
@@ -256,8 +281,9 @@ def parse_package(obj, data=None):
 def import_submodules(pkg_name):
     """
     Import all submodules of a package, enabling their parsing
-    :param pkg_name:
-    :return:
+
+    Args:
+        pkg_name (str): package name
     """
     package = sys.modules[pkg_name]
 
@@ -270,14 +296,17 @@ def import_submodules(pkg_name):
 def generate_links(module_data: dict) -> Dict[str, dict[str, str]]:
     """
     Generate links for the objects for the json data:
-        Example:
-        {
-            "AFM" : {"path": "compute.model.attribute.afm_models.AFM", "kind": "class"},
-            "Class2" : {"path": "path.in.json.Class2", "kind": "class"},
-            "func1" : {"path": "path.in.json.func1", "kind": "function"}
-        }
-    :param module_data: dict with the module data
-    :return:
+
+    Args:
+        module_data(dict): dict with the module data
+    Returns:
+        dict: dict with the links
+    Example:
+    {
+        "AFM" : {"path": "compute.model.attribute.afm_models.AFM", "kind": "class"},
+        "Class2" : {"path": "path.in.json.Class2", "kind": "class"},
+        "func1" : {"path": "path.in.json.func1", "kind": "function"}
+    }
     """
     links = {}
 

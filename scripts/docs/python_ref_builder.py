@@ -3,41 +3,57 @@ import json
 from pathlib import Path
 from typing import List, Optional
 
-# Template variables:
-#   PATH: replace with path to object
-#   NAME: replace with name of the object
-#   LINK: link title for the page
-#   PARENT: replace with parent name (only for functions)
 MODULE_TEMPLATE_STRING = Path("module_template.md").read_text()
 CLASS_TEMPLATE_STRING = Path("class_template.md").read_text()
 FUNCTION_TEMPLATE_STRING = Path("function_template.md").read_text()
 
 
-def shorten_name(name: str, max_len=30) -> str:
-    """
-    Shorten the name of the object, if it is too long
-    :param name:
-    :return:
+def shorten_name(name: str, max_len: int = 30) -> str:
+    """Shorten the name of the object, if it is too long.
+
+    Args:
+        name (str): The name to be shortened.
+        max_len (int, optional): Maximum length of the name. Defaults to 30.
+
+    Returns:
+        str: The shortened name.
     """
     if len(name) > max_len:
         return name[: max_len - 3] + "..."
     return name
 
 
-def process_json_file(file_path) -> dict:
+def process_json_file(file_path: str) -> dict:
+    """Load JSON data from a file.
+
+    Args:
+        file_path (str): Path to the JSON file.
+
+    Returns:
+        dict: Parsed JSON data.
+    """
     with open(file_path) as json_file:
         return json.load(json_file)
 
 
 def create_file_structure(data: dict, root: Path, url_root: str):
+    """Recursively create file structure based on JSON data.
+
+    Args:
+        data (dict): JSON data representing the object.
+        root (Path): Path to the root directory.
+        url_root (str): URL root path for the API reference.
+    """
     links = {}
 
     def _recursive_create(data_root: dict, dir_root: Path, url_root: str, module_import_path: str):
-        """
-        :param data_root: Sub-dictionary of the original json representing the object
-        :param dir_root: Path to the corresponding directory root Ex.: Path("./sdk/compute")
-        :param module_import_path: Import path to the object Ex.: "sdk.compute"
-        :return:
+        """Recursively create files and directories.
+
+        Args:
+            data_root (dict): Sub-dictionary of the JSON representing the object.
+            dir_root (Path): Path to the directory root.
+            url_root (str): URL root path for the API reference.
+            module_import_path (str): Import path to the object.
         """
         dir_root.mkdir(exist_ok=True)
         for name, obj in data_root.items():
@@ -76,7 +92,6 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                 )
                 links[name] = {"path": f"{url_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
             elif name == "functions":
-                # Class objects in the json contain a field "functions" with the functions of the class
                 for func_name, func in obj.items():
                     if func_name.startswith("_"):
                         continue  # Skip magic and private methods
@@ -104,26 +119,14 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
 
 def change_json_root(data: dict, json_start_paths: Optional[List[str]]) -> dict:
-    """
-    Change the root of the json data to the specified path
+    """Change the root of the JSON data to the specified path.
 
-    Example
-    input:
-        data:
-        "root": {
-            "sdk": {sdk-data}
-            "other": {...}
-            }
-        json_start_path: ["root.sdk"]
-    output:
-        "sdk": sdk-data
+    Args:
+        data (dict): Dict with the module data.
+        json_start_paths (Optional[List[str]]): Paths to the object in the JSON data.
 
-    In case of multiple start_paths, all the paths
-    will be put to the root of the json
-
-    :param data: dict with the module data
-    :param json_start_path: path to the object in the json data
-    :return:
+    Returns:
+        dict: Modified JSON data.
     """
     if json_start_paths is None:
         return data
