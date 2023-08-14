@@ -111,7 +111,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
                 tags=["Revenues"],
                 title="Country ID setting",
-                user=UserIdentifier(
+                user=DeclarativeUserIdentifier(
                     id="employee123",
                     type="user",
                 ),

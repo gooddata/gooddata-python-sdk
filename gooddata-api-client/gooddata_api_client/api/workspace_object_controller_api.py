@@ -130,6 +130,7 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -137,6 +138,8 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -270,6 +273,7 @@ class WorkspaceObjectControllerApi(object):
                 'all': [
                     'workspace_id',
                     'json_api_dashboard_plugin_post_optional_id_document',
+                    'include',
                     'meta_include',
                 ],
                 'required': [
@@ -279,6 +283,7 @@ class WorkspaceObjectControllerApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -292,6 +297,13 @@ class WorkspaceObjectControllerApi(object):
                     },
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -304,19 +316,24 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'json_api_dashboard_plugin_post_optional_id_document':
                         (JsonApiDashboardPluginPostOptionalIdDocument,),
+                    'include':
+                        ([str],),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'include': 'include',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_dashboard_plugin_post_optional_id_document': 'body',
+                    'include': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'meta_include': 'csv',
                 }
             },
@@ -456,11 +473,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -638,11 +658,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -1529,6 +1552,7 @@ class WorkspaceObjectControllerApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -1536,6 +1560,8 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -1840,6 +1866,7 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id',
                     'origin',
                     'filter',
+                    'include',
                     'page',
                     'size',
                     'sort',
@@ -1853,6 +1880,7 @@ class WorkspaceObjectControllerApi(object):
                 ],
                 'enum': [
                     'origin',
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -1872,6 +1900,13 @@ class WorkspaceObjectControllerApi(object):
                         "PARENTS": "PARENTS",
                         "NATIVE": "NATIVE"
                     },
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -1886,6 +1921,8 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                     'page':
                         (int,),
                     'size':
@@ -1901,6 +1938,7 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id': 'workspaceId',
                     'origin': 'origin',
                     'filter': 'filter',
+                    'include': 'include',
                     'page': 'page',
                     'size': 'size',
                     'sort': 'sort',
@@ -1911,6 +1949,7 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id': 'path',
                     'origin': 'query',
                     'filter': 'query',
+                    'include': 'query',
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
@@ -1918,6 +1957,7 @@ class WorkspaceObjectControllerApi(object):
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'sort': 'multi',
                     'meta_include': 'csv',
                 }
@@ -2452,11 +2492,14 @@ class WorkspaceObjectControllerApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -2696,11 +2739,14 @@ class WorkspaceObjectControllerApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -3111,6 +3157,7 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -3118,6 +3165,8 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -3365,6 +3414,7 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id',
                     'object_id',
                     'filter',
+                    'include',
                     'x_gdc_validate_relations',
                     'meta_include',
                 ],
@@ -3375,6 +3425,7 @@ class WorkspaceObjectControllerApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -3388,6 +3439,13 @@ class WorkspaceObjectControllerApi(object):
                     },
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -3402,6 +3460,8 @@ class WorkspaceObjectControllerApi(object):
                         (str,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
                     'meta_include':
@@ -3411,6 +3471,7 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
                     'meta_include': 'metaInclude',
                 },
@@ -3418,10 +3479,12 @@ class WorkspaceObjectControllerApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'filter': 'query',
+                    'include': 'query',
                     'x_gdc_validate_relations': 'header',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'meta_include': 'csv',
                 }
             },
@@ -3858,11 +3921,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4058,11 +4124,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4389,6 +4458,7 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -4396,6 +4466,8 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -4520,6 +4592,7 @@ class WorkspaceObjectControllerApi(object):
                     'object_id',
                     'json_api_dashboard_plugin_patch_document',
                     'filter',
+                    'include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4529,6 +4602,7 @@ class WorkspaceObjectControllerApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                 ],
                 'validation': [
                 ]
@@ -4537,6 +4611,13 @@ class WorkspaceObjectControllerApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -4547,19 +4628,24 @@ class WorkspaceObjectControllerApi(object):
                         (JsonApiDashboardPluginPatchDocument,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_patch_document': 'body',
                     'filter': 'query',
+                    'include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -4689,11 +4775,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -4859,11 +4948,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -5169,6 +5261,7 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -5176,6 +5269,8 @@ class WorkspaceObjectControllerApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -5300,6 +5395,7 @@ class WorkspaceObjectControllerApi(object):
                     'object_id',
                     'json_api_dashboard_plugin_in_document',
                     'filter',
+                    'include',
                 ],
                 'required': [
                     'workspace_id',
@@ -5309,6 +5405,7 @@ class WorkspaceObjectControllerApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                 ],
                 'validation': [
                 ]
@@ -5317,6 +5414,13 @@ class WorkspaceObjectControllerApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -5327,19 +5431,24 @@ class WorkspaceObjectControllerApi(object):
                         (JsonApiDashboardPluginInDocument,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_in_document': 'body',
                     'filter': 'query',
+                    'include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -5469,11 +5578,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -5639,11 +5751,14 @@ class WorkspaceObjectControllerApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -6108,6 +6223,7 @@ class WorkspaceObjectControllerApi(object):
             json_api_dashboard_plugin_post_optional_id_document (JsonApiDashboardPluginPostOptionalIdDocument):
 
         Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -7947,6 +8063,7 @@ class WorkspaceObjectControllerApi(object):
         Keyword Args:
             origin (str): [optional] if omitted the server will use the default value of "ALL"
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
@@ -9203,6 +9320,7 @@ class WorkspaceObjectControllerApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -10374,6 +10492,7 @@ class WorkspaceObjectControllerApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -11291,6 +11410,7 @@ class WorkspaceObjectControllerApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

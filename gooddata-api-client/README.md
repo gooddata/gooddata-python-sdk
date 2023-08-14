@@ -384,6 +384,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_themes**](docs/EntitiesApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
 *EntitiesApi* | [**get_all_entities_user_data_filters**](docs/EntitiesApi.md#get_all_entities_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters | Get all User Data Filters
 *EntitiesApi* | [**get_all_entities_user_groups**](docs/EntitiesApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
+*EntitiesApi* | [**get_all_entities_user_identifiers**](docs/EntitiesApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
 *EntitiesApi* | [**get_all_entities_user_settings**](docs/EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 *EntitiesApi* | [**get_all_entities_users**](docs/EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
 *EntitiesApi* | [**get_all_entities_visualization_objects**](docs/EntitiesApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
@@ -416,6 +417,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_themes**](docs/EntitiesApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
 *EntitiesApi* | [**get_entity_user_data_filters**](docs/EntitiesApi.md#get_entity_user_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId} | Get a User Data Filter
 *EntitiesApi* | [**get_entity_user_groups**](docs/EntitiesApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
+*EntitiesApi* | [**get_entity_user_identifiers**](docs/EntitiesApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
 *EntitiesApi* | [**get_entity_user_settings**](docs/EntitiesApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | Get a setting for a user
 *EntitiesApi* | [**get_entity_users**](docs/EntitiesApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
 *EntitiesApi* | [**get_entity_visualization_objects**](docs/EntitiesApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
@@ -531,6 +533,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_all_entities_organization_settings**](docs/OrganizationModelControllerApi.md#get_all_entities_organization_settings) | **GET** /api/v1/entities/organizationSettings | Get Organization entities
 *OrganizationModelControllerApi* | [**get_all_entities_themes**](docs/OrganizationModelControllerApi.md#get_all_entities_themes) | **GET** /api/v1/entities/themes | Get all Theming entities
 *OrganizationModelControllerApi* | [**get_all_entities_user_groups**](docs/OrganizationModelControllerApi.md#get_all_entities_user_groups) | **GET** /api/v1/entities/userGroups | Get UserGroup entities
+*OrganizationModelControllerApi* | [**get_all_entities_user_identifiers**](docs/OrganizationModelControllerApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
 *OrganizationModelControllerApi* | [**get_all_entities_users**](docs/OrganizationModelControllerApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
 *OrganizationModelControllerApi* | [**get_all_entities_workspaces**](docs/OrganizationModelControllerApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
 *OrganizationModelControllerApi* | [**get_entity_color_palettes**](docs/OrganizationModelControllerApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
@@ -542,6 +545,7 @@ Class | Method | HTTP request | Description
 *OrganizationModelControllerApi* | [**get_entity_organization_settings**](docs/OrganizationModelControllerApi.md#get_entity_organization_settings) | **GET** /api/v1/entities/organizationSettings/{id} | Get Organization entity
 *OrganizationModelControllerApi* | [**get_entity_themes**](docs/OrganizationModelControllerApi.md#get_entity_themes) | **GET** /api/v1/entities/themes/{id} | Get Theming
 *OrganizationModelControllerApi* | [**get_entity_user_groups**](docs/OrganizationModelControllerApi.md#get_entity_user_groups) | **GET** /api/v1/entities/userGroups/{id} | Get UserGroup entity
+*OrganizationModelControllerApi* | [**get_entity_user_identifiers**](docs/OrganizationModelControllerApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
 *OrganizationModelControllerApi* | [**get_entity_users**](docs/OrganizationModelControllerApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
 *OrganizationModelControllerApi* | [**get_entity_workspaces**](docs/OrganizationModelControllerApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
 *OrganizationModelControllerApi* | [**patch_entity_color_palettes**](docs/OrganizationModelControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
@@ -736,6 +740,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeUserGroupPermission](docs/DeclarativeUserGroupPermission.md)
  - [DeclarativeUserGroupPermissions](docs/DeclarativeUserGroupPermissions.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
+ - [DeclarativeUserIdentifier](docs/DeclarativeUserIdentifier.md)
  - [DeclarativeUserPermission](docs/DeclarativeUserPermission.md)
  - [DeclarativeUserPermissions](docs/DeclarativeUserPermissions.md)
  - [DeclarativeUsers](docs/DeclarativeUsers.md)
@@ -789,6 +794,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardInDocument](docs/JsonApiAnalyticalDashboardInDocument.md)
  - [JsonApiAnalyticalDashboardLinkage](docs/JsonApiAnalyticalDashboardLinkage.md)
  - [JsonApiAnalyticalDashboardOut](docs/JsonApiAnalyticalDashboardOut.md)
+ - [JsonApiAnalyticalDashboardOutAttributes](docs/JsonApiAnalyticalDashboardOutAttributes.md)
  - [JsonApiAnalyticalDashboardOutDocument](docs/JsonApiAnalyticalDashboardOutDocument.md)
  - [JsonApiAnalyticalDashboardOutIncludes](docs/JsonApiAnalyticalDashboardOutIncludes.md)
  - [JsonApiAnalyticalDashboardOutList](docs/JsonApiAnalyticalDashboardOutList.md)
@@ -797,6 +803,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardOutMetaOrigin](docs/JsonApiAnalyticalDashboardOutMetaOrigin.md)
  - [JsonApiAnalyticalDashboardOutRelationships](docs/JsonApiAnalyticalDashboardOutRelationships.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards](docs/JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards.md)
+ - [JsonApiAnalyticalDashboardOutRelationshipsCreatedBy](docs/JsonApiAnalyticalDashboardOutRelationshipsCreatedBy.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins](docs/JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsDatasets](docs/JsonApiAnalyticalDashboardOutRelationshipsDatasets.md)
  - [JsonApiAnalyticalDashboardOutRelationshipsFilterContexts](docs/JsonApiAnalyticalDashboardOutRelationshipsFilterContexts.md)
@@ -873,8 +880,10 @@ Class | Method | HTTP request | Description
  - [JsonApiDashboardPluginInDocument](docs/JsonApiDashboardPluginInDocument.md)
  - [JsonApiDashboardPluginLinkage](docs/JsonApiDashboardPluginLinkage.md)
  - [JsonApiDashboardPluginOut](docs/JsonApiDashboardPluginOut.md)
+ - [JsonApiDashboardPluginOutAttributes](docs/JsonApiDashboardPluginOutAttributes.md)
  - [JsonApiDashboardPluginOutDocument](docs/JsonApiDashboardPluginOutDocument.md)
  - [JsonApiDashboardPluginOutList](docs/JsonApiDashboardPluginOutList.md)
+ - [JsonApiDashboardPluginOutRelationships](docs/JsonApiDashboardPluginOutRelationships.md)
  - [JsonApiDashboardPluginOutWithLinks](docs/JsonApiDashboardPluginOutWithLinks.md)
  - [JsonApiDashboardPluginPatch](docs/JsonApiDashboardPluginPatch.md)
  - [JsonApiDashboardPluginPatchDocument](docs/JsonApiDashboardPluginPatchDocument.md)
@@ -976,6 +985,7 @@ Class | Method | HTTP request | Description
  - [JsonApiMetricInDocument](docs/JsonApiMetricInDocument.md)
  - [JsonApiMetricLinkage](docs/JsonApiMetricLinkage.md)
  - [JsonApiMetricOut](docs/JsonApiMetricOut.md)
+ - [JsonApiMetricOutAttributes](docs/JsonApiMetricOutAttributes.md)
  - [JsonApiMetricOutDocument](docs/JsonApiMetricOutDocument.md)
  - [JsonApiMetricOutIncludes](docs/JsonApiMetricOutIncludes.md)
  - [JsonApiMetricOutList](docs/JsonApiMetricOutList.md)
@@ -1047,6 +1057,13 @@ Class | Method | HTTP request | Description
  - [JsonApiUserGroupPatchDocument](docs/JsonApiUserGroupPatchDocument.md)
  - [JsonApiUserGroupToManyLinkage](docs/JsonApiUserGroupToManyLinkage.md)
  - [JsonApiUserGroupToOneLinkage](docs/JsonApiUserGroupToOneLinkage.md)
+ - [JsonApiUserIdentifierLinkage](docs/JsonApiUserIdentifierLinkage.md)
+ - [JsonApiUserIdentifierOut](docs/JsonApiUserIdentifierOut.md)
+ - [JsonApiUserIdentifierOutAttributes](docs/JsonApiUserIdentifierOutAttributes.md)
+ - [JsonApiUserIdentifierOutDocument](docs/JsonApiUserIdentifierOutDocument.md)
+ - [JsonApiUserIdentifierOutList](docs/JsonApiUserIdentifierOutList.md)
+ - [JsonApiUserIdentifierOutWithLinks](docs/JsonApiUserIdentifierOutWithLinks.md)
+ - [JsonApiUserIdentifierToOneLinkage](docs/JsonApiUserIdentifierToOneLinkage.md)
  - [JsonApiUserIn](docs/JsonApiUserIn.md)
  - [JsonApiUserInAttributes](docs/JsonApiUserInAttributes.md)
  - [JsonApiUserInDocument](docs/JsonApiUserInDocument.md)
@@ -1204,7 +1221,6 @@ Class | Method | HTTP request | Description
  - [UserGroupAssignee](docs/UserGroupAssignee.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
  - [UserGroupPermission](docs/UserGroupPermission.md)
- - [UserIdentifier](docs/UserIdentifier.md)
  - [UserPermission](docs/UserPermission.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
 

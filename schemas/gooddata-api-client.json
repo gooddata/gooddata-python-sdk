@@ -994,6 +994,16 @@
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Analytical dashboard description.",
             "example": "Period to period comparison of revenues in main sectors.",
@@ -1005,6 +1015,16 @@
             "example": "revenues-analysis",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "2023-07-20 12:30",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "permissions": {
             "description": "A list of permissions.",
@@ -1346,6 +1366,16 @@
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Dashboard plugin description.",
             "example": "Three dimensional view of data.",
@@ -1357,6 +1387,16 @@
             "example": "dashboard-plugin-1",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "tags": {
             "description": "A list of tags.",
@@ -1978,6 +2018,16 @@
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Metric description.",
             "example": "Sales for all the data available.",
@@ -1989,6 +2039,16 @@
             "example": "total-sales",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "tags": {
             "description": "A list of tags.",
@@ -2550,7 +2610,7 @@
             "type": "string"
           },
           "user": {
-            "$ref": "#/components/schemas/UserIdentifier"
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "userGroup": {
             "$ref": "#/components/schemas/UserGroupIdentifier"
@@ -2658,6 +2718,34 @@
         ],
         "type": "object"
       },
+      "DeclarativeUserIdentifier": {
+        "description": "A user identifier.",
+        "example": {
+          "id": "example123",
+          "type": "user"
+        },
+        "properties": {
+          "id": {
+            "description": "User identifier.",
+            "example": "employee123",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "user"
+            ],
+            "example": "user",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
       "DeclarativeUserPermission": {
         "description": "Definition of a user permission assigned to a user/user-group.",
         "properties": {
@@ -2732,6 +2820,16 @@
           "content": {
             "$ref": "#/components/schemas/JsonNode"
           },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
           "description": {
             "description": "Visualization object description.",
             "example": "Simple number for total goods in current production.",
@@ -2743,6 +2841,16 @@
             "example": "visualization-1",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "tags": {
             "description": "A list of tags.",
@@ -4049,8 +4157,16 @@
                 },
                 "type": "object"
               },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
               "description": {
                 "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
                 "type": "string"
               },
               "tags": {
@@ -4135,6 +4251,17 @@
                 ],
                 "type": "object"
               },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "dashboardPlugins": {
                 "properties": {
                   "data": {
@@ -4183,6 +4310,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -4243,6 +4381,9 @@
       },
       "JsonApiAnalyticalDashboardOutIncludes": {
         "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
           {
             "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
           },
@@ -5702,8 +5843,16 @@
                 },
                 "type": "object"
               },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
               "description": {
                 "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
                 "type": "string"
               },
               "tags": {
@@ -5751,6 +5900,33 @@
             },
             "type": "object"
           },
+          "relationships": {
+            "properties": {
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "type": {
             "description": "Object type",
             "enum": [
@@ -5771,6 +5947,14 @@
           "data": {
             "$ref": "#/components/schemas/JsonApiDashboardPluginOut"
           },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
           "links": {
             "$ref": "#/components/schemas/ObjectLinks"
           }
@@ -5786,6 +5970,14 @@
           "data": {
             "items": {
               "$ref": "#/components/schemas/JsonApiDashboardPluginOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
             },
             "type": "array",
             "uniqueItems": true
@@ -8225,8 +8417,16 @@
                 ],
                 "type": "object"
               },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
               "description": {
                 "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
                 "type": "string"
               },
               "tags": {
@@ -8290,6 +8490,17 @@
                 ],
                 "type": "object"
               },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "datasets": {
                 "properties": {
                   "data": {
@@ -8327,6 +8538,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -8377,6 +8599,9 @@
       },
       "JsonApiMetricOutIncludes": {
         "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
           {
             "$ref": "#/components/schemas/JsonApiFactOutWithLinks"
           },
@@ -10069,6 +10294,118 @@
           }
         ]
       },
+      "JsonApiUserIdentifierLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "userIdentifier"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserIdentifierOut": {
+        "description": "JSON:API representation of userIdentifier entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "email": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "firstname": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "lastname": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "userIdentifier"
+            ],
+            "example": "userIdentifier",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserIdentifierOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserIdentifierOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiUserIdentifierOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiUserIdentifierToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierLinkage"
+          }
+        ]
+      },
       "JsonApiUserIn": {
         "description": "JSON:API representation of user entity.",
         "properties": {
@@ -10615,8 +10952,16 @@
                 },
                 "type": "object"
               },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
               "description": {
                 "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
                 "type": "string"
               },
               "tags": {
@@ -10677,6 +11022,17 @@
                 ],
                 "type": "object"
               },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "datasets": {
                 "properties": {
                   "data": {
@@ -10714,6 +11070,17 @@
                 "properties": {
                   "data": {
                     "$ref": "#/components/schemas/JsonApiMetricToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
                   }
                 },
                 "required": [
@@ -13731,34 +14098,6 @@
         },
         "required": [
           "id"
-        ],
-        "type": "object"
-      },
-      "UserIdentifier": {
-        "description": "A user identifier.",
-        "example": {
-          "id": "example123",
-          "type": "user"
-        },
-        "properties": {
-          "id": {
-            "description": "User identifier.",
-            "example": "employee123",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "A type.",
-            "enum": [
-              "user"
-            ],
-            "example": "user",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "type"
         ],
         "type": "object"
       },
@@ -18265,6 +18604,86 @@
         }
       }
     },
+    "/api/v1/entities/userIdentifiers": {
+      "get": {
+        "description": "UserIdentifier - represents entity interacting with platform",
+        "operationId": "getAllEntities@UserIdentifiers",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=firstname==someString;lastname==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserIdentifierOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get UserIdentifier entities",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/userIdentifiers/{id}": {
+      "get": {
+        "description": "UserIdentifier - represents basic informationZ about entity interacting with platform",
+        "operationId": "getEntity@UserIdentifiers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=firstname==someString;lastname==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiUserIdentifierOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get UserIdentifier entity",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      }
+    },
     "/api/v1/entities/users": {
       "get": {
         "description": "User - represents entity interacting with platform",
@@ -19556,7 +19975,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19565,7 +19984,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "include=createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19573,6 +19992,7 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "visualizationObjects",
                   "analyticalDashboards",
                   "labels",
@@ -19580,6 +20000,8 @@
                   "datasets",
                   "filterContexts",
                   "dashboardPlugins",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -19669,7 +20091,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "include=createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19677,6 +20099,7 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "visualizationObjects",
                   "analyticalDashboards",
                   "labels",
@@ -19684,6 +20107,8 @@
                   "datasets",
                   "filterContexts",
                   "dashboardPlugins",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -19775,7 +20200,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19822,7 +20247,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19831,7 +20256,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "include=createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19839,6 +20264,7 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "visualizationObjects",
                   "analyticalDashboards",
                   "labels",
@@ -19846,6 +20272,8 @@
                   "datasets",
                   "filterContexts",
                   "dashboardPlugins",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -19934,7 +20362,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19943,7 +20371,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "include=createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -19951,6 +20379,7 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "visualizationObjects",
                   "analyticalDashboards",
                   "labels",
@@ -19958,6 +20387,8 @@
                   "datasets",
                   "filterContexts",
                   "dashboardPlugins",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -20023,7 +20454,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20032,7 +20463,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
+            "example": "include=createdBy,modifiedBy,visualizationObjects,analyticalDashboards,labels,metrics,datasets,filterContexts,dashboardPlugins",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -20040,6 +20471,7 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "visualizationObjects",
                   "analyticalDashboards",
                   "labels",
@@ -20047,6 +20479,8 @@
                   "datasets",
                   "filterContexts",
                   "dashboardPlugins",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -20753,12 +21187,33 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           },
           {
             "$ref": "#/components/parameters/page"
@@ -20836,6 +21291,27 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           },
           {
             "description": "Include Meta objects.",
@@ -20918,7 +21394,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20965,12 +21441,33 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           },
           {
             "in": "header",
@@ -21050,12 +21547,33 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -21114,12 +21632,33 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
           }
         ],
         "requestBody": {
@@ -22410,7 +22949,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22419,7 +22958,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22427,11 +22966,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -22519,7 +23061,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22527,11 +23069,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -22621,7 +23166,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22668,7 +23213,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22677,7 +23222,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22685,11 +23230,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -22776,7 +23324,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22785,7 +23333,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22793,11 +23341,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -22863,7 +23414,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22872,7 +23423,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22880,11 +23431,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -23492,7 +24046,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -23501,7 +24055,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -23509,11 +24063,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -23601,7 +24158,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -23609,11 +24166,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -23703,7 +24263,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -23750,7 +24310,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -23759,7 +24319,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -23767,11 +24327,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -23858,7 +24421,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -23867,7 +24430,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -23875,11 +24438,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -23945,7 +24511,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -23954,7 +24520,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=facts,attributes,labels,metrics,datasets",
+            "example": "include=createdBy,modifiedBy,facts,attributes,labels,metrics,datasets",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -23962,11 +24528,14 @@
             "schema": {
               "items": {
                 "enum": [
+                  "userIdentifiers",
                   "facts",
                   "attributes",
                   "labels",
                   "metrics",
                   "datasets",
+                  "createdBy",
+                  "modifiedBy",
                   "ALL"
                 ],
                 "type": "string"
@@ -25502,6 +26071,23 @@
       "get": {
         "description": "Retrieve complete layout of organization, workspaces, user-groups, etc.",
         "operationId": "getOrganizationLayout",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "description": "Defines properties which should not be included in the payload.",
+                "enum": [
+                  "ACTIVITY_INFO"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -25951,6 +26537,23 @@
       "get": {
         "description": "Gets complete layout of workspaces, their hierarchy, models.",
         "operationId": "getWorkspacesLayout",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "description": "Defines properties which should not be included in the payload.",
+                "enum": [
+                  "ACTIVITY_INFO"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -26017,6 +26620,21 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "description": "Defines properties which should not be included in the payload.",
+                "enum": [
+                  "ACTIVITY_INFO"
+                ],
+                "type": "string"
+              },
+              "type": "array"
             }
           }
         ],
@@ -26096,6 +26714,21 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "items": {
+                "description": "Defines properties which should not be included in the payload.",
+                "enum": [
+                  "ACTIVITY_INFO"
+                ],
+                "type": "string"
+              },
+              "type": "array"
             }
           }
         ],

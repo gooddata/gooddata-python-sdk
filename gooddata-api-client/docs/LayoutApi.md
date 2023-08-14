@@ -64,11 +64,23 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Get analytics model
         api_response = api_instance.get_analytics_model(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_analytics_model: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get analytics model
+        api_response = api_instance.get_analytics_model(workspace_id, exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LayoutApi->get_analytics_model: %s\n" % e)
@@ -80,6 +92,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -271,11 +284,15 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get organization layout
-        api_response = api_instance.get_organization_layout()
+        api_response = api_instance.get_organization_layout(exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LayoutApi->get_organization_layout: %s\n" % e)
@@ -283,7 +300,10 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -855,11 +875,23 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Get workspace layout
         api_response = api_instance.get_workspace_layout(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_workspace_layout: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get workspace layout
+        api_response = api_instance.get_workspace_layout(workspace_id, exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LayoutApi->get_workspace_layout: %s\n" % e)
@@ -871,6 +903,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -988,11 +1021,15 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = layout_api.LayoutApi(api_client)
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get all workspaces layout
-        api_response = api_instance.get_workspaces_layout()
+        api_response = api_instance.get_workspaces_layout(exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling LayoutApi->get_workspaces_layout: %s\n" % e)
@@ -1000,7 +1037,10 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -1499,8 +1539,18 @@ with gooddata_api_client.ApiClient() as api_client:
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
                     content={},
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Period to period comparison of revenues in main sectors.",
                     id="revenues-analysis",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     permissions=[
                         DeclarativeAnalyticalDashboardPermission(
                             assignee=AssigneeIdentifier(
@@ -1517,8 +1567,18 @@ with gooddata_api_client.ApiClient() as api_client:
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Three dimensional view of data.",
                     id="dashboard-plugin-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="3D map renderer",
                 ),
@@ -1535,8 +1595,18 @@ with gooddata_api_client.ApiClient() as api_client:
             metrics=[
                 DeclarativeMetric(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Sales for all the data available.",
                     id="total-sales",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Total sales",
                 ),
@@ -1544,8 +1614,18 @@ with gooddata_api_client.ApiClient() as api_client:
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Simple number for total goods in current production.",
                     id="visualization-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Count of goods",
                 ),
@@ -1760,8 +1840,18 @@ with gooddata_api_client.ApiClient() as api_client:
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
                     content={},
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Period to period comparison of revenues in main sectors.",
                     id="revenues-analysis",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     permissions=[
                         DeclarativeAnalyticalDashboardPermission(
                             assignee=AssigneeIdentifier(
@@ -1778,8 +1868,18 @@ with gooddata_api_client.ApiClient() as api_client:
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Three dimensional view of data.",
                     id="dashboard-plugin-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="3D map renderer",
                 ),
@@ -1796,8 +1896,18 @@ with gooddata_api_client.ApiClient() as api_client:
             metrics=[
                 DeclarativeMetric(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Sales for all the data available.",
                     id="total-sales",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Total sales",
                 ),
@@ -1805,8 +1915,18 @@ with gooddata_api_client.ApiClient() as api_client:
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Simple number for total goods in current production.",
                     id="visualization-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Count of goods",
                 ),
@@ -2298,8 +2418,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
                                 content={},
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Period to period comparison of revenues in main sectors.",
                                 id="revenues-analysis",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 permissions=[
                                     DeclarativeAnalyticalDashboardPermission(
                                         assignee=AssigneeIdentifier(
@@ -2316,8 +2446,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Three dimensional view of data.",
                                 id="dashboard-plugin-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="3D map renderer",
                             ),
@@ -2334,8 +2474,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         metrics=[
                             DeclarativeMetric(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Sales for all the data available.",
                                 id="total-sales",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Total sales",
                             ),
@@ -2343,8 +2493,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Simple number for total goods in current production.",
                                 id="visualization-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Count of goods",
                             ),
@@ -2502,7 +2662,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
                         tags=["Revenues"],
                         title="Country ID setting",
-                        user=UserIdentifier(
+                        user=DeclarativeUserIdentifier(
                             id="employee123",
                             type="user",
                         ),
@@ -2677,7 +2837,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
                 tags=["Revenues"],
                 title="Country ID setting",
-                user=UserIdentifier(
+                user=DeclarativeUserIdentifier(
                     id="employee123",
                     type="user",
                 ),
@@ -3154,8 +3314,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
                                 content={},
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Period to period comparison of revenues in main sectors.",
                                 id="revenues-analysis",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 permissions=[
                                     DeclarativeAnalyticalDashboardPermission(
                                         assignee=AssigneeIdentifier(
@@ -3172,8 +3342,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Three dimensional view of data.",
                                 id="dashboard-plugin-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="3D map renderer",
                             ),
@@ -3190,8 +3370,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         metrics=[
                             DeclarativeMetric(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Sales for all the data available.",
                                 id="total-sales",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Total sales",
                             ),
@@ -3199,8 +3389,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Simple number for total goods in current production.",
                                 id="visualization-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Count of goods",
                             ),
@@ -3358,7 +3558,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
                         tags=["Revenues"],
                         title="Country ID setting",
-                        user=UserIdentifier(
+                        user=DeclarativeUserIdentifier(
                             id="employee123",
                             type="user",
                         ),

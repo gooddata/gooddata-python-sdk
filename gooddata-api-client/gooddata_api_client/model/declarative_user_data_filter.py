@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
     from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
-    from gooddata_api_client.model.user_identifier import UserIdentifier
+    globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
     globals()['UserGroupIdentifier'] = UserGroupIdentifier
-    globals()['UserIdentifier'] = UserIdentifier
 
 
 class DeclarativeUserDataFilter(ModelNormal):
@@ -111,7 +111,7 @@ class DeclarativeUserDataFilter(ModelNormal):
             'title': (str,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
-            'user': (UserIdentifier,),  # noqa: E501
+            'user': (DeclarativeUserIdentifier,),  # noqa: E501
             'user_group': (UserGroupIdentifier,),  # noqa: E501
         }
 
@@ -178,7 +178,7 @@ class DeclarativeUserDataFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): User Data Filters setting description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
-            user (UserIdentifier): [optional]  # noqa: E501
+            user (DeclarativeUserIdentifier): [optional]  # noqa: E501
             user_group (UserGroupIdentifier): [optional]  # noqa: E501
         """
 
@@ -275,7 +275,7 @@ class DeclarativeUserDataFilter(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             description (str): User Data Filters setting description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
-            user (UserIdentifier): [optional]  # noqa: E501
+            user (DeclarativeUserIdentifier): [optional]  # noqa: E501
             user_group (UserGroupIdentifier): [optional]  # noqa: E501
         """
 

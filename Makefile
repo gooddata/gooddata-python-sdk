@@ -50,7 +50,7 @@ endef
 
 .PHONY: api-client
 api-client: download
-	rm -f schemas/gooddata-api-client.json+
+	rm -f schemas/gooddata-api-client.json
 	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' | sed '/\u0000/d' > "schemas/gooddata-api-client.json"
 	$(call generate_client,api)
 

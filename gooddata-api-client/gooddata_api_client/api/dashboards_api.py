@@ -79,6 +79,7 @@ class DashboardsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -86,6 +87,8 @@ class DashboardsApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -241,6 +244,7 @@ class DashboardsApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -248,6 +252,8 @@ class DashboardsApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -356,6 +362,7 @@ class DashboardsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -363,6 +370,8 @@ class DashboardsApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -453,6 +462,7 @@ class DashboardsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -460,6 +470,8 @@ class DashboardsApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -538,6 +550,7 @@ class DashboardsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -545,6 +558,8 @@ class DashboardsApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },

@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
+    from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
     globals()['JsonApiDashboardPluginOutWithLinks'] = JsonApiDashboardPluginOutWithLinks
+    globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
     globals()['ListLinks'] = ListLinks
 
 
@@ -67,6 +69,8 @@ class JsonApiDashboardPluginOutList(ModelNormal):
     validations = {
         ('data',): {
         },
+        ('included',): {
+        },
     }
 
     @cached_property
@@ -93,6 +97,7 @@ class JsonApiDashboardPluginOutList(ModelNormal):
         lazy_import()
         return {
             'data': ([JsonApiDashboardPluginOutWithLinks],),  # noqa: E501
+            'included': ([JsonApiUserIdentifierOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
         }
 
@@ -103,6 +108,7 @@ class JsonApiDashboardPluginOutList(ModelNormal):
 
     attribute_map = {
         'data': 'data',  # noqa: E501
+        'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -150,6 +156,7 @@ class JsonApiDashboardPluginOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
         """
 
@@ -240,6 +247,7 @@ class JsonApiDashboardPluginOutList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
         """
 

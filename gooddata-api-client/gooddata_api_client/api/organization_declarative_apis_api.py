@@ -47,11 +47,13 @@ class OrganizationDeclarativeAPIsApi(object):
             },
             params_map={
                 'all': [
+                    'exclude',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
+                    'exclude',
                 ],
                 'validation': [
                 ]
@@ -60,14 +62,23 @@ class OrganizationDeclarativeAPIsApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
                 },
                 'openapi_types': {
+                    'exclude':
+                        ([str],),
                 },
                 'attribute_map': {
+                    'exclude': 'exclude',
                 },
                 'location_map': {
+                    'exclude': 'query',
                 },
                 'collection_format_map': {
+                    'exclude': 'multi',
                 }
             },
             headers_map={
@@ -142,6 +153,7 @@ class OrganizationDeclarativeAPIsApi(object):
 
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

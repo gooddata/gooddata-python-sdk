@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
     from gooddata_api_client.model.json_api_analytical_dashboard_out_meta import JsonApiAnalyticalDashboardOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships import JsonApiAnalyticalDashboardOutRelationships
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
     globals()['JsonApiAnalyticalDashboardOutMeta'] = JsonApiAnalyticalDashboardOutMeta
     globals()['JsonApiAnalyticalDashboardOutRelationships'] = JsonApiAnalyticalDashboardOutRelationships
 
@@ -102,7 +102,7 @@ class JsonApiAnalyticalDashboardOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'meta': (JsonApiAnalyticalDashboardOutMeta,),  # noqa: E501
             'relationships': (JsonApiAnalyticalDashboardOutRelationships,),  # noqa: E501
         }
@@ -165,7 +165,7 @@ class JsonApiAnalyticalDashboardOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
         """
@@ -260,7 +260,7 @@ class JsonApiAnalyticalDashboardOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
         """
