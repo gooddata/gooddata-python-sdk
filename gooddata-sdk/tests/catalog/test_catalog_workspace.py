@@ -84,7 +84,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         _empty_workspaces(sdk)
 
         sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
-        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
@@ -109,13 +109,13 @@ def test_store_declarative_workspaces(test_config):
 def test_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces.json"
-    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces()
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
     try:
         _empty_workspaces(sdk)
 
         sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
-        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+        workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
@@ -129,7 +129,7 @@ def test_put_declarative_workspaces(test_config):
 def test_get_declarative_workspaces_snake_case(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces_snake_case.json"
-    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
     with open(path) as f:
         data = json.load(f)
@@ -144,7 +144,7 @@ def test_get_declarative_workspaces_snake_case(test_config):
 def test_get_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_workspaces.json"
-    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
     with open(path) as f:
         data = json.load(f)
@@ -161,12 +161,14 @@ def test_declarative_workspaces(test_config):
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
     layout_api = client.layout_api
 
-    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces()
+    workspaces_o = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
     assert len(workspaces_o.workspaces) == 3
     assert len(workspaces_o.workspace_data_filters) == 2
     assert [workspace.id for workspace in workspaces_o.workspaces] == ["demo", "demo_west", "demo_west_california"]
-    assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout().to_dict(camel_case=True)
+    assert workspaces_o.to_dict(camel_case=True) == layout_api.get_workspaces_layout(exclude=["ACTIVITY_INFO"]).to_dict(
+        camel_case=True
+    )
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_update_workspace_invalid.yaml"))
@@ -560,7 +562,9 @@ def test_get_declarative_workspace(test_config):
     client = GoodDataApiClient(host=test_config["host"], token=test_config["token"])
     layout_api = client.layout_api
 
-    workspace = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
+    workspace = sdk.catalog_workspace.get_declarative_workspace(
+        workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
+    )
 
     assert len(workspace.ldm.datasets) == 5
     assert len(workspace.ldm.date_instances) == 1
@@ -570,7 +574,7 @@ def test_get_declarative_workspace(test_config):
     assert len(workspace.analytics.metrics) == 24
     assert len(workspace.analytics.visualization_objects) == 15
     assert workspace.to_dict(camel_case=True) == layout_api.get_workspace_layout(
-        workspace_id=test_config["workspace"]
+        workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
     ).to_dict(camel_case=True)
 
 

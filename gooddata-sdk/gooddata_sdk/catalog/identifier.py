@@ -6,11 +6,11 @@ from typing import Type
 import attr
 
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
-from gooddata_api_client.model.user_identifier import UserIdentifier
 from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
@@ -69,8 +69,8 @@ class CatalogUserIdentifier(Base):
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[UserIdentifier]:
-        return UserIdentifier
+    def client_class() -> Type[DeclarativeUserIdentifier]:
+        return DeclarativeUserIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)

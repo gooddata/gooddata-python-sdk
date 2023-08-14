@@ -338,18 +338,26 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     # Declarative methods for analytics model
 
-    def get_declarative_analytics_model(self, workspace_id: str) -> CatalogDeclarativeAnalytics:
+    def get_declarative_analytics_model(
+        self, workspace_id: str, exclude: Optional[List[str]] = None
+    ) -> CatalogDeclarativeAnalytics:
         """Retrieves declarative analytics model. The model is tied to the workspace and organization.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload.
 
         Returns:
             CatalogDeclarativeAnalytics:
                 Object Containing declarative Analytical Model
         """
-        return CatalogDeclarativeAnalytics.from_api(self._layout_api.get_analytics_model(workspace_id))
+        if exclude is None:
+            exclude = []
+        return CatalogDeclarativeAnalytics.from_api(
+            self._layout_api.get_analytics_model(workspace_id=workspace_id, exclude=exclude)
+        )
 
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
         """Sets the declarative analytics model for a given workspace.

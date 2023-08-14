@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 75f2456647a722d1
+          traceId: 968d3dc0b7e6fd9d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1159,17 +1159,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo_west_california
-              type: workspace
-              attributes:
-                name: Demo West California
-              relationships:
-                parent:
-                  data:
-                    id: demo_west
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo_west
               type: workspace
               attributes:
@@ -1181,18 +1170,29 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: test_put_declarative_analytics_model
+            - id: demo_west_california
               type: workspace
               attributes:
-                name: test_put_declarative_analytics_model
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_analytics_model
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo
               type: workspace
               attributes:
                 name: Demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: test_put_declarative_analytics_model
+              type: workspace
+              attributes:
+                name: test_put_declarative_analytics_model
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/test_put_declarative_analytics_model
           included:
             - id: demo
               type: workspace
