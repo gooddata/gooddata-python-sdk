@@ -8,7 +8,7 @@ CLASS_TEMPLATE_STRING = Path("class_template.md").read_text()
 FUNCTION_TEMPLATE_STRING = Path("function_template.md").read_text()
 
 
-def shorten_name(name: str, max_len: int = 30) -> str:
+def shorten_name(name: str, max_len: int = 999) -> str:
     """Shorten the name of the object, if it is too long.
 
     Args:

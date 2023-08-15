@@ -13,15 +13,54 @@
 {{ $objData := $currentData }}
 
 {{ $publicMethodsCounter := 0 }}
+{{ $publicPropertiesCounter := 0 }}
+
 {{ range $name, $func := $objData.functions }}
-  {{ if and (not (hasPrefix $name "_"))}}
-    {{ $publicMethodsCounter = add $publicMethodsCounter 1 }}
-  {{ end }}
+  {{ if (not (hasPrefix $name "_"))}}
+    {{ if $func.is_property }}
+      {{ $publicPropertiesCounter = add $publicPropertiesCounter 1 }}
+    {{ else }}
+      {{ $publicMethodsCounter = add $publicMethodsCounter 1 }}
+    {{ end }}
+{{ end }}
+
 {{ end }}
 
 
 <div class="python-ref">
 {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
+
+  <h2> Properties </h2>
+{{ if gt $publicPropertiesCounter 0 }}
+  <table class="gd-docs-parameters-block">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ range $name, $func := $objData.functions }}
+        {{ if and (not (hasPrefix $name "_")) ($func.is_property)}}
+        <tr>
+
+        <td>
+            {{ partial "python-api-link-partial.html" $name }}
+        </td>
+        {{ if $func.docstring_parsed }}
+        <td>{{ partial "python-api-link-all-partial.html" $func.docstring_parsed.short_description }}</td>
+        {{ else }}
+        <td><i>None</i></td>
+        {{ end }}
+        </tr>
+        {{ end }}
+    {{ end }}
+    </tbody>
+  </table>
+{{ else }}
+<i> None </i>
+{{ end }}
+
 <h2>Methods</h2>
 {{ if gt $publicMethodsCounter 0 }}
 
@@ -37,13 +76,10 @@
 {{ range $name, $func := $objData.functions }}
   <tr>
 
-      {{ if and (not (hasPrefix $name "_"))}}
+      {{ if and (not (hasPrefix $name "_")) (not $func.is_property)}}
         {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $func}}
 
-        <td>{{ partial "python-api-link-partial.html" $name }}
-          {{ if not $func.is_property}}
-            ({{- $parenthesisArgsString -}})
-          {{ end }}
+        <td>{{ partial "python-api-link-partial.html" $name }}({{- $parenthesisArgsString -}})
         </td>
         {{ if $func.docstring_parsed }}
         <td>{{ partial "python-api-link-all-partial.html" $func.docstring_parsed.short_description }}</td>
