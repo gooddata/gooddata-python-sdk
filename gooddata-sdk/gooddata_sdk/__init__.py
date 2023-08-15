@@ -55,6 +55,12 @@ from gooddata_sdk.catalog.export.request import (
     ExportSettings,
 )
 from gooddata_sdk.catalog.identifier import CatalogDatasetWorkspaceDataFilterIdentifier, CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.organization.entity_model.jwk import (
+    CatalogJwk,
+    CatalogJwkAttributes,
+    CatalogJwkDocument,
+    CatalogRsaSpecification,
+)
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
