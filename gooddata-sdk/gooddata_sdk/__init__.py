@@ -54,7 +54,7 @@ from gooddata_sdk.catalog.export.request import (
     ExportRequest,
     ExportSettings,
 )
-from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.identifier import CatalogDatasetWorkspaceDataFilterIdentifier, CatalogWorkspaceIdentifier
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
@@ -92,6 +92,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMetric,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
+    CatalogDeclarativeWorkspaceDataFilterReferences,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
     CatalogDataSourceTableIdentifier,
     CatalogDeclarativeAttribute,
@@ -101,6 +104,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.da
     CatalogDeclarativeLabel,
     CatalogDeclarativeReference,
     CatalogDeclarativeWorkspaceDataFilterColumn,
+)
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension import (  # noqa: E501
+    CatalogDeclarativeDatasetExtension,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
     CatalogDeclarativeDateDataset,

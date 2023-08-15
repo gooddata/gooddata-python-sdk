@@ -16,6 +16,9 @@ from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
+    CatalogDeclarativeWorkspaceDataFilterReferences,
+)
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 
 LAYOUT_DATASETS_DIR = "datasets"
@@ -34,6 +37,7 @@ class CatalogDeclarativeDataset(Base):
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[List[str]] = None
     workspace_data_filter_columns: Optional[List[CatalogDeclarativeWorkspaceDataFilterColumn]] = None
+    workspace_data_filter_references: Optional[List[CatalogDeclarativeWorkspaceDataFilterReferences]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeDataset]:
