@@ -13,3 +13,4 @@ pre-commit~=2.14.0
 -r ./gooddata-pandas/test-requirements.txt
 -r ./gooddata-fdw/test-requirements.txt
 -r ./tests-support/requirements.txt
+-r ./docs/doc-requirements.txt

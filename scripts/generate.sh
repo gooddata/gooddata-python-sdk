@@ -4,7 +4,7 @@ set -e
 shopt -s extglob
 
 content_dir=versioned_docs
-# Name of the remote hosting the main repo (gitlab.com/gooddata/gdc-tiger-docs)
+# Name of the remote hosting the main repo
 remote_name=${1:-origin}
 # target branch where changes will be applied (master, rel/0.7, ...)
 target_branch=${2:-master}
@@ -28,6 +28,7 @@ esac
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
+
 # TODO: update when we move hugo to repo root
 pushd "$REPO_ROOT/docs"
 
@@ -41,6 +42,16 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
     target_section=${branch#"$remote_name"/}
     target_section=${target_section#rel/}
     target_section=${target_section%.*}
+    # Python speciality, this generates the .json for API references
+    API_GEN_FILE=../scripts/docs/python_ref_builder.py
+    if test -f "$API_GEN_FILE"; then
+        echo "$API_GEN_FILE for branch:$branch exists."
+        echo "Generating API ref"
+        python3 ../scripts/docs/json_builder.py
+        mv -f links_data.json ./content/en/docs/api-reference
+        mv -f data.json ./content/en/docs/api-reference
+        python3 $API_GEN_FILE ./content/en/docs/api-reference/data.json ./content/en/docs/api-reference --json_start_path sdk catalog --url_root "/docs/api-reference"
+    fi
     if [ "$target_section" == "master" ] ; then
         # handle master branch specially, all contents is copied, not just docs
         target_section=""
