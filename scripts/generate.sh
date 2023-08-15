@@ -41,17 +41,9 @@ git fetch "$remote_name"
 for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
     target_section=${branch#"$remote_name"/}
     target_section=${target_section#rel/}
-    target_section=${target_section%.*}
+    #target_section=${target_section%.*}
     # Python speciality, this generates the .json for API references
-    API_GEN_FILE=../scripts/docs/python_ref_builder.py
-    if test -f "$API_GEN_FILE"; then
-        echo "$API_GEN_FILE for branch:$branch exists."
-        echo "Generating API ref"
-        python3 ../scripts/docs/json_builder.py
-        mv -f links_data.json ./content/en/docs/api-reference
-        mv -f data.json ./content/en/docs/api-reference
-        python3 $API_GEN_FILE ./content/en/docs/api-reference/data.json ./content/en/docs/api-reference --json_start_path sdk catalog --url_root "/docs/api-reference"
-    fi
+
     if [ "$target_section" == "master" ] ; then
         # handle master branch specially, all contents is copied, not just docs
         target_section=""
@@ -73,6 +65,15 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
         mkdir -p "$content_dir/$target_section"
         git archive "$branch" "content/en/$src_section" | tar xf - -C "$content_dir/$target_section" \
             --strip-components=$strip_count "content/en/$src_section"
+    fi
+    API_GEN_FILE="$branch:scripts/docs/json_builder.py"
+    if git cat-file -e $API_GEN_FILE; then
+        echo "$API_GEN_FILE for branch:$branch exists."
+        echo "Generating API ref"
+        python3 ../scripts/docs/json_builder.py
+        mv -f data.json ./versioned_docs/
+        python3 ../scripts/docs/python_ref_builder.py ./versioned_docs/data.json ./versioned_docs/$target_section/api-reference --json_start_path sdk catalog --url_root "/$target_section/api-reference"
+        mv -f links.json ./versioned_docs/
     fi
 done
 if [ "$keep_master" != "keep_master" ] ; then
