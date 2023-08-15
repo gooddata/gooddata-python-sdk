@@ -150,8 +150,8 @@ def main():
         required=False,
         nargs="*",
         help="Example: sdk.CatalogUserService, "
-        "would only generate markdown tree for that object,"
-        "can use multiple start paths, by including the argument multiple times",
+             "would only generate markdown tree for that object,"
+             "can use multiple start paths, by including the argument multiple times",
     )
     parser.add_argument("--url_root", default="", required=False, help="url root path for the apiref")
     args = parser.parse_args()
@@ -164,4 +164,5 @@ def main():
     json.dump(links, open("links.json", "w+"), indent=4)
 
 
-main()
+if __name__ == '__main__':
+    main()

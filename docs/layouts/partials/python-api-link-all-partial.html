@@ -1,6 +1,6 @@
 {{ $paragraph := .}}
 
-{{ $links := getJSON "layouts/shortcodes/data/links.json" }}
+{{ $links := getJSON (print "versioned_docs/links.json") }}
 
 {{ range $name, $data := $links }}
     {{ $path := $data.path }}
@@ -18,7 +18,7 @@
         are matched in random places */}}
     {{ else }}
         {{ $pattern = printf `([\[%s])(%s)([\]%s])` "`" $name "`" }}
-    {{ end}}
+    {{ end }}
     {{ $matches := findRE $name $paragraph}}
     {{ if gt (len $matches) 0 }}
         {{ $a_html := (printf "$1<a href=\"%s/\">%s</a>$3" $path $name) }}
