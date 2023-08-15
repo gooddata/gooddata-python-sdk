@@ -1,5 +1,6 @@
 {{ $path := split . "." }}
-{{ $data := getJSON "layouts/shortcodes/data/data.json" }}
+
+{{ $data := getJSON (print "versioned_docs/data.json") }}
 
 {{ $currentData := $data}}
 {{ range $path }}

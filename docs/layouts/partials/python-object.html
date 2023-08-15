@@ -18,8 +18,8 @@
 
 {{ if $objData.docstring_parsed}}
 <div class="python-ref-description">
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
+    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML}}</p>
+    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML}}</p>
 </div>
 {{ end }}
 

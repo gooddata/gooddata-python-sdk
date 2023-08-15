@@ -1,5 +1,6 @@
-{{ $data := getJSON "layouts/shortcodes/data/data.json" }}
-{{ $links := getJSON "layouts/shortcodes/data/links.json" }}
+{{ $links := getJSON (print "versioned_docs/links.json") }}
+{{ $data := getJSON (print "versioned_docs/data.json") }}
+
 <style>
     html {
         scroll-behavior: smooth;
