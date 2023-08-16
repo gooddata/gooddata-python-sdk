@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: e57db53354109061
+          traceId: a5aa895f113ebecc
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -847,7 +847,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo/analyticsModel
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo/analyticsModel?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -2382,7 +2382,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 7610ecf2-e15c-46c6-a1c0-97a513ff7b41
+              oauthClientId: 0d6eee19-385e-477b-9fe2-1ca61a3b406c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -3766,7 +3766,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/analyticsModel
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo_testing/analyticsModel?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -5227,17 +5227,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo_west_california
-              type: workspace
-              attributes:
-                name: Demo West California
-              relationships:
-                parent:
-                  data:
-                    id: demo_west
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo_west
               type: workspace
               attributes:
@@ -5249,18 +5238,29 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: demo_testing
+            - id: demo_west_california
               type: workspace
               attributes:
-                name: demo_testing
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo
               type: workspace
               attributes:
                 name: Demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_testing
+              type: workspace
+              attributes:
+                name: demo_testing
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_testing
           included:
             - id: demo
               type: workspace

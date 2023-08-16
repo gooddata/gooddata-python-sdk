@@ -5,7 +5,7 @@ JSON:API representation of metric entity.
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**attributes** | [**JsonApiMetricInAttributes**](JsonApiMetricInAttributes.md) |  | 
+**attributes** | [**JsonApiMetricOutAttributes**](JsonApiMetricOutAttributes.md) |  | 
 **id** | **str** | API identifier of an object | 
 **type** | **str** | Object type | defaults to "metric"
 **meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 

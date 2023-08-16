@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: http://localhost:3000/api/v1/layout/workspaces?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '34285'
+          - '34401'
       body:
         string:
           workspaceDataFilters:
@@ -1640,6 +1640,11 @@ interactions:
                       tags:
                         - Order lines
                       title: Order lines
+                      workspaceDataFilterColumns:
+                        - dataType: STRING
+                          name: wdf__region
+                        - dataType: STRING
+                          name: wdf__state
                     - attributes:
                         - description: Product id
                           id: product_id
@@ -1757,7 +1762,7 @@ interactions:
               userDataFilters: []
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces
+      uri: http://localhost:3000/api/v1/layout/workspaces?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -1827,7 +1832,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '34285'
+          - '34401'
       body:
         string:
           workspaceDataFilters:
@@ -3393,6 +3398,11 @@ interactions:
                       tags:
                         - Order lines
                       title: Order lines
+                      workspaceDataFilterColumns:
+                        - dataType: STRING
+                          name: wdf__region
+                        - dataType: STRING
+                          name: wdf__state
                     - attributes:
                         - description: Product id
                           id: product_id

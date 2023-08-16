@@ -32,9 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
-    from gooddata_api_client.model.json_api_dashboard_plugin_in_attributes import JsonApiDashboardPluginInAttributes
+    from gooddata_api_client.model.json_api_dashboard_plugin_out_attributes import JsonApiDashboardPluginOutAttributes
+    from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
     globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
-    globals()['JsonApiDashboardPluginInAttributes'] = JsonApiDashboardPluginInAttributes
+    globals()['JsonApiDashboardPluginOutAttributes'] = JsonApiDashboardPluginOutAttributes
+    globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
 
 
 class JsonApiDashboardPluginOut(ModelNormal):
@@ -100,8 +102,9 @@ class JsonApiDashboardPluginOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiDashboardPluginInAttributes,),  # noqa: E501
+            'attributes': (JsonApiDashboardPluginOutAttributes,),  # noqa: E501
             'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
         }
 
     @cached_property
@@ -114,6 +117,7 @@ class JsonApiDashboardPluginOut(ModelNormal):
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
+        'relationships': 'relationships',  # noqa: E501
     }
 
     read_only_vars = {
@@ -161,8 +165,9 @@ class JsonApiDashboardPluginOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDashboardPluginInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dashboardPlugin")
@@ -255,8 +260,9 @@ class JsonApiDashboardPluginOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDashboardPluginInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "dashboardPlugin")

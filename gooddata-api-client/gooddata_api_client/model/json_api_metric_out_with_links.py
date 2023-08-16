@@ -32,14 +32,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
-    from gooddata_api_client.model.json_api_metric_in_attributes import JsonApiMetricInAttributes
     from gooddata_api_client.model.json_api_metric_out import JsonApiMetricOut
+    from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
     globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
-    globals()['JsonApiMetricInAttributes'] = JsonApiMetricInAttributes
     globals()['JsonApiMetricOut'] = JsonApiMetricOut
+    globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
@@ -106,7 +106,7 @@ class JsonApiMetricOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiMetricInAttributes,),  # noqa: E501
+            'attributes': (JsonApiMetricOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
@@ -137,7 +137,7 @@ class JsonApiMetricOutWithLinks(ModelComposed):
         """JsonApiMetricOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiMetricInAttributes):
+            attributes (JsonApiMetricOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "metric", must be one of ["metric", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -247,7 +247,7 @@ class JsonApiMetricOutWithLinks(ModelComposed):
         """JsonApiMetricOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
-            attributes (JsonApiMetricInAttributes):
+            attributes (JsonApiMetricOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "metric", must be one of ["metric", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types

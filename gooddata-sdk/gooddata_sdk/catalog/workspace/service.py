@@ -181,17 +181,20 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     # Declarative methods - workspaces
 
-    def get_declarative_workspaces(self) -> CatalogDeclarativeWorkspaces:
+    def get_declarative_workspaces(self, exclude: Optional[List[str]] = None) -> CatalogDeclarativeWorkspaces:
         """Get all workspaces in the current organization in a declarative form.
 
         Args:
-            None
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload.
 
         Returns:
             CatalogDeclarativeWorkspaces:
                 Declarative Workspaces object including all the workspaces for given organization.
         """
-        return CatalogDeclarativeWorkspaces.from_api(self._layout_api.get_workspaces_layout())
+        if exclude is None:
+            exclude = []
+        return CatalogDeclarativeWorkspaces.from_api(self._layout_api.get_workspaces_layout(exclude=exclude))
 
     def put_declarative_workspaces(self, workspace: CatalogDeclarativeWorkspaces) -> None:
         """Set layout of all workspaces and their hierarchy. Parameter is in declarative form.
@@ -248,18 +251,26 @@ class CatalogWorkspaceService(CatalogServiceBase):
 
     # Declarative methods - workspace
 
-    def get_declarative_workspace(self, workspace_id: str) -> CatalogDeclarativeWorkspaceModel:
+    def get_declarative_workspace(
+        self, workspace_id: str, exclude: Optional[List[str]] = None
+    ) -> CatalogDeclarativeWorkspaceModel:
         """Retrieve a workspace layout.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload.
 
         Returns:
             CatalogDeclarativeWorkspaceModel:
                 Object Containing declarative Logical Data Model and declarative Analytical Model.
         """
-        return CatalogDeclarativeWorkspaceModel.from_api(self._layout_api.get_workspace_layout(workspace_id))
+        if exclude is None:
+            exclude = []
+        return CatalogDeclarativeWorkspaceModel.from_api(
+            self._layout_api.get_workspace_layout(workspace_id=workspace_id, exclude=exclude)
+        )
 
     def put_declarative_workspace(self, workspace_id: str, workspace: CatalogDeclarativeWorkspaceModel) -> None:
         """Set a workspace layout.

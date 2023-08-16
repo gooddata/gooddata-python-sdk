@@ -79,11 +79,14 @@ class MetricsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -237,11 +240,14 @@ class MetricsApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -348,11 +354,14 @@ class MetricsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -441,11 +450,14 @@ class MetricsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -524,11 +536,14 @@ class MetricsApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },

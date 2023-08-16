@@ -16,9 +16,10 @@ from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
 from gooddata_sdk import CatalogDeclarativeWorkspaceHierarchyPermission
 from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
 
-T = TypeVar("T", bound="CatalogAnalyticsBase")
+T = TypeVar("T", bound="CatalogAnalyticsObjectBase")
 AnalyticsObjects = Union[
     DeclarativeAnalyticalDashboard,
     DeclarativeDashboardPlugin,
@@ -186,7 +187,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogAnalyticsBase(Base):
+class CatalogAnalyticsObjectBase(Base):
     id: str
 
     def store_to_disk(self, analytics_folder: Path) -> None:
@@ -200,34 +201,37 @@ class CatalogAnalyticsBase(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBase):
-    id: str
+class CatalogAnalyticsBase(CatalogAnalyticsObjectBase):
     title: str
     content: Dict[str, Any]
     description: Optional[str] = None
     tags: Optional[List[str]] = None
 
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogAnalyticsBaseMeta(CatalogAnalyticsBase):
+    created_at: Optional[str] = None
+    created_by: Optional[CatalogUserIdentifier] = None
+    modified_at: Optional[str] = None
+    modified_by: Optional[CatalogUserIdentifier] = None
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> Type[DeclarativeAnalyticalDashboard]:
         return DeclarativeAnalyticalDashboard
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBase):
-    id: str
-    title: str
-    content: Dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[List[str]] = None
-
+class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> Type[DeclarativeDashboardPlugin]:
         return DeclarativeDashboardPlugin
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsBase):
-    id: str
+class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsObjectBase):
     permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission]
 
     @staticmethod
@@ -237,38 +241,20 @@ class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsBase):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeFilterContext(CatalogAnalyticsBase):
-    id: str
-    title: str
-    content: Dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[List[str]] = None
-
     @staticmethod
     def client_class() -> Type[DeclarativeFilterContext]:
         return DeclarativeFilterContext
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeMetric(CatalogAnalyticsBase):
-    id: str
-    title: str
-    content: Dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[List[str]] = None
-
+class CatalogDeclarativeMetric(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> Type[DeclarativeMetric]:
         return DeclarativeMetric
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBase):
-    id: str
-    title: str
-    content: Dict[str, Any]
-    description: Optional[str] = None
-    tags: Optional[List[str]] = None
-
+class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> Type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject

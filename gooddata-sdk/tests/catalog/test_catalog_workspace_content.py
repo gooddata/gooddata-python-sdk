@@ -180,11 +180,15 @@ def test_load_and_put_declarative_analytics_model(test_config):
     workspace_id = test_config["workspace"]
     identifier = test_config["workspace_test"]
     _set_up_workspace_ldm(sdk, workspace_id, identifier)
-    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(workspace_id)
+    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(
+        workspace_id, exclude=["ACTIVITY_INFO"]
+    )
 
     try:
         sdk.catalog_workspace_content.load_and_put_declarative_analytics_model(identifier, path)
-        analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
+        analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(
+            identifier, exclude=["ACTIVITY_INFO"]
+        )
         assert analytics_model_e == analytics_model_o
         assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
     finally:
@@ -228,7 +232,9 @@ def test_put_declarative_ldm(test_config):
 def test_get_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "expected" / "declarative_analytics_model.json"
-    analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(test_config["workspace"])
+    analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(
+        test_config["workspace"], exclude=["ACTIVITY_INFO"]
+    )
 
     with open(path) as f:
         data = json.load(f)

@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
     from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
     globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
 
@@ -102,7 +102,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
             'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
         }
@@ -165,7 +165,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """
@@ -260,7 +260,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """

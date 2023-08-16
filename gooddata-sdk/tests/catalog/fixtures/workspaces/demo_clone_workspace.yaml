@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 983ed81022942a9e
+          traceId: 69e096f6dedbb516
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -250,7 +250,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32454'
+          - '35622'
       body:
         string:
           analytics:
@@ -303,6 +303,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: campaign
                 title: Campaign
@@ -338,6 +342,10 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: dashboard_plugin
                 title: Dashboard plugin
               - content:
@@ -484,6 +492,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: product_and_category
                 title: Product & Category
@@ -491,12 +503,20 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_1
                 id: dashboard_plugin_1
                 title: dashboard_plugin_1
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
@@ -542,81 +562,137 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_active_customers
                 title: '# of Active Customers'
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_orders
                 title: '# of Orders'
               - content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_top_customers
                 title: '# of Top Customers'
               - content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: amount_of_valid_orders
                 title: '# of Valid Orders'
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: order_amount
                 title: Order Amount
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue
                 title: '% Revenue'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_customers
                 title: '% Revenue from Top 10 Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_customers
                 title: '% Revenue from Top 10% Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_products
                 title: '% Revenue from Top 10% Products'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_products
                 title: '% Revenue from Top 10 Products'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_in_category
                 title: '% Revenue in Category'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product
                 title: '% Revenue per Product'
               - content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: revenue
                 title: Revenue
@@ -624,54 +700,94 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-clothing
                 title: Revenue (Clothing)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-electronic
                 title: Revenue (Electronic)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-home
                 title: Revenue (Home)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-outdoor
                 title: Revenue (Outdoor)
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_customer
                 title: Revenue per Customer
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_dollar_spent
                 title: Revenue per Dollar Spent
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10
                 title: Revenue / Top 10
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10_percent
                 title: Revenue / Top 10%
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue
                 title: Total Revenue
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue-no_filters
                 title: Total Revenue (No Filters)
             visualizationObjects:
@@ -733,6 +849,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
@@ -805,6 +925,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: customers_trend
                 title: Customers Trend
               - content:
@@ -880,6 +1004,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product_by_customer_and_category
                 title: '% Revenue per Product by Customer and Category'
               - content:
@@ -935,6 +1063,10 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percentage_of_customers_by_region
                 title: Percentage of Customers by Region
               - content:
@@ -988,6 +1120,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_breakdown
                 title: Product Breakdown
               - content:
@@ -1037,6 +1173,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_categories_pie_chart
                 title: Product Categories Pie Chart
               - content:
@@ -1108,6 +1248,10 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_revenue_comparison-over_previous_period
                 title: Product Revenue Comparison (over previous period)
               - content:
@@ -1161,6 +1305,10 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_saleability
                 title: Product Saleability
               - content:
@@ -1256,6 +1404,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_and_quantity_by_product_and_category
                 title: Revenue and Quantity by Product and Category
               - content:
@@ -1308,6 +1460,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_category_trend
                 title: Revenue by Category Trend
               - content:
@@ -1343,6 +1499,10 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_product
                 title: Revenue by Product
               - content:
@@ -1395,6 +1555,10 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_usd_vs_spend_by_campaign
                 title: Revenue per $ vs Spend by Campaign
               - content:
@@ -1459,6 +1623,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_trend
                 title: Revenue Trend
               - content:
@@ -1512,6 +1680,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_customers
                 title: Top 10 Customers
               - content:
@@ -1565,6 +1737,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_products
                 title: Top 10 Products
           ldm:
@@ -1991,7 +2167,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: e5c4d2012837866d
+          traceId: 954ec49651cf1d47
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_clone?include=workspaces
@@ -2069,7 +2245,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: cfc24bdd6b3d6d14
+          traceId: b7f0a4cedec41921
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -2480,6 +2656,10 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -2514,6 +2694,10 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -2661,6 +2845,10 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           analyticalDashboardExtensions: []
           dashboardPlugins:
             - content:
@@ -2669,12 +2857,20 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 url: https://www.example.com
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           filterContexts:
             - content:
                 filters:
@@ -2719,17 +2915,29 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue}
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.00'
                 maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -2737,56 +2945,96 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -2794,57 +3042,101 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN (
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           visualizationObjects:
             - content:
                 buckets:
@@ -2906,6 +3198,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -2978,6 +3274,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3053,6 +3353,10 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3108,6 +3412,10 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3161,6 +3469,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3210,6 +3522,10 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3281,6 +3597,10 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3334,6 +3654,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3429,6 +3753,10 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3481,6 +3809,10 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3516,6 +3848,10 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3568,6 +3904,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3632,6 +3972,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3685,6 +4029,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -3738,6 +4086,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -4135,7 +4487,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32474'
+          - '35642'
       body:
         string:
           analytics:
@@ -4188,6 +4540,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: campaign
                 title: Campaign
@@ -4223,6 +4579,10 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: dashboard_plugin
                 title: Dashboard plugin
               - content:
@@ -4369,6 +4729,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: product_and_category
                 title: Product & Category
@@ -4376,12 +4740,20 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_1
                 id: dashboard_plugin_1
                 title: dashboard_plugin_1
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
@@ -4427,81 +4799,137 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_active_customers
                 title: '# of Active Customers'
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_orders
                 title: '# of Orders'
               - content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_top_customers
                 title: '# of Top Customers'
               - content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: amount_of_valid_orders
                 title: '# of Valid Orders'
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: order_amount
                 title: Order Amount
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue
                 title: '% Revenue'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_customers
                 title: '% Revenue from Top 10 Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_customers
                 title: '% Revenue from Top 10% Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_products
                 title: '% Revenue from Top 10% Products'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_products
                 title: '% Revenue from Top 10 Products'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_in_category
                 title: '% Revenue in Category'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product
                 title: '% Revenue per Product'
               - content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: revenue
                 title: Revenue
@@ -4509,54 +4937,94 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-clothing
                 title: Revenue (Clothing)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-electronic
                 title: Revenue (Electronic)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-home
                 title: Revenue (Home)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-outdoor
                 title: Revenue (Outdoor)
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_customer
                 title: Revenue per Customer
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_dollar_spent
                 title: Revenue per Dollar Spent
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10
                 title: Revenue / Top 10
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10_percent
                 title: Revenue / Top 10%
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue
                 title: Total Revenue
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue-no_filters
                 title: Total Revenue (No Filters)
             visualizationObjects:
@@ -4618,6 +5086,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
@@ -4690,6 +5162,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: customers_trend
                 title: Customers Trend
               - content:
@@ -4765,6 +5241,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product_by_customer_and_category
                 title: '% Revenue per Product by Customer and Category'
               - content:
@@ -4820,6 +5300,10 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percentage_of_customers_by_region
                 title: Percentage of Customers by Region
               - content:
@@ -4873,6 +5357,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_breakdown
                 title: Product Breakdown
               - content:
@@ -4922,6 +5410,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_categories_pie_chart
                 title: Product Categories Pie Chart
               - content:
@@ -4993,6 +5485,10 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_revenue_comparison-over_previous_period
                 title: Product Revenue Comparison (over previous period)
               - content:
@@ -5046,6 +5542,10 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_saleability
                 title: Product Saleability
               - content:
@@ -5141,6 +5641,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_and_quantity_by_product_and_category
                 title: Revenue and Quantity by Product and Category
               - content:
@@ -5193,6 +5697,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_category_trend
                 title: Revenue by Category Trend
               - content:
@@ -5228,6 +5736,10 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_product
                 title: Revenue by Product
               - content:
@@ -5280,6 +5792,10 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_usd_vs_spend_by_campaign
                 title: Revenue per $ vs Spend by Campaign
               - content:
@@ -5344,6 +5860,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_trend
                 title: Revenue Trend
               - content:
@@ -5397,6 +5917,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_customers
                 title: Top 10 Customers
               - content:
@@ -5450,6 +5974,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_products
                 title: Top 10 Products
           ldm:
@@ -5791,7 +6319,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32454'
+          - '35622'
       body:
         string:
           analytics:
@@ -5844,6 +6372,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: campaign
                 title: Campaign
@@ -5879,6 +6411,10 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: dashboard_plugin
                 title: Dashboard plugin
               - content:
@@ -6025,6 +6561,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: product_and_category
                 title: Product & Category
@@ -6032,12 +6572,20 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_1
                 id: dashboard_plugin_1
                 title: dashboard_plugin_1
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
@@ -6083,81 +6631,137 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_active_customers
                 title: '# of Active Customers'
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_orders
                 title: '# of Orders'
               - content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_top_customers
                 title: '# of Top Customers'
               - content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: amount_of_valid_orders
                 title: '# of Valid Orders'
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: order_amount
                 title: Order Amount
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue
                 title: '% Revenue'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_customers
                 title: '% Revenue from Top 10 Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_customers
                 title: '% Revenue from Top 10% Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_products
                 title: '% Revenue from Top 10% Products'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_products
                 title: '% Revenue from Top 10 Products'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_in_category
                 title: '% Revenue in Category'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product
                 title: '% Revenue per Product'
               - content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: revenue
                 title: Revenue
@@ -6165,54 +6769,94 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-clothing
                 title: Revenue (Clothing)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-electronic
                 title: Revenue (Electronic)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-home
                 title: Revenue (Home)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-outdoor
                 title: Revenue (Outdoor)
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_customer
                 title: Revenue per Customer
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_dollar_spent
                 title: Revenue per Dollar Spent
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10
                 title: Revenue / Top 10
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10_percent
                 title: Revenue / Top 10%
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue
                 title: Total Revenue
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue-no_filters
                 title: Total Revenue (No Filters)
             visualizationObjects:
@@ -6274,6 +6918,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
@@ -6346,6 +6994,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: customers_trend
                 title: Customers Trend
               - content:
@@ -6421,6 +7073,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product_by_customer_and_category
                 title: '% Revenue per Product by Customer and Category'
               - content:
@@ -6476,6 +7132,10 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percentage_of_customers_by_region
                 title: Percentage of Customers by Region
               - content:
@@ -6529,6 +7189,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_breakdown
                 title: Product Breakdown
               - content:
@@ -6578,6 +7242,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_categories_pie_chart
                 title: Product Categories Pie Chart
               - content:
@@ -6649,6 +7317,10 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_revenue_comparison-over_previous_period
                 title: Product Revenue Comparison (over previous period)
               - content:
@@ -6702,6 +7374,10 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_saleability
                 title: Product Saleability
               - content:
@@ -6797,6 +7473,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_and_quantity_by_product_and_category
                 title: Revenue and Quantity by Product and Category
               - content:
@@ -6849,6 +7529,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_category_trend
                 title: Revenue by Category Trend
               - content:
@@ -6884,6 +7568,10 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_product
                 title: Revenue by Product
               - content:
@@ -6936,6 +7624,10 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_usd_vs_spend_by_campaign
                 title: Revenue per $ vs Spend by Campaign
               - content:
@@ -7000,6 +7692,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_trend
                 title: Revenue Trend
               - content:
@@ -7053,6 +7749,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_customers
                 title: Top 10 Customers
               - content:
@@ -7106,6 +7806,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_products
                 title: Top 10 Products
           ldm:
@@ -7532,7 +8236,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: d479b7aa11cdee79
+          traceId: fd33541f61cb208a
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo_jacek?include=workspaces
@@ -7610,7 +8314,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 385295821a1939ee
+          traceId: 739d60448dd8b9a7
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -8021,6 +8725,10 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -8055,6 +8763,10 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -8202,6 +8914,10 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           analyticalDashboardExtensions: []
           dashboardPlugins:
             - content:
@@ -8210,12 +8926,20 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 url: https://www.example.com
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           filterContexts:
             - content:
                 filters:
@@ -8260,17 +8984,29 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue}
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.00'
                 maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -8278,56 +9014,96 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -8335,57 +9111,101 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN (
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           visualizationObjects:
             - content:
                 buckets:
@@ -8447,6 +9267,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8519,6 +9343,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8594,6 +9422,10 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8649,6 +9481,10 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8702,6 +9538,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8751,6 +9591,10 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8822,6 +9666,10 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8875,6 +9723,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -8970,6 +9822,10 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9022,6 +9878,10 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9057,6 +9917,10 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9109,6 +9973,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9173,6 +10041,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9226,6 +10098,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -9279,6 +10155,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -9862,7 +10742,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32454'
+          - '35622'
       body:
         string:
           analytics:
@@ -9915,6 +10795,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: campaign
                 title: Campaign
@@ -9950,6 +10834,10 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: dashboard_plugin
                 title: Dashboard plugin
               - content:
@@ -10096,6 +10984,10 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: product_and_category
                 title: Product & Category
@@ -10103,12 +10995,20 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_1
                 id: dashboard_plugin_1
                 title: dashboard_plugin_1
               - content:
                   url: https://www.example.com
                   version: '2'
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: Testing record dashboard_plugin_2
                 id: dashboard_plugin_2
                 title: dashboard_plugin_2
@@ -10154,81 +11054,137 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_active_customers
                 title: '# of Active Customers'
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_orders
                 title: '# of Orders'
               - content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: amount_of_top_customers
                 title: '# of Top Customers'
               - content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: amount_of_valid_orders
                 title: '# of Valid Orders'
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: order_amount
                 title: Order Amount
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue
                 title: '% Revenue'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_customers
                 title: '% Revenue from Top 10 Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_customers
                 title: '% Revenue from Top 10% Customers'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_percent_products
                 title: '% Revenue from Top 10% Products'
               - content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_from_top_10_products
                 title: '% Revenue from Top 10 Products'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_in_category
                 title: '% Revenue in Category'
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product
                 title: '% Revenue per Product'
               - content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 description: ''
                 id: revenue
                 title: Revenue
@@ -10236,54 +11192,94 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-clothing
                 title: Revenue (Clothing)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-electronic
                 title: Revenue (Electronic)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-home
                 title: Revenue (Home)
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue-outdoor
                 title: Revenue (Outdoor)
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_customer
                 title: Revenue per Customer
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_dollar_spent
                 title: Revenue per Dollar Spent
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10
                 title: Revenue / Top 10
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_top_10_percent
                 title: Revenue / Top 10%
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue
                 title: Total Revenue
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: total_revenue-no_filters
                 title: Total Revenue (No Filters)
             visualizationObjects:
@@ -10345,6 +11341,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: campaign_spend
                 title: Campaign Spend
               - content:
@@ -10417,6 +11417,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: customers_trend
                 title: Customers Trend
               - content:
@@ -10492,6 +11496,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percent_revenue_per_product_by_customer_and_category
                 title: '% Revenue per Product by Customer and Category'
               - content:
@@ -10547,6 +11555,10 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: percentage_of_customers_by_region
                 title: Percentage of Customers by Region
               - content:
@@ -10600,6 +11612,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_breakdown
                 title: Product Breakdown
               - content:
@@ -10649,6 +11665,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_categories_pie_chart
                 title: Product Categories Pie Chart
               - content:
@@ -10720,6 +11740,10 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_revenue_comparison-over_previous_period
                 title: Product Revenue Comparison (over previous period)
               - content:
@@ -10773,6 +11797,10 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: product_saleability
                 title: Product Saleability
               - content:
@@ -10868,6 +11896,10 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_and_quantity_by_product_and_category
                 title: Revenue and Quantity by Product and Category
               - content:
@@ -10920,6 +11952,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_category_trend
                 title: Revenue by Category Trend
               - content:
@@ -10955,6 +11991,10 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_by_product
                 title: Revenue by Product
               - content:
@@ -11007,6 +12047,10 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_per_usd_vs_spend_by_campaign
                 title: Revenue per $ vs Spend by Campaign
               - content:
@@ -11071,6 +12115,10 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: revenue_trend
                 title: Revenue Trend
               - content:
@@ -11124,6 +12172,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_customers
                 title: Top 10 Customers
               - content:
@@ -11177,6 +12229,10 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
+                createdAt: 2023-08-14 07:28
+                createdBy:
+                  id: admin
+                  type: user
                 id: top_10_products
                 title: Top 10 Products
           ldm:
@@ -11929,6 +12985,10 @@ interactions:
               id: campaign
               title: Campaign
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -11963,6 +13023,10 @@ interactions:
                 version: '2'
               id: dashboard_plugin
               title: Dashboard plugin
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 filterContextRef:
                   identifier:
@@ -12110,6 +13174,10 @@ interactions:
               id: product_and_category
               title: Product & Category
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           analyticalDashboardExtensions: []
           dashboardPlugins:
             - content:
@@ -12118,12 +13186,20 @@ interactions:
               id: dashboard_plugin_1
               title: dashboard_plugin_1
               description: Testing record dashboard_plugin_1
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 url: https://www.example.com
                 version: '2'
               id: dashboard_plugin_2
               title: dashboard_plugin_2
               description: Testing record dashboard_plugin_2
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           filterContexts:
             - content:
                 filters:
@@ -12168,17 +13244,29 @@ interactions:
                 maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
               id: amount_of_active_customers
               title: '# of Active Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: SELECT COUNT({attribute/order_id})
               id: amount_of_orders
               title: '# of Orders'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0'
                 maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT {metric/revenue}
                   BY {attribute/customer_id}) >  10000 '
               id: amount_of_top_customers
               title: '# of Top Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.00'
                 maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -12186,56 +13274,96 @@ interactions:
               id: amount_of_valid_orders
               title: '# of Valid Orders'
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/spend})
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT SUM({fact/price}*{fact/quantity})
               id: order_amount
               title: Order Amount
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / {metric/total_revenue}
               id: percent_revenue
               title: '% Revenue'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_customers
               title: '% Revenue from Top 10 Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_customers
               title: '% Revenue from Top 10% Customers'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_percent_products
               title: '% Revenue from Top 10% Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                   \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
               id: percent_revenue_from_top_10_products
               title: '% Revenue from Top 10 Products'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                   ALL OTHER)
               id: percent_revenue_in_category
               title: '% Revenue in Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: '#,##0.0%'
                 maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL {attribute/product_id})
               id: percent_revenue_per_product
               title: '% Revenue per Product'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -12243,57 +13371,101 @@ interactions:
               id: revenue
               title: Revenue
               description: ''
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Clothing")
               id: revenue-clothing
               title: Revenue (Clothing)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN (
                   "Electronics")
               id: revenue-electronic
               title: Revenue (Electronic)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Home")
               id: revenue-home
               title: Revenue (Home)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE {label/products.category} IN ("Outdoor")
               id: revenue-outdoor
               title: Revenue (Outdoor)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
               id: revenue_per_customer
               title: Revenue per Customer
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0.0
                 maql: SELECT {metric/revenue} / {metric/campaign_spend}
               id: revenue_per_dollar_spent
               title: Revenue per Dollar Spent
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
               id: revenue_top_10
               title: Revenue / Top 10
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
               id: revenue_top_10_percent
               title: Revenue / Top 10%
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/revenue} BY ALL OTHER
               id: total_revenue
               title: Total Revenue
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 format: $#,##0
                 maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
               id: total_revenue-no_filters
               title: Total Revenue (No Filters)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
           visualizationObjects:
             - content:
                 buckets:
@@ -12355,6 +13527,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: campaign_spend
               title: Campaign Spend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12427,6 +13603,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: customers_trend
               title: Customers Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12502,6 +13682,10 @@ interactions:
                 visualizationUrl: local:table
               id: percent_revenue_per_product_by_customer_and_category
               title: '% Revenue per Product by Customer and Category'
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12557,6 +13741,10 @@ interactions:
                 visualizationUrl: local:area
               id: percentage_of_customers_by_region
               title: Percentage of Customers by Region
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12610,6 +13798,10 @@ interactions:
                 visualizationUrl: local:treemap
               id: product_breakdown
               title: Product Breakdown
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12659,6 +13851,10 @@ interactions:
                 visualizationUrl: local:donut
               id: product_categories_pie_chart
               title: Product Categories Pie Chart
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12730,6 +13926,10 @@ interactions:
                 visualizationUrl: local:column
               id: product_revenue_comparison-over_previous_period
               title: Product Revenue Comparison (over previous period)
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12783,6 +13983,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: product_saleability
               title: Product Saleability
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12878,6 +14082,10 @@ interactions:
                 visualizationUrl: local:table
               id: revenue_and_quantity_by_product_and_category
               title: Revenue and Quantity by Product and Category
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12930,6 +14138,10 @@ interactions:
                 visualizationUrl: local:line
               id: revenue_by_category_trend
               title: Revenue by Category Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -12965,6 +14177,10 @@ interactions:
                 visualizationUrl: local:bar
               id: revenue_by_product
               title: Revenue by Product
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -13017,6 +14233,10 @@ interactions:
                 visualizationUrl: local:scatter
               id: revenue_per_usd_vs_spend_by_campaign
               title: Revenue per $ vs Spend by Campaign
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -13081,6 +14301,10 @@ interactions:
                 visualizationUrl: local:combo2
               id: revenue_trend
               title: Revenue Trend
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -13134,6 +14358,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_customers
               title: Top 10 Customers
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
             - content:
                 buckets:
                   - items:
@@ -13187,6 +14415,10 @@ interactions:
                 visualizationUrl: local:bar
               id: top_10_products
               title: Top 10 Products
+              createdAt: 2023-08-14 07:28
+              createdBy:
+                id: admin
+                type: user
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -13703,17 +14935,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo_west_california
-              type: workspace
-              attributes:
-                name: Demo West California
-              relationships:
-                parent:
-                  data:
-                    id: demo_west
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo_west
               type: workspace
               attributes:
@@ -13725,18 +14946,29 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
-            - id: demo_jacek
+            - id: demo_west_california
               type: workspace
               attributes:
-                name: Deno Jacek
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo
               type: workspace
               attributes:
                 name: Demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
+            - id: demo_jacek
+              type: workspace
+              attributes:
+                name: Deno Jacek
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_jacek
           included:
             - id: demo
               type: workspace

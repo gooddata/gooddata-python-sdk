@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32454'
+          - '32570'
       body:
         string:
           analytics:
@@ -86,46 +86,46 @@ interactions:
                       id: campaign_name_filter
                       type: filterContext
                   layout:
+                    type: IDashboardLayout
                     sections:
-                      - header:
+                      - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
                           description: The first insight shows a breakdown of spend
                             by category and campaign. The second shows revenue per
                             $ spend, for each campaign, to demonstrate, how campaigns
                             are successful.
-                          title: Spend breakdown and Revenue
                         items:
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Campaign Spend
                               description: ''
-                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: campaign_spend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Campaign Spend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Revenue per $ vs Spend by Campaign
                               description: ''
-                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_per_usd_vs_spend_by_campaign
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Revenue per $ vs Spend by Campaign
-                              type: insight
-                        type: IDashboardLayoutSection
-                    type: IDashboardLayout
                   version: '2'
                 description: ''
                 id: campaign
@@ -170,143 +170,143 @@ interactions:
                       id: region_filter
                       type: filterContext
                   layout:
+                    type: IDashboardLayout
                     sections:
-                      - items:
-                          - size:
+                      - type: IDashboardLayoutSection
+                        items:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Top 10 Products
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: top_10_products
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Top 10 Products
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Revenue Trend
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_trend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Revenue Trend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Customers Trend
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: customers_trend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Customers Trend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Categories Pie Chart
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_categories_pie_chart
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Categories Pie Chart
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Breakdown
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_breakdown
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Breakdown
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Saleability
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_saleability
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Saleability
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 12
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: '% Revenue per Product by Customer and Category'
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: percent_revenue_per_product_by_customer_and_category
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: '% Revenue per Product by Customer and Category'
-                              type: insight
-                        type: IDashboardLayoutSection
-                    type: IDashboardLayout
                   version: '2'
                 description: ''
                 id: product_and_category
@@ -329,19 +329,19 @@ interactions:
                   filters:
                     - dateFilter:
                         from: '0'
-                        granularity: GDC.time.month
                         to: '0'
+                        granularity: GDC.time.month
                         type: relative
                     - attributeFilter:
-                        attributeElements:
-                          uris: []
                         displayForm:
                           identifier:
                             id: campaign_name
                             type: label
-                        filterElementsBy: []
-                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
                         negativeSelection: true
+                        attributeElements:
+                          uris: []
+                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+                        filterElementsBy: []
                   version: '2'
                 description: ''
                 id: campaign_name_filter
@@ -349,15 +349,15 @@ interactions:
               - content:
                   filters:
                     - attributeFilter:
-                        attributeElements:
-                          uris: []
                         displayForm:
                           identifier:
                             id: region
                             type: label
-                        filterElementsBy: []
-                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
                         negativeSelection: true
+                        attributeElements:
+                          uris: []
+                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+                        filterElementsBy: []
                   version: '2'
                 description: ''
                 id: region_filter
@@ -826,9 +826,9 @@ interactions:
                                   identifier:
                                     id: revenue
                                     type: metric
-                            format: '#,##0.00%'
                             localIdentifier: 162b857af49d45769bc12604a5c192b9
                             title: '% Revenue'
+                            format: '#,##0.00%'
                       localIdentifier: measures
                     - items:
                         - attribute:
@@ -1597,6 +1597,11 @@ interactions:
                 tags:
                   - Order lines
                 title: Order lines
+                workspaceDataFilterColumns:
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
               - attributes:
                   - description: Product id
                     id: product_id
@@ -1660,7 +1665,7 @@ interactions:
                 title: Date
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/layout/workspaces/demo
+      uri: http://localhost:3000/api/v1/layout/workspaces/demo?exclude=ACTIVITY_INFO
       body: null
       headers:
         Accept:
@@ -1730,7 +1735,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '32454'
+          - '32570'
       body:
         string:
           analytics:
@@ -1742,46 +1747,46 @@ interactions:
                       id: campaign_name_filter
                       type: filterContext
                   layout:
+                    type: IDashboardLayout
                     sections:
-                      - header:
+                      - type: IDashboardLayoutSection
+                        header:
+                          title: Spend breakdown and Revenue
                           description: The first insight shows a breakdown of spend
                             by category and campaign. The second shows revenue per
                             $ spend, for each campaign, to demonstrate, how campaigns
                             are successful.
-                          title: Spend breakdown and Revenue
                         items:
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Campaign Spend
                               description: ''
-                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: campaign_spend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Campaign Spend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Revenue per $ vs Spend by Campaign
                               description: ''
-                              drills: []
                               ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_per_usd_vs_spend_by_campaign
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Revenue per $ vs Spend by Campaign
-                              type: insight
-                        type: IDashboardLayoutSection
-                    type: IDashboardLayout
                   version: '2'
                 description: ''
                 id: campaign
@@ -1826,143 +1831,143 @@ interactions:
                       id: region_filter
                       type: filterContext
                   layout:
+                    type: IDashboardLayout
                     sections:
-                      - items:
-                          - size:
+                      - type: IDashboardLayoutSection
+                        items:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Top 10 Products
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: top_10_products
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Top 10 Products
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Revenue Trend
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: revenue_trend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Revenue Trend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Customers Trend
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: customers_trend
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Customers Trend
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Categories Pie Chart
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_categories_pie_chart
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Categories Pie Chart
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Breakdown
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_breakdown
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Breakdown
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 6
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: Product Saleability
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: product_saleability
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: Product Saleability
-                              type: insight
-                          - size:
+                          - type: IDashboardLayoutItem
+                            size:
                               xl:
                                 gridWidth: 12
-                            type: IDashboardLayoutItem
                             widget:
+                              type: insight
+                              title: '% Revenue per Product by Customer and Category'
+                              description: ''
+                              ignoreDashboardFilters: []
                               dateDataSet:
                                 identifier:
                                   id: date
                                   type: dataset
-                              description: ''
-                              drills: []
-                              ignoreDashboardFilters: []
                               insight:
                                 identifier:
                                   id: percent_revenue_per_product_by_customer_and_category
                                   type: visualizationObject
+                              drills: []
                               properties: {}
-                              title: '% Revenue per Product by Customer and Category'
-                              type: insight
-                        type: IDashboardLayoutSection
-                    type: IDashboardLayout
                   version: '2'
                 description: ''
                 id: product_and_category
@@ -1985,19 +1990,19 @@ interactions:
                   filters:
                     - dateFilter:
                         from: '0'
-                        granularity: GDC.time.month
                         to: '0'
+                        granularity: GDC.time.month
                         type: relative
                     - attributeFilter:
-                        attributeElements:
-                          uris: []
                         displayForm:
                           identifier:
                             id: campaign_name
                             type: label
-                        filterElementsBy: []
-                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
                         negativeSelection: true
+                        attributeElements:
+                          uris: []
+                        localIdentifier: 14b0807447ef4bc28f43e4fc5c337d1d
+                        filterElementsBy: []
                   version: '2'
                 description: ''
                 id: campaign_name_filter
@@ -2005,15 +2010,15 @@ interactions:
               - content:
                   filters:
                     - attributeFilter:
-                        attributeElements:
-                          uris: []
                         displayForm:
                           identifier:
                             id: region
                             type: label
-                        filterElementsBy: []
-                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
                         negativeSelection: true
+                        attributeElements:
+                          uris: []
+                        localIdentifier: 2d5ef8df82444f6ba27b45f0990ee6af
+                        filterElementsBy: []
                   version: '2'
                 description: ''
                 id: region_filter
@@ -2482,9 +2487,9 @@ interactions:
                                   identifier:
                                     id: revenue
                                     type: metric
-                            format: '#,##0.00%'
                             localIdentifier: 162b857af49d45769bc12604a5c192b9
                             title: '% Revenue'
+                            format: '#,##0.00%'
                       localIdentifier: measures
                     - items:
                         - attribute:
@@ -3253,6 +3258,11 @@ interactions:
                 tags:
                   - Order lines
                 title: Order lines
+                workspaceDataFilterColumns:
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
               - attributes:
                   - description: Product id
                     id: product_id

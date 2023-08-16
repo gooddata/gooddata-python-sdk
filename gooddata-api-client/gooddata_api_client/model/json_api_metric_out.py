@@ -32,10 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
-    from gooddata_api_client.model.json_api_metric_in_attributes import JsonApiMetricInAttributes
+    from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
-    globals()['JsonApiMetricInAttributes'] = JsonApiMetricInAttributes
+    globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
 
 
@@ -100,7 +100,7 @@ class JsonApiMetricOut(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiMetricInAttributes,),  # noqa: E501
+            'attributes': (JsonApiMetricOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
@@ -131,7 +131,7 @@ class JsonApiMetricOut(ModelNormal):
         """JsonApiMetricOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiMetricInAttributes):
+            attributes (JsonApiMetricOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -227,7 +227,7 @@ class JsonApiMetricOut(ModelNormal):
         """JsonApiMetricOut - a model defined in OpenAPI
 
         Args:
-            attributes (JsonApiMetricInAttributes):
+            attributes (JsonApiMetricOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
