@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -9,8 +10,10 @@ import attrs
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
+    CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeModel,
+    CatalogDeclarativeWorkspaceDataFilterReferences,
     CatalogDependentEntitiesRequest,
     CatalogEntityIdentifier,
     CatalogWorkspace,
@@ -347,3 +350,38 @@ def test_label_elements(test_config):
         test_config["workspace"], ObjId(id="order_status", type="label")
     )
     assert label_values == ["Canceled", "Delivered", "Returned"]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "explicit_workspace_data_filter.yaml"))
+def test_explicit_workspace_data_filter(test_config):
+    """
+    This test is run with the following env variable.
+
+    GDC_FEATURES_VALUES_ENABLE_PDM_REMOVAL_DEPRECATION_PHASE: "true"
+    """
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    dataset_id = "customers"
+
+    model = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
+    model_cpy = copy.deepcopy(model)
+    try:
+        reference = CatalogDeclarativeWorkspaceDataFilterReferences(
+            filter_id=CatalogDatasetWorkspaceDataFilterIdentifier(id="wdf__region"),
+            filter_column="wdf__region",
+            filter_column_data_type="STRING",
+        )
+        customers = [dataset for dataset in model_cpy.ldm.datasets if dataset.id == dataset_id][0]
+        customers.workspace_data_filter_references = [reference]
+
+        sdk.catalog_workspace_content.put_declarative_ldm(workspace_id=test_config["workspace"], ldm=model_cpy)
+
+        updated_ldm = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id=test_config["workspace"])
+
+        assert model_cpy == updated_ldm
+
+        dataset = sdk.catalog_workspace_content.get_full_catalog(workspace_id=test_config["workspace"]).get_dataset(
+            dataset_id
+        )
+        assert len(dataset.workspace_data_filter_properties) == 1
+    finally:
+        sdk.catalog_workspace_content.put_declarative_ldm(workspace_id=test_config["workspace"], ldm=model)

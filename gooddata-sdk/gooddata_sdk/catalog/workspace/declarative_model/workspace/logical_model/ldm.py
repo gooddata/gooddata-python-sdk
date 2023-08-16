@@ -13,6 +13,10 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.da
     LAYOUT_DATASETS_DIR,
     CatalogDeclarativeDataset,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension import (  # noqa: E501
+    LAYOUT_DATASET_EXTENSIONS_DIR,
+    CatalogDeclarativeDatasetExtension,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
     LAYOUT_DATE_INSTANCES_DIR,
     CatalogDeclarativeDateDataset,
@@ -44,6 +48,7 @@ class CatalogDeclarativeModel(Base):
 class CatalogDeclarativeLdm(Base):
     datasets: List[CatalogDeclarativeDataset] = attr.field(factory=list)
     date_instances: List[CatalogDeclarativeDateDataset] = attr.field(factory=list)
+    dataset_extensions: Optional[List[CatalogDeclarativeDatasetExtension]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeLdm]:
@@ -52,11 +57,21 @@ class CatalogDeclarativeLdm(Base):
     @staticmethod
     def get_ldm_folder(workspace_folder: Path) -> Path:
         folder = workspace_folder / LAYOUT_LDM_DIR
+        return folder
+
+    @staticmethod
+    def create_ldm_folder(workspace_folder: Path) -> Path:
+        folder = workspace_folder / LAYOUT_LDM_DIR
         create_directory(folder)
         return folder
 
     @staticmethod
     def get_datasets_folder(ldm_folder: Path) -> Path:
+        folder = ldm_folder / LAYOUT_DATASETS_DIR
+        return folder
+
+    @staticmethod
+    def create_datasets_folder(ldm_folder: Path) -> Path:
         folder = ldm_folder / LAYOUT_DATASETS_DIR
         create_directory(folder)
         return folder
@@ -64,34 +79,65 @@ class CatalogDeclarativeLdm(Base):
     @staticmethod
     def get_date_instances_folder(ldm_folder: Path) -> Path:
         folder = ldm_folder / LAYOUT_DATE_INSTANCES_DIR
+        return folder
+
+    @staticmethod
+    def create_date_instances_folder(ldm_folder: Path) -> Path:
+        folder = ldm_folder / LAYOUT_DATE_INSTANCES_DIR
+        create_directory(folder)
+        return folder
+
+    @staticmethod
+    def get_dataset_extensions_folder(ldm_folder: Path) -> Path:
+        folder = ldm_folder / LAYOUT_DATASET_EXTENSIONS_DIR
+        return folder
+
+    @staticmethod
+    def create_dataset_extensions_folder(ldm_folder: Path) -> Path:
+        folder = ldm_folder / LAYOUT_DATASET_EXTENSIONS_DIR
         create_directory(folder)
         return folder
 
     def store_to_disk(self, workspace_folder: Path) -> None:
-        ldm_folder = self.get_ldm_folder(workspace_folder)
-        datasets_folder = self.get_datasets_folder(ldm_folder)
-        date_instances_folder = self.get_date_instances_folder(ldm_folder)
+        ldm_folder = self.create_ldm_folder(workspace_folder)
+        datasets_folder = self.create_datasets_folder(ldm_folder)
+        date_instances_folder = self.create_date_instances_folder(ldm_folder)
 
         for dataset in self.datasets:
             dataset.store_to_disk(datasets_folder)
         for date_instance in self.date_instances:
             date_instance.store_to_disk(date_instances_folder)
+        # Note: should be defaulted to an empty list in the future
+        if self.dataset_extensions:
+            dataset_extensions_folder = self.create_dataset_extensions_folder(ldm_folder)
+            for dataset_extension in self.dataset_extensions:
+                dataset_extension.store_to_disk(dataset_extensions_folder)
 
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeLdm:
         ldm_folder = cls.get_ldm_folder(workspace_folder)
         datasets_folder = cls.get_datasets_folder(ldm_folder)
         date_instances_folder = cls.get_date_instances_folder(ldm_folder)
+        dataset_extensions_folder = cls.get_dataset_extensions_folder(ldm_folder)
 
         dataset_files = get_sorted_yaml_files(datasets_folder)
         date_instance_files = get_sorted_yaml_files(date_instances_folder)
+        dataset_extensions_files = get_sorted_yaml_files(dataset_extensions_folder)
 
         datasets = [CatalogDeclarativeDataset.load_from_disk(dataset_file) for dataset_file in dataset_files]
         date_instances = [
             CatalogDeclarativeDateDataset.load_from_disk(date_instance_file)
             for date_instance_file in date_instance_files
         ]
-        return cls(datasets=datasets, date_instances=date_instances)
+        dataset_extensions = (
+            [
+                CatalogDeclarativeDatasetExtension.load_from_disk(dataset_extensions_file)
+                for dataset_extensions_file in dataset_extensions_files
+            ]
+            if dataset_extensions_folder.exists()
+            else None
+        )
+        return cls(datasets=datasets, date_instances=date_instances, dataset_extensions=dataset_extensions)
 
     def modify_mapped_data_source(self, data_source_mapping: Optional[dict]) -> CatalogDeclarativeLdm:
         """LDM contains data source ID - is mapped to this data source.
