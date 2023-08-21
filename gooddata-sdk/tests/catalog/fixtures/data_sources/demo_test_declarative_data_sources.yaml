@@ -381,5 +381,5 @@ interactions:
       body:
         string:
           queryDurationMillis:
-            simpleSelect: 0
+            simpleSelect: 1
           successful: true

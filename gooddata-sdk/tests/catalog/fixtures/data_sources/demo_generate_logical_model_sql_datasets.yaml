@@ -114,7 +114,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '8256'
+          - '9201'
       body:
         string:
           ldm:
@@ -124,6 +124,7 @@ interactions:
                     id: campaign_channel_id
                     labels: []
                     sourceColumn: campaign_channel_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Campaign channel id
@@ -131,6 +132,7 @@ interactions:
                     id: campaign_channels.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Category
@@ -138,24 +140,30 @@ interactions:
                     id: type
                     labels: []
                     sourceColumn: type
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Type
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaign_channels
+                  path:
+                    - demo
+                    - campaign_channels
                   type: dataSource
                 description: Campaign channels
                 facts:
                   - description: Budget
                     id: budget
                     sourceColumn: budget
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Budget
                   - description: Spend
                     id: spend
                     sourceColumn: spend
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Spend
@@ -168,6 +176,8 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                 tags:
@@ -178,6 +188,7 @@ interactions:
                     id: campaign_name
                     labels: []
                     sourceColumn: campaign_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaigns
                     title: Campaign name
@@ -185,12 +196,16 @@ interactions:
                     id: campaigns.campaign_id
                     labels: []
                     sourceColumn: campaign_id
+                    sourceColumnDataType: INT
                     tags:
                       - Campaigns
                     title: Campaign id
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaigns
+                  path:
+                    - demo
+                    - campaigns
                   type: dataSource
                 description: Campaigns
                 facts: []
@@ -207,6 +222,7 @@ interactions:
                     id: customers.customer_id
                     labels: []
                     sourceColumn: customer_id
+                    sourceColumnDataType: INT
                     tags:
                       - Customers
                     title: Customer id
@@ -214,6 +230,7 @@ interactions:
                     id: customers.customer_name
                     labels: []
                     sourceColumn: customer_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Customer name
@@ -221,6 +238,7 @@ interactions:
                     id: customers.region
                     labels: []
                     sourceColumn: region
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Region
@@ -230,16 +248,21 @@ interactions:
                       - description: Location
                         id: geo__state__location
                         sourceColumn: geo__state__location
+                        sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
                     sourceColumn: state
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: State
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: customers
+                  path:
+                    - demo
+                    - customers
                   type: dataSource
                 description: Customers
                 facts: []
@@ -256,6 +279,7 @@ interactions:
                     id: order_lines.order_id
                     labels: []
                     sourceColumn: order_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order id
@@ -263,6 +287,7 @@ interactions:
                     id: order_lines.order_line_id
                     labels: []
                     sourceColumn: order_line_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order line id
@@ -270,24 +295,30 @@ interactions:
                     id: order_lines.order_status
                     labels: []
                     sourceColumn: order_status
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order status
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: order_lines
+                  path:
+                    - demo
+                    - order_lines
                   type: dataSource
                 description: Order lines
                 facts:
                   - description: Price
                     id: order_lines.price
                     sourceColumn: price
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Price
                   - description: Quantity
                     id: order_lines.quantity
                     sourceColumn: quantity
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Quantity
@@ -300,24 +331,32 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - customer_id
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - DATE
                     sourceColumns:
                       - date
                   - identifier:
                       id: products
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - product_id
                 tags:
@@ -333,6 +372,7 @@ interactions:
                     id: product_name
                     labels: []
                     sourceColumn: product_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Product name
@@ -340,6 +380,7 @@ interactions:
                     id: products.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Category
@@ -347,12 +388,16 @@ interactions:
                     id: products.product_id
                     labels: []
                     sourceColumn: product_id
+                    sourceColumnDataType: INT
                     tags:
                       - Products
                     title: Product id
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: products
+                  path:
+                    - demo
+                    - products
                   type: dataSource
                 description: Products
                 facts: []

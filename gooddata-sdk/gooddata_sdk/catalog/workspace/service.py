@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 import functools
 import logging
 import re
@@ -272,7 +273,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
             self._layout_api.get_workspace_layout(workspace_id=workspace_id, exclude=exclude)
         )
 
-    def put_declarative_workspace(self, workspace_id: str, workspace: CatalogDeclarativeWorkspaceModel) -> None:
+    def put_declarative_workspace(
+        self, workspace_id: str, workspace: CatalogDeclarativeWorkspaceModel, standalone_copy: bool = False
+    ) -> None:
         """Set a workspace layout.
 
         Args:
@@ -280,13 +283,20 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             workspace (CatalogDeclarativeWorkspaceModel):
                 Object Containing declarative Logical Data Model and declarative Analytical Model.
-
+            standalone_copy (bool):
+                If true, then workspace data filter references will be removed from LDM.
+                Note that first, the copy is made so we do not interfere with the original input.
         Returns:
             None
         """
+        if standalone_copy:
+            workspace = copy.deepcopy(workspace)
+            workspace.remove_wdf_refs()
         self._layout_api.put_workspace_layout(workspace_id, workspace.to_api())
 
-    def store_declarative_workspace(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
+    def store_declarative_workspace(
+        self, workspace_id: str, layout_root_path: Path = Path.cwd(), exclude: Optional[List[str]] = None
+    ) -> None:
         """Store workspace layout in a directory hierarchy.
 
         Args:
@@ -294,11 +304,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             layout_root_path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload.
         """
         workspace_folder = get_workspace_folder(
             workspace_id=workspace_id, layout_organization_folder=self.layout_organization_folder(layout_root_path)
         )
-        self.get_declarative_workspace(workspace_id=workspace_id).store_to_disk(workspace_folder=workspace_folder)
+        self.get_declarative_workspace(workspace_id=workspace_id, exclude=exclude).store_to_disk(
+            workspace_folder=workspace_folder
+        )
 
     def load_declarative_workspace(
         self, workspace_id: str, layout_root_path: Path = Path.cwd()
@@ -348,6 +362,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         overwrite_existing: Optional[bool] = None,
         data_source_mapping: Optional[dict] = None,
         upper_case: Optional[bool] = True,
+        place_in_hierarchy: bool = True,
     ) -> None:
         """Clone workspace from existing workspace.
 
@@ -377,10 +392,14 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 Optional, allows users to change the case of all physical object IDs (table names, columns names)
                 True changes it to upper-case, False to lower-case, None(default) is noop
                 Useful when migrating to Snowflake, which is the only DB with upper-case default.
+            place_in_hierarchy (bool):
+                Place in the hierarchy of the source parent workspace.
 
         Returns:
             None
         """
+        if not place_in_hierarchy:
+            raise ValueError(f"{place_in_hierarchy=} currently not supported")
         # TODO - what if it has already been cloned? List existing WS and find first free WS ID?
         source_declarative_ws = self.get_declarative_workspace(workspace_id=source_workspace_id)
         source_ws = self.get_workspace(source_workspace_id)
@@ -396,6 +415,15 @@ class CatalogWorkspaceService(CatalogServiceBase):
                 raise Exception(
                     f"Target workspace {final_target_workspace_id} already exists, "
                     "and `overwrite_existing` argument is False"
+                )
+            if overwrite_existing:
+                self.delete_workspace(final_target_workspace_id)
+                self.create_or_update(
+                    CatalogWorkspace(
+                        workspace_id=final_target_workspace_id,
+                        name=final_target_workspace_name,
+                        parent_id=final_target_parent_id,
+                    )
                 )
         except NotFoundException:
             self.create_or_update(
@@ -414,6 +442,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
                     upper_case
                 ),
             )
+        # copy workspace data filters
+        # TODO: reimplement using entity when available
+        filters = self.get_declarative_workspace_data_filters()
+        new_filters, filters_mapping = filters.create_copy(source_workspace_id, final_target_workspace_id)
+        target_declarative_ws.change_wdf_refs_id(filters_mapping)
+        self.put_declarative_workspace_data_filters(new_filters)
 
         self.put_declarative_workspace(workspace_id=final_target_workspace_id, workspace=target_declarative_ws)
         self._permissions_service.put_declarative_permissions(
@@ -430,6 +464,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         layout_root_path: Optional[Path] = None,
         provision_workspace: Optional[bool] = False,
         store_layouts: Optional[bool] = False,
+        place_in_hierarchy: bool = True,
     ) -> None:
         """
         Generate layouts of new workspaces based on the source workspace.
@@ -438,6 +473,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         If translation is not requested, source and target texts are identical. Users must translate it manually.
         We recommend to translate using a third party service and polish the result manually.
 
+        :param place_in_hierarchy: Place in the hierarchy of the source parent workspace.
         :param workspace_id: ID of source workspace which we clone and translate all texts in it
         :param to_lang: ISO lang name (IETF BCP 47)
         :param to_locale: ISO lang code and country code (IETF BCP 47, e.g. en-US, cs-CZ, ...).
@@ -455,6 +491,8 @@ class CatalogWorkspaceService(CatalogServiceBase):
         :param store_layouts: Store declarative layouts of all workspaces to disk
         :return: None
         """
+        if not place_in_hierarchy:
+            raise ValueError(f"{place_in_hierarchy=} currently not supported")
         logger.info(f"generate_localized_workspaces START from_lang={from_lang} to_lang={to_lang}")
         workspace_folder = self.create_custom_workspace_folder(workspace_id, layout_root_path)
         translation_file_path = workspace_folder / f"translations_{to_lang}.yml"
@@ -539,6 +577,12 @@ class CatalogWorkspaceService(CatalogServiceBase):
     ) -> None:
         logger.info(f"Provision workspace with locales workspace_id={new_workspace.id}")
         self.create_or_update(new_workspace)
+
+        filters = self.get_declarative_workspace_data_filters()
+        new_filters, filters_mapping = filters.create_copy(source_workspace_id, new_workspace.id)
+        new_workspace_content.change_wdf_refs_id(filters_mapping)
+        self.put_declarative_workspace_data_filters(new_filters)
+
         self.put_declarative_workspace(new_workspace.id, new_workspace_content)
         # TODO - uncomment the copy after the fix is fully released
         #      - list_workspace_settings is failing with 500 error too :-(

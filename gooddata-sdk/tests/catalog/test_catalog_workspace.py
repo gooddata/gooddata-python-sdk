@@ -24,6 +24,7 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import recreate_directory
+from tests.catalog.utils import _refresh_workspaces
 
 gd_vcr = get_vcr()
 
@@ -88,7 +89,7 @@ def test_load_and_put_declarative_workspaces(test_config):
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
-        sdk.catalog_workspace.put_declarative_workspaces(workspaces_e)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspaces.yaml"))
@@ -108,7 +109,6 @@ def test_store_declarative_workspaces(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspaces.yaml"))
 def test_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "expected" / "declarative_workspaces.json"
     workspaces_e = sdk.catalog_workspace.get_declarative_workspaces(exclude=["ACTIVITY_INFO"])
 
     try:
@@ -119,10 +119,7 @@ def test_put_declarative_workspaces(test_config):
         assert workspaces_e == workspaces_o
         assert workspaces_e.to_dict(camel_case=True) == workspaces_o.to_dict(camel_case=True)
     finally:
-        with open(path) as f:
-            data = json.load(f)
-        workspaces_o = CatalogDeclarativeWorkspaces.from_dict(data)
-        sdk.catalog_workspace.put_declarative_workspaces(workspaces_o)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspaces_snake_case.yaml"))
@@ -219,18 +216,12 @@ def test_update_workspace_valid(test_config):
         assert len(workspaces) == 3
         assert workspace_o == new_workspace
     finally:
-        # Clean up. Revert changes.
-        sdk.catalog_workspace.create_or_update(workspace)
-        workspaces = sdk.catalog_workspace.list_workspaces()
-        workspace_o = sdk.catalog_workspace.get_workspace(workspace.id)
-        assert len(workspaces) == 3
-        assert workspace_o == workspace
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_workspace.yaml"))
 def test_delete_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "load"
     workspace_id = "demo_west_california"
 
     workspaces = sdk.catalog_workspace.list_workspaces()
@@ -243,12 +234,7 @@ def test_delete_workspace(test_config):
         assert len(workspaces) == 2
         assert workspace_id not in [w.id for w in workspaces]
     finally:
-        # Restore the whole WS hierarchy. WS delete can remove also objects out of WS definition, like
-        # workspace data filter settings
-        sdk.catalog_workspace.load_and_put_declarative_workspaces(path)
-        workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 3
-        assert workspace_id in [w.id for w in workspaces]
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_delete_non_existing_workspace.yaml"))
@@ -302,11 +288,7 @@ def test_create_workspace(test_config):
         assert len(workspaces) == 4
         assert workspace_o == workspace
     finally:
-        # Clean up. Delete created workspace.
-        sdk.catalog_workspace.delete_workspace(workspace_id)
-        workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 3
-        assert workspace_id not in [w.id for w in workspaces]
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_workspace.yaml"))
@@ -389,7 +371,6 @@ def test_store_declarative_workspace_data_filters(test_config):
 def test_load_and_put_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_workspace_data_filters.json"
     workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
 
     try:
@@ -400,16 +381,12 @@ def test_load_and_put_declarative_workspace_data_filters(test_config):
         assert workspace_data_filters_e == workspace_data_filters_o
         assert workspace_data_filters_e.to_dict(camel_case=True) == workspace_data_filters_o.to_dict(camel_case=True)
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data, camel_case=True)
-        sdk.catalog_workspace.put_declarative_workspace_data_filters(workspace_data_filters_o)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_workspace_data_filters.yaml"))
 def test_put_declarative_workspace_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    path = _current_dir / "expected" / "declarative_workspace_data_filters.json"
     declarative_workspace_data_filters_e = sdk.catalog_workspace.get_declarative_workspace_data_filters()
 
     try:
@@ -422,10 +399,7 @@ def test_put_declarative_workspace_data_filters(test_config):
             camel_case=True
         ) == declarative_workspace_data_filters_o.to_dict(camel_case=True)
     finally:
-        with open(path) as f:
-            data = json.load(f)
-        declarative_workspace_data_filters_o = CatalogDeclarativeWorkspaceDataFilters.from_dict(data)
-        sdk.catalog_workspace.put_declarative_workspace_data_filters(declarative_workspace_data_filters_o)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_life_cycle.yaml"))
@@ -465,12 +439,7 @@ def test_user_data_filters_life_cycle(test_config):
         user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
         assert len(user_data_filters) == 0
     finally:
-        sdk.catalog_workspace.delete_user_data_filter(
-            workspace_id=test_config["workspace"], user_data_filter_id=test_config["test_new_user_data_filter"]
-        )
-
-        user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
-        assert len(user_data_filters) == 0
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_user_data_filters.yaml"))
@@ -510,7 +479,6 @@ def test_store_declarative_user_data_filters(test_config):
 def test_load_and_put_declarative_user_data_filters(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_user_data_filters.json"
     user_data_filters_e = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
 
     try:
@@ -521,10 +489,7 @@ def test_load_and_put_declarative_user_data_filters(test_config):
         assert user_data_filters_e == user_data_filters_o
         assert user_data_filters_e.to_dict(camel_case=True) == user_data_filters_o.to_dict(camel_case=True)
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        workspace_data_filters_o = CatalogDeclarativeUserDataFilters.from_dict(data, camel_case=True)
-        sdk.catalog_workspace.put_declarative_user_data_filters(test_config["workspace"], workspace_data_filters_o)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_user_data_filters.yaml"))
@@ -549,11 +514,7 @@ def test_put_declarative_user_data_filters(test_config):
         assert user_data_filters_e == user_data_filters_o
         assert user_data_filters_e.to_dict() == user_data_filters_o.to_dict()
     finally:
-        sdk.catalog_workspace.put_declarative_user_data_filters(
-            test_config["workspace"], user_data_filters=CatalogDeclarativeUserDataFilters(user_data_filters=[])
-        )
-        user_data_filters = sdk.catalog_workspace.get_declarative_user_data_filters(test_config["workspace"])
-        assert len(user_data_filters.user_data_filters) == 0
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_workspace.yaml"))
@@ -587,17 +548,21 @@ def test_put_declarative_workspace(test_config):
     )
 
     try:
-        workspace_e = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
-        sdk.catalog_workspace.put_declarative_workspace(
-            workspace_id=test_config["workspace_test"], workspace=workspace_e
+        workspace_e = sdk.catalog_workspace.get_declarative_workspace(
+            test_config["workspace"], exclude=["ACTIVITY_INFO"]
         )
-        workspace_o = sdk.catalog_workspace.get_declarative_workspace(test_config["workspace"])
+        sdk.catalog_workspace.put_declarative_workspace(
+            workspace_id=test_config["workspace_test"], workspace=workspace_e, standalone_copy=True
+        )
+        workspace_o = sdk.catalog_workspace.get_declarative_workspace(
+            test_config["workspace_test"], exclude=["ACTIVITY_INFO"]
+        )
+        assert workspace_e != workspace_o
+        workspace_e.remove_wdf_refs()
         assert workspace_e == workspace_o
         assert workspace_e.to_dict() == workspace_o.to_dict()
     finally:
-        sdk.catalog_workspace.delete_workspace(workspace_id=test_config["workspace_test"])
-        workspaces = sdk.catalog_workspace.list_workspaces()
-        assert len(workspaces) == 3
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_workspace.yaml"))
@@ -606,8 +571,12 @@ def test_store_declarative_workspace(test_config):
     path = _current_dir / "store"
     recreate_directory(path)
 
-    workspaces_e = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
-    sdk.catalog_workspace.store_declarative_workspace(workspace_id=test_config["workspace"], layout_root_path=path)
+    workspaces_e = sdk.catalog_workspace.get_declarative_workspace(
+        workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
+    )
+    sdk.catalog_workspace.store_declarative_workspace(
+        workspace_id=test_config["workspace"], layout_root_path=path, exclude=["ACTIVITY_INFO"]
+    )
     workspaces_o = sdk.catalog_workspace.load_declarative_workspace(
         workspace_id=test_config["workspace"], layout_root_path=path
     )
@@ -620,8 +589,9 @@ def test_store_declarative_workspace(test_config):
 def test_load_and_put_declarative_workspace(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     path = _current_dir / "load"
-    expected_json_path = _current_dir / "expected" / "declarative_workspace.json"
-    workspace_e = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
+    workspace_e = sdk.catalog_workspace.get_declarative_workspace(
+        workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
+    )
 
     try:
         _empty_workspace(sdk, workspace_id=test_config["workspace"])
@@ -629,14 +599,13 @@ def test_load_and_put_declarative_workspace(test_config):
         sdk.catalog_workspace.load_and_put_declarative_workspace(
             workspace_id=test_config["workspace"], layout_root_path=path
         )
-        workspace_o = sdk.catalog_workspace.get_declarative_workspace(workspace_id=test_config["workspace"])
+        workspace_o = sdk.catalog_workspace.get_declarative_workspace(
+            workspace_id=test_config["workspace"], exclude=["ACTIVITY_INFO"]
+        )
         assert workspace_e == workspace_o
         assert workspace_e.to_dict(camel_case=True) == workspace_o.to_dict(camel_case=True)
     finally:
-        with open(expected_json_path) as f:
-            data = json.load(f)
-        workspace_o = CatalogDeclarativeWorkspaceModel.from_dict(data, camel_case=True)
-        sdk.catalog_workspace.put_declarative_workspace(workspace_id=test_config["workspace"], workspace=workspace_o)
+        _refresh_workspaces(sdk)
 
 
 def create_second_data_source(sdk: GoodDataSdk, ds_id: str) -> None:
@@ -694,9 +663,7 @@ def test_clone_workspace(test_config):
             source_ws_id, data_source_mapping=data_source_mapping, upper_case=True, overwrite_existing=True
         )
     finally:
-        # Cleanup
-        sdk.catalog_workspace.delete_workspace(default_cloned_ws_id)
-        sdk.catalog_workspace.delete_workspace(custom_cloned_ws_id)
+        _refresh_workspaces(sdk)
         delete_data_source(sdk, test_config["data_source2"])
 
 
@@ -725,7 +692,7 @@ def test_translate_workspace(test_config):
                 to_locale=to_config["locale"],
                 from_lang=from_lang,
                 translator_func=_translate_batch,
-                provision_workspace=True,
+                provision_workspace=False,
                 layout_root_path=path_to_layouts,
             )
             new_workspace = sdk.catalog_workspace.load_declarative_workspace(new_workspace_id, path_to_layouts)
@@ -744,4 +711,4 @@ def test_translate_workspace(test_config):
                 layout_root_path=path_to_layouts,
             )
         finally:
-            sdk.catalog_workspace.delete_workspace(new_workspace_id)
+            _refresh_workspaces(sdk)

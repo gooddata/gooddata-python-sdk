@@ -89,6 +89,7 @@ class CatalogDeclarativeFact(Base):
 class CatalogDataSourceTableIdentifier(Base):
     id: str
     data_source_id: str
+    path: Optional[List[str]] = None
 
     @staticmethod
     def client_class() -> Type[DataSourceTableIdentifier]:

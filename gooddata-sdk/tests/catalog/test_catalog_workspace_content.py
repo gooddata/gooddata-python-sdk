@@ -22,6 +22,7 @@ from gooddata_sdk import (
     ObjId,
 )
 from gooddata_sdk.utils import recreate_directory
+from tests.catalog.test_catalog_workspace import _refresh_workspaces
 
 gd_vcr = get_vcr()
 
@@ -34,7 +35,7 @@ def _set_up_workspace_ldm(sdk: GoodDataSdk, workspace_id: str, identifier: str) 
     sdk.catalog_workspace.create_or_update(workspace)
 
     ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
-    sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_o)
+    sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_o, standalone_copy=True)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_catalog_list_labels.yaml"))
@@ -86,18 +87,20 @@ def test_load_and_put_declarative_ldm(test_config):
     path = _current_dir / "load" / "workspace_content"
     workspace_id = test_config["workspace"]
     identifier = test_config["workspace_test"]
-    workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
-    sdk.catalog_workspace.create_or_update(workspace)
-
-    ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
 
     try:
-        sdk.catalog_workspace_content.load_and_put_declarative_ldm(identifier, path)
+        workspace = CatalogWorkspace(workspace_id=identifier, name=identifier)
+        sdk.catalog_workspace.create_or_update(workspace)
+        ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(workspace_id)
+
+        sdk.catalog_workspace_content.load_and_put_declarative_ldm(identifier, path, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
+        assert ldm_e != ldm_o
+        ldm_e.remove_wdf_refs()
         assert ldm_e == ldm_o
         assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
     finally:
-        sdk.catalog_workspace.delete_workspace(identifier)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_modify_ds_and_put_declarative_ldm.yaml"))
@@ -115,10 +118,10 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
     assert ds_e == [test_config["data_source"]]
 
     try:
-        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator, standalone_copy=True)
         assert True
         ldm_e.ldm.modify_mapped_data_source(data_source_mapping=data_source_mapping)
-        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator, standalone_copy=True)
         assert False
     except ValueError:
         DataSourceValidator.validate_ldm = MagicMock(return_value=None)
@@ -127,12 +130,12 @@ def test_load_and_modify_ds_and_put_declarative_ldm(test_config):
         reverse_data_source_mapping = {v: k for k, v in data_source_mapping.items()}
 
         ldm_e.ldm.modify_mapped_data_source(data_source_mapping=reverse_data_source_mapping)
-        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, validator, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
         ds_o = list(set([d.data_source_table_id.data_source_id for d in ldm_o.ldm.datasets]))
         assert ds_o == [test_config["data_source"]]
     finally:
-        sdk.catalog_workspace.delete_workspace(identifier)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_ldm_and_modify_tables_columns_case.yaml"))
@@ -182,12 +185,13 @@ def test_load_and_put_declarative_analytics_model(test_config):
     path = _current_dir / "load" / "workspace_content"
     workspace_id = test_config["workspace"]
     identifier = test_config["workspace_test"]
-    _set_up_workspace_ldm(sdk, workspace_id, identifier)
-    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(
-        workspace_id, exclude=["ACTIVITY_INFO"]
-    )
 
     try:
+        _set_up_workspace_ldm(sdk, workspace_id, identifier)
+        analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(
+            workspace_id, exclude=["ACTIVITY_INFO"]
+        )
+
         sdk.catalog_workspace_content.load_and_put_declarative_analytics_model(identifier, path)
         analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(
             identifier, exclude=["ACTIVITY_INFO"]
@@ -195,23 +199,24 @@ def test_load_and_put_declarative_analytics_model(test_config):
         assert analytics_model_e == analytics_model_o
         assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
     finally:
-        sdk.catalog_workspace.delete_workspace(identifier)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_analytics_model.yaml"))
 def test_put_declarative_analytics_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     identifier = test_put_declarative_analytics_model.__name__
-    _set_up_workspace_ldm(sdk, test_config["workspace"], identifier)
-    analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
 
     try:
+        _set_up_workspace_ldm(sdk, test_config["workspace"], identifier)
+        analytics_model_e = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
+
         sdk.catalog_workspace_content.put_declarative_analytics_model(identifier, analytics_model_e)
         analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(identifier)
         assert analytics_model_e == analytics_model_o
         assert analytics_model_e.to_api().to_dict() == analytics_model_o.to_api().to_dict()
     finally:
-        sdk.catalog_workspace.delete_workspace(identifier)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_put_declarative_ldm.yaml"))
@@ -223,12 +228,14 @@ def test_put_declarative_ldm(test_config):
 
     ldm_e = sdk.catalog_workspace_content.get_declarative_ldm(test_config["workspace"])
     try:
-        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e)
+        sdk.catalog_workspace_content.put_declarative_ldm(identifier, ldm_e, standalone_copy=True)
         ldm_o = sdk.catalog_workspace_content.get_declarative_ldm(identifier)
+        assert ldm_e != ldm_o
+        ldm_e.remove_wdf_refs()
         assert ldm_e == ldm_o
         assert ldm_e.to_api().to_dict() == ldm_o.to_api().to_dict()
     finally:
-        sdk.catalog_workspace.delete_workspace(identifier)
+        _refresh_workspaces(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_analytics_model.yaml"))
@@ -384,4 +391,4 @@ def test_explicit_workspace_data_filter(test_config):
         )
         assert len(dataset.workspace_data_filter_properties) == 1
     finally:
-        sdk.catalog_workspace_content.put_declarative_ldm(workspace_id=test_config["workspace"], ldm=model)
+        _refresh_workspaces(sdk)

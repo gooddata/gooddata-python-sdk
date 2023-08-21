@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 import functools
 from pathlib import Path
 from typing import List, Optional, Union
@@ -229,7 +230,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
 
     def put_declarative_ldm(
-        self, workspace_id: str, ldm: CatalogDeclarativeModel, validator: Optional[DataSourceValidator] = None
+        self,
+        workspace_id: str,
+        ldm: CatalogDeclarativeModel,
+        validator: Optional[DataSourceValidator] = None,
+        standalone_copy: bool = False,
     ) -> None:
         """Set declarative logical data model for a given workspace.
 
@@ -241,12 +246,18 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             validator (Optional[DataSourceValidator], optional):
                 Object that manages validation, whether each data_source_id in LDM corresponds
                 to existing data source. Defaults to None.
+            standalone_copy (bool):
+                If true, then workspace data filter references will be removed from LDM.
+                Note that first, the copy is made so we do not interfere with the original input.
 
         Returns:
             None
         """
         if validator is not None:
             validator.validate_ldm(ldm)
+        if standalone_copy:
+            ldm = copy.deepcopy(ldm)
+            ldm.remove_wdf_refs()
         self._layout_api.set_logical_model(workspace_id, ldm.to_api())
 
     def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
@@ -287,6 +298,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         workspace_id: str,
         layout_root_path: Path = Path.cwd(),
         validator: Optional[DataSourceValidator] = None,
+        standalone_copy: bool = False,
     ) -> None:
         """This method combines load_declarative_ldm and put_declarative_ldm
         methods to load and set layouts stored using store_declarative_ldm.
@@ -299,12 +311,15 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             validator (Optional[DataSourceValidator], optional):
                 Object that manages validation, whether each data_source_id in LDM corresponds
                 to existing data source. Defaults to None.
+            standalone_copy (bool):
+                If true, then workspace data filter references will be removed from LDM.
+                Note that first, the copy is made so we do not interfere with the original input.
 
         Returns:
             None
         """
         declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
-        self.put_declarative_ldm(workspace_id, declarative_ldm, validator)
+        self.put_declarative_ldm(workspace_id, declarative_ldm, validator, standalone_copy)
 
     def store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
         """Store declarative logical data model for a given workspace in directory hierarchy.

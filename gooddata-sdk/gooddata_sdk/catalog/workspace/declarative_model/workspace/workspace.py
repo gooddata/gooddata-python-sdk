@@ -1,8 +1,9 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 from pathlib import Path
-from typing import Any, List, Optional, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 import attr
 
@@ -60,6 +61,14 @@ class CatalogDeclarativeWorkspaceModel(Base):
         ldm = CatalogDeclarativeLdm.load_from_disk(workspace_folder)
         analytics = CatalogDeclarativeAnalyticsLayer.load_from_disk(workspace_folder)
         return cls(ldm=ldm, analytics=analytics)
+
+    def remove_wdf_refs(self) -> None:
+        if self.ldm:
+            self.ldm.remove_wdf_refs()
+
+    def change_wdf_refs_id(self, mapping: Dict[str, str]) -> None:
+        if self.ldm:
+            self.ldm.change_wdf_refs_id(mapping)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -148,6 +157,34 @@ class CatalogDeclarativeWorkspaceDataFilters(Base):
                 CatalogDeclarativeWorkspaceDataFilter.load_from_disk(workspace_data_filters_file)
             )
         return cls(workspace_data_filters=workspace_data_filters)
+
+    def create_copy(
+        self, source_ws_id: str, target_ws_id: str
+    ) -> Tuple["CatalogDeclarativeWorkspaceDataFilters", Dict]:
+        self_copy = copy.deepcopy(self)
+        # update workspace data filter settings
+        for wdf in self_copy.workspace_data_filters:
+            new_settings = []
+            for setting in wdf.workspace_data_filter_settings:
+                if setting.workspace.id == source_ws_id:
+                    new_setting = copy.deepcopy(setting)
+                    new_setting.workspace.id = target_ws_id
+                    new_settings.append(new_setting)
+            wdf.workspace_data_filter_settings = wdf.workspace_data_filter_settings + new_settings
+        # update workspace data filters
+        new_filters = []
+        wdf_ref_mapping = {}
+        for wdf in self_copy.workspace_data_filters:
+            if wdf.workspace is not None and wdf.workspace.id == source_ws_id:
+                filter_copy = copy.deepcopy(wdf)
+                wdf_copy_id = f"{filter_copy.id}_{target_ws_id}"
+                wdf_ref_mapping[filter_copy.id] = wdf_copy_id
+                filter_copy.id = wdf_copy_id
+                filter_copy.workspace = CatalogWorkspaceIdentifier(id=target_ws_id)
+                filter_copy.workspace_data_filter_settings = []
+                new_filters.append(filter_copy)
+        self_copy.workspace_data_filters = self_copy.workspace_data_filters + new_filters
+        return self_copy, wdf_ref_mapping
 
 
 @attr.s(auto_attribs=True, kw_only=True)
