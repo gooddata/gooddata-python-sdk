@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional, Type
+from typing import Dict, List, Optional, Type
 
 import attr
 
@@ -42,6 +42,14 @@ class CatalogDeclarativeModel(Base):
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeModel:
         ldm = CatalogDeclarativeLdm.load_from_disk(workspace_folder)
         return cls(ldm=ldm)
+
+    def remove_wdf_refs(self) -> None:
+        if self.ldm:
+            self.ldm.remove_wdf_refs()
+
+    def change_wdf_refs_id(self, mapping: Dict[str, str]) -> None:
+        if self.ldm:
+            self.ldm.change_wdf_refs_id(mapping)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -235,3 +243,19 @@ class CatalogDeclarativeLdm(Base):
                         new_columns.append(self._change_case(reference_column, upper_case))
                     reference.source_columns = new_columns
         return self
+
+    def remove_wdf_refs(self) -> None:
+        for dataset in self.datasets:
+            dataset.workspace_data_filter_references = None
+
+    def change_wdf_refs_id(self, mapping: Dict[str, str]) -> None:
+        for dataset in self.datasets:
+            if dataset.workspace_data_filter_references:
+                for wdf_ref in dataset.workspace_data_filter_references:
+                    wdf_ref.filter_id.id = mapping[wdf_ref.filter_id.id]
+
+        if self.dataset_extensions:
+            for dataset_extension in self.dataset_extensions:
+                if dataset_extension.workspace_data_filter_references:
+                    for wdf_ref in dataset_extension.workspace_data_filter_references:
+                        wdf_ref.filter_id.id = mapping[wdf_ref.filter_id.id]
