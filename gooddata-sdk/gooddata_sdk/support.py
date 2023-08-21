@@ -44,8 +44,9 @@ class SupportService:
 
         Method propagates is_available exceptions.
 
-        :param timeout: seconds to wait to service to be available (see method description for details)
-        :param sleep_time: seconds to wait between GD.CN availability tests
+        Args:
+            timeout: seconds to wait to service to be available (see method description for details)
+            sleep_time: seconds to wait between GD.CN availability tests
         """
         start_time_sec = time.time()
         while True:

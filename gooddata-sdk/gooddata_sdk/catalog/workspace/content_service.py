@@ -61,14 +61,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
-            inject_valid_objects_func (bool)
+            inject_valid_objects_func (bool):
                 Should valid_objects func be injected into the result container?
                 When turned off, it enables pickling of the result, which is useful e.g. in Streamlit caching
                 In such a case, developers must call compute_valid_objects in this service.
 
         Returns:
-            CatalogWorkspaceContent:
-                Object containing all data sets and metrics.
+            CatalogWorkspaceContent: Object containing all data sets and metrics.
         """
         get_datasets = functools.partial(
             self._entities_api.get_all_entities_datasets,

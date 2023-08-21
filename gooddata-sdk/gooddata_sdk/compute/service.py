@@ -24,8 +24,9 @@ class ComputeService:
         """
         Starts computation in GoodData.CN workspace, using the provided execution definition.
 
-        :param workspace_id: workspace identifier
-        :param exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
+        Args:
+            workspace_id: workspace identifier
+            exec_def: execution definition - this prescribes what to calculate, how to place labels and metric values
          into dimensions
         """
         response = self._actions_api.compute_report(workspace_id, exec_def.as_api_model(), _check_return_type=False)
@@ -41,9 +42,11 @@ class ComputeService:
         """
         Gets execution result's metadata from GoodData.CN workspace for given execution result ID.
 
-        :param workspace_id: workspace identifier
-        :param result_id: execution result ID
-        :return: execution result's metadata
+        Args:
+            workspace_id: workspace identifier
+            result_id: execution result ID
+        Returns:
+            ResultCacheMetadata: execution result's metadata
         """
         result_cache_metadata, _, http_headers = self._actions_api.retrieve_execution_metadata(
             workspace_id,

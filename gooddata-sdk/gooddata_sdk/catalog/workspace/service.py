@@ -120,12 +120,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
     def list_workspaces(self) -> List[CatalogWorkspace]:
         """Returns a list of all workspaces in current organization
 
-        Args:
-            List[CatalogWorkspace]
-
         Returns:
-            List[CatalogWorkspace]:
-                List of workspaces in the current organization.
+            List[CatalogWorkspace]: List of workspaces in the current organization.
+
         """
         get_workspaces = functools.partial(
             self._entities_api.get_all_entities_workspaces,
@@ -139,7 +136,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
         """Create a new workspace setting or overwrite an existing workspace setting with the same id.
 
         Args:
-            workspace_id (str)
+            workspace_id (str):
                 ID of workspace where we create the setting
             workspace_setting (CatalogWorkspaceSetting):
                 Catalog Workspace Setting object to be created or updated.
@@ -470,26 +467,27 @@ class CatalogWorkspaceService(CatalogServiceBase):
         Generate layouts of new workspaces based on the source workspace.
         All texts (titles, ...) will be translated to different languages if requested.
         Translation YAML files are created for each language containing pairs of source and target texts.
-        If translation is not requested, source and target texts are identical. Users must translate it manually.
+        If translation is not requested, source and target texts are identical. Users must translate it manually
         We recommend to translate using a third party service and polish the result manually.
+        Args:
+            workspace_id: ID of source workspace which we clone and translate all texts in it
+            to_lang: ISO lang name (IETF BCP 47)
+            to_locale: ISO lang code and country code (IETF BCP 47, e.g. en-US, cs-CZ, ...).
+                                Check GoodData documentation for what codes are supported.
+            from_lang: from which language we are going to translate
+            translator_func: 3rd party service capable of translating a batch of strings to various languages
+            layout_root_path: folder, where to store all layout YAML files (of new translated workspaces)
+                                        Also, the translation files are stored there.
+                                        if empty, they are stored to:
+                                        <CURRENT_DIR>/<LAYOUT_ROOT_FOLDER>/<organization_id>/
+                                        <LAYOUT_WORKSPACES_DIR>/<workspace_id>
+                                        else they are stored to <layout_root_path>/
+            provision_workspace: Should new workspace for the target language be provisioned?
+                                        Including setting of corresponding locales.
+            store_layouts: Store declarative layouts of all workspaces to disk
 
-        :param place_in_hierarchy: Place in the hierarchy of the source parent workspace.
-        :param workspace_id: ID of source workspace which we clone and translate all texts in it
-        :param to_lang: ISO lang name (IETF BCP 47)
-        :param to_locale: ISO lang code and country code (IETF BCP 47, e.g. en-US, cs-CZ, ...).
-                          Check GoodData documentation for what codes are supported.
-        :param from_lang: from which language we are going to translate
-        :param translator_func: 3rd party service capable of translating a batch of strings to various languages
-        :param layout_root_path: folder, where to store all layout YAML files (of new translated workspaces)
-                                 Also, the translation files are stored there.
-                                 if empty, they are stored to:
-                                 <CURRENT_DIR>/<LAYOUT_ROOT_FOLDER>/<organization_id>/
-                                   <LAYOUT_WORKSPACES_DIR>/<workspace_id>
-                                 else they are stored to <layout_root_path>/
-        :param provision_workspace: Should new workspace for the target language be provisioned?
-                                     Including setting of corresponding locales.
-        :param store_layouts: Store declarative layouts of all workspaces to disk
-        :return: None
+        Returns:
+            None
         """
         if not place_in_hierarchy:
             raise ValueError(f"{place_in_hierarchy=} currently not supported")

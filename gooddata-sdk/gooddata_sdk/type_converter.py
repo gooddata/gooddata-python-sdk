@@ -133,8 +133,9 @@ class TypeConverterRegistry:
         Register converter instance for given sub-type (granularity). If sub-type is not specified, converter is
         registered as the default one for the whole type. Default converter can be registered only once.
 
-        :param converter: converter instance
-        :param sub_type: sub-type name
+        Args:
+            converter: converter instance
+            sub_type: sub-type name
         """
         if sub_type is None:
             self._register_default(converter)
@@ -145,8 +146,9 @@ class TypeConverterRegistry:
         """
         Register converter instance for given sub-type granularity.
 
-        :param converter: converter instance
-        :param sub_type: sub-type name
+        Args:
+            converter: converter instance
+            sub_type: sub-type name
         """
         if sub_type in self._converters:
             reg_converter_type = self._converters[sub_type].__class__.__name__
@@ -178,8 +180,11 @@ class TypeConverterRegistry:
         if the sub-type is not found or not provided. When a default converter is not registered, ValueError
         exception is raised.
 
-        :param sub_type: sub-type name
-        :return: Converter instance
+        Args:
+            sub_type: sub-type name
+
+        Returns:
+            Converter instance
         """
         if sub_type is None:
             return self._get_default_converter()
