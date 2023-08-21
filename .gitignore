@@ -14,5 +14,5 @@ docs/node_modules
 docs/public
 docs/resources/_gen
 docs/tmp/
-docs/multidocs
+docs/versioned_docs
 docs/.hugo_build.lock
