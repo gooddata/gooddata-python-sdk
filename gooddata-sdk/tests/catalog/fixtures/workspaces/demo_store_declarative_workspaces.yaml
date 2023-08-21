@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '37453'
+          - '38871'
       body:
         string:
           workspaceDataFilters:
@@ -169,7 +169,7 @@ interactions:
                                     drills: []
                                     properties: {}
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -208,7 +208,7 @@ interactions:
                                 type: dashboardPlugin
                             version: '2'
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -359,7 +359,7 @@ interactions:
                                     drills: []
                                     properties: {}
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -370,7 +370,7 @@ interactions:
                     - content:
                         url: https://www.example.com
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -380,7 +380,7 @@ interactions:
                     - content:
                         url: https://www.example.com
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -429,7 +429,7 @@ interactions:
                     - content:
                         format: '#,##0'
                         maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -438,7 +438,7 @@ interactions:
                     - content:
                         format: '#,##0'
                         maql: SELECT COUNT({attribute/order_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -448,7 +448,7 @@ interactions:
                         format: '#,##0'
                         maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                           {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -458,7 +458,7 @@ interactions:
                         format: '#,##0.00'
                         maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                           IN ("Returned", "Canceled"))
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -468,7 +468,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT SUM({fact/spend})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -477,7 +477,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT SUM({fact/price}*{fact/quantity})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -486,7 +486,7 @@ interactions:
                     - content:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / {metric/total_revenue}
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -496,7 +496,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                           \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -506,7 +506,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                           \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -516,7 +516,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                           \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -526,7 +526,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                           \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -536,7 +536,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY
                           {attribute/products.category}, ALL OTHER)
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -546,7 +546,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY
                           ALL {attribute/product_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -556,7 +556,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                           IN ("Returned", "Canceled"))
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -567,7 +567,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Clothing")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -577,7 +577,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ( "Electronics")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -587,7 +587,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Home")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -597,7 +597,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Outdoor")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -606,7 +606,7 @@ interactions:
                     - content:
                         format: $#,##0.0
                         maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -615,7 +615,7 @@ interactions:
                     - content:
                         format: $#,##0.0
                         maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -624,7 +624,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -633,7 +633,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -642,7 +642,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} BY ALL OTHER
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -651,7 +651,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -716,7 +716,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:treemap
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -792,7 +792,7 @@ interactions:
                               rotation: auto
                         version: '2'
                         visualizationUrl: local:combo2
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -871,7 +871,7 @@ interactions:
                               direction: asc
                         version: '2'
                         visualizationUrl: local:table
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -930,7 +930,7 @@ interactions:
                             stackMeasuresToPercent: true
                         version: '2'
                         visualizationUrl: local:area
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -987,7 +987,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:treemap
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1040,7 +1040,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:donut
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1115,7 +1115,7 @@ interactions:
                                 visible: false
                         version: '2'
                         visualizationUrl: local:column
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1172,7 +1172,7 @@ interactions:
                               enabled: true
                         version: '2'
                         visualizationUrl: local:scatter
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1271,7 +1271,7 @@ interactions:
                               direction: asc
                         version: '2'
                         visualizationUrl: local:table
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1327,7 +1327,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:line
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1366,7 +1366,7 @@ interactions:
                         properties: {}
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1422,7 +1422,7 @@ interactions:
                               min: '0'
                         version: '2'
                         visualizationUrl: local:scatter
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1490,7 +1490,7 @@ interactions:
                               rotation: auto
                         version: '2'
                         visualizationUrl: local:combo2
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1547,7 +1547,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1604,7 +1604,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -1617,6 +1617,7 @@ interactions:
                           id: campaign_channel_id
                           labels: []
                           sourceColumn: campaign_channel_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Campaign channel id
@@ -1624,6 +1625,7 @@ interactions:
                           id: campaign_channels.category
                           labels: []
                           sourceColumn: category
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Category
@@ -1631,24 +1633,30 @@ interactions:
                           id: type
                           labels: []
                           sourceColumn: type
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Type
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: campaign_channels
+                        path:
+                          - demo
+                          - campaign_channels
                         type: dataSource
                       description: Campaign channels
                       facts:
                         - description: Budget
                           id: budget
                           sourceColumn: budget
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Campaign channels
                           title: Budget
                         - description: Spend
                           id: spend
                           sourceColumn: spend
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Campaign channels
                           title: Spend
@@ -1661,6 +1669,8 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - campaign_id
                       tags:
@@ -1671,6 +1681,7 @@ interactions:
                           id: campaign_id
                           labels: []
                           sourceColumn: campaign_id
+                          sourceColumnDataType: INT
                           tags:
                             - Campaigns
                           title: Campaign id
@@ -1678,12 +1689,16 @@ interactions:
                           id: campaign_name
                           labels: []
                           sourceColumn: campaign_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaigns
                           title: Campaign name
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: campaigns
+                        path:
+                          - demo
+                          - campaigns
                         type: dataSource
                       description: Campaigns
                       facts: []
@@ -1700,6 +1715,7 @@ interactions:
                           id: customer_id
                           labels: []
                           sourceColumn: customer_id
+                          sourceColumnDataType: INT
                           tags:
                             - Customers
                           title: Customer id
@@ -1707,6 +1723,7 @@ interactions:
                           id: customer_name
                           labels: []
                           sourceColumn: customer_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: Customer name
@@ -1714,6 +1731,7 @@ interactions:
                           id: region
                           labels: []
                           sourceColumn: region
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: Region
@@ -1723,16 +1741,21 @@ interactions:
                             - description: Location
                               id: geo__state__location
                               sourceColumn: geo__state__location
+                              sourceColumnDataType: STRING
                               tags:
                                 - Customers
                               title: Location
                           sourceColumn: state
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: State
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: customers
+                        path:
+                          - demo
+                          - customers
                         type: dataSource
                       description: Customers
                       facts: []
@@ -1749,6 +1772,7 @@ interactions:
                           id: order_id
                           labels: []
                           sourceColumn: order_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order id
@@ -1756,6 +1780,7 @@ interactions:
                           id: order_line_id
                           labels: []
                           sourceColumn: order_line_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order line id
@@ -1763,24 +1788,30 @@ interactions:
                           id: order_status
                           labels: []
                           sourceColumn: order_status
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order status
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: order_lines
+                        path:
+                          - demo
+                          - order_lines
                         type: dataSource
                       description: Order lines
                       facts:
                         - description: Price
                           id: price
                           sourceColumn: price
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Order lines
                           title: Price
                         - description: Quantity
                           id: quantity
                           sourceColumn: quantity
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Order lines
                           title: Quantity
@@ -1793,34 +1824,54 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - campaign_id
                         - identifier:
                             id: customers
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - customer_id
                         - identifier:
                             id: date
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - DATE
                           sourceColumns:
                             - date
                         - identifier:
                             id: products
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - product_id
                       tags:
                         - Order lines
                       title: Order lines
+                      workspaceDataFilterColumns:
+                        - dataType: STRING
+                          name: wdf__region
+                        - dataType: STRING
+                          name: wdf__state
+                      workspaceDataFilterReferences:
+                        - filterColumn: wdf__region
+                          filterColumnDataType: STRING
+                          filterId:
+                            id: wdf__region
+                            type: workspaceDataFilter
                     - attributes:
                         - description: Product id
                           id: product_id
                           labels: []
                           sourceColumn: product_id
+                          sourceColumnDataType: INT
                           tags:
                             - Products
                           title: Product id
@@ -1828,6 +1879,7 @@ interactions:
                           id: product_name
                           labels: []
                           sourceColumn: product_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Products
                           title: Product name
@@ -1835,12 +1887,16 @@ interactions:
                           id: products.category
                           labels: []
                           sourceColumn: category
+                          sourceColumnDataType: STRING
                           tags:
                             - Products
                           title: Category
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: products
+                        path:
+                          - demo
+                          - products
                         type: dataSource
                       description: Products
                       facts: []
@@ -1901,6 +1957,14 @@ interactions:
                   metrics: []
                   visualizationObjects: []
                 ldm:
+                  datasetExtensions:
+                    - id: order_lines
+                      workspaceDataFilterReferences:
+                        - filterColumn: wdf__state
+                          filterColumnDataType: STRING
+                          filterId:
+                            id: wdf__state
+                            type: workspaceDataFilter
                   datasets: []
                   dateInstances: []
               name: Demo West
@@ -2003,7 +2067,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '37453'
+          - '38871'
       body:
         string:
           workspaceDataFilters:
@@ -2098,7 +2162,7 @@ interactions:
                                     drills: []
                                     properties: {}
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2137,7 +2201,7 @@ interactions:
                                 type: dashboardPlugin
                             version: '2'
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2288,7 +2352,7 @@ interactions:
                                     drills: []
                                     properties: {}
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2299,7 +2363,7 @@ interactions:
                     - content:
                         url: https://www.example.com
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2309,7 +2373,7 @@ interactions:
                     - content:
                         url: https://www.example.com
                         version: '2'
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2358,7 +2422,7 @@ interactions:
                     - content:
                         format: '#,##0'
                         maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2367,7 +2431,7 @@ interactions:
                     - content:
                         format: '#,##0'
                         maql: SELECT COUNT({attribute/order_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2377,7 +2441,7 @@ interactions:
                         format: '#,##0'
                         maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                           {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2387,7 +2451,7 @@ interactions:
                         format: '#,##0.00'
                         maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                           IN ("Returned", "Canceled"))
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2397,7 +2461,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT SUM({fact/spend})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2406,7 +2470,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT SUM({fact/price}*{fact/quantity})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2415,7 +2479,7 @@ interactions:
                     - content:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / {metric/total_revenue}
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2425,7 +2489,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                           \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2435,7 +2499,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                           \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2445,7 +2509,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                           \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2455,7 +2519,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                           \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2465,7 +2529,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY
                           {attribute/products.category}, ALL OTHER)
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2475,7 +2539,7 @@ interactions:
                         format: '#,##0.0%'
                         maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY
                           ALL {attribute/product_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2485,7 +2549,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                           IN ("Returned", "Canceled"))
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2496,7 +2560,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Clothing")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2506,7 +2570,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ( "Electronics")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2516,7 +2580,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Home")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2526,7 +2590,7 @@ interactions:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE {label/products.category}
                           IN ("Outdoor")
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2535,7 +2599,7 @@ interactions:
                     - content:
                         format: $#,##0.0
                         maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2544,7 +2608,7 @@ interactions:
                     - content:
                         format: $#,##0.0
                         maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2553,7 +2617,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2562,7 +2626,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2571,7 +2635,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/revenue} BY ALL OTHER
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2580,7 +2644,7 @@ interactions:
                     - content:
                         format: $#,##0
                         maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2645,7 +2709,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:treemap
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2721,7 +2785,7 @@ interactions:
                               rotation: auto
                         version: '2'
                         visualizationUrl: local:combo2
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2800,7 +2864,7 @@ interactions:
                               direction: asc
                         version: '2'
                         visualizationUrl: local:table
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2859,7 +2923,7 @@ interactions:
                             stackMeasuresToPercent: true
                         version: '2'
                         visualizationUrl: local:area
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2916,7 +2980,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:treemap
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -2969,7 +3033,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:donut
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3044,7 +3108,7 @@ interactions:
                                 visible: false
                         version: '2'
                         visualizationUrl: local:column
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3101,7 +3165,7 @@ interactions:
                               enabled: true
                         version: '2'
                         visualizationUrl: local:scatter
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3200,7 +3264,7 @@ interactions:
                               direction: asc
                         version: '2'
                         visualizationUrl: local:table
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3256,7 +3320,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:line
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3295,7 +3359,7 @@ interactions:
                         properties: {}
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3351,7 +3415,7 @@ interactions:
                               min: '0'
                         version: '2'
                         visualizationUrl: local:scatter
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3419,7 +3483,7 @@ interactions:
                               rotation: auto
                         version: '2'
                         visualizationUrl: local:combo2
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3476,7 +3540,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3533,7 +3597,7 @@ interactions:
                               position: bottom
                         version: '2'
                         visualizationUrl: local:bar
-                      createdAt: 2023-08-14 07:28
+                      createdAt: 2023-08-21 10:44
                       createdBy:
                         id: admin
                         type: user
@@ -3546,6 +3610,7 @@ interactions:
                           id: campaign_channel_id
                           labels: []
                           sourceColumn: campaign_channel_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Campaign channel id
@@ -3553,6 +3618,7 @@ interactions:
                           id: campaign_channels.category
                           labels: []
                           sourceColumn: category
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Category
@@ -3560,24 +3626,30 @@ interactions:
                           id: type
                           labels: []
                           sourceColumn: type
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaign channels
                           title: Type
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: campaign_channels
+                        path:
+                          - demo
+                          - campaign_channels
                         type: dataSource
                       description: Campaign channels
                       facts:
                         - description: Budget
                           id: budget
                           sourceColumn: budget
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Campaign channels
                           title: Budget
                         - description: Spend
                           id: spend
                           sourceColumn: spend
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Campaign channels
                           title: Spend
@@ -3590,6 +3662,8 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - campaign_id
                       tags:
@@ -3600,6 +3674,7 @@ interactions:
                           id: campaign_id
                           labels: []
                           sourceColumn: campaign_id
+                          sourceColumnDataType: INT
                           tags:
                             - Campaigns
                           title: Campaign id
@@ -3607,12 +3682,16 @@ interactions:
                           id: campaign_name
                           labels: []
                           sourceColumn: campaign_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Campaigns
                           title: Campaign name
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: campaigns
+                        path:
+                          - demo
+                          - campaigns
                         type: dataSource
                       description: Campaigns
                       facts: []
@@ -3629,6 +3708,7 @@ interactions:
                           id: customer_id
                           labels: []
                           sourceColumn: customer_id
+                          sourceColumnDataType: INT
                           tags:
                             - Customers
                           title: Customer id
@@ -3636,6 +3716,7 @@ interactions:
                           id: customer_name
                           labels: []
                           sourceColumn: customer_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: Customer name
@@ -3643,6 +3724,7 @@ interactions:
                           id: region
                           labels: []
                           sourceColumn: region
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: Region
@@ -3652,16 +3734,21 @@ interactions:
                             - description: Location
                               id: geo__state__location
                               sourceColumn: geo__state__location
+                              sourceColumnDataType: STRING
                               tags:
                                 - Customers
                               title: Location
                           sourceColumn: state
+                          sourceColumnDataType: STRING
                           tags:
                             - Customers
                           title: State
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: customers
+                        path:
+                          - demo
+                          - customers
                         type: dataSource
                       description: Customers
                       facts: []
@@ -3678,6 +3765,7 @@ interactions:
                           id: order_id
                           labels: []
                           sourceColumn: order_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order id
@@ -3685,6 +3773,7 @@ interactions:
                           id: order_line_id
                           labels: []
                           sourceColumn: order_line_id
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order line id
@@ -3692,24 +3781,30 @@ interactions:
                           id: order_status
                           labels: []
                           sourceColumn: order_status
+                          sourceColumnDataType: STRING
                           tags:
                             - Order lines
                           title: Order status
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: order_lines
+                        path:
+                          - demo
+                          - order_lines
                         type: dataSource
                       description: Order lines
                       facts:
                         - description: Price
                           id: price
                           sourceColumn: price
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Order lines
                           title: Price
                         - description: Quantity
                           id: quantity
                           sourceColumn: quantity
+                          sourceColumnDataType: NUMERIC
                           tags:
                             - Order lines
                           title: Quantity
@@ -3722,34 +3817,54 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - campaign_id
                         - identifier:
                             id: customers
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - customer_id
                         - identifier:
                             id: date
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - DATE
                           sourceColumns:
                             - date
                         - identifier:
                             id: products
                             type: dataset
                           multivalue: false
+                          sourceColumnDataTypes:
+                            - INT
                           sourceColumns:
                             - product_id
                       tags:
                         - Order lines
                       title: Order lines
+                      workspaceDataFilterColumns:
+                        - dataType: STRING
+                          name: wdf__region
+                        - dataType: STRING
+                          name: wdf__state
+                      workspaceDataFilterReferences:
+                        - filterColumn: wdf__region
+                          filterColumnDataType: STRING
+                          filterId:
+                            id: wdf__region
+                            type: workspaceDataFilter
                     - attributes:
                         - description: Product id
                           id: product_id
                           labels: []
                           sourceColumn: product_id
+                          sourceColumnDataType: INT
                           tags:
                             - Products
                           title: Product id
@@ -3757,6 +3872,7 @@ interactions:
                           id: product_name
                           labels: []
                           sourceColumn: product_name
+                          sourceColumnDataType: STRING
                           tags:
                             - Products
                           title: Product name
@@ -3764,12 +3880,16 @@ interactions:
                           id: products.category
                           labels: []
                           sourceColumn: category
+                          sourceColumnDataType: STRING
                           tags:
                             - Products
                           title: Category
                       dataSourceTableId:
                         dataSourceId: demo-test-ds
                         id: products
+                        path:
+                          - demo
+                          - products
                         type: dataSource
                       description: Products
                       facts: []
@@ -3830,6 +3950,14 @@ interactions:
                   metrics: []
                   visualizationObjects: []
                 ldm:
+                  datasetExtensions:
+                    - id: order_lines
+                      workspaceDataFilterReferences:
+                        - filterColumn: wdf__state
+                          filterColumnDataType: STRING
+                          filterId:
+                            id: wdf__state
+                            type: workspaceDataFilter
                   datasets: []
                   dateInstances: []
               name: Demo West
@@ -4008,7 +4136,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 0d6eee19-385e-477b-9fe2-1ca61a3b406c
+              oauthClientId: 7e7c90d7-eb40-4075-936e-94100ba27cfa
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -4159,6 +4287,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 0d6eee19-385e-477b-9fe2-1ca61a3b406c
+              oauthClientId: 7e7c90d7-eb40-4075-936e-94100ba27cfa
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

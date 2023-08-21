@@ -1,9 +1,10 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 attributes:
   - description: Campaign channel id
     id: campaign_channel_id
     labels: []
     sourceColumn: campaign_channel_id
+    sourceColumnDataType: STRING
     tags:
       - Campaign channels
     title: Campaign channel id
@@ -11,6 +12,7 @@ attributes:
     id: campaign_channels.category
     labels: []
     sourceColumn: category
+    sourceColumnDataType: STRING
     tags:
       - Campaign channels
     title: Category
@@ -18,24 +20,30 @@ attributes:
     id: type
     labels: []
     sourceColumn: type
+    sourceColumnDataType: STRING
     tags:
       - Campaign channels
     title: Type
 dataSourceTableId:
   dataSourceId: demo-test-ds
   id: campaign_channels
+  path:
+    - demo
+    - campaign_channels
   type: dataSource
 description: Campaign channels
 facts:
   - description: Budget
     id: budget
     sourceColumn: budget
+    sourceColumnDataType: NUMERIC
     tags:
       - Campaign channels
     title: Budget
   - description: Spend
     id: spend
     sourceColumn: spend
+    sourceColumnDataType: NUMERIC
     tags:
       - Campaign channels
     title: Spend
@@ -48,6 +56,8 @@ references:
       id: campaigns
       type: dataset
     multivalue: false
+    sourceColumnDataTypes:
+      - INT
     sourceColumns:
       - campaign_id
 tags:

@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '25476'
+          - '27138'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -76,30 +76,6 @@ interactions:
       body:
         string:
           data:
-            - id: type
-              type: attribute
-              attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
-                areRelationsValid: true
-                sourceColumn: type
-              relationships:
-                dataset:
-                  data:
-                    id: campaign_channels
-                    type: dataset
-                labels:
-                  data:
-                    - id: type
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: campaign_channel_id
               type: attribute
               attributes:
@@ -109,6 +85,7 @@ interactions:
                   - Campaign channels
                 areRelationsValid: true
                 sourceColumn: campaign_channel_id
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -133,6 +110,7 @@ interactions:
                   - Campaign channels
                 areRelationsValid: true
                 sourceColumn: category
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -148,26 +126,27 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: campaign_name
+            - id: type
               type: attribute
               attributes:
-                title: Campaign name
-                description: Campaign name
+                title: Type
+                description: Type
                 tags:
-                  - Campaigns
+                  - Campaign channels
                 areRelationsValid: true
-                sourceColumn: campaign_name
+                sourceColumn: type
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: campaigns
+                    id: campaign_channels
                     type: dataset
                 labels:
                   data:
-                    - id: campaign_name
+                    - id: type
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
               meta:
                 origin:
                   originType: NATIVE
@@ -181,6 +160,7 @@ interactions:
                   - Campaigns
                 areRelationsValid: true
                 sourceColumn: campaign_id
+                sourceColumnDataType: INT
               relationships:
                 dataset:
                   data:
@@ -196,56 +176,27 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: region
+            - id: campaign_name
               type: attribute
               attributes:
-                title: Region
-                description: Region
+                title: Campaign name
+                description: Campaign name
                 tags:
-                  - Customers
+                  - Campaigns
                 areRelationsValid: true
-                sourceColumn: region
+                sourceColumn: campaign_name
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: customers
+                    id: campaigns
                     type: dataset
                 labels:
                   data:
-                    - id: region
+                    - id: campaign_name
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: state
-              type: attribute
-              attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: state
-              relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: state
-                      type: label
-                    - id: geo__state__location
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
               meta:
                 origin:
                   originType: NATIVE
@@ -259,6 +210,7 @@ interactions:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: customer_id
+                sourceColumnDataType: INT
               relationships:
                 dataset:
                   data:
@@ -283,6 +235,7 @@ interactions:
                   - Customers
                 areRelationsValid: true
                 sourceColumn: customer_name
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -298,50 +251,58 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: order_status
+            - id: region
               type: attribute
               attributes:
-                title: Order status
-                description: Order status
+                title: Region
+                description: Region
                 tags:
-                  - Order lines
+                  - Customers
                 areRelationsValid: true
-                sourceColumn: order_status
+                sourceColumn: region
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: order_lines
+                    id: customers
                     type: dataset
                 labels:
                   data:
-                    - id: order_status
+                    - id: region
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: order_line_id
+            - id: state
               type: attribute
               attributes:
-                title: Order line id
-                description: Order line id
+                title: State
+                description: State
                 tags:
-                  - Order lines
+                  - Customers
                 areRelationsValid: true
-                sourceColumn: order_line_id
+                sourceColumn: state
+                sourceColumnDataType: STRING
               relationships:
+                defaultView:
+                  data:
+                    id: state
+                    type: label
                 dataset:
                   data:
-                    id: order_lines
+                    id: customers
                     type: dataset
                 labels:
                   data:
-                    - id: order_line_id
+                    - id: geo__state__location
+                      type: label
+                    - id: state
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
@@ -355,6 +316,7 @@ interactions:
                   - Order lines
                 areRelationsValid: true
                 sourceColumn: order_id
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -370,6 +332,56 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: order_line_id
+              type: attribute
+              attributes:
+                title: Order line id
+                description: Order line id
+                tags:
+                  - Order lines
+                areRelationsValid: true
+                sourceColumn: order_line_id
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: order_lines
+                    type: dataset
+                labels:
+                  data:
+                    - id: order_line_id
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: order_status
+              type: attribute
+              attributes:
+                title: Order status
+                description: Order status
+                tags:
+                  - Order lines
+                areRelationsValid: true
+                sourceColumn: order_status
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: order_lines
+                    type: dataset
+                labels:
+                  data:
+                    - id: order_status
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: product_id
               type: attribute
               attributes:
@@ -379,6 +391,7 @@ interactions:
                   - Products
                 areRelationsValid: true
                 sourceColumn: product_id
+                sourceColumnDataType: INT
               relationships:
                 dataset:
                   data:
@@ -403,6 +416,7 @@ interactions:
                   - Products
                 areRelationsValid: true
                 sourceColumn: product_name
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -427,6 +441,7 @@ interactions:
                   - Products
                 areRelationsValid: true
                 sourceColumn: category
+                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
@@ -462,6 +477,30 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.hour
+              type: attribute
+              attributes:
+                title: Date - Hour
+                description: Hour
+                tags:
+                  - Date
+                granularity: HOUR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.hour
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
               meta:
                 origin:
                   originType: NATIVE
@@ -778,30 +817,6 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.hour
-              type: attribute
-              attributes:
-                title: Date - Hour
-                description: Hour
-                tags:
-                  - Date
-                granularity: HOUR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.hour
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
           included:
             - id: date.minuteOfHour
               type: label
@@ -834,6 +849,7 @@ interactions:
                   - Products
                 primary: true
                 sourceColumn: product_name
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
@@ -846,6 +862,7 @@ interactions:
                   - Order lines
                 primary: true
                 sourceColumn: order_status
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_status
@@ -862,34 +879,57 @@ interactions:
                     order: 0
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes: []
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - date
-                    sourceColumnDataTypes: []
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes: []
+                    sourceColumnDataTypes:
+                      - DATE
                   - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                    sourceColumnDataTypes: []
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes:
+                      - INT
                 dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
+                workspaceDataFilterColumns:
+                  - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
+                workspaceDataFilterProperties:
+                  - workspaceDataFilterIdentifier:
+                      id: wdf__region
+                      type: workspaceDataFilter
+                    filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - workspaceDataFilterIdentifier:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -902,6 +942,7 @@ interactions:
                   - Campaigns
                 primary: true
                 sourceColumn: campaign_name
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_name
@@ -934,8 +975,12 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                    sourceColumnDataTypes: []
+                    sourceColumnDataTypes:
+                      - INT
                 dataSourceTableId: demo-test-ds:campaign_channels
+                dataSourceTablePath:
+                  - demo
+                  - campaign_channels
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
@@ -981,6 +1026,7 @@ interactions:
                   - Campaign channels
                 primary: true
                 sourceColumn: campaign_channel_id
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channel_id
@@ -1018,6 +1064,9 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:campaigns
+                dataSourceTablePath:
+                  - demo
+                  - campaigns
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
@@ -1030,6 +1079,7 @@ interactions:
                   - Order lines
                 primary: true
                 sourceColumn: order_id
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_id
@@ -1042,6 +1092,7 @@ interactions:
                   - Customers
                 primary: true
                 sourceColumn: customer_name
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_name
@@ -1054,6 +1105,7 @@ interactions:
                   - Campaign channels
                 primary: true
                 sourceColumn: type
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/type
@@ -1069,6 +1121,9 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:customers
+                dataSourceTablePath:
+                  - demo
+                  - customers
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
@@ -1081,6 +1136,7 @@ interactions:
                   - Customers
                 primary: true
                 sourceColumn: region
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/region
@@ -1093,6 +1149,7 @@ interactions:
                   - Products
                 primary: true
                 sourceColumn: category
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/products.category
@@ -1138,6 +1195,7 @@ interactions:
                   - Customers
                 primary: false
                 sourceColumn: geo__state__location
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/geo__state__location
             - id: product_id
@@ -1149,6 +1207,7 @@ interactions:
                   - Products
                 primary: true
                 sourceColumn: product_id
+                sourceColumnDataType: INT
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_id
@@ -1172,6 +1231,7 @@ interactions:
                   - Order lines
                 primary: true
                 sourceColumn: order_line_id
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/order_line_id
@@ -1187,6 +1247,9 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:products
+                dataSourceTablePath:
+                  - demo
+                  - products
                 type: NORMAL
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
@@ -1231,6 +1294,7 @@ interactions:
                   - Campaign channels
                 primary: true
                 sourceColumn: category
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_channels.category
@@ -1243,6 +1307,7 @@ interactions:
                   - Customers
                 primary: true
                 sourceColumn: customer_id
+                sourceColumnDataType: INT
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/customer_id
@@ -1266,6 +1331,7 @@ interactions:
                   - Customers
                 primary: true
                 sourceColumn: state
+                sourceColumnDataType: STRING
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/state
@@ -1278,6 +1344,7 @@ interactions:
                   - Campaigns
                 primary: true
                 sourceColumn: campaign_id
+                sourceColumnDataType: INT
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
@@ -1311,7 +1378,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '13635'
+          - '14916'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1376,18 +1443,22 @@ interactions:
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                    sourceColumnDataTypes: null
+                    sourceColumnDataTypes:
+                      - INT
                 dataSourceTableId: demo-test-ds:campaign_channels
+                dataSourceTablePath:
+                  - demo
+                  - campaign_channels
                 areRelationsValid: true
                 type: NORMAL
               relationships:
                 attributes:
                   data:
-                    - id: type
-                      type: attribute
                     - id: campaign_channels.category
                       type: attribute
                     - id: campaign_channel_id
+                      type: attribute
+                    - id: type
                       type: attribute
                 facts:
                   data:
@@ -1413,6 +1484,9 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:campaigns
+                dataSourceTablePath:
+                  - demo
+                  - campaigns
                 areRelationsValid: true
                 type: NORMAL
               relationships:
@@ -1440,18 +1514,21 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:customers
+                dataSourceTablePath:
+                  - demo
+                  - customers
                 areRelationsValid: true
                 type: NORMAL
               relationships:
                 attributes:
                   data:
-                    - id: region
-                      type: attribute
-                    - id: customer_name
-                      type: attribute
                     - id: customer_id
                       type: attribute
                     - id: state
+                      type: attribute
+                    - id: region
+                      type: attribute
+                    - id: customer_name
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
@@ -1472,50 +1549,73 @@ interactions:
                     order: 0
                 referenceProperties:
                   - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes: null
-                  - identifier:
                       id: date
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - date
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes: null
+                    sourceColumnDataTypes:
+                      - DATE
                   - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
                     sourceColumns:
                       - campaign_id
-                    sourceColumnDataTypes: null
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes:
+                      - INT
                 dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
                 areRelationsValid: true
+                workspaceDataFilterColumns:
+                  - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
+                workspaceDataFilterProperties:
+                  - workspaceDataFilterIdentifier:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                  - workspaceDataFilterIdentifier:
+                      id: wdf__region
+                      type: workspaceDataFilter
+                    filterColumn: wdf__region
+                    filterColumnDataType: STRING
                 type: NORMAL
               relationships:
                 attributes:
                   data:
+                    - id: order_line_id
+                      type: attribute
                     - id: order_id
                       type: attribute
                     - id: order_status
                       type: attribute
-                    - id: order_line_id
-                      type: attribute
                 facts:
                   data:
-                    - id: price
-                      type: fact
                     - id: quantity
+                      type: fact
+                    - id: price
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -1535,16 +1635,19 @@ interactions:
                     type: attribute
                     order: 0
                 dataSourceTableId: demo-test-ds:products
+                dataSourceTablePath:
+                  - demo
+                  - products
                 areRelationsValid: true
                 type: NORMAL
               relationships:
                 attributes:
                   data:
-                    - id: products.category
-                      type: attribute
                     - id: product_id
                       type: attribute
                     - id: product_name
+                      type: attribute
+                    - id: products.category
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
@@ -1564,33 +1667,33 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.dayOfYear
+                    - id: date.minute
+                      type: attribute
+                    - id: date.month
                       type: attribute
                     - id: date.quarterOfYear
                       type: attribute
                     - id: date.minuteOfHour
                       type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.minute
-                      type: attribute
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
                     - id: date.hourOfDay
                       type: attribute
                     - id: date.day
                       type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
                     - id: date.dayOfMonth
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.quarter
                       type: attribute
                     - id: date.weekOfYear
                       type: attribute
-                    - id: date.month
+                    - id: date.hour
                       type: attribute
                     - id: date.dayOfWeek
                       type: attribute
@@ -1609,6 +1712,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: product_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
             - id: budget
@@ -1619,6 +1723,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: budget
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
             - id: date.year
@@ -1639,6 +1744,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: product_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
             - id: date.month
@@ -1659,6 +1765,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: category
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
             - id: date.dayOfMonth
@@ -1699,6 +1806,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: category
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
             - id: date.minute
@@ -1719,6 +1827,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: state
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
             - id: date.week
@@ -1739,6 +1848,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
             - id: date.hour
@@ -1759,6 +1869,7 @@ interactions:
                 tags:
                   - Campaigns
                 sourceColumn: campaign_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
             - id: price
@@ -1769,6 +1880,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: price
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
             - id: date.dayOfWeek
@@ -1799,6 +1911,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: region
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
             - id: campaign_channel_id
@@ -1809,6 +1922,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: campaign_channel_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
             - id: customer_id
@@ -1819,6 +1933,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: customer_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
             - id: date.hourOfDay
@@ -1839,6 +1954,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: quantity
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
             - id: campaign_id
@@ -1849,6 +1965,7 @@ interactions:
                 tags:
                   - Campaigns
                 sourceColumn: campaign_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
             - id: type
@@ -1859,6 +1976,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: type
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
             - id: spend
@@ -1869,6 +1987,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: spend
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
             - id: date.dayOfYear
@@ -1909,6 +2028,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_status
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
             - id: date.monthOfYear
@@ -1929,6 +2049,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: customer_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
             - id: order_line_id
@@ -1939,6 +2060,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_line_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
           links:
@@ -2023,7 +2145,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -2038,7 +2160,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -2053,7 +2175,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -2070,7 +2192,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -2086,7 +2208,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -2101,7 +2223,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -2116,7 +2238,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -2131,7 +2253,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2147,7 +2269,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2163,7 +2285,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2179,7 +2301,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2195,7 +2317,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -2211,7 +2333,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -2228,7 +2350,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -2244,7 +2366,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2260,7 +2382,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2276,7 +2398,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2292,7 +2414,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2308,7 +2430,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -2323,7 +2445,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -2338,7 +2460,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -2353,7 +2475,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -2368,7 +2490,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -2383,7 +2505,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2023-08-14 07:28
+                createdAt: 2023-08-21 10:45
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER

@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1414'
+          - '1546'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -84,6 +84,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: budget
+                sourceColumnDataType: NUMERIC
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
@@ -99,6 +100,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: spend
+                sourceColumnDataType: NUMERIC
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
@@ -114,6 +116,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: price
+                sourceColumnDataType: NUMERIC
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
@@ -129,6 +132,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: quantity
+                sourceColumnDataType: NUMERIC
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
