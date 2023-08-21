@@ -1,0 +1,35 @@
+{{ $path := split (.Get 0) "."  }}
+{{ $data := getJSON (print "versioned_docs/data.json") }}
+
+
+{{ $currentData := $data}}
+{{ range $path }}
+    {{ if (eq $currentData.kind "class") }}
+        {{ $currentData = $currentData.functions }}
+    {{ end }}
+    {{$currentData = index $currentData .}}
+{{ end }}
+
+{{ $moduleData := $currentData }}
+
+
+<div class="python-api-ref">
+    <table class="gd-docs-parameters-block">
+    <thead>
+    <tr>
+    <th>Type</th>
+    <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ range $objName, $objData := $moduleData }}
+            {{ if ne $objName "kind" }}
+                <tr>
+                    <td>{{$objData.kind}}</td>
+                    <td>{{partial "python-api-link-partial.html" $objName}} </td>
+                </tr>
+            {{ end }}
+        {{ end }}
+    </tbody>
+    </table>
+</div>
