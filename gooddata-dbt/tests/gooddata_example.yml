@@ -1,0 +1,31 @@
+# (C) 2023 GoodData Corporation
+# Environment, into which data products are delivered
+# ID is configured in a pipeline (Gitlab/Github) in jobs, which are then running against the configured environment
+# Finally, GoodData workspace is created and populated for each data product and for each environment
+environment_setups:
+  - id: default
+    environments:
+      - id: development
+        name: Development
+        elt_environment: dev
+      - id: staging
+        name: Staging
+        elt_environment: staging
+      - id: production
+        name: Production
+        elt_environment: prod
+
+data_products:
+  - id: sales
+    name: "Sales"
+    environment_setup_id: default
+    model_id: github
+     - github
+     - faa
+    localization:
+      from_language: en
+      to:
+        - locale: fr-FR
+          language: fr
+        - locale: zh-Hans
+          language: "chinese (simplified)"
