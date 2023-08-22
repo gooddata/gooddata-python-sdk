@@ -71,11 +71,12 @@ class CatalogWorkspaceContent:
         Gets metric by id. The id can be either an instance of ObjId or string containing serialized ObjId
         ('metric/some.metric.id') or contain just the id part ('some.metric.id').
 
-        :param metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
+        Args:
+            metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
 
-        :return: instance of CatalogMetric or None if no such metric in catalog
+        Returns:
+            CatalogMetric: instance of CatalogMetric or None if no such metric in catalog
 
-        :rtype: CatalogMetric
         """
         if isinstance(metric_id, ObjId):
             obj_id_str = str(metric_id)
@@ -91,11 +92,12 @@ class CatalogWorkspaceContent:
         Gets dataset by id. The id can be either an instance of ObjId or string containing serialized ``ObjId
         ('dataset/some.dataset.id')`` or contain just the id part (``some.dataset.id``).
 
-        :param dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
+        Args:
+            dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
 
-        :return: instance of CatalogDataset or None if no such dataset in catalog
+        Returns:
+            CatalogDataset: instance of CatalogDataset or None if no such dataset in catalog
 
-        :rtype: CatalogDataset
         """
         if isinstance(dataset_id, ObjId):
             obj_id_str = str(dataset_id)
@@ -138,11 +140,11 @@ class CatalogWorkspaceContent:
         If valid_objects_func is not set, return the current state.
         It is useful when apps need to cache this container using pickle - the func cannot be pickled.
 
-        :param ctx: existing context. you can specify context in one of the following ways:
-
-         - single item or list of items from the execution model
-         - single item or list of items from catalog model; catalog fact, label or metric may be added
-         - the entire execution definition that is used to compute analytics
+        Args:
+            ctx (ValidObjectsInputType): existing context. you can specify context in one of the following ways:
+                 - single item or list of items from the execution model
+                 - single item or list of items from catalog model; catalog fact, label or metric may be added
+                 - the entire execution definition that is used to compute analytics
 
         """
         new_datasets = self.datasets

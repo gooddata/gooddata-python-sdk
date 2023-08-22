@@ -1,0 +1,19 @@
+{{ $orig_name := .}}
+{{ $links := getJSON (print "versioned_docs/links.json") }}
+
+
+{{/* We have to handle the case of Optional[name] or list[name] */}}
+{{ $name := $orig_name }}
+{{ $name := replace $name "]" "" }}
+{{ $name := replace $name "Optional[" "" }}
+{{ $name := replace $name "list[" "" }}
+{{ $name := replace $name "List[" "" }}
+
+{{ $data := index $links (trim $name " ") }}
+{{ if $data }}
+    {{ $path := $data.path }}
+    {{ $a_html := (printf "<a href=\"%s/\">%s</a>" $path $name) }}
+    {{ replace $orig_name $name $a_html | safeHTML}}
+{{ else }}
+    {{ $orig_name }}
+{{ end }}

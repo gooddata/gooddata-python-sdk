@@ -1,0 +1,15 @@
+{{ $links := getJSON (print "versioned_docs/links.json") }}
+{{ $data := getJSON (print "versioned_docs/data.json") }}
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+<div class="python-api-ref-link">
+    {{ range $name, $data := $links }}
+        {{ $path := $data.path }}
+        <span style="top: -250px; position: relative;" id="{{ $path }}"></span>
+        {{ partial "python.html" $path }}
+    {{ end }}
+</div>

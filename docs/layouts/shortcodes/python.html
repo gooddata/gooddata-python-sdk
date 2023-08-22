@@ -1,0 +1,19 @@
+{{ $path := split (.Get 0) "."  }}
+
+{{ $data := getJSON (print "versioned_docs/data.json") }}
+
+
+{{ $currentData := $data}}
+{{ range $path }}
+    {{ if (eq $currentData.kind "class") }}
+        {{ $currentData = $currentData.functions }}
+    {{ end }}
+    {{$currentData = index $currentData .}}
+{{ end }}
+
+{{ $objData := $currentData }}
+
+
+<div class="python-ref">
+    {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
+</div>
