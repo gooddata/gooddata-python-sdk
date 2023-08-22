@@ -38,6 +38,12 @@ The Python SDK is versioned. The version you should be using depends on the type
 
 We recommend you always work with the newest (supported) Python available.
 
-#### GoodData.CN & GoodData.CN Community Edition
+#### GoodData.CN
 
-Check the [release notes](https://github.com/gooddata/gooddata-python-sdk/releases) to see what version of Python SDK is supported in the version of GoodData.CN you are using.
+Here is a mapping table of compatibility, which version of Python SDK to use with each version of GoodData.CN
+
+| Gooddata.CN | Python SDK  |
+|---|---|
+| v2.4 | v1.4 |
+| v2.3 | v1.3 |
+| v2.2 | v1.2 |
