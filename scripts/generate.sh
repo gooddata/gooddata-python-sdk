@@ -70,13 +70,13 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
             --strip-components=$strip_count "content/en/$src_section"
     fi
     API_GEN_FILE="$branch:scripts/docs/json_builder.py"
-    if git cat-file -e $API_GEN_FILE; then
-        echo "$API_GEN_FILE exists."
-        echo "Generating API ref..."
-        python3 ../scripts/docs/json_builder.py
-        mv -f data.json ./versioned_docs/
-        python3 ../scripts/docs/python_ref_builder.py ./versioned_docs/data.json ./versioned_docs/$target_section/api-reference --json_start_path sdk catalog --url_root "/$target_section/api-reference"
-        mv -f links.json ./versioned_docs/
+    #if git cat-file -e $API_GEN_FILE; then
+    #   echo "$API_GEN_FILE exists."
+    #   echo "Generating API ref..."
+    #   python3 ../scripts/docs/json_builder.py
+    #   mv -f data.json ./versioned_docs/
+    #   python3 ../scripts/docs/python_ref_builder.py ./versioned_docs/data.json ./versioned_docs/$target_section/api-reference --json_start_path sdk catalog --url_root "/$target_section/api-reference"
+    #mv -f links.json ./versioned_docs/
     fi
 done
 if [ "$keep_master" != "keep_master" ] ; then

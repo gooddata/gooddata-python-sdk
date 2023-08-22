@@ -24,14 +24,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r dev-requirements.txt
     - name: Generate Versioned Documentation
       shell: bash
       run: |
