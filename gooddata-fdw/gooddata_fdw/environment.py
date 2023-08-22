@@ -87,7 +87,7 @@ except ImportError as e:
             restriction_type: Optional[str],
             restricts: list[str],
         ) -> list[TableDefinition]:  # type: ignore
-            pass
+            return NotImplemented
 
         def execute(self, quals: list[Qual], columns: list[str], sortkeys: Optional[list[Any]] = None):  # type: ignore
             pass

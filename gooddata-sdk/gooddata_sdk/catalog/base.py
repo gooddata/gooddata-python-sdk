@@ -9,6 +9,7 @@ from cattrs import structure
 from gooddata_sdk.utils import AllPagedEntities
 
 T = TypeVar("T", bound="Base")
+U = TypeVar("U", bound="JsonApiEntityBase")
 
 
 def value_in_allowed(
@@ -100,7 +101,7 @@ class JsonApiEntityBase:
         return structure(entity, cls)
 
     @classmethod
-    def from_dict(cls) -> T:
+    def from_dict(cls: Type[U], data: Dict[str, Any]) -> U:
         return NotImplemented
 
     @staticmethod
