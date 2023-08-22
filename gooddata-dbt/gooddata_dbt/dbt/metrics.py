@@ -3,10 +3,9 @@ import re
 from typing import Optional
 
 import attrs
+from gooddata_dbt.dbt.base import DBT_PATH_TO_MANIFEST, Base
+from gooddata_dbt.dbt.tables import DbtModelBase
 from gooddata_sdk import CatalogDeclarativeMetric, CatalogDeclarativeModel
-
-from dbt_gooddata.dbt.base import DBT_PATH_TO_MANIFEST, Base
-from dbt_gooddata.dbt.tables import DbtModelBase
 
 DBT_TO_GD_CALC_METHODS = {
     "count_distinct": "COUNT",

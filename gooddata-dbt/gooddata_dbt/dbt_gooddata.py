@@ -5,6 +5,12 @@ from time import time
 from typing import Optional
 
 import yaml
+from gooddata_dbt.args import parse_arguments
+from gooddata_dbt.dbt.profiles import DbtOutput, DbtProfiles
+from gooddata_dbt.dbt.tables import DbtModelTables
+from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigProduct
+from gooddata_dbt.logger import get_logger
+from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_sdk import (
     CatalogDeclarativeModel,
     CatalogDeclarativeTables,
@@ -12,13 +18,6 @@ from gooddata_sdk import (
     CatalogWorkspace,
     GoodDataSdk,
 )
-
-from dbt_gooddata.args import parse_arguments
-from dbt_gooddata.dbt.profiles import DbtOutput, DbtProfiles
-from dbt_gooddata.dbt.tables import DbtModelTables
-from dbt_gooddata.gooddata.config import GoodDataConfig, GoodDataConfigProduct
-from dbt_gooddata.logger import get_logger
-from dbt_gooddata.sdk_wrapper import GoodDataSdkWrapper
 
 GOODDATA_LAYOUTS_DIR = Path("gooddata_layouts")
 
@@ -122,9 +121,9 @@ def test_insights(logger, sdk: GoodDataSdk, workspace_id: str) -> None:
 def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDataSdk, workspace_id: str) -> None:
     for to in data_product.localization.to:
         from deep_translator import GoogleTranslator
+
         translator_func = GoogleTranslator(
-            source=data_product.localization.from_language,
-            target=to.language
+            source=data_product.localization.from_language, target=to.language
         ).translate_batch
         logging.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
         sdk.catalog_workspace.generate_localized_workspaces(

@@ -1,8 +1,7 @@
 from typing import Optional
 
 import attrs
-
-from dbt_gooddata.dbt.base import Base
+from gooddata_dbt.dbt.base import Base
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

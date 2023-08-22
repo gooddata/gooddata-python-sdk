@@ -61,7 +61,7 @@ The plugin provides the following use cases:
 - deploy_analytics
   - Reads content of `gooddata_layout` folder and deploys analytics model to GoodData
 - store_analytics
-  - Reads analytics model from GoodData instance and stores it to disk to `gooddata_layout` folder 
+  - Reads analytics model from GoodData instance and stores it to disk to `gooddata_layout` folder
 - test_insights
   - Lists all insights(reports) from GoodData instance, and executes each report to validate it
 
@@ -71,7 +71,7 @@ If you want to generate optimal LDM from dbt models, sometimes you need to speci
 In general, all GoodData metadata must be put to dbt models under `meta` key, except descriptions.
 
 ### Titles, descriptions
-dbt supports only `description` field. For now, dbt-gooddata generates GoodData title/description from dbt description. 
+dbt supports only `description` field. For now, dbt-gooddata generates GoodData title/description from dbt description.
 
 Can be specified for both tables and columns.
 

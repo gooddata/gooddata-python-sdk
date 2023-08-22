@@ -4,9 +4,7 @@ import re
 from typing import Optional
 
 import attrs
-from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
-
-from dbt_gooddata.dbt.base import (
+from gooddata_dbt.dbt.base import (
     DATE_GRANULARITIES,
     DATETIME_DATA_TYPES,
     DBT_PATH_TO_MANIFEST,
@@ -16,6 +14,7 @@ from dbt_gooddata.dbt.base import (
     Base,
     GoodDataLdmTypes,
 )
+from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
