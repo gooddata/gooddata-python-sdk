@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 import os
 import re
 from typing import Optional
@@ -6,6 +7,7 @@ from urllib.parse import quote_plus
 import attrs
 import yaml
 from gooddata_dbt.dbt.base import Base
+
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,

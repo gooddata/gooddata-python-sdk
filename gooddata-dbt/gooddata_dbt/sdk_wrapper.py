@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 from logging import Logger
 from typing import Optional
 

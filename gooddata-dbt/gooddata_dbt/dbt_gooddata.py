@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 import logging
 import sys
 from pathlib import Path
@@ -11,6 +12,7 @@ from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
+
 from gooddata_sdk import (
     CatalogDeclarativeModel,
     CatalogDeclarativeTables,
@@ -139,8 +141,8 @@ def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDa
 
 
 def main():
-    args = parse_arguments("dbt-gooddata plugin for models management and invalidating caches(upload notification)")
-    logger = get_logger("dbt-gooddata", args.debug)
+    args = parse_arguments("gooddata-dbt plugin for models management and invalidating caches(upload notification)")
+    logger = get_logger("gooddata-dbt", args.debug)
     logger.info("Start")
     sdk = GoodDataSdkWrapper(args, logger).sdk
     with open("gooddata.yml") as fp:

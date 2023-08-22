@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, Type, TypeVar

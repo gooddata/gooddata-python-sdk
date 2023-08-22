@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 from typing import Optional
 
 import attrs

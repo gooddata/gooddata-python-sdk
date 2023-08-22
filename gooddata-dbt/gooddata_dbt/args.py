@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 import argparse
 import os
 

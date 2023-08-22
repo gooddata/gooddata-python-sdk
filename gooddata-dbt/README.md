@@ -1,13 +1,13 @@
-# dbt-gooddata
+# gooddata-dbt
 GoodData plugin for dbt. Reads dbt models and profiles, generates GoodData semantic model.
 
 ## Install
 
-TODO, now only directly from git:
+Currently directly from git only:
 ```shell
-pip install git+https://github.com/jaceksan/dbt-gooddata.git
+pip install git+https://github.com/gooddata/gooddata-python-sdk.git#egg=gooddata-dbt&subdirectory=gooddata-dbt
 # Or add the following line to requirements.txt
--e git+https://github.com/jaceksan/dbt-gooddata.git
+-e git+https://github.com/gooddata/gooddata-python-sdk.git#egg=gooddata-dbt&subdirectory=gooddata-dbt
 ```
 
 ## Local development
@@ -47,7 +47,7 @@ export GOODDATA_TOKEN="YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
 
 ## Use cases
 ```shell
-dbt-gooddata --help
+gooddata-dbt --help
 ```
 The plugin provides the following use cases:
 - deploy_models
@@ -71,7 +71,7 @@ If you want to generate optimal LDM from dbt models, sometimes you need to speci
 In general, all GoodData metadata must be put to dbt models under `meta` key, except descriptions.
 
 ### Titles, descriptions
-dbt supports only `description` field. For now, dbt-gooddata generates GoodData title/description from dbt description.
+dbt supports only `description` field. For now, gooddata-dbt generates GoodData title/description from dbt description.
 
 Can be specified for both tables and columns.
 
@@ -86,7 +86,7 @@ models:
 ```
 
 ### GoodData entities
-By default, dbt-gooddata generates GoodData entities based on the following rules:
+By default, gooddata-dbt generates GoodData entities based on the following rules:
 - data type = NUMERIC (decimal number) - fact
 - data_type = DATE/TIMESTAMP/TIMESTAMPTZ - date dimension
 - other data types = attributes

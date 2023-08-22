@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 # Environment, into which data products are delivered
 # ID is configured in a pipeline (Gitlab/Github) in jobs, which are then running against the configured environment
 # Finally, GoodData workspace is created and populated for each data product and for each environment

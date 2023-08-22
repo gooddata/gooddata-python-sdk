@@ -1,3 +1,4 @@
+# (C) 2023 GoodData Corporation
 import copy
 import json
 import re
@@ -14,6 +15,7 @@ from gooddata_dbt.dbt.base import (
     Base,
     GoodDataLdmTypes,
 )
+
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
 
 
