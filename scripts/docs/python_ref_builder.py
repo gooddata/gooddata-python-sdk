@@ -23,6 +23,7 @@ class TemplateReplacementSpec:
     parent: None | str = None
     name: None | str = None
     link: None | str = None
+    path: None | str = None
 
     def render_template_to_str(self, template: str) -> str:
         """
@@ -32,6 +33,7 @@ class TemplateReplacementSpec:
             ("PARENT", self.parent),
             ("NAME", self.name),
             ("LINK", self.link),
+            ("PATH", self.path),
         ]:
             if replacement is not None:
                 template = template.replace(token, replacement)
@@ -94,7 +96,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
             # Create files based on the kind of the data: module/class/function
             if kind == "module":
-                template_spec = TemplateReplacementSpec(name=name, link=name)
+                template_spec = TemplateReplacementSpec(name=name, link=name, path=obj_module_import_path)
                 (dir_root / name).mkdir(exist_ok=True)
                 with (dir_root / name / "_index.md").open("w") as f:
                     template_spec.render_template_to_file(MODULE_TEMPLATE_STRING, f)
@@ -104,7 +106,9 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
             elif kind == "class":
                 (dir_root / name).mkdir(exist_ok=True)
-                template_spec = TemplateReplacementSpec(name=name, link=name, parent=module_import_path.split(".")[-1])
+                template_spec = TemplateReplacementSpec(
+                    name=name, link=name, parent=module_import_path.split(".")[-1], path=obj_module_import_path
+                )
                 with (dir_root / name / "_index.md").open("w") as f:
                     template_spec.render_template_to_file(CLASS_TEMPLATE_STRING, f)
 
@@ -118,7 +122,10 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
                     with (dir_root / f"{func_name}.md").open("w") as f:
                         template_spec = TemplateReplacementSpec(
-                            name=func_name, link=func_name, parent=module_import_path.split(".")[-1]
+                            name=func_name,
+                            link=func_name,
+                            parent=module_import_path.split(".")[-1],
+                            path=obj_module_import_path + f".{func_name}",
                         )
                         template_spec.render_template_to_file(FUNCTION_TEMPLATE_STRING, f)
 
