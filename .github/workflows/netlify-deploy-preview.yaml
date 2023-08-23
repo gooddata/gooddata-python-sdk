@@ -41,6 +41,14 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_PREVIEW_AUTH_TOKEN }}
+# `htmltest` is after publishing, so we can see the artifact.
+      - name: htmltest
+        run: |
+          rm -f htmltest.sh
+          wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
+          chmod +x ./htmltest.sh
+          ./htmltest.sh -c docs/.htmltest.yml docs/public
+# Commented out, because it has been failing. Check up later.
 #      - name: Comment PR
 #        uses: thollander/actions-comment-pull-request@v2
 #        with:
