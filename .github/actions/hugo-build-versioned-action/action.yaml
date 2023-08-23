@@ -27,7 +27,7 @@ runs:
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version-file: `.python-version`
+        python-version-file: ".python-version"
     - name: Install Dependencies
       shell: bash
       run: |
