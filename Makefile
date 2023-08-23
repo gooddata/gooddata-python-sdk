@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 # list all full paths to files and directories in CWD containing "gooddata", filter out ones ending by "client"
-NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata*))
+NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %dbt, $(filter-out %client, $(wildcard $(CURDIR)/*gooddata*)))
 # for each path, take only the base name of the path
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 # TODO: replace API_VERSION in the future by call to API
