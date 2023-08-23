@@ -14,6 +14,7 @@ $toc-top: 20px;
     height: 100%;
     padding: 0 20px;
     border-left: none;
+    order: 2;
 
     @include mq(large) {
         top: $header-height-desktop + $toc-top;
