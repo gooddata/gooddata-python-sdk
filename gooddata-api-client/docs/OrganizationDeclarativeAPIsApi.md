@@ -192,6 +192,7 @@ with gooddata_api_client.ApiClient() as api_client:
             oauth_client_secret="oauth_client_secret_example",
             oauth_issuer_id="myOidcProvider",
             oauth_issuer_location="oauth_issuer_location_example",
+            oauth_subject_id_claim="oid",
             permissions=[
                 DeclarativeOrganizationPermission(
                     assignee=AssigneeIdentifier(

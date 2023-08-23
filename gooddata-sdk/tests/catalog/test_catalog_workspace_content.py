@@ -389,6 +389,6 @@ def test_explicit_workspace_data_filter(test_config):
         dataset = sdk.catalog_workspace_content.get_full_catalog(workspace_id=test_config["workspace"]).get_dataset(
             dataset_id
         )
-        assert len(dataset.workspace_data_filter_properties) == 1
+        assert len(dataset.workspace_data_filter_references) == 1
     finally:
         _refresh_workspaces(sdk)
