@@ -81,6 +81,9 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         ('oauth_issuer_location',): {
             'max_length': 255,
         },
+        ('oauth_subject_id_claim',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property
@@ -114,6 +117,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
+            'oauth_subject_id_claim': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -130,6 +134,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'oauth_subject_id_claim': 'oauthSubjectIdClaim',  # noqa: E501
     }
 
     read_only_vars = {
@@ -181,6 +186,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -274,6 +280,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

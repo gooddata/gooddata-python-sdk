@@ -97,6 +97,9 @@ class DeclarativeOrganizationInfo(ModelNormal):
         ('oauth_issuer_location',): {
             'max_length': 255,
         },
+        ('oauth_subject_id_claim',): {
+            'max_length': 255,
+        },
     }
 
     @cached_property
@@ -133,6 +136,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             'oauth_client_secret': (str,),  # noqa: E501
             'oauth_issuer_id': (str,),  # noqa: E501
             'oauth_issuer_location': (str,),  # noqa: E501
+            'oauth_subject_id_claim': (str,),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
             'themes': ([DeclarativeTheme],),  # noqa: E501
         }
@@ -154,6 +158,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
         'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
         'oauth_issuer_location': 'oauthIssuerLocation',  # noqa: E501
+        'oauth_subject_id_claim': 'oauthSubjectIdClaim',  # noqa: E501
         'settings': 'settings',  # noqa: E501
         'themes': 'themes',  # noqa: E501
     }
@@ -212,6 +217,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of organization settings.. [optional]  # noqa: E501
             themes ([DeclarativeTheme]): A list of themes.. [optional]  # noqa: E501
         """
@@ -316,6 +322,7 @@ class DeclarativeOrganizationInfo(ModelNormal):
             oauth_client_secret (str): Communication secret of the authentication provider (never returned back).. [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
             oauth_issuer_location (str): URI of the authentication provider.. [optional]  # noqa: E501
+            oauth_subject_id_claim (str): Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of organization settings.. [optional]  # noqa: E501
             themes ([DeclarativeTheme]): A list of themes.. [optional]  # noqa: E501
         """

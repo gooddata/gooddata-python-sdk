@@ -153,9 +153,9 @@ class CatalogDataset(AttrCatalogEntity):
     workspace_data_filter_columns: Optional[List] = attr.field(
         default=attr.Factory(lambda self: self.json_api_attributes.get("workspaceDataFilterColumns"), takes_self=True)
     )
-    workspace_data_filter_properties: Optional[List] = attr.field(
+    workspace_data_filter_references: Optional[List] = attr.field(
         default=attr.Factory(
-            lambda self: self.json_api_attributes.get("workspaceDataFilterProperties"), takes_self=True
+            lambda self: self.json_api_attributes.get("workspaceDataFilterReferences"), takes_self=True
         )
     )
 

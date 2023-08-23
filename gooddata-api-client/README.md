@@ -303,6 +303,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+*ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
@@ -921,7 +922,7 @@ Class | Method | HTTP request | Description
  - [JsonApiDatasetOutAttributesReferencePropertiesInner](docs/JsonApiDatasetOutAttributesReferencePropertiesInner.md)
  - [JsonApiDatasetOutAttributesSql](docs/JsonApiDatasetOutAttributesSql.md)
  - [JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner](docs/JsonApiDatasetOutAttributesWorkspaceDataFilterColumnsInner.md)
- - [JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner](docs/JsonApiDatasetOutAttributesWorkspaceDataFilterPropertiesInner.md)
+ - [JsonApiDatasetOutAttributesWorkspaceDataFilterReferencesInner](docs/JsonApiDatasetOutAttributesWorkspaceDataFilterReferencesInner.md)
  - [JsonApiDatasetOutDocument](docs/JsonApiDatasetOutDocument.md)
  - [JsonApiDatasetOutIncludes](docs/JsonApiDatasetOutIncludes.md)
  - [JsonApiDatasetOutList](docs/JsonApiDatasetOutList.md)

@@ -1443,6 +1443,12 @@
             "maxLength": 255,
             "type": "string"
           },
+          "oauthSubjectIdClaim": {
+            "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+            "example": "oid",
+            "maxLength": 255,
+            "type": "string"
+          },
           "permissions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
@@ -5734,9 +5740,9 @@
                 },
                 "type": "array"
               },
-              "workspaceDataFilterProperties": {
+              "workspaceDataFilterReferences": {
                 "items": {
-                  "description": "Workspace data filter properties.",
+                  "description": "Workspace data filter reference.",
                   "properties": {
                     "filterColumn": {
                       "type": "string"
@@ -5753,14 +5759,14 @@
                       ],
                       "type": "string"
                     },
-                    "workspaceDataFilterIdentifier": {
+                    "filterId": {
                       "$ref": "#/components/schemas/DatasetWorkspaceDataFilterIdentifier"
                     }
                   },
                   "required": [
                     "filterColumn",
                     "filterColumnDataType",
-                    "workspaceDataFilterIdentifier"
+                    "filterId"
                   ],
                   "type": "object"
                 },
@@ -7612,6 +7618,12 @@
               "oauthIssuerLocation": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
+                "maxLength": 255,
+                "type": "string"
               }
             },
             "type": "object"
@@ -7699,6 +7711,12 @@
                 "type": "string"
               },
               "oauthIssuerLocation": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
                 "maxLength": 255,
                 "type": "string"
               }
@@ -7838,6 +7856,12 @@
                 "type": "string"
               },
               "oauthIssuerLocation": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "oauthSubjectIdClaim": {
+                "description": "Any string identifying the claim in ID token, that should be used for user identification. The default value is 'sub'.",
+                "example": "oid",
                 "maxLength": 255,
                 "type": "string"
               }
@@ -12370,6 +12394,47 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes": {
+      "get": {
+        "description": "Get used entity prefixes in hierarchy of parent workspaces",
+        "operationId": "inheritedEntityPrefixes",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Prefixes used in parent entities"
+          }
+        },
+        "summary": "Get used entity prefixes in hierarchy",
+        "tags": [
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "VIEW"
           ]
         }
       }
