@@ -13,6 +13,10 @@ See [Manage Organizations](https://www.gooddata.com/developers/cloud-native/doc/
 
 * [update_name](./update_name/)
 * [update_oidc_parameters](./update_oidc_parameters/)
+* [create_or_update_jwk](./create_or_update_jwk/)
+* [delete_jwk](./delete_jwk/)
+* [get_jwk](./get_jwk/)
+* [list_jwks](./list_jwks/)
 
 ## Example
 
