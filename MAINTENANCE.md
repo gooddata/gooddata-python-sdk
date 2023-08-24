@@ -1,22 +1,19 @@
 # Repository maintenance and release
 
-## How to release documentation for new versions
-
-* Edit redirects in `./docs/layouts/index.redir`
-* Add the new version to the version picker in `./docs/config/production/params.toml`
-* Create a new branch named `rel/X.Y.Z`
+## How to release
+* add new documentation version
+  * edit redirects in [./docs/layouts/index.redir](docs/layouts/index.redir)
+  * add the new version to the version picker in [./docs/config/production/params.toml](docs/config/production/params.toml)
+* run `make release VERSION=X.Y.Z`
+* create a pull request with the latest commit with bumped versions
+  * ask for merge of a pull request
+* create a new branch named `rel/X.Y.Z` from master
   * This branch now hosts the content for documentation of the X.Y.Z version. Any changes to the content in the branch will be public.
-* Dispatch the Github workflow `netlify-deploy` on the `master` branch
-  * The styling of the documentation is taken from the `master` branch. For more details see `./scripts/generate.sh` and `netlify-deploy` workflow.
+* dispatch the GitHub workflow `netlify-deploy` on the `master` branch
+  * The styling of the documentation is taken from the `master` branch. For more details see [./scripts/generate.sh](scripts/generate.sh) and [netlify-deploy](.github/workflows/netlify-deploy.yaml) workflow.
+* checkout latest master branch and tag it `vX.Y.Z`
+* push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
-## How to release new version
-
-* Run `make release VERSION=X.Y.Z`
-* Create a pull request with the latest commit with bumped versions
-* Ask for merge of a pull request.
-* Once it is merged:
-  * Checkout latest master and tag it `vX.Y.Z`
-* Push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
 ### Releasing Alpha versions
 To publish current master as an alpha version, use `Release master as alpha` github workflow where you need to specify
