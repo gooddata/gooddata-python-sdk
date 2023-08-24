@@ -44,6 +44,6 @@ Here is a mapping table of compatibility, which version of Python SDK to use wit
 
 | Gooddata.CN | Python SDK  |
 |---|---|
+| v2.5 | v1.5 |
 | v2.4 | v1.4 |
 | v2.3 | v1.3 |
-| v2.2 | v1.2 |
