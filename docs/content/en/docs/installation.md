@@ -10,7 +10,7 @@ Before installing, ensure you are using:
 * [GoodData.CN](https://www.gooddata.com/developers/cloud-native/doc/cloud/deploy-and-install/cloud-native/) or [GoodData Cloud](https://www.gooddata.com/developers/cloud-native/doc/cloud/deploy-and-install/cloud/)
 * The [pip](https://pypi.org/project/pip/) package management tool
 
-
+:)
 
 To install the `gooddata-sdk` Python SDK package, run the following command:
 
