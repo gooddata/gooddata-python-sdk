@@ -12,8 +12,8 @@ dirpath = "dev"
 url = "/dev/"
 [[versions]]
 version = "1.5"
-dirpath = "1.5"
-url = "/1.5/"
+dirpath = "latest"
+url = "/latest/"
 [[versions]]
 version = "1.4"
 dirpath = "1.4"

@@ -83,6 +83,13 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
         mv -f links.json ./versioned_docs/
     fi
 done
+
+
+## Moving the highest version to latest
+highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | tail -n 1)
+echo "Moving ${highest_version} to /latest"
+mv -f ./versioned_docs/$highest_version ./versioned_docs/latest
+
 if [ "$keep_master" != "keep_master" ] ; then
     echo "master docs will not be published, removing"
     rm -rf "${content_dir}/docs"

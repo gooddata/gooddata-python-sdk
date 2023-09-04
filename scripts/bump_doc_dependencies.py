@@ -28,11 +28,15 @@ def bump_toml(file_path: Path, version: list[int]):
     if versions:
         versions.pop()
 
+    old_version = versions[1]["version"]
+    versions[1]["dirpath"] = old_version
+    versions[1]["url"] = f"/{old_version}/"
+
     # Add the new version
     new_version_data = tomlkit.table()
     new_version_data["version"] = short_version
-    new_version_data["dirpath"] = short_version
-    new_version_data["url"] = f"/{short_version}/"
+    new_version_data["dirpath"] = "latest"
+    new_version_data["url"] = "/latest/"
     versions.insert(1, new_version_data)
 
     with open(file_path, "w") as file:
@@ -42,25 +46,29 @@ def bump_toml(file_path: Path, version: list[int]):
 def bump_redir(file_path: Path, version: list[int]):
     long_version = f"{version[0]}.{version[1]}.{version[2]}"
     short_version = f"{version[0]}.{version[1]}"
-
-    new_redirect_rule = f"/{long_version}/ {{{{ .Site.BaseURL }}}}/{short_version} 301!\n"
-
     with open(file_path, "r") as file:
         content = file.readlines()
 
-    content.insert(4, new_redirect_rule)
-
     if version[2] == 0:
-        indices_to_replace = [1, 2, 3]
-        new_lines = [
-            f"/ {{{{ .Site.BaseURL }}}}/{short_version}/ 301!",
-            f"/latest/ {{{{ .Site.BaseURL }}}}/{short_version}/ 301",
-            f"/docs/ {{{{ .Site.BaseURL }}}}/{short_version}/ 301!",
-        ]
+        line_to_delete = -1
+        for i, line in enumerate(content):
+            if line.endswith("/latest 301!\n"):
+                parts = line.split(" ")
+                if len(parts[0].split(".")) == 2:
+                    line_to_delete = i
+                else:
+                    old_short_version = f"{parts[0][:-3]}"
+                    content[i] = content[i].replace("/latest", old_short_version)
 
-        for i, new_line in zip(indices_to_replace, new_lines):
-            content[i] = new_line + "\n"
+        if line_to_delete != -1:
+            content.remove(content[line_to_delete])
 
+        content.insert(3, f"/{long_version}/ {{ .Site.BaseURL }}/latest 301!\n")
+
+        content.insert(3, f"/{short_version}/ {{ .Site.BaseURL }}/latest 301!\n")
+
+    else:
+        content.insert(4, f"/{long_version}/ {{ .Site.BaseURL }}/latest 301!\n")
     with open(file_path, "w") as file:
         file.writelines(content)
 
