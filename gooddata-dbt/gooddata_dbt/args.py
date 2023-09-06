@@ -9,7 +9,7 @@ def get_parser(description: str) -> argparse.ArgumentParser:
     )
 
 
-def set_gooddata_endpoint_args(parser):
+def set_gooddata_endpoint_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-gh",
         "--gooddata-host",
@@ -31,7 +31,7 @@ def set_gooddata_endpoint_args(parser):
     )
 
 
-def set_environment_id_arg(parser: argparse.ArgumentParser):
+def set_environment_id_arg(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-gw",
         "--gooddata-environment-id",
@@ -40,7 +40,7 @@ def set_environment_id_arg(parser: argparse.ArgumentParser):
     )
 
 
-def set_gooddata_upper_case_args(parser: argparse.ArgumentParser):
+def set_gooddata_upper_case_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-guc",
         "--gooddata-upper-case",
@@ -50,13 +50,13 @@ def set_gooddata_upper_case_args(parser: argparse.ArgumentParser):
     )
 
 
-def set_gooddata_workspace_title_args(parser: argparse.ArgumentParser):
+def set_gooddata_workspace_title_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-gwt", "--gooddata-workspace-title", help="Workspace title", default=os.getenv("GOODDATA_WORKSPACE_TITLE")
     )
 
 
-def set_dbt_args(parser: argparse.ArgumentParser):
+def set_dbt_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-pd",
         "--profile-dir",
@@ -74,7 +74,7 @@ def set_dbt_args(parser: argparse.ArgumentParser):
     )
 
 
-def parse_arguments(description: str):
+def parse_arguments(description: str) -> argparse.Namespace:
     parser = get_parser(description)
     parser.add_argument("--debug", action="store_true", default=False, help="Increase logging level to DEBUG")
     set_gooddata_endpoint_args(parser)

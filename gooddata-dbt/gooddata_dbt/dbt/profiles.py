@@ -1,7 +1,8 @@
 # (C) 2023 GoodData Corporation
+import argparse
 import os
 import re
-from typing import Optional
+from typing import Dict, List, Optional, Union
 from urllib.parse import quote_plus
 
 import attrs
@@ -28,6 +29,7 @@ class DbtOutputPostgreSQL(Base):
     user: str
     password: str = attrs.field(repr=lambda value: "***")
     dbname: str
+    database: str = attrs.field(default=attrs.Factory(lambda self: self.dbname, takes_self=True))
     schema: str
 
     def to_gooddata(self, data_source_id: str, schema_name: str) -> CatalogDataSourcePostgres:
@@ -110,23 +112,29 @@ class DbtOutputVertica(Base):
         )
 
 
-DbtOutput = DbtOutputPostgreSQL | DbtOutputSnowflake | DbtOutputVertica
+DbtOutput = Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica]
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtProfile(Base):
     name: str
-    outputs: list[DbtOutputPostgreSQL | DbtOutputSnowflake]
+    outputs: List[Union[DbtOutputPostgreSQL, DbtOutputSnowflake, DbtOutputVertica]]
 
 
 class DbtProfiles:
-    def __init__(self, args):
+    """
+    TODO:
+        * from class methods from_cloud, from_local/core
+        * How to read password for dbt Cloud?
+    """
+
+    def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
         with open(os.path.expanduser(f"{args.profile_dir}/profiles.yml")) as fp:
             self.dbt_profiles = yaml.safe_load(fp)
 
     @staticmethod
-    def inject_env_vars(output_def: dict) -> None:
+    def inject_env_vars(output_def: Dict) -> None:
         env_re = re.compile(r"env_var\('([^']+)'(,\s*'([^']+)')?\)")
         for output_key, output_value in output_def.items():
             if (env_match := env_re.search(str(output_value))) is not None:
@@ -138,20 +146,19 @@ class DbtProfiles:
             # else do nothing, real value seems to be stored in dbt profile
 
     @staticmethod
-    def to_data_class(output: str, output_def: dict) -> DbtOutput:
+    def to_data_class(output: str, output_def: Dict) -> DbtOutput:
         db_type = output_def["type"]
-        match db_type:
-            case "postgres":
-                return DbtOutputPostgreSQL.from_dict({"name": output} | output_def)
-            case "snowflake":
-                return DbtOutputSnowflake.from_dict({"name": output} | output_def)
-            case "vertica":
-                return DbtOutputVertica.from_dict({"name": output} | output_def)
-            case _:
-                raise Exception(f"Unsupported database type {output=} {db_type=}")
+        if db_type == "postgres":
+            return DbtOutputPostgreSQL.from_dict({"name": output, **output_def})
+        elif db_type == "snowflake":
+            return DbtOutputSnowflake.from_dict({"name": output, **output_def})
+        elif db_type == "vertica":
+            return DbtOutputVertica.from_dict({"name": output, **output_def})
+        else:
+            raise Exception(f"Unsupported database type {output=} {db_type=}")
 
     @property
-    def profiles(self) -> list[DbtProfile]:
+    def profiles(self) -> List[DbtProfile]:
         profiles = []
         for profile, profile_def in self.dbt_profiles.items():
             outputs = []
@@ -163,13 +170,15 @@ class DbtProfiles:
         return profiles
 
     @property
-    def profile(self) -> Optional[DbtProfile]:
+    def profile(self) -> DbtProfile:
         for profile in self.profiles:
             if profile.name == self.args.profile:
                 return profile
+        raise ValueError(f"Profile {self.args.profile} not found in {self.profiles}.")
 
     @property
-    def target(self) -> Optional[DbtOutput]:
+    def target(self) -> DbtOutput:
         for output in self.profile.outputs:
             if output.name == self.args.target:
                 return output
+        raise ValueError(f"Target {self.args.target} not found in {self.profile.outputs}.")
