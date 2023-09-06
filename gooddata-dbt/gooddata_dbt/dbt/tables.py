@@ -2,21 +2,25 @@
 import copy
 import json
 import re
-from typing import Optional
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 import attrs
 from gooddata_dbt.dbt.base import (
     DATE_GRANULARITIES,
     DATETIME_DATA_TYPES,
     DBT_PATH_TO_MANIFEST,
+    DBT_TARGET_DIR,
     NUMERIC_DATA_TYPES,
     TIMESTAMP_DATA_TYPES,
     TIMESTAMP_GRANULARITIES,
     Base,
     GoodDataLdmTypes,
 )
+from gooddata_dbt.dbt.cloud import DbtConnection
 
 from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
+from gooddata_sdk.utils import safeget
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -35,8 +39,9 @@ class DbtModelMetaGoodDataColumnProps(Base):
     def gooddata_ref_table_ldm_id(self) -> Optional[str]:
         if self.referenced_table:
             return self.referenced_table.lower()
+        return None
 
-    def upper_case_names(self):
+    def upper_case_names(self) -> None:
         if self.referenced_table:
             self.referenced_table = self.referenced_table.upper()
         if self.attribute_column:
@@ -45,19 +50,19 @@ class DbtModelMetaGoodDataColumnProps(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataTable(Base):
-    gooddata: Optional[DbtModelMetaGoodDataTableProps] = None
+    gooddata: DbtModelMetaGoodDataTableProps = attrs.field(factory=DbtModelMetaGoodDataTableProps)
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataColumn(Base):
-    gooddata: Optional[DbtModelMetaGoodDataColumnProps] = None
+    gooddata: DbtModelMetaGoodDataColumnProps = attrs.field(factory=DbtModelMetaGoodDataColumnProps)
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelBase(Base):
     name: str
     description: str
-    tags: list[str]
+    tags: List[str]
     # If 2+ references point to the same table, the table plays multiple roles,
     # it must be generated as multiple datasets
     role_name: Optional[str] = None
@@ -101,86 +106,108 @@ class DbtModelBase(Base):
         else:
             return self.description
 
-    def upper_case_name(self):
+    def upper_case_name(self) -> None:
         self.name = self.name.upper()
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelColumn(DbtModelBase):
     data_type: Optional[str]
-    meta: Optional[DbtModelMetaGoodDataColumn] = None
-
-    def has_gooddata_metadata(self) -> bool:
-        return self.meta is not None and self.meta.gooddata is not None
+    meta: DbtModelMetaGoodDataColumn = attrs.field(factory=DbtModelMetaGoodDataColumn)
 
     def gooddata_is_fact(self) -> bool:
-        return (
-            self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value
-        ) or self.is_number()
+        return (self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value) or self.is_number()
 
     def gooddata_is_attribute(self) -> bool:
         valid_ldm_types = [GoodDataLdmTypes.ATTRIBUTE.value, GoodDataLdmTypes.PRIMARY_KEY.value]
         # Without GD metadata, attribute is default unless it is DATETIME data type
-        return (not self.has_gooddata_metadata() and not self.is_date()) or (
-            self.has_gooddata_metadata() and self.meta.gooddata.ldm_type in valid_ldm_types
-        )
+        return not self.is_date() or self.meta.gooddata.ldm_type in valid_ldm_types
 
     def gooddata_is_label(self, attribute_column_name: str) -> bool:
         return (
-            self.has_gooddata_metadata()
-            and self.meta.gooddata.ldm_type == GoodDataLdmTypes.LABEL.value
+            self.meta.gooddata.ldm_type == GoodDataLdmTypes.LABEL.value
             and attribute_column_name == self.meta.gooddata.attribute_column
         )
 
     def is_date(self) -> bool:
-        gooddata_date = self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == "date"
+        if self.data_type is None:
+            return False
+        gooddata_date = self.meta.gooddata.ldm_type == "date"
         return gooddata_date or self.data_type.upper() in DATETIME_DATA_TYPES
 
     def is_number(self) -> bool:
+        if self.data_type is None:
+            return False
         return self.data_type.upper() in NUMERIC_DATA_TYPES
 
     def is_reference(self) -> bool:
-        return self.has_gooddata_metadata() and self.meta.gooddata.ldm_type == GoodDataLdmTypes.REFERENCE.value
+        return self.meta.gooddata.ldm_type == GoodDataLdmTypes.REFERENCE.value
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelTable(DbtModelBase):
     schema: str
-    columns: dict[str, DbtModelColumn]
-    meta: DbtModelMetaGoodDataTable
-
-    def has_gooddata_metadata(self) -> bool:
-        return self.meta is not None and self.meta.gooddata is not None
+    columns: Dict[str, DbtModelColumn]
+    meta: DbtModelMetaGoodDataTable = attrs.field(factory=DbtModelMetaGoodDataTable)
 
 
 class DbtModelTables:
-    def __init__(self, upper_case: bool, all_model_ids: list[str]) -> None:
+    """
+    TODO:
+        * add 2 class method – from_cloud, from_local
+        * DbtModelTables should accept tables only
+        * check dbt Cloud if it gives data type
+            * if yes get rid off LDM if possible and other fun
+        * column_type – Optional if missing call  scan
+    """
+
+    def __init__(self, tables: List[DbtModelTable], upper_case: bool) -> None:
         self.upper_case = upper_case
-        with open(DBT_PATH_TO_MANIFEST) as fp:
-            self.dbt_catalog = json.load(fp)
+        self.tables = tables
 
-        self.tables = self.read_dbt_models(all_model_ids)
+    @classmethod
+    def from_cloud(
+        cls,
+        dbt_conn: DbtConnection,
+        run_id: str,
+        upper_case: bool,
+        all_model_ids: List[str],
+        path: Union[str, Path] = DBT_TARGET_DIR,
+    ) -> "DbtModelTables":
+        path = path if isinstance(path, Path) else Path(path)
+        dbt_conn.download_manifest(run_id=run_id, path=path)
+        with open(path / "manifest.json") as fp:
+            dbt_catalog = json.load(fp)
+        tables = cls.read_dbt_models(dbt_catalog, upper_case, all_model_ids)
+        return cls(tables, upper_case)
 
-    def read_dbt_models(self, all_model_ids: list[str]) -> list[DbtModelTable]:
+    @classmethod
+    def from_local(
+        cls, upper_case: bool, all_model_ids: List[str], manifest_path: Union[str, Path] = DBT_PATH_TO_MANIFEST
+    ) -> "DbtModelTables":
+        with open(manifest_path) as fp:
+            dbt_catalog = json.load(fp)
+        tables = cls.read_dbt_models(dbt_catalog, upper_case, all_model_ids)
+        return cls(tables, upper_case)
+
+    @staticmethod
+    def read_dbt_models(dbt_catalog: Dict, upper_case: bool, all_model_ids: List[str]) -> List[DbtModelTable]:
         tables = []
-        for model_name, model_def in self.dbt_catalog["nodes"].items():
-            tables.append(DbtModelTable.from_dict(model_def))
+        for _, model_def in dbt_catalog["nodes"].items():
+            model_id = safeget(model_def, ["meta", "gooddata", "model_id"])
+            if model_id in all_model_ids:
+                tables.append(DbtModelTable.from_dict(model_def))
 
-        for table in tables:
-            if self.upper_case:
-                table.upper_case_name()
-            for column in table.columns.values():
-                if self.upper_case:
-                    column.upper_case_name()
-                    if column.has_gooddata_metadata():
-                        column.meta.gooddata.upper_case_names()
-
-        # Return only gooddata labelled tables.
-        result = [t for t in tables if t.has_gooddata_metadata() and t.meta.gooddata.model_id in all_model_ids]
-        if len(result) == 0:
+        if len(tables) == 0:
             raise Exception("No tables labelled by gooddata meta flag found in the data source")
-        else:
-            return result
+
+        if upper_case:
+            for table in tables:
+                table.upper_case_name()
+                for column in table.columns.values():
+                    column.upper_case_name()
+                    column.meta.gooddata.upper_case_names()
+        return tables
 
     def set_data_types(self, scan_pdm: CatalogDeclarativeTables) -> None:
         for table in self.tables:
@@ -192,7 +219,7 @@ class DbtModelTables:
                 column.data_type = scan_column.data_type
 
     @property
-    def schema_name(self):
+    def schema_name(self) -> str:
         schemas = set([t.schema for t in self.tables if t.schema])
         if len(schemas) > 1:
             raise Exception(f"Unsupported feature: GoodData does not support multiple schemas - {schemas=}")
@@ -221,9 +248,9 @@ class DbtModelTables:
         scan_columns = [s.name for s in table.columns]
         raise Exception(f"get_scan_column table={table.id} column={column_name} not found in scan. {scan_columns=}")
 
-    def make_pdm(self, scan_pdm: CatalogDeclarativeTables) -> dict:
+    def make_pdm(self, scan_pdm: CatalogDeclarativeTables) -> Dict:
         self.set_data_types(scan_pdm)
-        result = {"tables": []}
+        tables = []
         for table in self.tables:
             scan_table = self.get_scan_table(scan_pdm, table.name)
             columns = []
@@ -233,7 +260,7 @@ class DbtModelTables:
                 column.data_type = column.data_type or scan_column.data_type
 
                 columns.append({"name": column.name, "data_type": column.data_type})
-            result["tables"].append(
+            tables.append(
                 {
                     "id": table.name,
                     "path": [self.schema_name, table.name],
@@ -241,7 +268,7 @@ class DbtModelTables:
                     "columns": columns,
                 }
             )
-        return result
+        return {"tables": tables}
 
     @staticmethod
     def get_ldm_title(column: DbtModelColumn) -> str:
@@ -254,11 +281,11 @@ class DbtModelTables:
         # for test in column.tests:
         #     if DbtTests.PRIMARY_KEY.value in test:
         #         result = True
-        if column.has_gooddata_metadata() and column.meta.gooddata.ldm_type == GoodDataLdmTypes.PRIMARY_KEY.value:
+        if column.meta.gooddata.ldm_type == GoodDataLdmTypes.PRIMARY_KEY.value:
             result = True
         return result
 
-    def make_grain(self, table: DbtModelTable) -> list[dict]:
+    def make_grain(self, table: DbtModelTable) -> List[Dict]:
         grain = []
         for column in table.columns.values():
             if self.is_primary_key(column):
@@ -278,33 +305,35 @@ class DbtModelTables:
     #     return referenced_object_id
 
     @staticmethod
-    def find_role_playing_tables(tables: list[DbtModelTable]) -> dict:
+    def find_role_playing_tables(tables: List[DbtModelTable]) -> Dict:
         result = {}
         for table in tables:
-            references = {}
+            references: Dict[str, Any] = {}
             for column in table.columns.values():
                 if column.is_reference():
                     referenced_table = column.meta.gooddata.referenced_table
-                    if referenced_table in references:
-                        references[referenced_table].append(column.name)
-                    else:
-                        references[referenced_table] = [column.name]
+                    if referenced_table is not None:
+                        if referenced_table in references:
+                            references[referenced_table].append(column.name)
+                        else:
+                            references[referenced_table] = [column.name]
             for referenced_object_id, columns in references.items():
                 if len(columns) > 1:
                     result[referenced_object_id] = columns
         return result
 
-    def make_references(self, table: DbtModelTable, role_playing_tables: dict) -> list[dict]:
+    def make_references(self, table: DbtModelTable, role_playing_tables: Dict) -> List[Dict]:
         references = []
         for column in table.columns.values():
             referenced_object_id = None
             if column.is_reference():
                 referenced_object_id = column.meta.gooddata.gooddata_ref_table_ldm_id
                 referenced_object_name = referenced_object_id
-                if self.upper_case:
-                    referenced_object_name = referenced_object_name.upper()
-                if referenced_object_name in role_playing_tables:
-                    referenced_object_id = f"{referenced_object_id}_{column.gooddata_ldm_id}"
+                if referenced_object_name is not None:
+                    if self.upper_case:
+                        referenced_object_name = referenced_object_name.upper()
+                    if referenced_object_name in role_playing_tables:
+                        referenced_object_id = f"{referenced_object_id}_{column.gooddata_ldm_id}"
             elif column.is_date():
                 referenced_object_id = column.gooddata_ldm_id
             if referenced_object_id is not None:
@@ -318,7 +347,7 @@ class DbtModelTables:
         return references
 
     @staticmethod
-    def make_facts(table: DbtModelTable) -> list[dict]:
+    def make_facts(table: DbtModelTable) -> List[Dict]:
         facts = []
         for column in table.columns.values():
             if column.gooddata_is_fact():
@@ -335,7 +364,7 @@ class DbtModelTables:
         return facts
 
     @staticmethod
-    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> list[dict]:
+    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> List[Dict]:
         labels = []
         for column in table.columns.values():
             if column.gooddata_is_label(attribute_column.name):
@@ -351,7 +380,7 @@ class DbtModelTables:
                 )
         return labels
 
-    def make_attributes(self, table: DbtModelTable) -> list[dict]:
+    def make_attributes(self, table: DbtModelTable) -> List[Dict]:
         attributes = []
         for column in table.columns.values():
             # Default is attribute
@@ -368,7 +397,7 @@ class DbtModelTables:
                 )
         return attributes
 
-    def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: list[dict]) -> list[dict]:
+    def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
         date_datasets = []
         for column in table.columns.values():
             existing_dataset_ids = [d["id"] for d in existing_date_datasets]
@@ -392,7 +421,7 @@ class DbtModelTables:
                 )
         return date_datasets
 
-    def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: dict, result: dict) -> dict:
+    def make_dataset(self, data_source_id: str, table: DbtModelTable, role_playing_tables: Dict, result: Dict) -> Dict:
         grain = self.make_grain(table)
         references = self.make_references(table, role_playing_tables)
         facts = self.make_facts(table)
@@ -421,7 +450,7 @@ class DbtModelTables:
         return result
 
     @staticmethod
-    def populate_role_playing_tables(tables: list[DbtModelTable], role_playing_tables: dict) -> list[DbtModelTable]:
+    def populate_role_playing_tables(tables: List[DbtModelTable], role_playing_tables: Dict) -> List[DbtModelTable]:
         result = []
         for table in tables:
             if table.name in role_playing_tables:
@@ -435,15 +464,14 @@ class DbtModelTables:
                 result.append(table)
         return result
 
-    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[list[str]]) -> dict:
-        result = {"datasets": [], "date_instances": []}
+    def make_declarative_datasets(self, data_source_id: str, model_ids: Optional[List[str]]) -> Dict:
+        result: Dict[str, List] = {"datasets": [], "date_instances": []}
         model_tables = [t for t in self.tables if not model_ids or t.meta.gooddata.model_id in model_ids]
         role_playing_tables = self.find_role_playing_tables(model_tables)
         model_tables_with_roles = self.populate_role_playing_tables(model_tables, role_playing_tables)
 
         for table in model_tables_with_roles:
             result = self.make_dataset(data_source_id, table, role_playing_tables, result)
-        # print(result)
         return result
 
     def get_entity_type(self, table_name: str, column_name: str) -> Optional[str]:
@@ -458,3 +486,4 @@ class DbtModelTables:
                 for column in table.columns.values():
                     if column.name == comp_column_name:
                         return column.meta.gooddata.ldm_type
+        return None

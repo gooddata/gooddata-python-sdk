@@ -3,7 +3,7 @@ import logging
 import sys
 from pathlib import Path
 from time import time
-from typing import Optional
+from typing import List, Optional
 
 import yaml
 from gooddata_dbt.args import parse_arguments
@@ -31,7 +31,9 @@ def layout_model_path(data_product: GoodDataConfigProduct) -> Path:
     return GOODDATA_LAYOUTS_DIR / data_product.id
 
 
-def generate_and_put_pdm(logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables) -> None:
+def generate_and_put_pdm(
+    logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables
+) -> None:
     # Construct GoodData PDM from dbt models and put it to the server
     # GoodData caches the metadata to reduce querying them (costly) in runtime.
     scan_request = CatalogScanModelRequest(scan_tables=True, scan_views=True)
@@ -45,7 +47,7 @@ def generate_and_put_pdm(logger, sdk: GoodDataSdk, data_source_id: str, dbt_tabl
 
 
 def generate_and_put_ldm(
-    sdk: GoodDataSdk, data_source_id: str, workspace_id: str, dbt_tables: DbtModelTables, model_ids: Optional[list[str]]
+    sdk: GoodDataSdk, data_source_id: str, workspace_id: str, dbt_tables: DbtModelTables, model_ids: Optional[List[str]]
 ) -> None:
     # Construct GoodData LDM from dbt models
     declarative_datasets = dbt_tables.make_declarative_datasets(data_source_id, model_ids)
@@ -56,8 +58,8 @@ def generate_and_put_ldm(
 
 
 def register_data_source(
-    logger, sdk: GoodDataSdk, data_source_id: str, dbt_target: DbtOutput, dbt_tables: DbtModelTables
-):
+    logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str, dbt_target: DbtOutput, dbt_tables: DbtModelTables
+) -> None:
     logger.info(f"Register data source {data_source_id=} schema={dbt_tables.schema_name}")
     data_source = dbt_target.to_gooddata(data_source_id, dbt_tables.schema_name)
     sdk.catalog_data_source.create_or_update_data_source(data_source)
@@ -66,7 +68,7 @@ def register_data_source(
     generate_and_put_pdm(logger, sdk, data_source_id, dbt_tables)
 
 
-def create_workspace(logger, sdk: GoodDataSdk, workspace_id: str, workspace_title: str) -> None:
+def create_workspace(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, workspace_title: str) -> None:
     logger.info(f"Create workspace {workspace_id=} {workspace_title=}")
     # Create workspaces, if they do not exist yet, otherwise update them
     workspace = CatalogWorkspace(workspace_id=workspace_id, name=workspace_title)
@@ -74,23 +76,25 @@ def create_workspace(logger, sdk: GoodDataSdk, workspace_id: str, workspace_titl
 
 
 def deploy_ldm(
-    logger,
+    logger: logging.Logger,
     sdk: GoodDataSdk,
     data_source_id: str,
     dbt_tables: DbtModelTables,
-    model_ids: Optional[list[str]],
+    model_ids: Optional[List[str]],
     workspace_id: str,
 ) -> None:
     logger.info("Generate and put LDM")
     generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_ids)
 
 
-def upload_notification(logger, sdk: GoodDataSdk, data_source_id: str) -> None:
+def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str) -> None:
     logger.info(f"Upload notification {data_source_id=}")
     sdk.catalog_data_source.register_upload_notification(data_source_id)
 
 
-def deploy_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct) -> None:
+def deploy_analytics(
+    logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct
+) -> None:
     logger.info(f"Deploy analytics {workspace_id=}")
 
     logger.info("Read analytics model from disk")
@@ -101,12 +105,14 @@ def deploy_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: 
     sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, adm)
 
 
-def store_analytics(logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct) -> None:
+def store_analytics(
+    logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct
+) -> None:
     logger.info("Store analytics model to disk")
     sdk.catalog_workspace_content.store_analytics_model_to_disk(workspace_id, layout_model_path(data_product))
 
 
-def test_insights(logger, sdk: GoodDataSdk, workspace_id: str) -> None:
+def test_insights(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str) -> None:
     logger.info(f"Test insights {workspace_id=}")
     insights = sdk.insights.get_insights(workspace_id)
 
@@ -121,6 +127,8 @@ def test_insights(logger, sdk: GoodDataSdk, workspace_id: str) -> None:
 
 
 def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDataSdk, workspace_id: str) -> None:
+    if data_product.localization is None:
+        return
     for to in data_product.localization.to:
         from deep_translator import GoogleTranslator
 
@@ -140,7 +148,7 @@ def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDa
         )
 
 
-def main():
+def main() -> None:
     args = parse_arguments("gooddata-dbt plugin for models management and invalidating caches(upload notification)")
     logger = get_logger("gooddata-dbt", args.debug)
     logger.info("Start")
@@ -155,7 +163,7 @@ def main():
             # Caches are invalidated only per data source, not per data product
             upload_notification(logger, sdk, data_source_id)
         else:
-            dbt_tables = DbtModelTables(args.gooddata_upper_case, gd_config.all_model_ids)
+            dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, gd_config.all_model_ids)
             if args.gooddata_upper_case:
                 dbt_target.schema = dbt_target.schema.upper()
                 dbt_target.database = dbt_target.database.upper()

@@ -1,0 +1,74 @@
+# (C) 2023 GoodData Corporation
+default:
+  target: cicd_dev_local
+  outputs:
+    # Define default values for all env vars to do not have to set them even when they are not needed
+    # This is required in the analytics stage, where we have to run dbt compile, but we want to read only metrics
+    cicd_dev_local:
+      # Title is not a standard dbt field. We use it as a title of GoodData data source.
+      # If not filled, ID(dict key) is used
+      title: "CICD demo (dev local)"
+      type: postgres
+      threads: 1
+      host: "{{ env_var('POSTGRES_HOST', 'localhost') }}"
+      port: "{{ env_var('POSTGRES_PORT', '5432') | int }}"
+      user: "{{ env_var('POSTGRES_USER', 'demouser') }}"
+      password: "{{ env_var('POSTGRES_PASS', 'demopass') }}"
+      dbname: "{{ env_var('POSTGRES_DBNAME', 'demo') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"
+      vars:
+        incremental_strategy: "insert+update"
+    cicd_dev_local_vertica:
+      title: "CICD demo (dev local)"
+      type: vertica
+      threads: 1
+      host: "{{ env_var('VERTICA_HOST', 'localhost') }}"
+      port: "{{ env_var('VERTICA_PORT', '5433') | int }}"
+      username: "{{ env_var('VERTICA_USER', 'demouser') }}"
+      password: "{{ env_var('VERTICA_PASS', 'demopass') }}"
+      database: "{{ env_var('VERTICA_DBNAME', 'vmart') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"
+    # Copy & paste below targets, reasons:
+    # 1. the env variables must be shared with Meltano, so we cannot hardcode them here
+    # 2. we cannot create single target, because its name (dict key) is used as ID of GoodData data source
+    cicd_dev:
+      title: "CICD demo (dev)"
+      type: snowflake
+      threads: 1
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'gooddata') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'cicd') }}"
+      password: "{{ env_var('SNOWFLAKE_PASS', 'xxxxx') }}"
+      database: "{{ env_var('SNOWFLAKE_DBNAME', 'CICD_DEV') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'DEMO_WH') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"
+    cicd_staging:
+      title: "CICD demo (staging)"
+      type: snowflake
+      threads: 1
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'gooddata') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'cicd') }}"
+      password: "{{ env_var('SNOWFLAKE_PASS', 'xxxxx') }}"
+      database: "{{ env_var('SNOWFLAKE_DBNAME', 'CICD_STAGING') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'DEMO_WH') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"
+    # Vertica alternative
+    cicd_staging_vertica:
+      title: "CICD demo Vertica (staging)"
+      type: vertica
+      threads: 1
+      host: "{{ env_var('VERTICA_HOST', 'localhost') }}"
+      port: "{{ env_var('VERTICA_PORT', '5433') | int }}"
+      username: "{{ env_var('VERTICA_USER', 'demouser') }}"
+      password: "{{ env_var('VERTICA_PASS', 'demopass') }}"
+      database: "{{ env_var('VERTICA_DBNAME', 'vmart') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"
+    cicd_prod:
+      title: "CICD demo (prod)"
+      type: snowflake
+      threads: 1
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', 'gooddata') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', 'cicd') }}"
+      password: "{{ env_var('SNOWFLAKE_PASS', 'xxxxx') }}"
+      database: "{{ env_var('SNOWFLAKE_DBNAME', 'CICD_PROD') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'DEMO_WH') }}"
+      schema: "{{ env_var('INPUT_SCHEMA', 'cicd_input_stage') }}"

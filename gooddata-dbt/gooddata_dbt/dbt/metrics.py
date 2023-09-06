@@ -1,7 +1,7 @@
 # (C) 2023 GoodData Corporation
 import json
 import re
-from typing import Optional
+from typing import List, Optional
 
 import attrs
 from gooddata_dbt.dbt.base import DBT_PATH_TO_MANIFEST, Base
@@ -32,7 +32,7 @@ class DbtModelMetaGoodDataMetricProps(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataMetric(Base):
-    gooddata: Optional[DbtModelMetaGoodDataMetricProps] = None
+    gooddata: DbtModelMetaGoodDataMetricProps = attrs.field(factory=DbtModelMetaGoodDataMetricProps)
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -49,18 +49,18 @@ class DbtModelMetric(DbtModelBase):
     model: str
     calculation_method: str
     expression: str
-    filters: Optional[list[DbtModelMetricFilter]] = None
+    filters: Optional[List[DbtModelMetricFilter]] = None
 
 
 class DbtModelMetrics:
-    def __init__(self, model_ids: Optional[list[str]], ldm: CatalogDeclarativeModel) -> None:
+    def __init__(self, model_ids: Optional[List[str]], ldm: CatalogDeclarativeModel) -> None:
         self.model_ids = model_ids
         self.ldm = ldm
         with open(DBT_PATH_TO_MANIFEST) as fp:
             self.dbt_catalog = json.load(fp)
 
     @property
-    def metrics(self) -> list[DbtModelMetric]:
+    def metrics(self) -> List[DbtModelMetric]:
         result = []
         for metric_name, metric_def in self.dbt_catalog["metrics"].items():
             result.append(DbtModelMetric.from_dict(metric_def))
@@ -82,15 +82,20 @@ class DbtModelMetrics:
     def get_entity_type(self, table_name: str, expression_entity: str) -> str:
         result = None
         expression_entity_cmp = expression_entity.lower()
+        if self.ldm.ldm is None:
+            raise Exception("LDM cannot be None.")
         for dataset in self.ldm.ldm.datasets:
-            if dataset.data_source_table_id.id.lower() == table_name.lower():
-                for attribute in dataset.attributes:
+            table_id = dataset.data_source_table_id
+            if table_id is not None and table_id.id.lower() == table_name.lower():
+                attributes = dataset.attributes if dataset.attributes else []
+                facts = dataset.facts if dataset.facts else []
+                for attribute in attributes:
                     if attribute.source_column.lower() == expression_entity_cmp:
                         result = "label"
                     for label in attribute.labels:
                         if label.source_column.lower() == expression_entity_cmp:
                             result = "label"
-                for fact in dataset.facts:
+                for fact in facts:
                     if fact.source_column.lower() == expression_entity_cmp:
                         result = "fact"
         for date_dataset in self.ldm.ldm.date_instances:
@@ -103,16 +108,17 @@ class DbtModelMetrics:
 
     def make_entity_id(self, table_name: str, token: str) -> Optional[str]:
         entity_type = self.get_entity_type(table_name, token)
-        if entity_type:
-            full_entity_name = token
-            final_entity_type = entity_type
-            if entity_type == "date":
-                # TODO - not sure how date dims are handled in dbt models, cannot find it in DOC
-                full_entity_name = f"{token}.day"
-                final_entity_type = "label"
-            return f" {{{final_entity_type}/{full_entity_name}}}"
+        if not entity_type:
+            return None
+        full_entity_name = token
+        final_entity_type = entity_type
+        if entity_type == "date":
+            # TODO - not sure how date dims are handled in dbt models, cannot find it in DOC
+            full_entity_name = f"{token}.day"
+            final_entity_type = "label"
+        return f" {{{final_entity_type}/{full_entity_name}}}"
 
-    def resolve_entities_in_expression(self, expression: str, table_name: str):
+    def resolve_entities_in_expression(self, expression: str, table_name: str) -> str:
         re_split = re.compile(r"\s+")
         tokens = re_split.split(expression)
         result_tokens = []
@@ -121,10 +127,11 @@ class DbtModelMetrics:
             result_tokens.append(entity_id or token)
         return " ".join(result_tokens)
 
-    def make_gooddata_filter(self, table_name: str, dbt_filters: list[DbtModelMetricFilter]) -> str:
+    def make_gooddata_filter(self, table_name: str, dbt_filters: Optional[List[DbtModelMetricFilter]] = None) -> str:
         # TODO - Quite naive implementation
         #    e.g. missing polishing of values (e.g. SQL vs MAQL enclosers)
         gd_maql_filters = []
+        dbt_filters = dbt_filters if dbt_filters is not None else []
         for dbt_filter in dbt_filters:
             entity_id = self.make_entity_id(table_name, dbt_filter.field)
             operator = DBT_TO_GD_FILTER_OPERATORS.get(dbt_filter.operator, dbt_filter.operator)
@@ -134,7 +141,7 @@ class DbtModelMetrics:
         else:
             return ""
 
-    def make_gooddata_metrics(self):
+    def make_gooddata_metrics(self) -> List[CatalogDeclarativeMetric]:
         gd_metrics = []
         for dbt_metric in self.metrics:
             calculation_method = DBT_TO_GD_CALC_METHODS.get(dbt_metric.calculation_method)

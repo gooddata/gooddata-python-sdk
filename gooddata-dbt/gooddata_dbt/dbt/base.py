@@ -37,7 +37,8 @@ TIMESTAMP_GRANULARITIES = [
 ]
 T = TypeVar("T", bound="Base")
 
-DBT_PATH_TO_MANIFEST = Path("target") / "manifest.json"
+DBT_TARGET_DIR = Path("target")
+DBT_PATH_TO_MANIFEST = DBT_TARGET_DIR / "manifest.json"
 
 
 class DbtTests(Enum):
