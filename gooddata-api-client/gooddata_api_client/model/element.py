@@ -107,7 +107,7 @@ class Element(ModelNormal):
         """Element - a model defined in OpenAPI
 
         Args:
-            primary_title (str): Title of primary label of attribute owning requested label or null if the primary label is excluded
+            primary_title (str): Title of primary label of attribute owning requested label, null if the title is null or the primary label is excluded
             title (str): Title of requested label.
 
         Keyword Args:
@@ -198,7 +198,7 @@ class Element(ModelNormal):
         """Element - a model defined in OpenAPI
 
         Args:
-            primary_title (str): Title of primary label of attribute owning requested label or null if the primary label is excluded
+            primary_title (str): Title of primary label of attribute owning requested label, null if the title is null or the primary label is excluded
             title (str): Title of requested label.
 
         Keyword Args:

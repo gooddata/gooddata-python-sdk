@@ -409,8 +409,7 @@
               "value2"
             ],
             "items": {
-              "description": "Set of label values.",
-              "example": "[\"value1\",\"value2\"]",
+              "nullable": true,
               "type": "string"
             },
             "type": "array",
@@ -699,7 +698,7 @@
         "description": "List of returned elements.",
         "properties": {
           "primaryTitle": {
-            "description": "Title of primary label of attribute owning requested label or null if the primary label is excluded",
+            "description": "Title of primary label of attribute owning requested label, null if the title is null or the primary label is excluded",
             "type": "string"
           },
           "title": {
