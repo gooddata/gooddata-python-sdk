@@ -1,17 +1,21 @@
 # (C) 2023 GoodData Corporation
 import logging
+import os
 import sys
+from argparse import Namespace
 from pathlib import Path
 from time import time
 from typing import List, Optional
 
 import yaml
 from gooddata_dbt.args import parse_arguments
+from gooddata_dbt.dbt.cloud import DbtConnection, DbtCredentials
 from gooddata_dbt.dbt.profiles import DbtOutput, DbtProfiles
 from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
+from gooddata_dbt.utils import report_message_to_merge_request
 
 from gooddata_sdk import (
     CatalogDeclarativeModel,
@@ -148,6 +152,108 @@ def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDa
         )
 
 
+def deploy_models(
+    gooddata_upper_case: bool,
+    gooddata_environment_id: str,
+    logger: logging.Logger,
+    dbt_target: DbtOutput,
+    gd_config: GoodDataConfig,
+    sdk: GoodDataSdk,
+    data_source_id: str,
+) -> None:
+    dbt_tables = DbtModelTables.from_local(gooddata_upper_case, gd_config.all_model_ids)
+    if gooddata_upper_case:
+        dbt_target.schema = dbt_target.schema.upper()
+        dbt_target.database = dbt_target.database.upper()
+    register_data_source(logger, sdk, data_source_id, dbt_target, dbt_tables)
+    for data_product in gd_config.data_products:
+        logger.info(f"Process product name={data_product.name}")
+        environments = gd_config.get_environment_workspaces(data_product.environment_setup_id)
+        for environment in environments:
+            if environment.id == gooddata_environment_id:
+                workspace_id = f"{data_product.id}_{environment.id}"
+                workspace_title = f"{data_product.name} ({environment.name})"
+                create_workspace(logger, sdk, workspace_id, workspace_title)
+                deploy_ldm(logger, sdk, data_source_id, dbt_tables, data_product.model_ids, workspace_id)
+                if data_product.localization:
+                    create_localized_workspaces(data_product, sdk, workspace_id)
+
+
+def dbt_cloud_stats(
+    args: Namespace,
+    logger: logging.Logger,
+    all_model_ids: list[str],
+    environment_id: str,
+) -> None:
+    logger.info("Get stats for last execution...")
+    dbt_conn = DbtConnection(credentials=DbtCredentials(account_id=args.account_id, token=args.token))
+    dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
+    model_executions = dbt_conn.get_last_execution(environment_id, len(dbt_tables.tables))
+    for execution in model_executions:
+        logger.info(f"Model {execution.unique_id} finished in {execution.execution_info.execution_time:.2f}s")
+
+    logger.info("Get stats for historical executions...")
+    models_history_avg_execution_times = dbt_conn.get_average_times(logger, model_executions, environment_id, 5)
+    degradations = {}
+    for execution in model_executions:
+        for model_id, avg_time in models_history_avg_execution_times.items():
+            degradation = float(execution.execution_info.execution_time - avg_time) / avg_time * 100
+            if model_id == execution.unique_id and degradation > args.allowed_degradation:
+                degradations[model_id] = {
+                    "last_time": execution.execution_info.execution_time,
+                    "avg_time": avg_time,
+                    "degradation": degradation,
+                }
+    degradation_md = (
+        "**WARNING:** The performance of some dbt cloud jobs degraded "
+        + f"by more than {args.allowed_degradation}%\n\n"
+        + "| Model | Last duration(s) | Average duration(s) | Degradation |\n"
+        + "|-------|------------------|---------------------|-------------|"
+    )
+    if len(degradations) > 0:
+        for model_id, data in degradations.items():
+            model_degradation_text = (
+                f"Model {model_id} - performance degraded: "
+                + f"last_time={data['last_time']:.2f} avg_time={data['avg_time']:.2f} "
+                + f"degradation={data['degradation']:.2f}%"
+            )
+            logger.warning(model_degradation_text)
+            model_degradation_md = "| {model_id} | {last_time} | {avg_time} | {degradation}% |".format(
+                model_id=model_id,
+                last_time=f"{data['last_time']:.2f}",
+                avg_time=f"{data['avg_time']:.2f}",
+                degradation=f"{data['degradation']:.2f}",
+            )
+            degradation_md += f"\n{model_degradation_md}"
+        if os.getenv("CI_MERGE_REQUEST_IID"):
+            logger.info("Sending report of degradations to related Gitlab merge request as comment")
+            # Running in Gitlab CI pipeline, report degradations to the merge request to notify code reviewer
+            report_message_to_merge_request(degradation_md)
+
+
+def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: list[str]) -> None:
+    dbt_conn = DbtConnection(credentials=DbtCredentials(account_id=args.account_id, token=args.token))
+    logger.info("#" * 80)
+    logger.info(f"Starting job in dbt cloud with job_id={args.job_id}")
+    logger.info("#" * 80)
+
+    run_id, run_href = dbt_conn.run_job(args.job_id)
+    logger.info(f"Job with {run_id=} started. Link to job run {run_href=}")
+
+    dbt_conn.fetch_run_result(run_id)
+    dbt_conn.download_manifest(run_id)
+    logger.info("Manifest downloaded successfully")
+
+    environment_id = dbt_conn.get_environment_id(args.job_id)
+    logger.info(f"Found environment with {environment_id=} for job_id={args.job_id}")
+
+    environment = dbt_conn.read_environment(environment_id, args.project_id, args.job_id)
+    dbt_conn.make_profiles(environment, path_to_profiles=Path(args.profiles_dir))
+    logger.info(f"Profile file stored to {args.profiles_dir}")
+
+    dbt_cloud_stats(args, logger, all_model_ids, environment_id)
+
+
 def main() -> None:
     args = parse_arguments("gooddata-dbt plugin for models management and invalidating caches(upload notification)")
     logger = get_logger("gooddata-dbt", args.debug)
@@ -156,29 +262,26 @@ def main() -> None:
     with open("gooddata.yml") as fp:
         gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
 
-    if args.method in ["upload_notification", "deploy_models"]:
+    if args.method == "dbt_cloud_run":
+        dbt_cloud_run(args, logger, gd_config.all_model_ids)
+    elif args.method == "dbt_cloud_stats":
+        dbt_cloud_stats(args, logger, gd_config.all_model_ids, args.environment_id)
+    elif args.method in ["upload_notification", "deploy_models"]:
         dbt_target = DbtProfiles(args).target
-        data_source_id = dbt_target.name
+        data_source_id = f"{args.dbt_profile}-{dbt_target.name}"
         if args.method == "upload_notification":
             # Caches are invalidated only per data source, not per data product
             upload_notification(logger, sdk, data_source_id)
         else:
-            dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, gd_config.all_model_ids)
-            if args.gooddata_upper_case:
-                dbt_target.schema = dbt_target.schema.upper()
-                dbt_target.database = dbt_target.database.upper()
-            register_data_source(logger, sdk, data_source_id, dbt_target, dbt_tables)
-            for data_product in gd_config.data_products:
-                logger.info(f"Process product name={data_product.name}")
-                environments = gd_config.get_environment_workspaces(data_product.environment_setup_id)
-                for environment in environments:
-                    if environment.id == args.gooddata_environment_id:
-                        workspace_id = f"{data_product.id}_{environment.id}"
-                        workspace_title = f"{data_product.name} ({environment.name})"
-                        create_workspace(logger, sdk, workspace_id, workspace_title)
-                        deploy_ldm(logger, sdk, data_source_id, dbt_tables, data_product.model_ids, workspace_id)
-                        if data_product.localization:
-                            create_localized_workspaces(data_product, sdk, workspace_id)
+            deploy_models(
+                args.gooddata_upper_case,
+                args.gooddata_environment_id,
+                logger,
+                dbt_target,
+                gd_config,
+                sdk,
+                data_source_id,
+            )
     else:
         for data_product in gd_config.data_products:
             logger.info(f"Process product name={data_product.name}")

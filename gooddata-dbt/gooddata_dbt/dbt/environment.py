@@ -10,7 +10,8 @@ from cattrs import structure
 class Environment:
     name: str
     environment_name: str
-    environment_id: str = attrs.field(init=False, default=os.environ.get("ELT_ENVIRONMENT", ""))
+    profile: str = attrs.field(init=False, default=os.environ.get("ELT_ENVIRONMENT", ""))
+    target: str = attrs.field(init=False, default=os.environ.get("DBT_TARGET", ""))
     title: str = attrs.field(init=False, default="")
     type: str
     account: str
