@@ -59,9 +59,9 @@ def set_gooddata_workspace_title_args(parser: argparse.ArgumentParser) -> None:
 def set_dbt_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-pd",
-        "--profile-dir",
+        "--profiles-dir",
         help="Directory where dbt profiles.yml is stored",
-        default=os.getenv("DBT_PROFILE_DIR", "~/.dbt"),
+        default=os.getenv("DBT_PROFILES_DIR", "~/.dbt"),
     )
     parser.add_argument(
         "-p", "--profile", help="Name of profile from profiles.yml", default=os.getenv("DBT_PROFILE", "default")

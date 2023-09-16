@@ -8,7 +8,7 @@ _CURR_DIR = Path(__file__).parent
 
 
 def test_profiles():
-    dbt_profiles = DbtProfiles(argparse.Namespace(profile_dir=_CURR_DIR / "resources/dbt_profiles"))
+    dbt_profiles = DbtProfiles(argparse.Namespace(profiles_dir=_CURR_DIR / "resources/dbt_profiles"))
     profiles = dbt_profiles.profiles
     assert len(profiles) == 1
     default_profile = profiles[0]
