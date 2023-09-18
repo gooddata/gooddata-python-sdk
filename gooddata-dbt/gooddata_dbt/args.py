@@ -59,9 +59,9 @@ def set_gooddata_workspace_title_args(parser: argparse.ArgumentParser) -> None:
 def set_dbt_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "-pd",
-        "--profile-dir",
+        "--profiles-dir",
         help="Directory where dbt profiles.yml is stored",
-        default=os.getenv("DBT_PROFILE_DIR", "~/.dbt"),
+        default=os.getenv("DBT_PROFILES_DIR", "~/.dbt"),
     )
     parser.add_argument(
         "-p", "--profile", help="Name of profile from profiles.yml", default=os.getenv("DBT_PROFILE", "default")
@@ -74,12 +74,69 @@ def set_dbt_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
+def set_dbt_cloud_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "-dca",
+        "--account-id",
+        help="dbt cloud account ID",
+        default=os.getenv("DBT_ACCOUNT_ID"),
+    )
+    parser.add_argument(
+        "-dcj",
+        "--job-id",
+        help="dbt cloud job ID",
+        default=os.getenv("DBT_JOB_ID"),
+    )
+    parser.add_argument(
+        "-dcp",
+        "--project-id",
+        help="dbt cloud project ID",
+        default=os.getenv("DBT_PROJECT_ID"),
+    )
+    parser.add_argument(
+        "-dct",
+        "--token",
+        help="dbt cloud token",
+        default=os.getenv("DBT_TOKEN"),
+    )
+
+
+def set_dbt_cloud_stats_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "-dce",
+        "--environment-id",
+        help="dbt cloud environment ID",
+        default=os.getenv("DBT_ENVIRONMENT_ID"),
+    )
+
+    parser.add_argument(
+        "-dcd",
+        "--allowed-degradation",
+        type=int,
+        help="How much performance of model executions can degrade before reported as warning, in percent",
+        default=int(os.getenv("DBT_ALLOWED_DEGRADATION", "100")),
+    )
+
+
 def parse_arguments(description: str) -> argparse.Namespace:
     parser = get_parser(description)
     parser.add_argument("--debug", action="store_true", default=False, help="Increase logging level to DEBUG")
     set_gooddata_endpoint_args(parser)
 
     subparsers = parser.add_subparsers(help="actions")
+
+    dbt_cloud_run = subparsers.add_parser("dbt_cloud_run")
+    set_dbt_cloud_args(dbt_cloud_run)
+    set_dbt_args(dbt_cloud_run)
+    set_gooddata_upper_case_args(dbt_cloud_run)
+    dbt_cloud_run.set_defaults(method="dbt_cloud_run")
+
+    dbt_cloud_stats = subparsers.add_parser("dbt_cloud_stats")
+    set_dbt_cloud_args(dbt_cloud_stats)
+    set_dbt_cloud_stats_args(dbt_cloud_stats)
+    set_dbt_args(dbt_cloud_stats)
+    set_gooddata_upper_case_args(dbt_cloud_stats)
+    dbt_cloud_stats.set_defaults(method="dbt_cloud_stats")
 
     deploy_models = subparsers.add_parser("deploy_models")
     set_dbt_args(deploy_models)

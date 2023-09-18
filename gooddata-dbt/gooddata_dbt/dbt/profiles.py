@@ -130,7 +130,7 @@ class DbtProfiles:
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-        with open(os.path.expanduser(f"{args.profile_dir}/profiles.yml")) as fp:
+        with open(os.path.expanduser(f"{args.profiles_dir}/profiles.yml")) as fp:
             self.dbt_profiles = yaml.safe_load(fp)
 
     @staticmethod

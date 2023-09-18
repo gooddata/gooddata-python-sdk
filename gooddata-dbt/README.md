@@ -20,7 +20,7 @@ make install
 
 ## Configuration, parametrization
 Create `gooddata.yaml` file to configure so-called data products and environments.
-Check [gooddata_example.yaml](gooddata_example.yaml) file for more details.
+Check [gooddata_example.yml](gooddata_example.yml) file for more details.
 
 Parametrization of each execution can be done using environment variables / tool arguments.
 Use main --help and --help for each use case to learn more.
