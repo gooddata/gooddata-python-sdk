@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **relationships** | [**JsonApiDatasetOutRelationships**](JsonApiDatasetOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
-**meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 
+**meta** | [**JsonApiAttributeHierarchyOutMeta**](JsonApiAttributeHierarchyOutMeta.md) |  | [optional] 
 **attributes** | [**JsonApiDatasetOutAttributes**](JsonApiDatasetOutAttributes.md) |  | [optional] 
 **id** | **str** | API identifier of an object | [optional] 
 **type** | **str** | Object type | [optional]  if omitted the server will use the default value of "dataset"

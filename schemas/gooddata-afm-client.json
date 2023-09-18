@@ -296,6 +296,42 @@
         ],
         "type": "object"
       },
+      "AfmValidDescendantsQuery": {
+        "description": "Entity describing the valid descendants request.",
+        "properties": {
+          "attributes": {
+            "description": "List of identifiers of the attributes to get the valid descendants for.",
+            "items": {
+              "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes"
+        ],
+        "type": "object"
+      },
+      "AfmValidDescendantsResponse": {
+        "description": "Entity describing the valid descendants response.",
+        "properties": {
+          "validDescendants": {
+            "additionalProperties": {
+              "description": "Map of attribute identifiers to list of valid descendants identifiers.",
+              "items": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
+              },
+              "type": "array"
+            },
+            "description": "Map of attribute identifiers to list of valid descendants identifiers.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "validDescendants"
+        ],
+        "type": "object"
+      },
       "AfmValidObjectsQuery": {
         "description": "Entity holding AFM and list of object types whose validity should be computed.",
         "properties": {
@@ -729,7 +765,7 @@
           "exactFilter": {
             "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
             "items": {
-              "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
+              "nullable": true,
               "type": "string"
             },
             "type": "array"
@@ -744,6 +780,7 @@
           },
           "label": {
             "description": "Requested label.",
+            "example": "label_id",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
@@ -1907,6 +1944,57 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
+      "post": {
+        "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",
+        "operationId": "computeValidDescendants",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AfmValidDescendantsQuery"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmValidDescendantsResponse"
+                }
+              }
+            },
+            "description": "Map of lists of attributes valid as descendants of the given attributes."
+          }
+        },
+        "summary": "(BETA) Valid descendants",
+        "tags": [
+          "Computation",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to analyze data.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects": {
       "post": {
         "description": "Returns list containing attributes, facts, or metrics, which can be added to given AFM while still keeping it computable.",

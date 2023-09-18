@@ -133,7 +133,7 @@ class RsaSpecification(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, alg, e, kid, n, x5c, x5t, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, alg, e, kid, n, *args, **kwargs):  # noqa: E501
         """RsaSpecification - a model defined in OpenAPI
 
         Args:
@@ -141,8 +141,6 @@ class RsaSpecification(ModelNormal):
             e (str):
             kid (str):
             n (str):
-            x5c ([str]):
-            x5t (str):
 
         Keyword Args:
             kty (str): defaults to "RSA", must be one of ["RSA", ]  # noqa: E501
@@ -177,6 +175,8 @@ class RsaSpecification(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): [optional]  # noqa: E501
+            x5t (str): [optional]  # noqa: E501
         """
 
         kty = kwargs.get('kty', "RSA")
@@ -216,8 +216,6 @@ class RsaSpecification(ModelNormal):
         self.kty = kty
         self.n = n
         self.use = use
-        self.x5c = x5c
-        self.x5t = x5t
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -238,7 +236,7 @@ class RsaSpecification(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, alg, e, kid, n, x5c, x5t, *args, **kwargs):  # noqa: E501
+    def __init__(self, alg, e, kid, n, *args, **kwargs):  # noqa: E501
         """RsaSpecification - a model defined in OpenAPI
 
         Args:
@@ -246,8 +244,6 @@ class RsaSpecification(ModelNormal):
             e (str):
             kid (str):
             n (str):
-            x5c ([str]):
-            x5t (str):
 
         Keyword Args:
             kty (str): defaults to "RSA", must be one of ["RSA", ]  # noqa: E501
@@ -282,6 +278,8 @@ class RsaSpecification(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): [optional]  # noqa: E501
+            x5t (str): [optional]  # noqa: E501
         """
 
         kty = kwargs.get('kty', "RSA")
@@ -319,8 +317,6 @@ class RsaSpecification(ModelNormal):
         self.kty = kty
         self.n = n
         self.use = use
-        self.x5c = x5c
-        self.x5t = x5t
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

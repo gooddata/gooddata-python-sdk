@@ -31,7 +31,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_attribute_out_with_links import JsonApiAttributeOutWithLinks
     from gooddata_api_client.model.json_api_dataset_out_attributes import JsonApiDatasetOutAttributes
     from gooddata_api_client.model.json_api_dataset_out_relationships import JsonApiDatasetOutRelationships
@@ -42,7 +42,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_user_group_out_with_links import JsonApiUserGroupOutWithLinks
     from gooddata_api_client.model.json_api_user_out_with_links import JsonApiUserOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
-    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiAttributeOutWithLinks'] = JsonApiAttributeOutWithLinks
     globals()['JsonApiDatasetOutAttributes'] = JsonApiDatasetOutAttributes
     globals()['JsonApiDatasetOutRelationships'] = JsonApiDatasetOutRelationships
@@ -118,7 +118,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
         return {
             'relationships': (JsonApiDatasetOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
-            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'attributes': (JsonApiDatasetOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
@@ -179,7 +179,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501
@@ -288,7 +288,7 @@ class JsonApiUserDataFilterOutIncludes(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             relationships (JsonApiDatasetOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             attributes (JsonApiDatasetOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
             type (str): Object type. [optional] if omitted the server will use the default value of "dataset"  # noqa: E501

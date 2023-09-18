@@ -25,7 +25,7 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 from gooddata_api_client.model.available_assignees import AvailableAssignees
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 
 
 class PermissionsApi(object):
@@ -211,12 +211,12 @@ class PermissionsApi(object):
                 'all': [
                     'workspace_id',
                     'dashboard_id',
-                    'permissions_for_assignee',
+                    'manage_dashboard_permissions_request_inner',
                 ],
                 'required': [
                     'workspace_id',
                     'dashboard_id',
-                    'permissions_for_assignee',
+                    'manage_dashboard_permissions_request_inner',
                 ],
                 'nullable': [
                 ],
@@ -235,8 +235,8 @@ class PermissionsApi(object):
                         (str,),
                     'dashboard_id':
                         (str,),
-                    'permissions_for_assignee':
-                        ([PermissionsForAssignee],),
+                    'manage_dashboard_permissions_request_inner':
+                        ([ManageDashboardPermissionsRequestInner],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -245,7 +245,7 @@ class PermissionsApi(object):
                 'location_map': {
                     'workspace_id': 'path',
                     'dashboard_id': 'path',
-                    'permissions_for_assignee': 'body',
+                    'manage_dashboard_permissions_request_inner': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -572,7 +572,7 @@ class PermissionsApi(object):
         self,
         workspace_id,
         dashboard_id,
-        permissions_for_assignee,
+        manage_dashboard_permissions_request_inner,
         **kwargs
     ):
         """Manage Permissions for a Dashboard  # noqa: E501
@@ -580,13 +580,13 @@ class PermissionsApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee, async_req=True)
+        >>> thread = api.manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
             dashboard_id (str):
-            permissions_for_assignee ([PermissionsForAssignee]):
+            manage_dashboard_permissions_request_inner ([ManageDashboardPermissionsRequestInner]):
 
         Keyword Args:
             _return_http_data_only (bool): response data without head status
@@ -654,8 +654,8 @@ class PermissionsApi(object):
             workspace_id
         kwargs['dashboard_id'] = \
             dashboard_id
-        kwargs['permissions_for_assignee'] = \
-            permissions_for_assignee
+        kwargs['manage_dashboard_permissions_request_inner'] = \
+            manage_dashboard_permissions_request_inner
         return self.manage_dashboard_permissions_endpoint.call_with_http_info(**kwargs)
 
     def set_workspace_permissions(

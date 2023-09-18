@@ -58,6 +58,7 @@ class JsonApiOrganizationOutMeta(ModelNormal):
     allowed_values = {
         ('permissions',): {
             'MANAGE': "MANAGE",
+            'SELF_CREATE_TOKEN': "SELF_CREATE_TOKEN",
         },
     }
 

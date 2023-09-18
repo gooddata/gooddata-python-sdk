@@ -32,7 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_with_links import JsonApiAnalyticalDashboardOutWithLinks
-    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_dashboard_plugin_out_attributes import JsonApiDashboardPluginOutAttributes
     from gooddata_api_client.model.json_api_dashboard_plugin_out_relationships import JsonApiDashboardPluginOutRelationships
     from gooddata_api_client.model.json_api_dashboard_plugin_out_with_links import JsonApiDashboardPluginOutWithLinks
@@ -44,7 +44,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiAnalyticalDashboardOutWithLinks'] = JsonApiAnalyticalDashboardOutWithLinks
-    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiDashboardPluginOutAttributes'] = JsonApiDashboardPluginOutAttributes
     globals()['JsonApiDashboardPluginOutRelationships'] = JsonApiDashboardPluginOutRelationships
     globals()['JsonApiDashboardPluginOutWithLinks'] = JsonApiDashboardPluginOutWithLinks
@@ -119,7 +119,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
         lazy_import()
         return {
             'links': (ObjectLinks,),  # noqa: E501
-            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiDashboardPluginOutRelationships,),  # noqa: E501
             'attributes': (JsonApiDashboardPluginOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
@@ -180,7 +180,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
             attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
@@ -289,7 +289,7 @@ class JsonApiAnalyticalDashboardOutIncludes(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ObjectLinks): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiDashboardPluginOutRelationships): [optional]  # noqa: E501
             attributes (JsonApiDashboardPluginOutAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501

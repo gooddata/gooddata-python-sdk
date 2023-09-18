@@ -122,13 +122,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeAnalyticalDashboardExtension(
                     id="revenues-analysis",
                     permissions=[
-                        DeclarativeAnalyticalDashboardPermission(
-                            assignee=AssigneeIdentifier(
-                                id="id_example",
-                                type="user",
-                            ),
-                            name="EDIT",
-                        ),
+                        DeclarativeAnalyticalDashboardPermissionsInner(None),
                     ],
                 ),
             ],
@@ -148,13 +142,7 @@ with gooddata_api_client.ApiClient() as api_client:
                         type="user",
                     ),
                     permissions=[
-                        DeclarativeAnalyticalDashboardPermission(
-                            assignee=AssigneeIdentifier(
-                                id="id_example",
-                                type="user",
-                            ),
-                            name="EDIT",
-                        ),
+                        DeclarativeAnalyticalDashboardPermissionsInner(None),
                     ],
                     tags=["Revenues"],
                     title="Revenues analysis",

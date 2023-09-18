@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.rule_permission import RulePermission
     from gooddata_api_client.model.user_group_permission import UserGroupPermission
     from gooddata_api_client.model.user_permission import UserPermission
+    globals()['RulePermission'] = RulePermission
     globals()['UserGroupPermission'] = UserGroupPermission
     globals()['UserPermission'] = UserPermission
 
@@ -90,6 +92,7 @@ class DashboardPermissions(ModelNormal):
         """
         lazy_import()
         return {
+            'rules': ([RulePermission],),  # noqa: E501
             'user_groups': ([UserGroupPermission],),  # noqa: E501
             'users': ([UserPermission],),  # noqa: E501
         }
@@ -100,6 +103,7 @@ class DashboardPermissions(ModelNormal):
 
 
     attribute_map = {
+        'rules': 'rules',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
         'users': 'users',  # noqa: E501
     }
@@ -111,10 +115,11 @@ class DashboardPermissions(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, user_groups, users, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, rules, user_groups, users, *args, **kwargs):  # noqa: E501
         """DashboardPermissions - a model defined in OpenAPI
 
         Args:
+            rules ([RulePermission]): List of rules
             user_groups ([UserGroupPermission]): List of user groups
             users ([UserPermission]): List of users
 
@@ -180,6 +185,7 @@ class DashboardPermissions(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.rules = rules
         self.user_groups = user_groups
         self.users = users
         for var_name, var_value in kwargs.items():
@@ -202,10 +208,11 @@ class DashboardPermissions(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, user_groups, users, *args, **kwargs):  # noqa: E501
+    def __init__(self, rules, user_groups, users, *args, **kwargs):  # noqa: E501
         """DashboardPermissions - a model defined in OpenAPI
 
         Args:
+            rules ([RulePermission]): List of rules
             user_groups ([UserGroupPermission]): List of user groups
             users ([UserPermission]): List of users
 
@@ -269,6 +276,7 @@ class DashboardPermissions(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.rules = rules
         self.user_groups = user_groups
         self.users = users
         for var_name, var_value in kwargs.items():

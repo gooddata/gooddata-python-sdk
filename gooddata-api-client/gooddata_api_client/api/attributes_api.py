@@ -89,6 +89,7 @@ class AttributesApi(object):
 
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ATTRIBUTEHIERARCHIES": "attributeHierarchies",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
@@ -199,6 +200,7 @@ class AttributesApi(object):
 
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ATTRIBUTEHIERARCHIES": "attributeHierarchies",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
@@ -350,7 +352,7 @@ class AttributesApi(object):
         object_id,
         **kwargs
     ):
-        """Get a Attribute  # noqa: E501
+        """Get an Attribute  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

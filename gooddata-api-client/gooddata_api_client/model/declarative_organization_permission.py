@@ -62,6 +62,7 @@ class DeclarativeOrganizationPermission(ModelNormal):
     allowed_values = {
         ('name',): {
             'MANAGE': "MANAGE",
+            'SELF_CREATE_TOKEN': "SELF_CREATE_TOKEN",
         },
     }
 
@@ -112,14 +113,14 @@ class DeclarativeOrganizationPermission(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, assignee, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, assignee, name, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationPermission - a model defined in OpenAPI
 
         Args:
             assignee (AssigneeIdentifier):
+            name (str): Permission name.
 
         Keyword Args:
-            name (str): Permission name.. defaults to "MANAGE", must be one of ["MANAGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -152,7 +153,6 @@ class DeclarativeOrganizationPermission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        name = kwargs.get('name', "MANAGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -204,14 +204,14 @@ class DeclarativeOrganizationPermission(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, assignee, *args, **kwargs):  # noqa: E501
+    def __init__(self, assignee, name, *args, **kwargs):  # noqa: E501
         """DeclarativeOrganizationPermission - a model defined in OpenAPI
 
         Args:
             assignee (AssigneeIdentifier):
+            name (str): Permission name.
 
         Keyword Args:
-            name (str): Permission name.. defaults to "MANAGE", must be one of ["MANAGE", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -244,7 +244,6 @@ class DeclarativeOrganizationPermission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
-        name = kwargs.get('name', "MANAGE")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

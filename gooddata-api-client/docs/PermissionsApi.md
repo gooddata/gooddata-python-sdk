@@ -213,7 +213,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_dashboard_permissions**
-> manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+> manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
 Manage Permissions for a Dashboard
 
@@ -224,7 +224,7 @@ Manage Permissions for a Dashboard
 import time
 import gooddata_api_client
 from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -239,22 +239,14 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = permissions_api.PermissionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     dashboard_id = "dashboardId_example" # str | 
-    permissions_for_assignee = [
-        PermissionsForAssignee(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            permissions=[
-                "EDIT",
-            ],
-        ),
-    ] # [PermissionsForAssignee] | 
+    manage_dashboard_permissions_request_inner = [
+        ManageDashboardPermissionsRequestInner(None),
+    ] # [ManageDashboardPermissionsRequestInner] | 
 
     # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Dashboard
-        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling PermissionsApi->manage_dashboard_permissions: %s\n" % e)
 ```
@@ -266,7 +258,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **dashboard_id** | **str**|  |
- **permissions_for_assignee** | [**[PermissionsForAssignee]**](PermissionsForAssignee.md)|  |
+ **manage_dashboard_permissions_request_inner** | [**[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  |
 
 ### Return type
 
