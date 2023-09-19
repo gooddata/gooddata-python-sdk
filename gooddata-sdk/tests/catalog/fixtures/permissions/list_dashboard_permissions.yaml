@@ -158,6 +158,7 @@ interactions:
                 - level: VIEW
                   source: direct
           users: []
+          rules: []
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
@@ -308,3 +309,4 @@ interactions:
         string:
           userGroups: []
           users: []
+          rules: []

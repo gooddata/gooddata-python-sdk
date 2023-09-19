@@ -350,7 +350,19 @@
         "title": "Product & Category"
       }
     ],
-    "analyticalDashboardExtensions": [],
+    "analyticalDashboardExtensions": [
+      {
+        "id": "inherited",
+        "permissions": [
+          {
+            "assigneeRule": {
+              "type": "allWorkspaceUsers"
+            },
+            "name": "VIEW"
+          }
+        ]
+      }
+    ],
     "dashboardPlugins": [
       {
         "content": {

@@ -78,7 +78,12 @@ interactions:
       body:
         string:
           analytics:
-            analyticalDashboardExtensions: []
+            analyticalDashboardExtensions:
+              - id: inherited
+                permissions:
+                  - assigneeRule:
+                      type: allWorkspaceUsers
+                    name: VIEW
             analyticalDashboards:
               - content:
                   filterContextRef:

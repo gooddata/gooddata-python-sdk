@@ -1889,7 +1889,8 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
                         configuration=constant_kwargs['_configuration']
                     )
             oneof_instances.append(oneof_instance)
-        except Exception:
+        except Exception as e:
+            print(e)
             pass
     if len(oneof_instances) == 0:
         raise ApiValueError(
