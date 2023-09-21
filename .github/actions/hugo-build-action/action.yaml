@@ -30,5 +30,5 @@ runs:
       env:
         HUGO_ENV: ${{ inputs.hugo-env }}
         BASE_URL: ${{ inputs.base-url }}
-      run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
+      run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL} --debug
       shell: bash
