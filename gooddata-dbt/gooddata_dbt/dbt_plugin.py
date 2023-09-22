@@ -182,7 +182,7 @@ def deploy_models(
 def dbt_cloud_stats(
     args: Namespace,
     logger: logging.Logger,
-    all_model_ids: list[str],
+    all_model_ids: List[str],
     environment_id: str,
 ) -> None:
     logger.info("Get stats for last execution...")
@@ -231,7 +231,7 @@ def dbt_cloud_stats(
             report_message_to_merge_request(degradation_md)
 
 
-def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: list[str]) -> None:
+def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: List[str]) -> None:
     dbt_conn = DbtConnection(credentials=DbtCredentials(account_id=args.account_id, token=args.token))
     logger.info("#" * 80)
     logger.info(f"Starting job in dbt cloud with job_id={args.job_id}")
