@@ -33,10 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_labels import JsonApiAnalyticalDashboardOutRelationshipsLabels
-    from gooddata_api_client.model.json_api_dataset_out_relationships_attributes import JsonApiDatasetOutRelationshipsAttributes
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_relationships_attributes import JsonApiAttributeHierarchyOutRelationshipsAttributes
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsLabels'] = JsonApiAnalyticalDashboardOutRelationshipsLabels
-    globals()['JsonApiDatasetOutRelationshipsAttributes'] = JsonApiDatasetOutRelationshipsAttributes
+    globals()['JsonApiAttributeHierarchyOutRelationshipsAttributes'] = JsonApiAttributeHierarchyOutRelationshipsAttributes
 
 
 class JsonApiFilterContextOutRelationships(ModelNormal):
@@ -92,7 +92,7 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'attributes': (JsonApiDatasetOutRelationshipsAttributes,),  # noqa: E501
+            'attributes': (JsonApiAttributeHierarchyOutRelationshipsAttributes,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
         }
@@ -149,7 +149,7 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
         """
@@ -237,7 +237,7 @@ class JsonApiFilterContextOutRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiDatasetOutRelationshipsAttributes): [optional]  # noqa: E501
+            attributes (JsonApiAttributeHierarchyOutRelationshipsAttributes): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
         """

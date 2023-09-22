@@ -194,6 +194,25 @@
         ],
         "type": "object"
       },
+      "DatasetGrain": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "attribute",
+              "date"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
       "DatasetReferenceIdentifier": {
         "properties": {
           "id": {
@@ -1618,9 +1637,7 @@
           "kid",
           "kty",
           "n",
-          "use",
-          "x5c",
-          "x5t"
+          "use"
         ],
         "type": "object"
       },
@@ -2694,7 +2711,7 @@
             "description": "A type of the grain.",
             "enum": [
               "attribute",
-              "dataset"
+              "date"
             ],
             "example": "ATTRIBUTE",
             "type": "string"
@@ -3461,6 +3478,393 @@
           }
         ]
       },
+      "JsonApiAttributeHierarchyIn": {
+        "description": "JSON:API representation of attributeHierarchy entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {
+                  "attributes": [
+                    {
+                      "identifier": {
+                        "id": "country",
+                        "type": "attribute"
+                      }
+                    },
+                    {
+                      "identifier": {
+                        "id": "city",
+                        "type": "attribute"
+                      }
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "attributeHierarchy"
+            ],
+            "example": "attributeHierarchy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAttributeHierarchyIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyLinkage": {
+        "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "attributeHierarchy"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyOut": {
+        "description": "JSON:API representation of attributeHierarchy entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {
+                  "attributes": [
+                    {
+                      "identifier": {
+                        "id": "country",
+                        "type": "attribute"
+                      }
+                    },
+                    {
+                      "identifier": {
+                        "id": "city",
+                        "type": "attribute"
+                      }
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "attributes": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAttributeToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "attributeHierarchy"
+            ],
+            "example": "attributeHierarchy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAttributeHierarchyOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiAttributeHierarchyOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeHierarchyOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiAttributeHierarchyPatch": {
+        "description": "JSON:API representation of patching attributeHierarchy entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "content": {
+                "description": "Free-form JSON content. Maximum supported length is 15000 characters.",
+                "example": {
+                  "attributes": [
+                    {
+                      "identifier": {
+                        "id": "country",
+                        "type": "attribute"
+                      }
+                    },
+                    {
+                      "identifier": {
+                        "id": "city",
+                        "type": "attribute"
+                      }
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "attributeHierarchy"
+            ],
+            "example": "attributeHierarchy",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiAttributeHierarchyPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiAttributeHierarchyToManyLinkage": {
+        "description": "References to other resource objects in a to-many (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "items": {
+          "$ref": "#/components/schemas/JsonApiAttributeHierarchyLinkage"
+        },
+        "type": "array"
+      },
       "JsonApiAttributeLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
         "properties": {
@@ -3586,6 +3990,17 @@
           },
           "relationships": {
             "properties": {
+              "attributeHierarchies": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAttributeHierarchyToManyLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
               "dataset": {
                 "properties": {
                   "data": {
@@ -3666,6 +4081,9 @@
           },
           {
             "$ref": "#/components/schemas/JsonApiLabelOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutWithLinks"
           }
         ]
       },
@@ -5061,6 +5479,7 @@
               },
               "password": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "schema": {
@@ -5069,6 +5488,7 @@
               },
               "token": {
                 "maxLength": 10000,
+                "nullable": true,
                 "type": "string"
               },
               "type": {
@@ -5096,6 +5516,7 @@
               },
               "username": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               }
             },
@@ -5224,6 +5645,7 @@
               },
               "username": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               }
             },
@@ -5355,6 +5777,7 @@
               },
               "password": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "schema": {
@@ -5363,6 +5786,7 @@
               },
               "token": {
                 "maxLength": 10000,
+                "nullable": true,
                 "type": "string"
               },
               "type": {
@@ -5390,6 +5814,7 @@
               },
               "username": {
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               }
             },
@@ -5620,21 +6045,16 @@
                     "id": {
                       "type": "string"
                     },
-                    "order": {
-                      "format": "int32",
-                      "type": "integer"
-                    },
                     "type": {
                       "enum": [
                         "attribute",
-                        "dataset"
+                        "date"
                       ],
                       "type": "string"
                     }
                   },
                   "required": [
                     "id",
-                    "order",
                     "type"
                   ],
                   "type": "object"
@@ -5670,12 +6090,17 @@
                         "type": "string"
                       },
                       "type": "array"
+                    },
+                    "sources": {
+                      "items": {
+                        "$ref": "#/components/schemas/ReferenceSourceColumn"
+                      },
+                      "type": "array"
                     }
                   },
                   "required": [
                     "identifier",
-                    "multivalue",
-                    "sourceColumns"
+                    "multivalue"
                   ],
                   "type": "object"
                 },
@@ -11515,6 +11940,33 @@
         ],
         "type": "object"
       },
+      "ReferenceSourceColumn": {
+        "properties": {
+          "column": {
+            "type": "string"
+          },
+          "dataType": {
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "type": "string"
+          },
+          "target": {
+            "$ref": "#/components/schemas/DatasetGrain"
+          }
+        },
+        "required": [
+          "column",
+          "target"
+        ],
+        "type": "object"
+      },
       "ResolveSettingsRequest": {
         "description": "A request containing setting IDs to resolve.",
         "properties": {
@@ -11616,9 +12068,7 @@
           "kid",
           "kty",
           "n",
-          "use",
-          "x5c",
-          "x5t"
+          "use"
         ],
         "type": "object"
       },
@@ -17138,6 +17588,550 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies": {
+      "get": {
+        "operationId": "getAllEntities@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy,attributes",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "attributes",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Attribute Hierarchies",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy,attributes",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "attributes",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAttributeHierarchyInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Attribute Hierarchies",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete an Attribute Hierarchy",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy,attributes",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "attributes",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get an Attribute Hierarchy",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy,attributes",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "attributes",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAttributeHierarchyPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch an Attribute Hierarchy",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@AttributeHierarchies",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;createdBy.id==321;modifiedBy.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=createdBy,modifiedBy,attributes",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "userIdentifiers",
+                  "attributes",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiAttributeHierarchyInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiAttributeHierarchyOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put an Attribute Hierarchy",
+        "tags": [
+          "Attribute Hierarchies",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/attributes": {
       "get": {
         "operationId": "getAllEntities@Attributes",
@@ -17176,7 +18170,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset,defaultView,labels",
+            "example": "include=dataset,defaultView,labels,attributeHierarchies",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -17186,6 +18180,7 @@
                 "enum": [
                   "datasets",
                   "labels",
+                  "attributeHierarchies",
                   "dataset",
                   "defaultView",
                   "ALL"
@@ -17288,7 +18283,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=dataset,defaultView,labels",
+            "example": "include=dataset,defaultView,labels,attributeHierarchies",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -17298,6 +18293,7 @@
                 "enum": [
                   "datasets",
                   "labels",
+                  "attributeHierarchies",
                   "dataset",
                   "defaultView",
                   "ALL"
@@ -17352,7 +18348,7 @@
             "description": "Request successfully processed"
           }
         },
-        "summary": "Get a Attribute",
+        "summary": "Get an Attribute",
         "tags": [
           "Attributes",
           "entities",

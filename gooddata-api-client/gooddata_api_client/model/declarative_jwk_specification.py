@@ -105,14 +105,14 @@ class DeclarativeJwkSpecification(ModelComposed):
         """
         lazy_import()
         return {
+            'x5c': ([str],),  # noqa: E501
+            'x5t': (str,),  # noqa: E501
             'alg': (str,),  # noqa: E501
             'e': (str,),  # noqa: E501
             'kid': (str,),  # noqa: E501
             'kty': (str,),  # noqa: E501
             'n': (str,),  # noqa: E501
             'use': (str,),  # noqa: E501
-            'x5c': ([str],),  # noqa: E501
-            'x5t': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -121,14 +121,14 @@ class DeclarativeJwkSpecification(ModelComposed):
 
 
     attribute_map = {
+        'x5c': 'x5c',  # noqa: E501
+        'x5t': 'x5t',  # noqa: E501
         'alg': 'alg',  # noqa: E501
         'e': 'e',  # noqa: E501
         'kid': 'kid',  # noqa: E501
         'kty': 'kty',  # noqa: E501
         'n': 'n',  # noqa: E501
         'use': 'use',  # noqa: E501
-        'x5c': 'x5c',  # noqa: E501
-        'x5t': 'x5t',  # noqa: E501
     }
 
     read_only_vars = {
@@ -170,14 +170,14 @@ class DeclarativeJwkSpecification(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
+            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
             alg (str): Algorithm intended for use with the key.. [optional]  # noqa: E501
             e (str): parameter contains the exponent value for the RSA public key.. [optional]  # noqa: E501
             kid (str): Parameter is used to match a specific key.. [optional]  # noqa: E501
             kty (str): Key type parameter. [optional] if omitted the server will use the default value of "RSA"  # noqa: E501
             n (str): Parameter contains the modulus value for the RSA public key.. [optional]  # noqa: E501
             use (str): Parameter identifies the intended use of the public key.. [optional] if omitted the server will use the default value of "sig"  # noqa: E501
-            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
-            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -281,14 +281,14 @@ class DeclarativeJwkSpecification(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
+            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
             alg (str): Algorithm intended for use with the key.. [optional]  # noqa: E501
             e (str): parameter contains the exponent value for the RSA public key.. [optional]  # noqa: E501
             kid (str): Parameter is used to match a specific key.. [optional]  # noqa: E501
             kty (str): Key type parameter. [optional] if omitted the server will use the default value of "RSA"  # noqa: E501
             n (str): Parameter contains the modulus value for the RSA public key.. [optional]  # noqa: E501
             use (str): Parameter identifies the intended use of the public key.. [optional] if omitted the server will use the default value of "sig"  # noqa: E501
-            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
-            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

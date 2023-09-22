@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**meta** | [**JsonApiAttributeOutMeta**](JsonApiAttributeOutMeta.md) |  | [optional] 
+**meta** | [**JsonApiAttributeHierarchyOutMeta**](JsonApiAttributeHierarchyOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiWorkspaceDataFilterInRelationships**](JsonApiWorkspaceDataFilterInRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 
 **attributes** | [**JsonApiWorkspaceDataFilterInAttributes**](JsonApiWorkspaceDataFilterInAttributes.md) |  | [optional] 

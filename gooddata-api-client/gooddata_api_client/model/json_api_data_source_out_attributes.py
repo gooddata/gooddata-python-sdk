@@ -124,7 +124,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'enable_caching': (bool,),  # noqa: E501
             'parameters': ([JsonApiDataSourceInAttributesParametersInner],),  # noqa: E501
             'url': (str,),  # noqa: E501
-            'username': (str,),  # noqa: E501
+            'username': (str, none_type,),  # noqa: E501
         }
 
     @cached_property
@@ -195,7 +195,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner]): [optional]  # noqa: E501
             url (str): [optional]  # noqa: E501
-            username (str): [optional]  # noqa: E501
+            username (str, none_type): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -294,7 +294,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([JsonApiDataSourceInAttributesParametersInner]): [optional]  # noqa: E501
             url (str): [optional]  # noqa: E501
-            username (str): [optional]  # noqa: E501
+            username (str, none_type): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

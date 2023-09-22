@@ -24,6 +24,8 @@ from gooddata_api_client.model_utils import (  # noqa: F401
 )
 from gooddata_api_client.model.afm_execution import AfmExecution
 from gooddata_api_client.model.afm_execution_response import AfmExecutionResponse
+from gooddata_api_client.model.afm_valid_descendants_query import AfmValidDescendantsQuery
+from gooddata_api_client.model.afm_valid_descendants_response import AfmValidDescendantsResponse
 from gooddata_api_client.model.afm_valid_objects_query import AfmValidObjectsQuery
 from gooddata_api_client.model.afm_valid_objects_response import AfmValidObjectsResponse
 from gooddata_api_client.model.elements_request import ElementsRequest
@@ -194,6 +196,69 @@ class ComputationApi(object):
                     'afm_execution': 'body',
                     'skip_cache': 'header',
                     'timestamp': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.compute_valid_descendants_endpoint = _Endpoint(
+            settings={
+                'response_type': (AfmValidDescendantsResponse,),
+                'auth': [],
+                'endpoint_path': '/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants',
+                'operation_id': 'compute_valid_descendants',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'afm_valid_descendants_query',
+                ],
+                'required': [
+                    'workspace_id',
+                    'afm_valid_descendants_query',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'workspace_id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('workspace_id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'afm_valid_descendants_query':
+                        (AfmValidDescendantsQuery,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'afm_valid_descendants_query': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -789,6 +854,93 @@ class ComputationApi(object):
         kwargs['afm_execution'] = \
             afm_execution
         return self.compute_report_endpoint.call_with_http_info(**kwargs)
+
+    def compute_valid_descendants(
+        self,
+        workspace_id,
+        afm_valid_descendants_query,
+        **kwargs
+    ):
+        """(BETA) Valid descendants  # noqa: E501
+
+        (BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.compute_valid_descendants(workspace_id, afm_valid_descendants_query, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str): Workspace identifier
+            afm_valid_descendants_query (AfmValidDescendantsQuery):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            AfmValidDescendantsResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['afm_valid_descendants_query'] = \
+            afm_valid_descendants_query
+        return self.compute_valid_descendants_endpoint.call_with_http_info(**kwargs)
 
     def compute_valid_objects(
         self,

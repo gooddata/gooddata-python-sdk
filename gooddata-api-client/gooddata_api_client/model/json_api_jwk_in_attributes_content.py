@@ -106,14 +106,14 @@ class JsonApiJwkInAttributesContent(ModelComposed):
         """
         lazy_import()
         return {
+            'x5c': ([str],),  # noqa: E501
+            'x5t': (str,),  # noqa: E501
             'alg': (str,),  # noqa: E501
             'e': (str,),  # noqa: E501
             'kid': (str,),  # noqa: E501
             'kty': (str,),  # noqa: E501
             'n': (str,),  # noqa: E501
             'use': (str,),  # noqa: E501
-            'x5c': ([str],),  # noqa: E501
-            'x5t': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -122,14 +122,14 @@ class JsonApiJwkInAttributesContent(ModelComposed):
 
 
     attribute_map = {
+        'x5c': 'x5c',  # noqa: E501
+        'x5t': 'x5t',  # noqa: E501
         'alg': 'alg',  # noqa: E501
         'e': 'e',  # noqa: E501
         'kid': 'kid',  # noqa: E501
         'kty': 'kty',  # noqa: E501
         'n': 'n',  # noqa: E501
         'use': 'use',  # noqa: E501
-        'x5c': 'x5c',  # noqa: E501
-        'x5t': 'x5t',  # noqa: E501
     }
 
     read_only_vars = {
@@ -171,14 +171,14 @@ class JsonApiJwkInAttributesContent(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): [optional]  # noqa: E501
+            x5t (str): [optional]  # noqa: E501
             alg (str): [optional]  # noqa: E501
             e (str): [optional]  # noqa: E501
             kid (str): [optional]  # noqa: E501
             kty (str): [optional] if omitted the server will use the default value of "RSA"  # noqa: E501
             n (str): [optional]  # noqa: E501
             use (str): [optional] if omitted the server will use the default value of "sig"  # noqa: E501
-            x5c ([str]): [optional]  # noqa: E501
-            x5t (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -282,14 +282,14 @@ class JsonApiJwkInAttributesContent(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): [optional]  # noqa: E501
+            x5t (str): [optional]  # noqa: E501
             alg (str): [optional]  # noqa: E501
             e (str): [optional]  # noqa: E501
             kid (str): [optional]  # noqa: E501
             kty (str): [optional] if omitted the server will use the default value of "RSA"  # noqa: E501
             n (str): [optional]  # noqa: E501
             use (str): [optional] if omitted the server will use the default value of "sig"  # noqa: E501
-            x5c ([str]): [optional]  # noqa: E501
-            x5t (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

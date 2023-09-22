@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**attribute_hierarchies** | [**JsonApiAttributeOutRelationshipsAttributeHierarchies**](JsonApiAttributeOutRelationshipsAttributeHierarchies.md) |  | [optional] 
 **dataset** | [**JsonApiAttributeOutRelationshipsDataset**](JsonApiAttributeOutRelationshipsDataset.md) |  | [optional] 
 **default_view** | [**JsonApiAttributeOutRelationshipsDefaultView**](JsonApiAttributeOutRelationshipsDefaultView.md) |  | [optional] 
 **labels** | [**JsonApiAnalyticalDashboardOutRelationshipsLabels**](JsonApiAnalyticalDashboardOutRelationshipsLabels.md) |  | [optional] 
