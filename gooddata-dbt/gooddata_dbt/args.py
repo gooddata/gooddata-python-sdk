@@ -99,6 +99,13 @@ def set_dbt_cloud_args(parser: argparse.ArgumentParser) -> None:
         help="dbt cloud token",
         default=os.getenv("DBT_TOKEN"),
     )
+    parser.add_argument(
+        "-dcd",
+        "--allowed-degradation",
+        type=int,
+        help="How much performance of model executions can degrade before reported as warning, in percent",
+        default=int(os.getenv("DBT_ALLOWED_DEGRADATION", "100")),
+    )
 
 
 def set_dbt_cloud_stats_args(parser: argparse.ArgumentParser) -> None:
@@ -107,14 +114,6 @@ def set_dbt_cloud_stats_args(parser: argparse.ArgumentParser) -> None:
         "--environment-id",
         help="dbt cloud environment ID",
         default=os.getenv("DBT_ENVIRONMENT_ID"),
-    )
-
-    parser.add_argument(
-        "-dcd",
-        "--allowed-degradation",
-        type=int,
-        help="How much performance of model executions can degrade before reported as warning, in percent",
-        default=int(os.getenv("DBT_ALLOWED_DEGRADATION", "100")),
     )
 
 
