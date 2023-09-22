@@ -63,12 +63,12 @@ def bump_redir(file_path: Path, version: list[int]):
         if line_to_delete != -1:
             content.remove(content[line_to_delete])
 
-        content.insert(3, f"/{long_version}/ {{ .Site.BaseURL }}/latest 301!\n")
+        content.insert(3, f"/{long_version}/ {{{{ .Site.BaseURL }}}}/latest 301!\n")
 
-        content.insert(3, f"/{short_version}/ {{ .Site.BaseURL }}/latest 301!\n")
+        content.insert(3, f"/{short_version}/ {{{{ .Site.BaseURL }}}}/latest 301!\n")
 
     else:
-        content.insert(4, f"/{long_version}/ {{ .Site.BaseURL }}/latest 301!\n")
+        content.insert(4, f"/{long_version}/ {{{{ .Site.BaseURL }}}}/latest 301!\n")
     with open(file_path, "w") as file:
         file.writelines(content)
 
