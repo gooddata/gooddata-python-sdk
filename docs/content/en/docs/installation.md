@@ -25,7 +25,7 @@ __(Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE\_VERIFY\_FA
 
 it is likely caused by Python and it occurs if you have installed Python directly from python.org.
 
-To mitigate, please istall your SSL certificates in __HD -> Applications -> Python -> Install Certificates.command__.
+To mitigate, please install your SSL certificates in __HD -> Applications -> Python -> Install Certificates.command__.
 {{% /alert %}}
 
 To make use of the package, you need a running instance of GoodData. If you do not have GoodData yet, sign up for a [trial of GoodData Cloud](https://www.gooddata.com/trial/).
