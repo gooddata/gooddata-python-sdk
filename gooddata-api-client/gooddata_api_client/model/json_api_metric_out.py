@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_metric_out_attributes import JsonApiMetricOutAttributes
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
-    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiMetricOutAttributes'] = JsonApiMetricOutAttributes
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
 
@@ -103,7 +103,7 @@ class JsonApiMetricOut(ModelNormal):
             'attributes': (JsonApiMetricOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
         }
 
@@ -166,7 +166,7 @@ class JsonApiMetricOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """
 
@@ -262,7 +262,7 @@ class JsonApiMetricOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """
 

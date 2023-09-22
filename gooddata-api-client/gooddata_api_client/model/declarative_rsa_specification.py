@@ -132,7 +132,7 @@ class DeclarativeRsaSpecification(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, alg, e, kid, n, x5c, x5t, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, alg, e, kid, n, *args, **kwargs):  # noqa: E501
         """DeclarativeRsaSpecification - a model defined in OpenAPI
 
         Args:
@@ -140,8 +140,6 @@ class DeclarativeRsaSpecification(ModelNormal):
             e (str): parameter contains the exponent value for the RSA public key.
             kid (str): Parameter is used to match a specific key.
             n (str): Parameter contains the modulus value for the RSA public key.
-            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.
-            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.
 
         Keyword Args:
             kty (str): Key type parameter. defaults to "RSA", must be one of ["RSA", ]  # noqa: E501
@@ -176,6 +174,8 @@ class DeclarativeRsaSpecification(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
+            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
         """
 
         kty = kwargs.get('kty', "RSA")
@@ -215,8 +215,6 @@ class DeclarativeRsaSpecification(ModelNormal):
         self.kty = kty
         self.n = n
         self.use = use
-        self.x5c = x5c
-        self.x5t = x5t
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -237,7 +235,7 @@ class DeclarativeRsaSpecification(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, alg, e, kid, n, x5c, x5t, *args, **kwargs):  # noqa: E501
+    def __init__(self, alg, e, kid, n, *args, **kwargs):  # noqa: E501
         """DeclarativeRsaSpecification - a model defined in OpenAPI
 
         Args:
@@ -245,8 +243,6 @@ class DeclarativeRsaSpecification(ModelNormal):
             e (str): parameter contains the exponent value for the RSA public key.
             kid (str): Parameter is used to match a specific key.
             n (str): Parameter contains the modulus value for the RSA public key.
-            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.
-            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.
 
         Keyword Args:
             kty (str): Key type parameter. defaults to "RSA", must be one of ["RSA", ]  # noqa: E501
@@ -281,6 +277,8 @@ class DeclarativeRsaSpecification(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            x5c ([str]): Parameter contains a chain of one or more PKIX certificates.. [optional]  # noqa: E501
+            x5t (str): Parameter is a base64url-encoded SHA-1 thumbprint of the DER encoding of an X.509 certificate.. [optional]  # noqa: E501
         """
 
         kty = kwargs.get('kty', "RSA")
@@ -318,8 +316,6 @@ class DeclarativeRsaSpecification(ModelNormal):
         self.kty = kty
         self.n = n
         self.use = use
-        self.x5c = x5c
-        self.x5t = x5t
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

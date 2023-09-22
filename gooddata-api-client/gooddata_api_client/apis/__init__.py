@@ -17,6 +17,7 @@
 from gooddata_api_client.api.api_tokens_api import APITokensApi
 from gooddata_api_client.api.analytics_model_api import AnalyticsModelApi
 from gooddata_api_client.api.appearance_api import AppearanceApi
+from gooddata_api_client.api.attribute_hierarchies_api import AttributeHierarchiesApi
 from gooddata_api_client.api.attributes_api import AttributesApi
 from gooddata_api_client.api.available_drivers_api import AvailableDriversApi
 from gooddata_api_client.api.csp_directives_api import CSPDirectivesApi
