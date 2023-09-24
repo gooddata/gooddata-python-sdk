@@ -268,7 +268,7 @@ def main() -> None:
         dbt_cloud_stats(args, logger, gd_config.all_model_ids, args.environment_id)
     elif args.method in ["upload_notification", "deploy_models"]:
         dbt_target = DbtProfiles(args).target
-        data_source_id = f"{args.dbt_profile}-{dbt_target.name}"
+        data_source_id = f"{args.profile}-{dbt_target.name}"
         if args.method == "upload_notification":
             # Caches are invalidated only per data source, not per data product
             upload_notification(logger, sdk, data_source_id)
