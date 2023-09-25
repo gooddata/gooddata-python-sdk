@@ -74,6 +74,9 @@ menuTitle = "Python SDK"
 copyright = "GoodData"
 offlineSearch = false
 
+# AddSearch config
+addSearchTab = "gd-py-doc"
+
 # Enable syntax highlighting and copy buttons on code blocks with Prism
 prism_syntax_highlighting = true
 
