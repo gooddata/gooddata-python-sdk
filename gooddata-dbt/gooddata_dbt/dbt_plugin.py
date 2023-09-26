@@ -237,8 +237,8 @@ def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: List[s
     logger.info(f"Starting job in dbt cloud with job_id={args.job_id}")
     logger.info("#" * 80)
 
-    run_id, run_href = dbt_conn.run_job(args.job_id)
-    logger.info(f"Job with {run_id=} started. Link to job run {run_href=}")
+    run_id, run_href = dbt_conn.run_job(logger, args.job_id)
+    logger.info(f"Job with {run_id=} successfully initiated. Link to job run {run_href=}")
 
     dbt_conn.fetch_run_result(run_id)
     dbt_conn.download_manifest(run_id)
