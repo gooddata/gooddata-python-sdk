@@ -139,19 +139,20 @@ class DbtConnection(DbtCloudBase):
             )
         return response.json()
 
-    def run_job(self, job_id: str) -> Tuple[str, str]:
+    def run_job(self, logger: logging.Logger, job_id: str) -> Tuple[str, str]:
         url = f"{self.base_v2}/accounts/{self.credentials.account_id}/jobs/{job_id}/run/"
         data = {"cause": "Triggered via API by gooddata-dbt plugin"}
         # Allow testing from localhost where CI_COMMIT_SHA is not set
         # TODO - Gitlab only! Allow override it from the outside in the future
         if os.getenv("CI_COMMIT_SHA"):
             commit_sha = os.getenv("CI_COMMIT_SHA")
-            commit_branch = os.getenv("CI_COMMIT_BRANCH")
+            commit_branch = os.getenv("CI_MERGE_REQUEST_SOURCE_BRANCH_NAME")
             data = {
                 "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=} {commit_branch=}",
-                "git_sha": os.getenv("CI_COMMIT_SHA"),
-                "git_branch": os.getenv("CI_COMMIT_BRANCH"),
+                "git_sha": commit_sha,
+                "git_branch": commit_branch,
             }
+        logger.info(f"Run dbt cloud job {job_id=} with cause={data['cause']}")
         result = self._post_rest(url, data)
         run_id = safeget(result, ["data", "id"])
         run_href = safeget(result, ["data", "href"])
