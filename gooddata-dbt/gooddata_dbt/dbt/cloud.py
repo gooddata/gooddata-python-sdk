@@ -250,8 +250,8 @@ class DbtConnection(DbtCloudBase):
         project_id: str,
         job_id: str,
         schema_key: str = "DBT_OUTPUT_SCHEMA",
-        user_key: str = "DBT_USER",
-        password_key: str = "DBT_PASSWORD",
+        user_key: str = "DBT_DB_USER",
+        password_key: str = "DBT_DB_PASS",
     ) -> Environment:
         url = f"{self.base_v2}/accounts/{self.credentials.account_id}/environments/{environment_id}"
         response = self._call_get_dbt_endpoint(url)
