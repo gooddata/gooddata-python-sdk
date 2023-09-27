@@ -13,11 +13,11 @@ def post_gitlab_rest(url: str, headers: dict, data: dict) -> dict:
     return response.json()
 
 
-def report_message_to_merge_request(text: str) -> None:
+def report_message_to_merge_request(token: str, text: str) -> None:
     url = (
         "https://gitlab.com/api/v4/projects/"
         + f"{os.getenv('CI_MERGE_REQUEST_PROJECT_ID')}/merge_requests/{os.getenv('CI_MERGE_REQUEST_IID')}/notes"
     )
-    headers = {"PRIVATE-TOKEN": os.getenv("GITLAB_TOKEN"), "Content-Type": "application/json"}
+    headers = {"PRIVATE-TOKEN": token, "Content-Type": "application/json"}
     data = {"body": text}
     post_gitlab_rest(url, headers, data)

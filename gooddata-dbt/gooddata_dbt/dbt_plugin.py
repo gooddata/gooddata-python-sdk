@@ -225,10 +225,11 @@ def dbt_cloud_stats(
                 degradation=f"{data['degradation']:.2f}",
             )
             degradation_md += f"\n{model_degradation_md}"
-        if os.getenv("CI_MERGE_REQUEST_IID"):
+        gitlab_token = os.getenv("GITLAB_TOKEN")
+        if os.getenv("CI_MERGE_REQUEST_IID") and gitlab_token:
             logger.info("Sending report of degradations to related Gitlab merge request as comment")
             # Running in Gitlab CI pipeline, report degradations to the merge request to notify code reviewer
-            report_message_to_merge_request(degradation_md)
+            report_message_to_merge_request(gitlab_token, degradation_md)
 
 
 def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: List[str]) -> None:
