@@ -146,11 +146,9 @@ class DbtConnection(DbtCloudBase):
         # TODO - Gitlab only! Allow override it from the outside in the future
         if os.getenv("CI_COMMIT_SHA"):
             commit_sha = os.getenv("CI_COMMIT_SHA")
-            commit_branch = os.getenv("CI_MERGE_REQUEST_SOURCE_BRANCH_NAME")
             data = {
-                "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=} {commit_branch=}",
+                "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=}",
                 "git_sha": commit_sha,
-                "git_branch": commit_branch,
             }
         logger.info(f"Run dbt cloud job {job_id=} with cause={data['cause']}")
         result = self._post_rest(url, data)
