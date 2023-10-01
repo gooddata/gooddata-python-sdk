@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '722'
+          - '760'
       body:
         string:
           userGroups:
@@ -86,8 +86,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -99,14 +101,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            - authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            - authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -185,7 +187,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '722'
+          - '760'
       body:
         string:
           userGroups:
@@ -197,8 +199,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -210,14 +214,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            - authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            - authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []

@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '722'
+          - '760'
       body:
         string:
           userGroups:
@@ -86,8 +86,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -99,14 +101,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            - authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            - authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -140,7 +142,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1219'
+          - '1238'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -190,7 +192,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -211,7 +213,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -227,7 +229,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -385,8 +388,10 @@ interactions:
                 type: userGroup
             permissions: []
           - id: demoGroup
+            name: demo group
             permissions: []
           - id: visitorsGroup
+            name: visitors
             parents:
               - id: demoGroup
                 type: userGroup
@@ -399,14 +404,14 @@ interactions:
             settings: []
             permissions: []
           - id: demo
-            authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
@@ -549,7 +554,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '722'
+          - '760'
       body:
         string:
           userGroups:
@@ -561,8 +566,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -574,14 +581,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            - authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            - authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -601,8 +608,10 @@ interactions:
                 type: userGroup
             permissions: []
           - id: demoGroup
+            name: demo group
             permissions: []
           - id: visitorsGroup
+            name: visitors
             parents:
               - id: demoGroup
                 type: userGroup
@@ -615,14 +624,14 @@ interactions:
             settings: []
             permissions: []
           - id: demo
-            authId: CiQxYTMwZGVlZi0yNWY4LTQ2ZjgtOWE1YS0zMGU1ZGYzZWQwZTcSBWxvY2Fs
+            authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiRiYjg4OTdhMS01ZjExLTRhZGEtOWY3OC00ZjZlZTRhYzk4ZDUSBWxvY2Fs
+            authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

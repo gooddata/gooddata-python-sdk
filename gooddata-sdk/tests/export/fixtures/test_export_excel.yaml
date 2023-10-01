@@ -161,12 +161,12 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 1a41d049063ef9b6a948251db9f9534dfe6bca5b
+              executionResult: ca1c21ad62d8114bce7916ae13e90d1a47d3ac72
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 1a41d049063ef9b6a948251db9f9534dfe6bca5b
+        executionResult: ca1c21ad62d8114bce7916ae13e90d1a47d3ac72
         fileName: test_xlsx
         format: XLSX
         customOverride:
@@ -251,10 +251,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: 9576a15897876b6df5e8ce231dbd704872a34593
+          exportResult: 6a3d3cf077f0cf142129a4f918841e806c993dae
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9576a15897876b6df5e8ce231dbd704872a34593
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/6a3d3cf077f0cf142129a4f918841e806c993dae
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/9576a15897876b6df5e8ce231dbd704872a34593
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/6a3d3cf077f0cf142129a4f918841e806c993dae
       body: null
       headers:
         Accept:
@@ -354,7 +354,7 @@ interactions:
         Content-Disposition:
           - attachment;filename*=utf-8''test_xlsx.xlsx
         Content-Length:
-          - '7609'
+          - '7610'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -508,29 +508,29 @@ interactions:
           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
-          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
-          cHAueG1sUEsFBgAAAAAKAAoAgAIAACMbAAAAAA==
+          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
+          YXBwLnhtbFBLBQYAAAAACgAKAIACAAAkGwAAAAA=

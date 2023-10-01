@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1219'
+          - '1238'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -76,28 +76,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: user
-              attributes:
-                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
-              type: user
-              attributes:
-                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
             - id: admin
               type: user
               attributes: {}
@@ -108,6 +86,28 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/admin
+            - id: demo
+              type: user
+              attributes:
+                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
+            - id: demo2
+              type: user
+              attributes:
+                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
           included:
             - id: adminGroup
               type: userGroup
@@ -116,7 +116,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -199,7 +200,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: c84b0a084433996a
+          traceId: eb69bac61339f35c
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -325,7 +326,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '471'
+          - '490'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -387,7 +388,8 @@ interactions:
           included:
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -419,7 +421,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1518'
+          - '1537'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -466,38 +468,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: user
-              attributes:
-                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
-              type: user
-              attributes:
-                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
-            - id: admin
-              type: user
-              attributes: {}
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
             - id: newUser
               type: user
               attributes:
@@ -512,6 +482,38 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/newUser
+            - id: admin
+              type: user
+              attributes: {}
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+            - id: demo
+              type: user
+              attributes:
+                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
+            - id: demo2
+              type: user
+              attributes:
+                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
           included:
             - id: adminGroup
               type: userGroup
@@ -520,7 +522,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -620,7 +623,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1219'
+          - '1238'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -667,28 +670,6 @@ interactions:
       body:
         string:
           data:
-            - id: demo
-              type: user
-              attributes:
-                authenticationId: CiRiNDJiMzQ4Zi03NjA0LTRhNDktYjg0MS0wOGYyNzRhNWQ1OTUSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
-              type: user
-              attributes:
-                authenticationId: CiQ4NTFmODE2MS1kNGU3LTQ4MGItYmFiZS05MjllZmNhMzBmYjgSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
             - id: admin
               type: user
               attributes: {}
@@ -699,6 +680,28 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/admin
+            - id: demo
+              type: user
+              attributes:
+                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
+            - id: demo2
+              type: user
+              attributes:
+                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
           included:
             - id: adminGroup
               type: userGroup
@@ -707,7 +710,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:

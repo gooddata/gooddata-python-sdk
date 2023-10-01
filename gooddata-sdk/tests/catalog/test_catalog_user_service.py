@@ -126,6 +126,7 @@ def test_list_user_groups(test_config):
         "adminQA1Group",
         "visitorsGroup",
     }
+    assert set(user_group.name for user_group in user_groups) == {"demo group", None, "visitors", None}
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "get_user_group.yaml"))
@@ -142,12 +143,19 @@ def test_create_delete_user_group(test_config):
     user_group_parent_ids = [test_config["test_user_group"]]
 
     try:
-        assert len(sdk.catalog_user.list_user_groups()) == 4
-        user_group_e = CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids)
+        current_user_groups = sdk.catalog_user.list_user_groups()
+        assert len(current_user_groups) == 4
+        assert set(ug.name for ug in current_user_groups) == {"demo group", None, "visitors", None}
+        user_group_e = CatalogUserGroup.init(
+            user_group_id=user_group_id,
+            user_group_name=user_group_id.upper(),
+            user_group_parent_ids=user_group_parent_ids,
+        )
         sdk.catalog_user.create_or_update_user_group(user_group_e)
         user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert len(sdk.catalog_user.list_user_groups()) == 5
         assert user_group.id == user_group_id
+        assert user_group.name == user_group_id.upper()
         assert [p.id for p in user_group.relationships.parents.data] == user_group_parent_ids
     finally:
         sdk.catalog_user.delete_user_group(user_group_id)
@@ -160,13 +168,20 @@ def test_update_user_group(test_config):
     user_group_id = test_config["test_user_group"]
     user_group = sdk.catalog_user.get_user_group(user_group_id)
     user_group_parent_ids = []
+    new_user_group_name = "test_update_user_group"
     assert len(sdk.catalog_user.list_user_groups()) == 4
 
     try:
-        user_group_e = CatalogUserGroup.init(user_group_id=user_group_id, user_group_parent_ids=user_group_parent_ids)
+        user_group_e = CatalogUserGroup.init(
+            user_group_id=user_group_id,
+            user_group_name=new_user_group_name,
+            user_group_parent_ids=user_group_parent_ids,
+        )
         sdk.catalog_user.create_or_update_user_group(user_group_e)
         updated_user_group = sdk.catalog_user.get_user_group(user_group_id)
         assert user_group.id == updated_user_group.id
+        assert updated_user_group.name == new_user_group_name
+        assert user_group.relationships == updated_user_group.relationships
         assert len(updated_user_group.get_parents) == len(user_group_parent_ids)
         assert set(updated_user_group.get_parents) == set(user_group_parent_ids)
     finally:
@@ -500,6 +515,7 @@ def _assert_user_groups_default(user_groups: List[CatalogDeclarativeUserGroup]):
         "adminQA1Group",
         "visitorsGroup",
     }
+    assert set(user_group.name for user_group in user_groups) == {"demo group", None, "visitors", None}
 
 
 def _assert_users_user_groups_default(users_user_groups: CatalogDeclarativeUsersUserGroups):

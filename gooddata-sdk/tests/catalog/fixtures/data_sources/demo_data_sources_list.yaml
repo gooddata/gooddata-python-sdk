@@ -83,8 +83,8 @@ interactions:
                 username: demouser
                 enableCaching: false
                 type: POSTGRESQL
-                schema: demo
                 name: demo-test-ds
+                schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
           links:

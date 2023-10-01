@@ -74,12 +74,12 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '93'
+          - '107'
       body:
         string:
           userGroups:
-            - id: demoGroup
-              name: null
             - id: visitorsGroup
-              name: null
+              name: visitors
+            - id: demoGroup
+              name: demo group
           users: []

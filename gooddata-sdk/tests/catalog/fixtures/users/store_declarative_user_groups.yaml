@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '270'
+          - '308'
       body:
         string:
           userGroups:
@@ -86,8 +86,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -164,7 +166,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '270'
+          - '308'
       body:
         string:
           userGroups:
@@ -176,8 +178,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -330,7 +334,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 7610ecf2-e15c-46c6-a1c0-97a513ff7b41
+              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -481,6 +485,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 7610ecf2-e15c-46c6-a1c0-97a513ff7b41
+              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1186'
+          - '1241'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -83,7 +83,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
@@ -98,7 +99,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
             - id: visitorsGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: visitors
               relationships:
                 parents:
                   data:
@@ -114,7 +116,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
