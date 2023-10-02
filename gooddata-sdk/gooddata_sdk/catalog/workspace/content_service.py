@@ -361,7 +361,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             workspace_id (str):
                 Workspace identification string e.g. "demo"
             exclude (Optional[List[str]]):
-                Defines properties which should not be included in the payload.
+                Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
             CatalogDeclarativeAnalytics:
@@ -439,7 +439,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         declarative_analytics_model = self.load_declarative_analytics_model(workspace_id, layout_root_path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
-    def store_analytics_model_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
+    def store_analytics_model_to_disk(
+        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[List[str]] = None
+    ) -> None:
         """Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative
             analytics model to the workspace and organization, thus it is recommended for migration between workspaces.
             If you want to migrate analytics model between workspaces, use store_analytics_model_to_disk.
@@ -449,11 +451,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
             None
         """
-        self.get_declarative_analytics_model(workspace_id).store_to_disk(path)
+        self.get_declarative_analytics_model(workspace_id, exclude).store_to_disk(path)
 
     @staticmethod
     def load_analytics_model_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeAnalytics:
