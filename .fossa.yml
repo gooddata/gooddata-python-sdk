@@ -1,0 +1,13 @@
+# (C) 2023 GoodData Corporation
+version: 3
+
+project:
+  id: gooddata-python-sdk
+
+telemetry:
+  scope: 'off'
+
+# We need to specify it per-each package. See fossa_* branches.
+# paths:
+#   only:
+#     - path-here
