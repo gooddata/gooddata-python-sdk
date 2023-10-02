@@ -145,7 +145,7 @@ class DbtConnection(DbtCloudBase):
         # Allow testing from localhost where CI_COMMIT_SHA is not set
         # TODO - Gitlab only! Allow override it from the outside in the future
         if os.getenv("CI_COMMIT_SHA"):
-            commit_sha = os.getenv("CI_COMMIT_SHA")
+            commit_sha = os.environ["CI_COMMIT_SHA"]
             data = {
                 "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=}",
                 "git_sha": commit_sha,

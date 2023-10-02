@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1186'
+          - '1241'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -83,7 +83,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
@@ -98,7 +99,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
             - id: visitorsGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: visitors
               relationships:
                 parents:
                   data:
@@ -114,7 +116,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -197,7 +200,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 5fe24a830df76e11
+          traceId: f2da10282d6880ba
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups
@@ -205,6 +208,8 @@ interactions:
         data:
           id: newUserGroup
           type: userGroup
+          attributes:
+            name: NEWUSERGROUP
           relationships:
             parents:
               data:
@@ -235,7 +240,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '146'
+          - '167'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -284,7 +289,8 @@ interactions:
           data:
             id: newUserGroup
             type: userGroup
-            attributes: {}
+            attributes:
+              name: NEWUSERGROUP
           links:
             self: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
   - request:
@@ -314,7 +320,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '380'
+          - '420'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -363,7 +369,8 @@ interactions:
           data:
             id: newUserGroup
             type: userGroup
-            attributes: {}
+            attributes:
+              name: NEWUSERGROUP
             relationships:
               parents:
                 data:
@@ -372,7 +379,8 @@ interactions:
           included:
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -404,7 +412,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1401'
+          - '1477'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -458,7 +466,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
@@ -473,7 +482,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
             - id: visitorsGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: visitors
               relationships:
                 parents:
                   data:
@@ -483,7 +493,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
             - id: newUserGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: NEWUSERGROUP
               relationships:
                 parents:
                   data:
@@ -499,7 +510,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:
@@ -599,7 +611,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '1186'
+          - '1241'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -653,7 +665,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
@@ -668,7 +681,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
             - id: visitorsGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: visitors
               relationships:
                 parents:
                   data:
@@ -684,7 +698,8 @@ interactions:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
             - id: demoGroup
               type: userGroup
-              attributes: {}
+              attributes:
+                name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           links:

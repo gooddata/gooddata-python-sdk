@@ -150,6 +150,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f2c93ec5-56fc-4045-9165-5ae18b71c916
+              oauthClientId: 6c626aec-2e86-409e-a5e3-f720a111fe2c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

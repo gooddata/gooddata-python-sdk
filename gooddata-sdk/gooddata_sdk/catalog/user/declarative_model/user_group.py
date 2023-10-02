@@ -46,6 +46,7 @@ class CatalogDeclarativeUserGroups(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUserGroup(Base):
     id: str
+    name: Optional[str] = None
     parents: Optional[List[CatalogUserGroupIdentifier]] = None
     permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
 

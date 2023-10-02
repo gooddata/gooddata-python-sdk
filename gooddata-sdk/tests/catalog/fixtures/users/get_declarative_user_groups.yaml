@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '270'
+          - '308'
       body:
         string:
           userGroups:
@@ -86,8 +86,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup
@@ -164,7 +166,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '270'
+          - '308'
       body:
         string:
           userGroups:
@@ -176,8 +178,10 @@ interactions:
                   type: userGroup
               permissions: []
             - id: demoGroup
+              name: demo group
               permissions: []
             - id: visitorsGroup
+              name: visitors
               parents:
                 - id: demoGroup
                   type: userGroup

@@ -4,7 +4,8 @@
       "id": "adminGroup"
     },
     {
-      "id": "demoGroup"
+      "id": "demoGroup",
+      "name": "demo group"
     },
     {
       "id": "adminQA1Group",
@@ -17,6 +18,7 @@
     },
     {
       "id": "visitorsGroup",
+      "name": "visitors",
       "parents": [
         {
           "id": "demoGroup",

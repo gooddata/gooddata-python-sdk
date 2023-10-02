@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '152'
+          - '171'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -78,6 +78,7 @@ interactions:
           data:
             id: demoGroup
             type: userGroup
-            attributes: {}
+            attributes:
+              name: demo group
           links:
             self: http://localhost:3000/api/v1/entities/userGroups/demoGroup?include=ALL

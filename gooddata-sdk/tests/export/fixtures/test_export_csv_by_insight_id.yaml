@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '3018'
+          - '3321'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -151,7 +151,12 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
+              createdAt: 2023-10-01 19:56
             relationships:
+              createdBy:
+                data:
+                  id: admin
+                  type: userIdentifier
               metrics:
                 data:
                   - id: amount_of_active_customers
@@ -171,6 +176,11 @@ interactions:
                 originType: NATIVE
                 originId: demo
           included:
+            - id: admin
+              type: userIdentifier
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/userIdentifiers/admin
             - id: date
               type: dataset
               attributes:
@@ -185,6 +195,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
+                createdAt: 2023-10-01 19:56
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -194,6 +205,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
+                createdAt: 2023-10-01 19:56
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -363,10 +375,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 3d0d64272a526bb50021702e5d04ee0177abcd86
+              executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/3d0d64272a526bb50021702e5d04ee0177abcd86?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/450bebe463cc16dc0d6a02fa2074a3fe981b55b4?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -436,46 +448,37 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '1430'
+          - '1405'
       body:
         string:
           data:
-            - - 87.0
-              - 249.6326923076923
-            - - 87.0
-              - 208.97644736842105
-            - - 73.0
-              - 177.2809375
-            - - 56.0
+            - - 56
               - 170.1824
-            - - 88.0
+            - - 88
               - 178.174875
-            - - 65.0
+            - - 65
               - 174.79036363636362
-            - - 61.0
+            - - 61
               - 150.10735849056604
-            - - 70.0
+            - - 70
               - 110.63396825396825
-            - - 53.0
+            - - 53
               - 164.63276595744682
-            - - 54.0
+            - - 54
               - 247.32333333333332
-            - - 58.0
+            - - 58
               - 113.54166666666667
-            - - 76.0
+            - - 76
               - 213.47925373134328
+            - - 95
+              - 167.58869047619046
+            - - 110
+              - 237.2503
+            - - 91
+              - 154.40761904761905
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2022-08
-                        primaryLabelValue: 2022-08
-                    - attributeHeader:
-                        labelValue: 2022-09
-                        primaryLabelValue: 2022-09
-                    - attributeHeader:
-                        labelValue: 2022-10
-                        primaryLabelValue: 2022-10
                     - attributeHeader:
                         labelValue: 2022-11
                         primaryLabelValue: 2022-11
@@ -503,6 +506,15 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-07
                         primaryLabelValue: 2023-07
+                    - attributeHeader:
+                        labelValue: 2023-08
+                        primaryLabelValue: 2023-08
+                    - attributeHeader:
+                        labelValue: 2023-09
+                        primaryLabelValue: 2023-09
+                    - attributeHeader:
+                        labelValue: 2023-10
+                        primaryLabelValue: 2023-10
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -524,7 +536,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 3d0d64272a526bb50021702e5d04ee0177abcd86
+        executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
         fileName: Customers Trend
         format: CSV
         customOverride:
@@ -609,10 +621,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: f287626023a2ffe575d2048cfd2223284f397244
+          exportResult: a5b86ea777a93b0edf1b13f49836b8175de90001
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f287626023a2ffe575d2048cfd2223284f397244
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/a5b86ea777a93b0edf1b13f49836b8175de90001
       body: null
       headers:
         Accept:
@@ -683,7 +695,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/f287626023a2ffe575d2048cfd2223284f397244
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/a5b86ea777a93b0edf1b13f49836b8175de90001
       body: null
       headers:
         Accept:
@@ -712,7 +724,7 @@ interactions:
         Content-Disposition:
           - attachment;filename*=utf-8''Customers%20Trend.csv
         Content-Length:
-          - '447'
+          - '422'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -759,28 +771,28 @@ interactions:
       body:
         string: '"date.month","amount_of_active_customers","revenue_per_customer"
 
-          "2022-08",87.0,249.6326923076923
+          "2022-11",56,170.1824
 
-          "2022-09",87.0,208.97644736842105
+          "2022-12",88,178.174875
 
-          "2022-10",73.0,177.2809375
+          "2023-01",65,174.79036363636362
 
-          "2022-11",56.0,170.1824
+          "2023-02",61,150.10735849056604
 
-          "2022-12",88.0,178.174875
+          "2023-03",70,110.63396825396825
 
-          "2023-01",65.0,174.79036363636362
+          "2023-04",53,164.63276595744682
 
-          "2023-02",61.0,150.10735849056604
+          "2023-05",54,247.32333333333332
 
-          "2023-03",70.0,110.63396825396825
+          "2023-06",58,113.54166666666667
 
-          "2023-04",53.0,164.63276595744682
+          "2023-07",76,213.47925373134328
 
-          "2023-05",54.0,247.32333333333332
+          "2023-08",95,167.58869047619046
 
-          "2023-06",58.0,113.54166666666667
+          "2023-09",110,237.2503
 
-          "2023-07",76.0,213.47925373134328
+          "2023-10",91,154.40761904761905
 
           '

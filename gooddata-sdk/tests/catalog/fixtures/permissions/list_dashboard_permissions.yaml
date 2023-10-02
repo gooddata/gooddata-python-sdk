@@ -148,12 +148,12 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '113'
+          - '119'
       body:
         string:
           userGroups:
             - id: visitorsGroup
-              name: null
+              name: visitors
               permissions:
                 - level: VIEW
                   source: direct
