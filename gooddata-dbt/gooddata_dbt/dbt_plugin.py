@@ -113,7 +113,14 @@ def store_analytics(
     logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct
 ) -> None:
     logger.info("Store analytics model to disk")
-    sdk.catalog_workspace_content.store_analytics_model_to_disk(workspace_id, layout_model_path(data_product))
+    sdk.catalog_workspace_content.store_analytics_model_to_disk(
+        workspace_id,
+        layout_model_path(data_product),
+        # Exclude attributes related to activities of users, e.g. createdBy
+        # When delivering programmatically,
+        #   we don't want to transfer info about users and their activities into another environments
+        exclude=["ACTIVITY_INFO"],
+    )
 
 
 def test_insights(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str) -> None:
