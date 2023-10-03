@@ -18,12 +18,12 @@ To install the `gooddata-sdk` Python SDK package, run the following command:
 pip3 install gooddata-sdk
 ```
 
-{{% alert color="warning" title="Known MacOS issue" %}}
+{{% alert color="warning" title="Known macOS issue" %}}
 If you are getting the following message:
 
 __(Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE\_VERIFY\_FAILED] certificate verify failed: unable to get local issuer certificate (\_ssl.c:1129)')))__
 
-it is likely caused by Python and it occurs if you have installed Python directly from python.org.
+it is likely caused by Python, and it occurs if you have installed Python directly from python.org.
 
 To mitigate, please install your SSL certificates in __HD -> Applications -> Python -> Install Certificates.command__.
 {{% /alert %}}
@@ -32,18 +32,8 @@ To make use of the package, you need a running instance of GoodData. If you do n
 
 ### Versioning
 
-The Python SDK is versioned. The version you should be using depends on the type of GoodData distribution you are using.
+The Python SDK is versioned and usually released in tandem with GoodData Cloud.
 
 #### GoodData Cloud
 
-We recommend you always work with the newest (supported) Python available.
-
-#### GoodData.CN
-
-Here is a mapping table of compatibility, which version of Python SDK to use with each version of GoodData.CN
-
-| Gooddata.CN | Python SDK  |
-|---|---|
-| v2.5 | v1.5 |
-| v2.4 | v1.4 |
-| v2.3 | v1.3 |
+When working with GoodData Cloud, we recommend you always work with the newest Python SDK available.
