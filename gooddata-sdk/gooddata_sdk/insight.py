@@ -457,11 +457,11 @@ class Insight:
 
 class InsightService:
     """
-    Insight Service allows retrieval of insights from a GD.CN workspace. The insights are returned as instances of
+    Insight Service allows retrieval of insights from a local GD workspace. The insights are returned as instances of
     Insight which allows convenient introspection and necessary functions to convert the insight into a form where it
     can be sent for computation.
 
-    Note: the insights are created using GD.CN Analytical Designer or using GoodData.UI SDK. They are stored as
+    Note: the insights are created using GD Analytical Designer or using GoodData.UI SDK. They are stored as
     visualization objects with a free-form body. This body is specific for AD & SDK.
     The Insight wrapper exists to take care of these discrepancies.
     """
