@@ -109,3 +109,7 @@ You can also perform certain administration tasks:
 Get started with Python SDK right now by following the [Quick Start](./getting-started/#quick-start) guide.
 
 New to GoodData? Follow the [Getting Started](https://www.gooddata.com/developers/cloud-native/doc/cloud/getting-started/) series of articles that include Python SDK code examples.
+
+### Troubleshooting
+
+In case of any issues with Python SDK, feel free to reach out to us on our [community slack](https://www.gooddata.com/slack/) or create a [GitHub issue](https://github.com/gooddata/gooddata-python-sdk/issues).
