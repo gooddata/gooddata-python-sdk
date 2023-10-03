@@ -15,6 +15,7 @@ on:
       - 'Makefile'
       - '!docs/**'
       - 'gooddata-api-client/**'
+      - 'gooddata-dbt/**'
   push:
     branches:
       - master
@@ -30,6 +31,7 @@ on:
       - 'Makefile'
       - '!docs/**'
       - 'gooddata-api-client/**'
+      - 'gooddata-dbt/**'
 jobs:
   unit-tests:
     runs-on: ubuntu-latest

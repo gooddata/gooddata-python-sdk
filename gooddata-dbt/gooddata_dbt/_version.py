@@ -1,5 +1,7 @@
 # (C) 2023 GoodData Corporation
-# Based on
-# https://packaging.python.org/en/latest/guides/single-sourcing-package-version/
+from importlib import metadata
 
-__version__ = "1.4.0"
+try:
+    __version__ = metadata.version("gooddata-dbt")
+except metadata.PackageNotFoundError:
+    __version__ = "unknown-version"
