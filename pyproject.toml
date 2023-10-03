@@ -105,6 +105,16 @@ src = "gooddata-sdk/setup.py"
 search = "gooddata-.*-client~={current_version}"
 
 [[tool.tbump.file]]
+# sdk setup.py
+src = "gooddata-dbt/setup.py"
+search = "version=\"{current_version}\""
+
+[[tool.tbump.file]]
+# sdk setup.py dependency
+src = "gooddata-dbt/setup.py"
+search = "gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
 # clients README
 src = "gooddata-*-client/README.md"
 

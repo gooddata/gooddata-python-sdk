@@ -32,4 +32,9 @@ pipenv install --skip-lock ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 cd ..
 
+cd ./gooddata-dbt
+pipenv install --skip-lock ../gooddata-api-client/ \
+../gooddata-sdk/ -r requirements.txt
+cd ..
+
 cd $ORIG_WORK_DIR
