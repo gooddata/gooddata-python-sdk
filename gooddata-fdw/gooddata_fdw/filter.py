@@ -59,7 +59,7 @@ def _qual_to_date_filter(filter_entity: Attribute, qual: Qual) -> Union[Filter, 
     re_day = re.compile(r"(.*)\.[^.]+$")
     label = ObjId(re_day.sub(r"\1", filter_entity.label.id), "dataset")
     if isinstance(qual.operator, tuple):
-        # Can't be implemented by multiple filters, because GD.CN does not support OR between filters
+        # Can't be implemented by multiple filters, because local GoodData instance does not support OR between filters
         _log_debug("extract_filters_from_quals: IN (date1, date2, ..) is not supported")
         return None
     else:
