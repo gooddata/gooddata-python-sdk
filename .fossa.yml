@@ -8,6 +8,11 @@ telemetry:
   scope: 'off'
 
 # We need to specify it per-each package. See fossa_* branches.
+# targets:
+#   only:
+#     - type: pipenv
+#       path: path-here
+#
 # paths:
 #   only:
 #     - path-here

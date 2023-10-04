@@ -15,31 +15,26 @@ cd $PROJ_HOME
 
 cd ./gooddata-api-client
 pipenv install -r requirements.txt
-rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-sdk
 pipenv install ../gooddata-api-client/ \
 -r requirements.txt
-rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-fdw
 pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
-rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-pandas
 pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
-rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-dbt
 pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
-rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd $ORIG_WORK_DIR
