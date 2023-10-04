@@ -14,30 +14,30 @@ cd $PROJ_HOME
 
 
 cd ./gooddata-api-client
-pipenv install --skip-lock -r requirements.txt
+pipenv install -r requirements.txt
 rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-sdk
-pipenv install --skip-lock ../gooddata-api-client/ \
+pipenv install ../gooddata-api-client/ \
 -r requirements.txt
 rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-fdw
-pipenv install --skip-lock ../gooddata-api-client/ \
+pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-pandas
-pipenv install --skip-lock ../gooddata-api-client/ \
+pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 rm -f test-requirements.txt type-requirements.txt
 cd ..
 
 cd ./gooddata-dbt
-pipenv install --skip-lock ../gooddata-api-client/ \
+pipenv install ../gooddata-api-client/ \
 ../gooddata-sdk/ -r requirements.txt
 rm -f test-requirements.txt type-requirements.txt
 cd ..
