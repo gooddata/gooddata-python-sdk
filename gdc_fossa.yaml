@@ -9,4 +9,5 @@ ignored_paths:
   - gooddata-fdw
   - gooddata-sdk
   - tests-support
+  - gooddata-dbt
   - ".+/docs"
