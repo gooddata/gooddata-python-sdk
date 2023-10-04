@@ -37,3 +37,7 @@ The Python SDK is versioned and usually released in tandem with GoodData Cloud.
 #### GoodData Cloud
 
 When working with GoodData Cloud, we recommend you always work with the newest Python SDK available.
+
+### Troubleshooting
+
+In case of any issues with Python SDK, feel free to reach out to us on our [community slack](https://www.gooddata.com/slack/) or create a [GitHub issue](https://github.com/gooddata/gooddata-python-sdk/issues).
