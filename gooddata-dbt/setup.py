@@ -1,7 +1,14 @@
 # (C) 2023 GoodData Corporation
 from setuptools import find_packages, setup
 
-REQUIRES = ["gooddata-sdk~=1.7.0", "pyyaml>=5.1", "attrs==21.4.0", "cattrs==22.1.0", "requests~=2.31.0"]
+REQUIRES = [
+    "gooddata-sdk~=1.7.0",
+    "pyyaml>=5.1",
+    "attrs==21.4.0",
+    "cattrs==22.1.0",
+    "requests~=2.31.0",
+    "tabulate~=0.8.10",
+]
 
 setup(
     name="gooddata-dbt",
