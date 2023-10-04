@@ -82,6 +82,7 @@ def create_workspace(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str
 def deploy_ldm(
     logger: logging.Logger,
     sdk: GoodDataSdk,
+    args: Namespace,
     data_source_id: str,
     dbt_tables: DbtModelTables,
     model_ids: Optional[List[str]],
@@ -89,6 +90,8 @@ def deploy_ldm(
 ) -> None:
     logger.info("Generate and put LDM")
     generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_ids)
+    workspace_url = f"{args.gooddata_host}/modeler/#/{workspace_id}"
+    logger.info(f"LDM successfully loaded, verify here: {workspace_url}")
 
 
 def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str) -> None:
@@ -97,7 +100,7 @@ def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id
 
 
 def deploy_analytics(
-    logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, data_product: GoodDataConfigProduct
+    logger: logging.Logger, sdk: GoodDataSdk, args: Namespace, workspace_id: str, data_product: GoodDataConfigProduct
 ) -> None:
     logger.info(f"Deploy analytics {workspace_id=}")
 
@@ -107,6 +110,9 @@ def deploy_analytics(
     # Deploy analytics model into target workspace
     logger.info("Load analytics model into GoodData")
     sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, adm)
+
+    workspace_url = f"{args.gooddata_host}/dashboards/#/workspace/{workspace_id}"
+    logger.info(f"Analytics successfully loaded, verify here: {workspace_url}")
 
 
 def store_analytics(
