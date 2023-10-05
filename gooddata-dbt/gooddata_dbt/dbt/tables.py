@@ -30,6 +30,7 @@ class DbtModelMetaGoodDataTableProps(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataColumnProps(Base):
+    id: Optional[str] = None
     ldm_type: Optional[str] = None
     referenced_table: Optional[str] = None
     label_type: Optional[str] = None
@@ -114,6 +115,12 @@ class DbtModelBase(Base):
 class DbtModelColumn(DbtModelBase):
     data_type: Optional[str]
     meta: DbtModelMetaGoodDataColumn = attrs.field(factory=DbtModelMetaGoodDataColumn)
+
+    # Enable to override LDM ID for LDM entities derived from columns (attributes, ...)
+    # TODO - does it work for PK/references in combination with roles?
+    @property
+    def ldm_id(self) -> str:
+        return self.meta.gooddata.id or self.gooddata_ldm_id
 
     def gooddata_is_fact(self) -> bool:
         return (self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value) or self.is_number()
@@ -355,7 +362,7 @@ class DbtModelTables:
             if column.gooddata_is_fact():
                 facts.append(
                     {
-                        "id": column.gooddata_ldm_id,
+                        "id": column.ldm_id,
                         # TODO - all titles filled from dbt descriptions, incorrect! No title in dbt models.
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
@@ -372,7 +379,7 @@ class DbtModelTables:
             if column.gooddata_is_label(attribute_column.name):
                 labels.append(
                     {
-                        "id": column.gooddata_ldm_id,
+                        "id": column.ldm_id,
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
@@ -389,7 +396,7 @@ class DbtModelTables:
             if column.gooddata_is_attribute():
                 attributes.append(
                     {
-                        "id": column.gooddata_ldm_id,
+                        "id": column.ldm_id,
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
@@ -410,7 +417,7 @@ class DbtModelTables:
                     granularities = DATE_GRANULARITIES
                 date_datasets.append(
                     {
-                        "id": column.gooddata_ldm_id,
+                        "id": column.ldm_id,
                         "title": self.get_ldm_title(column),
                         "description": column.description,
                         "tags": [table.gooddata_ldm_title] + column.tags,
