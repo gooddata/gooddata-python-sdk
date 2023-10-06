@@ -298,7 +298,7 @@ class DbtModelTables:
         grain = []
         for column in table.columns.values():
             if self.is_primary_key(column):
-                grain.append({"id": column.gooddata_ldm_id, "type": "attribute"})
+                grain.append({"id": column.ldm_id, "type": "attribute"})
         return grain
 
     # TODO - constraints are stored in special nodes
@@ -342,9 +342,9 @@ class DbtModelTables:
                     if self.upper_case:
                         referenced_object_name = referenced_object_name.upper()
                     if referenced_object_name in role_playing_tables:
-                        referenced_object_id = f"{referenced_object_id}_{column.gooddata_ldm_id}"
+                        referenced_object_id = f"{referenced_object_id}_{column.ldm_id}"
             elif column.is_date():
-                referenced_object_id = column.gooddata_ldm_id
+                referenced_object_id = column.ldm_id
             if referenced_object_id is not None:
                 references.append(
                     {
