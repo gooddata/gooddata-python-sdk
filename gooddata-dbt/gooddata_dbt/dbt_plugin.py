@@ -301,7 +301,7 @@ def main() -> None:
     logger = get_logger("gooddata-dbt", args.debug)
     logger.info("Start")
     sdk = GoodDataSdkWrapper(args, logger).sdk
-    with open("gooddata.yml") as fp:
+    with open(args.gooddata_config) as fp:
         gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
 
     if args.method == "dbt_cloud_run":
