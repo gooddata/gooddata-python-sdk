@@ -127,9 +127,9 @@ class DbtModelColumn(DbtModelBase):
 
     def gooddata_is_attribute(self) -> bool:
         valid_ldm_types = [GoodDataLdmTypes.ATTRIBUTE.value, GoodDataLdmTypes.PRIMARY_KEY.value]
-        # Without GD metadata, attribute is default unless it is DATETIME data type
+        # Without GD metadata, attribute is default unless it is DATETIME/NUMBER(FLOAT) data type
         return self.meta.gooddata.ldm_type in valid_ldm_types or (
-            self.meta.gooddata.ldm_type is None and not self.is_date()
+            self.meta.gooddata.ldm_type is None and not self.is_date() and not self.is_number()
         )
 
     def gooddata_is_label(self, attribute_column_name: str) -> bool:
