@@ -11,6 +11,12 @@ def get_parser(description: str) -> argparse.ArgumentParser:
 
 def set_gooddata_endpoint_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
+        "-gc",
+        "--gooddata-config",
+        help="Path to GoodData config file containing definitions of environments",
+        default=os.getenv("GOODDATA_CONFIG", "gooddata.yml"),
+    )
+    parser.add_argument(
         "-gh",
         "--gooddata-host",
         help="Hostname(DNS) where GoodData is running",
