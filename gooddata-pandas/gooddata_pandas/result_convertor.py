@@ -174,7 +174,7 @@ class DataFrameMetadata:
     DataFrameMetadata class stores metadata about a DataFrame.
 
     Attributes:
-    - row_totals_indexes: A nested list of integers. Each inner list represents
+      row_totals_indexes: A nested list of integers. Each inner list represents
                           the row indices containing totals per index header column.
                           Example:
                           Category  | Country | Budget
@@ -186,7 +186,7 @@ class DataFrameMetadata:
                                     | AVG     |    150
                           SUM       |         |    450
 
-    - execution_response: An instance of BareExecutionResponse representing the
+      execution_response: An instance of BareExecutionResponse representing the
                           execution response.
     """
 
