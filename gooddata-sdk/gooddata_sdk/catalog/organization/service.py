@@ -69,6 +69,21 @@ class CatalogOrganizationService(CatalogServiceBase):
         organization_document = CatalogOrganizationDocument(data=organization)
         self._entities_api.update_entity_organizations(organization.id, organization_document.to_api())
 
+    def update_allowed_origins(self, allowed_origins: List[str]) -> None:
+        """Updates the allowed origins of the organization.
+
+        Args:
+            allowed_origins (List[str]):
+                New allowed origins of the organization
+
+        Returns:
+            None
+        """
+        organization = self.get_organization()
+        organization.attributes.allowed_origins = allowed_origins
+        organization_document = CatalogOrganizationDocument(data=organization)
+        self._entities_api.update_entity_organizations(organization.id, organization_document.to_api())
+
     def create_or_update_jwk(self, jwk: CatalogJwk) -> None:
         """Create a new jwk or overwrite an existing jwk with the same id.
 

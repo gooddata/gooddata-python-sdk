@@ -327,3 +327,19 @@ def test_update_csp_directive(test_config):
     finally:
         sdk.catalog_organization.delete_csp_directive(directive_id)
         assert len(sdk.catalog_organization.list_csp_directives()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_allowed_origins.yaml"))
+def test_update_allowed_origins(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    allowed_origins = ["https://test.com"]
+
+    try:
+        sdk.catalog_organization.update_allowed_origins(allowed_origins)
+        organization = sdk.catalog_organization.get_organization()
+        assert organization.attributes.allowed_origins == allowed_origins
+    finally:
+        sdk.catalog_organization.update_allowed_origins([])
+        organization = sdk.catalog_organization.get_organization()
+        assert organization.attributes.allowed_origins == []
