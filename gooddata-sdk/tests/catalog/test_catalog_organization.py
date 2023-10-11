@@ -6,7 +6,14 @@ from pathlib import Path
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_sdk import CatalogJwk, CatalogOrganization, CatalogRsaSpecification, GoodDataSdk
+from gooddata_sdk import (
+    CatalogCspDirective,
+    CatalogJwk,
+    CatalogOrganization,
+    CatalogOrganizationSetting,
+    CatalogRsaSpecification,
+    GoodDataSdk,
+)
 
 gd_vcr = get_vcr()
 
@@ -166,3 +173,157 @@ def test_list_jwk(test_config):
         sdk.catalog_organization.delete_jwk(jwk1.id)
         sdk.catalog_organization.delete_jwk(jwk2.id)
         assert len(sdk.catalog_organization.list_jwks()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_organization_setting.yaml"))
+def test_create_organization_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    setting_id = "test_setting"
+    setting_type = "LOCALE"
+    content = {"value": "fr-FR"}
+
+    new_setting = CatalogOrganizationSetting.init(setting_id, setting_type, content)
+    try:
+        sdk.catalog_organization.create_organization_setting(new_setting)
+        setting = sdk.catalog_organization.get_organization_setting(setting_id)
+        assert setting.id == setting_id
+        assert setting.attributes.type == setting_type
+        assert setting.attributes.content == content
+    finally:
+        sdk.catalog_organization.delete_organization_setting(setting_id)
+        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_organization_settings.yaml"))
+def test_list_organization_settings(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    setting_id_1 = "test_setting_1"
+    setting_id_2 = "test_setting_2"
+    new_setting_1 = CatalogOrganizationSetting.init(setting_id_1, "LOCALE", {"value": "fr-FR"})
+    new_setting_2 = CatalogOrganizationSetting.init(setting_id_2, "FORMAT_LOCALE", {"value": "en-GB"})
+
+    try:
+        sdk.catalog_organization.create_organization_setting(new_setting_1)
+        sdk.catalog_organization.create_organization_setting(new_setting_2)
+        organization_settings = sdk.catalog_organization.list_organization_settings()
+        assert len(organization_settings) == 2
+        assert new_setting_1 in organization_settings
+        assert new_setting_2 in organization_settings
+    finally:
+        sdk.catalog_organization.delete_organization_setting(setting_id_1)
+        sdk.catalog_organization.delete_organization_setting(setting_id_2)
+        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "delete_organization_setting.yaml"))
+def test_delete_organization_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    setting_id = "test_setting"
+    new_setting = CatalogOrganizationSetting.init(setting_id, "LOCALE", {"value": "fr-FR"})
+
+    try:
+        sdk.catalog_organization.create_organization_setting(new_setting)
+        sdk.catalog_organization.delete_organization_setting(setting_id)
+        sdk.catalog_organization.get_organization_setting(setting_id)
+    except NotFoundException:
+        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+    finally:
+        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_organization_setting.yaml"))
+def test_update_organization_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    setting_id = "test_setting"
+    new_setting = CatalogOrganizationSetting.init(setting_id, "LOCALE", {"value": "fr-FR"})
+    update_setting = CatalogOrganizationSetting.init(setting_id, "LOCALE", {"value": "en-GB"})
+
+    try:
+        sdk.catalog_organization.create_organization_setting(new_setting)
+        sdk.catalog_organization.update_organization_setting(update_setting)
+        setting = sdk.catalog_organization.get_organization_setting(setting_id)
+        assert setting.id == setting_id
+        assert setting.attributes.type == "LOCALE"
+        assert setting.attributes.content == {"value": "en-GB"}
+    finally:
+        sdk.catalog_organization.delete_organization_setting(setting_id)
+        assert len(sdk.catalog_organization.list_organization_settings()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_csp_directive.yaml"))
+def test_create_csp_directive(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    directive_id = "font-src"
+    sources = ["https://test.com"]
+
+    new_csp_directive = CatalogCspDirective.init(directive_id, sources)
+    try:
+        sdk.catalog_organization.create_csp_directive(new_csp_directive)
+        csp_directive = sdk.catalog_organization.get_csp_directive(directive_id)
+        assert csp_directive.id == directive_id
+        assert csp_directive.attributes.sources == sources
+    finally:
+        sdk.catalog_organization.delete_csp_directive(directive_id)
+        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_csp_directives.yaml"))
+def test_list_csp_directives(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    directive_id_1 = "font-src"
+    directive_id_2 = "script-src"
+    new_csp_directive_1 = CatalogCspDirective.init(directive_id_1, ["https://test.com"])
+    new_csp_directive_2 = CatalogCspDirective.init(directive_id_2, ["https://test2.com"])
+
+    try:
+        sdk.catalog_organization.create_csp_directive(new_csp_directive_1)
+        sdk.catalog_organization.create_csp_directive(new_csp_directive_2)
+        csp_directives = sdk.catalog_organization.list_csp_directives()
+        assert len(csp_directives) == 2
+        assert new_csp_directive_1 in csp_directives
+        assert new_csp_directive_2 in csp_directives
+    finally:
+        sdk.catalog_organization.delete_csp_directive(directive_id_1)
+        sdk.catalog_organization.delete_csp_directive(directive_id_2)
+        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "delete_csp_directive.yaml"))
+def test_delete_csp_directive(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    directive_id = "font-src"
+    new_csp_directive = CatalogCspDirective.init(directive_id, ["https://test.com"])
+
+    try:
+        sdk.catalog_organization.create_csp_directive(new_csp_directive)
+        sdk.catalog_organization.delete_csp_directive(directive_id)
+        sdk.catalog_organization.get_csp_directive(directive_id)
+    except NotFoundException:
+        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+    finally:
+        assert len(sdk.catalog_organization.list_csp_directives()) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_csp_directive.yaml"))
+def test_update_csp_directive(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    directive_id = "font-src"
+    new_csp_directive = CatalogCspDirective.init(directive_id, ["https://test.com"])
+    update_csp_directive = CatalogCspDirective.init(directive_id, ["https://test2.com"])
+
+    try:
+        sdk.catalog_organization.create_csp_directive(new_csp_directive)
+        sdk.catalog_organization.update_csp_directive(update_csp_directive)
+        csp_directive = sdk.catalog_organization.get_csp_directive(directive_id)
+        assert csp_directive.id == directive_id
+        assert csp_directive.attributes.sources == ["https://test2.com"]
+    finally:
+        sdk.catalog_organization.delete_csp_directive(directive_id)
+        assert len(sdk.catalog_organization.list_csp_directives()) == 0
