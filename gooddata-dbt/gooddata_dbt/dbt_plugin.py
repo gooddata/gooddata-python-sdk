@@ -298,11 +298,7 @@ def process_organization(
     gd_config: GoodDataConfig,
     organization: Optional[GoodDataConfigOrganization] = None,
 ) -> None:
-    if args.method == "dbt_cloud_run":
-        dbt_cloud_run(args, logger, gd_config.all_model_ids)
-    elif args.method == "dbt_cloud_stats":
-        dbt_cloud_stats(args, logger, gd_config.all_model_ids, args.environment_id)
-    elif args.method == "upload_notification":
+    if args.method == "upload_notification":
         dbt_profiles = DbtProfiles(args)
         # Caches are invalidated only per data source, not per data product
         upload_notification(logger, sdk_wrapper.sdk, dbt_profiles.data_source_id)
@@ -343,17 +339,22 @@ def main() -> None:
     logger.info("Start")
     with open(args.gooddata_config) as fp:
         gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
-
-    if args.gooddata_profiles:
-        logger.info(f"Process multiple organizations profiles={args.gooddata_profiles}")
-        for organization in gd_config.organizations:
-            if organization.gooddata_profile in args.gooddata_profiles:
-                sdk_wrapper = GoodDataSdkWrapper(args, logger, profile=organization.gooddata_profile)
-                logger.info(f"Process organization profile={organization.gooddata_profile}")
-                process_organization(args, logger, sdk_wrapper, gd_config, organization)
+    # dbt cloud tasks must run only once, not for each organization
+    if args.method == "dbt_cloud_run":
+        dbt_cloud_run(args, logger, gd_config.all_model_ids)
+    elif args.method == "dbt_cloud_stats":
+        dbt_cloud_stats(args, logger, gd_config.all_model_ids, args.environment_id)
     else:
-        sdk_wrapper = GoodDataSdkWrapper(args, logger)
-        logger.info(f"Process single organization from env vars host={args.gooddata_host}")
-        process_organization(args, logger, sdk_wrapper, gd_config)
+        if args.gooddata_profiles:
+            logger.info(f"Process multiple organizations profiles={args.gooddata_profiles}")
+            for organization in gd_config.organizations:
+                if organization.gooddata_profile in args.gooddata_profiles:
+                    sdk_wrapper = GoodDataSdkWrapper(args, logger, profile=organization.gooddata_profile)
+                    logger.info(f"Process organization profile={organization.gooddata_profile}")
+                    process_organization(args, logger, sdk_wrapper, gd_config, organization)
+        else:
+            sdk_wrapper = GoodDataSdkWrapper(args, logger)
+            logger.info(f"Process single organization from env vars host={args.gooddata_host}")
+            process_organization(args, logger, sdk_wrapper, gd_config)
 
     logger.info("End")
