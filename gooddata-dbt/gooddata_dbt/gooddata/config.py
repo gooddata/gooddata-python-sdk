@@ -38,6 +38,7 @@ class GoodDataConfigProduct(Base):
     environment_setup_id: str
     model_ids: List[str] = attr.field(default=list)
     localization: Optional[GoodDataConfigLocalization] = None
+    skip_tests: Optional[List[str]] = None
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

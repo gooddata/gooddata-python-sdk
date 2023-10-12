@@ -149,18 +149,22 @@ def store_analytics(
     )
 
 
-def test_insights(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str) -> None:
+def test_insights(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, skip_tests: Optional[List[str]]) -> None:
     logger.info(f"Test insights {workspace_id=}")
     insights = sdk.insights.get_insights(workspace_id)
 
     for insight in insights:
-        try:
-            start = time()
-            sdk.tables.for_insight(workspace_id, insight)
-            duration = int((time() - start) * 1000)
-            logger.info(f'Test successful insight="{insight.title}" duration={duration}(ms) ...')
-        except RuntimeError:
-            sys.exit()
+        logger.info(f"Executing insight {insight.id=} {insight.title=} ...")
+        if skip_tests is not None and insight.id in skip_tests:
+            logger.info(f"Skip test insight={insight.title} (requested in gooddata.yaml)")
+        else:
+            try:
+                start = time()
+                sdk.tables.for_insight(workspace_id, insight)
+                duration = int((time() - start) * 1000)
+                logger.info(f"Test successful {insight.id=} {insight.title=} duration={duration}(ms)")
+            except RuntimeError:
+                sys.exit()
 
 
 def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDataSdk, workspace_id: str) -> None:
@@ -328,7 +332,7 @@ def process_organization(
                     elif args.method == "deploy_analytics":
                         deploy_analytics(logger, sdk_wrapper, workspace_id, data_product)
                     elif args.method == "test_insights":
-                        test_insights(logger, sdk_wrapper.sdk, workspace_id)
+                        test_insights(logger, sdk_wrapper.sdk, workspace_id, data_product.skip_tests)
                     else:
                         raise Exception(f"Unsupported method requested in args: {args.method}")
 
