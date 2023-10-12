@@ -36,13 +36,18 @@ def set_gooddata_endpoint_args(parser: argparse.ArgumentParser) -> None:
         default=os.getenv("GOODDATA_OVERRIDE_HOST"),
     )
     # Alternative - use profile.yml file
+    env_profiles = os.getenv("GOODDATA_PROFILES")
+    if env_profiles:
+        env_profiles_list = env_profiles.split(" ")
+    else:
+        env_profiles_list = []
     parser.add_argument(
         "-gp",
         "--gooddata-profiles",
         nargs="*",
         help="Profiles in profile.yml file. Overrides gooddata-host, gooddata-token and gooddata-override-host."
         + "You can use multiple profiles separated by space to deliver models/analytics to multiple organizations.",
-        default=os.getenv("GOODDATA_PROFILES", None),
+        default=env_profiles_list,
     )
 
 
