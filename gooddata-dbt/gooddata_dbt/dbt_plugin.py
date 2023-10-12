@@ -5,7 +5,7 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 from time import time
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import tabulate
 import yaml
@@ -13,7 +13,7 @@ from gooddata_dbt.args import parse_arguments
 from gooddata_dbt.dbt.cloud import DbtConnection, DbtCredentials, DbtExecution
 from gooddata_dbt.dbt.profiles import DbtOutput, DbtProfiles
 from gooddata_dbt.dbt.tables import DbtModelTables
-from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigProduct
+from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganization, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import report_message_to_merge_request
@@ -27,9 +27,6 @@ from gooddata_sdk import (
 )
 
 GOODDATA_LAYOUTS_DIR = Path("gooddata_layouts")
-
-# TODO
-#   Tests, ...
 
 
 def layout_model_path(data_product: GoodDataConfigProduct) -> Path:
@@ -80,18 +77,37 @@ def create_workspace(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str
     sdk.catalog_workspace.create_or_update(workspace=workspace)
 
 
+DATA_SOURCE_CONTAINER: Dict[str, DbtModelTables] = {}
+
+
 def deploy_ldm(
     logger: logging.Logger,
-    sdk: GoodDataSdk,
     args: Namespace,
-    data_source_id: str,
-    dbt_tables: DbtModelTables,
+    all_model_ids: List[str],
+    sdk_wrapper: GoodDataSdkWrapper,
     model_ids: Optional[List[str]],
     workspace_id: str,
 ) -> None:
+    global DATA_SOURCE_CONTAINER
     logger.info("Generate and put LDM")
-    generate_and_put_ldm(sdk, data_source_id, workspace_id, dbt_tables, model_ids)
-    workspace_url = f"{args.gooddata_host}/modeler/#/{workspace_id}"
+    dbt_profiles = DbtProfiles(args)
+    dbt_target = dbt_profiles.target
+    data_source_id = dbt_profiles.data_source_id
+    # Parse dbt models only once and scan data source only once, not for each product/environment
+    dbt_tables = DATA_SOURCE_CONTAINER.get(data_source_id)
+    if dbt_tables is None:
+        logger.info(f"Process data source {data_source_id=}")
+        dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
+        if args.gooddata_upper_case:
+            dbt_target.schema = dbt_target.schema.upper()
+            dbt_target.database = dbt_target.database.upper()
+        register_data_source(logger, sdk_wrapper.sdk, data_source_id, dbt_target, dbt_tables)
+        DATA_SOURCE_CONTAINER[data_source_id] = dbt_tables
+    else:
+        logger.info(f"Data source already processed {data_source_id=} table_count={len(dbt_tables.tables)}")
+
+    generate_and_put_ldm(sdk_wrapper.sdk, data_source_id, workspace_id, dbt_tables, model_ids)
+    workspace_url = f"{sdk_wrapper.get_host_from_sdk()}/modeler/#/{workspace_id}"
     logger.info(f"LDM successfully loaded, verify here: {workspace_url}")
 
 
@@ -101,18 +117,21 @@ def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id
 
 
 def deploy_analytics(
-    logger: logging.Logger, sdk: GoodDataSdk, args: Namespace, workspace_id: str, data_product: GoodDataConfigProduct
+    logger: logging.Logger,
+    sdk_wrapper: GoodDataSdkWrapper,
+    workspace_id: str,
+    data_product: GoodDataConfigProduct,
 ) -> None:
     logger.info(f"Deploy analytics {workspace_id=}")
 
     logger.info("Read analytics model from disk")
-    adm = sdk.catalog_workspace_content.load_analytics_model_from_disk(layout_model_path(data_product))
+    adm = sdk_wrapper.sdk.catalog_workspace_content.load_analytics_model_from_disk(layout_model_path(data_product))
 
     # Deploy analytics model into target workspace
     logger.info("Load analytics model into GoodData")
-    sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, adm)
+    sdk_wrapper.sdk.catalog_workspace_content.put_declarative_analytics_model(workspace_id, adm)
 
-    workspace_url = f"{args.gooddata_host}/dashboards/#/workspace/{workspace_id}"
+    workspace_url = f"{sdk_wrapper.get_host_from_sdk()}/dashboards/#/workspace/{workspace_id}"
     logger.info(f"Analytics successfully loaded, verify here: {workspace_url}")
 
 
@@ -164,34 +183,6 @@ def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDa
             store_layouts=False,
             layout_root_path=GOODDATA_LAYOUTS_DIR / data_product.id,
         )
-
-
-def deploy_models(
-    gooddata_upper_case: bool,
-    gooddata_environment_id: str,
-    logger: logging.Logger,
-    dbt_target: DbtOutput,
-    gd_config: GoodDataConfig,
-    sdk: GoodDataSdk,
-    args: Namespace,
-    data_source_id: str,
-) -> None:
-    dbt_tables = DbtModelTables.from_local(gooddata_upper_case, gd_config.all_model_ids)
-    if gooddata_upper_case:
-        dbt_target.schema = dbt_target.schema.upper()
-        dbt_target.database = dbt_target.database.upper()
-    register_data_source(logger, sdk, data_source_id, dbt_target, dbt_tables)
-    for data_product in gd_config.data_products:
-        logger.info(f"Process product name={data_product.name}")
-        environments = gd_config.get_environment_workspaces(data_product.environment_setup_id)
-        for environment in environments:
-            if environment.id == gooddata_environment_id:
-                workspace_id = f"{data_product.id}_{environment.id}"
-                workspace_title = f"{data_product.name} ({environment.name})"
-                create_workspace(logger, sdk, workspace_id, workspace_title)
-                deploy_ldm(logger, sdk, args, data_source_id, dbt_tables, data_product.model_ids, workspace_id)
-                if data_product.localization:
-                    create_localized_workspaces(data_product, sdk, workspace_id)
 
 
 def get_table(data: List[list], headers: List[str], fmt: str) -> str:
@@ -296,49 +287,69 @@ def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: List[s
     dbt_cloud_stats(args, logger, all_model_ids, environment_id)
 
 
-def main() -> None:
-    args = parse_arguments("gooddata-dbt plugin for models management and invalidating caches(upload notification)")
-    logger = get_logger("gooddata-dbt", args.debug)
-    logger.info("Start")
-    sdk = GoodDataSdkWrapper(args, logger).sdk
-    with open(args.gooddata_config) as fp:
-        gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
-
+def process_organization(
+    args: Namespace,
+    logger: logging.Logger,
+    sdk_wrapper: GoodDataSdkWrapper,
+    gd_config: GoodDataConfig,
+    organization: Optional[GoodDataConfigOrganization] = None,
+) -> None:
     if args.method == "dbt_cloud_run":
         dbt_cloud_run(args, logger, gd_config.all_model_ids)
     elif args.method == "dbt_cloud_stats":
         dbt_cloud_stats(args, logger, gd_config.all_model_ids, args.environment_id)
-    elif args.method in ["upload_notification", "deploy_models"]:
-        dbt_target = DbtProfiles(args).target
-        data_source_id = f"{args.profile}-{dbt_target.name}"
-        if args.method == "upload_notification":
-            # Caches are invalidated only per data source, not per data product
-            upload_notification(logger, sdk, data_source_id)
-        else:
-            deploy_models(
-                args.gooddata_upper_case,
-                args.gooddata_environment_id,
-                logger,
-                dbt_target,
-                gd_config,
-                sdk,
-                args,
-                data_source_id,
-            )
+    elif args.method == "upload_notification":
+        dbt_profiles = DbtProfiles(args)
+        # Caches are invalidated only per data source, not per data product
+        upload_notification(logger, sdk_wrapper.sdk, dbt_profiles.data_source_id)
     else:
-        for data_product in gd_config.data_products:
+        if organization:
+            data_products = [dp for dp in gd_config.data_products if dp.id in organization.data_product_ids]
+        else:
+            data_products = gd_config.data_products
+        for data_product in data_products:
             logger.info(f"Process product name={data_product.name}")
             environments = gd_config.get_environment_workspaces(data_product.environment_setup_id)
             for environment in environments:
                 if environment.id == args.gooddata_environment_id:
                     workspace_id = f"{data_product.id}_{environment.id}"
-                    if args.method == "store_analytics":
-                        store_analytics(logger, sdk, workspace_id, data_product)
+                    if args.method == "deploy_models":
+                        workspace_title = f"{data_product.name} ({environment.name})"
+                        # TODO - provision workspaces in a separate args.method?
+                        #  We will need to extend it by provisioning of child workspaces, ...
+                        create_workspace(logger, sdk_wrapper.sdk, workspace_id, workspace_title)
+                        deploy_ldm(
+                            logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id
+                        )
+                        if data_product.localization:
+                            create_localized_workspaces(data_product, sdk_wrapper.sdk, workspace_id)
+                    elif args.method == "store_analytics":
+                        store_analytics(logger, sdk_wrapper.sdk, workspace_id, data_product)
                     elif args.method == "deploy_analytics":
-                        deploy_analytics(logger, sdk, args, workspace_id, data_product)
+                        deploy_analytics(logger, sdk_wrapper, workspace_id, data_product)
                     elif args.method == "test_insights":
-                        test_insights(logger, sdk, workspace_id)
+                        test_insights(logger, sdk_wrapper.sdk, workspace_id)
                     else:
                         raise Exception(f"Unsupported method requested in args: {args.method}")
+
+
+def main() -> None:
+    args = parse_arguments("gooddata-dbt plugin for models management and invalidating caches(upload notification)")
+    logger = get_logger("gooddata-dbt", args.debug)
+    logger.info("Start")
+    with open(args.gooddata_config) as fp:
+        gd_config = GoodDataConfig.from_dict(yaml.safe_load(fp))
+
+    if args.gooddata_profiles:
+        logger.info(f"Process multiple organizations profiles={args.gooddata_profiles}")
+        for organization in gd_config.organizations:
+            if organization.gooddata_profile in args.gooddata_profiles:
+                sdk_wrapper = GoodDataSdkWrapper(args, logger, profile=organization.gooddata_profile)
+                logger.info(f"Process organization profile={organization.gooddata_profile}")
+                process_organization(args, logger, sdk_wrapper, gd_config, organization)
+    else:
+        sdk_wrapper = GoodDataSdkWrapper(args, logger)
+        logger.info(f"Process single organization from env vars host={args.gooddata_host}")
+        process_organization(args, logger, sdk_wrapper, gd_config)
 
     logger.info("End")

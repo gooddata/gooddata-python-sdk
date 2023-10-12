@@ -35,6 +35,15 @@ def set_gooddata_endpoint_args(parser: argparse.ArgumentParser) -> None:
         "When you connect to different hostname than where GoodData is running(proxies)",
         default=os.getenv("GOODDATA_OVERRIDE_HOST"),
     )
+    # Alternative - use profile.yml file
+    parser.add_argument(
+        "-gp",
+        "--gooddata-profiles",
+        nargs="*",
+        help="Profiles in profile.yml file. Overrides gooddata-host, gooddata-token and gooddata-override-host."
+        + "You can use multiple profiles separated by space to deliver models/analytics to multiple organizations.",
+        default=os.getenv("GOODDATA_PROFILES", None),
+    )
 
 
 def set_environment_id_arg(parser: argparse.ArgumentParser) -> None:

@@ -182,3 +182,7 @@ class DbtProfiles:
             if output.name == self.args.target:
                 return output
         raise ValueError(f"Target {self.args.target} not found in {self.profile.outputs}.")
+
+    @property
+    def data_source_id(self) -> str:
+        return f"{self.args.profile}-{self.target.name}"

@@ -41,9 +41,16 @@ class GoodDataConfigProduct(Base):
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
+class GoodDataConfigOrganization(Base):
+    gooddata_profile: str
+    data_product_ids: List[str] = attr.field(default=list)
+
+
+@attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfig(Base):
     environment_setups: List[GoodDataConfigEnvironmentSetup]
     data_products: List[GoodDataConfigProduct]
+    organizations: List[GoodDataConfigOrganization]
 
     @property
     def all_model_ids(self) -> List[str]:
