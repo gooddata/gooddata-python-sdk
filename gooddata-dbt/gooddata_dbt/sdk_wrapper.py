@@ -8,41 +8,44 @@ from gooddata_sdk import GoodDataSdk
 
 class GoodDataSdkWrapper:
     # Timeout=600 because supporting waiting for All-in-one image starts
-    def __init__(self, args: argparse.Namespace, logger: Logger, timeout: int = 600) -> None:
+    def __init__(
+        self, args: argparse.Namespace, logger: Logger, profile: Optional[str] = None, timeout: int = 600
+    ) -> None:
         self.args = args
         self.logger = logger
         self.timeout = timeout
+        self.profile = profile
         self.sdk = self.create_sdk()
         self.wait_for_gooddata_is_up(self.timeout)
 
-    @property
-    def host(self) -> str:
-        return self.args.gooddata_host
-
-    @property
-    def token(self) -> str:
-        return self.args.gooddata_token
-
-    @property
-    def override_host(self) -> Optional[str]:
-        return self.args.gooddata_override_host
+    def get_host_from_sdk(self) -> Optional[str]:
+        # TODO - make _hostname public in gooddata_sdk
+        return self.sdk.client._hostname
 
     def create_sdk(self) -> GoodDataSdk:
-        kwargs = {}
-        if self.override_host:
-            kwargs["Host"] = self.override_host
-        masked_token = f"{len(self.token[:-4]) * '#'}{self.token[-4:]}"
-        self.logger.info(
-            f"Connecting to GoodData host={self.host} token={masked_token} override_host={self.override_host}"
-        )
-        sdk = GoodDataSdk.create(host_=self.host, token_=self.token, **kwargs)
-        return sdk
+        if self.profile:
+            self.logger.info(f"Connecting to GoodData using profile={self.profile}")
+            sdk = GoodDataSdk.create_from_profile(profile=self.profile)
+            return sdk
+        else:
+            host = self.args.gooddata_host
+            token = self.args.gooddata_token
+            override_host = self.args.gooddata_override_host
+            kwargs = {}
+            if override_host:
+                kwargs["Host"] = override_host
+            masked_token = f"{len(token[:-4]) * '#'}{token[-4:]}"
+            self.logger.info(f"Connecting to GoodData host={host} token={masked_token} override_host={override_host}")
+            sdk = GoodDataSdk.create(host_=host, token_=token, **kwargs)
+            return sdk
 
     def wait_for_gooddata_is_up(self, timeout: int) -> None:
-        # Wait for the GoodData.CN docker image to start up
-        self.logger.info(f"Waiting for {self.host} to be up")
+        # Wait for the GoodData.CN docker image to start up or prevent hiccups of cloud deployments
+        # We have to take hostname from sdk.client, because it can also be collected from profiles.yml file
+        host = self.get_host_from_sdk()
+        self.logger.info(f"Waiting for {host} to be up")
         self.sdk.support.wait_till_available(timeout=timeout)
-        self.logger.info(f"Host {self.host} is up")
+        self.logger.info(f"Host {host} is up")
 
     def pre_cache_insights(self, workspaces: Optional[List] = None) -> None:
         if not workspaces:

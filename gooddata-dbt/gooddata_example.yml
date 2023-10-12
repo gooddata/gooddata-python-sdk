@@ -19,9 +19,8 @@ data_products:
   - id: sales
     name: "Sales"
     environment_setup_id: default
-    model_id: github
-     - github
-     - faa
+    model_ids:
+      - salesforce
     localization:
       from_language: en
       to:
@@ -29,3 +28,18 @@ data_products:
           language: fr
         - locale: zh-Hans
           language: "chinese (simplified)"
+  - id: marketing
+    name: "Marketing"
+    environment_setup_id: default
+    model_ids:
+      - hubspot
+
+# You can deliver data products to multiple organizations. Each organization can contain different (sub)set of products
+organizations:
+  - gooddata_profile: local
+    data_product_ids:
+      - sales
+  - gooddata_profile: production
+    data_product_ids:
+      - sales
+      - marketing
