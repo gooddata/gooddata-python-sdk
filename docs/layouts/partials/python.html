@@ -1,22 +1,22 @@
-{{ $path := split . "." }}
+{{ $path := split .path "." }}
 
-{{ $data := getJSON (print "versioned_docs/data.json") }}
-
-{{ $currentData := $data}}
-{{ range $path }}
-    {{ if (eq $currentData.kind "class") }}
-        {{ $currentData = $currentData.functions }}
+{{ with getJSON (printf "versioned_docs/%s/data.json") (partial "version.html" (dict "context" .context )).dirpath }}
+    {{ $currentData := . }}
+    {{ range $path }}
+        {{ if (eq $currentData.kind "class") }}
+            {{ $currentData = $currentData.functions }}
+        {{ end }}
+        {{ if $currentData }}
+            {{$currentData = index $currentData .}}
+        {{ else }}
+            Failed to render: {{ $path }}
+        {{ end}}
     {{ end }}
-    {{ if $currentData }}
-        {{$currentData = index $currentData .}}
-    {{ else }}
-        Failed to render: {{ $path }}
-    {{ end}}
+
+    {{ $objData := $currentData }}
+
+
+    <div class="python-ref">
+        {{ partial "python-object.html" (dict "object" $objData "path" $path "context" .) }}
+    </div>
 {{ end }}
-
-{{ $objData := $currentData }}
-
-
-<div class="python-ref">
-    {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
-</div>

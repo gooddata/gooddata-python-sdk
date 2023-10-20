@@ -1,19 +1,19 @@
+{{ $page := .Page }}
 {{ $path := split (.Get 0) "."  }}
 
-{{ $data := getJSON (print "versioned_docs/data.json") }}
-
-
-{{ $currentData := $data}}
-{{ range $path }}
-    {{ if (eq $currentData.kind "class") }}
-        {{ $currentData = $currentData.functions }}
+{{ with getJSON (printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" $page)).dirpath) }}
+    {{ $currentData := .}}
+    {{ range $path }}
+        {{ if (eq $currentData.kind "class") }}
+            {{ $currentData = $currentData.functions }}
+        {{ end }}
+        {{$currentData = index $currentData .}}
     {{ end }}
-    {{$currentData = index $currentData .}}
+
+    {{ $objData := $currentData }}
+
+
+    <div class="python-ref">
+        {{ partial "python-object.html" (dict "object" $objData "path" $path "context" $page) }}
+    </div>
 {{ end }}
-
-{{ $objData := $currentData }}
-
-
-<div class="python-ref">
-    {{ partial "python-object.html" (dict "object" $objData "path" $path) }}
-</div>

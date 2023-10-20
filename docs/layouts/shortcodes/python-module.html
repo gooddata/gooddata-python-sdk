@@ -1,5 +1,6 @@
 {{ $path := split (.Get 0) "."  }}
-{{ $data := getJSON (print "versioned_docs/data.json") }}
+{{ $page := .Page }}
+{{ $data := getJSON (printf "versioned_docs/%s/data.json" (partial "version.html" (dict "context" .Page)).dirpath) }}
 
 
 {{ $currentData := $data}}
@@ -26,7 +27,7 @@
             {{ if ne $objName "kind" }}
                 <tr>
                     <td>{{$objData.kind}}</td>
-                    <td>{{partial "python-api-link-partial.html" $objName}} </td>
+                    <td>{{partial "python-api-link-partial.html" (dict "paragraph" $objName "context" $page) }} </td>
                 </tr>
             {{ end }}
         {{ end }}
