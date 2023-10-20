@@ -1,3 +1,4 @@
+{{ $context := .context }}
 {{ $objData := .object }}
 {{ $path := .path }}
 
@@ -8,18 +9,18 @@
 {{ $parenthesisArgsString := partial "python-function-parenthesis.html" $objData}}
 {{ if not $objData.is_property }}
 <p><code>
-    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "python-api-link-partial.html" $objData.signature.return_annotation}}
+    {{ (index (last 1 $path) 0) }}({{- $parenthesisArgsString -}}) -> {{ partial "python-api-link-partial.html" (dict "paragraph" $objData.signature.return_annotation "context" $context) }}
 </code></p>
 {{ else }}
     <p><code>
-    {{ (index (last 1 $path) 0) }} -> {{ partial "python-api-link-partial.html" $objData.signature.return_annotation}}
+    {{ (index (last 1 $path) 0) }} -> {{ partial "python-api-link-partial.html" (dict "paragraph" $objData.signature.return_annotation "context" $context) }}
     </code></p>
 {{ end }}
 
 {{ if $objData.docstring_parsed}}
 <div class="python-ref-description">
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML}}</p>
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML}}</p>
+    <p> {{ partial "python-api-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description | safeHTML) "context" $context) }}</p>
+    <p> {{ partial "python-api-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description | safeHTML) "context" $context)}}</p>
 </div>
 {{ end }}
 
@@ -40,8 +41,8 @@
         {{range $objData.docstring_parsed.params}}
             <tr>
                 <td> {{ .arg_name }} </td>
-                <td> {{ partial "python-api-link-partial.html" .type_name }} </td>
-                <td> {{ partial "python-api-link-all-partial.html" .description | safeHTML }} </td>
+                <td> {{ partial "python-api-link-partial.html" (dict "paragraph" .type_name "context" $context) }} </td>
+                <td> {{ partial "python-api-link-all-partial.html" (dict "paragraph" (.description | safeHTML) "context" $context) }} </td>
             </tr>
         {{end}}
         </tbody>
@@ -62,7 +63,7 @@
         {{range $objData.signature.params}}
             <tr>
                 <td> {{ index . 0 }} </td>
-                <td> {{ partial "python-api-link-partial.html" (index . 1) }} </td>
+                <td> {{ partial "python-api-link-partial.html" (dict "paragraph" (index . 1) "context" $context) }} </td>
                 <td> <i> None </i> </td>
             </tr>
         {{end}}
@@ -100,11 +101,11 @@
 <tbody>
 <tr>
 <td>
-    {{ partial "python-api-link-partial.html" $typeName }}
+    {{ partial "python-api-link-partial.html" (dict "paragraph" $typeName "context" $context) }}
 </td>
 <td>
     {{ if $description }}
-    {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.returns.description | safeHTML }}
+    {{ partial "python-api-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.returns.description | safeHTML) "context" $context) }}
     {{ else }}
     <i> None </i>
     {{ end }}
@@ -123,8 +124,8 @@
 <h1> {{index (last 2 $path) 0}}.{{ index (last 1 $path) 0 }} </h1>
 {{ if $objData.docstring_parsed }}
 <div class="python-ref-description">
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.short_description | safeHTML }}</p>
-    <p> {{ partial "python-api-link-all-partial.html" $objData.docstring_parsed.long_description | safeHTML }}</p>
+    <p> {{ partial "python-api-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.short_description | safeHTML) "context" $context) }}</p>
+    <p> {{ partial "python-api-link-all-partial.html" (dict "paragraph" ($objData.docstring_parsed.long_description | safeHTML) "context" $context) }}</p>
 </div>
 {{ end }}
 {{end}}
