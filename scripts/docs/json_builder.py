@@ -106,6 +106,7 @@ def docstring_fixes(docstr: str) -> str:
 
     Args:
         docstr: docstring to fix
+
     Returns:
         str: fixed docstring
     """
@@ -197,6 +198,7 @@ def class_data(obj: type) -> ClassData:
 
     Args:
         obj(type): class object to be analysed
+
     Returns:
         ClassData: parsed class data
     """
@@ -214,15 +216,10 @@ def class_data(obj: type) -> ClassData:
                 if hasattr(value, attr) and getattr(value, attr) is not None:
                     ret.functions[key] = function_data(getattr(value, attr), is_property=True)
 
-        # As of now, there are no subclasses in the gooddata package,
-        # and the data would not be handled correctly
-        # if inspect.isclass(value) and key != "__class__":
-        #     ret["classes"][key] = object_data(value)
-
     return ret
 
 
-def module_data(module: ModuleType) -> dict:
+def module_data(module: ModuleType, module_name: str) -> dict:
     """
     Parse a module object and return formatted docstring data about its contents
     Args:
@@ -231,7 +228,12 @@ def module_data(module: ModuleType) -> dict:
         dict: parsed module data
     """
     data: dict[str, Any] = {"kind": "module"}
-    objects = vars(module)
+    if hasattr(module, "__dict__"):
+        objects = vars(module)
+    else:
+        # Handle the case where the object doesn't have __dict__.
+        objects = {}  # or some other appropriate default or action
+
     for name, obj in objects.items():
         obj_module = inspect.getmodule(obj)
         if obj_module is None:
@@ -239,22 +241,22 @@ def module_data(module: ModuleType) -> dict:
 
         if isinstance(obj, type):
             # Filter out non-gooddata libraries
-            if MODULE_NAME in obj_module.__name__:
+            if module_name in obj_module.__name__:
                 data[name] = class_data(obj)
         elif isinstance(obj, ModuleType):
-            if MODULE_NAME in obj_module.__name__:
+            if module_name in obj_module.__name__:
                 data[name] = module_data(obj)
     return data
 
 
-def parse_package(obj: ModuleType, data: dict | None = None) -> dict:
+def parse_package(obj: ModuleType, module_name: str = None) -> dict:
     """
     Parse the package and its submodules into a dict object, that
     can be converted into a json
 
     Args:
         obj (ModuleType): package object
-        data (dict): optional parameter for recursive calling
+        module_name: name of the module
     Returns:
         dict: data of package
 
@@ -268,9 +270,7 @@ def parse_package(obj: ModuleType, data: dict | None = None) -> dict:
             }
         }
     """
-    if not data:
-        data = {}
-    data["kind"] = "module"
+    data = {"kind": "module"}
 
     if not isinstance(obj, ModuleType):
         return data
@@ -281,11 +281,11 @@ def parse_package(obj: ModuleType, data: dict | None = None) -> dict:
             data[item.name] = {}
 
         if item.ispkg:
-            data[item.name].update(parse_package(vars(obj)[item.name]))
+            data[item.name].update(parse_package(vars(obj)[item.name], module_name))
         else:
-            module = vars(obj)[item.name]
-            data[item.name].update(module_data(module))
-
+            if item.name in vars(obj):
+                module = vars(obj)[item.name]
+                data[item.name].update(module_data(module, module_name))
     return data
 
 
@@ -305,12 +305,15 @@ def import_submodules(pkg_name: str) -> dict[str, ModuleType]:
 
 
 if __name__ == "__main__":
+    import gooddata_pandas
     import gooddata_sdk
 
-    MODULE_NAME = "gooddata_sdk"  # This global variable is needed in further parsing
-    import_submodules(MODULE_NAME)
-    res = parse_package(gooddata_sdk)
-    output_json: dict = cattrs.unstructure(res)
+    import_submodules("gooddata_sdk")
+    import_submodules("gooddata_pandas")
+    output_json: dict = {
+        **cattrs.unstructure(parse_package(gooddata_pandas, "gooddata_pandas")),
+        **cattrs.unstructure(parse_package(gooddata_sdk, "gooddata_sdk")),
+    }
     open("data.json", "w").write(json.dumps(output_json))
 
-    print(f"Saved data.json and links_data.json to {os.getcwd()}")
+    print(f"Saved the .json file: `data.json` to {os.getcwd()}")

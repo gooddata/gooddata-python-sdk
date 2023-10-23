@@ -1,14 +1,26 @@
 # (C) 2023 GoodData Corporation
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import List, TextIO
 
+import attr
+import toml
 from attr import define
 
 MODULE_TEMPLATE_STRING = Path("module_template.md").read_text()
 CLASS_TEMPLATE_STRING = Path("class_template.md").read_text()
 FUNCTION_TEMPLATE_STRING = Path("function_template.md").read_text()
+
+
+@attr.s(auto_attribs=True)
+class RefHolder:
+    """ """
+
+    url: str
+    packages: []
+    directory: str
 
 
 @define
@@ -67,13 +79,13 @@ def create_file_structure(data: dict, root: Path, url_root: str):
     """
     links = {}
 
-    def _recursive_create(data_root: dict, dir_root: Path, url_root: str, module_import_path: str):
+    def _recursive_create(data_root: dict, dir_root: Path, api_ref_root: str, module_import_path: str):
         """Recursively create files and directories.
 
         Args:
             data_root (dict): Sub-dictionary of the JSON representing the object.
             dir_root (Path): Path to the directory root.
-            url_root (str): URL root path for the API reference.
+            api_ref_root (str): URL root path for the API reference.
             module_import_path (str): Import path to the object.
         """
         dir_root.mkdir(exist_ok=True)
@@ -102,7 +114,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                     template_spec.render_template_to_file(MODULE_TEMPLATE_STRING, f)
 
                 # Add entry for url linking
-                links[name] = {"path": f"{url_root}/{name}".lower(), "kind": "function"}  # Lowercase for Hugo
+                links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "function"}  # Lowercase for Hugo
 
             elif kind == "class":
                 (dir_root / name).mkdir(exist_ok=True)
@@ -113,7 +125,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                     template_spec.render_template_to_file(CLASS_TEMPLATE_STRING, f)
 
                 # Add entry for url linking
-                links[name] = {"path": f"{url_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
+                links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
 
             elif name == "functions":
                 for func_name, func in obj.items():
@@ -131,7 +143,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
 
                     # Add entry for url linking
                     links[func_name] = {
-                        "path": f"{url_root}/{func_name}".lower(),  # Lowercase for Hugo
+                        "path": f"{api_ref_root}/{func_name}".lower(),  # Lowercase for Hugo
                         "kind": "function",
                     }
                 continue  # No need to recurse deeper, functions are the last level
@@ -139,7 +151,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
             else:
                 continue  # Not a class nor a module
 
-            _recursive_create(obj, dir_root / name, f"{url_root}/{name}", obj_module_import_path)
+            _recursive_create(obj, dir_root / name, f"{api_ref_root}/{name}", obj_module_import_path)
 
     _recursive_create(data, root, url_root, "")
 
@@ -168,28 +180,43 @@ def change_json_root(data: dict, json_start_paths: List[str] | None) -> dict:
     return new_json
 
 
+def parse_toml(toml_path: str, version: str, root_directory: str) -> [RefHolder]:
+    references = []
+    # In case of missing toml_file, we need a default for the api-references
+    if not os.path.exists(toml_path):
+        return [
+            RefHolder(
+                url=f"/{version}/api-reference",
+                packages=["sdk", "catalog"],
+                directory=f"{root_directory}/{version}/api-reference",
+            )
+        ]
+    parsed_toml = toml.load(toml_path)
+    for name in parsed_toml:
+        packages = parsed_toml[name]["packages"]
+        directory = f"{root_directory}/{version}/{parsed_toml[name]['directory']}"
+        url = f"/{version}/{parsed_toml[name]['directory']}"
+        references.append(RefHolder(url, packages, directory))
+    return references
+
+
 def main():
     parser = argparse.ArgumentParser(description="Process a JSON file")
-    parser.add_argument("file", metavar="FILE", help="path to the JSON file", default="data.json")
-    parser.add_argument("output", metavar="FILE", help="root directory of the output", default="apiref")
-    parser.add_argument(
-        "--json_start_path",
-        default="",
-        required=False,
-        nargs="*",
-        help="Example: sdk.CatalogUserService, "
-        "would only generate markdown tree for that object,"
-        "can use multiple start paths, by including the argument multiple times",
-    )
-    parser.add_argument("--url_root", default="", required=False, help="url root path for the apiref")
-    args = parser.parse_args()
-    print(f"Json start path is f{args.json_start_path}")
+    parser.add_argument("toml_file", metavar="FILE", help="Paths to toml config file", default="api_spec.toml")
+    parser.add_argument("json_file", metavar="FILE", help="Paths to json data file", default="data.json")
+    parser.add_argument("version", metavar="str", help="Current Version", default="latest")
+    parser.add_argument("root_directory", metavar="str", help="Current Version", default="versioned_docs")
 
-    file_path = args.file
-    data = read_json_file(file_path)
-    data = change_json_root(data, args.json_start_path)
-    links = create_file_structure(data, Path(args.output), url_root=args.url_root)
-    json.dump(links, open("links.json", "w"), indent=4)
+    args = parser.parse_args()
+
+    references = parse_toml(args.toml_file, args.version, args.root_directory)
+    links = {}
+    for ref in references:
+        print(f"Parsing: {ref.url}")
+        data = read_json_file(args.json_file)
+        data = change_json_root(data, ref.packages)
+        links.update(create_file_structure(data, Path(ref.directory), url_root=ref.url))
+    json.dump(links, open(f"{args.root_directory}/{args.version}/links.json", "w"), indent=4)
     print("Dumping the links.json")
 
 
