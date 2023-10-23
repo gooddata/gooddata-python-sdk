@@ -7,12 +7,13 @@ import attr
 
 from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
 from gooddata_api_client.model.declarative_setting import DeclarativeSetting
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeSetting(Base):
     id: str
+    type: str = attr.field(validator=value_in_allowed)
     content: Optional[Dict[str, Any]] = None
 
     @staticmethod
