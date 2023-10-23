@@ -595,10 +595,11 @@ class CatalogWorkspaceService(CatalogServiceBase):
         self.delete_workspace_setting(new_workspace.id, "formatLocale")
         # Create/update locale settings to target language
         self.create_or_update_workspace_setting(
-            new_workspace.id, CatalogWorkspaceSetting(id="locale", content={"value": to_locale})
+            new_workspace.id, CatalogWorkspaceSetting(id="locale", content={"value": to_locale}, setting_type="LOCALE")
         )
         self.create_or_update_workspace_setting(
-            new_workspace.id, CatalogWorkspaceSetting(id="formatLocale", content={"value": to_locale})
+            new_workspace.id,
+            CatalogWorkspaceSetting(id="formatLocale", content={"value": to_locale}, setting_type="FORMAT_LOCALE"),
         )
 
     def translate_if_requested(

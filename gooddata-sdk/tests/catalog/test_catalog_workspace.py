@@ -18,6 +18,7 @@ from gooddata_sdk import (
     CatalogDeclarativeWorkspaces,
     CatalogUserDataFilter,
     CatalogWorkspace,
+    CatalogWorkspaceSetting,
     GoodDataApiClient,
     GoodDataSdk,
     PostgresAttributes,
@@ -712,3 +713,89 @@ def test_translate_workspace(test_config):
             )
         finally:
             _refresh_workspaces(sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "create_workspace_setting.yaml"))
+def test_create_workspace_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    setting_id = "test_setting"
+    setting_type = "LOCALE"
+    content = {"value": "fr-FR"}
+    setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
+
+    try:
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
+        assert setting_o == setting
+    finally:
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
+        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "list_workspace_settings.yaml"))
+def test_list_workspace_settings(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    setting_id_1 = "test_setting_1"
+    setting_type_1 = "LOCALE"
+    content_1 = {"value": "fr-FR"}
+    new_setting_1 = CatalogWorkspaceSetting(id=setting_id_1, setting_type=setting_type_1, content=content_1)
+
+    setting_id_2 = "test_setting_2"
+    setting_type_2 = "FORMAT_LOCALE"
+    content_2 = {"value": "en-US"}
+    new_setting_2 = CatalogWorkspaceSetting(id=setting_id_2, setting_type=setting_type_2, content=content_2)
+
+    try:
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], new_setting_1)
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], new_setting_2)
+        workspace_settings = sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])
+        assert len(workspace_settings) == 2
+        assert new_setting_1 in workspace_settings
+        assert new_setting_2 in workspace_settings
+    finally:
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id_1)
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id_2)
+        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "delete_workspace_setting.yaml"))
+def test_delete_workspace_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    setting_id = "test_setting"
+    setting_type = "LOCALE"
+    content = {"value": "fr-FR"}
+    setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
+
+    try:
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
+        assert setting_o == setting
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
+        settings = sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])
+        assert len(settings) == 0
+    finally:
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
+        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "update_workspace_setting.yaml"))
+def test_update_workspace_setting(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    setting_id = "test_setting"
+    setting_type = "LOCALE"
+    content = {"value": "fr-FR"}
+    setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
+
+    try:
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
+        assert setting_o == setting
+        content = {"value": "en-US"}
+        setting = CatalogWorkspaceSetting(id=setting_id, setting_type=setting_type, content=content)
+        sdk.catalog_workspace.create_or_update_workspace_setting(test_config["workspace"], setting)
+        setting_o = sdk.catalog_workspace.get_workspace_setting(test_config["workspace"], setting_id)
+        assert setting_o == setting
+    finally:
+        sdk.catalog_workspace.delete_workspace_setting(test_config["workspace"], setting_id)
+        assert len(sdk.catalog_workspace.list_workspace_settings(test_config["workspace"])) == 0
