@@ -1,12 +1,15 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import List, Type
 
 import attr
 
-from gooddata_api_client.model.declarative_analytical_dashboard_permissions_inner import (
-    DeclarativeAnalyticalDashboardPermissionsInner,
+from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_assignee import (
+    DeclarativeAnalyticalDashboardPermissionForAssignee,
+)
+from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_assignee_rule import (
+    DeclarativeAnalyticalDashboardPermissionForAssigneeRule,
 )
 from gooddata_api_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
 from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
@@ -58,11 +61,20 @@ class CatalogDeclarativeWorkspacePermissions(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogDeclarativeDashboardPermissionsAssignment(Base):
+class CatalogDeclarativeDashboardPermissionsForAssignee(Base):
     name: str = attr.field(validator=value_in_allowed)
-    assignee_identifier: Optional[CatalogAssigneeIdentifier] = None
-    assignee_rule: Optional[CatalogAssigneeRule] = None
+    assignee_identifier: CatalogAssigneeIdentifier
 
     @staticmethod
-    def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionsInner]:
-        return DeclarativeAnalyticalDashboardPermissionsInner
+    def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionForAssignee]:
+        return DeclarativeAnalyticalDashboardPermissionForAssignee
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeDashboardPermissionsForAssigneeRule(Base):
+    name: str = attr.field(validator=value_in_allowed)
+    assignee_rule: CatalogAssigneeRule
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionForAssigneeRule]:
+        return DeclarativeAnalyticalDashboardPermissionForAssigneeRule

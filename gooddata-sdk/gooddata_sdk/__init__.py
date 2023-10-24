@@ -82,11 +82,12 @@ from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions imp
 )
 from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
     CatalogDashboardAssigneeIdentifier,
-    CatalogPermissionsAssignment,
     CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeRule,
 )
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
-    CatalogDeclarativeDashboardPermissionsAssignment,
+    CatalogDeclarativeDashboardPermissionsForAssignee,
+    CatalogDeclarativeDashboardPermissionsForAssigneeRule,
     CatalogDeclarativeDataSourcePermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,

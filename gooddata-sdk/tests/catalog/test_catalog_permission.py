@@ -15,8 +15,8 @@ from gooddata_sdk import (
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
-    CatalogPermissionsAssignment,
     CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
     GoodDataSdk,
 )
@@ -129,11 +129,11 @@ def test_list_dashboard_permissions(test_config):
         "demo",
         "campaign",
         [
-            CatalogPermissionsAssignment(
+            CatalogPermissionsForAssignee(
                 assignee_identifier=CatalogAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
                 permissions=["VIEW"],
             ),
-            CatalogPermissionsAssignment(
+            CatalogPermissionsForAssigneeRule(
                 assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
                 permissions=["VIEW"],
             ),
@@ -149,12 +149,11 @@ def test_list_dashboard_permissions(test_config):
         "demo",
         "campaign",
         [
-            # CatalogPermissionsForAssignee used to test backward compatibility
             CatalogPermissionsForAssignee(
                 assignee_identifier=CatalogDashboardAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
                 permissions=[],
             ),
-            CatalogPermissionsAssignment(
+            CatalogPermissionsForAssigneeRule(
                 assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
                 permissions=[],
             ),
