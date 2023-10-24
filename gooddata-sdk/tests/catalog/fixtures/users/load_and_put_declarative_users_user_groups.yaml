@@ -101,14 +101,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+            - authId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+            - authId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -202,7 +202,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -213,7 +213,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+                authenticationId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -471,7 +471,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -523,7 +523,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -775,14 +776,14 @@ interactions:
             settings: []
             permissions: []
           - id: demo
-            authId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+            authId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+            authId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup

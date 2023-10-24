@@ -98,7 +98,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -150,7 +150,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -249,7 +250,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -301,7 +302,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -314,7 +316,8 @@ interactions:
           attributes:
             name: test_organization
             hostname: localhost
-            oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+            allowedOrigins: []
+            oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -340,7 +343,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '252'
+          - '272'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -392,7 +395,8 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -491,7 +495,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '252'
+          - '272'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -543,7 +547,8 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -642,7 +647,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '252'
+          - '272'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -694,7 +699,8 @@ interactions:
             attributes:
               name: test_organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -707,7 +713,8 @@ interactions:
           attributes:
             name: Default Organization
             hostname: localhost
-            oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+            allowedOrigins: []
+            oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -733,7 +740,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -785,7 +792,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -884,7 +892,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -936,6 +944,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: f0ec3cf7-fc0f-4915-837b-e77af36ece4a
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

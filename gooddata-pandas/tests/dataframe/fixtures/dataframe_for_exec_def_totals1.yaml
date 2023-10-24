@@ -200,10 +200,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 5c3b2376af9338a03dde550ecedb2632586d0f13
+              executionResult: 9825cdca7eb3ffec4a122861bbd6b2f77d70cabc
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5c3b2376af9338a03dde550ecedb2632586d0f13/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9825cdca7eb3ffec4a122861bbd6b2f77d70cabc/metadata
       body: null
       headers:
         Accept:
@@ -273,7 +273,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '2407'
+          - '2406'
       body:
         string:
           afm:
@@ -372,7 +372,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 5c3b2376af9338a03dde550ecedb2632586d0f13
+              executionResult: 9825cdca7eb3ffec4a122861bbd6b2f77d70cabc
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -404,10 +404,10 @@ interactions:
                       - region
                       - state
                       - measureGroup
-          resultSize: 11108
+          resultSize: 4770
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5c3b2376af9338a03dde550ecedb2632586d0f13?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9825cdca7eb3ffec4a122861bbd6b2f77d70cabc?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -477,7 +477,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '22919'
+          - '22920'
       body:
         string:
           data:
@@ -1654,6 +1654,102 @@ interactions:
                         measureIndex: 1
           grandTotals:
             - data:
+                - - 8804.49
+                  - null
+                  - 5982.7
+                  - null
+                  - 8467.679999999998
+                  - null
+                  - 4503.79
+                  - null
+                  - 7745.420000000001
+                  - null
+                  - 8189.130000000001
+                  - null
+                  - 8546.58
+                  - null
+                  - 2558.1
+                  - null
+                  - 176.71
+                  - null
+                  - 13572.17
+                  - null
+                  - 640.05
+                  - null
+                  - 10650.42
+                  - null
+                  - 2892.16
+                  - null
+                  - 4050.87
+                  - null
+                  - 382.19
+                  - null
+                  - 2132.86
+                  - null
+                  - 21687.019999999997
+                  - null
+                  - 13555.43
+                  - null
+                  - 6198.55
+                  - null
+                  - 4683.68
+                  - null
+                  - 3239.7200000000003
+                  - null
+                  - 16394.17
+                  - null
+                  - 41989.67
+                  - null
+                  - 9865.27
+                  - null
+                  - 2879.09
+                  - null
+                  - 6511.789999999999
+                  - null
+                  - 8417.93
+                  - null
+                  - 3967.36
+                  - null
+                  - 8876.18
+                  - null
+                  - 8748.77
+                  - null
+                  - 3435.73
+                  - null
+                  - 5143.92
+                  - null
+                  - 44253.95
+                  - null
+                  - 15696.93
+                  - null
+                  - 2654.63
+                  - null
+                  - 18.7
+                  - null
+                  - 4983.36
+                  - null
+                  - 10279.68
+                  - null
+                  - 57411.81
+                  - null
+                  - 10012.02
+                  - null
+                  - 5219.91
+                  - null
+                  - 1840.6399999999999
+                  - null
+                  - 1384.3899999999999
+                  - null
+                  - 1444.77
+                  - null
+                  - 1328.97
+                  - null
+                  - 4465.110000000001
+                  - null
+                  - 8360.6
+                  - null
+                  - 6219.379999999999
+                  - null
                 - - null
                   - 3205.41
                   - null
@@ -1750,109 +1846,13 @@ interactions:
                   - 6042.93
                   - null
                   - 4246.86
-                - - 8804.49
-                  - null
-                  - 5982.7
-                  - null
-                  - 8467.68
-                  - null
-                  - 4503.79
-                  - null
-                  - 7745.42
-                  - null
-                  - 8189.130000000001
-                  - null
-                  - 8546.58
-                  - null
-                  - 2558.1
-                  - null
-                  - 176.71
-                  - null
-                  - 13572.17
-                  - null
-                  - 640.05
-                  - null
-                  - 10650.42
-                  - null
-                  - 2892.16
-                  - null
-                  - 4050.87
-                  - null
-                  - 382.19
-                  - null
-                  - 2132.86
-                  - null
-                  - 21687.019999999997
-                  - null
-                  - 13555.43
-                  - null
-                  - 6198.55
-                  - null
-                  - 4683.68
-                  - null
-                  - 3239.7200000000003
-                  - null
-                  - 16394.17
-                  - null
-                  - 41989.67
-                  - null
-                  - 9865.269999999999
-                  - null
-                  - 2879.09
-                  - null
-                  - 6511.790000000001
-                  - null
-                  - 8417.93
-                  - null
-                  - 3967.36
-                  - null
-                  - 8876.18
-                  - null
-                  - 8748.77
-                  - null
-                  - 3435.73
-                  - null
-                  - 5143.92
-                  - null
-                  - 44253.95000000001
-                  - null
-                  - 15696.93
-                  - null
-                  - 2654.63
-                  - null
-                  - 18.7
-                  - null
-                  - 4983.36
-                  - null
-                  - 10279.68
-                  - null
-                  - 57411.81
-                  - null
-                  - 10012.02
-                  - null
-                  - 5219.91
-                  - null
-                  - 1840.64
-                  - null
-                  - 1384.3899999999999
-                  - null
-                  - 1444.77
-                  - null
-                  - 1328.9699999999998
-                  - null
-                  - 4465.110000000001
-                  - null
-                  - 8360.6
-                  - null
-                  - 6219.379999999999
-                  - null
               dimensionHeaders:
                 - headerGroups:
                     - headers:
                         - totalHeader:
-                            function: MAX
-                        - totalHeader:
                             function: SUM
+                        - totalHeader:
+                            function: MAX
               totalDimensions:
                 - dim_1
           paging:
@@ -1867,7 +1867,7 @@ interactions:
               - 96
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5c3b2376af9338a03dde550ecedb2632586d0f13/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9825cdca7eb3ffec4a122861bbd6b2f77d70cabc/metadata
       body: null
       headers:
         Accept:
@@ -1937,7 +1937,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '2407'
+          - '2406'
       body:
         string:
           afm:
@@ -2036,7 +2036,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 5c3b2376af9338a03dde550ecedb2632586d0f13
+              executionResult: 9825cdca7eb3ffec4a122861bbd6b2f77d70cabc
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -2068,10 +2068,10 @@ interactions:
                       - region
                       - state
                       - measureGroup
-          resultSize: 11108
+          resultSize: 4770
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5c3b2376af9338a03dde550ecedb2632586d0f13?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/9825cdca7eb3ffec4a122861bbd6b2f77d70cabc?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2141,7 +2141,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '22919'
+          - '22920'
       body:
         string:
           data:
@@ -3318,6 +3318,102 @@ interactions:
                         measureIndex: 1
           grandTotals:
             - data:
+                - - 8804.49
+                  - null
+                  - 5982.7
+                  - null
+                  - 8467.679999999998
+                  - null
+                  - 4503.79
+                  - null
+                  - 7745.420000000001
+                  - null
+                  - 8189.130000000001
+                  - null
+                  - 8546.58
+                  - null
+                  - 2558.1
+                  - null
+                  - 176.71
+                  - null
+                  - 13572.17
+                  - null
+                  - 640.05
+                  - null
+                  - 10650.42
+                  - null
+                  - 2892.16
+                  - null
+                  - 4050.87
+                  - null
+                  - 382.19
+                  - null
+                  - 2132.86
+                  - null
+                  - 21687.019999999997
+                  - null
+                  - 13555.43
+                  - null
+                  - 6198.55
+                  - null
+                  - 4683.68
+                  - null
+                  - 3239.7200000000003
+                  - null
+                  - 16394.17
+                  - null
+                  - 41989.67
+                  - null
+                  - 9865.27
+                  - null
+                  - 2879.09
+                  - null
+                  - 6511.789999999999
+                  - null
+                  - 8417.93
+                  - null
+                  - 3967.36
+                  - null
+                  - 8876.18
+                  - null
+                  - 8748.77
+                  - null
+                  - 3435.73
+                  - null
+                  - 5143.92
+                  - null
+                  - 44253.95
+                  - null
+                  - 15696.93
+                  - null
+                  - 2654.63
+                  - null
+                  - 18.7
+                  - null
+                  - 4983.36
+                  - null
+                  - 10279.68
+                  - null
+                  - 57411.81
+                  - null
+                  - 10012.02
+                  - null
+                  - 5219.91
+                  - null
+                  - 1840.6399999999999
+                  - null
+                  - 1384.3899999999999
+                  - null
+                  - 1444.77
+                  - null
+                  - 1328.97
+                  - null
+                  - 4465.110000000001
+                  - null
+                  - 8360.6
+                  - null
+                  - 6219.379999999999
+                  - null
                 - - null
                   - 3205.41
                   - null
@@ -3414,109 +3510,13 @@ interactions:
                   - 6042.93
                   - null
                   - 4246.86
-                - - 8804.49
-                  - null
-                  - 5982.7
-                  - null
-                  - 8467.68
-                  - null
-                  - 4503.79
-                  - null
-                  - 7745.42
-                  - null
-                  - 8189.130000000001
-                  - null
-                  - 8546.58
-                  - null
-                  - 2558.1
-                  - null
-                  - 176.71
-                  - null
-                  - 13572.17
-                  - null
-                  - 640.05
-                  - null
-                  - 10650.42
-                  - null
-                  - 2892.16
-                  - null
-                  - 4050.87
-                  - null
-                  - 382.19
-                  - null
-                  - 2132.86
-                  - null
-                  - 21687.019999999997
-                  - null
-                  - 13555.43
-                  - null
-                  - 6198.55
-                  - null
-                  - 4683.68
-                  - null
-                  - 3239.7200000000003
-                  - null
-                  - 16394.17
-                  - null
-                  - 41989.67
-                  - null
-                  - 9865.269999999999
-                  - null
-                  - 2879.09
-                  - null
-                  - 6511.790000000001
-                  - null
-                  - 8417.93
-                  - null
-                  - 3967.36
-                  - null
-                  - 8876.18
-                  - null
-                  - 8748.77
-                  - null
-                  - 3435.73
-                  - null
-                  - 5143.92
-                  - null
-                  - 44253.95000000001
-                  - null
-                  - 15696.93
-                  - null
-                  - 2654.63
-                  - null
-                  - 18.7
-                  - null
-                  - 4983.36
-                  - null
-                  - 10279.68
-                  - null
-                  - 57411.81
-                  - null
-                  - 10012.02
-                  - null
-                  - 5219.91
-                  - null
-                  - 1840.64
-                  - null
-                  - 1384.3899999999999
-                  - null
-                  - 1444.77
-                  - null
-                  - 1328.9699999999998
-                  - null
-                  - 4465.110000000001
-                  - null
-                  - 8360.6
-                  - null
-                  - 6219.379999999999
-                  - null
               dimensionHeaders:
                 - headerGroups:
                     - headers:
                         - totalHeader:
-                            function: MAX
-                        - totalHeader:
                             function: SUM
+                        - totalHeader:
+                            function: MAX
               totalDimensions:
                 - dim_1
           paging:

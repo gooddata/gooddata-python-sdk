@@ -98,7 +98,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -150,7 +150,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              allowedOrigins: []
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -165,7 +166,7 @@ interactions:
             hostname: localhost
             allowedOrigins:
               - https://test.com
-            oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+            oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -245,7 +246,7 @@ interactions:
               hostname: localhost
               allowedOrigins:
                 - https://test.com
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -398,7 +399,7 @@ interactions:
               hostname: localhost
               allowedOrigins:
                 - https://test.com
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -551,7 +552,7 @@ interactions:
               hostname: localhost
               allowedOrigins:
                 - https://test.com
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -565,7 +566,7 @@ interactions:
             name: Default Organization
             hostname: localhost
             allowedOrigins: []
-            oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+            oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
       headers:
         Accept:
           - application/vnd.gooddata.api+json
@@ -644,7 +645,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -796,6 +797,6 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 8575edbf-aa5d-4b6f-a36c-9f1469c83c75
+              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
