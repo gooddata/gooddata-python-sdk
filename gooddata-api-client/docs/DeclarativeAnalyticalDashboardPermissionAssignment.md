@@ -1,11 +1,10 @@
-# DeclarativeOrganizationPermission
+# DeclarativeAnalyticalDashboardPermissionAssignment
 
-Definition of an organization permission assigned to a user/user-group.
+Analytical dashboard permission.
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**assignee** | [**AssigneeIdentifier**](AssigneeIdentifier.md) |  | 
 **name** | **str** | Permission name. | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

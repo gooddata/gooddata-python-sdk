@@ -46,7 +46,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100,
+        data_sampling_percentage=100.0,
         exact_filter=[
             "exact_filter_example",
         ],
@@ -54,7 +54,7 @@ with gooddata_api_client.ApiClient() as api_client:
         filter_by=FilterBy(
             label_type="REQUESTED",
         ),
-        label="/6bUUGjjNSwg0_bs",
+        label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
     ) # ElementsRequest | 

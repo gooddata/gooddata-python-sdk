@@ -31,9 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission
+    from gooddata_api_client.model.declarative_analytical_dashboard_permissions_inner import DeclarativeAnalyticalDashboardPermissionsInner
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-    globals()['DeclarativeAnalyticalDashboardPermission'] = DeclarativeAnalyticalDashboardPermission
+    globals()['DeclarativeAnalyticalDashboardPermissionsInner'] = DeclarativeAnalyticalDashboardPermissionsInner
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
 
 
@@ -121,7 +121,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             'description': (str,),  # noqa: E501
             'modified_at': (str, none_type,),  # noqa: E501
             'modified_by': (DeclarativeUserIdentifier,),  # noqa: E501
-            'permissions': ([DeclarativeAnalyticalDashboardPermission],),  # noqa: E501
+            'permissions': ([DeclarativeAnalyticalDashboardPermissionsInner],),  # noqa: E501
             'tags': ([str],),  # noqa: E501
         }
 
@@ -194,7 +194,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            permissions ([DeclarativeAnalyticalDashboardPermission]): A list of permissions.. [optional]  # noqa: E501
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 
@@ -294,7 +294,7 @@ class DeclarativeAnalyticalDashboard(ModelNormal):
             description (str): Analytical dashboard description.. [optional]  # noqa: E501
             modified_at (str, none_type): Time of the last entity modification.. [optional]  # noqa: E501
             modified_by (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            permissions ([DeclarativeAnalyticalDashboardPermission]): A list of permissions.. [optional]  # noqa: E501
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
         """
 

@@ -4,6 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**rules** | [**[RulePermission]**](RulePermission.md) | List of rules | 
 **user_groups** | [**[UserGroupPermission]**](UserGroupPermission.md) | List of user groups | 
 **users** | [**[UserPermission]**](UserPermission.md) | List of users | 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
