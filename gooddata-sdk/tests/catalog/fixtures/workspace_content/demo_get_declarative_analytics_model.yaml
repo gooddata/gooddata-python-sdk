@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '27629'
+          - '27705'
       body:
         string:
           analytics:
@@ -129,6 +129,10 @@ interactions:
                   version: '2'
                 description: ''
                 id: campaign
+                permissions:
+                  - assigneeRule:
+                      type: allWorkspaceUsers
+                    name: VIEW
                 title: Campaign
               - content:
                   filterContextRef:

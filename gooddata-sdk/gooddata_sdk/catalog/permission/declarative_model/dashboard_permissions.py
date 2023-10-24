@@ -5,6 +5,7 @@ import attr
 
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_api_client.model.granted_permission import GrantedPermission
+from gooddata_api_client.model.rule_permission import RulePermission
 from gooddata_api_client.model.user_group_permission import UserGroupPermission
 from gooddata_api_client.model.user_permission import UserPermission
 from gooddata_sdk.catalog.base import Base
@@ -44,7 +45,18 @@ class CatalogUserGroupPermission(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class CatalogRulePermission(Base):
+    type: str
+    permissions: Optional[List[str]] = None
+
+    @staticmethod
+    def client_class() -> Type[RulePermission]:
+        return RulePermission
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDashboardPermissions(Base):
+    rules: List[CatalogRulePermission]
     user_groups: List[CatalogUserGroupPermission]
     users: List[CatalogUserPermission]
 

@@ -69,6 +69,14 @@
           },
           "version": "2"
         },
+        "permissions": [
+          {
+            "assigneeRule": {
+              "type": "allWorkspaceUsers"
+            },
+            "name": "VIEW"
+          }
+        ],
         "description": "",
         "id": "campaign",
         "title": "Campaign"

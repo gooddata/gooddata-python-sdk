@@ -185,8 +185,10 @@ class CatalogUserDataFilterRelationships(Base):
     ) -> CatalogUserDataFilterRelationships | None:
         if user_id is None and user_group_id is None:
             return None
-        assignee_user = _data_entity(CatalogEntityIdentifier(id=user_id)) if user_id else None
-        assignee_user_group = _data_entity(CatalogEntityIdentifier(id=user_group_id)) if user_group_id else None
+        assignee_user = _data_entity(CatalogEntityIdentifier(id=user_id, type="user")) if user_id else None
+        assignee_user_group = (
+            _data_entity(CatalogEntityIdentifier(id=user_group_id, type="userGroup")) if user_group_id else None
+        )
         return cls(user=assignee_user, user_group=assignee_user_group)
 
 
