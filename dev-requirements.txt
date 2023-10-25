@@ -15,4 +15,3 @@ pre-commit~=3.3.3
 -r ./gooddata-fdw/test-requirements.txt
 -r ./gooddata-dbt/test-requirements.txt
 -r ./tests-support/requirements.txt
--r ./docs/docs-requirements.txt
