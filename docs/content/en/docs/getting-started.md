@@ -20,6 +20,8 @@ Start integrating GoodData into your Python application right now.
     from gooddata_sdk import GoodDataSdk
     ```
 
+   Profit..?
+
 1. Connect to your instance of GoodData using:
 
     ```python
