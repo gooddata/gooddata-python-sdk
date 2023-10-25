@@ -5,11 +5,15 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - assigneeIdentifier:
+        - permissions:
+            - VIEW
+          assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-          permissions:
+        - permissions:
             - VIEW
+          assigneeRule:
+            type: allWorkspaceUsers
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -148,9 +152,14 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '119'
+          - '209'
       body:
         string:
+          rules:
+            - permissions:
+                - level: VIEW
+                  source: direct
+              type: allWorkspaceUsers
           userGroups:
             - id: visitorsGroup
               name: visitors
@@ -162,10 +171,13 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/analyticalDashboards/campaign/managePermissions
       body:
-        - assigneeIdentifier:
+        - permissions: []
+          assigneeIdentifier:
             id: visitorsGroup
             type: userGroup
-          permissions: []
+        - permissions: []
+          assigneeRule:
+            type: allWorkspaceUsers
       headers:
         Accept-Encoding:
           - br, gzip, deflate
@@ -303,8 +315,9 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '28'
+          - '39'
       body:
         string:
+          rules: []
           userGroups: []
           users: []

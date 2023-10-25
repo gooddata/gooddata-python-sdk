@@ -182,7 +182,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: dd1ff5143c90994331bce565ebcd4c5b3a37c17a
+              executionResult: e5324ed0a1e74c1346c14a2df4fda6b263696902
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
@@ -210,7 +210,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '27018'
+          - '27121'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -257,27 +257,362 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_channels.category
+            - id: date.minute
               type: attribute
               attributes:
-                title: Category
-                description: Category
+                title: Date - Minute
+                description: Minute
                 tags:
-                  - Campaign channels
+                  - Date
+                granularity: MINUTE
                 areRelationsValid: true
-                sourceColumn: category
-                sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: campaign_channels
+                    id: date
                     type: dataset
                 labels:
                   data:
-                    - id: campaign_channels.category
+                    - id: date.minute
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.hour
+              type: attribute
+              attributes:
+                title: Date - Hour
+                description: Hour
+                tags:
+                  - Date
+                granularity: HOUR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.hour
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.day
+              type: attribute
+              attributes:
+                title: Date - Date
+                description: Date
+                tags:
+                  - Date
+                granularity: DAY
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.day
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.week
+              type: attribute
+              attributes:
+                title: Date - Week/Year
+                description: Week and Year (W52/2020)
+                tags:
+                  - Date
+                granularity: WEEK
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.week
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.month
+              type: attribute
+              attributes:
+                title: Date - Month/Year
+                description: Month and Year (12/2020)
+                tags:
+                  - Date
+                granularity: MONTH
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.month
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.quarter
+              type: attribute
+              attributes:
+                title: Date - Quarter/Year
+                description: Quarter and Year (Q1/2020)
+                tags:
+                  - Date
+                granularity: QUARTER
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.quarter
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.year
+              type: attribute
+              attributes:
+                title: Date - Year
+                description: Year
+                tags:
+                  - Date
+                granularity: YEAR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.year
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.minuteOfHour
+              type: attribute
+              attributes:
+                title: Date - Minute of Hour
+                description: Generic Minute of the Hour(MI1-MI60)
+                tags:
+                  - Date
+                granularity: MINUTE_OF_HOUR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.minuteOfHour
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.hourOfDay
+              type: attribute
+              attributes:
+                title: Date - Hour of Day
+                description: Generic Hour of the Day(H1-H24)
+                tags:
+                  - Date
+                granularity: HOUR_OF_DAY
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.hourOfDay
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.dayOfWeek
+              type: attribute
+              attributes:
+                title: Date - Day of Week
+                description: Generic Day of the Week (D1-D7)
+                tags:
+                  - Date
+                granularity: DAY_OF_WEEK
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.dayOfWeek
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.dayOfMonth
+              type: attribute
+              attributes:
+                title: Date - Day of Month
+                description: Generic Day of the Month (D1-D31)
+                tags:
+                  - Date
+                granularity: DAY_OF_MONTH
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.dayOfMonth
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.dayOfYear
+              type: attribute
+              attributes:
+                title: Date - Day of Year
+                description: Generic Day of the Year (D1-D366)
+                tags:
+                  - Date
+                granularity: DAY_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.dayOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.weekOfYear
+              type: attribute
+              attributes:
+                title: Date - Week of Year
+                description: Generic Week (W1-W53)
+                tags:
+                  - Date
+                granularity: WEEK_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.weekOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.monthOfYear
+              type: attribute
+              attributes:
+                title: Date - Month of Year
+                description: Generic Month (M1-M12)
+                tags:
+                  - Date
+                granularity: MONTH_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.monthOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.quarterOfYear
+              type: attribute
+              attributes:
+                title: Date - Quarter of Year
+                description: Generic Quarter (Q1-Q4)
+                tags:
+                  - Date
+                granularity: QUARTER_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                dataset:
+                  data:
+                    id: date
+                    type: dataset
+                labels:
+                  data:
+                    - id: date.quarterOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
               meta:
                 origin:
                   originType: NATIVE
@@ -307,6 +642,31 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: campaign_channels.category
+              type: attribute
+              attributes:
+                title: Category
+                description: Category
+                tags:
+                  - Campaign channels
+                areRelationsValid: true
+                sourceColumn: category
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: campaign_channels
+                    type: dataset
+                labels:
+                  data:
+                    - id: campaign_channels.category
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: type
               type: attribute
               attributes:
@@ -328,31 +688,6 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: campaign_name
-              type: attribute
-              attributes:
-                title: Campaign name
-                description: Campaign name
-                tags:
-                  - Campaigns
-                areRelationsValid: true
-                sourceColumn: campaign_name
-                sourceColumnDataType: STRING
-              relationships:
-                dataset:
-                  data:
-                    id: campaigns
-                    type: dataset
-                labels:
-                  data:
-                    - id: campaign_name
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
               meta:
                 origin:
                   originType: NATIVE
@@ -382,83 +717,27 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: state
+            - id: campaign_name
               type: attribute
               attributes:
-                title: State
-                description: State
+                title: Campaign name
+                description: Campaign name
                 tags:
-                  - Customers
+                  - Campaigns
                 areRelationsValid: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-              relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: state
-                      type: label
-                    - id: geo__state__location
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: region
-              type: attribute
-              attributes:
-                title: Region
-                description: Region
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: region
+                sourceColumn: campaign_name
                 sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: customers
+                    id: campaigns
                     type: dataset
                 labels:
                   data:
-                    - id: region
+                    - id: campaign_name
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: customer_name
-              type: attribute
-              attributes:
-                title: Customer name
-                description: Customer name
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: customer_name
-                sourceColumnDataType: STRING
-              relationships:
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: customer_name
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
               meta:
                 origin:
                   originType: NATIVE
@@ -488,52 +767,83 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: order_status
+            - id: customer_name
               type: attribute
               attributes:
-                title: Order status
-                description: Order status
+                title: Customer name
+                description: Customer name
                 tags:
-                  - Order lines
+                  - Customers
                 areRelationsValid: true
-                sourceColumn: order_status
+                sourceColumn: customer_name
                 sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: order_lines
+                    id: customers
                     type: dataset
                 labels:
                   data:
-                    - id: order_status
+                    - id: customer_name
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: order_line_id
+            - id: region
               type: attribute
               attributes:
-                title: Order line id
-                description: Order line id
+                title: Region
+                description: Region
                 tags:
-                  - Order lines
+                  - Customers
                 areRelationsValid: true
-                sourceColumn: order_line_id
+                sourceColumn: region
                 sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: order_lines
+                    id: customers
                     type: dataset
                 labels:
                   data:
-                    - id: order_line_id
+                    - id: region
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: state
+              type: attribute
+              attributes:
+                title: State
+                description: State
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
+              relationships:
+                defaultView:
+                  data:
+                    id: state
+                    type: label
+                dataset:
+                  data:
+                    id: customers
+                    type: dataset
+                labels:
+                  data:
+                    - id: geo__state__location
+                      type: label
+                    - id: state
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
@@ -563,27 +873,52 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: product_name
+            - id: order_line_id
               type: attribute
               attributes:
-                title: Product name
-                description: Product name
+                title: Order line id
+                description: Order line id
                 tags:
-                  - Products
+                  - Order lines
                 areRelationsValid: true
-                sourceColumn: product_name
+                sourceColumn: order_line_id
                 sourceColumnDataType: STRING
               relationships:
                 dataset:
                   data:
-                    id: products
+                    id: order_lines
                     type: dataset
                 labels:
                   data:
-                    - id: product_name
+                    - id: order_line_id
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: order_status
+              type: attribute
+              attributes:
+                title: Order status
+                description: Order status
+                tags:
+                  - Order lines
+                areRelationsValid: true
+                sourceColumn: order_status
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: order_lines
+                    type: dataset
+                labels:
+                  data:
+                    - id: order_status
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
               meta:
                 origin:
                   originType: NATIVE
@@ -613,6 +948,31 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: product_name
+              type: attribute
+              attributes:
+                title: Product name
+                description: Product name
+                tags:
+                  - Products
+                areRelationsValid: true
+                sourceColumn: product_name
+                sourceColumnDataType: STRING
+              relationships:
+                dataset:
+                  data:
+                    id: products
+                    type: dataset
+                labels:
+                  data:
+                    - id: product_name
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: products.category
               type: attribute
               attributes:
@@ -634,366 +994,6 @@ interactions:
                       type: label
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.quarterOfYear
-              type: attribute
-              attributes:
-                title: Date - Quarter of Year
-                description: Generic Quarter (Q1-Q4)
-                tags:
-                  - Date
-                granularity: QUARTER_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.quarterOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.monthOfYear
-              type: attribute
-              attributes:
-                title: Date - Month of Year
-                description: Generic Month (M1-M12)
-                tags:
-                  - Date
-                granularity: MONTH_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.monthOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.weekOfYear
-              type: attribute
-              attributes:
-                title: Date - Week of Year
-                description: Generic Week (W1-W53)
-                tags:
-                  - Date
-                granularity: WEEK_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.weekOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfYear
-              type: attribute
-              attributes:
-                title: Date - Day of Year
-                description: Generic Day of the Year (D1-D366)
-                tags:
-                  - Date
-                granularity: DAY_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.dayOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfMonth
-              type: attribute
-              attributes:
-                title: Date - Day of Month
-                description: Generic Day of the Month (D1-D31)
-                tags:
-                  - Date
-                granularity: DAY_OF_MONTH
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.dayOfMonth
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfWeek
-              type: attribute
-              attributes:
-                title: Date - Day of Week
-                description: Generic Day of the Week (D1-D7)
-                tags:
-                  - Date
-                granularity: DAY_OF_WEEK
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.dayOfWeek
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.hourOfDay
-              type: attribute
-              attributes:
-                title: Date - Hour of Day
-                description: Generic Hour of the Day(H1-H24)
-                tags:
-                  - Date
-                granularity: HOUR_OF_DAY
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.hourOfDay
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.minuteOfHour
-              type: attribute
-              attributes:
-                title: Date - Minute of Hour
-                description: Generic Minute of the Hour(MI1-MI60)
-                tags:
-                  - Date
-                granularity: MINUTE_OF_HOUR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.minuteOfHour
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.year
-              type: attribute
-              attributes:
-                title: Date - Year
-                description: Year
-                tags:
-                  - Date
-                granularity: YEAR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.year
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.quarter
-              type: attribute
-              attributes:
-                title: Date - Quarter/Year
-                description: Quarter and Year (Q1/2020)
-                tags:
-                  - Date
-                granularity: QUARTER
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.quarter
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.month
-              type: attribute
-              attributes:
-                title: Date - Month/Year
-                description: Month and Year (12/2020)
-                tags:
-                  - Date
-                granularity: MONTH
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.month
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.week
-              type: attribute
-              attributes:
-                title: Date - Week/Year
-                description: Week and Year (W52/2020)
-                tags:
-                  - Date
-                granularity: WEEK
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.week
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.day
-              type: attribute
-              attributes:
-                title: Date - Date
-                description: Date
-                tags:
-                  - Date
-                granularity: DAY
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.day
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.hour
-              type: attribute
-              attributes:
-                title: Date - Hour
-                description: Hour
-                tags:
-                  - Date
-                granularity: HOUR
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.hour
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.minute
-              type: attribute
-              attributes:
-                title: Date - Minute
-                description: Minute
-                tags:
-                  - Date
-                granularity: MINUTE
-                areRelationsValid: true
-              relationships:
-                dataset:
-                  data:
-                    id: date
-                    type: dataset
-                labels:
-                  data:
-                    - id: date.minute
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
               meta:
                 origin:
                   originType: NATIVE
@@ -1057,51 +1057,59 @@ interactions:
                 grain:
                   - id: order_line_id
                     type: attribute
-                    order: 0
                 referenceProperties:
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes:
-                      - INT
-                  - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes:
-                      - INT
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
+                    sources: null
                     sourceColumns:
                       - date
                     sourceColumnDataTypes:
                       - DATE
                   - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sources: null
                     sourceColumns:
                       - campaign_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - product_id
                     sourceColumnDataTypes:
                       - INT
                 dataSourceTableId: demo-test-ds:order_lines
                 dataSourceTablePath:
                   - demo
                   - order_lines
-                workspaceDataFilterProperties:
-                  - workspaceDataFilterIdentifier:
+                workspaceDataFilterColumns:
+                  - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
+                workspaceDataFilterReferences:
+                  - filterId:
                       id: wdf__state
                       type: workspaceDataFilter
                     filterColumn: wdf__state
                     filterColumnDataType: STRING
-                  - workspaceDataFilterIdentifier:
+                  - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
@@ -1143,12 +1151,12 @@ interactions:
                 grain:
                   - id: campaign_channel_id
                     type: attribute
-                    order: 0
                 referenceProperties:
                   - identifier:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sources: null
                     sourceColumns:
                       - campaign_id
                     sourceColumnDataTypes:
@@ -1238,7 +1246,6 @@ interactions:
                 grain:
                   - id: campaign_id
                     type: attribute
-                    order: 0
                 dataSourceTableId: demo-test-ds:campaigns
                 dataSourceTablePath:
                   - demo
@@ -1295,7 +1302,6 @@ interactions:
                 grain:
                   - id: customer_id
                     type: attribute
-                    order: 0
                 dataSourceTableId: demo-test-ds:customers
                 dataSourceTablePath:
                   - demo
@@ -1421,7 +1427,6 @@ interactions:
                 grain:
                   - id: product_id
                     type: attribute
-                    order: 0
                 dataSourceTableId: demo-test-ds:products
                 dataSourceTablePath:
                   - demo
@@ -1525,8 +1530,8 @@ interactions:
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/campaign_id
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels,datasets&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels,datasets&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=1&size=500
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts&page=0&size=500
@@ -1554,7 +1559,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '13953'
+          - '14899'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1601,153 +1606,6 @@ interactions:
       body:
         string:
           data:
-            - id: campaign_channels
-              type: dataset
-              attributes:
-                title: Campaign channels
-                description: Campaign channels
-                tags:
-                  - Campaign channels
-                grain:
-                  - id: campaign_channel_id
-                    type: attribute
-                    order: 0
-                referenceProperties:
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:campaign_channels
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: campaign_channel_id
-                      type: attribute
-                    - id: type
-                      type: attribute
-                    - id: campaign_channels.category
-                      type: attribute
-                facts:
-                  data:
-                    - id: budget
-                      type: fact
-                    - id: spend
-                      type: fact
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: order_lines
-              type: dataset
-              attributes:
-                title: Order lines
-                description: Order lines
-                tags:
-                  - Order lines
-                grain:
-                  - id: order_line_id
-                    type: attribute
-                    order: 0
-                referenceProperties:
-                  - identifier:
-                      id: products
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - product_id
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: customers
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - customer_id
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: date
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - date
-                    sourceColumnDataTypes: null
-                  - identifier:
-                      id: campaigns
-                      type: dataset
-                    multivalue: false
-                    sourceColumns:
-                      - campaign_id
-                    sourceColumnDataTypes: null
-                dataSourceTableId: demo-test-ds:order_lines
-                areRelationsValid: true
-                workspaceDataFilterProperties:
-                  - workspaceDataFilterIdentifier:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
-                  - workspaceDataFilterIdentifier:
-                      id: wdf__region
-                      type: workspaceDataFilter
-                    filterColumn: wdf__region
-                    filterColumnDataType: STRING
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: order_status
-                      type: attribute
-                    - id: order_id
-                      type: attribute
-                    - id: order_line_id
-                      type: attribute
-                facts:
-                  data:
-                    - id: price
-                      type: fact
-                    - id: quantity
-                      type: fact
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: products
-              type: dataset
-              attributes:
-                title: Products
-                description: Products
-                tags:
-                  - Products
-                grain:
-                  - id: product_id
-                    type: attribute
-                    order: 0
-                dataSourceTableId: demo-test-ds:products
-                areRelationsValid: true
-                type: NORMAL
-              relationships:
-                attributes:
-                  data:
-                    - id: product_name
-                      type: attribute
-                    - id: product_id
-                      type: attribute
-                    - id: products.category
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: date
               type: dataset
               attributes:
@@ -1760,38 +1618,85 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: date.quarterOfYear
-                      type: attribute
-                    - id: date.weekOfYear
-                      type: attribute
-                    - id: date.dayOfMonth
-                      type: attribute
-                    - id: date.monthOfYear
-                      type: attribute
-                    - id: date.minuteOfHour
-                      type: attribute
-                    - id: date.hour
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-                    - id: date.week
-                      type: attribute
                     - id: date.quarter
-                      type: attribute
-                    - id: date.dayOfYear
-                      type: attribute
-                    - id: date.dayOfWeek
                       type: attribute
                     - id: date.minute
                       type: attribute
-                    - id: date.day
+                    - id: date.hourOfDay
+                      type: attribute
+                    - id: date.minuteOfHour
+                      type: attribute
+                    - id: date.dayOfYear
+                      type: attribute
+                    - id: date.monthOfYear
+                      type: attribute
+                    - id: date.weekOfYear
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+                    - id: date.dayOfWeek
+                      type: attribute
+                    - id: date.hour
+                      type: attribute
+                    - id: date.dayOfMonth
                       type: attribute
                     - id: date.month
                       type: attribute
-                    - id: date.hourOfDay
+                    - id: date.quarterOfYear
+                      type: attribute
+                    - id: date.day
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: campaign_channels
+              type: dataset
+              attributes:
+                title: Campaign channels
+                description: Campaign channels
+                tags:
+                  - Campaign channels
+                grain:
+                  - id: campaign_channel_id
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes:
+                      - INT
+                dataSourceTableId: demo-test-ds:campaign_channels
+                dataSourceTablePath:
+                  - demo
+                  - campaign_channels
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: campaign_channel_id
+                      type: attribute
+                    - id: campaign_channels.category
+                      type: attribute
+                    - id: type
+                      type: attribute
+                facts:
+                  data:
+                    - id: budget
+                      type: fact
+                    - id: spend
+                      type: fact
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaign_channels
               meta:
                 origin:
                   originType: NATIVE
@@ -1806,8 +1711,10 @@ interactions:
                 grain:
                   - id: campaign_id
                     type: attribute
-                    order: 0
                 dataSourceTableId: demo-test-ds:campaigns
+                dataSourceTablePath:
+                  - demo
+                  - campaigns
                 areRelationsValid: true
                 type: NORMAL
               relationships:
@@ -1833,23 +1740,146 @@ interactions:
                 grain:
                   - id: customer_id
                     type: attribute
-                    order: 0
                 dataSourceTableId: demo-test-ds:customers
+                dataSourceTablePath:
+                  - demo
+                  - customers
                 areRelationsValid: true
                 type: NORMAL
               relationships:
                 attributes:
                   data:
-                    - id: region
+                    - id: customer_id
                       type: attribute
                     - id: state
                       type: attribute
-                    - id: customer_id
-                      type: attribute
                     - id: customer_name
+                      type: attribute
+                    - id: region
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: order_lines
+              type: dataset
+              attributes:
+                title: Order lines
+                description: Order lines
+                tags:
+                  - Order lines
+                grain:
+                  - id: order_line_id
+                    type: attribute
+                referenceProperties:
+                  - identifier:
+                      id: date
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - date
+                    sourceColumnDataTypes:
+                      - DATE
+                  - identifier:
+                      id: customers
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - customer_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: campaigns
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - campaign_id
+                    sourceColumnDataTypes:
+                      - INT
+                  - identifier:
+                      id: products
+                      type: dataset
+                    multivalue: false
+                    sources: null
+                    sourceColumns:
+                      - product_id
+                    sourceColumnDataTypes:
+                      - INT
+                dataSourceTableId: demo-test-ds:order_lines
+                dataSourceTablePath:
+                  - demo
+                  - order_lines
+                areRelationsValid: true
+                workspaceDataFilterColumns:
+                  - name: wdf__state
+                    dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
+                workspaceDataFilterReferences:
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__region
+                      type: workspaceDataFilter
+                    filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: order_id
+                      type: attribute
+                    - id: order_line_id
+                      type: attribute
+                    - id: order_status
+                      type: attribute
+                facts:
+                  data:
+                    - id: price
+                      type: fact
+                    - id: quantity
+                      type: fact
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: products
+              type: dataset
+              attributes:
+                title: Products
+                description: Products
+                tags:
+                  - Products
+                grain:
+                  - id: product_id
+                    type: attribute
+                dataSourceTableId: demo-test-ds:products
+                dataSourceTablePath:
+                  - demo
+                  - products
+                areRelationsValid: true
+                type: NORMAL
+              relationships:
+                attributes:
+                  data:
+                    - id: products.category
+                      type: attribute
+                    - id: product_id
+                      type: attribute
+                    - id: product_name
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
               meta:
                 origin:
                   originType: NATIVE
@@ -1863,6 +1893,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: product_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_id
             - id: budget
@@ -1873,6 +1904,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: budget
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/budget
             - id: date.year
@@ -1893,6 +1925,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: product_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/product_name
             - id: date.month
@@ -1913,6 +1946,7 @@ interactions:
                 tags:
                   - Products
                 sourceColumn: category
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/products.category
             - id: date.dayOfMonth
@@ -1953,6 +1987,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: category
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channels.category
             - id: date.minute
@@ -1973,6 +2008,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: state
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
             - id: date.week
@@ -1993,6 +2029,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_id
             - id: date.hour
@@ -2013,6 +2050,7 @@ interactions:
                 tags:
                   - Campaigns
                 sourceColumn: campaign_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_name
             - id: price
@@ -2023,6 +2061,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: price
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/price
             - id: date.dayOfWeek
@@ -2053,6 +2092,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: region
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
             - id: campaign_channel_id
@@ -2063,6 +2103,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: campaign_channel_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_channel_id
             - id: customer_id
@@ -2073,6 +2114,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: customer_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_id
             - id: date.hourOfDay
@@ -2093,6 +2135,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: quantity
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
             - id: campaign_id
@@ -2103,6 +2146,7 @@ interactions:
                 tags:
                   - Campaigns
                 sourceColumn: campaign_id
+                sourceColumnDataType: INT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/campaign_id
             - id: type
@@ -2113,6 +2157,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: type
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
             - id: spend
@@ -2123,6 +2168,7 @@ interactions:
                 tags:
                   - Campaign channels
                 sourceColumn: spend
+                sourceColumnDataType: NUMERIC
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
             - id: date.dayOfYear
@@ -2163,6 +2209,7 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_status
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_status
             - id: date.monthOfYear
@@ -2183,6 +2230,7 @@ interactions:
                 tags:
                   - Customers
                 sourceColumn: customer_name
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/customer_name
             - id: order_line_id
@@ -2193,11 +2241,12 @@ interactions:
                 tags:
                   - Order lines
                 sourceColumn: order_line_id
+                sourceColumnDataType: STRING
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/order_line_id
           links:
-            self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=0&size=500
-            next: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes,facts&page=1&size=500
+            self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts&page=0&size=500
+            next: http://localhost:3000/api/v1/entities/workspaces/demo/datasets?include=attributes%2Cfacts&page=1&size=500
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=0&size=500
@@ -2225,7 +2274,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '9799'
+          - '10543'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -2277,6 +2326,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -2291,6 +2341,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -2305,6 +2356,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -2321,6 +2373,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -2336,6 +2389,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -2350,6 +2404,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -2364,6 +2419,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -2378,6 +2434,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2393,6 +2450,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2408,6 +2466,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2423,6 +2482,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2438,6 +2498,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -2453,6 +2514,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -2469,6 +2531,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -2484,6 +2547,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2499,6 +2563,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2514,6 +2579,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2529,6 +2595,7 @@ interactions:
               attributes:
                 title: Revenue (Outdoor)
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2544,6 +2611,7 @@ interactions:
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -2558,6 +2626,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -2572,6 +2641,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -2586,6 +2656,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -2600,6 +2671,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -2614,6 +2686,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -2628,7 +2701,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/dd1ff5143c90994331bce565ebcd4c5b3a37c17a?offset=0%2C0&limit=2%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e5324ed0a1e74c1346c14a2df4fda6b263696902?offset=0%2C0&limit=2%2C1000
       body: null
       headers:
         Accept:
@@ -2698,7 +2771,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '43771'
+          - '43407'
       body:
         string:
           data:
@@ -2884,188 +2957,188 @@ interactions:
               - 2638.54
               - 1684.95
               - 5646.42
-            - - 21.0
-              - 11.0
-              - 7.0
-              - 3.0
-              - 19.0
-              - 14.0
-              - 12.0
-              - 3.0
-              - 60.0
-              - 35.0
-              - 25.0
-              - 5.0
-              - 15.0
-              - 5.0
-              - 9.0
-              - 3.0
-              - 269.0
-              - 146.0
-              - 118.0
-              - 41.0
-              - 37.0
-              - 20.0
-              - 13.0
-              - 8.0
-              - 22.0
-              - 15.0
-              - 9.0
-              - 1.0
-              - 14.0
-              - 7.0
-              - 5.0
-              - 2.0
-              - 67.0
-              - 49.0
-              - 41.0
-              - 7.0
-              - 199.0
-              - 109.0
-              - 86.0
-              - 30.0
-              - 40.0
-              - 25.0
-              - 15.0
-              - 4.0
-              - 17.0
-              - 14.0
-              - 6.0
-              - 4.0
-              - 4.0
-              - 5.0
-              - 2.0
-              - 2.0
-              - 51.0
-              - 26.0
-              - 24.0
-              - 3.0
-              - 24.0
-              - 14.0
-              - 9.0
-              - 6.0
-              - 47.0
-              - 27.0
-              - 22.0
-              - 8.0
-              - 23.0
-              - 9.0
-              - 12.0
-              - 3.0
-              - 35.0
-              - 18.0
-              - 9.0
-              - 1.0
-              - 33.0
-              - 23.0
-              - 19.0
-              - 4.0
-              - 37.0
-              - 13.0
-              - 17.0
-              - 6.0
-              - 24.0
-              - 15.0
-              - 6.0
-              - 1.0
-              - 26.0
-              - 18.0
-              - 19.0
-              - 5.0
-              - 46.0
-              - 31.0
-              - 19.0
-              - 4.0
-              - 8.0
-              - 3.0
-              - 3.0
-              - 3.0
-              - 56.0
-              - 18.0
-              - 25.0
-              - 5.0
-              - 16.0
-              - 6.0
-              - 4.0
-              - 13.0
-              - 9.0
-              - 8.0
-              - 3.0
-              - 13.0
-              - 7.0
-              - 3.0
-              - 6.0
-              - 5.0
-              - 20.0
-              - 9.0
-              - 4.0
-              - 1.0
-              - 13.0
-              - 7.0
-              - 8.0
-              - 121.0
-              - 58.0
-              - 51.0
-              - 11.0
-              - 39.0
-              - 18.0
-              - 20.0
-              - 7.0
-              - 2.0
-              - 1.0
-              - 1.0
-              - 75.0
-              - 44.0
-              - 40.0
-              - 9.0
-              - 24.0
-              - 11.0
-              - 10.0
-              - 5.0
-              - 21.0
-              - 9.0
-              - 15.0
-              - 4.0
-              - 49.0
-              - 25.0
-              - 19.0
-              - 10.0
-              - 1.0
-              - 26.0
-              - 11.0
-              - 9.0
-              - 2.0
-              - 7.0
-              - 3.0
-              - 1.0
-              - 35.0
-              - 17.0
-              - 8.0
-              - 3.0
-              - 220.0
-              - 132.0
-              - 123.0
-              - 28.0
-              - 25.0
-              - 16.0
-              - 11.0
-              - 4.0
-              - 75.0
-              - 37.0
-              - 39.0
-              - 12.0
-              - 30.0
-              - 15.0
-              - 6.0
-              - 5.0
-              - 16.0
-              - 8.0
-              - 11.0
-              - 2.0
-              - 45.0
-              - 23.0
-              - 20.0
-              - 9.0
+            - - 21
+              - 11
+              - 7
+              - 3
+              - 19
+              - 14
+              - 12
+              - 3
+              - 60
+              - 35
+              - 25
+              - 5
+              - 15
+              - 5
+              - 9
+              - 3
+              - 269
+              - 146
+              - 118
+              - 41
+              - 37
+              - 20
+              - 13
+              - 8
+              - 22
+              - 15
+              - 9
+              - 1
+              - 14
+              - 7
+              - 5
+              - 2
+              - 67
+              - 49
+              - 41
+              - 7
+              - 199
+              - 109
+              - 86
+              - 30
+              - 40
+              - 25
+              - 15
+              - 4
+              - 17
+              - 14
+              - 6
+              - 4
+              - 4
+              - 5
+              - 2
+              - 2
+              - 51
+              - 26
+              - 24
+              - 3
+              - 24
+              - 14
+              - 9
+              - 6
+              - 47
+              - 27
+              - 22
+              - 8
+              - 23
+              - 9
+              - 12
+              - 3
+              - 35
+              - 18
+              - 9
+              - 1
+              - 33
+              - 23
+              - 19
+              - 4
+              - 37
+              - 13
+              - 17
+              - 6
+              - 24
+              - 15
+              - 6
+              - 1
+              - 26
+              - 18
+              - 19
+              - 5
+              - 46
+              - 31
+              - 19
+              - 4
+              - 8
+              - 3
+              - 3
+              - 3
+              - 56
+              - 18
+              - 25
+              - 5
+              - 16
+              - 6
+              - 4
+              - 13
+              - 9
+              - 8
+              - 3
+              - 13
+              - 7
+              - 3
+              - 6
+              - 5
+              - 20
+              - 9
+              - 4
+              - 1
+              - 13
+              - 7
+              - 8
+              - 121
+              - 58
+              - 51
+              - 11
+              - 39
+              - 18
+              - 20
+              - 7
+              - 2
+              - 1
+              - 1
+              - 75
+              - 44
+              - 40
+              - 9
+              - 24
+              - 11
+              - 10
+              - 5
+              - 21
+              - 9
+              - 15
+              - 4
+              - 49
+              - 25
+              - 19
+              - 10
+              - 1
+              - 26
+              - 11
+              - 9
+              - 2
+              - 7
+              - 3
+              - 1
+              - 35
+              - 17
+              - 8
+              - 3
+              - 220
+              - 132
+              - 123
+              - 28
+              - 25
+              - 16
+              - 11
+              - 4
+              - 75
+              - 37
+              - 39
+              - 12
+              - 30
+              - 15
+              - 6
+              - 5
+              - 16
+              - 8
+              - 11
+              - 2
+              - 45
+              - 23
+              - 20
+              - 9
           dimensionHeaders:
             - headerGroups:
                 - headers:

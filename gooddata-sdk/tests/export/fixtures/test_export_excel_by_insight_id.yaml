@@ -151,7 +151,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2023-10-01 19:56
+              createdAt: 2023-10-24 11:18
             relationships:
               createdBy:
                 data:
@@ -195,7 +195,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2023-10-01 19:56
+                createdAt: 2023-10-24 11:18
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -205,7 +205,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2023-10-01 19:56
+                createdAt: 2023-10-24 11:18
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -375,10 +375,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
+              executionResult: 6423dcf3a78558dfc3702a9d4a1231489f0a3ff2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/450bebe463cc16dc0d6a02fa2074a3fe981b55b4?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6423dcf3a78558dfc3702a9d4a1231489f0a3ff2?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -536,7 +536,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
+        executionResult: 6423dcf3a78558dfc3702a9d4a1231489f0a3ff2
         fileName: Customers Trend
         format: XLSX
         customOverride:
@@ -621,10 +621,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: 40f40b86ada7b4b2e6f486402e134ccf04d33759
+          exportResult: 042970ef8de7afd71bbc95234948116e7610e769
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/40f40b86ada7b4b2e6f486402e134ccf04d33759
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/042970ef8de7afd71bbc95234948116e7610e769
       body: null
       headers:
         Accept:
@@ -695,7 +695,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/40f40b86ada7b4b2e6f486402e134ccf04d33759
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/042970ef8de7afd71bbc95234948116e7610e769
       body: null
       headers:
         Accept:
@@ -853,12 +853,12 @@ interactions:
           G2TV28zst1A06yalI3Lc6aDZpuoahv3/8OTjrph8zh4PFoLc88wirtb0tUfBxtupcM5Hbd1scd1b
           +1GbwuEDZV/QuKnw2WK+HfADiD6aT5QIEvFSqyy/+eYQdG5pxmWs/tkxahGC1op4X+TwqTm7scLZ
           Z4t7c2d7Bl97Z7vaXi5RWzvI5KulP5748D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQA
-          AAAIAAAAPwDT2cyqJQEAAFACAAARAAAAZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7Lcum
-          oRW2A23JqYFCU1pyE9ImEbV+kNQ6efvKTuIk4FOPq5n9dnZRNd+rNvkF56XRNSJZjhLQ3AiptzX6
-          WC3SB5T4wLRgrdFQowN4NG/uKm4pNw7enLHgggSfRJD2lNsa7UKwFGPPd6CYz6JDR3FjnGIhlm6L
-          LePfbAu4yPMZVhCYYIHhHpjakYhOSMFHpP1x7QAQHEMLCnTwmGQEX7wBnPKTDYNy5VQyHCxMWs/i
-          6N57ORq7rsu6crDG/AR/LV/fh1VTqftTcUBNJTjlDlgwrqnwdREP1zIflvHEGwni6RD1ibfTIsc+
-          EEkMQI9xz8pn+fyyWqCmyIsyJXmakxV5pPczWhTrfuRN/wWoTkP+TTwDjrlvP0HzB1BLAwQUAAAA
+          AAAIAAAAPwAWga73JQEAAFACAAARAAAAZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7Lcsx
+          JQjbgbbk1EChKS29CWmTiFo/SGodv30VJ3ES8CnH1cx+O7uoWuxVm/yB89LoGpEsRwloboTU2xp9
+          rJfpHCU+MC1YazTUqAePFs1DxS3lxsGbMxZckOCTCNKeclujXQiWYuz5DhTzWXToKG6MUyzE0m2x
+          ZfyHbQEXef6IFQQmWGD4AEztSEQnpOAj0v66dgAIjqEFBTp4TDKCL94ATvnJhkG5cioZeguT1rM4
+          uvdejsau67JuNlhjfoK/Vq/vw6qp1IdTcUBNJTjlDlgwrqnwdREP1zIfVvHEGwniqY/6xNtpkWMf
+          iCQGoMe4Z+Vz9vyyXqKmyItZSvK0KNeEUDKnZfl9GHnTfwGq05C7iWfAMfftJ2j+AVBLAwQUAAAA
           CAAAAD8AssAyR34BAAAZAwAAEAAAAGRvY1Byb3BzL2FwcC54bWydUsFO6zAQvPMVke/UaYXQU+UY
           oQLiwNOr1ABn42waC8e2vNuofV+Pk6ohBU7kNDs7Gk92V9zsW5t1ENF4V7D5LGcZOO0r47YFey4f
           Lv+wDEm5SlnvoGAHQHYjL8Q6+gCRDGCWHBwWrCEKS85RN9AqnKW2S53ax1ZRKuOW+7o2Gu683rXg
@@ -875,6 +875,6 @@ interactions:
           LnhtbFBLAQIUAxQAAAAIAAAAPwCICTc14wAAAB0CAAAUAAAAAAAAAAAAAACAgVEIAAB4bC9zaGFy
           ZWRTdHJpbmdzLnhtbFBLAQIUAxQAAAAIAAAAPwAf9bHeAwMAAA8RAAANAAAAAAAAAAAAAACAgWYJ
           AAB4bC9zdHlsZXMueG1sUEsBAhQDFAAAAAgAAAA/ABj6RlSwBQAAUhsAABMAAAAAAAAAAAAAAICB
-          lAwAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwECFAMUAAAACAAAAD8A09nMqiUBAABQAgAAEQAAAAAA
+          lAwAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwECFAMUAAAACAAAAD8AFoGu9yUBAABQAgAAEQAAAAAA
           AAAAAAAAgIF1EgAAZG9jUHJvcHMvY29yZS54bWxQSwECFAMUAAAACAAAAD8AssAyR34BAAAZAwAA
           EAAAAAAAAAAAAAAAgIHJEwAAZG9jUHJvcHMvYXBwLnhtbFBLBQYAAAAACgAKAIACAAB1FQAAAAA=

@@ -25,6 +25,7 @@ Method | HTTP request | Description
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+[**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
@@ -278,7 +279,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100,
+        data_sampling_percentage=100.0,
         exact_filter=[
             "exact_filter_example",
         ],
@@ -286,7 +287,7 @@ with gooddata_api_client.ApiClient() as api_client:
         filter_by=FilterBy(
             label_type="REQUESTED",
         ),
-        label="/6bUUGjjNSwg0_bs",
+        label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
     ) # ElementsRequest | 
@@ -1698,7 +1699,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_dashboard_permissions**
-> manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+> manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
 Manage Permissions for a Dashboard
 
@@ -1709,7 +1710,7 @@ Manage Permissions for a Dashboard
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -1724,22 +1725,14 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = actions_api.ActionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     dashboard_id = "dashboardId_example" # str | 
-    permissions_for_assignee = [
-        PermissionsForAssignee(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            permissions=[
-                "EDIT",
-            ],
-        ),
-    ] # [PermissionsForAssignee] | 
+    manage_dashboard_permissions_request_inner = [
+        ManageDashboardPermissionsRequestInner(None),
+    ] # [ManageDashboardPermissionsRequestInner] | 
 
     # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Dashboard
-        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_dashboard_permissions: %s\n" % e)
 ```
@@ -1751,7 +1744,83 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **dashboard_id** | **str**|  |
- **permissions_for_assignee** | [**[PermissionsForAssignee]**](PermissionsForAssignee.md)|  |
+ **manage_dashboard_permissions_request_inner** | [**[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_organization_permissions**
+> manage_organization_permissions(organization_permission_assignment)
+
+Manage Permissions for a Organization
+
+Manage Permissions for a Organization
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    organization_permission_assignment = [
+        OrganizationPermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [OrganizationPermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Organization
+        api_instance.manage_organization_permissions(organization_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_organization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
 
 ### Return type
 

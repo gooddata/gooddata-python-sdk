@@ -58,6 +58,7 @@
               "Contract",
               "CustomTheming",
               "ExtraCache",
+              "Hipaa",
               "PdfExports",
               "ManagedOIDC",
               "UiLocalization",
@@ -99,6 +100,21 @@
         ],
         "type": "object"
       },
+      "AssigneeRule": {
+        "description": "Identifier of an assignee rule.",
+        "properties": {
+          "type": {
+            "enum": [
+              "allWorkspaceUsers"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
       "AvailableAssignees": {
         "properties": {
           "userGroups": {
@@ -124,6 +140,13 @@
       },
       "DashboardPermissions": {
         "properties": {
+          "rules": {
+            "description": "List of rules",
+            "items": {
+              "$ref": "#/components/schemas/RulePermission"
+            },
+            "type": "array"
+          },
           "userGroups": {
             "description": "List of user groups",
             "items": {
@@ -140,8 +163,29 @@
           }
         },
         "required": [
+          "rules",
           "userGroups",
           "users"
+        ],
+        "type": "object"
+      },
+      "DashboardPermissionsAssignment": {
+        "description": "Desired levels of permissions for an assignee.",
+        "properties": {
+          "permissions": {
+            "items": {
+              "enum": [
+                "EDIT",
+                "SHARE",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "permissions"
         ],
         "type": "object"
       },
@@ -295,7 +339,14 @@
           "permissions": {
             "description": "A list of permissions.",
             "items": {
-              "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermission"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionForAssignee"
+                },
+                {
+                  "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionForAssigneeRule"
+                }
+              ]
             },
             "type": "array"
           },
@@ -337,7 +388,14 @@
           "permissions": {
             "description": "A list of permissions.",
             "items": {
-              "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermission"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionForAssignee"
+                },
+                {
+                  "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionForAssigneeRule"
+                }
+              ]
             },
             "type": "array"
           }
@@ -348,12 +406,9 @@
         ],
         "type": "object"
       },
-      "DeclarativeAnalyticalDashboardPermission": {
+      "DeclarativeAnalyticalDashboardPermissionAssignment": {
         "description": "Analytical dashboard permission.",
         "properties": {
-          "assignee": {
-            "$ref": "#/components/schemas/AssigneeIdentifier"
-          },
           "name": {
             "description": "Permission name.",
             "enum": [
@@ -365,7 +420,48 @@
           }
         },
         "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeAnalyticalDashboardPermissionForAssignee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionAssignment"
+          },
+          {
+            "properties": {
+              "assignee": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Analytical dashboard permission for an assignee.",
+        "required": [
           "assignee",
+          "name"
+        ],
+        "type": "object"
+      },
+      "DeclarativeAnalyticalDashboardPermissionForAssigneeRule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DeclarativeAnalyticalDashboardPermissionAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Analytical dashboard permission for a collection of assignees identified by a rule.",
+        "required": [
+          "assigneeRule",
           "name"
         ],
         "type": "object"
@@ -1506,7 +1602,8 @@
           "name": {
             "description": "Permission name.",
             "enum": [
-              "MANAGE"
+              "MANAGE",
+              "SELF_CREATE_TOKEN"
             ],
             "type": "string"
           }
@@ -2566,6 +2663,7 @@
                 "Contract",
                 "CustomTheming",
                 "ExtraCache",
+                "Hipaa",
                 "PdfExports",
                 "ManagedOIDC",
                 "UiLocalization",
@@ -8160,7 +8258,8 @@
                 "description": "List of valid permissions for a logged-in user.",
                 "items": {
                   "enum": [
-                    "MANAGE"
+                    "MANAGE",
+                    "SELF_CREATE_TOKEN"
                   ],
                   "type": "string"
                 },
@@ -11792,6 +11891,29 @@
         },
         "type": "object"
       },
+      "OrganizationPermissionAssignment": {
+        "description": "Organization permission assignments",
+        "properties": {
+          "assigneeIdentifier": {
+            "$ref": "#/components/schemas/AssigneeIdentifier"
+          },
+          "permissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "SELF_CREATE_TOKEN"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
       "Parameter": {
         "properties": {
           "name": {
@@ -11855,25 +11977,43 @@
         "type": "object"
       },
       "PermissionsForAssignee": {
-        "description": "Desired levels of permissions for an assignee.",
-        "properties": {
-          "assigneeIdentifier": {
-            "$ref": "#/components/schemas/AssigneeIdentifier"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
           },
-          "permissions": {
-            "items": {
-              "enum": [
-                "EDIT",
-                "SHARE",
-                "VIEW"
-              ],
-              "type": "string"
+          {
+            "properties": {
+              "assigneeIdentifier": {
+                "$ref": "#/components/schemas/AssigneeIdentifier"
+              }
             },
-            "type": "array"
+            "type": "object"
           }
-        },
+        ],
+        "description": "Desired levels of permissions for an assignee identified by an identifier.",
         "required": [
           "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "PermissionsForAssigneeRule": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DashboardPermissionsAssignment"
+          },
+          {
+            "properties": {
+              "assigneeRule": {
+                "$ref": "#/components/schemas/AssigneeRule"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Desired levels of permissions for a collection of assignees identified by a rule.",
+        "required": [
+          "assigneeRule",
           "permissions"
         ],
         "type": "object"
@@ -12069,6 +12209,27 @@
           "kty",
           "n",
           "use"
+        ],
+        "type": "object"
+      },
+      "RulePermission": {
+        "description": "List of rules",
+        "properties": {
+          "permissions": {
+            "description": "Permissions granted by the rule",
+            "items": {
+              "$ref": "#/components/schemas/GrantedPermission"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "Type of the rule",
+            "example": "allWorkspaceUsers",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
         ],
         "type": "object"
       },
@@ -12407,6 +12568,35 @@
         }
       }
     },
+    "/api/v1/actions/organization/managePermissions": {
+      "post": {
+        "description": "Manage Permissions for a Organization",
+        "operationId": "manageOrganizationPermissions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/OrganizationPermissionAssignment"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for a Organization",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/resolveEntitlements": {
       "get": {
         "description": "Resolves values of available entitlements for the organization.",
@@ -12606,7 +12796,14 @@
               "schema": {
                 "description": "An array of permissions assignments",
                 "items": {
-                  "$ref": "#/components/schemas/PermissionsForAssignee"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/PermissionsForAssignee"
+                    },
+                    {
+                      "$ref": "#/components/schemas/PermissionsForAssigneeRule"
+                    }
+                  ]
                 },
                 "type": "array"
               }
@@ -22350,9 +22547,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       }
@@ -22399,9 +22596,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -22566,9 +22763,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -22650,9 +22847,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       }
@@ -22818,9 +23015,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       }
@@ -22867,9 +23064,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -23034,9 +23231,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       },
@@ -23118,9 +23315,9 @@
           "workspace-object-controller"
         ],
         "x-gdc-security-info": {
-          "description": "Contains minimal permission level required to manage this object type.",
+          "description": "Contains minimal permission level required to manage WorkspaceDataFilter/Settings for the workspace the WDF originates and related workspace hierarchy.",
           "permissions": [
-            "ANALYZE"
+            "MANAGE"
           ]
         }
       }
@@ -23745,6 +23942,71 @@
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set organization layout.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/layout/organization/permissions": {
+      "get": {
+        "description": "Retrieve organization permissions",
+        "operationId": "getOrganizationPermissions",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Retrieved all organization permissions."
+          }
+        },
+        "summary": "Get organization permissions",
+        "tags": [
+          "layout",
+          "Permissions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to get organization permissions.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "Sets organization permissions",
+        "operationId": "setOrganizationPermissions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Organization permissions set."
+          }
+        },
+        "summary": "Set organization permissions",
+        "tags": [
+          "layout",
+          "Permissions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permission required to set organization permissions.",
           "permissions": [
             "MANAGE"
           ]

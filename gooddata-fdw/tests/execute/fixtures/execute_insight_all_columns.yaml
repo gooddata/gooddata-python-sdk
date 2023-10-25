@@ -28,7 +28,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '4703'
+          - '5006'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -174,7 +174,12 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
+              createdAt: 2023-10-24 11:00
             relationships:
+              createdBy:
+                data:
+                  id: admin
+                  type: userIdentifier
               metrics:
                 data:
                   - id: percent_revenue_in_category
@@ -183,9 +188,9 @@ interactions:
                     type: metric
               facts:
                 data:
-                  - id: price
-                    type: fact
                   - id: quantity
+                    type: fact
+                  - id: price
                     type: fact
               labels:
                 data:
@@ -216,6 +221,7 @@ interactions:
               attributes:
                 title: Revenue
                 description: ''
+                createdAt: 2023-10-24 11:00
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -246,6 +252,11 @@ interactions:
                 valueType: TEXT
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/labels/product_name
+            - id: admin
+              type: userIdentifier
+              attributes: {}
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/userIdentifiers/admin
             - id: customer_name
               type: label
               attributes:
@@ -263,6 +274,7 @@ interactions:
               type: metric
               attributes:
                 title: '% Revenue in Category'
+                createdAt: 2023-10-24 11:00
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -466,10 +478,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 0da271826abfb80b2ee7d82ac6ac5ea18b19dd6e
+              executionResult: a3841c000c13f542e43aa6306a6cd98e1bdc2ba9
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0da271826abfb80b2ee7d82ac6ac5ea18b19dd6e?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a3841c000c13f542e43aa6306a6cd98e1bdc2ba9?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

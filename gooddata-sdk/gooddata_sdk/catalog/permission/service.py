@@ -1,11 +1,12 @@
 # (C) 2022 GoodData Corporation
-from typing import List
+from typing import List, Union
 
 from gooddata_sdk import (
     CatalogAvailableAssignees,
     CatalogDashboardPermissions,
     CatalogDeclarativeWorkspacePermissions,
     CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
 )
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
@@ -81,7 +82,10 @@ class CatalogPermissionService(CatalogServiceBase):
         )
 
     def manage_dashboard_permissions(
-        self, workspace_id: str, dashboard_id: str, permissions_for_assignee: List[CatalogPermissionsForAssignee]
+        self,
+        workspace_id: str,
+        dashboard_id: str,
+        permissions_for_assignee: List[Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]],
     ) -> None:
         """Provide managing dashboard permissions for user and user groups.
 

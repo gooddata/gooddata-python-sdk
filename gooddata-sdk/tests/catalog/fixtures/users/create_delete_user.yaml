@@ -89,7 +89,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -100,7 +100,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+                authenticationId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -200,7 +200,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: eb69bac61339f35c
+          traceId: 659e487c7b87344b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/users
@@ -468,6 +468,38 @@ interactions:
       body:
         string:
           data:
+            - id: admin
+              type: user
+              attributes: {}
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/admin
+            - id: demo
+              type: user
+              attributes:
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: adminGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo
+            - id: demo2
+              type: user
+              attributes:
+                authenticationId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
+              relationships:
+                userGroups:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/users/demo2
             - id: newUser
               type: user
               attributes:
@@ -482,38 +514,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/users/newUser
-            - id: admin
-              type: user
-              attributes: {}
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/admin
-            - id: demo
-              type: user
-              attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: adminGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo
-            - id: demo2
-              type: user
-              attributes:
-                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
-              relationships:
-                userGroups:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/users/demo2
           included:
             - id: adminGroup
               type: userGroup
@@ -683,7 +683,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -694,7 +694,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiRiOWU2NjY4Zi1jYzc4LTQ4MTYtOGM5OS0zMWI3Y2VhMzg0MGQSBWxvY2Fs
+                authenticationId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
               relationships:
                 userGroups:
                   data:

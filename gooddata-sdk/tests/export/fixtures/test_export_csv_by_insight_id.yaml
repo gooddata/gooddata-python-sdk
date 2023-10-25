@@ -151,7 +151,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2023-10-01 19:56
+              createdAt: 2023-10-24 11:18
             relationships:
               createdBy:
                 data:
@@ -195,7 +195,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2023-10-01 19:56
+                createdAt: 2023-10-24 11:18
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -205,7 +205,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2023-10-01 19:56
+                createdAt: 2023-10-24 11:18
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -375,10 +375,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
+              executionResult: 6423dcf3a78558dfc3702a9d4a1231489f0a3ff2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/450bebe463cc16dc0d6a02fa2074a3fe981b55b4?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6423dcf3a78558dfc3702a9d4a1231489f0a3ff2?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -536,7 +536,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 450bebe463cc16dc0d6a02fa2074a3fe981b55b4
+        executionResult: 6423dcf3a78558dfc3702a9d4a1231489f0a3ff2
         fileName: Customers Trend
         format: CSV
         customOverride:
@@ -621,10 +621,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: a5b86ea777a93b0edf1b13f49836b8175de90001
+          exportResult: aa2711f02d4f56bb8d637e9a470930ef30950fe9
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/a5b86ea777a93b0edf1b13f49836b8175de90001
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/aa2711f02d4f56bb8d637e9a470930ef30950fe9
       body: null
       headers:
         Accept:
@@ -695,7 +695,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/a5b86ea777a93b0edf1b13f49836b8175de90001
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/aa2711f02d4f56bb8d637e9a470930ef30950fe9
       body: null
       headers:
         Accept:

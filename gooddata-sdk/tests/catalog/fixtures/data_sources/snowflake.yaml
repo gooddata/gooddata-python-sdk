@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 62e06ff0f4e36baf
+          traceId: a57957079b238f20
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -122,7 +122,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '385'
+          - '387'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -172,13 +172,13 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCNCE&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -209,7 +209,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '385'
+          - '387'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -259,13 +259,13 @@ interactions:
             id: test
             type: dataSource
             attributes:
-              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCN&db=TIGER&useProxy=true&warehouse=TIGER
+              url: jdbc:snowflake://gooddata.snowflakecomputing.com:443/?application=GoodData_GoodDataCNCE&db=TIGER&useProxy=true&warehouse=TIGER
               username: demouser
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

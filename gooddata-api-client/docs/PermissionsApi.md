@@ -6,8 +6,11 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**available_assignees**](PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**dashboard_permissions**](PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
+[**get_organization_permissions**](PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+[**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+[**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_workspace_permissions**](PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 
 
@@ -145,6 +148,69 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_organization_permissions**
+> [DeclarativeOrganizationPermission] get_organization_permissions()
+
+Get organization permissions
+
+Retrieve organization permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
+    try:
+        # Get organization permissions
+        api_response = api_instance.get_organization_permissions()
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->get_organization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved all organization permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_workspace_permissions**
 > DeclarativeWorkspacePermissions get_workspace_permissions(workspace_id)
 
@@ -213,7 +279,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_dashboard_permissions**
-> manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+> manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
 
 Manage Permissions for a Dashboard
 
@@ -224,7 +290,7 @@ Manage Permissions for a Dashboard
 import time
 import gooddata_api_client
 from gooddata_api_client.api import permissions_api
-from gooddata_api_client.model.permissions_for_assignee import PermissionsForAssignee
+from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -239,22 +305,14 @@ with gooddata_api_client.ApiClient() as api_client:
     api_instance = permissions_api.PermissionsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     dashboard_id = "dashboardId_example" # str | 
-    permissions_for_assignee = [
-        PermissionsForAssignee(
-            assignee_identifier=AssigneeIdentifier(
-                id="id_example",
-                type="user",
-            ),
-            permissions=[
-                "EDIT",
-            ],
-        ),
-    ] # [PermissionsForAssignee] | 
+    manage_dashboard_permissions_request_inner = [
+        ManageDashboardPermissionsRequestInner(None),
+    ] # [ManageDashboardPermissionsRequestInner] | 
 
     # example passing only required values which don't have defaults set
     try:
         # Manage Permissions for a Dashboard
-        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, permissions_for_assignee)
+        api_instance.manage_dashboard_permissions(workspace_id, dashboard_id, manage_dashboard_permissions_request_inner)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling PermissionsApi->manage_dashboard_permissions: %s\n" % e)
 ```
@@ -266,7 +324,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
  **dashboard_id** | **str**|  |
- **permissions_for_assignee** | [**[PermissionsForAssignee]**](PermissionsForAssignee.md)|  |
+ **manage_dashboard_permissions_request_inner** | [**[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  |
 
 ### Return type
 
@@ -287,6 +345,156 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_organization_permissions**
+> manage_organization_permissions(organization_permission_assignment)
+
+Manage Permissions for a Organization
+
+Manage Permissions for a Organization
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    organization_permission_assignment = [
+        OrganizationPermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [OrganizationPermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Organization
+        api_instance.manage_organization_permissions(organization_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_organization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_organization_permissions**
+> set_organization_permissions(declarative_organization_permission)
+
+Set organization permissions
+
+Sets organization permissions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    declarative_organization_permission = [
+        DeclarativeOrganizationPermission(
+            assignee=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            name="MANAGE",
+        ),
+    ] # [DeclarativeOrganizationPermission] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set organization permissions
+        api_instance.set_organization_permissions(declarative_organization_permission)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->set_organization_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **declarative_organization_permission** | [**[DeclarativeOrganizationPermission]**](DeclarativeOrganizationPermission.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Organization permissions set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

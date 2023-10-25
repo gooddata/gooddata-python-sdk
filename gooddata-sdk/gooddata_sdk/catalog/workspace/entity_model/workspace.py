@@ -32,7 +32,9 @@ class CatalogWorkspace(Base):
         kwargs = dict()
         if self.parent_id:
             kwargs["relationships"] = JsonApiWorkspaceInRelationships(
-                parent=JsonApiWorkspaceInRelationshipsParent(data=JsonApiWorkspaceToOneLinkage(id=self.parent_id))
+                parent=JsonApiWorkspaceInRelationshipsParent(
+                    data=JsonApiWorkspaceToOneLinkage(id=self.parent_id, type="workspace")
+                )
             )
         return JsonApiWorkspaceInDocument(
             data=JsonApiWorkspaceIn(

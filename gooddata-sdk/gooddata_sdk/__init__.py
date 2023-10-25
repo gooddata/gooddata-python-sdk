@@ -54,7 +54,11 @@ from gooddata_sdk.catalog.export.request import (
     ExportRequest,
     ExportSettings,
 )
-from gooddata_sdk.catalog.identifier import CatalogDatasetWorkspaceDataFilterIdentifier, CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.identifier import (
+    CatalogAssigneeIdentifier,
+    CatalogDatasetWorkspaceDataFilterIdentifier,
+    CatalogWorkspaceIdentifier,
+)
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.jwk import (
     CatalogJwk,
@@ -79,14 +83,17 @@ from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions imp
 from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
     CatalogDashboardAssigneeIdentifier,
     CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeRule,
 )
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
-    CatalogAssigneeIdentifier,
+    CatalogDeclarativeDashboardPermissionsForAssignee,
+    CatalogDeclarativeDashboardPermissionsForAssigneeRule,
     CatalogDeclarativeDataSourcePermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
 )
+from gooddata_sdk.catalog.rule import CatalogAssigneeRule
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import (

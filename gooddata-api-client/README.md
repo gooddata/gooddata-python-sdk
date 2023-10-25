@@ -219,8 +219,11 @@ Class | Method | HTTP request | Description
 *PDMDeclarativeAPIsApi* | [**set_pdm_layout**](docs/PDMDeclarativeAPIsApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 *PermissionsApi* | [**available_assignees**](docs/PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *PermissionsApi* | [**dashboard_permissions**](docs/PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
+*PermissionsApi* | [**get_organization_permissions**](docs/PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
 *PermissionsApi* | [**get_workspace_permissions**](docs/PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 *PermissionsApi* | [**manage_dashboard_permissions**](docs/PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+*PermissionsApi* | [**manage_organization_permissions**](docs/PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+*PermissionsApi* | [**set_organization_permissions**](docs/PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 *PermissionsApi* | [**set_workspace_permissions**](docs/PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *PluginsApi* | [**create_entity_dashboard_plugins**](docs/PluginsApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 *PluginsApi* | [**delete_entity_dashboard_plugins**](docs/PluginsApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
@@ -313,6 +316,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+*ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
@@ -489,6 +493,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
+*LayoutApi* | [**get_organization_permissions**](docs/LayoutApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
 *LayoutApi* | [**get_pdm_layout**](docs/LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
 *LayoutApi* | [**get_user_data_filters**](docs/LayoutApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
 *LayoutApi* | [**get_user_group_permissions**](docs/LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
@@ -508,6 +513,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_analytics_model**](docs/LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
+*LayoutApi* | [**set_organization_permissions**](docs/LayoutApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 *LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 *LayoutApi* | [**set_user_data_filters**](docs/LayoutApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
 *LayoutApi* | [**set_user_group_permissions**](docs/LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
@@ -695,6 +701,7 @@ Class | Method | HTTP request | Description
  - [ArithmeticMeasureDefinition](docs/ArithmeticMeasureDefinition.md)
  - [ArithmeticMeasureDefinitionArithmeticMeasure](docs/ArithmeticMeasureDefinitionArithmeticMeasure.md)
  - [AssigneeIdentifier](docs/AssigneeIdentifier.md)
+ - [AssigneeRule](docs/AssigneeRule.md)
  - [AttributeExecutionResultHeader](docs/AttributeExecutionResultHeader.md)
  - [AttributeFilter](docs/AttributeFilter.md)
  - [AttributeFilterElements](docs/AttributeFilterElements.md)
@@ -711,6 +718,7 @@ Class | Method | HTTP request | Description
  - [CustomMetric](docs/CustomMetric.md)
  - [CustomOverride](docs/CustomOverride.md)
  - [DashboardPermissions](docs/DashboardPermissions.md)
+ - [DashboardPermissionsAssignment](docs/DashboardPermissionsAssignment.md)
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
@@ -722,7 +730,12 @@ Class | Method | HTTP request | Description
  - [DateFilter](docs/DateFilter.md)
  - [DeclarativeAnalyticalDashboard](docs/DeclarativeAnalyticalDashboard.md)
  - [DeclarativeAnalyticalDashboardExtension](docs/DeclarativeAnalyticalDashboardExtension.md)
- - [DeclarativeAnalyticalDashboardPermission](docs/DeclarativeAnalyticalDashboardPermission.md)
+ - [DeclarativeAnalyticalDashboardPermissionAssignment](docs/DeclarativeAnalyticalDashboardPermissionAssignment.md)
+ - [DeclarativeAnalyticalDashboardPermissionForAssignee](docs/DeclarativeAnalyticalDashboardPermissionForAssignee.md)
+ - [DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf](docs/DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf.md)
+ - [DeclarativeAnalyticalDashboardPermissionForAssigneeRule](docs/DeclarativeAnalyticalDashboardPermissionForAssigneeRule.md)
+ - [DeclarativeAnalyticalDashboardPermissionForAssigneeRuleAllOf](docs/DeclarativeAnalyticalDashboardPermissionForAssigneeRuleAllOf.md)
+ - [DeclarativeAnalyticalDashboardPermissionsInner](docs/DeclarativeAnalyticalDashboardPermissionsInner.md)
  - [DeclarativeAnalytics](docs/DeclarativeAnalytics.md)
  - [DeclarativeAnalyticsLayer](docs/DeclarativeAnalyticsLayer.md)
  - [DeclarativeAttribute](docs/DeclarativeAttribute.md)
@@ -1188,6 +1201,7 @@ Class | Method | HTTP request | Description
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListLinks](docs/ListLinks.md)
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
+ - [ManageDashboardPermissionsRequestInner](docs/ManageDashboardPermissionsRequestInner.md)
  - [MeasureDefinition](docs/MeasureDefinition.md)
  - [MeasureExecutionResultHeader](docs/MeasureExecutionResultHeader.md)
  - [MeasureGroupHeaders](docs/MeasureGroupHeaders.md)
@@ -1199,12 +1213,15 @@ Class | Method | HTTP request | Description
  - [NegativeAttributeFilterNegativeAttributeFilter](docs/NegativeAttributeFilterNegativeAttributeFilter.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
+ - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
  - [Paging](docs/Paging.md)
  - [Parameter](docs/Parameter.md)
  - [PdfExportRequest](docs/PdfExportRequest.md)
  - [PdmLdmRequest](docs/PdmLdmRequest.md)
  - [PdmSql](docs/PdmSql.md)
  - [PermissionsForAssignee](docs/PermissionsForAssignee.md)
+ - [PermissionsForAssigneeAllOf](docs/PermissionsForAssigneeAllOf.md)
+ - [PermissionsForAssigneeRule](docs/PermissionsForAssigneeRule.md)
  - [PlatformUsage](docs/PlatformUsage.md)
  - [PlatformUsageRequest](docs/PlatformUsageRequest.md)
  - [PopDataset](docs/PopDataset.md)
@@ -1232,6 +1249,7 @@ Class | Method | HTTP request | Description
  - [ResultDimensionHeader](docs/ResultDimensionHeader.md)
  - [ResultSpec](docs/ResultSpec.md)
  - [RsaSpecification](docs/RsaSpecification.md)
+ - [RulePermission](docs/RulePermission.md)
  - [ScanRequest](docs/ScanRequest.md)
  - [ScanResultPdm](docs/ScanResultPdm.md)
  - [ScanSqlRequest](docs/ScanSqlRequest.md)

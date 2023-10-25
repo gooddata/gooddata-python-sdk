@@ -156,7 +156,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3a83b2c80ed88562
+          traceId: 2ac74a61282936d5
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -367,7 +367,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
           links:
@@ -470,7 +470,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQzMzBlZTg2Zi00MWU1LTRhNzAtOWVlZC03MTI5OWZkNDlhZTUSBWxvY2Fs
+                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
             - id: order_status

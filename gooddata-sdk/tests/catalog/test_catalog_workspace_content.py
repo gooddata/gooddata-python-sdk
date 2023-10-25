@@ -255,6 +255,23 @@ def test_get_declarative_analytics_model(test_config):
     assert analytics_model_o.to_api().to_dict(camel_case=True) == data
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_analytics_model_child.yaml"))
+def test_get_declarative_analytics_model_child(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    path = _current_dir / "expected" / "declarative_analytics_model_child.json"
+    analytics_model_o = sdk.catalog_workspace_content.get_declarative_analytics_model(
+        test_config["workspace_with_parent"], exclude=["ACTIVITY_INFO"]
+    )
+
+    with open(path) as f:
+        data = json.load(f)
+
+    expected_o = CatalogDeclarativeAnalytics.from_dict(data)
+
+    assert analytics_model_o == expected_o
+    assert analytics_model_o.to_api().to_dict(camel_case=True) == data
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_get_declarative_ldm.yaml"))
 def test_get_declarative_ldm(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])

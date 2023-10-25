@@ -635,7 +635,7 @@
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
-            "MANAGE"
+            "USE"
           ]
         }
       }

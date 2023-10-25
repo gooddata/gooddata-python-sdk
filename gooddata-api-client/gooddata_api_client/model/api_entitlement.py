@@ -61,6 +61,7 @@ class ApiEntitlement(ModelNormal):
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
             'EXTRACACHE': "ExtraCache",
+            'HIPAA': "Hipaa",
             'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",

@@ -27,14 +27,15 @@ def _run_and_validate_results(
     exec_def: ExecutionDefinition,
     expected: Tuple[int, int],
     expected_row_totals: Optional[List[List[int]]] = None,
+    page_size: int = 100,
 ) -> str:
     # generate dataframe from exec_def
-    result, result_metadata = gdf.for_exec_def(exec_def=exec_def)
+    result, result_metadata = gdf.for_exec_def(exec_def=exec_def, page_size=page_size)
     assert result.values.shape == expected
 
     # use result ID from computation above and generate dataframe just from it
     result_from_result_id, result_metadata_from_result_id = gdf.for_exec_result_id(
-        result_id=result_metadata.execution_response.result_id,
+        result_id=result_metadata.execution_response.result_id, page_size=page_size
     )
 
     if expected_row_totals is not None:
@@ -360,7 +361,8 @@ def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
         filters=[],
         dimensions=[["region", "state", "product_category", "measureGroup"]],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1))
+    # TODO: remove page_size=500 once UNI-591 is resolved
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1), page_size=500)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_one_dim2.yaml"))

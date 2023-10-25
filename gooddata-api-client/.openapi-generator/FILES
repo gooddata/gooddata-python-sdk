@@ -30,6 +30,7 @@ docs/AppearanceApi.md
 docs/ArithmeticMeasureDefinition.md
 docs/ArithmeticMeasureDefinitionArithmeticMeasure.md
 docs/AssigneeIdentifier.md
+docs/AssigneeRule.md
 docs/AttributeExecutionResultHeader.md
 docs/AttributeFilter.md
 docs/AttributeFilterElements.md
@@ -53,6 +54,7 @@ docs/CustomLabel.md
 docs/CustomMetric.md
 docs/CustomOverride.md
 docs/DashboardPermissions.md
+docs/DashboardPermissionsAssignment.md
 docs/DashboardsApi.md
 docs/DataColumnLocator.md
 docs/DataColumnLocators.md
@@ -70,7 +72,12 @@ docs/DatasetsApi.md
 docs/DateFilter.md
 docs/DeclarativeAnalyticalDashboard.md
 docs/DeclarativeAnalyticalDashboardExtension.md
-docs/DeclarativeAnalyticalDashboardPermission.md
+docs/DeclarativeAnalyticalDashboardPermissionAssignment.md
+docs/DeclarativeAnalyticalDashboardPermissionForAssignee.md
+docs/DeclarativeAnalyticalDashboardPermissionForAssigneeAllOf.md
+docs/DeclarativeAnalyticalDashboardPermissionForAssigneeRule.md
+docs/DeclarativeAnalyticalDashboardPermissionForAssigneeRuleAllOf.md
+docs/DeclarativeAnalyticalDashboardPermissionsInner.md
 docs/DeclarativeAnalytics.md
 docs/DeclarativeAnalyticsLayer.md
 docs/DeclarativeAttribute.md
@@ -546,6 +553,7 @@ docs/LabelsApi.md
 docs/LayoutApi.md
 docs/ListLinks.md
 docs/ListLinksAllOf.md
+docs/ManageDashboardPermissionsRequestInner.md
 docs/MeasureDefinition.md
 docs/MeasureExecutionResultHeader.md
 docs/MeasureGroupHeaders.md
@@ -563,6 +571,7 @@ docs/OrganizationControllerApi.md
 docs/OrganizationDeclarativeAPIsApi.md
 docs/OrganizationEntityAPIsApi.md
 docs/OrganizationModelControllerApi.md
+docs/OrganizationPermissionAssignment.md
 docs/PDMDeclarativeAPIsApi.md
 docs/Paging.md
 docs/Parameter.md
@@ -571,6 +580,8 @@ docs/PdmLdmRequest.md
 docs/PdmSql.md
 docs/PermissionsApi.md
 docs/PermissionsForAssignee.md
+docs/PermissionsForAssigneeAllOf.md
+docs/PermissionsForAssigneeRule.md
 docs/PlatformUsage.md
 docs/PlatformUsageRequest.md
 docs/PluginsApi.md
@@ -600,6 +611,7 @@ docs/ResultDimension.md
 docs/ResultDimensionHeader.md
 docs/ResultSpec.md
 docs/RsaSpecification.md
+docs/RulePermission.md
 docs/ScanRequest.md
 docs/ScanResultPdm.md
 docs/ScanSqlRequest.md
@@ -731,6 +743,7 @@ gooddata_api_client/model/api_entitlement.py
 gooddata_api_client/model/arithmetic_measure_definition.py
 gooddata_api_client/model/arithmetic_measure_definition_arithmetic_measure.py
 gooddata_api_client/model/assignee_identifier.py
+gooddata_api_client/model/assignee_rule.py
 gooddata_api_client/model/attribute_execution_result_header.py
 gooddata_api_client/model/attribute_filter.py
 gooddata_api_client/model/attribute_filter_elements.py
@@ -747,6 +760,7 @@ gooddata_api_client/model/custom_label.py
 gooddata_api_client/model/custom_metric.py
 gooddata_api_client/model/custom_override.py
 gooddata_api_client/model/dashboard_permissions.py
+gooddata_api_client/model/dashboard_permissions_assignment.py
 gooddata_api_client/model/data_column_locator.py
 gooddata_api_client/model/data_column_locators.py
 gooddata_api_client/model/data_source_parameter.py
@@ -758,7 +772,12 @@ gooddata_api_client/model/dataset_workspace_data_filter_identifier.py
 gooddata_api_client/model/date_filter.py
 gooddata_api_client/model/declarative_analytical_dashboard.py
 gooddata_api_client/model/declarative_analytical_dashboard_extension.py
-gooddata_api_client/model/declarative_analytical_dashboard_permission.py
+gooddata_api_client/model/declarative_analytical_dashboard_permission_assignment.py
+gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee.py
+gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee_all_of.py
+gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee_rule.py
+gooddata_api_client/model/declarative_analytical_dashboard_permission_for_assignee_rule_all_of.py
+gooddata_api_client/model/declarative_analytical_dashboard_permissions_inner.py
 gooddata_api_client/model/declarative_analytics.py
 gooddata_api_client/model/declarative_analytics_layer.py
 gooddata_api_client/model/declarative_attribute.py
@@ -1224,6 +1243,7 @@ gooddata_api_client/model/json_api_workspace_to_one_linkage.py
 gooddata_api_client/model/label_identifier.py
 gooddata_api_client/model/list_links.py
 gooddata_api_client/model/list_links_all_of.py
+gooddata_api_client/model/manage_dashboard_permissions_request_inner.py
 gooddata_api_client/model/measure_definition.py
 gooddata_api_client/model/measure_execution_result_header.py
 gooddata_api_client/model/measure_group_headers.py
@@ -1235,12 +1255,15 @@ gooddata_api_client/model/negative_attribute_filter.py
 gooddata_api_client/model/negative_attribute_filter_negative_attribute_filter.py
 gooddata_api_client/model/object_links.py
 gooddata_api_client/model/object_links_container.py
+gooddata_api_client/model/organization_permission_assignment.py
 gooddata_api_client/model/paging.py
 gooddata_api_client/model/parameter.py
 gooddata_api_client/model/pdf_export_request.py
 gooddata_api_client/model/pdm_ldm_request.py
 gooddata_api_client/model/pdm_sql.py
 gooddata_api_client/model/permissions_for_assignee.py
+gooddata_api_client/model/permissions_for_assignee_all_of.py
+gooddata_api_client/model/permissions_for_assignee_rule.py
 gooddata_api_client/model/platform_usage.py
 gooddata_api_client/model/platform_usage_request.py
 gooddata_api_client/model/pop_dataset.py
@@ -1268,6 +1291,7 @@ gooddata_api_client/model/result_dimension.py
 gooddata_api_client/model/result_dimension_header.py
 gooddata_api_client/model/result_spec.py
 gooddata_api_client/model/rsa_specification.py
+gooddata_api_client/model/rule_permission.py
 gooddata_api_client/model/scan_request.py
 gooddata_api_client/model/scan_result_pdm.py
 gooddata_api_client/model/scan_sql_request.py

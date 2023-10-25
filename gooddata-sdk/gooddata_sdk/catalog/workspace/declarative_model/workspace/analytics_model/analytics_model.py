@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 import attr
+from cattrs import global_converter, structure
 
 from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
 from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
@@ -14,7 +15,10 @@ from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDa
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
-from gooddata_sdk import CatalogDeclarativeWorkspaceHierarchyPermission
+from gooddata_sdk import (
+    CatalogDeclarativeDashboardPermissionsForAssignee,
+    CatalogDeclarativeDashboardPermissionsForAssigneeRule,
+)
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
@@ -218,9 +222,34 @@ class CatalogAnalyticsBaseMeta(CatalogAnalyticsBase):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
+    permissions: Optional[
+        List[
+            Union[
+                CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
+            ]
+        ]
+    ] = None
+
     @staticmethod
     def client_class() -> Type[DeclarativeAnalyticalDashboard]:
         return DeclarativeAnalyticalDashboard
+
+    @staticmethod
+    def structure_permissions(
+        v: Dict[str, Any], _: Any
+    ) -> Union[
+        CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
+    ]:
+        if v.get("assignee_identifier") is not None:
+            return structure(v, CatalogDeclarativeDashboardPermissionsForAssignee)
+        else:
+            return structure(v, CatalogDeclarativeDashboardPermissionsForAssigneeRule)
+
+
+global_converter.register_structure_hook(
+    Union[CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule],
+    CatalogDeclarativeAnalyticalDashboard.structure_permissions,
+)
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -232,7 +261,9 @@ class CatalogDeclarativeDashboardPlugin(CatalogAnalyticsBaseMeta):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeAnalyticalDashboardExtension(CatalogAnalyticsObjectBase):
-    permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission]
+    permissions: List[
+        Union[CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule]
+    ]
 
     @staticmethod
     def client_class() -> Type[DeclarativeAnalyticalDashboardExtension]:
