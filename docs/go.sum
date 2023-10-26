@@ -8,6 +8,8 @@ github.com/gooddata/gooddata-docs-theme v0.0.0-20231017144305-7224c1251b71 h1:TP
 github.com/gooddata/gooddata-docs-theme v0.0.0-20231017144305-7224c1251b71/go.mod h1:VVNP6Cmo+vC37RD3T/YHjyU/QdqftGY5z4G513LYyrA=
 github.com/gooddata/gooddata-docs-theme v0.0.0-20231020110753-c96d5d57bff5 h1:jN+ygmdMBAErl2GTH7scqopUXtRyM6HvaA2Mgx7CmtY=
 github.com/gooddata/gooddata-docs-theme v0.0.0-20231020110753-c96d5d57bff5/go.mod h1:VVNP6Cmo+vC37RD3T/YHjyU/QdqftGY5z4G513LYyrA=
+github.com/gooddata/gooddata-docs-theme v0.0.0-20231026115610-865757c9da13 h1:s6+8+l46mnvOU0SW3LD8thIBTNpv8xMhXxdJyIk+zbk=
+github.com/gooddata/gooddata-docs-theme v0.0.0-20231026115610-865757c9da13/go.mod h1:VVNP6Cmo+vC37RD3T/YHjyU/QdqftGY5z4G513LYyrA=
 github.com/google/docsy v0.7.1 h1:DUriA7Nr3lJjNi9Ulev1SfiG1sUYmvyDeU4nTp7uDxY=
 github.com/google/docsy v0.7.1/go.mod h1:JCmE+c+izhE0Rvzv3y+AzHhz1KdwlA9Oj5YBMklJcfc=
 github.com/google/docsy/dependencies v0.7.1 h1:NbzYKJYMin2q50xdWSUzR2c9gCp7zR/XHDBcxklEcTQ=
