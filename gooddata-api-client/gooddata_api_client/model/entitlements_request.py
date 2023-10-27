@@ -71,6 +71,7 @@ class EntitlementsRequest(ModelNormal):
             'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
             'WHITELABELING': "WhiteLabeling",
             'WORKSPACECOUNT': "WorkspaceCount",
+            'USERTELEMETRYDISABLED': "UserTelemetryDisabled",
         },
     }
 

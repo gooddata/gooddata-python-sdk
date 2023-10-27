@@ -238,10 +238,14 @@ class CatalogDeclarativeLdm(Base):
                         if fact.source_column:
                             fact.source_column = self._change_case(fact.source_column, upper_case)
                 for reference in dataset.references:
-                    new_columns = []
-                    for reference_column in reference.source_columns:
-                        new_columns.append(self._change_case(reference_column, upper_case))
-                    reference.source_columns = new_columns
+                    if reference.source_columns is not None:
+                        new_columns = []
+                        for reference_column in reference.source_columns:
+                            new_columns.append(self._change_case(reference_column, upper_case))
+                        reference.source_columns = new_columns
+                    elif reference.sources is not None:
+                        for reference_source in reference.sources:
+                            reference_source.column = self._change_case(reference_source.column, upper_case)
         return self
 
     def remove_wdf_refs(self) -> None:

@@ -195,6 +195,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                 "INT",
                             ],
                             source_columns=["customer_id"],
+                            sources=[
+                                DeclarativeReferenceSource(
+                                    column="customer_id",
+                                    data_type="STRING",
+                                    target=GrainIdentifier(
+                                        id="attr.customers.customer_name",
+                                        type="ATTRIBUTE",
+                                    ),
+                                ),
+                            ],
                         ),
                     ],
                     sql=DeclarativeDatasetSql(

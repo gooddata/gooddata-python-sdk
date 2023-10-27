@@ -151,7 +151,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 515fa3fc-96d4-40cd-b7ea-437be9c24f17
+              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -303,7 +303,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 515fa3fc-96d4-40cd-b7ea-437be9c24f17
+              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -797,7 +797,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -949,6 +949,6 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

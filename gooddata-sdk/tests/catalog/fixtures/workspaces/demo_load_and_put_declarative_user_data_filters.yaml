@@ -373,7 +373,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -1894,10 +1894,10 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - campaign_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - campaign_id
                     title: Campaign channels
                     attributes:
                       - id: campaign_channel_id
@@ -2049,34 +2049,34 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - campaign_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - campaign_id
                       - identifier:
                           id: customers
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - customer_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - customer_id
                       - identifier:
                           id: date
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - date
                         sourceColumnDataTypes:
                           - DATE
+                        sourceColumns:
+                          - date
                       - identifier:
                           id: products
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - product_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - product_id
                     title: Order lines
                     attributes:
                       - id: order_id

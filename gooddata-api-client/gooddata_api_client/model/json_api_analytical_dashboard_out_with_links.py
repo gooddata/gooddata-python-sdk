@@ -106,9 +106,9 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'meta': (JsonApiAnalyticalDashboardOutMeta,),  # noqa: E501
             'relationships': (JsonApiAnalyticalDashboardOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
@@ -120,9 +120,9 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
@@ -137,6 +137,7 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """JsonApiAnalyticalDashboardOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "analyticalDashboard", must be one of ["analyticalDashboard", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -169,7 +170,6 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
@@ -247,6 +247,7 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """JsonApiAnalyticalDashboardOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "analyticalDashboard", must be one of ["analyticalDashboard", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -279,7 +280,6 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardOutAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501

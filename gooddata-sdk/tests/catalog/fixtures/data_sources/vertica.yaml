@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 905a35975ec309ea
+          traceId: 4995ca396cc1dcc1
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -173,9 +173,9 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               enableCaching: false
-              name: Test2
               type: VERTICA
               schema: demo
+              name: Test2
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -258,9 +258,9 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               enableCaching: false
-              name: Test2
               type: VERTICA
               schema: demo
+              name: Test2
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:

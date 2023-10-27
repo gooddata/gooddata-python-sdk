@@ -344,8 +344,7 @@
               "enum": [
                 "facts",
                 "attributes",
-                "measures",
-                "UNRECOGNIZED"
+                "measures"
               ],
               "example": "facts",
               "type": "string"

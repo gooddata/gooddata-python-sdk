@@ -64,7 +64,6 @@ class AfmValidObjectsQuery(ModelNormal):
             'FACTS': "facts",
             'ATTRIBUTES': "attributes",
             'MEASURES': "measures",
-            'UNRECOGNIZED': "UNRECOGNIZED",
         },
     }
 

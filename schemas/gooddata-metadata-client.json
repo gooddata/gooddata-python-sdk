@@ -67,7 +67,8 @@
               "UnlimitedUsers",
               "UnlimitedWorkspaces",
               "WhiteLabeling",
-              "WorkspaceCount"
+              "WorkspaceCount",
+              "UserTelemetryDisabled"
             ],
             "type": "string"
           },
@@ -1639,7 +1640,8 @@
             "type": "boolean"
           },
           "sourceColumnDataTypes": {
-            "description": "An array of source column data types for a given reference.",
+            "deprecated": true,
+            "description": "An array of source column data types for a given reference. Deprecated, use 'sources' instead.",
             "items": {
               "enum": [
                 "INT",
@@ -1655,7 +1657,8 @@
             "type": "array"
           },
           "sourceColumns": {
-            "description": "An array of source column names for a given reference.",
+            "deprecated": true,
+            "description": "An array of source column names for a given reference. Deprecated, use 'sources' instead.",
             "example": [
               "customer_id"
             ],
@@ -1663,12 +1666,52 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "sources": {
+            "description": "An array of source columns for a given reference.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeReferenceSource"
+            },
+            "type": "array"
           }
         },
         "required": [
           "identifier",
-          "multivalue",
-          "sourceColumns"
+          "multivalue"
+        ],
+        "type": "object"
+      },
+      "DeclarativeReferenceSource": {
+        "description": "A dataset reference source column description.",
+        "properties": {
+          "column": {
+            "description": "A name of the source column in the table.",
+            "example": "customer_id",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "dataType": {
+            "description": "A type of the source column.",
+            "enum": [
+              "INT",
+              "STRING",
+              "DATE",
+              "NUMERIC",
+              "TIMESTAMP",
+              "TIMESTAMP_TZ",
+              "BOOLEAN"
+            ],
+            "example": "STRING",
+            "maxLength": 255,
+            "type": "string"
+          },
+          "target": {
+            "$ref": "#/components/schemas/GrainIdentifier"
+          }
+        },
+        "required": [
+          "column",
+          "target"
         ],
         "type": "object"
       },
@@ -2672,7 +2715,8 @@
                 "UnlimitedUsers",
                 "UnlimitedWorkspaces",
                 "WhiteLabeling",
-                "WorkspaceCount"
+                "WorkspaceCount",
+                "UserTelemetryDisabled"
               ],
               "type": "string"
             },
@@ -2798,6 +2842,11 @@
       },
       "GrainIdentifier": {
         "description": "A grain identifier.",
+        "example": {
+          "id": "customer_id",
+          "type": "attribute"
+        },
+        "maxLength": 255,
         "properties": {
           "id": {
             "description": "Grain ID.",
@@ -2965,6 +3014,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -2983,6 +3035,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -3060,6 +3113,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -3232,6 +3288,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -3376,6 +3433,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -3426,6 +3484,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -3444,6 +3505,7 @@
           }
         },
         "required": [
+          "attributes",
           "type"
         ],
         "type": "object"
@@ -6792,6 +6854,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -6810,6 +6875,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -6879,6 +6945,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -6961,6 +7030,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -7090,6 +7160,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -7140,6 +7211,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -7158,6 +7232,7 @@
           }
         },
         "required": [
+          "attributes",
           "type"
         ],
         "type": "object"
@@ -10187,6 +10262,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -10205,6 +10283,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -10282,6 +10361,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -10408,6 +10490,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -10524,6 +10607,7 @@
           }
         },
         "required": [
+          "attributes",
           "id",
           "type"
         ],
@@ -10574,6 +10658,9 @@
                 "type": "string"
               }
             },
+            "required": [
+              "content"
+            ],
             "type": "object"
           },
           "id": {
@@ -10592,6 +10679,7 @@
           }
         },
         "required": [
+          "attributes",
           "type"
         ],
         "type": "object"
@@ -16477,59 +16565,6 @@
           }
         },
         "summary": "Get an API Token for a user",
-        "tags": [
-          "API tokens",
-          "entities",
-          "user-model-controller"
-        ]
-      },
-      "put": {
-        "operationId": "updateEntity@ApiTokens",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=bearerToken==someString",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/vnd.gooddata.api+json": {
-              "schema": {
-                "$ref": "#/components/schemas/JsonApiApiTokenInDocument"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiApiTokenOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
-          }
-        },
-        "summary": "Put new API token for the user",
         "tags": [
           "API tokens",
           "entities",

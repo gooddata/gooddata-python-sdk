@@ -335,7 +335,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -487,6 +487,6 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
