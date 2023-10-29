@@ -89,9 +89,11 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
     CatalogDeclarativeDataSourcePermission,
+    CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
+    CatalogOrganizationPermissionAssignment,
 )
 from gooddata_sdk.catalog.rule import CatalogAssigneeRule
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers

@@ -4,7 +4,9 @@ from typing import List, Union
 from gooddata_sdk import (
     CatalogAvailableAssignees,
     CatalogDashboardPermissions,
+    CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeWorkspacePermissions,
+    CatalogOrganizationPermissionAssignment,
     CatalogPermissionsForAssignee,
     CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
@@ -106,3 +108,53 @@ class CatalogPermissionService(CatalogServiceBase):
             [permission.to_api() for permission in permissions_for_assignee],
             _check_return_type=False,
         )
+
+    def get_declarative_organization_permissions(self) -> List[CatalogDeclarativeOrganizationPermission]:
+        """Get a list of all declarative organization permissions.
+
+        Args:
+            None
+
+        Returns:
+            [CatalogDeclarativeOrganizationPermission]:
+                List of all declarative organization permissions.
+        """
+
+        catalog_list = []
+        organization_permissions = self._layout_api.get_organization_permissions()
+        for permission in organization_permissions:
+            catalog_list.append(CatalogDeclarativeOrganizationPermission.from_api(permission))
+        return catalog_list
+
+    def put_declarative_organization_permissions(
+        self, org_permissions: List[CatalogDeclarativeOrganizationPermission]
+    ) -> None:
+        """Put a list of all declarative organization permissions.
+
+        Args:
+            org_permissions([CatalogDeclarativeOrganizationPermission])
+                list of declarative organization permissions
+
+        Returns:
+            None
+        """
+
+        declarative_organization_permissions = []
+        for catalog_permission in org_permissions:
+            declarative_organization_permissions.append(catalog_permission.to_api())
+        self._layout_api.set_organization_permissions(declarative_organization_permissions)
+
+    def manage_organization_permissions(
+        self, organization_permission_assignments: List[CatalogOrganizationPermissionAssignment]
+    ) -> None:
+        """Provide managing organization permissions for user and user groups.
+
+        Args:
+            organization_permission_assignments ([CatalogOrganizationPermissionAssignment]):
+                Object containing List of users and user group and desired organization permissions. Set empty list
+                permissions for user/user group means remove organization permissions.
+        Returns:
+            None
+        """
+        permissions = [permission.to_api() for permission in organization_permission_assignments]
+        self._actions_api.manage_organization_permissions(permissions, _check_return_type=False)
