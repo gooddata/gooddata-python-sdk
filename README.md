@@ -29,11 +29,11 @@ Check out the GoodData Pandas [documentation](https://gooddata-pandas.readthedoc
 
 ### GoodData Foreign Data Wrapper
 
-[!WARNING]
-GoodData Foreign Data Wrapper is currently deprecated.
+> [!WARNING]
+> GoodData Foreign Data Wrapper is currently deprecated.
 
 The [gooddata-fdw](./gooddata-fdw) package provides a way
-to map Good Data Cloud semantic layer and/or insights stored in your Good Data Cloud
+to map GoodData Cloud semantic layer and/or insights stored in your GoodData Cloud
 into PostgreSQL as foreign tables that you can then query using SQL.
 
 Check out the GoodData Foreign Data Wrapper [documentation](https://gooddata-fdw.readthedocs.io/en/latest/) to learn more and get started.
