@@ -161,12 +161,12 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 9cc4d5e5d01a8a6c15dd52a5a9113375507c1699
+              executionResult: 456a6b6bfa45413bc17832446cb5dae5f97d8936
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 9cc4d5e5d01a8a6c15dd52a5a9113375507c1699
+        executionResult: 456a6b6bfa45413bc17832446cb5dae5f97d8936
         fileName: test_csv
         format: CSV
         customOverride:
@@ -251,10 +251,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: 12d2a1a1eddd5ccabda84adfb333e1607d3c2f80
+          exportResult: 321a18236166383c0e5d1b23ee648be756900c61
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/12d2a1a1eddd5ccabda84adfb333e1607d3c2f80
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/321a18236166383c0e5d1b23ee648be756900c61
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/12d2a1a1eddd5ccabda84adfb333e1607d3c2f80
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/321a18236166383c0e5d1b23ee648be756900c61
       body: null
       headers:
         Accept:
@@ -352,7 +352,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Disposition:
-          - attachment;filename*=utf-8''test_csv.csv
+          - attachment; filename*=UTF-8''test_csv.csv
         Content-Length:
           - '1830'
         Content-Security-Policy:

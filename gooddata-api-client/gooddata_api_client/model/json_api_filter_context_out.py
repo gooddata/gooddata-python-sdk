@@ -100,9 +100,9 @@ class JsonApiFilterContextOut(ModelNormal):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
             'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiFilterContextOutRelationships,),  # noqa: E501
         }
@@ -113,9 +113,9 @@ class JsonApiFilterContextOut(ModelNormal):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
@@ -127,10 +127,11 @@ class JsonApiFilterContextOut(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiFilterContextOut - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -165,7 +166,6 @@ class JsonApiFilterContextOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiFilterContextOutRelationships): [optional]  # noqa: E501
         """
@@ -200,6 +200,7 @@ class JsonApiFilterContextOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -222,10 +223,11 @@ class JsonApiFilterContextOut(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiFilterContextOut - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardInAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -260,7 +262,6 @@ class JsonApiFilterContextOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiFilterContextOutRelationships): [optional]  # noqa: E501
         """
@@ -293,6 +294,7 @@ class JsonApiFilterContextOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

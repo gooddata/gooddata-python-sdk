@@ -71,6 +71,7 @@ class ApiEntitlement(ModelNormal):
             'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
             'WHITELABELING': "WhiteLabeling",
             'WORKSPACECOUNT': "WorkspaceCount",
+            'USERTELEMETRYDISABLED': "UserTelemetryDisabled",
         },
     }
 

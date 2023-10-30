@@ -400,7 +400,7 @@ with gooddata_api_client.ApiClient() as api_client:
     object_id = "objectId_example" # str | 
     json_api_filter_context_patch_document = JsonApiFilterContextPatchDocument(
         data=JsonApiFilterContextPatch(
-            attributes=JsonApiAnalyticalDashboardInAttributes(
+            attributes=JsonApiAnalyticalDashboardPatchAttributes(
                 are_relations_valid=True,
                 content={},
                 description="description_example",

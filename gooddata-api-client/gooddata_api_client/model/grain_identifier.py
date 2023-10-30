@@ -63,6 +63,8 @@ class GrainIdentifier(ModelNormal):
     }
 
     validations = {
+        ('value',): {
+        },
         ('id',): {
             'regex': {
                 'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501

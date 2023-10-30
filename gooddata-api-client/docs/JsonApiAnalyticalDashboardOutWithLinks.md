@@ -4,9 +4,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**attributes** | [**JsonApiAnalyticalDashboardOutAttributes**](JsonApiAnalyticalDashboardOutAttributes.md) |  | 
 **id** | **str** | API identifier of an object | 
 **type** | **str** | Object type | defaults to "analyticalDashboard"
-**attributes** | [**JsonApiAnalyticalDashboardOutAttributes**](JsonApiAnalyticalDashboardOutAttributes.md) |  | [optional] 
 **meta** | [**JsonApiAnalyticalDashboardOutMeta**](JsonApiAnalyticalDashboardOutMeta.md) |  | [optional] 
 **relationships** | [**JsonApiAnalyticalDashboardOutRelationships**](JsonApiAnalyticalDashboardOutRelationships.md) |  | [optional] 
 **links** | [**ObjectLinks**](ObjectLinks.md) |  | [optional] 

@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: edf8d3401c0d88b6
+          traceId: 55d87a2638e999d4
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -2563,10 +2563,10 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - campaign_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - campaign_id
                     title: Campaign channels
                     attributes:
                       - id: campaign_channel_id
@@ -2718,34 +2718,34 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - campaign_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - campaign_id
                       - identifier:
                           id: customers
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - customer_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - customer_id
                       - identifier:
                           id: date
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - date
                         sourceColumnDataTypes:
                           - DATE
+                        sourceColumns:
+                          - date
                       - identifier:
                           id: products
                           type: dataset
                         multivalue: false
-                        sourceColumns:
-                          - product_id
                         sourceColumnDataTypes:
                           - INT
+                        sourceColumns:
+                          - product_id
                     title: Order lines
                     attributes:
                       - id: order_id

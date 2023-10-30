@@ -88,8 +88,8 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'are_relations_valid': (bool,),  # noqa: E501
             'content': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'are_relations_valid': (bool,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
@@ -103,8 +103,8 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
 
 
     attribute_map = {
-        'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'content': 'content',  # noqa: E501
+        'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
@@ -119,8 +119,11 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, content, *args, **kwargs):  # noqa: E501
         """JsonApiAnalyticalDashboardOutAttributes - a model defined in OpenAPI
+
+        Args:
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -154,7 +157,6 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.. [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
@@ -191,6 +193,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.content = content
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -211,8 +214,11 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, content, *args, **kwargs):  # noqa: E501
         """JsonApiAnalyticalDashboardOutAttributes - a model defined in OpenAPI
+
+        Args:
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -246,7 +252,6 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             are_relations_valid (bool): [optional]  # noqa: E501
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Free-form JSON content. Maximum supported length is 250000 characters.. [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
@@ -281,6 +286,7 @@ class JsonApiAnalyticalDashboardOutAttributes(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.content = content
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

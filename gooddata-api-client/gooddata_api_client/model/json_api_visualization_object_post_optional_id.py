@@ -96,8 +96,8 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         """
         lazy_import()
         return {
-            'type': (str,),  # noqa: E501
             'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
+            'type': (str,),  # noqa: E501
             'id': (str,),  # noqa: E501
         }
 
@@ -107,8 +107,8 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
 
 
     attribute_map = {
-        'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'type': 'type',  # noqa: E501
         'id': 'id',  # noqa: E501
     }
 
@@ -119,10 +119,11 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, attributes, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectPostOptionalId - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
@@ -156,7 +157,6 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
         """
 
@@ -190,6 +190,7 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -211,10 +212,11 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, attributes, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectPostOptionalId - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardInAttributes):
 
         Keyword Args:
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
@@ -248,7 +250,6 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             id (str): API identifier of an object. [optional]  # noqa: E501
         """
 
@@ -280,6 +281,7 @@ class JsonApiVisualizationObjectPostOptionalId(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.type = type
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

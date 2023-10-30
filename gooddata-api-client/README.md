@@ -91,7 +91,6 @@ Class | Method | HTTP request | Description
 *APITokensApi* | [**delete_entity_api_tokens**](docs/APITokensApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | Delete an API Token for a user
 *APITokensApi* | [**get_all_entities_api_tokens**](docs/APITokensApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
 *APITokensApi* | [**get_entity_api_tokens**](docs/APITokensApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | Get an API Token for a user
-*APITokensApi* | [**update_entity_api_tokens**](docs/APITokensApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | Put new API token for the user
 *AnalyticsModelApi* | [**get_analytics_model**](docs/AnalyticsModelApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
 *AnalyticsModelApi* | [**set_analytics_model**](docs/AnalyticsModelApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
 *AppearanceApi* | [**create_entity_color_palettes**](docs/AppearanceApi.md#create_entity_color_palettes) | **POST** /api/v1/entities/colorPalettes | Post Color Pallettes
@@ -466,7 +465,6 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**patch_entity_workspace_settings**](docs/EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
 *EntitiesApi* | [**patch_entity_workspaces**](docs/EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
 *EntitiesApi* | [**update_entity_analytical_dashboards**](docs/EntitiesApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
-*EntitiesApi* | [**update_entity_api_tokens**](docs/EntitiesApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | Put new API token for the user
 *EntitiesApi* | [**update_entity_attribute_hierarchies**](docs/EntitiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 *EntitiesApi* | [**update_entity_color_palettes**](docs/EntitiesApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
 *EntitiesApi* | [**update_entity_cookie_security_configurations**](docs/EntitiesApi.md#update_entity_cookie_security_configurations) | **PUT** /api/v1/entities/admin/cookieSecurityConfigurations/{id} | Put CookieSecurityConfiguration
@@ -595,7 +593,6 @@ Class | Method | HTTP request | Description
 *UserModelControllerApi* | [**get_all_entities_user_settings**](docs/UserModelControllerApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 *UserModelControllerApi* | [**get_entity_api_tokens**](docs/UserModelControllerApi.md#get_entity_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens/{id} | Get an API Token for a user
 *UserModelControllerApi* | [**get_entity_user_settings**](docs/UserModelControllerApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | Get a setting for a user
-*UserModelControllerApi* | [**update_entity_api_tokens**](docs/UserModelControllerApi.md#update_entity_api_tokens) | **PUT** /api/v1/entities/users/{userId}/apiTokens/{id} | Put new API token for the user
 *UserModelControllerApi* | [**update_entity_user_settings**](docs/UserModelControllerApi.md#update_entity_user_settings) | **PUT** /api/v1/entities/users/{userId}/userSettings/{id} | Put new user settings for the user
 *WorkspaceObjectControllerApi* | [**create_entity_analytical_dashboards**](docs/WorkspaceObjectControllerApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Post Dashboards
 *WorkspaceObjectControllerApi* | [**create_entity_attribute_hierarchies**](docs/WorkspaceObjectControllerApi.md#create_entity_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Post Attribute Hierarchies
@@ -764,6 +761,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeOrganizationPermission](docs/DeclarativeOrganizationPermission.md)
  - [DeclarativePdm](docs/DeclarativePdm.md)
  - [DeclarativeReference](docs/DeclarativeReference.md)
+ - [DeclarativeReferenceSource](docs/DeclarativeReferenceSource.md)
  - [DeclarativeRsaSpecification](docs/DeclarativeRsaSpecification.md)
  - [DeclarativeSetting](docs/DeclarativeSetting.md)
  - [DeclarativeSingleWorkspacePermission](docs/DeclarativeSingleWorkspacePermission.md)
@@ -849,6 +847,7 @@ Class | Method | HTTP request | Description
  - [JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects](docs/JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects.md)
  - [JsonApiAnalyticalDashboardOutWithLinks](docs/JsonApiAnalyticalDashboardOutWithLinks.md)
  - [JsonApiAnalyticalDashboardPatch](docs/JsonApiAnalyticalDashboardPatch.md)
+ - [JsonApiAnalyticalDashboardPatchAttributes](docs/JsonApiAnalyticalDashboardPatchAttributes.md)
  - [JsonApiAnalyticalDashboardPatchDocument](docs/JsonApiAnalyticalDashboardPatchDocument.md)
  - [JsonApiAnalyticalDashboardPostOptionalId](docs/JsonApiAnalyticalDashboardPostOptionalId.md)
  - [JsonApiAnalyticalDashboardPostOptionalIdDocument](docs/JsonApiAnalyticalDashboardPostOptionalIdDocument.md)

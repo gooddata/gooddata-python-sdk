@@ -84,14 +84,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
+            - authId: CiQxMjRjYzNlZi1lODU5LTQzM2ItODc0Mi1mOWJhMDRjYTRmMmISBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
+            - authId: CiQyZjBlZDM1ZS0zMTZmLTQ3MmEtOTc0Yi00MmRmYTFjOGNjMmYSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -185,7 +185,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
+                authenticationId: CiQxMjRjYzNlZi1lODU5LTQzM2ItODc0Mi1mOWJhMDRjYTRmMmISBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -196,7 +196,7 @@ interactions:
             - id: demo2
               type: user
               attributes:
-                authenticationId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
+                authenticationId: CiQyZjBlZDM1ZS0zMTZmLTQ3MmEtOTc0Yi00MmRmYTFjOGNjMmYSBWxvY2Fs
               relationships:
                 userGroups:
                   data:
@@ -435,7 +435,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: a7ab866a-75fd-41b8-8d28-8b5ffc3bd1ac
+              oauthClientId: 34272031-2ff7-43fc-a8f8-803b9fa4cc88
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -636,14 +636,14 @@ interactions:
             settings: []
             permissions: []
           - id: demo
-            authId: CiQ3YmY3ZTAxNS0xOWNkLTQ3MDgtYTEyNi1kYzg0NzI4MTdjZDgSBWxvY2Fs
+            authId: CiQxMjRjYzNlZi1lODU5LTQzM2ItODc0Mi1mOWJhMDRjYTRmMmISBWxvY2Fs
             userGroups:
               - id: adminGroup
                 type: userGroup
             settings: []
             permissions: []
           - id: demo2
-            authId: CiQ3NDkyOWY0OS0xNjQ2LTQxOWEtOWY0OC1iNjE1ZjAyNTk0NzcSBWxvY2Fs
+            authId: CiQyZjBlZDM1ZS0zMTZmLTQ3MmEtOTc0Yi00MmRmYTFjOGNjMmYSBWxvY2Fs
             userGroups:
               - id: demoGroup
                 type: userGroup
