@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import List
 
 import pytest
 from tests_support.vcrpy_utils import get_vcr
@@ -12,9 +13,11 @@ from gooddata_sdk import (
     CatalogAssigneeRule,
     CatalogDashboardAssigneeIdentifier,
     CatalogDeclarativeDataSourcePermission,
+    CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
+    CatalogOrganizationPermissionAssignment,
     CatalogPermissionsForAssignee,
     CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
@@ -52,6 +55,25 @@ def _assert_default_permissions(catalog_declarative_permissions: CatalogDeclarat
         "demoGroup",
     }
     assert set(permission.name for permission in catalog_declarative_permissions.permissions) == {"ANALYZE", "VIEW"}
+
+
+def _assert_organization_permissions_id(
+    catalog_organization_permissions: List[CatalogDeclarativeOrganizationPermission],
+) -> None:
+    assert set(org_permission.assignee.id for org_permission in catalog_organization_permissions) == {"adminGroup"}
+
+
+def _default_organization_permissions(sdk: GoodDataSdk) -> None:
+    default_catalog_organization_permission = CatalogDeclarativeOrganizationPermission(
+        name="MANAGE", assignee=CatalogAssigneeIdentifier(id="adminGroup", type="userGroup")
+    )
+
+    sdk.catalog_permission.put_declarative_organization_permissions([default_catalog_organization_permission])
+
+    catalog_permissions = sdk.catalog_permission.get_declarative_organization_permissions()
+    assert len(catalog_permissions) == 1
+    _assert_organization_permissions_id(catalog_permissions)
+    assert set(org_permission.name for org_permission in catalog_permissions) == {"MANAGE"}
 
 
 def _validation_helper(class_type, attribute_name: str):
@@ -164,3 +186,54 @@ def test_list_dashboard_permissions(test_config):
     assert len(dashboard_permissions.user_groups) == 0
     assert len(dashboard_permissions.users) == 0
     assert len(dashboard_permissions.rules) == 0
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_organization_permissions.yaml"))
+def test_put_and_get_declarative_organization_permissions(test_config):
+    expected_json_path = _current_dir / "expected" / "declarative_organization_permissions.json"
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    with open(expected_json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    declarative_organization_permissions = []
+    for permission in data:
+        declarative_organization_permissions.append(CatalogDeclarativeOrganizationPermission.from_api(permission))
+
+    try:
+        sdk.catalog_permission.put_declarative_organization_permissions(declarative_organization_permissions)
+
+        catalog_declarative_permissions_after_put = sdk.catalog_permission.get_declarative_organization_permissions()
+        assert len(catalog_declarative_permissions_after_put) == 2
+        _assert_organization_permissions_id(catalog_declarative_permissions_after_put)
+        assert set(org_permission.name for org_permission in catalog_declarative_permissions_after_put) == {
+            "MANAGE",
+            "SELF_CREATE_TOKEN",
+        }
+    finally:
+        _default_organization_permissions(sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "manage_organization_permissions.yaml"))
+def test_manage_organization_permissions(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+
+    # assign permissions to adminGroup
+    try:
+        sdk.catalog_permission.manage_organization_permissions(
+            [
+                CatalogOrganizationPermissionAssignment(
+                    assignee_identifier=CatalogAssigneeIdentifier(id="adminGroup", type="userGroup"),
+                    permissions=["MANAGE", "SELF_CREATE_TOKEN"],
+                )
+            ],
+        )
+
+        catalog_declarative_permissions_initial = sdk.catalog_permission.get_declarative_organization_permissions()
+        assert len(catalog_declarative_permissions_initial) == 2
+        assert set(org_permission.name for org_permission in catalog_declarative_permissions_initial) == {
+            "MANAGE",
+            "SELF_CREATE_TOKEN",
+        }
+    finally:
+        _default_organization_permissions(sdk)

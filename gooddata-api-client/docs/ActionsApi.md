@@ -279,7 +279,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
         exact_filter=[
             "exact_filter_example",
         ],
