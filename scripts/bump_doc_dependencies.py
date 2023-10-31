@@ -6,8 +6,8 @@ import tomlkit
 
 _CURRENT_DIR = Path.cwd()
 
-_TOML_FILE = _CURRENT_DIR / "docs/config/production/params.toml"
-_REDIR_FILE = _CURRENT_DIR / "docs/layouts/index.redir"
+_TOML_FILE = _CURRENT_DIR / "config/production/params.toml"
+_REDIR_FILE = _CURRENT_DIR / "layouts/index.redir"
 
 
 def bump_toml(file_path: Path, version: list[int]):
