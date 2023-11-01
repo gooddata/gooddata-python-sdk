@@ -2,7 +2,7 @@
 {{ $path := split (.Get 0) "."  }}
 {{ $version := partial "version.html" (dict "context" $page)}}
 
-{{ if $version }}
+{{ if and $version $version.dirpath }}
     {{ with getJSON (printf "versioned_docs/%s/data.json" $version.dirpath) }}
         {{ $currentData := .}}
         {{ range $path }}
@@ -19,4 +19,8 @@
             {{ partial "python-object.html" (dict "object" $objData "path" $path "context" $page) }}
         </div>
     {{ end }}
+{{ else }}
+
+Problem parsing the data.json!
+
 {{ end }}
