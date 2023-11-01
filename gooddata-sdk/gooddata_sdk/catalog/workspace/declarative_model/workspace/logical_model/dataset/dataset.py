@@ -145,7 +145,7 @@ class CatalogDeclarativeWorkspaceDataFilterColumn(Base):
         return DeclarativeWorkspaceDataFilterColumn
 
 
-@attr.s
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeReferenceSource(Base):
     column: str
     target: CatalogGrainIdentifier
