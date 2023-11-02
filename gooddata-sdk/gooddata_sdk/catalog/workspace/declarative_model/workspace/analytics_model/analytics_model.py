@@ -240,7 +240,7 @@ class CatalogDeclarativeAnalyticalDashboard(CatalogAnalyticsBaseMeta):
     ) -> Union[
         CatalogDeclarativeDashboardPermissionsForAssignee, CatalogDeclarativeDashboardPermissionsForAssigneeRule
     ]:
-        if v.get("assignee_identifier") is not None:
+        if v.get("assignee") is not None:
             return structure(v, CatalogDeclarativeDashboardPermissionsForAssignee)
         else:
             return structure(v, CatalogDeclarativeDashboardPermissionsForAssigneeRule)

@@ -18,7 +18,7 @@ from gooddata_sdk import (
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
     CatalogOrganizationPermissionAssignment,
-    CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeIdentifier,
     CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
     GoodDataSdk,
@@ -88,6 +88,52 @@ def _validation_helper(class_type, attribute_name: str):
         class_type(name="nonsense", assignee=CatalogAssigneeIdentifier(id="", type="user"))
 
 
+def _add_dashboard_permissions(sdk: GoodDataSdk) -> None:
+    # Add dashboard permission VIEW to one group and allWorkspaceUsers
+    sdk.catalog_permission.manage_dashboard_permissions(
+        "demo",
+        "campaign",
+        [
+            CatalogPermissionsForAssigneeIdentifier(
+                assignee_identifier=CatalogAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
+                permissions=["VIEW"],
+            ),
+            CatalogPermissionsForAssigneeRule(
+                assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
+                permissions=["VIEW"],
+            ),
+        ],
+    )
+    # check that just one group and allWorkspaceUsers has dashboard permission
+    dashboard_permissions = sdk.catalog_permission.list_dashboard_permissions("demo", "campaign")
+    assert len(dashboard_permissions.user_groups) == 1
+    assert len(dashboard_permissions.users) == 0
+    assert len(dashboard_permissions.rules) == 1
+
+
+def _rollback_dashboard_permissions(sdk: GoodDataSdk) -> None:
+    # remove dashboard permissions of the group and allWorkspaceUsers
+    sdk.catalog_permission.manage_dashboard_permissions(
+        "demo",
+        "campaign",
+        [
+            CatalogPermissionsForAssigneeIdentifier(
+                assignee_identifier=CatalogDashboardAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
+                permissions=[],
+            ),
+            CatalogPermissionsForAssigneeRule(
+                assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
+                permissions=[],
+            ),
+        ],
+    )
+    # check that it was properly removed
+    dashboard_permissions = sdk.catalog_permission.list_dashboard_permissions("demo", "campaign")
+    assert len(dashboard_permissions.user_groups) == 0
+    assert len(dashboard_permissions.users) == 0
+    assert len(dashboard_permissions.rules) == 0
+
+
 def test_single_workspace_permission_validation(test_config):
     _validation_helper(CatalogDeclarativeSingleWorkspacePermission, "name")
 
@@ -146,46 +192,10 @@ def test_list_available_assignees(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "list_dashboard_permissions.yaml"))
 def test_list_dashboard_permissions(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    # Add dashboard permission VIEW to one group and allWorkspaceUsers
-    sdk.catalog_permission.manage_dashboard_permissions(
-        "demo",
-        "campaign",
-        [
-            CatalogPermissionsForAssignee(
-                assignee_identifier=CatalogAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
-                permissions=["VIEW"],
-            ),
-            CatalogPermissionsForAssigneeRule(
-                assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
-                permissions=["VIEW"],
-            ),
-        ],
-    )
-    # check that just one group and allWorkspaceUsers has dashboard permission
-    dashboard_permissions = sdk.catalog_permission.list_dashboard_permissions("demo", "campaign")
-    assert len(dashboard_permissions.user_groups) == 1
-    assert len(dashboard_permissions.users) == 0
-    assert len(dashboard_permissions.rules) == 1
-    # remove dashboard permissions of the group and allWorkspaceUsers
-    sdk.catalog_permission.manage_dashboard_permissions(
-        "demo",
-        "campaign",
-        [
-            CatalogPermissionsForAssignee(
-                assignee_identifier=CatalogDashboardAssigneeIdentifier(id="visitorsGroup", type="userGroup"),
-                permissions=[],
-            ),
-            CatalogPermissionsForAssigneeRule(
-                assignee_rule=CatalogAssigneeRule(type="allWorkspaceUsers"),
-                permissions=[],
-            ),
-        ],
-    )
-    # check that it was properly removed
-    dashboard_permissions = sdk.catalog_permission.list_dashboard_permissions("demo", "campaign")
-    assert len(dashboard_permissions.user_groups) == 0
-    assert len(dashboard_permissions.users) == 0
-    assert len(dashboard_permissions.rules) == 0
+    try:
+        _add_dashboard_permissions(sdk)
+    finally:
+        _rollback_dashboard_permissions(sdk)
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "put_declarative_organization_permissions.yaml"))
@@ -237,3 +247,13 @@ def test_manage_organization_permissions(test_config):
         }
     finally:
         _default_organization_permissions(sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "manage_dashboard_permissions_declarative_workspace.yaml"))
+def test_manage_dashboard_permissions_declarative_workspace(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    try:
+        _add_dashboard_permissions(sdk)
+        sdk.catalog_workspace.get_declarative_workspace(workspace_id="demo")
+    finally:
+        _rollback_dashboard_permissions(sdk)

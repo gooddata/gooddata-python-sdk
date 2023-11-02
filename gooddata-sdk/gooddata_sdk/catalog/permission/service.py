@@ -7,7 +7,7 @@ from gooddata_sdk import (
     CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeWorkspacePermissions,
     CatalogOrganizationPermissionAssignment,
-    CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeIdentifier,
     CatalogPermissionsForAssigneeRule,
     GoodDataApiClient,
 )
@@ -87,7 +87,9 @@ class CatalogPermissionService(CatalogServiceBase):
         self,
         workspace_id: str,
         dashboard_id: str,
-        permissions_for_assignee: List[Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]],
+        permissions_for_assignee: List[
+            Union[CatalogPermissionsForAssigneeIdentifier, CatalogPermissionsForAssigneeRule]
+        ],
     ) -> None:
         """Provide managing dashboard permissions for user and user groups.
 
@@ -96,9 +98,9 @@ class CatalogPermissionService(CatalogServiceBase):
                 Workspace identification string. e.g. "demo"
             dashboard_id (str):
                 Dashboard identification string. e.g. "campaign"
-            permissions_for_assignee ([CatalogPermissionsForAssignee]):
-                Object containing List of users and user group and desired dashboard permissions. Set empty list
-                permissions for user/user group means remove dashboard permissions.
+            permissions_for_assignee ([Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]]):
+                Object containing a List of permission assignments. An empty list of permissions in the assignment
+                removes existing dashboard permissions.
         Returns:
             None
         """
