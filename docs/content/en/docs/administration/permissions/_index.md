@@ -16,6 +16,9 @@ See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cl
 * [get_declarative_organization_permissions](./get_declarative_organization_permissions/)
 * [put_declarative_permissions](./put_declarative_organization_permissions/)
 * [manage_organization_permissions](./manage_organization_permissions/)
+* [list_available_assignees](./list_available_assignees/)
+* [list_dashboard_permissions](./list_dashboard_permissions/)
+* [manage_dashboard_permissions](./manage_dashboard_permissions/)
 
 ## Example
 
