@@ -98,9 +98,9 @@ class CatalogPermissionService(CatalogServiceBase):
                 Workspace identification string. e.g. "demo"
             dashboard_id (str):
                 Dashboard identification string. e.g. "campaign"
-            permissions_for_assignee ([CatalogPermissionsForAssignee]):
-                Object containing List of users and user group and desired dashboard permissions. Set empty list
-                permissions for user/user group means remove dashboard permissions.
+            permissions_for_assignee ([Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]]):
+                Object containing a List of permission assignments. An empty list of permissions in the assignment
+                removes existing dashboard permissions.
         Returns:
             None
         """
