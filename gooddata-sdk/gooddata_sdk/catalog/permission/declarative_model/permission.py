@@ -65,7 +65,7 @@ class CatalogDeclarativeWorkspacePermissions(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeDashboardPermissionsForAssignee(Base):
     name: str = attr.field(validator=value_in_allowed)
-    assignee_identifier: CatalogAssigneeIdentifier
+    assignee: CatalogAssigneeIdentifier
 
     @staticmethod
     def client_class() -> Type[DeclarativeAnalyticalDashboardPermissionForAssignee]:

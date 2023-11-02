@@ -16,7 +16,7 @@ class CatalogDashboardAssigneeIdentifier(CatalogAssigneeIdentifier):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogPermissionsForAssignee(Base):
+class CatalogPermissionsForAssigneeIdentifier(Base):
     permissions: List[str] = attr.field(factory=list)
     assignee_identifier: CatalogAssigneeIdentifier
 
