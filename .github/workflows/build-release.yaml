@@ -43,7 +43,7 @@ jobs:
           cd ${{ matrix.component }}
           python -m build
     - name: Persist ${{ matrix.component }} artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: artifacts_${{ matrix.component }}
         path: ${{ matrix.component }}/dist/
