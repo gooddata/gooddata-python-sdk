@@ -64,7 +64,10 @@ except ImportError as e:
 
     class TableDefinitionStub:
         def __init__(
-            self, table_name: str, columns: list[ColumnDefinition], options: dict[str, str]  # type: ignore
+            self,
+            table_name: str,
+            columns: list[ColumnDefinition],  # type: ignore
+            options: dict[str, str],  # type: ignore
         ) -> None:
             self.table_name = table_name
             self.columns = columns

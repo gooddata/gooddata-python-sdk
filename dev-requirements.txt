@@ -1,9 +1,8 @@
 -r ./tox-requirements.txt
-tbump~=6.10.0
-pre-commit~=3.3.3
+tbump~=6.11.0
+pre-commit~=3.5.0
 
 -r ./fmt-requirements.txt
--r ./lint-requirements.txt
 
 -r ./gooddata-api-client/requirements.txt
 -r ./gooddata-sdk/requirements.txt
