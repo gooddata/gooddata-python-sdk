@@ -25,10 +25,8 @@ select = [
 "gooddata-dbt/gooddata_dbt/__init__.py" = ["F401"]
 "gooddata-fdw/gooddata_fdw/__init__.py" = ["F401"]
 
-[tool.black]
-line-length = 120
-# intentionally ignore the generated clients
-extend-exclude = '(gooddata-api-client|.*\.snapshot\..*)'
+[tool.ruff.format]
+exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
 
 [tool.isort]
 # make isort setup compatible with black

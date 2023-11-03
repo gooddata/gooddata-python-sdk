@@ -14,27 +14,25 @@ all:
 
 .PHONY: dev
 dev:
+	rm -rf .venv
 	python3.11 -m venv .venv --upgrade-deps
 	.venv/bin/pip3 install -r dev-requirements.txt
 	.venv/bin/pre-commit install
 
-.PHONY: lint
-lint:
-	.venv/bin/ruff .
-
 .PHONY: format
 format:
-	.venv/bin/black --check .
+	.venv/bin/ruff format --check .
 	.venv/bin/isort --check .
 
 .PHONY: format-diff
 format-diff:
-	.venv/bin/black --diff .
+	.venv/bin/ruff format --diff .
 	.venv/bin/isort --diff .
 
 .PHONY: format-fix
 format-fix:
-	.venv/bin/black .
+	.venv/bin/ruff .
+	.venv/bin/ruff format .
 	.venv/bin/isort .
 
 

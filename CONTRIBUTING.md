@@ -40,15 +40,13 @@
 
 ## Coding Conventions
 
-This project uses [ruff](https://github.com/charliermarsh/ruff) to ensure basic code sanity and [black](https://github.com/psf/black)
-for no-nonsense, consistent formatting.
+This project uses [ruff](https://github.com/astral-sh/ruff) to ensure basic code sanity and for no-nonsense, consistent formatting.
 
-Both `ruff` and auto-fixing `black` are part of the pre-commit hook that is automatically set up during `make dev`.
+`ruff` is part of the pre-commit hook that is automatically set up during `make dev`.
 
 You can also run the lint and formatter manually:
 
--  To run `ruff` run: `make lint`
--  To reformat code black run: `make format-fix`
+-  To run `ruff` run: `make format-fix`
 
 **NOTE:** If the pre-commit hook finds and auto-corrects some formatting errors, it will not auto-stage
 the updated files and will fail the commit operation. You have to re-drive the commit. This is a well-known and

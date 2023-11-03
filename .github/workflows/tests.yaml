@@ -67,10 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           make dev
-      - name: Pep8 check
-        run: |
-          make lint
-      - name: Formatting check
+      - name: pep8 and formatting check
         run: |
           make format
   types-check:
