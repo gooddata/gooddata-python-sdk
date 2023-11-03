@@ -366,7 +366,7 @@ def _extract_from_attributes_and_maybe_metrics(
 
     # mappings from column name to Attribute
     index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in safe_index_to_attr_idx.items()}
-    col_to_attribute = {col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()}
+    col_to_attribute = {col: exec_def.attributes[i] for col, i in col_to_attr_idx.items()}
 
     # datastructures to return
     index: dict[str, list[Any]] = {idx_name: [] for idx_name in safe_index_to_attr_idx}
