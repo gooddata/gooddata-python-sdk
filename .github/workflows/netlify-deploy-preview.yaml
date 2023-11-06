@@ -40,7 +40,7 @@ jobs:
           args: deploy -d docs/public --alias=preview-${{ env.GITHUB_PR_NUMBER }}
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_PREVIEW_AUTH_TOKEN }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 # `htmltest` is after publishing, so we can see the artifact.
       - name: htmltest
         run: |
