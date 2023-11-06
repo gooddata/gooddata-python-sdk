@@ -1,0 +1,7 @@
+[sdk]
+directory = "api-reference"
+packages = ["sdk","catalog"]
+
+[pandas]
+directory = "pandas"
+packages = ["data_access","dataframe","good_pandas","result_convertor","utils"]
