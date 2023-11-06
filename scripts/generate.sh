@@ -75,8 +75,6 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
         echo "Generating API ref..."
         if [ "$target_section" == "" ] ; then
             echo "Skipping master api ref"
-            #mv -f data.json ./versioned_docs/latest/
-            #python3 ../scripts/docs/python_ref_builder.py api_spec.toml ./versioned_docs/latest/data.json latest versioned_docs
         else
             directories=$(find .. -type d -name 'gooddata-*')
 
@@ -112,3 +110,5 @@ if [ "$keep_master" != "keep_master" ] ; then
     rm -rf "${content_dir}/docs"
 fi
 popd
+
+git reset --hard
