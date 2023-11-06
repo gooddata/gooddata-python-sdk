@@ -5,13 +5,13 @@ import sys
 from argparse import Namespace
 from pathlib import Path
 from time import time
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import tabulate
 import yaml
 from gooddata_dbt.args import parse_arguments
 from gooddata_dbt.dbt.cloud import DbtConnection, DbtCredentials, DbtExecution
-from gooddata_dbt.dbt.profiles import DbtOutput, DbtProfiles
+from gooddata_dbt.dbt.profiles import DbtProfiles
 from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganization, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
@@ -54,20 +54,9 @@ def generate_and_put_ldm(
     # Construct GoodData LDM from dbt models
     declarative_datasets = dbt_tables.make_declarative_datasets(data_source_id, model_ids)
     ldm = CatalogDeclarativeModel.from_dict({"ldm": declarative_datasets}, camel_case=False)
-
+    print(f"ldm={ldm.to_api()}")
     # Deploy logical into target workspace
     sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
-
-
-def register_data_source(
-    logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str, dbt_target: DbtOutput, dbt_tables: DbtModelTables
-) -> None:
-    logger.info(f"Register data source {data_source_id=} schema={dbt_tables.schema_name}")
-    data_source = dbt_target.to_gooddata(data_source_id, dbt_tables.schema_name)
-    sdk.catalog_data_source.create_or_update_data_source(data_source)
-
-    logger.info("Generate and put PDM")
-    generate_and_put_pdm(logger, sdk, data_source_id, dbt_tables)
 
 
 def create_workspace(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, workspace_title: str) -> None:
@@ -75,9 +64,6 @@ def create_workspace(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str
     # Create workspaces, if they do not exist yet, otherwise update them
     workspace = CatalogWorkspace(workspace_id=workspace_id, name=workspace_title)
     sdk.catalog_workspace.create_or_update(workspace=workspace)
-
-
-DATA_SOURCE_CONTAINER: Dict[str, DbtModelTables] = {}
 
 
 def deploy_ldm(
@@ -88,27 +74,36 @@ def deploy_ldm(
     model_ids: Optional[List[str]],
     workspace_id: str,
 ) -> None:
-    global DATA_SOURCE_CONTAINER
     logger.info("Generate and put LDM")
     dbt_profiles = DbtProfiles(args)
-    dbt_target = dbt_profiles.target
     data_source_id = dbt_profiles.data_source_id
-    # Parse dbt models only once and scan data source only once, not for each product/environment
-    dbt_tables = DATA_SOURCE_CONTAINER.get(data_source_id)
-    if dbt_tables is None:
-        logger.info(f"Process data source {data_source_id=}")
-        dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
-        if args.gooddata_upper_case:
-            dbt_target.schema = dbt_target.schema.upper()
-            dbt_target.database = dbt_target.database.upper()
-        register_data_source(logger, sdk_wrapper.sdk, data_source_id, dbt_target, dbt_tables)
-        DATA_SOURCE_CONTAINER[data_source_id] = dbt_tables
-    else:
-        logger.info(f"Data source already processed {data_source_id=} table_count={len(dbt_tables.tables)}")
-
+    dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
     generate_and_put_ldm(sdk_wrapper.sdk, data_source_id, workspace_id, dbt_tables, model_ids)
     workspace_url = f"{sdk_wrapper.get_host_from_sdk()}/modeler/#/{workspace_id}"
     logger.info(f"LDM successfully loaded, verify here: {workspace_url}")
+
+
+def register_data_source(
+    logger: logging.Logger,
+    args: Namespace,
+    all_model_ids: List[str],
+    sdk_wrapper: GoodDataSdkWrapper,
+):
+    dbt_profiles = DbtProfiles(args)
+    dbt_target = dbt_profiles.target
+    data_source_id = dbt_profiles.data_source_id
+    logger.info(f"Process data source {data_source_id=}")
+    dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
+    if args.gooddata_upper_case:
+        dbt_target.schema = dbt_target.schema.upper()
+        dbt_target.database = dbt_target.database.upper()
+
+    logger.info(f"Register data source {data_source_id=} schema={dbt_tables.schema_name}")
+    data_source = dbt_target.to_gooddata(data_source_id, dbt_tables.schema_name)
+    sdk_wrapper.sdk.catalog_data_source.create_or_update_data_source(data_source)
+
+    logger.info("Generate and put PDM")
+    generate_and_put_pdm(logger, sdk_wrapper.sdk, data_source_id, dbt_tables)
 
 
 def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str) -> None:
@@ -302,6 +297,8 @@ def process_organization(
         dbt_profiles = DbtProfiles(args)
         # Caches are invalidated only per data source, not per data product
         upload_notification(logger, sdk_wrapper.sdk, dbt_profiles.data_source_id)
+    elif args.method == "register_data_sources":
+        register_data_source(logger, args, gd_config.all_model_ids, sdk_wrapper)
     else:
         if organization:
             data_products = [dp for dp in gd_config.data_products if dp.id in organization.data_product_ids]
@@ -313,11 +310,10 @@ def process_organization(
             for environment in environments:
                 if environment.id == args.gooddata_environment_id:
                     workspace_id = f"{data_product.id}_{environment.id}"
-                    if args.method == "deploy_models":
-                        workspace_title = f"{data_product.name} ({environment.name})"
-                        # TODO - provision workspaces in a separate args.method?
-                        #  We will need to extend it by provisioning of child workspaces, ...
+                    workspace_title = f"{data_product.name} ({environment.name})"
+                    if args.method == "provision_workspaces":
                         create_workspace(logger, sdk_wrapper.sdk, workspace_id, workspace_title)
+                    elif args.method == "deploy_ldm":
                         deploy_ldm(
                             logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id
                         )
