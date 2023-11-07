@@ -1,0 +1,25 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: repo_created_at
+  - dataType: INT
+    isPrimaryKey: true
+    name: repo_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: repo_name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: repo_url
+  - dataType: INT
+    isPrimaryKey: false
+    name: stargazers_count
+  - dataType: INT
+    isPrimaryKey: false
+    name: watchers_count
+id: repos
+path:
+  - cicd_output_stage
+  - repos
+type: TABLE

@@ -1,0 +1,37 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer_city
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer_country
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: customer_created_date
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer_email
+  - dataType: STRING
+    isPrimaryKey: true
+    name: customer_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer_state
+  - dataType: STRING
+    isPrimaryKey: false
+    name: geo__customer_city__city_pushpin_latitude
+  - dataType: STRING
+    isPrimaryKey: false
+    name: geo__customer_city__city_pushpin_longitude
+  - dataType: STRING
+    isPrimaryKey: false
+    name: ls__customer_id__customer_name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: wdf__client_id
+id: customer
+path:
+  - cicd_output_stage
+  - customer
+type: TABLE

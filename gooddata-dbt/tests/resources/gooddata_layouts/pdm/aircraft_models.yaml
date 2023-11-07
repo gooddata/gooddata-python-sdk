@@ -1,0 +1,16 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: true
+    name: aircraft_model_code
+  - dataType: STRING
+    isPrimaryKey: false
+    name: manufacturer
+  - dataType: INT
+    isPrimaryKey: false
+    name: seats
+id: aircraft_models
+path:
+  - cicd_output_stage
+  - aircraft_models
+type: TABLE

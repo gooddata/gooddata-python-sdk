@@ -18,13 +18,9 @@ from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import report_message_to_merge_request
 
-from gooddata_sdk import (
-    CatalogDeclarativeModel,
-    CatalogDeclarativeTables,
-    CatalogScanModelRequest,
-    CatalogWorkspace,
-    GoodDataSdk,
-)
+from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk
+
+# TODO - upgrade AIO, cleanup, start from scratch, test everything
 
 GOODDATA_LAYOUTS_DIR = Path("gooddata_layouts")
 
@@ -33,28 +29,23 @@ def layout_model_path(data_product: GoodDataConfigProduct) -> Path:
     return GOODDATA_LAYOUTS_DIR / data_product.id
 
 
-def generate_and_put_pdm(
-    logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str, dbt_tables: DbtModelTables
+def generate_and_put_ldm(
+    logger: logging.Logger,
+    sdk: GoodDataSdk,
+    data_source_id: str,
+    workspace_id: str,
+    dbt_tables: DbtModelTables,
+    model_ids: Optional[List[str]],
 ) -> None:
-    # Construct GoodData PDM from dbt models and put it to the server
-    # GoodData caches the metadata to reduce querying them (costly) in runtime.
     scan_request = CatalogScanModelRequest(scan_tables=True, scan_views=True)
     logger.info(f"Scan data source {data_source_id=}")
     scan_pdm = sdk.catalog_data_source.scan_data_source(data_source_id, scan_request, report_warnings=True).pdm
-
-    logger.info(f"Generate and put PDM {data_source_id=}")
-    pdm = dbt_tables.make_pdm(scan_pdm)
-    declarative_tables = CatalogDeclarativeTables.from_dict(pdm, camel_case=False)
-    sdk.catalog_data_source.put_declarative_pdm(data_source_id, declarative_tables)
-
-
-def generate_and_put_ldm(
-    sdk: GoodDataSdk, data_source_id: str, workspace_id: str, dbt_tables: DbtModelTables, model_ids: Optional[List[str]]
-) -> None:
+    scan_pdm.store_to_disk(Path("test"))
+    # Store data types to dbt_tables class. It is used in make_declarative_datasets to inject data types to LDM.
+    dbt_tables.set_data_types(scan_pdm)
     # Construct GoodData LDM from dbt models
     declarative_datasets = dbt_tables.make_declarative_datasets(data_source_id, model_ids)
     ldm = CatalogDeclarativeModel.from_dict({"ldm": declarative_datasets}, camel_case=False)
-    print(f"ldm={ldm.to_api()}")
     # Deploy logical into target workspace
     sdk.catalog_workspace_content.put_declarative_ldm(workspace_id, ldm)
 
@@ -78,7 +69,7 @@ def deploy_ldm(
     dbt_profiles = DbtProfiles(args)
     data_source_id = dbt_profiles.data_source_id
     dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
-    generate_and_put_ldm(sdk_wrapper.sdk, data_source_id, workspace_id, dbt_tables, model_ids)
+    generate_and_put_ldm(logger, sdk_wrapper.sdk, data_source_id, workspace_id, dbt_tables, model_ids)
     workspace_url = f"{sdk_wrapper.get_host_from_sdk()}/modeler/#/{workspace_id}"
     logger.info(f"LDM successfully loaded, verify here: {workspace_url}")
 
@@ -88,22 +79,16 @@ def register_data_source(
     args: Namespace,
     all_model_ids: List[str],
     sdk_wrapper: GoodDataSdkWrapper,
-):
+) -> None:
     dbt_profiles = DbtProfiles(args)
     dbt_target = dbt_profiles.target
     data_source_id = dbt_profiles.data_source_id
     logger.info(f"Process data source {data_source_id=}")
     dbt_tables = DbtModelTables.from_local(args.gooddata_upper_case, all_model_ids)
-    if args.gooddata_upper_case:
-        dbt_target.schema = dbt_target.schema.upper()
-        dbt_target.database = dbt_target.database.upper()
 
     logger.info(f"Register data source {data_source_id=} schema={dbt_tables.schema_name}")
     data_source = dbt_target.to_gooddata(data_source_id, dbt_tables.schema_name)
     sdk_wrapper.sdk.catalog_data_source.create_or_update_data_source(data_source)
-
-    logger.info("Generate and put PDM")
-    generate_and_put_pdm(logger, sdk_wrapper.sdk, data_source_id, dbt_tables)
 
 
 def upload_notification(logger: logging.Logger, sdk: GoodDataSdk, data_source_id: str) -> None:

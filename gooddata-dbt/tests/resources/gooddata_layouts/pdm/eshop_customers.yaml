@@ -1,0 +1,37 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: clv
+  - dataType: STRING
+    isPrimaryKey: false
+    name: country
+  - dataType: STRING
+    isPrimaryKey: false
+    name: email
+  - dataType: STRING
+    isPrimaryKey: false
+    name: first_name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: gender
+  - dataType: STRING
+    isPrimaryKey: true
+    name: id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: last_name
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: nps
+  - dataType: STRING
+    isPrimaryKey: false
+    name: username
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: visits
+id: eshop_customers
+path:
+  - cicd_output_stage
+  - eshop_customers
+type: TABLE

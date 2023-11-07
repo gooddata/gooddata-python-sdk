@@ -1,0 +1,16 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: true
+    name: order_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: order_status
+  - dataType: STRING
+    isPrimaryKey: false
+    name: wdf__client_id
+id: orders
+path:
+  - cicd_output_stage
+  - orders
+type: TABLE

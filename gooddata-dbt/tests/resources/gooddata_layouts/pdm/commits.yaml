@@ -1,0 +1,29 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: INT
+    isPrimaryKey: false
+    name: comment_count
+  - dataType: STRING
+    isPrimaryKey: true
+    name: commit_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: commit_url
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: created_at
+  - dataType: INT
+    isPrimaryKey: false
+    name: repo_id
+    referencedTableColumn: repo_id
+    referencedTableId: repos
+  - dataType: INT
+    isPrimaryKey: false
+    name: user_id
+    referencedTableColumn: user_id
+    referencedTableId: users
+id: commits
+path:
+  - cicd_output_stage
+  - commits
+type: TABLE

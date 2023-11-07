@@ -1,0 +1,34 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: INT
+    isPrimaryKey: false
+    name: days_on_market
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: initial_price
+  - dataType: STRING
+    isPrimaryKey: false
+    name: location
+  - dataType: STRING
+    isPrimaryKey: false
+    name: neighborhood
+  - dataType: INT
+    isPrimaryKey: false
+    name: number_of_bathrooms
+  - dataType: INT
+    isPrimaryKey: false
+    name: number_of_rooms
+  - dataType: INT
+    isPrimaryKey: false
+    name: number_of_rooms_fact
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: rental_price
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: square_feets
+id: home_rentals
+path:
+  - cicd_output_stage
+  - home_rentals
+type: TABLE

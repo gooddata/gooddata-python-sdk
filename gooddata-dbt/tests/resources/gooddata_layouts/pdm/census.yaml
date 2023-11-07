@@ -1,0 +1,16 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: continent
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: population
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: timestamp
+id: census
+path:
+  - cicd_output_stage
+  - census
+type: TABLE
