@@ -64,6 +64,73 @@ The documentation is deployed using manually triggered GitHub workflows.
 
 One logical change is done in one commit.
 
+### Documenting new features
+
+To document a new feature, you need to create a new `.md` file in one of the subsections. These subsections reresent the left navigation menu and are in a hierarchical directories.
+
+e.g.:
+
+     administration
+         ├── organization
+         │       ├── create_or_update_jwk.md
+         │       ├── delete_jwk.md
+         │       └── ...
+         ├── premissions
+         │       ├── list_available_assignees.md
+         │       ├── get_declarative_organization_permissions.md
+         │       └── ...
+         └── ...
+
+
+> Note that you would not only need to add new `.md` but also edit the existing `_index.md` in the same directory to add a link to your new method.
+
+Example:
+
+Imagine you just created a new method named `super_permissions_method` and would like to document it.
+
+Steps:
+
+1. You make sure to properly document your new method in the docstrings.
+
+1. You create a new file `super_permissions_method.md` in `docs/content/en/docs/administration/permissions/`
+
+    1. With content:
+
+        ```
+        ---
+        title: "super_permissions_method"
+        linkTitle: "super_permissions_method"
+        superheading: "catalog_permission."
+        weight: 100
+        ---
+
+        {{< python "sdk.CatalogPermissionService.super_permissions_method" >}}
+
+        ## Example
+        ```python
+        # This method does something very cool, trust me bro
+        sdk.super_permissions_method(user_id = "demo_user", give_all_permission = True)
+        ```
+
+        The `{{< python  "PATH" >}}` is a hugo shortcode, that will render the information about the method directly from the docstrings. The `PATH` parameter is represented as a path in the API references with a dot `.` denoting each step.
+
+        So in our example, this is an `sdk` package with the permissions service (`CatalogPermissionService`) and then followed by the actual method (`super_permissions_method`).
+
+
+
+1. You update the `_index.md` in the same folder:
+
+    ```diff
+    * [update_name](./update_name/)
+    * [update_oidc_parameters](./update_oidc_parameters/)
+    * [create_or_update_jwk](./create_or_update_jwk/)
+    * [delete_jwk](./delete_jwk/)
+    * [get_jwk](./get_jwk/)
+    * [list_jwks](./list_jwks/)
+    + * [super_permissions_method](./super_permissions_method/)
+    ```
+
+1. Lastly you contact someone from the documentation team for a proof-read and merge. Your changes should be visible in the preview in the PR job named `Netlify Deploy Preview`
 
 ## Run tests
 Tests use [tox](https://tox.wiki/en/latest/index.html) and [pytest](https://docs.pytest.org/en/6.2.x/contents.html)
