@@ -53,3 +53,7 @@ organizations:
     data_product_ids:
       - sales
       - marketing
+
+# Global configuration for all data products
+global_properties:
+  test_insights_parallelism: 2

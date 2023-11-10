@@ -48,10 +48,16 @@ class GoodDataConfigOrganization(Base):
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
+class GoodDataGlobalConfig(Base):
+    test_insights_parallelism: Optional[int] = 1
+
+
+@attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataConfig(Base):
     environment_setups: List[GoodDataConfigEnvironmentSetup]
     data_products: List[GoodDataConfigProduct]
     organizations: List[GoodDataConfigOrganization]
+    global_properties: GoodDataGlobalConfig
 
     @property
     def all_model_ids(self) -> List[str]:

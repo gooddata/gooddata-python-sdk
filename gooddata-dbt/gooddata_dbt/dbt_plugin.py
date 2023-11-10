@@ -1,8 +1,9 @@
 # (C) 2023 GoodData Corporation
+import asyncio
 import logging
 import os
-import sys
 from argparse import Namespace
+from asyncio import Semaphore
 from pathlib import Path
 from time import time
 from typing import List, Optional
@@ -18,7 +19,7 @@ from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import report_message_to_merge_request
 
-from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk
+from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Insight
 
 # TODO - upgrade AIO, cleanup, start from scratch, test everything
 
@@ -129,22 +130,69 @@ def store_analytics(
     )
 
 
-def test_insights(logger: logging.Logger, sdk: GoodDataSdk, workspace_id: str, skip_tests: Optional[List[str]]) -> None:
+async def execute_insight(sdk: GoodDataSdk, workspace_id: str, insight: Insight) -> None:
+    sdk.tables.for_insight(workspace_id, insight)
+
+
+async def test_insight(
+    logger: logging.Logger,
+    sdk: GoodDataSdk,
+    workspace_id: str,
+    insight: Insight,
+) -> dict:
+    logger.info(f"Executing insight {insight.id=} {insight.title=} ...")
+    start = time()
+    try:
+        await execute_insight(sdk, workspace_id, insight)
+        duration = int((time() - start) * 1000)
+        logger.info(f"Test successful {insight.id=} {insight.title=} duration={duration}(ms)")
+        return {"id": insight.id, "title": insight.title, "duration": duration, "status": "success"}
+    except Exception as e:
+        duration = int((time() - start) * 1000)
+        logger.error(f"Test failed {insight.id=} {insight.title=} duration={duration}(ms) reason={str(e)}")
+        return {"id": insight.id, "title": insight.title, "duration": duration, "status": "failed", "reason": str(e)}
+
+
+async def safe_test_insight(
+    logger: logging.Logger,
+    sdk: GoodDataSdk,
+    workspace_id: str,
+    insight: Insight,
+    semaphore: Semaphore,
+) -> dict:
+    async with semaphore:  # semaphore limits num of simultaneous executions
+        return await test_insight(
+            logger,
+            sdk,
+            workspace_id,
+            insight,
+        )
+
+
+async def test_insights(
+    logger: logging.Logger,
+    sdk: GoodDataSdk,
+    workspace_id: str,
+    skip_tests: Optional[List[str]],
+    test_insights_parallelism: int = 1,
+) -> None:
+    start = time()
     logger.info(f"Test insights {workspace_id=}")
     insights = sdk.insights.get_insights(workspace_id)
-
+    semaphore = asyncio.Semaphore(test_insights_parallelism)
+    tasks = []
     for insight in insights:
-        logger.info(f"Executing insight {insight.id=} {insight.title=} ...")
         if skip_tests is not None and insight.id in skip_tests:
             logger.info(f"Skip test insight={insight.title} (requested in gooddata.yaml)")
         else:
-            try:
-                start = time()
-                sdk.tables.for_insight(workspace_id, insight)
-                duration = int((time() - start) * 1000)
-                logger.info(f"Test successful {insight.id=} {insight.title=} duration={duration}(ms)")
-            except RuntimeError:
-                sys.exit()
+            tasks.append(safe_test_insight(logger, sdk, workspace_id, insight, semaphore))
+    results = await asyncio.gather(*tasks)
+    duration = int((time() - start) * 1000)
+    errors = [result for result in results if result["status"] == "failed"]
+    if len(errors) > 0:
+        raise Exception(f"Test insights failed {workspace_id=} duration={duration}(ms) errors={errors}")
+    else:
+        logger.info(f"Test insights finished {workspace_id=} duration={duration}(ms)")
 
 
 def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDataSdk, workspace_id: str) -> None:
@@ -309,7 +357,10 @@ def process_organization(
                     elif args.method == "deploy_analytics":
                         deploy_analytics(logger, sdk_wrapper, workspace_id, data_product)
                     elif args.method == "test_insights":
-                        test_insights(logger, sdk_wrapper.sdk, workspace_id, data_product.skip_tests)
+                        parallelism = gd_config.global_properties.test_insights_parallelism or 1
+                        asyncio.run(
+                            test_insights(logger, sdk_wrapper.sdk, workspace_id, data_product.skip_tests, parallelism)
+                        )
                     else:
                         raise Exception(f"Unsupported method requested in args: {args.method}")
 
