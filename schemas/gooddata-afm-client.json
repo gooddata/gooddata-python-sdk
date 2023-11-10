@@ -680,6 +680,35 @@
         ],
         "type": "object"
       },
+      "DependsOn": {
+        "nullable": true,
+        "properties": {
+          "complementFilter": {
+            "default": false,
+            "description": "Inverse filtering mode.",
+            "type": "boolean"
+          },
+          "label": {
+            "default": "null",
+            "description": "Specifies on which label the filter depends on.",
+            "type": "string"
+          },
+          "values": {
+            "description": "Specifies values of the label for element filtering.",
+            "items": {
+              "default": "null",
+              "description": "Specifies values of the label for element filtering.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "label",
+          "values"
+        ],
+        "type": "object"
+      },
       "Dimension": {
         "description": "Single dimension description.",
         "properties": {
@@ -755,11 +784,18 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
             "type": "number"
+          },
+          "dependsOn": {
+            "description": "Return only items, whose are not filtered out by the parent filters.",
+            "items": {
+              "$ref": "#/components/schemas/DependsOn"
+            },
+            "type": "array"
           },
           "exactFilter": {
             "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
@@ -885,7 +921,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -930,7 +966,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [

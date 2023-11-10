@@ -3483,6 +3483,35 @@
         ],
         "type": "object"
       },
+      "DependsOn": {
+        "nullable": true,
+        "properties": {
+          "complementFilter": {
+            "default": false,
+            "description": "Inverse filtering mode.",
+            "type": "boolean"
+          },
+          "label": {
+            "default": "null",
+            "description": "Specifies on which label the filter depends on.",
+            "type": "string"
+          },
+          "values": {
+            "description": "Specifies values of the label for element filtering.",
+            "items": {
+              "default": "null",
+              "description": "Specifies values of the label for element filtering.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "label",
+          "values"
+        ],
+        "type": "object"
+      },
       "Dimension": {
         "description": "Single dimension description.",
         "properties": {
@@ -3558,11 +3587,18 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
             "type": "number"
+          },
+          "dependsOn": {
+            "description": "Return only items, whose are not filtered out by the parent filters.",
+            "items": {
+              "$ref": "#/components/schemas/DependsOn"
+            },
+            "type": "array"
           },
           "exactFilter": {
             "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
@@ -3751,7 +3787,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -3796,7 +3832,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -12091,6 +12127,32 @@
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
           "relationships": {
             "properties": {
               "filterSettings": {
@@ -12365,6 +12427,32 @@
             "example": "id1",
             "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
           },
           "relationships": {
             "properties": {
@@ -15770,6 +15858,7 @@
         },
         "summary": "Finds entities with given ID in hierarchy.",
         "tags": [
+          "Hierarchy",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -16660,8 +16749,9 @@
             "description": "Searching for conflicting identifiers finished successfully"
           }
         },
-        "summary": "Finds API identifier conflicts in given workspace hierarchy.",
+        "summary": "Finds identifier conflicts in workspace hierarchy.",
         "tags": [
+          "Hierarchy",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -16703,6 +16793,7 @@
         },
         "summary": "Get used entity prefixes in hierarchy",
         "tags": [
+          "Hierarchy",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -16742,8 +16833,9 @@
             "description": "Searching for overridden identifiers finished successfully"
           }
         },
-        "summary": "Finds API identifier overrides in given workspace hierarchy.",
+        "summary": "Finds identifier overrides in workspace hierarchy.",
         "tags": [
+          "Hierarchy",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -18383,6 +18475,7 @@
         },
         "summary": "Get all Jwks",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -18414,6 +18507,7 @@
         },
         "summary": "Post Jwks",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -18444,6 +18538,7 @@
         },
         "summary": "Delete Jwk",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -18479,6 +18574,7 @@
         },
         "summary": "Get Jwk",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -18524,6 +18620,7 @@
         },
         "summary": "Patch Jwk",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -18569,6 +18666,7 @@
         },
         "summary": "Put Jwk",
         "tags": [
+          "JWKS",
           "entities",
           "organization-model-controller"
         ]
@@ -19528,6 +19626,7 @@
         },
         "summary": "Get UserIdentifier entities",
         "tags": [
+          "User Identifiers",
           "entities",
           "organization-model-controller"
         ]
@@ -19535,7 +19634,7 @@
     },
     "/api/v1/entities/userIdentifiers/{id}": {
       "get": {
-        "description": "UserIdentifier - represents basic informationZ about entity interacting with platform",
+        "description": "UserIdentifier - represents basic information about entity interacting with platform",
         "operationId": "getEntity@UserIdentifiers",
         "parameters": [
           {
@@ -19565,6 +19664,7 @@
         },
         "summary": "Get UserIdentifier entity",
         "tags": [
+          "User Identifiers",
           "entities",
           "organization-model-controller"
         ]
@@ -26033,6 +26133,28 @@
               "default": false,
               "type": "boolean"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -26088,6 +26210,28 @@
                 "type": "string"
               },
               "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
             },
             "style": "form"
           }
@@ -26232,6 +26376,28 @@
               "default": false,
               "type": "boolean"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -26501,6 +26667,28 @@
               "default": false,
               "type": "boolean"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -26556,6 +26744,28 @@
                 "type": "string"
               },
               "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
             },
             "style": "form"
           }
@@ -26700,6 +26910,28 @@
               "default": false,
               "type": "boolean"
             }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -27674,7 +27906,8 @@
         },
         "summary": "Get permissions for the user-group",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -27713,7 +27946,8 @@
         },
         "summary": "Set permissions for the user-group",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -27810,7 +28044,8 @@
         },
         "summary": "Get permissions for the user",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",
@@ -27849,7 +28084,8 @@
         },
         "summary": "Set permissions for the user",
         "tags": [
-          "layout"
+          "layout",
+          "Permissions"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to manipulate permissions.",

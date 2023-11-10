@@ -433,6 +433,73 @@
       },
       {
         "grain": [],
+        "id": "Customers_sql_dataset_with_WDF",
+        "references": [],
+        "title": "Customers sql dataset with WDF",
+        "description": "Customers sql dataset with WDF",
+        "tags": [
+          "Customers sql dataset with WDF"
+        ],
+        "attributes": [
+          {
+            "id": "Customers_sql_dataset_with_WDF.customer_id",
+            "labels": [],
+            "sourceColumn": "customer_id",
+            "title": "Customer id",
+            "sourceColumnDataType": "INT",
+            "description": "Customer id",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.customer_name",
+            "labels": [],
+            "sourceColumn": "customer_name",
+            "title": "Customer name",
+            "sourceColumnDataType": "STRING",
+            "description": "Customer name",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.region",
+            "labels": [],
+            "sourceColumn": "region",
+            "title": "Region",
+            "sourceColumnDataType": "STRING",
+            "description": "Region",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.state",
+            "labels": [],
+            "sourceColumn": "state",
+            "title": "State",
+            "sourceColumnDataType": "STRING",
+            "description": "State",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          }
+        ],
+        "facts": [],
+        "sql": {
+          "dataSourceId": "demo-test-ds",
+          "statement": "SELECT * FROM v_wdf_customers"
+        },
+        "workspaceDataFilterColumns": [
+          {
+            "dataType": "STRING",
+            "name": "wdf__region"
+          }
+        ]
+      },
+      {
+        "grain": [],
         "id": "Order_lines_duplicate_sql_dataset",
         "references": [
           {
@@ -450,6 +517,10 @@
           }
         ],
         "title": "Order lines duplicate sql dataset",
+        "description": "Order lines duplicate sql dataset",
+        "tags": [
+          "Order lines duplicate sql dataset"
+        ],
         "attributes": [
           {
             "id": "Order_lines_duplicate_sql_dataset.campaign_id",
@@ -544,69 +615,6 @@
           "dataSourceId": "demo-test-ds",
           "statement": "SELECT * FROM order_lines"
         }
-      },
-      {
-        "grain": [],
-        "id": "Customers_sql_dataset_with_WDF",
-        "references": [],
-        "title": "Customers sql dataset with WDF",
-        "attributes": [
-          {
-            "id": "Customers_sql_dataset_with_WDF.customer_id",
-            "labels": [],
-            "sourceColumn": "customer_id",
-            "title": "Customer id",
-            "sourceColumnDataType": "INT",
-            "description": "Customer id",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.customer_name",
-            "labels": [],
-            "sourceColumn": "customer_name",
-            "title": "Customer name",
-            "sourceColumnDataType": "STRING",
-            "description": "Customer name",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.region",
-            "labels": [],
-            "sourceColumn": "region",
-            "title": "Region",
-            "sourceColumnDataType": "STRING",
-            "description": "Region",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.state",
-            "labels": [],
-            "sourceColumn": "state",
-            "title": "State",
-            "sourceColumnDataType": "STRING",
-            "description": "State",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          }
-        ],
-        "facts": [],
-        "sql": {
-          "dataSourceId": "demo-test-ds",
-          "statement": "SELECT * FROM v_wdf_customers"
-        },
-        "workspaceDataFilterColumns": [
-          {
-            "dataType": "STRING",
-            "name": "wdf__region"
-          }
-        ]
       }
     ],
     "dateInstances": [

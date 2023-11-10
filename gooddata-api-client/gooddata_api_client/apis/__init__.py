@@ -34,7 +34,9 @@ from gooddata_api_client.api.entitlement_api import EntitlementApi
 from gooddata_api_client.api.exporting_api import ExportingApi
 from gooddata_api_client.api.facts_api import FactsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
+from gooddata_api_client.api.hierarchy_api import HierarchyApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
+from gooddata_api_client.api.jwks_api import JWKSApi
 from gooddata_api_client.api.ldm_declarative_apis_api import LDMDeclarativeAPIsApi
 from gooddata_api_client.api.labels_api import LabelsApi
 from gooddata_api_client.api.metrics_api import MetricsApi
@@ -51,6 +53,7 @@ from gooddata_api_client.api.usage_api import UsageApi
 from gooddata_api_client.api.user_groups_declarative_apis_api import UserGroupsDeclarativeAPIsApi
 from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntityAPIsApi
 from gooddata_api_client.api.user_data_filters_api import UserDataFiltersApi
+from gooddata_api_client.api.user_identifiers_api import UserIdentifiersApi
 from gooddata_api_client.api.user_settings_api import UserSettingsApi
 from gooddata_api_client.api.users_declarative_apis_api import UsersDeclarativeAPIsApi
 from gooddata_api_client.api.users_entity_apis_api import UsersEntityAPIsApi

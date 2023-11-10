@@ -190,7 +190,17 @@ Class | Method | HTTP request | Description
 *FactsApi* | [**get_all_entities_facts**](docs/FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 *FactsApi* | [**get_entity_facts**](docs/FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *GenerateLogicalDataModelApi* | [**generate_logical_model**](docs/GenerateLogicalDataModelApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
+*HierarchyApi* | [**check_entity_overrides**](docs/HierarchyApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
+*HierarchyApi* | [**inherited_entity_conflicts**](docs/HierarchyApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
+*HierarchyApi* | [**inherited_entity_prefixes**](docs/HierarchyApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
+*HierarchyApi* | [**overridden_child_entities**](docs/HierarchyApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 *InvalidateCacheApi* | [**register_upload_notification**](docs/InvalidateCacheApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+*JWKSApi* | [**create_entity_jwks**](docs/JWKSApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
+*JWKSApi* | [**delete_entity_jwks**](docs/JWKSApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
+*JWKSApi* | [**get_all_entities_jwks**](docs/JWKSApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
+*JWKSApi* | [**get_entity_jwks**](docs/JWKSApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
+*JWKSApi* | [**patch_entity_jwks**](docs/JWKSApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
+*JWKSApi* | [**update_entity_jwks**](docs/JWKSApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
 *LDMDeclarativeAPIsApi* | [**get_logical_model**](docs/LDMDeclarativeAPIsApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LDMDeclarativeAPIsApi* | [**set_logical_model**](docs/LDMDeclarativeAPIsApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LabelsApi* | [**get_all_entities_labels**](docs/LabelsApi.md#get_all_entities_labels) | **GET** /api/v1/entities/workspaces/{workspaceId}/labels | Get all Labels
@@ -219,10 +229,14 @@ Class | Method | HTTP request | Description
 *PermissionsApi* | [**available_assignees**](docs/PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *PermissionsApi* | [**dashboard_permissions**](docs/PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 *PermissionsApi* | [**get_organization_permissions**](docs/PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
+*PermissionsApi* | [**get_user_group_permissions**](docs/PermissionsApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
+*PermissionsApi* | [**get_user_permissions**](docs/PermissionsApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 *PermissionsApi* | [**get_workspace_permissions**](docs/PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 *PermissionsApi* | [**manage_dashboard_permissions**](docs/PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 *PermissionsApi* | [**manage_organization_permissions**](docs/PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 *PermissionsApi* | [**set_organization_permissions**](docs/PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
+*PermissionsApi* | [**set_user_group_permissions**](docs/PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
+*PermissionsApi* | [**set_user_permissions**](docs/PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 *PermissionsApi* | [**set_workspace_permissions**](docs/PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 *PluginsApi* | [**create_entity_dashboard_plugins**](docs/PluginsApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 *PluginsApi* | [**delete_entity_dashboard_plugins**](docs/PluginsApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
@@ -251,6 +265,8 @@ Class | Method | HTTP request | Description
 *UserGroupsEntityAPIsApi* | [**update_entity_user_groups**](docs/UserGroupsEntityAPIsApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
 *UserDataFiltersApi* | [**get_user_data_filters**](docs/UserDataFiltersApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
 *UserDataFiltersApi* | [**set_user_data_filters**](docs/UserDataFiltersApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
+*UserIdentifiersApi* | [**get_all_entities_user_identifiers**](docs/UserIdentifiersApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
+*UserIdentifiersApi* | [**get_entity_user_identifiers**](docs/UserIdentifiersApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
 *UserSettingsApi* | [**create_entity_user_settings**](docs/UserSettingsApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | Post new user settings for the user
 *UserSettingsApi* | [**delete_entity_user_settings**](docs/UserSettingsApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | Delete a setting for a user
 *UserSettingsApi* | [**get_all_entities_user_settings**](docs/UserSettingsApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
@@ -312,11 +328,11 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
-*ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+*ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 *ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
-*ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
+*ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
@@ -795,6 +811,7 @@ Class | Method | HTTP request | Description
  - [DependentEntitiesNode](docs/DependentEntitiesNode.md)
  - [DependentEntitiesRequest](docs/DependentEntitiesRequest.md)
  - [DependentEntitiesResponse](docs/DependentEntitiesResponse.md)
+ - [DependsOn](docs/DependsOn.md)
  - [Dimension](docs/Dimension.md)
  - [DimensionHeader](docs/DimensionHeader.md)
  - [Element](docs/Element.md)

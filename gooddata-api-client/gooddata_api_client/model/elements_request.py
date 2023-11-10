@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.depends_on import DependsOn
     from gooddata_api_client.model.filter_by import FilterBy
+    globals()['DependsOn'] = DependsOn
     globals()['FilterBy'] = FilterBy
 
 
@@ -100,6 +102,7 @@ class ElementsRequest(ModelNormal):
             'label': (str,),  # noqa: E501
             'complement_filter': (bool,),  # noqa: E501
             'data_sampling_percentage': (float,),  # noqa: E501
+            'depends_on': ([DependsOn],),  # noqa: E501
             'exact_filter': ([str, none_type],),  # noqa: E501
             'exclude_primary_label': (bool,),  # noqa: E501
             'filter_by': (FilterBy,),  # noqa: E501
@@ -116,6 +119,7 @@ class ElementsRequest(ModelNormal):
         'label': 'label',  # noqa: E501
         'complement_filter': 'complementFilter',  # noqa: E501
         'data_sampling_percentage': 'dataSamplingPercentage',  # noqa: E501
+        'depends_on': 'dependsOn',  # noqa: E501
         'exact_filter': 'exactFilter',  # noqa: E501
         'exclude_primary_label': 'excludePrimaryLabel',  # noqa: E501
         'filter_by': 'filterBy',  # noqa: E501
@@ -168,7 +172,8 @@ class ElementsRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
+            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
+            depends_on ([DependsOn]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501
             exact_filter ([str, none_type]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
             filter_by (FilterBy): [optional]  # noqa: E501
@@ -264,7 +269,8 @@ class ElementsRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
+            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
+            depends_on ([DependsOn]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501
             exact_filter ([str, none_type]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
             filter_by (FilterBy): [optional]  # noqa: E501

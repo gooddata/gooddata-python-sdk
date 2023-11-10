@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 1337641ffbe20462
+          traceId: 2b3145e306f2023d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces

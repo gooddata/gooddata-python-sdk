@@ -7350,7 +7350,7 @@ class OrganizationModelControllerApi(object):
     ):
         """Get UserIdentifier entity  # noqa: E501
 
-        UserIdentifier - represents basic informationZ about entity interacting with platform  # noqa: E501
+        UserIdentifier - represents basic information about entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
