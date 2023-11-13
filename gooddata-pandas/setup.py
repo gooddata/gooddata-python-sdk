@@ -13,7 +13,7 @@ REQUIRES = [
 
 setup(
     name="gooddata-pandas",
-    description="GoodData.CN to pandas",
+    description="GoodData Cloud to pandas",
     long_description=long_description,
     long_description_content_type="text/markdown",
     version="1.8.0",

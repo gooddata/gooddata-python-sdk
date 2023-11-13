@@ -13,7 +13,7 @@ REQUIRES = [
 
 setup(
     name="gooddata-fdw",
-    description="GoodData.CN Foreign Data Wrapper For PostgreSQL",
+    description="GoodData Cloud Foreign Data Wrapper For PostgreSQL",
     long_description=long_description,
     long_description_content_type="text/markdown",
     version="1.8.0",
