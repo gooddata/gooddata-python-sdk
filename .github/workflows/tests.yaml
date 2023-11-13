@@ -62,7 +62,6 @@ jobs:
           python-version-file: '.python-version'
           cache: 'pip'
           cache-dependency-path: |
-            lint-requirements.txt
             fmt-requirements.txt
       - name: Install dependencies
         run: |
