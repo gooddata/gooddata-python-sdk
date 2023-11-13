@@ -28,6 +28,8 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version-file: ".python-version"
+        cache: 'pip'
+        cache-dependency-path: scripts/script-requirements.txt
     - name: Install Dependencies
       shell: bash
       run: |
