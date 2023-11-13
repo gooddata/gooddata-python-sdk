@@ -1,5 +1,10 @@
 # (C) 2023 GoodData Corporation
+from pathlib import Path
+
 from setuptools import find_packages, setup
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
     "gooddata-sdk~=1.8.0",
@@ -13,10 +18,14 @@ REQUIRES = [
 setup(
     name="gooddata-dbt",
     description="dbt plugin for GoodData",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     version="1.8.0",
     author="GoodData",
-    license="MIT",
     author_email="support@gooddata.com",
+    license="MIT",
+    license_file="LICENSE.txt",
+    license_files=("LICENSE.txt",),
     install_requires=REQUIRES,
     packages=find_packages(exclude=["tests*"]),
     python_requires=">=3.8.0",
@@ -24,7 +33,7 @@ setup(
         "bin/gooddata-dbt",
     ],
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",
