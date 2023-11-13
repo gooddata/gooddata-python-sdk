@@ -17,7 +17,7 @@ from gooddata_dbt.dbt.tables import DbtModelTables
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganization, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
-from gooddata_dbt.utils import report_message_to_merge_request
+from gooddata_dbt.utils import get_duration, report_message_to_merge_request
 
 from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Insight
 
@@ -144,11 +144,11 @@ async def test_insight(
     start = time()
     try:
         await execute_insight(sdk, workspace_id, insight)
-        duration = int((time() - start) * 1000)
+        duration = get_duration(start)
         logger.info(f"Test successful {insight.id=} {insight.title=} duration={duration}(ms)")
         return {"id": insight.id, "title": insight.title, "duration": duration, "status": "success"}
     except Exception as e:
-        duration = int((time() - start) * 1000)
+        duration = get_duration(start)
         logger.error(f"Test failed {insight.id=} {insight.title=} duration={duration}(ms) reason={str(e)}")
         return {"id": insight.id, "title": insight.title, "duration": duration, "status": "failed", "reason": str(e)}
 
@@ -187,12 +187,12 @@ async def test_insights(
         else:
             tasks.append(safe_test_insight(logger, sdk, workspace_id, insight, semaphore))
     results = await asyncio.gather(*tasks)
-    duration = int((time() - start) * 1000)
+    duration = get_duration(start)
     errors = [result for result in results if result["status"] == "failed"]
     if len(errors) > 0:
-        raise Exception(f"Test insights failed {workspace_id=} duration={duration}(ms) errors={errors}")
+        raise Exception(f"Test insights failed {workspace_id=} {duration=}(ms) {errors=}")
     else:
-        logger.info(f"Test insights finished {workspace_id=} duration={duration}(ms)")
+        logger.info(f"Test insights finished {workspace_id=} {duration=}(ms)")
 
 
 def create_localized_workspaces(data_product: GoodDataConfigProduct, sdk: GoodDataSdk, workspace_id: str) -> None:

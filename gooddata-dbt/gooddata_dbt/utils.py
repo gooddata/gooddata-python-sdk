@@ -1,5 +1,6 @@
 # (C) 2023 GoodData Corporation
 import os
+import time
 
 import requests
 
@@ -21,3 +22,7 @@ def report_message_to_merge_request(token: str, text: str) -> None:
     headers = {"PRIVATE-TOKEN": token, "Content-Type": "application/json"}
     data = {"body": text}
     post_gitlab_rest(url, headers, data)
+
+
+def get_duration(start: float) -> int:
+    return int((time.time() - start) * 1000)
