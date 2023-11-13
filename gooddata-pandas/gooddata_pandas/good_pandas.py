@@ -16,7 +16,7 @@ USER_AGENT = f"gooddata-pandas/{__version__}"
 
 class GoodPandas:
     """
-    Facade to access factories that create pandas Series and DataFrames using analytics computed by GoodData.CN.
+    Facade to access factories that create pandas Series and DataFrames using analytics computed by GoodData.
     """
 
     def __init__(
