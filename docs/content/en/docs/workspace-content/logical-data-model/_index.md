@@ -7,7 +7,7 @@ no_list: true
 
 Manage logical data models.
 
-See [Create a Logical Data Model](https://www.gooddata.com/developers/cloud-native/doc/cloud/model-data/create-ldm/) to learn abour logical data models in GoodData.
+See [Create a Logical Data Model](https://www.gooddata.com/docs/cloud/model-data/create-ldm/) to learn abour logical data models in GoodData.
 
 ## Methods
 

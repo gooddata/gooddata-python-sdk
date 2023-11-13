@@ -7,7 +7,7 @@ no_list: true
 
 Manage an organization.
 
-See [Manage Organizations](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/set-up-organizations/manage-organizations/) to learn how organizations work in GoodData.
+See [Manage Organizations](https://www.gooddata.com/docs/cloud/manage-deployment/set-up-organizations/manage-organizations/) to learn how organizations work in GoodData.
 
 ## Methods
 

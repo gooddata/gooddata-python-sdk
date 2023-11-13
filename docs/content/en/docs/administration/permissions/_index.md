@@ -7,7 +7,7 @@ no_list: true
 
 Manage workspace permissions.
 
-See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
+See [Manage Permissions](https://www.gooddata.com/docs/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
 
 ### Declarative Methods
 
