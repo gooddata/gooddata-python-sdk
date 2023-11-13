@@ -7,7 +7,7 @@ no_list: true
 
 Manage users.
 
-See [Manage Users and UserGroups](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-users/) to learn how user management works in GoodData.
+See [Manage Users and UserGroups](https://www.gooddata.com/docs/cloud/manage-deployment/manage-users/) to learn how user management works in GoodData.
 
 
 ### Entity Methods

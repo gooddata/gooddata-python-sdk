@@ -7,7 +7,7 @@ weight: 11
 Before installing, ensure you are using:
 
 * Python `3.8` or newer
-* [GoodData.CN](https://www.gooddata.com/developers/cloud-native/doc/cloud/deploy-and-install/cloud-native/) or [GoodData Cloud](https://www.gooddata.com/developers/cloud-native/doc/cloud/deploy-and-install/cloud/)
+* [GoodData.CN](https://www.gooddata.com/docs/cloud/deploy-and-install/cloud-native/) or [GoodData Cloud](https://www.gooddata.com/docs/cloud/deploy-and-install/cloud/)
 * The [pip](https://pypi.org/project/pip/) package management tool
 
 

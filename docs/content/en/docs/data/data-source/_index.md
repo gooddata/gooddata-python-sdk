@@ -7,7 +7,7 @@ no_list: true
 
 Manage data sources.
 
-See [Connect Data](https://www.gooddata.com/developers/cloud-native/doc/cloud/connect-data/) to learn how data sources work in GoodData.
+See [Connect Data](https://www.gooddata.com/docs/cloud/connect-data/) to learn how data sources work in GoodData.
 
 
 ### Entity Methods
