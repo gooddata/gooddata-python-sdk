@@ -3,19 +3,11 @@ GoodData plugin for dbt. Reads dbt models and profiles, generates GoodData seman
 
 ## Install
 
-Currently directly from git only:
 ```shell
-pip install git+https://github.com/gooddata/gooddata-python-sdk.git#egg=gooddata-dbt&subdirectory=gooddata-dbt
-# Or add the following line to requirements.txt
--e git+https://github.com/gooddata/gooddata-python-sdk.git#egg=gooddata-dbt&subdirectory=gooddata-dbt
-```
-
-## Local development
-```shell
-# Creates virtualenv, installs dependencies
-make dev
-# Installs the package itself
-make install
+pip install gooddata-dbt
+# Or add the corresponding line to requirements.txt
+# Or install specific version
+pip install gooddata-dbt==1.0.0
 ```
 
 ## Configuration, parametrization
@@ -25,24 +17,16 @@ Check [gooddata_example.yml](gooddata_example.yml) file for more details.
 Parametrization of each execution can be done using environment variables / tool arguments.
 Use main --help and --help for each use case to learn more.
 
-Example setup of environment variables for local environment (running GoodData Community Edition locally):
-```shell
-export POSTGRES_HOST="localhost"
-export POSTGRES_PORT=5432
-export POSTGRES_USER="demouser"
-export POSTGRES_PASS=demopass
-export POSTGRES_DBNAME=demo
-export INPUT_SCHEMA="input_stage"
-export OUTPUT_SCHEMA="output_stage"
+Alternatively, you can configure everything with environment variables.
+You can directly set env variables in a shell session, or store them to .env file(s).
+We provide the following example:
+- [.env.dev](.env.dev)
+- [.env.custom.dev](.env.custom.dev) is loaded from the above file and contains sensitive variables.
+  Add `.env.custom.*` to .gitignore!
 
-export DBT_PROFILE_DIR="profile"
-export DBT_PROFILE="default"
-export ELT_ENVIRONMENT="dev_local"
-
-export GOODDATA_HOST="http://localhost:3000"
-export GOODDATA_ENVIRONMENT_ID="development"
-unset GOODDATA_UPPER_CASE
-export GOODDATA_TOKEN="YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
+Then load .env files:
+```bash
+source .env.local
 ```
 
 ## Use cases
@@ -50,11 +34,13 @@ export GOODDATA_TOKEN="YWRtaW46Ym9vdHN0cmFwOmFkbWluMTIz"
 gooddata-dbt --help
 ```
 The plugin provides the following use cases:
-- deploy_models
+- provision_workspaces
+  - Provisions workspaces to GoodData based on gooddata.yaml file
+- register_data_sources
+  - Registers data source in GoodData for each relevant dbt profile
+- deploy_ldm
   - Reads dbt models and profiles
   - Scans data source (connection props from dbt profiles) through GoodData to get column data types (optional in dbt)
-  - Registers data source in GoodData
-  - Generates and stores PDM (Physical model) from dbt models and the result of the scan
   - Generates GoodData LDM(Logical Data Model) from dbt models. Can utilize custom gooddata-specific metadata, more below
 - upload_notification
   - Invalidates caches for data source
