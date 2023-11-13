@@ -27,6 +27,7 @@ jobs:
           - gooddata-pandas
           - gooddata-fdw
           - gooddata-sdk
+          - gooddata-dbt
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -76,6 +77,7 @@ jobs:
           - gooddata-pandas
           - gooddata-fdw
           - gooddata-sdk
+          - gooddata-dbt
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
         uses: actions/download-artifact@v2

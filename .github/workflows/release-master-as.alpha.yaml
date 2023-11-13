@@ -18,6 +18,7 @@ jobs:
           - gooddata-pandas
           - gooddata-fdw
           - gooddata-sdk
+          - gooddata-dbt
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
