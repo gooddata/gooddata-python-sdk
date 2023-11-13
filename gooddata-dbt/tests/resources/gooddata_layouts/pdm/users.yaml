@@ -1,0 +1,22 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: last_updated
+  - dataType: STRING
+    isPrimaryKey: false
+    name: login
+  - dataType: STRING
+    isPrimaryKey: false
+    name: user_avatar_url
+  - dataType: INT
+    isPrimaryKey: true
+    name: user_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: user_url
+id: users
+path:
+  - cicd_output_stage
+  - users
+type: TABLE

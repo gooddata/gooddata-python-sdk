@@ -257,28 +257,6 @@ class DbtModelTables:
         scan_columns = [s.name for s in table.columns]
         raise Exception(f"get_scan_column table={table.id} column={column_name} not found in scan. {scan_columns=}")
 
-    def make_pdm(self, scan_pdm: CatalogDeclarativeTables) -> Dict:
-        self.set_data_types(scan_pdm)
-        tables = []
-        for table in self.tables:
-            scan_table = self.get_scan_table(scan_pdm, table.name)
-            columns = []
-            for column in table.columns.values():
-                # dbt does not propagate data types to manifest (not yet?)
-                scan_column = self.get_scan_column(scan_table, column.name)
-                column.data_type = column.data_type or scan_column.data_type
-
-                columns.append({"name": column.name, "data_type": column.data_type})
-            tables.append(
-                {
-                    "id": table.name,
-                    "path": [self.schema_name, table.name],
-                    "type": "TABLE",
-                    "columns": columns,
-                }
-            )
-        return {"tables": tables}
-
     @staticmethod
     def get_ldm_title(column: DbtModelColumn) -> str:
         return column.description or column.name
@@ -351,6 +329,7 @@ class DbtModelTables:
                         "identifier": {"id": referenced_object_id, "type": "dataset"},
                         "multivalue": False,
                         "source_columns": [column.name],
+                        "source_column_data_types": [column.data_type],
                     }
                 )
         return references
@@ -367,6 +346,7 @@ class DbtModelTables:
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
+                        "source_column_data_type": column.data_type,
                         "tags": [table.gooddata_ldm_title] + column.tags,
                     }
                 )
@@ -383,6 +363,7 @@ class DbtModelTables:
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
+                        "source_column_data_type": column.data_type,
                         "value_type": column.meta.gooddata.label_type,
                         "tags": [table.gooddata_ldm_title] + column.tags,
                     }
@@ -400,6 +381,7 @@ class DbtModelTables:
                         "title": column.gooddata_ldm_title,
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
+                        "source_column_data_type": column.data_type,
                         "tags": [table.gooddata_ldm_title] + column.tags,
                         "labels": self.make_labels(table, column),
                     }
@@ -444,7 +426,8 @@ class DbtModelTables:
                 "tags": [table.gooddata_ldm_title] + table.tags,
                 "data_source_table_id": {
                     "data_source_id": data_source_id,
-                    "id": table.name,  # TODO - may not be unique
+                    "id": f"{self.schema_name}__{table.name}",
+                    "path": [self.schema_name, table.name],
                     "type": "dataSource",
                 },
                 "grain": grain,

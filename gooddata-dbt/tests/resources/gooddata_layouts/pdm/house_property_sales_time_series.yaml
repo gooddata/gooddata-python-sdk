@@ -1,0 +1,19 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: bedrooms
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: ma
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: saledate
+  - dataType: STRING
+    isPrimaryKey: false
+    name: type
+id: house_property_sales_time_series
+path:
+  - cicd_output_stage
+  - house_property_sales_time_series
+type: TABLE

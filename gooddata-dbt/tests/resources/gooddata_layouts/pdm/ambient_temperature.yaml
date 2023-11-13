@@ -1,0 +1,13 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: temperature
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: timestamp
+id: ambient_temperature
+path:
+  - cicd_output_stage
+  - ambient_temperature
+type: TABLE

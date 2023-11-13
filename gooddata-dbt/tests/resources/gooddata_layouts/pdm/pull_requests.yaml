@@ -1,0 +1,47 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: closed_at
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: created_at
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: days_to_solve
+  - dataType: INT
+    isPrimaryKey: false
+    name: id
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: merged_at
+  - dataType: BOOLEAN
+    isPrimaryKey: false
+    name: pull_request_draft
+  - dataType: STRING
+    isPrimaryKey: true
+    name: pull_request_id
+  - dataType: INT
+    isPrimaryKey: false
+    name: pull_request_number
+  - dataType: STRING
+    isPrimaryKey: false
+    name: pull_request_title
+  - dataType: STRING
+    isPrimaryKey: false
+    name: pull_request_url
+  - dataType: INT
+    isPrimaryKey: false
+    name: repo_id
+    referencedTableColumn: repo_id
+    referencedTableId: repos
+  - dataType: INT
+    isPrimaryKey: false
+    name: user_id
+    referencedTableColumn: user_id
+    referencedTableId: users
+id: pull_requests
+path:
+  - cicd_output_stage
+  - pull_requests
+type: TABLE

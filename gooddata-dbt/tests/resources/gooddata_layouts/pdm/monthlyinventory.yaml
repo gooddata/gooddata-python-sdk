@@ -1,0 +1,30 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: date
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: inventory_month
+  - dataType: STRING
+    isPrimaryKey: true
+    name: monthly_inventory_id
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: monthly_quantity_bom
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: monthly_quantity_eom
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product__product_id
+    referencedTableColumn: product_id
+    referencedTableId: product
+  - dataType: STRING
+    isPrimaryKey: false
+    name: wdf__client_id
+id: monthlyinventory
+path:
+  - cicd_output_stage
+  - monthlyinventory
+type: TABLE

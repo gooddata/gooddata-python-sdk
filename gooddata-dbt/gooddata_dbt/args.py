@@ -157,11 +157,21 @@ def parse_arguments(description: str) -> argparse.Namespace:
     set_gooddata_upper_case_args(dbt_cloud_stats)
     dbt_cloud_stats.set_defaults(method="dbt_cloud_stats")
 
-    deploy_models = subparsers.add_parser("deploy_models")
-    set_dbt_args(deploy_models)
-    set_environment_id_arg(deploy_models)
-    set_gooddata_upper_case_args(deploy_models)
-    deploy_models.set_defaults(method="deploy_models")
+    provision_workspaces = subparsers.add_parser("provision_workspaces")
+    set_environment_id_arg(provision_workspaces)
+    provision_workspaces.set_defaults(method="provision_workspaces")
+
+    register_data_sources = subparsers.add_parser("register_data_sources")
+    set_dbt_args(register_data_sources)
+    set_environment_id_arg(register_data_sources)
+    set_gooddata_upper_case_args(register_data_sources)
+    register_data_sources.set_defaults(method="register_data_sources")
+
+    deploy_ldm = subparsers.add_parser("deploy_ldm")
+    set_dbt_args(deploy_ldm)
+    set_environment_id_arg(deploy_ldm)
+    set_gooddata_upper_case_args(deploy_ldm)
+    deploy_ldm.set_defaults(method="deploy_ldm")
 
     upload_notification = subparsers.add_parser("upload_notification")
     set_dbt_args(upload_notification)

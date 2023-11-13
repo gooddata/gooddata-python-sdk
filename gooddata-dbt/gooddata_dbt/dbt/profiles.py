@@ -180,6 +180,9 @@ class DbtProfiles:
     def target(self) -> DbtOutput:
         for output in self.profile.outputs:
             if output.name == self.args.target:
+                if self.args.gooddata_upper_case:
+                    output.schema = output.schema.upper()
+                    output.database = output.database.upper()
                 return output
         raise ValueError(f"Target {self.args.target} not found in {self.profile.outputs}.")
 

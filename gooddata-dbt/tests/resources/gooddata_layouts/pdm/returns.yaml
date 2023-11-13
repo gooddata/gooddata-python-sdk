@@ -1,0 +1,43 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: customer__customer_id
+    referencedTableColumn: customer_id
+    referencedTableId: customer
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: date
+  - dataType: STRING
+    isPrimaryKey: false
+    name: order__order_id
+    referencedTableColumn: order_id
+    referencedTableId: orders
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product__product_id
+    referencedTableColumn: product_id
+    referencedTableId: product
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: return_date
+  - dataType: STRING
+    isPrimaryKey: true
+    name: return_id
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: return_unit_cost
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: return_unit_paid_amount
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: return_unit_quantity
+  - dataType: STRING
+    isPrimaryKey: false
+    name: wdf__client_id
+id: returns
+path:
+  - cicd_output_stage
+  - returns
+type: TABLE

@@ -1,0 +1,37 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: ls__product_id__product_id_image_web
+  - dataType: STRING
+    isPrimaryKey: false
+    name: ls__product_id__product_name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: ls__product_image__product_image_web
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product_brand
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product_category
+  - dataType: STRING
+    isPrimaryKey: true
+    name: product_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product_image
+  - dataType: STRING
+    isPrimaryKey: false
+    name: product_rating
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: rating
+  - dataType: STRING
+    isPrimaryKey: false
+    name: wdf__product_category
+id: product
+path:
+  - cicd_output_stage
+  - product
+type: TABLE
