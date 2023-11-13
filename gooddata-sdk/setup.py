@@ -17,7 +17,7 @@ REQUIRES = [
 
 setup(
     name="gooddata-sdk",
-    description="GoodData.CN Python SDK",
+    description="GoodData Cloud Python SDK",
     long_description=long_description,
     long_description_content_type="text/markdown",
     version="1.8.0",
