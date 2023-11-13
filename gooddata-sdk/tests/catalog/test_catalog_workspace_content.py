@@ -15,6 +15,7 @@ from gooddata_sdk import (
     CatalogDeclarativeModel,
     CatalogDeclarativeWorkspaceDataFilterReferences,
     CatalogDependentEntitiesRequest,
+    CatalogDependsOn,
     CatalogEntityIdentifier,
     CatalogWorkspace,
     DataSourceValidator,
@@ -366,8 +367,11 @@ def test_analytics_store_load(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "label_elements.yaml"))
 def test_label_elements(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    label_values = sdk.catalog_workspace_content.get_label_elements(test_config["workspace"], "order_status")
-    assert label_values == ["Canceled", "Delivered", "Returned"]
+    depends_on: CatalogDependsOn = CatalogDependsOn(label="order_status", values=["Canceled", "Delivered"])
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "order_status", [depends_on]
+    )
+    assert label_values == ["Canceled", "Delivered"]
     label_values = sdk.catalog_workspace_content.get_label_elements(test_config["workspace"], "label/order_status")
     assert label_values == ["Canceled", "Delivered", "Returned"]
     label_values = sdk.catalog_workspace_content.get_label_elements(
