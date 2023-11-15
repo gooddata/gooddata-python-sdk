@@ -29,6 +29,8 @@ jobs:
           with:
             python-version-file: '.python-version'
             cache: 'pip'
+          run: |
+            pip install tomlkit~=0.12.3
         - name: Bump version
           id: bump
           run: |
