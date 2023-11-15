@@ -29,9 +29,11 @@ jobs:
           with:
             python-version-file: '.python-version'
             cache: 'pip'
+            cache-dependency-path: |
+              release-requirements.txt
         - name: Install dependencies
           run: |
-            make dev
+            pip install -r release-requirements.txt
         - name: Bump version
           id: bump
           run: |
