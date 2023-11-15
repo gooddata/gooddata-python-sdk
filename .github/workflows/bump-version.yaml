@@ -1,0 +1,96 @@
+# (C) 2023 GoodData Corporation
+name: Bump version & trigger release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Type of version bump to perform (following semver).'
+        type: choice
+        required: true
+        default: 'minor'
+        options:
+          - major
+          - minor
+          - patch
+
+permissions:
+  contents: write
+
+jobs:
+    bump-version:
+      runs-on: ubuntu-latest
+      outputs:
+        new_version: ${{ steps.bump.outputs.new_version }}
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - uses: actions/setup-python@v4
+          with:
+            python-version-file: '.python-version'
+            cache: 'pip'
+        - name: Bump version
+          id: bump
+          run: |
+            NEW_VERSION=$(python ./scripts/bump_version.py ${{ github.event.inputs.bump_type }})
+            echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        - name: Bump version in documentation
+          run: |
+            python scripts/bump_doc_dependencies.py ${{ steps.bump.outputs.new_version }}
+        - name: Bump version in codebase
+          run: |
+            make release-ci VERSION=${{ steps.bump.outputs.new_version }}
+        - name: Commit version bump and push to custom branch
+          id: commit
+          uses: EndBug/add-and-commit@v9
+          with:
+            message: "Bump to ${{ steps.bump.outputs.new_version }}"
+            committer_name: GitHub Actions
+            committer_email: github-actions@github.com
+            new_branch: "release/${{ steps.bump.outputs.new_version }}"
+        - name: Create PR with the version bump
+          id: pr
+          if: ${{ steps.commit.outputs.pushed == 'true' }}
+          run: |
+            PR_URL=$(gh pr create \
+              --title "[bot] bump to ${{ steps.bump.outputs.new_version }}" \
+              --body ":rocket: Automated PR to bump to ${{ steps.bump.outputs.new_version }}." \
+              --base master --head "release/${{ steps.bump.outputs.new_version }}")
+            PR_NUMBER=$(basename $PR_URL)
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Approve the PR as yenkins-admin
+          if: ${{ steps.commit.outputs.pushed == 'true' }}
+          run: |
+            gh pr review ${{ steps.bump.outputs.pr_number }}  --approve
+            gh issue update ${{ steps.bump.outputs.pr_number }} --add-label "merge"
+          env:
+            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+#    create-release-branch:
+#      needs:
+#        - bump-version
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: Checkout
+#          uses: actions/checkout@v3
+#        - name: Create documentation rel/${{ github.event.inputs.bump_type }} branch
+#          run: |
+#            git config user.name GitHub Actions
+#            git config user.email github-actions@github.com
+#            git checkout -b rel/${{ needs.bump-version.outputs.new_version }}
+#            git push origin rel/${{ needs.bump-version.outputs.new_version }}
+#    trigger-release:
+#      needs:
+#        - bump-version
+#        - create-release-branch
+#      runs-on: ubuntu-latest
+#      steps:
+#        - name: Checkout
+#          uses: actions/checkout@v4
+#        - name: Push new tag – v${{ needs.bump-version.outputs.new_version }}
+#          run: |
+#            git config user.name GitHub Actions
+#            git config user.email github-actions@github.com
+#            git tag v${{ needs.bump-version.outputs.new_version }}
+#            git push origin v${{ needs.bump-version.outputs.new_version }}
