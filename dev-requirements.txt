@@ -1,5 +1,6 @@
 -r ./tox-requirements.txt
 tbump~=6.11.0
+tomlkit>=0.11
 pre-commit~=3.5.0
 
 -r ./fmt-requirements.txt
