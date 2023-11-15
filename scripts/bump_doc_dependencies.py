@@ -24,9 +24,6 @@ def bump_toml(file_path: Path, version: list[int]):
 
     versions = data.get("versions", [])
 
-    # Remove the old version
-    if versions:
-        versions.pop()
 
     old_version = versions[1]["version"]
     versions[1]["dirpath"] = old_version
