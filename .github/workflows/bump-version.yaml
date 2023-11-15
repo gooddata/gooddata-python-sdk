@@ -70,7 +70,7 @@ jobs:
           if: ${{ steps.commit.outputs.pushed == 'true' }}
           run: |
             gh pr review ${{ steps.bump.outputs.pr_number }}  --approve
-            gh issue update ${{ steps.bump.outputs.pr_number }} --add-label "merge"
+            gh issue edit ${{ steps.bump.outputs.pr_number }} --add-label "merge"
           env:
             GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
 #    create-release-branch:
