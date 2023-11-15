@@ -24,7 +24,6 @@ def bump_toml(file_path: Path, version: list[int]):
 
     versions = data.get("versions", [])
 
-
     old_version = versions[1]["version"]
     versions[1]["dirpath"] = old_version
     versions[1]["url"] = f"/{old_version}/"
