@@ -22,11 +22,11 @@ Method | HTTP request | Description
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
-[**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds API identifier conflicts in given workspace hierarchy.
+[**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
-[**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds API identifier overrides in given workspace hierarchy.
+[**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
@@ -279,7 +279,16 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
+        depends_on=[
+            DependsOn(
+                complement_filter=False,
+                label="null",
+                values=[
+                    "null",
+                ],
+            ),
+        ],
         exact_filter=[
             "exact_filter_example",
         ],
@@ -1568,7 +1577,7 @@ No authorization required
 # **inherited_entity_conflicts**
 > [IdentifierDuplications] inherited_entity_conflicts(workspace_id)
 
-Finds API identifier conflicts in given workspace hierarchy.
+Finds identifier conflicts in workspace hierarchy.
 
 Finds API identifier conflicts in given workspace hierarchy.
 
@@ -1596,7 +1605,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Finds API identifier conflicts in given workspace hierarchy.
+        # Finds identifier conflicts in workspace hierarchy.
         api_response = api_instance.inherited_entity_conflicts(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1847,7 +1856,7 @@ No authorization required
 # **overridden_child_entities**
 > [IdentifierDuplications] overridden_child_entities(workspace_id)
 
-Finds API identifier overrides in given workspace hierarchy.
+Finds identifier overrides in workspace hierarchy.
 
 Finds API identifier overrides in given workspace hierarchy.
 
@@ -1875,7 +1884,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
-        # Finds API identifier overrides in given workspace hierarchy.
+        # Finds identifier overrides in workspace hierarchy.
         api_response = api_instance.overridden_child_entities(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

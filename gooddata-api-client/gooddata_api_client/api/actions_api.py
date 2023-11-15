@@ -3730,7 +3730,7 @@ class ActionsApi(object):
         workspace_id,
         **kwargs
     ):
-        """Finds API identifier conflicts in given workspace hierarchy.  # noqa: E501
+        """Finds identifier conflicts in workspace hierarchy.  # noqa: E501
 
         Finds API identifier conflicts in given workspace hierarchy.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -4069,7 +4069,7 @@ class ActionsApi(object):
         workspace_id,
         **kwargs
     ):
-        """Finds API identifier overrides in given workspace hierarchy.  # noqa: E501
+        """Finds identifier overrides in workspace hierarchy.  # noqa: E501
 
         Finds API identifier overrides in given workspace hierarchy.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an

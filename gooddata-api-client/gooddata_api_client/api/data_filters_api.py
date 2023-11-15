@@ -156,6 +156,7 @@ class DataFiltersApi(object):
                     'workspace_id',
                     'json_api_workspace_data_filter_setting_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -165,18 +166,29 @@ class DataFiltersApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -187,18 +199,23 @@ class DataFiltersApi(object):
                         (JsonApiWorkspaceDataFilterSettingInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_workspace_data_filter_setting_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -225,6 +242,7 @@ class DataFiltersApi(object):
                     'workspace_id',
                     'json_api_workspace_data_filter_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -234,18 +252,29 @@ class DataFiltersApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -256,18 +285,23 @@ class DataFiltersApi(object):
                         (JsonApiWorkspaceDataFilterInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_workspace_data_filter_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -597,6 +631,7 @@ class DataFiltersApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -606,12 +641,17 @@ class DataFiltersApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -624,6 +664,12 @@ class DataFiltersApi(object):
 
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -644,6 +690,8 @@ class DataFiltersApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -654,6 +702,7 @@ class DataFiltersApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -664,10 +713,12 @@ class DataFiltersApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -697,6 +748,7 @@ class DataFiltersApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -706,12 +758,17 @@ class DataFiltersApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -724,6 +781,12 @@ class DataFiltersApi(object):
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -744,6 +807,8 @@ class DataFiltersApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -754,6 +819,7 @@ class DataFiltersApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -764,10 +830,12 @@ class DataFiltersApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -896,6 +964,7 @@ class DataFiltersApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -905,18 +974,29 @@ class DataFiltersApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -931,6 +1011,8 @@ class DataFiltersApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -938,6 +1020,7 @@ class DataFiltersApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -945,9 +1028,11 @@ class DataFiltersApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -974,6 +1059,7 @@ class DataFiltersApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -983,18 +1069,29 @@ class DataFiltersApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -1009,6 +1106,8 @@ class DataFiltersApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -1016,6 +1115,7 @@ class DataFiltersApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -1023,9 +1123,11 @@ class DataFiltersApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1729,6 +1831,7 @@ class DataFiltersApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1816,6 +1919,7 @@ class DataFiltersApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2258,6 +2362,7 @@ class DataFiltersApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2347,6 +2452,7 @@ class DataFiltersApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2524,6 +2630,7 @@ class DataFiltersApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2613,6 +2720,7 @@ class DataFiltersApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

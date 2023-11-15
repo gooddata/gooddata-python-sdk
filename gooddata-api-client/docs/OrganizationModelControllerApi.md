@@ -3161,7 +3161,7 @@ No authorization required
 
 Get UserIdentifier entity
 
-UserIdentifier - represents basic informationZ about entity interacting with platform
+UserIdentifier - represents basic information about entity interacting with platform
 
 ### Example
 

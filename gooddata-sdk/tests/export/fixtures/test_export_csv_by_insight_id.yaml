@@ -151,7 +151,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2023-10-30 12:50
+              createdAt: 2023-11-10 10:43
             relationships:
               createdBy:
                 data:
@@ -195,7 +195,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2023-10-30 12:50
+                createdAt: 2023-11-10 10:43
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -205,7 +205,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2023-10-30 12:50
+                createdAt: 2023-11-10 10:43
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -375,10 +375,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 83d42c02b47ca0fd6842b6f59be222f8c530d432
+              executionResult: a7cc1f11943368aafe33359c383a0d07970a9c2f
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/83d42c02b47ca0fd6842b6f59be222f8c530d432?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a7cc1f11943368aafe33359c383a0d07970a9c2f?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -448,12 +448,10 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '1405'
+          - '1414'
       body:
         string:
           data:
-            - - 56
-              - 170.1824
             - - 88
               - 178.174875
             - - 65
@@ -476,12 +474,11 @@ interactions:
               - 237.2503
             - - 91
               - 154.40761904761905
+            - - 59
+              - 307.9370909090909
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2022-11
-                        primaryLabelValue: 2022-11
                     - attributeHeader:
                         labelValue: 2022-12
                         primaryLabelValue: 2022-12
@@ -515,6 +512,9 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-10
                         primaryLabelValue: 2023-10
+                    - attributeHeader:
+                        labelValue: 2023-11
+                        primaryLabelValue: 2023-11
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -536,7 +536,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 83d42c02b47ca0fd6842b6f59be222f8c530d432
+        executionResult: a7cc1f11943368aafe33359c383a0d07970a9c2f
         fileName: Customers Trend
         format: CSV
         customOverride:
@@ -621,10 +621,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: ec2ba837da81f7f27fd63df9cb336cbec15de96c
+          exportResult: 80634e40e6c3c81c7fef7d7aba6f5df641aab93a
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/ec2ba837da81f7f27fd63df9cb336cbec15de96c
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/80634e40e6c3c81c7fef7d7aba6f5df641aab93a
       body: null
       headers:
         Accept:
@@ -695,7 +695,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/ec2ba837da81f7f27fd63df9cb336cbec15de96c
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/80634e40e6c3c81c7fef7d7aba6f5df641aab93a
       body: null
       headers:
         Accept:
@@ -724,7 +724,7 @@ interactions:
         Content-Disposition:
           - attachment; filename*=UTF-8''Customers%20Trend.csv
         Content-Length:
-          - '422'
+          - '431'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -771,8 +771,6 @@ interactions:
       body:
         string: '"date.month","amount_of_active_customers","revenue_per_customer"
 
-          "2022-11",56,170.1824
-
           "2022-12",88,178.174875
 
           "2023-01",65,174.79036363636362
@@ -794,5 +792,7 @@ interactions:
           "2023-09",110,237.2503
 
           "2023-10",91,154.40761904761905
+
+          "2023-11",59,307.9370909090909
 
           '

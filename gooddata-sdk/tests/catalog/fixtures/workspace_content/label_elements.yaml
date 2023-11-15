@@ -6,6 +6,11 @@ interactions:
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
+        dependsOn:
+          - label: order_status
+            values:
+              - Canceled
+              - Delivered
       headers:
         Accept:
           - application/json
@@ -77,7 +82,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '263'
+          - '216'
       body:
         string:
           primaryLabel:
@@ -88,11 +93,9 @@ interactions:
               primaryTitle: Canceled
             - title: Delivered
               primaryTitle: Delivered
-            - title: Returned
-              primaryTitle: Returned
           paging:
-            total: 3
-            count: 3
+            total: 2
+            count: 2
             offset: 0
             next: null
   - request:
@@ -100,6 +103,7 @@ interactions:
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
+        dependsOn: []
       headers:
         Accept:
           - application/json
@@ -193,6 +197,7 @@ interactions:
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/collectLabelElements
       body:
         label: order_status
+        dependsOn: []
       headers:
         Accept:
           - application/json

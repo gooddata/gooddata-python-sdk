@@ -7,10 +7,14 @@ Method | HTTP request | Description
 [**available_assignees**](PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**dashboard_permissions**](PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 [**get_organization_permissions**](PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
+[**get_user_group_permissions**](PermissionsApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
+[**get_user_permissions**](PermissionsApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
+[**set_user_group_permissions**](PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
+[**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
 [**set_workspace_permissions**](PermissionsApi.md#set_workspace_permissions) | **PUT** /api/v1/layout/workspaces/{workspaceId}/permissions | Set permissions for the workspace
 
 
@@ -208,6 +212,140 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved all organization permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_user_group_permissions**
+> DeclarativeUserGroupPermissions get_user_group_permissions(user_group_id)
+
+Get permissions for the user-group
+
+Retrieve current set of permissions of the user-group in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    user_group_id = "userGroupId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the user-group
+        api_response = api_instance.get_user_group_permissions(user_group_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->get_user_group_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_group_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_user_permissions**
+> DeclarativeUserPermissions get_user_permissions(user_id)
+
+Get permissions for the user
+
+Retrieve current set of permissions of the user in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    user_id = "userId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the user
+        api_response = api_instance.get_user_permissions(user_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->get_user_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -495,6 +633,162 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | Organization permissions set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_user_group_permissions**
+> set_user_group_permissions(user_group_id, declarative_user_group_permissions)
+
+Set permissions for the user-group
+
+Set effective permissions for the user-group
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    user_group_id = "userGroupId_example" # str | 
+    declarative_user_group_permissions = DeclarativeUserGroupPermissions(
+        permissions=[
+            DeclarativeUserGroupPermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="SEE",
+            ),
+        ],
+    ) # DeclarativeUserGroupPermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the user-group
+        api_instance.set_user_group_permissions(user_group_id, declarative_user_group_permissions)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->set_user_group_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_group_id** | **str**|  |
+ **declarative_user_group_permissions** | [**DeclarativeUserGroupPermissions**](DeclarativeUserGroupPermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | User-group permissions successfully set. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_user_permissions**
+> set_user_permissions(user_id, declarative_user_permissions)
+
+Set permissions for the user
+
+Set effective permissions for the user
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    user_id = "userId_example" # str | 
+    declarative_user_permissions = DeclarativeUserPermissions(
+        permissions=[
+            DeclarativeUserPermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="SEE",
+            ),
+        ],
+    ) # DeclarativeUserPermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set permissions for the user
+        api_instance.set_user_permissions(user_id, declarative_user_permissions)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->set_user_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user_id** | **str**|  |
+ **declarative_user_permissions** | [**DeclarativeUserPermissions**](DeclarativeUserPermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | User permissions successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

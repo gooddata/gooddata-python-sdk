@@ -294,7 +294,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -346,8 +346,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
+              oauthClientId: be8b1128-8b82-469c-b600-bef60639d14c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -642,7 +641,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -694,8 +693,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
+              oauthClientId: be8b1128-8b82-469c-b600-bef60639d14c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -794,7 +792,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -846,8 +844,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
+              oauthClientId: be8b1128-8b82-469c-b600-bef60639d14c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -1136,7 +1133,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '275'
+          - '255'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -1188,7 +1185,6 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              allowedOrigins: []
-              oauthClientId: 133f8f79-0218-48fb-800a-294052c8c0f4
+              oauthClientId: be8b1128-8b82-469c-b600-bef60639d14c
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

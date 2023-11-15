@@ -141,6 +141,7 @@ docs/DependentEntitiesGraph.md
 docs/DependentEntitiesNode.md
 docs/DependentEntitiesRequest.md
 docs/DependentEntitiesResponse.md
+docs/DependsOn.md
 docs/Dimension.md
 docs/DimensionHeader.md
 docs/Element.md
@@ -169,6 +170,7 @@ docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
 docs/HeaderGroup.md
+docs/HierarchyApi.md
 docs/HierarchyObjectIdentification.md
 docs/IdentifierDuplications.md
 docs/InlineFilterDefinition.md
@@ -176,6 +178,7 @@ docs/InlineFilterDefinitionInline.md
 docs/InlineMeasureDefinition.md
 docs/InlineMeasureDefinitionInline.md
 docs/InvalidateCacheApi.md
+docs/JWKSApi.md
 docs/JsonApiAnalyticalDashboardIn.md
 docs/JsonApiAnalyticalDashboardInAttributes.md
 docs/JsonApiAnalyticalDashboardInDocument.md
@@ -649,6 +652,7 @@ docs/UserGroupIdentifier.md
 docs/UserGroupPermission.md
 docs/UserGroupsDeclarativeAPIsApi.md
 docs/UserGroupsEntityAPIsApi.md
+docs/UserIdentifiersApi.md
 docs/UserModelControllerApi.md
 docs/UserPermission.md
 docs/UserSettingsApi.md
@@ -685,7 +689,9 @@ gooddata_api_client/api/entitlement_api.py
 gooddata_api_client/api/exporting_api.py
 gooddata_api_client/api/facts_api.py
 gooddata_api_client/api/generate_logical_data_model_api.py
+gooddata_api_client/api/hierarchy_api.py
 gooddata_api_client/api/invalidate_cache_api.py
+gooddata_api_client/api/jwks_api.py
 gooddata_api_client/api/labels_api.py
 gooddata_api_client/api/layout_api.py
 gooddata_api_client/api/ldm_declarative_apis_api.py
@@ -705,6 +711,7 @@ gooddata_api_client/api/usage_api.py
 gooddata_api_client/api/user_data_filters_api.py
 gooddata_api_client/api/user_groups_declarative_apis_api.py
 gooddata_api_client/api/user_groups_entity_apis_api.py
+gooddata_api_client/api/user_identifiers_api.py
 gooddata_api_client/api/user_model_controller_api.py
 gooddata_api_client/api/user_settings_api.py
 gooddata_api_client/api/users_declarative_apis_api.py
@@ -842,6 +849,7 @@ gooddata_api_client/model/dependent_entities_graph.py
 gooddata_api_client/model/dependent_entities_node.py
 gooddata_api_client/model/dependent_entities_request.py
 gooddata_api_client/model/dependent_entities_response.py
+gooddata_api_client/model/depends_on.py
 gooddata_api_client/model/dimension.py
 gooddata_api_client/model/dimension_header.py
 gooddata_api_client/model/element.py

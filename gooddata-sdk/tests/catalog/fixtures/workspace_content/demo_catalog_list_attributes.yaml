@@ -118,27 +118,6 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: type
-              type: attribute
-              attributes:
-                title: Type
-                description: Type
-                tags:
-                  - Campaign channels
-                areRelationsValid: true
-                sourceColumn: type
-                sourceColumnDataType: STRING
-              relationships:
-                labels:
-                  data:
-                    - id: type
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: campaign_id
               type: attribute
               attributes:
@@ -223,46 +202,302 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: region
+            - id: date.day
               type: attribute
               attributes:
-                title: Region
-                description: Region
+                title: Date - Date
+                description: Date
                 tags:
-                  - Customers
+                  - Date
+                granularity: DAY
                 areRelationsValid: true
-                sourceColumn: region
-                sourceColumnDataType: STRING
               relationships:
                 labels:
                   data:
-                    - id: region
+                    - id: date.day
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: state
+            - id: date.dayOfMonth
               type: attribute
               attributes:
-                title: State
-                description: State
+                title: Date - Day of Month
+                description: Generic Day of the Month (D1-D31)
                 tags:
-                  - Customers
+                  - Date
+                granularity: DAY_OF_MONTH
                 areRelationsValid: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
               relationships:
                 labels:
                   data:
-                    - id: geo__state__location
-                      type: label
-                    - id: state
+                    - id: date.dayOfMonth
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.dayOfWeek
+              type: attribute
+              attributes:
+                title: Date - Day of Week
+                description: Generic Day of the Week (D1-D7)
+                tags:
+                  - Date
+                granularity: DAY_OF_WEEK
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.dayOfWeek
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.dayOfYear
+              type: attribute
+              attributes:
+                title: Date - Day of Year
+                description: Generic Day of the Year (D1-D366)
+                tags:
+                  - Date
+                granularity: DAY_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.dayOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.hour
+              type: attribute
+              attributes:
+                title: Date - Hour
+                description: Hour
+                tags:
+                  - Date
+                granularity: HOUR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.hour
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.hourOfDay
+              type: attribute
+              attributes:
+                title: Date - Hour of Day
+                description: Generic Hour of the Day(H1-H24)
+                tags:
+                  - Date
+                granularity: HOUR_OF_DAY
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.hourOfDay
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.minute
+              type: attribute
+              attributes:
+                title: Date - Minute
+                description: Minute
+                tags:
+                  - Date
+                granularity: MINUTE
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.minute
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.minuteOfHour
+              type: attribute
+              attributes:
+                title: Date - Minute of Hour
+                description: Generic Minute of the Hour(MI1-MI60)
+                tags:
+                  - Date
+                granularity: MINUTE_OF_HOUR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.minuteOfHour
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.month
+              type: attribute
+              attributes:
+                title: Date - Month/Year
+                description: Month and Year (12/2020)
+                tags:
+                  - Date
+                granularity: MONTH
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.month
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.monthOfYear
+              type: attribute
+              attributes:
+                title: Date - Month of Year
+                description: Generic Month (M1-M12)
+                tags:
+                  - Date
+                granularity: MONTH_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.monthOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.quarter
+              type: attribute
+              attributes:
+                title: Date - Quarter/Year
+                description: Quarter and Year (Q1/2020)
+                tags:
+                  - Date
+                granularity: QUARTER
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.quarter
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.quarterOfYear
+              type: attribute
+              attributes:
+                title: Date - Quarter of Year
+                description: Generic Quarter (Q1-Q4)
+                tags:
+                  - Date
+                granularity: QUARTER_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.quarterOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.week
+              type: attribute
+              attributes:
+                title: Date - Week/Year
+                description: Week and Year (W52/2020)
+                tags:
+                  - Date
+                granularity: WEEK
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.week
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.weekOfYear
+              type: attribute
+              attributes:
+                title: Date - Week of Year
+                description: Generic Week (W1-W53)
+                tags:
+                  - Date
+                granularity: WEEK_OF_YEAR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.weekOfYear
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date.year
+              type: attribute
+              attributes:
+                title: Date - Year
+                description: Year
+                tags:
+                  - Date
+                granularity: YEAR
+                areRelationsValid: true
+              relationships:
+                labels:
+                  data:
+                    - id: date.year
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
               meta:
                 origin:
                   originType: NATIVE
@@ -393,302 +628,67 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.minute
+            - id: region
               type: attribute
               attributes:
-                title: Date - Minute
-                description: Minute
+                title: Region
+                description: Region
                 tags:
-                  - Date
-                granularity: MINUTE
+                  - Customers
                 areRelationsValid: true
+                sourceColumn: region
+                sourceColumnDataType: STRING
               relationships:
                 labels:
                   data:
-                    - id: date.minute
+                    - id: region
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minute
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/region
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.hour
+            - id: state
               type: attribute
               attributes:
-                title: Date - Hour
-                description: Hour
+                title: State
+                description: State
                 tags:
-                  - Date
-                granularity: HOUR
+                  - Customers
                 areRelationsValid: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
               relationships:
                 labels:
                   data:
-                    - id: date.hour
+                    - id: state
+                      type: label
+                    - id: geo__state__location
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hour
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
               meta:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: date.day
+            - id: type
               type: attribute
               attributes:
-                title: Date - Date
-                description: Date
+                title: Type
+                description: Type
                 tags:
-                  - Date
-                granularity: DAY
+                  - Campaign channels
                 areRelationsValid: true
+                sourceColumn: type
+                sourceColumnDataType: STRING
               relationships:
                 labels:
                   data:
-                    - id: date.day
+                    - id: type
                       type: label
               links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.day
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.week
-              type: attribute
-              attributes:
-                title: Date - Week/Year
-                description: Week and Year (W52/2020)
-                tags:
-                  - Date
-                granularity: WEEK
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.week
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.week
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.month
-              type: attribute
-              attributes:
-                title: Date - Month/Year
-                description: Month and Year (12/2020)
-                tags:
-                  - Date
-                granularity: MONTH
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.month
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.month
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.quarter
-              type: attribute
-              attributes:
-                title: Date - Quarter/Year
-                description: Quarter and Year (Q1/2020)
-                tags:
-                  - Date
-                granularity: QUARTER
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.quarter
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarter
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.year
-              type: attribute
-              attributes:
-                title: Date - Year
-                description: Year
-                tags:
-                  - Date
-                granularity: YEAR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.year
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.year
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.minuteOfHour
-              type: attribute
-              attributes:
-                title: Date - Minute of Hour
-                description: Generic Minute of the Hour(MI1-MI60)
-                tags:
-                  - Date
-                granularity: MINUTE_OF_HOUR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.minuteOfHour
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.minuteOfHour
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.hourOfDay
-              type: attribute
-              attributes:
-                title: Date - Hour of Day
-                description: Generic Hour of the Day(H1-H24)
-                tags:
-                  - Date
-                granularity: HOUR_OF_DAY
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.hourOfDay
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.hourOfDay
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfWeek
-              type: attribute
-              attributes:
-                title: Date - Day of Week
-                description: Generic Day of the Week (D1-D7)
-                tags:
-                  - Date
-                granularity: DAY_OF_WEEK
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.dayOfWeek
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfWeek
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfMonth
-              type: attribute
-              attributes:
-                title: Date - Day of Month
-                description: Generic Day of the Month (D1-D31)
-                tags:
-                  - Date
-                granularity: DAY_OF_MONTH
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.dayOfMonth
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfMonth
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.dayOfYear
-              type: attribute
-              attributes:
-                title: Date - Day of Year
-                description: Generic Day of the Year (D1-D366)
-                tags:
-                  - Date
-                granularity: DAY_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.dayOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.dayOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.weekOfYear
-              type: attribute
-              attributes:
-                title: Date - Week of Year
-                description: Generic Week (W1-W53)
-                tags:
-                  - Date
-                granularity: WEEK_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.weekOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.weekOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.monthOfYear
-              type: attribute
-              attributes:
-                title: Date - Month of Year
-                description: Generic Month (M1-M12)
-                tags:
-                  - Date
-                granularity: MONTH_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.monthOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.monthOfYear
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date.quarterOfYear
-              type: attribute
-              attributes:
-                title: Date - Quarter of Year
-                description: Generic Quarter (Q1-Q4)
-                tags:
-                  - Date
-                granularity: QUARTER_OF_YEAR
-                areRelationsValid: true
-              relationships:
-                labels:
-                  data:
-                    - id: date.quarterOfYear
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/date.quarterOfYear
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/type
               meta:
                 origin:
                   originType: NATIVE

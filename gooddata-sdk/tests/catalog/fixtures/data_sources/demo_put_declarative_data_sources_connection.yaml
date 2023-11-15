@@ -294,11 +294,11 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '60'
+          - '61'
       body:
         string:
           queryDurationMillis:
-            simpleSelect: 1
+            simpleSelect: 16
           successful: true
   - request:
       method: PUT

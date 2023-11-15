@@ -132,6 +132,7 @@ from gooddata_api_client.model.dependent_entities_graph import DependentEntities
 from gooddata_api_client.model.dependent_entities_node import DependentEntitiesNode
 from gooddata_api_client.model.dependent_entities_request import DependentEntitiesRequest
 from gooddata_api_client.model.dependent_entities_response import DependentEntitiesResponse
+from gooddata_api_client.model.depends_on import DependsOn
 from gooddata_api_client.model.dimension import Dimension
 from gooddata_api_client.model.dimension_header import DimensionHeader
 from gooddata_api_client.model.element import Element

@@ -10,6 +10,7 @@ import gooddata_api_client.models as afm_models
 from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
+from gooddata_sdk.catalog.depends_on import CatalogDependsOn
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
@@ -552,7 +553,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
         return by_type
 
-    def get_label_elements(self, workspace_id: str, label_id: LabelElementsInputType) -> List[str]:
+    def get_label_elements(
+        self, workspace_id: str, label_id: LabelElementsInputType, depends_on: Optional[List[CatalogDependsOn]] = None
+    ) -> List[str]:
         """
         Get existing values for a label.
         Under-the-hood, it basically executes SELECT DISTINCT <label_column_name> from corresponding table.
@@ -564,14 +567,20 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             label_id (str):
                 Label ID. We support string or ObjId types.
                 String may not contain "label/" prefix, we append it if necessary.
+            depends_on (Optional[DependsOn]):
+                Optional parameter specifying dependencies on other labels.
         Returns:
             list of label values
         """
+
+        if depends_on is None:
+            depends_on = []
+
         # API expects ID without type prefix
         parts = str(label_id).split("/")
         if len(parts) == 2:
             label_id = parts[1]
-        request = ElementsRequest(label=label_id)
+        request = ElementsRequest(label=label_id, depends_on=[d.to_api() for d in depends_on])
         # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
         values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
         return [v["title"] for v in values["elements"]]
