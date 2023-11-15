@@ -73,6 +73,20 @@ jobs:
             gh issue edit ${{ steps.bump.outputs.pr_number }} --add-label "merge"
           env:
             GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+        - name: Wait for PR to be merged
+          run: |
+            while true; do
+              PR_MERGED=$(gh api repos/gooddata/gooddata-python-sdk/pulls/${{ steps.bump.outputs.pr_number }} | jq .merged)
+              if [ "$PR_MERGED" = "true" ]; then
+                echo "PR has been merged!"
+                break
+              else
+                echo "PR is not yet merged. Waiting..."
+                sleep 10
+              fi
+            done
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #    create-release-branch:
 #      needs:
 #        - bump-version
