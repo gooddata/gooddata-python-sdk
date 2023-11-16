@@ -175,6 +175,7 @@ def parse_arguments(description: str) -> argparse.Namespace:
 
     upload_notification = subparsers.add_parser("upload_notification")
     set_dbt_args(upload_notification)
+    set_gooddata_upper_case_args(upload_notification)
     upload_notification.set_defaults(method="upload_notification")
 
     deploy_analytics = subparsers.add_parser("deploy_analytics")
