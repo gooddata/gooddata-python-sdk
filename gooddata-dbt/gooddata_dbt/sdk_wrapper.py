@@ -3,6 +3,8 @@ import argparse
 from logging import Logger
 from typing import List, Optional
 
+from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
+
 from gooddata_sdk import GoodDataSdk
 
 
@@ -16,7 +18,9 @@ class GoodDataSdkWrapper:
         self.timeout = timeout
         self.profile = profile
         self.sdk = self.create_sdk()
-        self.wait_for_gooddata_is_up(self.timeout)
+        self.sdk_facade = self.create_sdk_facade()
+        if not self.args.dry_run:
+            self.wait_for_gooddata_is_up(self.timeout)
 
     def get_host_from_sdk(self) -> Optional[str]:
         # TODO - make _hostname public in gooddata_sdk
@@ -38,6 +42,9 @@ class GoodDataSdkWrapper:
             self.logger.info(f"Connecting to GoodData host={host} token={masked_token} override_host={override_host}")
             sdk = GoodDataSdk.create(host_=host, token_=token, **kwargs)
             return sdk
+
+    def create_sdk_facade(self) -> GoodDataApiWrapper:
+        return GoodDataApiWrapper(self.sdk, self.logger, self.args.dry_run)
 
     def wait_for_gooddata_is_up(self, timeout: int) -> None:
         # Wait for the GoodData.CN docker image to start up or prevent hiccups of cloud deployments
