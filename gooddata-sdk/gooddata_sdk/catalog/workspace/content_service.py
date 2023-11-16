@@ -567,7 +567,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             label_id (str):
                 Label ID. We support string or ObjId types.
                 String may not contain "label/" prefix, we append it if necessary.
-            depends_on (Optional[DependsOn]):
+            depends_on (Optional[List[CatalogDependsOn]]):
                 Optional parameter specifying dependencies on other labels.
         Returns:
             list of label values
