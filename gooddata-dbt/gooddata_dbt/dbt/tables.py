@@ -218,14 +218,19 @@ class DbtModelTables:
                     column.meta.gooddata.upper_case_names()
         return tables
 
-    def set_data_types(self, scan_pdm: CatalogDeclarativeTables) -> None:
-        for table in self.tables:
-            scan_table = self.get_scan_table(scan_pdm, table.name)
-            for column in table.columns.values():
-                # dbt does not provide data types in manifest.json
-                # get it from GoodData scan API
-                scan_column = self.get_scan_column(scan_table, column.name)
-                column.data_type = scan_column.data_type
+    def set_data_types(self, scan_pdm: CatalogDeclarativeTables, dry_run: bool = False) -> None:
+        if dry_run:
+            for table in self.tables:
+                for column in table.columns.values():
+                    column.data_type = "STRING"
+        else:
+            for table in self.tables:
+                scan_table = self.get_scan_table(scan_pdm, table.name)
+                for column in table.columns.values():
+                    # dbt does not provide data types in manifest.json
+                    # get it from GoodData scan API
+                    scan_column = self.get_scan_column(scan_table, column.name)
+                    column.data_type = scan_column.data_type
 
     @property
     def schema_name(self) -> str:

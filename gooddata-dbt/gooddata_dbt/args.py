@@ -140,6 +140,7 @@ def set_dbt_cloud_stats_args(parser: argparse.ArgumentParser) -> None:
 def parse_arguments(description: str) -> argparse.Namespace:
     parser = get_parser(description)
     parser.add_argument("--debug", action="store_true", default=False, help="Increase logging level to DEBUG")
+    parser.add_argument("--dry-run", action="store_true", default=False, help="Do not call GoodData APIs")
     set_gooddata_endpoint_args(parser)
 
     subparsers = parser.add_subparsers(help="actions")
