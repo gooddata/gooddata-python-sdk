@@ -25,7 +25,7 @@ pygmentsStyle = "tango"
   proxy = "direct"
   [module.hugoVersion]
     extended = true
-    min = "0.81.0"
+    min = "0.110.0"
   [[module.imports]]
     path = "github.com/gooddata/gooddata-docs-theme"
     disable = false
@@ -100,13 +100,13 @@ enable = true
 title = "Page not found"
 [[params.404.links]]
 title = "Introduction"
-link = "/1.4/"
+link = "/latest/"
 [[params.404.links]]
 title = "Installation"
-link = "/1.4/installation/"
+link = "/latest/installation/"
 [[params.404.links]]
 title = "Getting Started"
-link = "/1.4/getting-started/"
+link = "/latest/getting-started/"
 
 # Generate Netlify redirects file in Hugo
 # Example taken from: https://github.com/gohugoio/hugoDocs/commit/c1ab9894e8292e0a74c43bbca2263b1fb3840f9e
