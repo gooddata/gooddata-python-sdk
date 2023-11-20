@@ -25,7 +25,7 @@ pygmentsStyle = "tango"
   proxy = "direct"
   [module.hugoVersion]
     extended = true
-    min = "0.81.0"
+    min = "0.110.0"
   [[module.imports]]
     path = "github.com/gooddata/gooddata-docs-theme"
     disable = false
