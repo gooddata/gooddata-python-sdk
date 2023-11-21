@@ -76,7 +76,7 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
         if [ "$target_section" == "" ] ; then
             echo "Skipping master api ref"
         else
-            directories=$(find .. -type d -name 'gooddata-*')
+            directories=$(ls -d ../gooddata-*)
 
             for dir in $directories; do
                 git checkout "$branch" -- "$dir"
