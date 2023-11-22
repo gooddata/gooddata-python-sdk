@@ -1,11 +1,12 @@
 ---
 title: "Pandas Overview"
 linkTitle: "Pandas Overview"
-weight: 1
+weight: 13
 ---
 
 GoodData Pandas contains a thin layer that utilizes GoodData Python SDK and allows you to conveniently create pandas series and  data frames from the computations done against semantic model in your GoodData workspace.
 
+For further information, refer to the PANDAS section in the left navigation menu.
 
 ## Installation
 
