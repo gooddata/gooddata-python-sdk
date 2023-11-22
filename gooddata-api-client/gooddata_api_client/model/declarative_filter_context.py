@@ -61,7 +61,7 @@ class DeclarativeFilterContext(ModelNormal):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
         ('title',): {
@@ -126,7 +126,7 @@ class DeclarativeFilterContext(ModelNormal):
         """DeclarativeFilterContext - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Filter Context ID.
             title (str): Filter Context title.
 
@@ -221,7 +221,7 @@ class DeclarativeFilterContext(ModelNormal):
         """DeclarativeFilterContext - a model defined in OpenAPI
 
         Args:
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Filter Context ID.
             title (str): Filter Context title.
 

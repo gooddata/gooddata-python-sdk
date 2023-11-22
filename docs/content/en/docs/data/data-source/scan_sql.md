@@ -33,7 +33,7 @@ SELECT query analysis result.
 
 ## Example
 
-```Python
+```python
 # Scan sql
 sdk.catalog_data_source.scan_sql(data_source_id="123", sql_request=ScanSqlRequest(sql="SELECT * FROM products"))
 # ScanSqlResponse(

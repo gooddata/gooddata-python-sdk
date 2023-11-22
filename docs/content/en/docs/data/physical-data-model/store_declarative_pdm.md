@@ -34,7 +34,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().().
 
 ## Example
 
-```Python
+```python
 # Store declarative PDM in directory hierarchy
 sdk.catalog_data_source.store_declarative_pdm(data_source_id="123",layour_root_path=Path.cwd())
 ```

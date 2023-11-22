@@ -4,15 +4,15 @@ from __future__ import annotations
 import functools
 import os
 import re
-import typing
 from collections.abc import KeysView
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Callable, Dict, NamedTuple, Tuple, Union, cast
+from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
 
 import yaml
 
 from gooddata_api_client import ApiAttributeError
+from gooddata_api_client.model_utils import OpenApiModel
 from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9
@@ -21,6 +21,8 @@ IdObjType = Union[str, ObjId, Dict[str, Dict[str, str]], Dict[str, str]]
 PROFILES_FILE = "profiles.yaml"
 PROFILES_DIRECTORY = ".gooddata"
 PROFILES_FILE_PATH = Path.home() / PROFILES_DIRECTORY / PROFILES_FILE
+SDK_PROFILE_MANDATORY_KEYS = ["host", "token"]
+SDK_PROFILE_KEYS = SDK_PROFILE_MANDATORY_KEYS + ["custom_headers", "extra_user_agent"]
 
 
 def id_obj_to_key(id_obj: IdObjType) -> str:
@@ -157,14 +159,14 @@ def recreate_directory(path: Path) -> None:
 
 
 class IndentDumper(yaml.SafeDumper):
-    @typing.no_type_check
+    @no_type_check
     def increase_indent(self, flow: bool = False, indentless: bool = False):
         return super(IndentDumper, self).increase_indent(flow, False)
 
 
 def write_layout_to_file(path: Path, content: Union[dict[str, Any], list[dict]]) -> None:
     with open(path, "w", encoding="utf-8") as fp:
-        yaml.dump(content, fp, indent=2, Dumper=IndentDumper)
+        yaml.dump(content, fp, indent=2, Dumper=IndentDumper, allow_unicode=True)
 
 
 def read_layout_from_file(path: Path) -> Any:
@@ -218,9 +220,8 @@ def mandatory_profile_content_check(profile: str, profile_content_keys: KeysView
         ValueError:
             Missing mandatory parameter or parameters.
     """
-    mandatory_parameters = ["host", "token"]
     missing = []
-    for mandatory_parameter in mandatory_parameters:
+    for mandatory_parameter in SDK_PROFILE_MANDATORY_KEYS:
         if mandatory_parameter not in profile_content_keys:
             missing.append(mandatory_parameter)
     if missing:
@@ -252,8 +253,8 @@ def profile_content(profile: str = "default", profiles_path: Path = PROFILES_FIL
     content = read_layout_from_file(profiles_path)
     if not content.get(profile):
         raise ValueError(f"Profiles file does not contain profile {profile}.")
-    mandatory_profile_content_check(profile, content.get(profile).keys())
-    return content.get(profile)
+    mandatory_profile_content_check(profile, content[profile].keys())
+    return {key: content[profile][key] for key in content[profile] if key in SDK_PROFILE_KEYS}
 
 
 def good_pandas_profile_content(
@@ -275,7 +276,33 @@ def good_pandas_profile_content(
             The content and custom Headers.
     """
     content = profile_content(profile, profiles_path)
-    custom_headers = content["custom_headers"]
-    del content["extra_user_agent"]
-    del content["custom_headers"]
+    custom_headers = content.pop("custom_headers", {})
+    content.pop("extra_user_agent", None)
     return content, custom_headers
+
+
+def safeget(var: Any, path: List[str]) -> Any:
+    if len(path) == 0:
+        # base case: we have reached the innermost key
+        return var
+    elif not isinstance(var, (dict, OpenApiModel)):
+        # base case: var is not a dictionary, so we can't proceed
+        # in this repository, we also use OpenApiModel objects, which support "to_dict"
+        return None
+    else:
+        # recursive case: we still have keys to traverse
+        key = path[0]
+        if key in var:
+            return safeget(var[key], path[1:])
+        else:
+            return None
+
+
+def safeget_list(var: Any, path: List[str]) -> List[Any]:
+    result = safeget(var, path)
+    if isinstance(result, list):
+        return result
+    elif result is None:
+        return []
+    else:
+        raise Exception("safeget_list: result is not iterable! result={0}".format(result))

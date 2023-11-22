@@ -1,0 +1,1 @@
+../OSS LICENSES/LICENSE (gooddata-dbt).txt

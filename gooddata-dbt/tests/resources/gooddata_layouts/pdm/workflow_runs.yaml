@@ -1,0 +1,33 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: created_at
+  - dataType: INT
+    isPrimaryKey: false
+    name: repo_id
+    referencedTableColumn: repo_id
+    referencedTableId: repos
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: updated_at
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: workflow_run_duration
+  - dataType: STRING
+    isPrimaryKey: false
+    name: workflow_run_event
+  - dataType: INT
+    isPrimaryKey: true
+    name: workflow_run_id
+  - dataType: STRING
+    isPrimaryKey: false
+    name: workflow_run_status
+  - dataType: STRING
+    isPrimaryKey: false
+    name: workflow_run_url
+id: workflow_runs
+path:
+  - cicd_output_stage
+  - workflow_runs
+type: TABLE

@@ -18,6 +18,9 @@
             "multivalue": false,
             "sourceColumns": [
               "campaign_id"
+            ],
+            "sourceColumnDataTypes": [
+              "INT"
             ]
           }
         ],
@@ -29,6 +32,7 @@
             "labels": [],
             "sourceColumn": "campaign_channel_id",
             "title": "Campaign channel id",
+            "sourceColumnDataType": "STRING",
             "description": "Campaign channel id",
             "tags": [
               "Campaign channels"
@@ -39,6 +43,7 @@
             "labels": [],
             "sourceColumn": "category",
             "title": "Category",
+            "sourceColumnDataType": "STRING",
             "description": "Category",
             "tags": [
               "Campaign channels"
@@ -49,6 +54,7 @@
             "labels": [],
             "sourceColumn": "type",
             "title": "Type",
+            "sourceColumnDataType": "STRING",
             "description": "Type",
             "tags": [
               "Campaign channels"
@@ -60,6 +66,7 @@
             "id": "budget",
             "sourceColumn": "budget",
             "title": "Budget",
+            "sourceColumnDataType": "NUMERIC",
             "description": "Budget",
             "tags": [
               "Campaign channels"
@@ -69,6 +76,7 @@
             "id": "spend",
             "sourceColumn": "spend",
             "title": "Spend",
+            "sourceColumnDataType": "NUMERIC",
             "description": "Spend",
             "tags": [
               "Campaign channels"
@@ -78,7 +86,11 @@
         "dataSourceTableId": {
           "dataSourceId": "demo-test-ds",
           "id": "campaign_channels",
-          "type": "dataSource"
+          "type": "dataSource",
+          "path": [
+            "demo",
+            "campaign_channels"
+          ]
         },
         "tags": [
           "Campaign channels"
@@ -101,6 +113,7 @@
             "labels": [],
             "sourceColumn": "campaign_name",
             "title": "Campaign name",
+            "sourceColumnDataType": "STRING",
             "description": "Campaign name",
             "tags": [
               "Campaigns"
@@ -111,6 +124,7 @@
             "labels": [],
             "sourceColumn": "campaign_id",
             "title": "Campaign id",
+            "sourceColumnDataType": "INT",
             "description": "Campaign id",
             "tags": [
               "Campaigns"
@@ -121,7 +135,11 @@
         "dataSourceTableId": {
           "dataSourceId": "demo-test-ds",
           "id": "campaigns",
-          "type": "dataSource"
+          "type": "dataSource",
+          "path": [
+            "demo",
+            "campaigns"
+          ]
         },
         "tags": [
           "Campaigns"
@@ -144,6 +162,7 @@
             "labels": [],
             "sourceColumn": "customer_id",
             "title": "Customer id",
+            "sourceColumnDataType": "INT",
             "description": "Customer id",
             "tags": [
               "Customers"
@@ -154,6 +173,7 @@
             "labels": [],
             "sourceColumn": "customer_name",
             "title": "Customer name",
+            "sourceColumnDataType": "STRING",
             "description": "Customer name",
             "tags": [
               "Customers"
@@ -164,6 +184,7 @@
             "labels": [],
             "sourceColumn": "region",
             "title": "Region",
+            "sourceColumnDataType": "STRING",
             "description": "Region",
             "tags": [
               "Customers"
@@ -176,6 +197,7 @@
                 "id": "geo__state__location",
                 "sourceColumn": "geo__state__location",
                 "title": "Location",
+                "sourceColumnDataType": "STRING",
                 "description": "Location",
                 "tags": [
                   "Customers"
@@ -184,6 +206,7 @@
             ],
             "sourceColumn": "state",
             "title": "State",
+            "sourceColumnDataType": "STRING",
             "description": "State",
             "tags": [
               "Customers"
@@ -194,7 +217,11 @@
         "dataSourceTableId": {
           "dataSourceId": "demo-test-ds",
           "id": "customers",
-          "type": "dataSource"
+          "type": "dataSource",
+          "path": [
+            "demo",
+            "customers"
+          ]
         },
         "tags": [
           "Customers"
@@ -217,6 +244,9 @@
             "multivalue": false,
             "sourceColumns": [
               "campaign_id"
+            ],
+            "sourceColumnDataTypes": [
+              "INT"
             ]
           },
           {
@@ -227,6 +257,9 @@
             "multivalue": false,
             "sourceColumns": [
               "customer_id"
+            ],
+            "sourceColumnDataTypes": [
+              "INT"
             ]
           },
           {
@@ -237,6 +270,9 @@
             "multivalue": false,
             "sourceColumns": [
               "date"
+            ],
+            "sourceColumnDataTypes": [
+              "DATE"
             ]
           },
           {
@@ -247,6 +283,9 @@
             "multivalue": false,
             "sourceColumns": [
               "product_id"
+            ],
+            "sourceColumnDataTypes": [
+              "INT"
             ]
           }
         ],
@@ -258,6 +297,7 @@
             "labels": [],
             "sourceColumn": "order_id",
             "title": "Order id",
+            "sourceColumnDataType": "STRING",
             "description": "Order id",
             "tags": [
               "Order lines"
@@ -268,6 +308,7 @@
             "labels": [],
             "sourceColumn": "order_line_id",
             "title": "Order line id",
+            "sourceColumnDataType": "STRING",
             "description": "Order line id",
             "tags": [
               "Order lines"
@@ -278,6 +319,7 @@
             "labels": [],
             "sourceColumn": "order_status",
             "title": "Order status",
+            "sourceColumnDataType": "STRING",
             "description": "Order status",
             "tags": [
               "Order lines"
@@ -289,6 +331,7 @@
             "id": "order_lines.price",
             "sourceColumn": "price",
             "title": "Price",
+            "sourceColumnDataType": "NUMERIC",
             "description": "Price",
             "tags": [
               "Order lines"
@@ -298,6 +341,7 @@
             "id": "order_lines.quantity",
             "sourceColumn": "quantity",
             "title": "Quantity",
+            "sourceColumnDataType": "NUMERIC",
             "description": "Quantity",
             "tags": [
               "Order lines"
@@ -307,19 +351,23 @@
         "dataSourceTableId": {
           "dataSourceId": "demo-test-ds",
           "id": "order_lines",
-          "type": "dataSource"
+          "type": "dataSource",
+          "path": [
+            "demo",
+            "order_lines"
+          ]
         },
         "tags": [
           "Order lines"
         ],
         "workspaceDataFilterColumns": [
           {
-            "name": "wdf__region",
-            "dataType": "STRING"
+            "dataType": "STRING",
+            "name": "wdf__region"
           },
           {
-            "name": "wdf__state",
-            "dataType": "STRING"
+            "dataType": "STRING",
+            "name": "wdf__state"
           }
         ]
       },
@@ -340,6 +388,7 @@
             "labels": [],
             "sourceColumn": "product_name",
             "title": "Product name",
+            "sourceColumnDataType": "STRING",
             "description": "Product name",
             "tags": [
               "Products"
@@ -350,6 +399,7 @@
             "labels": [],
             "sourceColumn": "category",
             "title": "Category",
+            "sourceColumnDataType": "STRING",
             "description": "Category",
             "tags": [
               "Products"
@@ -360,6 +410,7 @@
             "labels": [],
             "sourceColumn": "product_id",
             "title": "Product id",
+            "sourceColumnDataType": "INT",
             "description": "Product id",
             "tags": [
               "Products"
@@ -370,10 +421,81 @@
         "dataSourceTableId": {
           "dataSourceId": "demo-test-ds",
           "id": "products",
-          "type": "dataSource"
+          "type": "dataSource",
+          "path": [
+            "demo",
+            "products"
+          ]
         },
         "tags": [
           "Products"
+        ]
+      },
+      {
+        "grain": [],
+        "id": "Customers_sql_dataset_with_WDF",
+        "references": [],
+        "title": "Customers sql dataset with WDF",
+        "description": "Customers sql dataset with WDF",
+        "tags": [
+          "Customers sql dataset with WDF"
+        ],
+        "attributes": [
+          {
+            "id": "Customers_sql_dataset_with_WDF.customer_id",
+            "labels": [],
+            "sourceColumn": "customer_id",
+            "title": "Customer id",
+            "sourceColumnDataType": "INT",
+            "description": "Customer id",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.customer_name",
+            "labels": [],
+            "sourceColumn": "customer_name",
+            "title": "Customer name",
+            "sourceColumnDataType": "STRING",
+            "description": "Customer name",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.region",
+            "labels": [],
+            "sourceColumn": "region",
+            "title": "Region",
+            "sourceColumnDataType": "STRING",
+            "description": "Region",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          },
+          {
+            "id": "Customers_sql_dataset_with_WDF.state",
+            "labels": [],
+            "sourceColumn": "state",
+            "title": "State",
+            "sourceColumnDataType": "STRING",
+            "description": "State",
+            "tags": [
+              "Customers sql dataset with WDF"
+            ]
+          }
+        ],
+        "facts": [],
+        "sql": {
+          "dataSourceId": "demo-test-ds",
+          "statement": "SELECT * FROM v_wdf_customers"
+        },
+        "workspaceDataFilterColumns": [
+          {
+            "dataType": "STRING",
+            "name": "wdf__region"
+          }
         ]
       },
       {
@@ -395,6 +517,10 @@
           }
         ],
         "title": "Order lines duplicate sql dataset",
+        "description": "Order lines duplicate sql dataset",
+        "tags": [
+          "Order lines duplicate sql dataset"
+        ],
         "attributes": [
           {
             "id": "Order_lines_duplicate_sql_dataset.campaign_id",
@@ -489,100 +615,9 @@
           "dataSourceId": "demo-test-ds",
           "statement": "SELECT * FROM order_lines"
         }
-      },
-      {
-        "grain": [],
-        "id": "Customers_sql_dataset_with_WDF",
-        "references": [],
-        "title": "Customers sql dataset with WDF",
-        "attributes": [
-          {
-            "id": "Customers_sql_dataset_with_WDF.customer_id",
-            "labels": [],
-            "sourceColumn": "customer_id",
-            "title": "Customer id",
-            "sourceColumnDataType": "INT",
-            "description": "Customer id",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.customer_name",
-            "labels": [],
-            "sourceColumn": "customer_name",
-            "title": "Customer name",
-            "sourceColumnDataType": "STRING",
-            "description": "Customer name",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.region",
-            "labels": [],
-            "sourceColumn": "region",
-            "title": "Region",
-            "sourceColumnDataType": "STRING",
-            "description": "Region",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          },
-          {
-            "id": "Customers_sql_dataset_with_WDF.state",
-            "labels": [],
-            "sourceColumn": "state",
-            "title": "State",
-            "sourceColumnDataType": "STRING",
-            "description": "State",
-            "tags": [
-              "Customers sql dataset with WDF"
-            ]
-          }
-        ],
-        "facts": [],
-        "sql": {
-          "dataSourceId": "demo-test-ds",
-          "statement": "SELECT * FROM v_wdf_customers"
-        },
-        "workspaceDataFilterColumns": [
-          {
-            "name": "wdf__region",
-            "dataType": "STRING"
-          }
-        ]
       }
     ],
     "dateInstances": [
-      {
-        "granularities": [
-          "MINUTE",
-          "HOUR",
-          "DAY",
-          "WEEK",
-          "MONTH",
-          "QUARTER",
-          "YEAR",
-          "MINUTE_OF_HOUR",
-          "HOUR_OF_DAY",
-          "DAY_OF_WEEK",
-          "DAY_OF_MONTH",
-          "DAY_OF_YEAR",
-          "WEEK_OF_YEAR",
-          "MONTH_OF_YEAR",
-          "QUARTER_OF_YEAR"
-        ],
-        "granularitiesFormatting": {
-          "titleBase": "",
-          "titlePattern": "%titleBase - %granularityTitle"
-        },
-        "id": "date",
-        "title": "Date",
-        "tags": [
-          "Date"
-        ]
-      },
       {
         "granularities": [
           "MINUTE",

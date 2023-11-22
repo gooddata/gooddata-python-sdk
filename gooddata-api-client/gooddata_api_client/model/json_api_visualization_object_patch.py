@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
+    from gooddata_api_client.model.json_api_analytical_dashboard_patch_attributes import JsonApiAnalyticalDashboardPatchAttributes
+    globals()['JsonApiAnalyticalDashboardPatchAttributes'] = JsonApiAnalyticalDashboardPatchAttributes
 
 
 class JsonApiVisualizationObjectPatch(ModelNormal):
@@ -68,7 +68,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -96,9 +96,9 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardPatchAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
         }
 
     @cached_property
@@ -107,9 +107,9 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
     }
 
     read_only_vars = {
@@ -119,10 +119,11 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectPatch - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -157,7 +158,6 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "visualizationObject")
@@ -190,6 +190,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -212,10 +213,11 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectPatch - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardPatchAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -250,7 +252,6 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
         """
 
         type = kwargs.get('type', "visualizationObject")
@@ -281,6 +282,7 @@ class JsonApiVisualizationObjectPatch(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

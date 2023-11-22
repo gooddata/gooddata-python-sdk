@@ -26,7 +26,7 @@ from gooddata_sdk.compute.model.metric import (
     PopDatesetMetric,
     SimpleMetric,
 )
-from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities
+from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities, safeget
 
 #
 # Conversion from types stored in insight into the goodata_afm_client models. Insight is created by GD.UI SDK
@@ -259,16 +259,19 @@ class InsightMetric:
 
     @property
     def item(self) -> Optional[dict[str, Any]]:
-        if "measureDefinition" in self._d:
-            return self._d["measureDefinition"]["item"]
+        return safeget(self._d, ["measureDefinition", "item"])
 
-        return None
+    @property
+    def aggregation(self) -> Optional[str]:
+        return safeget(self._d, ["measureDefinition", "aggregation"])
 
     @property
     def item_id(self) -> Optional[str]:
-        item = self.item
+        return safeget(self.item, ["identifier", "id"])
 
-        return item["identifier"]["id"] if item is not None else None
+    @property
+    def item_type(self) -> Optional[str]:
+        return safeget(self.item, ["identifier", "type"])
 
     @property
     def is_time_comparison(self) -> bool:
@@ -282,12 +285,9 @@ class InsightMetric:
 
         :return: local_id of master metric, None if not a time comparison metric
         """
-        if "popMeasureDefinition" in self._d:
-            return self._d["popMeasureDefinition"]["measureIdentifier"]
-        elif "previousPeriodMeasure" in self._d:
-            return self._d["previousPeriodMeasure"]["measureIdentifier"]
-
-        return None
+        return safeget(self._d, ["popMeasureDefinition", "measureIdentifier"]) or safeget(
+            self._d, ["previousPeriodMeasure", "measureIdentifier"]
+        )
 
     def as_computable(self) -> Metric:
         return _convert_metric_to_computable(self._metric)
@@ -457,11 +457,11 @@ class Insight:
 
 class InsightService:
     """
-    Insight Service allows retrieval of insights from a GD.CN workspace. The insights are returned as instances of
+    Insight Service allows retrieval of insights from a local GD workspace. The insights are returned as instances of
     Insight which allows convenient introspection and necessary functions to convert the insight into a form where it
     can be sent for computation.
 
-    Note: the insights are created using GD.CN Analytical Designer or using GoodData.UI SDK. They are stored as
+    Note: the insights are created using GD Analytical Designer or using GoodData.UI SDK. They are stored as
     visualization objects with a free-form body. This body is specific for AD & SDK.
     The Insight wrapper exists to take care of these discrepancies.
     """

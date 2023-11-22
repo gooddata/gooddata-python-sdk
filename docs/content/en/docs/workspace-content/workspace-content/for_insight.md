@@ -2,7 +2,7 @@
 title: "for_insight"
 linkTitle: "for_insight"
 weight: 10
-superheading: "table."
+superheading: "tables."
 ---
 
 
@@ -28,7 +28,7 @@ Visualization data wrapper object.
 
 ## Example
 
-```Python
+```python
 # Get visualization
 campaign_spend_insight = sdk.insights.get_insight(workspace_id="123", insight_id="campaign_spend")
 # Get the visualization as Execution Table

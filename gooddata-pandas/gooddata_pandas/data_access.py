@@ -30,6 +30,16 @@ class ExecutionDefinitionBuilder:
     _DEFAULT_INDEX_NAME: str = "0"
 
     def __init__(self, columns: ColumnsDef, index_by: Optional[IndexDef] = None) -> None:
+        """
+        Initializes the ExecutionDefinitionBuilder instance with columns and an
+        optional index_by definition. Processes the given columns and index_by
+        definitions to build the internal mappings.
+
+        Args:
+            columns (ColumnsDef): Input columns to process and build internal mappings.
+            index_by (Optional[IndexDef], optional): Index definition to process. Defaults to None.
+
+        """
         self._attributes: list[Attribute] = []
         self._metrics: list[Metric] = []
         self._col_to_attr_idx: dict[str, int] = dict()
@@ -52,16 +62,31 @@ class ExecutionDefinitionBuilder:
         return self._col_to_metric_idx
 
     def _process_columns(self, columns: ColumnsDef) -> None:
+        """
+        Processes the input columns to build internal mappings and add attributes or
+        metrics as needed.
+
+        Args:
+            columns (ColumnsDef): Input columns to process and build internal mappings.
+        """
         for column_name, column_def in columns.items():
             self._add_column(column_name, column_def)
 
     def _add_column(self, column_name: str, column_def: Union[str, Attribute, Metric, ObjId]) -> None:
+        """
+        Adds a given column to the internal mappings and appends it to the appropriate list (Attributes or Metrics).
+
+        Args:
+            column_name (str): The name of the column to add.
+            column_def (Union[str, Attribute, Metric, ObjId]): Defines the column, either an Attribute or Metric object.
+
+        This method prevents duplicate attributes (with the same labels) from being added multiple times,
+        which could otherwise lead to an increased load or result size.
+
+        Note: This method is typically called from the _process_columns() method.
+        """
         item = _to_item(column_def)
         if isinstance(item, Attribute):
-            # prevent double-add for attributes that are using same labels. this has no real effect on the result
-            # apart from extra load/size of the result that would contain the duplicates.
-            #
-            # this may typically happen when same labels are used for indexing & data
             attr_index = self._find_attribute_index(item)
 
             if attr_index is not None:
@@ -74,6 +99,21 @@ class ExecutionDefinitionBuilder:
             self._metrics.append(item)
 
     def _process_index(self, index_by: Optional[IndexDef] = None) -> None:
+        """
+        Processes the given index definition (index_by) to determine whether to reference attributes or
+        raise an error when attempting to reference metrics. Updates the internal index-to-attribute mapping
+        and handles index definition without a column reference.
+
+        Args:
+            index_by (Optional[IndexDef], default None): A definition for index columns, it can be a string,
+                a dictionary of index keys and column names, or None.
+
+        If the index definition is a known attribute defined in columns, the associated attribute index is
+        added to the index-to-attribute mapping (_index_to_attr_idx). If the index is a known metric
+        defined in columns, it raises a ValueError since index_by cannot be a metric. Otherwise, if the
+        index definition has no direct column reference, the _process_index_item_without_col_ref method is
+        called.
+        """
         if index_by is None:
             return
 
@@ -94,6 +134,20 @@ class ExecutionDefinitionBuilder:
                 self._process_index_item_without_col_ref(index_name, index_def)
 
     def _find_attribute_index(self, item: Attribute) -> Union[int | None]:
+        """
+        Finds the index of an attribute in the attribute list, if the item has the same label as an existing attribute.
+
+        Args:
+            item (Attribute): The attribute for which the index is sought.
+
+        Returns:
+            Union[int, None]: The index of the attribute with the same label in the attribute list, if it exists.
+            Otherwise, returns None.
+
+        This method is used to find the index of an attribute in the _attributes list by checking if the given item
+        has the same label as an existing attribute in the list. If found, it returns the index of
+        the matching attribute, otherwise, it returns None.
+        """
         existing_attr_idx = next(
             (idx for idx, attr in enumerate(self._attributes) if item.has_same_label(attr)),
             None,
@@ -101,9 +155,20 @@ class ExecutionDefinitionBuilder:
         return existing_attr_idx
 
     def _process_index_item_without_col_ref(self, index_name: str, index_def: LabelItemDef) -> None:
+        """
+        This method processes an index item without column reference,
+        updating the internal state of the object.
+
+        Args:
+            index_name (str): The name of the index.
+            index_def (LabelItemDef): The definition of the index item.
+
+        Returns:
+            None
+        """
         norm_index_def = index_def
         if isinstance(index_def, str) and (not index_def.startswith("label/")):
-            # it is not a obj id in string form - consider it label_id and extend it to obj id string form
+            # it is not an obj id in string form - consider it label_id and extend it to obj id string form
             norm_index_def = f"label/{index_def}"
         attr_item = _to_attribute(norm_index_def)
         attr_index = self._find_attribute_index(attr_item)
@@ -115,6 +180,20 @@ class ExecutionDefinitionBuilder:
             self._attributes.append(attr_item)
 
     def _update_filter_ids(self, filter_by: Optional[Union[Filter, list[Filter]]] = None) -> Optional[list[Filter]]:
+        """
+        Updates the filter IDs for the given filters. If a filter references a metric/attribute by a string,
+        it is converted to the corresponding internal ID.
+
+        Args:
+            filter_by (Optional[Union[Filter, list[Filter]]], default None): A filter or list of filters
+                to be updated.
+
+        Returns:
+            Optional[list[Filter]]: The updated list of filters, or None if no filters were provided.
+
+        Raises:
+            ValueError: If an AttributeFilter instance references a metric.
+        """
         filters = [filter_by] if isinstance(filter_by, Filter) else filter_by
         if filters:
             for _filter in filters:
@@ -138,6 +217,17 @@ class ExecutionDefinitionBuilder:
     def build_execution_definition(
         self, filter_by: Optional[Union[Filter, list[Filter]]] = None
     ) -> ExecutionDefinition:
+        """
+        Builds an ExecutionDefinition instance with the current configuration of metrics, attributes, and filters.
+
+        Args:
+            filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters to be applied to the
+            execution definition. If it's not provided or None, then the current filter configuration is used.
+
+        Returns:
+            ExecutionDefinition: An ExecutionDefinition instance containing attributes, metrics, filters,
+            and dimensions.
+        """
         dimensions = [
             ["measureGroup"] if len(self._metrics) else None,
             [a.local_id for a in self._attributes] if len(self._attributes) else None,
@@ -161,26 +251,22 @@ def _compute(
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
 ) -> tuple[ExecutionResponse, dict[str, int], dict[str, int], dict[str, int]]:
     """
-    Creates execution-by-convention to retrieve data for frame with the provided columns that is optionally
-    indexed by index_by label and optionally also filtered.
+    Internal function that computes an execution-by-convention to retrieve data for a data frame with the provided
+    columns, optionally indexed by the index_by label and optionally filtered.
 
-    The convention is as follows:
+    Args:
+        sdk (GoodDataSdk): The GoodData SDK instance.
+        workspace_id (str): The workspace ID.
+        columns (ColumnsDef): The columns definition.
+        index_by (Optional[IndexDef]): The index definition, if any.
+        filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
 
-    -  If the columns contain labels and facts/metric, then two dimensional result will be created. first dim
-       will contain measureGroup, second dimension will be all the attributes
-
-    -  If indexing is desired, then the index label will be placed in the attribute dimension and will be the
-       first in that dimension
-
-    -  Otherwise the execution will be single-dim and will contain either measureGroup or all attributes
-
-    Only columns contain always full identification of objects in a form { 'index', 'full identification' }.
-    index_by and filters may contain references to columns using the index!
-
-    The compute will return execution response and two mappings:
-    -  pandas name to index where headers appear in the attribute dimension
-    -  pandas col name to index where headers appear in metric dimension
-    -  pandas index name to index where headers appear in the attribute dimension
+    Returns:
+        tuple: A tuple containing the following elements:
+        - ExecutionResponse: The execution response.
+        - dict[str, int]: A mapping of pandas column names to attribute dimension indices.
+        - dict[str, int]: A mapping of pandas column names to metric dimension indices.
+        - dict[str, int]: A mapping of pandas index names to attribute dimension indices.
     """
 
     builder = ExecutionDefinitionBuilder(columns, index_by)
@@ -206,6 +292,17 @@ _RESULT_PAGE_LEN = 1000
 
 
 def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_metric_idx: dict) -> dict:
+    """
+    Internal function that extracts data for metrics-only columns when there are no attribute columns.
+
+    Args:
+        response (ExecutionResponse): The execution response to extract data from.
+        cols (list): A list of column names.
+        col_to_metric_idx (dict): A mapping of pandas column names to metric dimension indices.
+
+    Returns:
+        dict: A dictionary containing the extracted data.
+    """
     exec_def = response.exec_def
     result = response.read_result(len(exec_def.metrics))
     data = dict()
@@ -217,7 +314,17 @@ def _extract_for_metrics_only(response: ExecutionResponse, cols: list, col_to_me
 
 
 def _typed_result(catalog: CatalogWorkspaceContent, attribute: Attribute, result_values: list[Any]) -> list[Any]:
-    """Convert result_values to proper data types."""
+    """
+    Internal function to convert result_values to proper data types.
+
+    Args:
+        catalog (CatalogWorkspaceContent): The catalog workspace content.
+        attribute (Attribute): The attribute for which the typed result will be computed.
+        result_values (list[Any]): A list of raw values.
+
+    Returns:
+        list[Any]: A list of converted values with proper data types.
+    """
     catalog_attribute = catalog.find_label_attribute(attribute.label)
     if catalog_attribute is None:
         raise ValueError(f"Unable to find attribute {attribute.label} in catalog")
@@ -232,7 +339,24 @@ def _extract_from_attributes_and_maybe_metrics(
     col_to_metric_idx: dict[str, int],
     index_to_attr_idx: Optional[dict[str, int]] = None,
 ) -> tuple[dict, dict]:
+    """
+    Internal function that extracts data from execution response with attributes columns and
+    optionally metrics columns.
 
+    Args:
+        response (ExecutionResponse): The execution response to extract data from.
+        catalog (CatalogWorkspaceContent): The catalog workspace content.
+        cols (list[str]): A list of column names.
+        col_to_attr_idx (dict[str, int]): A mapping of pandas column names to attribute dimension indices.
+        col_to_metric_idx (dict[str, int]): A mapping of pandas column names to metric dimension indices.
+        index_to_attr_idx (Optional[dict[str, int]]):
+            An optional mapping of pandas index names to attribute dimension indices.
+
+    Returns:
+        tuple: A tuple containing the following dictionaries:
+        - dict: A dictionary containing the extracted data.
+        - dict: A dictionary containing the extracted index data.
+    """
     exec_def = response.exec_def
     offset = [0 for _ in exec_def.dimensions]
     limit = [len(exec_def.metrics), _RESULT_PAGE_LEN] if exec_def.has_metrics() else [_RESULT_PAGE_LEN]
@@ -242,7 +366,7 @@ def _extract_from_attributes_and_maybe_metrics(
 
     # mappings from column name to Attribute
     index_to_attribute = {index_name: exec_def.attributes[i] for index_name, i in safe_index_to_attr_idx.items()}
-    col_to_attribute = {col: exec_def.attributes[i] for col, i, in col_to_attr_idx.items()}
+    col_to_attribute = {col: exec_def.attributes[i] for col, i in col_to_attr_idx.items()}
 
     # datastructures to return
     index: dict[str, list[Any]] = {idx_name: [] for idx_name in safe_index_to_attr_idx}
@@ -277,16 +401,21 @@ def compute_and_extract(
     filter_by: Optional[Union[Filter, list[Filter]]] = None,
 ) -> tuple[dict, dict]:
     """
-    Convenience function to drive computation & data extraction on behalf of the series and data frame factories.
+    Convenience function that computes and extracts data from the execution response.
 
-    Given data columns and index columns, this function will create AFM execution and then read the results and
-    populate data and index dicts.
+    Args:
+        sdk (GoodDataSdk): The GoodData SDK instance.
+        workspace_id (str): The workspace ID.
+        columns (ColumnsDef): The columns definition.
+        index_by (Optional[IndexDef]): The index definition, if any.
+        filter_by (Optional[Union[Filter, list[Filter]]]): A filter or a list of filters, if any.
 
-    For each column in `columns`, the returned data will contain key under which there is array of data for that column
-    For each index in index_by, the returned data will contain key under which there is array with data to construct the
-    index. When there are multiple indexes, feed the indexes to MultiIndex.from_arrays().
+    Returns:
+        tuple: A tuple containing the following dictionaries:
+        - dict: A dictionary with data for each column in `columns`.
+        - dict: A dictionary with data for constructing index(es) for each index in index_by.
 
-    Note that as convenience it is possible to pass just single index. in that case the index dict will contain exactly
+    Note: For convenience it is possible to pass just single index. in that case the index dict will contain exactly
     one key of '0' (just get first value from dict when consuming the result).
     """
     result = _compute(

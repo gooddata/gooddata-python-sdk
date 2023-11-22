@@ -7,7 +7,7 @@ no_list: true
 
 Manage workspace data filters.
 
-See [Set Up Data Filters in Workspaces](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-workspaces/workspace-data-filters/) to learn how workspace data filters work in GoodData.
+See [Set Up Data Filters in Workspaces](https://www.gooddata.com/docs/cloud/manage-deployment/manage-workspaces/workspace-data-filters/) to learn how workspace data filters work in GoodData.
 
 ## Methods
 
@@ -19,7 +19,7 @@ See [Set Up Data Filters in Workspaces](https://www.gooddata.com/developers/clou
 
 ## Example
 
-```Python
+```python
 from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 

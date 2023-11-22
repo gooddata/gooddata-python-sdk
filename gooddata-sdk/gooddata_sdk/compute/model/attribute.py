@@ -12,10 +12,10 @@ class Attribute(ExecModelEntity):
         """
         Creates new attribute that can be used to slice or dice metric values during computation.
 
-        :param local_id: identifier of the attribute within the execution
-        :param label: identifier of the label to use for slicing or dicing; specified either as ObjId or str containing
-               the label id
-        :param show_all_values: request show all values functionality for a given attribute
+        Args:
+            local_id: identifier of the attribute within the execution
+            label: identifier of the label to use for slicing or dicing; specified either as ObjId or str   the label id
+            show_all_values: request show all values functionality for a given attribute
         """
         super(Attribute, self).__init__()
 

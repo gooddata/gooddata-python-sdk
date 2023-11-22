@@ -1,0 +1,23 @@
+name: Back merge to rel/dev branch
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  master-to-fast:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: infra1-small
+    steps:
+      - uses: gooddata/gooddata-python-sdk/.github/actions/merge@master
+        with:
+          merge: true
+          source: "master"
+          target: "rel/dev"
+          token_pr: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}
+          token_push: ${{ secrets.TOKEN_GITHUB_YENKINS_ADMIN }}

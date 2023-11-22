@@ -15,11 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
+          path: 'PR-tmp'
+      - name: Get only changed docs
+        run: |
+          rsync --delete -av PR-tmp/docs/content/en/ docs/content/en/
+          rm -rf PR-tmp
       - name: Generate Versioned Docs
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
         with:
@@ -32,9 +40,17 @@ jobs:
           args: deploy -d docs/public --alias=preview-${{ env.GITHUB_PR_NUMBER }}
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_PREVIEW_AUTH_TOKEN }}
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+# `htmltest` is after publishing, so we can see the artifact.
+      - name: htmltest
+        run: |
+          rm -f htmltest.sh
+          wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
+          chmod +x ./htmltest.sh
+          ./htmltest.sh -c docs/.htmltest.yml docs/public
+# Commented out, because it has been failing. Check up later.
+#      - name: Comment PR
+#        uses: thollander/actions-comment-pull-request@v2
+#        with:
+#          message: |
+#            https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/

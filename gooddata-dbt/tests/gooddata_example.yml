@@ -1,0 +1,59 @@
+# (C) 2023 GoodData Corporation
+# Environment, into which data products are delivered
+# ID is configured in a pipeline (Gitlab/Github) in jobs, which are then running against the configured environment
+# Finally, GoodData workspace is created and populated for each data product and for each environment
+environment_setups:
+  - id: default
+    environments:
+      - id: development
+        name: Development
+        elt_environment: dev
+      - id: staging
+        name: Staging
+        elt_environment: staging
+      - id: production
+        name: Production
+        elt_environment: prod
+
+data_products:
+  - id: sales
+    name: "Sales"
+    environment_setup_id: default
+    model_ids:
+     - github
+     - faa
+    # Example of why and how to use skip_tests:
+    # TODO - this insight cannot be calculated by Python SDK:
+    #  The limit for maximum size of the dimension without metrics was exceeded(100_000).
+    #  Fix it either in Python SDK or in the insight
+    skip_tests:
+      - "insight_1"
+    localization:
+      from_language: en
+      to:
+        - locale: fr-FR
+          language: fr
+        - locale: zh-Hans
+          language: "chinese (simplified)"
+  - id: marketing
+    name: "Sales"
+    environment_setup_id: default
+    model_ids:
+      - faa
+
+
+# It is possible to deliver to multiple GoodData organizations
+# You have to set up a gooddata profile file and configure all organizations there
+# Related DOC - https://www.gooddata.com/docs/python-sdk/latest/getting-started/
+organizations:
+  - gooddata_profile: local
+    data_product_ids:
+      - sales
+  - gooddata_profile: production
+    data_product_ids:
+      - sales
+      - marketing
+
+# Global configuration for all data products
+global_properties:
+  test_insights_parallelism: 2

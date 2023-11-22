@@ -4,10 +4,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Custom setting content in JSON format. | 
+**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | 
 **id** | **str** | Metric ID. | 
 **title** | **str** | Metric title. | 
+**created_at** | **str, none_type** | Time of the entity creation. | [optional] 
+**created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Metric description. | [optional] 
+**modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
+**modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

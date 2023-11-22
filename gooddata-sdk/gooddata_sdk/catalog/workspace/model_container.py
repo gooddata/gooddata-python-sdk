@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Any, List, Union
+from typing import List, Optional, Union
 
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import (
@@ -17,7 +17,7 @@ from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
-from gooddata_sdk.utils import AllPagedEntities, IdObjType, SideLoads
+from gooddata_sdk.utils import AllPagedEntities, IdObjType
 
 ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, CatalogMetric]
 
@@ -28,11 +28,11 @@ ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], Executio
 class CatalogWorkspaceContent:
     def __init__(
         self,
-        valid_obj_fun: functools.partial[dict[str, set[str]]],
+        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
         datasets: list[CatalogDataset],
         metrics: list[CatalogMetric],
     ) -> None:
-        self._valid_obf_fun = valid_obj_fun
+        self._valid_obj_fun = valid_obj_fun
         self._datasets = datasets
         self._metrics = metrics
         self._metric_idx = dict([(str(m.obj_id), m) for m in metrics])
@@ -43,6 +43,26 @@ class CatalogWorkspaceContent:
         return self._datasets
 
     @property
+    def facts(self) -> list[CatalogFact]:
+        return [f for d in self._datasets for f in d.facts]
+
+    @property
+    def attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes]
+
+    @property
+    def date_attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes if a.granularity]
+
+    @property
+    def standard_attributes(self) -> list[CatalogAttribute]:
+        return [a for d in self._datasets for a in d.attributes if not a.granularity]
+
+    @property
+    def labels(self) -> list[CatalogLabel]:
+        return [x for d in self._datasets for a in d.attributes for x in a.labels]
+
+    @property
     def metrics(self) -> list[CatalogMetric]:
         return self._metrics
 
@@ -51,11 +71,12 @@ class CatalogWorkspaceContent:
         Gets metric by id. The id can be either an instance of ObjId or string containing serialized ObjId
         ('metric/some.metric.id') or contain just the id part ('some.metric.id').
 
-        :param metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
+        Args:
+            metric_id: fully qualified metric entity id (type/id) or just the identifier of metric entity
 
-        :return: instance of CatalogMetric or None if no such metric in catalog
+        Returns:
+            CatalogMetric: instance of CatalogMetric or None if no such metric in catalog
 
-        :rtype: CatalogMetric
         """
         if isinstance(metric_id, ObjId):
             obj_id_str = str(metric_id)
@@ -71,11 +92,12 @@ class CatalogWorkspaceContent:
         Gets dataset by id. The id can be either an instance of ObjId or string containing serialized ``ObjId
         ('dataset/some.dataset.id')`` or contain just the id part (``some.dataset.id``).
 
-        :param dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
+        Args:
+            dataset_id: fully qualified dataset entity id (type/id) or just the identifier of dataset entity
 
-        :return: instance of CatalogDataset or None if no such dataset in catalog
+        Returns:
+            CatalogDataset: instance of CatalogDataset or None if no such dataset in catalog
 
-        :rtype: CatalogDataset
         """
         if isinstance(dataset_id, ObjId):
             obj_id_str = str(dataset_id)
@@ -97,87 +119,62 @@ class CatalogWorkspaceContent:
         return None
 
     def _valid_objects(self, ctx: ValidObjectsInputType) -> ValidObjects:
-        return self._valid_obf_fun(ctx)
+        if self._valid_obj_fun:
+            return self._valid_obj_fun(ctx)
+        else:
+            return ValidObjects()
+
+    def filter_by_valid_objects(
+        self, valid_objects: dict[str, set[str]]
+    ) -> tuple[List[CatalogDataset], List[CatalogMetric]]:
+        new_datasets = list(filter(None, [d.filter_dataset(valid_objects) for d in self.datasets]))
+        new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
+        return new_datasets, new_metrics
 
     def catalog_with_valid_objects(self, ctx: ValidObjectsInputType) -> CatalogWorkspaceContent:
         """
         Returns a new instance of catalog which contains only those datasets (attributes and facts) that are valid in
-        the provided context. The context is composed of one more more entities of the semantic model and
+        the provided context. The context is composed of one or more entities of the semantic model and
         the filtered catalog will contain only those entities that can be safely added on top of that existing context.
 
-        :param ctx: existing context. you can specify context in one of the following ways:
+        If valid_objects_func is not set, return the current state.
+        It is useful when apps need to cache this container using pickle - the func cannot be pickled.
 
-         - single item or list of items from the execution model
-         - single item or list of items from catalog model; catalog fact, label or metric may be added
-         - the entire execution definition that is used to compute analytics
+        Args:
+            ctx (ValidObjectsInputType): existing context. you can specify context in one of the following ways:
+                 - single item or list of items from the execution model
+                 - single item or list of items from catalog model; catalog fact, label or metric may be added
+                 - the entire execution definition that is used to compute analytics
 
         """
-        valid_objects = self._valid_objects(ctx)
-
-        new_datasets = list(filter(None, [d.filter_dataset(valid_objects) for d in self.datasets]))
-        new_metrics = [m for m in self.metrics if m.id in valid_objects[m.type]]
-
+        new_datasets = self.datasets
+        new_metrics = self.metrics
+        if self._valid_obj_fun:
+            valid_objects = self._valid_objects(ctx)
+            new_datasets, new_metrics = self.filter_by_valid_objects(valid_objects)
         return CatalogWorkspaceContent(
-            self._valid_obf_fun,
+            self._valid_obj_fun,
             datasets=new_datasets,
             metrics=new_metrics,
         )
 
-    @staticmethod
-    def _create_attr_labels(attr_id: str, label_ids: dict[str, Any], raw_labels: SideLoads) -> list[CatalogLabel]:
-        labels = [(label_id, raw_labels.find(label_id)) for label_id in label_ids]
-        missing_labels = [label_id for label_id, label_data in labels if not label_data]
-        if len(missing_labels) > 0:
-            raise ValueError(f"Definition of label(s) [{','.join(missing_labels)}] not found for attribute {attr_id}")
-
-        return [CatalogLabel(label_data) for _, label_data in labels if label_data]
-
     @classmethod
     def create_workspace_content_catalog(
         cls,
-        valid_obj_fun: functools.partial[dict[str, set[str]]],
+        valid_obj_fun: Optional[functools.partial[dict[str, set[str]]]],
         datasets: AllPagedEntities,
         attributes: AllPagedEntities,
         metrics: AllPagedEntities,
     ) -> CatalogWorkspaceContent:
-        # prep: dataset query gets attributes and facts side loaded, shove them into a map for easier access
-        dataset_side_loads = SideLoads(datasets.included)
-        attribute_side_loads = SideLoads(attributes.included)
+        catalog_datasets = [
+            CatalogDataset.from_api(d, side_loads=datasets.included, related_entities=attributes) for d in datasets.data
+        ]
 
-        # metrics are not associated to any dataset, so can construct them right away
-        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
-
-        # now the rest requires some joins...
-        # first construct the dataset's leaves - facts
-        catalog_facts = {fact["id"]: CatalogFact(fact) for fact in dataset_side_loads.all_for_type("fact")}
-
-        # then build all attributes & their labels, map them attr.id => attribute
-        catalog_attributes = dict()
-        for attr in attributes.data:
-            attr_id: str = attr["id"]
-            label_ids: dict[str, Any] = attr["relationships"]["labels"]["data"]
-            catalog_attributes[attr_id] = CatalogAttribute(
-                attr,
-                cls._create_attr_labels(attr_id, label_ids, attribute_side_loads),
-            )
-
-        # finally go through all datasets, find related attributes and facts
-        catalog_datasets = dict()
-        for dataset in datasets.data:
-            dataset_id = dataset["id"]
-            rels = dataset["relationships"]
-            attribute_ids = rels["attributes"]["data"] if "attributes" in rels else []
-            fact_ids = rels["facts"]["data"] if "facts" in rels else []
-
-            catalog_datasets[dataset_id] = CatalogDataset(
-                dataset,
-                [catalog_attributes[attr_id_obj["id"]] for attr_id_obj in attribute_ids],
-                [catalog_facts[fact_id_obj["id"]] for fact_id_obj in fact_ids],
-            )
+        catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
 
         return cls(
             valid_obj_fun=valid_obj_fun,
-            datasets=list(catalog_datasets.values()),
+            datasets=list(catalog_datasets),
             metrics=catalog_metrics,
         )
 

@@ -25,7 +25,7 @@ List of all facts in a given workspace.
 
 ## Example
 
-```Python
+```python
 # Get all the facts
 facts = sdk.catalog_workspace_content.get_facts_catalog(workspace_id="123")
 ```

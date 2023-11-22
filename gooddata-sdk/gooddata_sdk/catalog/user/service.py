@@ -16,7 +16,6 @@ from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
 
 class CatalogUserService(CatalogServiceBase):
-
     # Entity methods for users
 
     def create_or_update_user(self, user: CatalogUser) -> None:
@@ -99,14 +98,11 @@ class CatalogUserService(CatalogServiceBase):
         try:
             self.get_user_group(user_group_id=user_group.id)
             user_group_document = CatalogUserGroupDocument(data=user_group)
-            user_group_document.update_user_group(user_group_parents_id=user_group.get_parents)
             self._entities_api.update_entity_user_groups(
                 id=user_group.id, json_api_user_group_in_document=user_group_document.to_api()
             )
         except NotFoundException:
-            user_group_document = CatalogUserGroupDocument.init(
-                user_group_id=user_group.id, user_group_parent_ids=user_group.get_parents
-            )
+            user_group_document = CatalogUserGroupDocument(data=user_group)
             self._entities_api.create_entity_user_groups(user_group_document.to_api())
 
     def get_user_group(self, user_group_id: str) -> CatalogUserGroup:

@@ -25,7 +25,7 @@ Object Containing declarative Logical Data Model and declarative Analytical Mode
 
 ## Example
 
-```Python
+```python
 # Get workspace
 declarative_workspace = sdk.catalog_workspace.get_declarative_workspace(workspace_id="123")
 

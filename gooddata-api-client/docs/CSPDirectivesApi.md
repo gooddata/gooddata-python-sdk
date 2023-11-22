@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_csp_directives**](CSPDirectivesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | 
-[**delete_entity_csp_directives**](CSPDirectivesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | 
-[**get_all_entities_csp_directives**](CSPDirectivesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | 
-[**get_entity_csp_directives**](CSPDirectivesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | 
-[**patch_entity_csp_directives**](CSPDirectivesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | 
-[**update_entity_csp_directives**](CSPDirectivesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | 
+[**create_entity_csp_directives**](CSPDirectivesApi.md#create_entity_csp_directives) | **POST** /api/v1/entities/cspDirectives | Post CSP Directives
+[**delete_entity_csp_directives**](CSPDirectivesApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
+[**get_all_entities_csp_directives**](CSPDirectivesApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
+[**get_entity_csp_directives**](CSPDirectivesApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
+[**patch_entity_csp_directives**](CSPDirectivesApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
+[**update_entity_csp_directives**](CSPDirectivesApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 
 
 # **create_entity_csp_directives**
 > JsonApiCspDirectiveOutDocument create_entity_csp_directives(json_api_csp_directive_in_document)
 
+Post CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -52,6 +54,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post CSP Directives
         api_response = api_instance.create_entity_csp_directives(json_api_csp_directive_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -90,7 +93,9 @@ No authorization required
 # **delete_entity_csp_directives**
 > delete_entity_csp_directives(id)
 
+Delete CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -116,6 +121,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete CSP Directives
         api_instance.delete_entity_csp_directives(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling CSPDirectivesApi->delete_entity_csp_directives: %s\n" % e)
@@ -123,6 +129,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete CSP Directives
         api_instance.delete_entity_csp_directives(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling CSPDirectivesApi->delete_entity_csp_directives: %s\n" % e)
@@ -161,7 +168,9 @@ No authorization required
 # **get_all_entities_csp_directives**
 > JsonApiCspDirectiveOutList get_all_entities_csp_directives()
 
+Get CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -193,6 +202,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get CSP Directives
         api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -234,7 +244,9 @@ No authorization required
 # **get_entity_csp_directives**
 > JsonApiCspDirectiveOutDocument get_entity_csp_directives(id)
 
+Get CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -261,6 +273,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get CSP Directives
         api_response = api_instance.get_entity_csp_directives(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -269,6 +282,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get CSP Directives
         api_response = api_instance.get_entity_csp_directives(id, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -308,7 +322,9 @@ No authorization required
 # **patch_entity_csp_directives**
 > JsonApiCspDirectiveOutDocument patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
 
+Patch CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -347,6 +363,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch CSP Directives
         api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -355,6 +372,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch CSP Directives
         api_response = api_instance.patch_entity_csp_directives(id, json_api_csp_directive_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -395,7 +413,9 @@ No authorization required
 # **update_entity_csp_directives**
 > JsonApiCspDirectiveOutDocument update_entity_csp_directives(id, json_api_csp_directive_in_document)
 
+Put CSP Directives
 
+ Context Security Police Directive
 
 ### Example
 
@@ -434,6 +454,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put CSP Directives
         api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -442,6 +463,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put CSP Directives
         api_response = api_instance.update_entity_csp_directives(id, json_api_csp_directive_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

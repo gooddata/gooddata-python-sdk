@@ -149,7 +149,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -187,7 +187,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -215,7 +215,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -246,7 +246,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -274,7 +274,7 @@
             "properties": {
               "id": {
                 "example": "sample_item.price",
-                "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+                "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
                 "type": "string"
               },
               "type": {
@@ -296,6 +296,42 @@
         ],
         "type": "object"
       },
+      "AfmValidDescendantsQuery": {
+        "description": "Entity describing the valid descendants request.",
+        "properties": {
+          "attributes": {
+            "description": "List of identifiers of the attributes to get the valid descendants for.",
+            "items": {
+              "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "attributes"
+        ],
+        "type": "object"
+      },
+      "AfmValidDescendantsResponse": {
+        "description": "Entity describing the valid descendants response.",
+        "properties": {
+          "validDescendants": {
+            "additionalProperties": {
+              "description": "Map of attribute identifiers to list of valid descendants identifiers.",
+              "items": {
+                "$ref": "#/components/schemas/AfmObjectIdentifierAttribute"
+              },
+              "type": "array"
+            },
+            "description": "Map of attribute identifiers to list of valid descendants identifiers.",
+            "type": "object"
+          }
+        },
+        "required": [
+          "validDescendants"
+        ],
+        "type": "object"
+      },
       "AfmValidObjectsQuery": {
         "description": "Entity holding AFM and list of object types whose validity should be computed.",
         "properties": {
@@ -308,8 +344,7 @@
               "enum": [
                 "facts",
                 "attributes",
-                "measures",
-                "UNRECOGNIZED"
+                "measures"
               ],
               "example": "facts",
               "type": "string"
@@ -409,8 +444,7 @@
               "value2"
             ],
             "items": {
-              "description": "Set of label values.",
-              "example": "[\"value1\",\"value2\"]",
+              "nullable": true,
               "type": "string"
             },
             "type": "array",
@@ -646,6 +680,35 @@
         ],
         "type": "object"
       },
+      "DependsOn": {
+        "nullable": true,
+        "properties": {
+          "complementFilter": {
+            "default": false,
+            "description": "Inverse filtering mode.",
+            "type": "boolean"
+          },
+          "label": {
+            "default": "null",
+            "description": "Specifies on which label the filter depends on.",
+            "type": "string"
+          },
+          "values": {
+            "description": "Specifies values of the label for element filtering.",
+            "items": {
+              "default": "null",
+              "description": "Specifies values of the label for element filtering.",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "label",
+          "values"
+        ],
+        "type": "object"
+      },
       "Dimension": {
         "description": "Single dimension description.",
         "properties": {
@@ -699,7 +762,7 @@
         "description": "List of returned elements.",
         "properties": {
           "primaryTitle": {
-            "description": "Title of primary label of attribute owning requested label or null if the primary label is excluded",
+            "description": "Title of primary label of attribute owning requested label, null if the title is null or the primary label is excluded",
             "type": "string"
           },
           "title": {
@@ -721,16 +784,23 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100,
+            "default": 100.0,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
             "type": "number"
           },
+          "dependsOn": {
+            "description": "Return only items, whose are not filtered out by the parent filters.",
+            "items": {
+              "$ref": "#/components/schemas/DependsOn"
+            },
+            "type": "array"
+          },
           "exactFilter": {
             "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
             "items": {
-              "description": "Return only items, whose ```label``` title exactly matches one of ```filter```.",
+              "nullable": true,
               "type": "string"
             },
             "type": "array"
@@ -745,6 +815,8 @@
           },
           "label": {
             "description": "Requested label.",
+            "example": "label_id",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "patternFilter": {
@@ -849,7 +921,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1,
+                1.0,
                 2.5
               ],
               [
@@ -894,7 +966,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1,
+                1.0,
                 2.5
               ],
               [
@@ -1020,9 +1092,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "labelType"
-        ],
         "type": "object"
       },
       "FilterDefinition": {
@@ -1563,7 +1632,7 @@
         "properties": {
           "id": {
             "example": "sample_item.price",
-            "pattern": "^((?!\\.)[.A-Za-z0-9_-]{1,255}:)?(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
             "type": "string"
           },
           "type": {
@@ -1910,6 +1979,57 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
+      "post": {
+        "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",
+        "operationId": "computeValidDescendants",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AfmValidDescendantsQuery"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AfmValidDescendantsResponse"
+                }
+              }
+            },
+            "description": "Map of lists of attributes valid as descendants of the given attributes."
+          }
+        },
+        "summary": "(BETA) Valid descendants",
+        "tags": [
+          "Computation",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to analyze data.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects": {
       "post": {
         "description": "Returns list containing attributes, facts, or metrics, which can be added to given AFM while still keeping it computable.",
@@ -2200,7 +2320,7 @@
             }
           },
           {
-            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
+            "description": "Requested explain type. If not specified all types are bundled in a ZIP archive.\n\n`MAQL` - MAQL Abstract Syntax Tree, execution dimensions and related info\n\n`GRPC_MODEL` - Datasets used in execution\n\n`GRPC_MODEL_SVG` - Generated SVG image of the datasets\n\n`WDF` - Workspace data filters in execution workspace context\n\n`QT` - Query Tree, created from MAQL AST using Logical Data Model,  contains all information needed to generate SQL\n\n`QT_SVG` - Generated SVG image of the Query Tree\n\n`OPT_QT` - Optimized Query Tree\n\n`OPT_QT_SVG` - Generated SVG image of the Optimized Query Tree\n\n`SQL` - Final SQL to be executed\n\n`SETTINGS` - Settings used to execute explain request",
             "in": "query",
             "name": "explainType",
             "required": false,
@@ -2208,6 +2328,7 @@
               "enum": [
                 "MAQL",
                 "GRPC_MODEL",
+                "GRPC_MODEL_SVG",
                 "WDF",
                 "QT",
                 "QT_SVG",
@@ -2237,7 +2358,7 @@
               "application/sql": {},
               "application/zip": {
                 "schema": {
-                  "description": "ZIP with MAQL, GRPC_MODEL, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
+                  "description": "ZIP with MAQL, GRPC_MODEL, GRPC_MODEL_SVG, WDF, QT, QT_SVG, OPT_QT, OPT_QT_SVG and SQL files",
                   "format": "binary",
                   "type": "string"
                 }
@@ -2355,9 +2476,6 @@
     }
   ],
   "tags": [
-    {
-      "name": "Computation"
-    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

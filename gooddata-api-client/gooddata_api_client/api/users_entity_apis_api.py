@@ -474,8 +474,9 @@ class UsersEntityAPIsApi(object):
         json_api_user_in_document,
         **kwargs
     ):
-        """create_entity_users  # noqa: E501
+        """Post User entities  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -557,8 +558,9 @@ class UsersEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_users  # noqa: E501
+        """Delete User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -639,8 +641,9 @@ class UsersEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_users  # noqa: E501
+        """Get User entities  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -722,8 +725,9 @@ class UsersEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_users  # noqa: E501
+        """Get User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -807,8 +811,9 @@ class UsersEntityAPIsApi(object):
         json_api_user_patch_document,
         **kwargs
     ):
-        """patch_entity_users  # noqa: E501
+        """Patch User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -895,8 +900,9 @@ class UsersEntityAPIsApi(object):
         json_api_user_in_document,
         **kwargs
     ):
-        """update_entity_users  # noqa: E501
+        """Put User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

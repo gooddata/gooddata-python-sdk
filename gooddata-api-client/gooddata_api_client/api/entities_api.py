@@ -26,9 +26,14 @@ from gooddata_api_client.model.json_api_analytical_dashboard_in_document import 
 from gooddata_api_client.model.json_api_analytical_dashboard_out_document import JsonApiAnalyticalDashboardOutDocument
 from gooddata_api_client.model.json_api_analytical_dashboard_out_list import JsonApiAnalyticalDashboardOutList
 from gooddata_api_client.model.json_api_analytical_dashboard_patch_document import JsonApiAnalyticalDashboardPatchDocument
+from gooddata_api_client.model.json_api_analytical_dashboard_post_optional_id_document import JsonApiAnalyticalDashboardPostOptionalIdDocument
 from gooddata_api_client.model.json_api_api_token_in_document import JsonApiApiTokenInDocument
 from gooddata_api_client.model.json_api_api_token_out_document import JsonApiApiTokenOutDocument
 from gooddata_api_client.model.json_api_api_token_out_list import JsonApiApiTokenOutList
+from gooddata_api_client.model.json_api_attribute_hierarchy_in_document import JsonApiAttributeHierarchyInDocument
+from gooddata_api_client.model.json_api_attribute_hierarchy_out_document import JsonApiAttributeHierarchyOutDocument
+from gooddata_api_client.model.json_api_attribute_hierarchy_out_list import JsonApiAttributeHierarchyOutList
+from gooddata_api_client.model.json_api_attribute_hierarchy_patch_document import JsonApiAttributeHierarchyPatchDocument
 from gooddata_api_client.model.json_api_attribute_out_document import JsonApiAttributeOutDocument
 from gooddata_api_client.model.json_api_attribute_out_list import JsonApiAttributeOutList
 from gooddata_api_client.model.json_api_color_palette_in_document import JsonApiColorPaletteInDocument
@@ -46,10 +51,12 @@ from gooddata_api_client.model.json_api_custom_application_setting_in_document i
 from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
 from gooddata_api_client.model.json_api_custom_application_setting_out_list import JsonApiCustomApplicationSettingOutList
 from gooddata_api_client.model.json_api_custom_application_setting_patch_document import JsonApiCustomApplicationSettingPatchDocument
+from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
 from gooddata_api_client.model.json_api_dashboard_plugin_in_document import JsonApiDashboardPluginInDocument
 from gooddata_api_client.model.json_api_dashboard_plugin_out_document import JsonApiDashboardPluginOutDocument
 from gooddata_api_client.model.json_api_dashboard_plugin_out_list import JsonApiDashboardPluginOutList
 from gooddata_api_client.model.json_api_dashboard_plugin_patch_document import JsonApiDashboardPluginPatchDocument
+from gooddata_api_client.model.json_api_dashboard_plugin_post_optional_id_document import JsonApiDashboardPluginPostOptionalIdDocument
 from gooddata_api_client.model.json_api_data_source_identifier_out_document import JsonApiDataSourceIdentifierOutDocument
 from gooddata_api_client.model.json_api_data_source_identifier_out_list import JsonApiDataSourceIdentifierOutList
 from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
@@ -68,12 +75,18 @@ from gooddata_api_client.model.json_api_filter_context_in_document import JsonAp
 from gooddata_api_client.model.json_api_filter_context_out_document import JsonApiFilterContextOutDocument
 from gooddata_api_client.model.json_api_filter_context_out_list import JsonApiFilterContextOutList
 from gooddata_api_client.model.json_api_filter_context_patch_document import JsonApiFilterContextPatchDocument
+from gooddata_api_client.model.json_api_filter_context_post_optional_id_document import JsonApiFilterContextPostOptionalIdDocument
+from gooddata_api_client.model.json_api_jwk_in_document import JsonApiJwkInDocument
+from gooddata_api_client.model.json_api_jwk_out_document import JsonApiJwkOutDocument
+from gooddata_api_client.model.json_api_jwk_out_list import JsonApiJwkOutList
+from gooddata_api_client.model.json_api_jwk_patch_document import JsonApiJwkPatchDocument
 from gooddata_api_client.model.json_api_label_out_document import JsonApiLabelOutDocument
 from gooddata_api_client.model.json_api_label_out_list import JsonApiLabelOutList
 from gooddata_api_client.model.json_api_metric_in_document import JsonApiMetricInDocument
 from gooddata_api_client.model.json_api_metric_out_document import JsonApiMetricOutDocument
 from gooddata_api_client.model.json_api_metric_out_list import JsonApiMetricOutList
 from gooddata_api_client.model.json_api_metric_patch_document import JsonApiMetricPatchDocument
+from gooddata_api_client.model.json_api_metric_post_optional_id_document import JsonApiMetricPostOptionalIdDocument
 from gooddata_api_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
 from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
 from gooddata_api_client.model.json_api_organization_patch_document import JsonApiOrganizationPatchDocument
@@ -85,10 +98,17 @@ from gooddata_api_client.model.json_api_theme_in_document import JsonApiThemeInD
 from gooddata_api_client.model.json_api_theme_out_document import JsonApiThemeOutDocument
 from gooddata_api_client.model.json_api_theme_out_list import JsonApiThemeOutList
 from gooddata_api_client.model.json_api_theme_patch_document import JsonApiThemePatchDocument
+from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
+from gooddata_api_client.model.json_api_user_data_filter_out_document import JsonApiUserDataFilterOutDocument
+from gooddata_api_client.model.json_api_user_data_filter_out_list import JsonApiUserDataFilterOutList
+from gooddata_api_client.model.json_api_user_data_filter_patch_document import JsonApiUserDataFilterPatchDocument
+from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import JsonApiUserDataFilterPostOptionalIdDocument
 from gooddata_api_client.model.json_api_user_group_in_document import JsonApiUserGroupInDocument
 from gooddata_api_client.model.json_api_user_group_out_document import JsonApiUserGroupOutDocument
 from gooddata_api_client.model.json_api_user_group_out_list import JsonApiUserGroupOutList
 from gooddata_api_client.model.json_api_user_group_patch_document import JsonApiUserGroupPatchDocument
+from gooddata_api_client.model.json_api_user_identifier_out_document import JsonApiUserIdentifierOutDocument
+from gooddata_api_client.model.json_api_user_identifier_out_list import JsonApiUserIdentifierOutList
 from gooddata_api_client.model.json_api_user_in_document import JsonApiUserInDocument
 from gooddata_api_client.model.json_api_user_out_document import JsonApiUserOutDocument
 from gooddata_api_client.model.json_api_user_out_list import JsonApiUserOutList
@@ -100,12 +120,15 @@ from gooddata_api_client.model.json_api_visualization_object_in_document import 
 from gooddata_api_client.model.json_api_visualization_object_out_document import JsonApiVisualizationObjectOutDocument
 from gooddata_api_client.model.json_api_visualization_object_out_list import JsonApiVisualizationObjectOutList
 from gooddata_api_client.model.json_api_visualization_object_patch_document import JsonApiVisualizationObjectPatchDocument
+from gooddata_api_client.model.json_api_visualization_object_post_optional_id_document import JsonApiVisualizationObjectPostOptionalIdDocument
 from gooddata_api_client.model.json_api_workspace_data_filter_in_document import JsonApiWorkspaceDataFilterInDocument
 from gooddata_api_client.model.json_api_workspace_data_filter_out_document import JsonApiWorkspaceDataFilterOutDocument
 from gooddata_api_client.model.json_api_workspace_data_filter_out_list import JsonApiWorkspaceDataFilterOutList
 from gooddata_api_client.model.json_api_workspace_data_filter_patch_document import JsonApiWorkspaceDataFilterPatchDocument
+from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_document import JsonApiWorkspaceDataFilterSettingInDocument
 from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_document import JsonApiWorkspaceDataFilterSettingOutDocument
 from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_list import JsonApiWorkspaceDataFilterSettingOutList
+from gooddata_api_client.model.json_api_workspace_data_filter_setting_patch_document import JsonApiWorkspaceDataFilterSettingPatchDocument
 from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWorkspaceInDocument
 from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
 from gooddata_api_client.model.json_api_workspace_out_list import JsonApiWorkspaceOutList
@@ -114,6 +137,7 @@ from gooddata_api_client.model.json_api_workspace_setting_in_document import Jso
 from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from gooddata_api_client.model.json_api_workspace_setting_out_list import JsonApiWorkspaceSettingOutList
 from gooddata_api_client.model.json_api_workspace_setting_patch_document import JsonApiWorkspaceSettingPatchDocument
+from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
 
 
 class EntitiesApi(object):
@@ -139,13 +163,13 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_analytical_dashboard_in_document',
+                    'json_api_analytical_dashboard_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_analytical_dashboard_in_document',
+                    'json_api_analytical_dashboard_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -166,6 +190,7 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -173,6 +198,8 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -187,8 +214,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_analytical_dashboard_in_document':
-                        (JsonApiAnalyticalDashboardInDocument,),
+                    'json_api_analytical_dashboard_post_optional_id_document':
+                        (JsonApiAnalyticalDashboardPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -201,7 +228,7 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_analytical_dashboard_in_document': 'body',
+                    'json_api_analytical_dashboard_post_optional_id_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
@@ -264,6 +291,94 @@ class EntitiesApi(object):
                     'json_api_api_token_in_document': 'body',
                 },
                 'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_attribute_hierarchies_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiAttributeHierarchyOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies',
+                'operation_id': 'create_entity_attribute_hierarchies',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'json_api_attribute_hierarchy_in_document',
+                    'include',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'json_api_attribute_hierarchy_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "ATTRIBUTES": "attributes",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'json_api_attribute_hierarchy_in_document':
+                        (JsonApiAttributeHierarchyInDocument,),
+                    'include':
+                        ([str],),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'include': 'include',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'json_api_attribute_hierarchy_in_document': 'body',
+                    'include': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -388,12 +503,12 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_custom_application_setting_in_document',
+                    'json_api_custom_application_setting_post_optional_id_document',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_custom_application_setting_in_document',
+                    'json_api_custom_application_setting_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -421,8 +536,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_custom_application_setting_in_document':
-                        (JsonApiCustomApplicationSettingInDocument,),
+                    'json_api_custom_application_setting_post_optional_id_document':
+                        (JsonApiCustomApplicationSettingPostOptionalIdDocument,),
                     'meta_include':
                         ([str],),
                 },
@@ -432,7 +547,7 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_custom_application_setting_in_document': 'body',
+                    'json_api_custom_application_setting_post_optional_id_document': 'body',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -461,16 +576,18 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_dashboard_plugin_in_document',
+                    'json_api_dashboard_plugin_post_optional_id_document',
+                    'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_dashboard_plugin_in_document',
+                    'json_api_dashboard_plugin_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -484,6 +601,13 @@ class EntitiesApi(object):
                     },
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -494,21 +618,26 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_dashboard_plugin_in_document':
-                        (JsonApiDashboardPluginInDocument,),
+                    'json_api_dashboard_plugin_post_optional_id_document':
+                        (JsonApiDashboardPluginPostOptionalIdDocument,),
+                    'include':
+                        ([str],),
                     'meta_include':
                         ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'include': 'include',
                     'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_dashboard_plugin_in_document': 'body',
+                    'json_api_dashboard_plugin_post_optional_id_document': 'body',
+                    'include': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'meta_include': 'csv',
                 }
             },
@@ -601,13 +730,13 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_filter_context_in_document',
+                    'json_api_filter_context_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_filter_context_in_document',
+                    'json_api_filter_context_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -643,8 +772,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_filter_context_in_document':
-                        (JsonApiFilterContextInDocument,),
+                    'json_api_filter_context_post_optional_id_document':
+                        (JsonApiFilterContextPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -657,13 +786,63 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_filter_context_in_document': 'body',
+                    'json_api_filter_context_post_optional_id_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiJwkOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks',
+                'operation_id': 'create_entity_jwks',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'json_api_jwk_in_document',
+                ],
+                'required': [
+                    'json_api_jwk_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'json_api_jwk_in_document':
+                        (JsonApiJwkInDocument,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'json_api_jwk_in_document': 'body',
+                },
+                'collection_format_map': {
                 }
             },
             headers_map={
@@ -688,13 +867,13 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_metric_in_document',
+                    'json_api_metric_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_metric_in_document',
+                    'json_api_metric_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -715,11 +894,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -732,8 +914,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_metric_in_document':
-                        (JsonApiMetricInDocument,),
+                    'json_api_metric_post_optional_id_document':
+                        (JsonApiMetricPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -746,7 +928,7 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_metric_in_document': 'body',
+                    'json_api_metric_post_optional_id_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
@@ -853,6 +1035,99 @@ class EntitiesApi(object):
                     'json_api_theme_in_document': 'body',
                 },
                 'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserDataFilterOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters',
+                'operation_id': 'create_entity_user_data_filters',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'json_api_user_data_filter_post_optional_id_document',
+                    'include',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'json_api_user_data_filter_post_optional_id_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "USER": "user",
+                        "USERGROUP": "userGroup",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'json_api_user_data_filter_post_optional_id_document':
+                        (JsonApiUserDataFilterPostOptionalIdDocument,),
+                    'include':
+                        ([str],),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'include': 'include',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'json_api_user_data_filter_post_optional_id_document': 'body',
+                    'include': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1058,13 +1333,13 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_visualization_object_in_document',
+                    'json_api_visualization_object_post_optional_id_document',
                     'include',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_visualization_object_in_document',
+                    'json_api_visualization_object_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -1085,11 +1360,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -1102,8 +1380,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_visualization_object_in_document':
-                        (JsonApiVisualizationObjectInDocument,),
+                    'json_api_visualization_object_post_optional_id_document':
+                        (JsonApiVisualizationObjectPostOptionalIdDocument,),
                     'include':
                         ([str],),
                     'meta_include':
@@ -1116,7 +1394,93 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_visualization_object_in_document': 'body',
+                    'json_api_visualization_object_post_optional_id_document': 'body',
+                    'include': 'query',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.create_entity_workspace_data_filter_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiWorkspaceDataFilterSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings',
+                'operation_id': 'create_entity_workspace_data_filter_settings',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'json_api_workspace_data_filter_setting_in_document',
+                    'include',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'json_api_workspace_data_filter_setting_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
+                        "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'json_api_workspace_data_filter_setting_in_document':
+                        (JsonApiWorkspaceDataFilterSettingInDocument,),
+                    'include':
+                        ([str],),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'include': 'include',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'json_api_workspace_data_filter_setting_in_document': 'body',
                     'include': 'query',
                     'meta_include': 'query',
                 },
@@ -1149,6 +1513,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'json_api_workspace_data_filter_in_document',
                     'include',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -1158,18 +1523,29 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -1180,18 +1556,23 @@ class EntitiesApi(object):
                         (JsonApiWorkspaceDataFilterInDocument,),
                     'include':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'include': 'include',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'json_api_workspace_data_filter_in_document': 'body',
                     'include': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1216,12 +1597,12 @@ class EntitiesApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_workspace_setting_in_document',
+                    'json_api_workspace_setting_post_optional_id_document',
                     'meta_include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_workspace_setting_in_document',
+                    'json_api_workspace_setting_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -1249,8 +1630,8 @@ class EntitiesApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_workspace_setting_in_document':
-                        (JsonApiWorkspaceSettingInDocument,),
+                    'json_api_workspace_setting_post_optional_id_document':
+                        (JsonApiWorkspaceSettingPostOptionalIdDocument,),
                     'meta_include':
                         ([str],),
                 },
@@ -1260,7 +1641,7 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_workspace_setting_in_document': 'body',
+                    'json_api_workspace_setting_post_optional_id_document': 'body',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
@@ -1470,6 +1851,64 @@ class EntitiesApi(object):
                 'location_map': {
                     'user_id': 'path',
                     'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_attribute_hierarchies_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}',
+                'operation_id': 'delete_entity_attribute_hierarchies',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -1832,6 +2271,65 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.delete_entity_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks/{id}',
+                'operation_id': 'delete_entity_jwks',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.delete_entity_metrics_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -1997,6 +2495,64 @@ class EntitiesApi(object):
                 },
                 'location_map': {
                     'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}',
+                'operation_id': 'delete_entity_user_data_filters',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
                     'filter': 'query',
                 },
                 'collection_format_map': {
@@ -2197,6 +2753,64 @@ class EntitiesApi(object):
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId}',
                 'operation_id': 'delete_entity_visualization_objects',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_workspace_data_filter_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}',
+                'operation_id': 'delete_entity_workspace_data_filter_settings',
                 'http_method': 'DELETE',
                 'servers': None,
             },
@@ -2474,6 +3088,7 @@ class EntitiesApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -2481,6 +3096,8 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -2618,6 +3235,125 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_attribute_hierarchies_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiAttributeHierarchyOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies',
+                'operation_id': 'get_all_entities_attribute_hierarchies',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'origin',
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'origin',
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('origin',): {
+
+                        "ALL": "ALL",
+                        "PARENTS": "PARENTS",
+                        "NATIVE": "NATIVE"
+                    },
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "ATTRIBUTES": "attributes",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'origin':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'origin': 'origin',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'origin': 'query',
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_all_entities_attributes_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiAttributeOutList,),
@@ -2670,6 +3406,7 @@ class EntitiesApi(object):
 
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ATTRIBUTEHIERARCHIES": "attributeHierarchies",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
@@ -2981,6 +3718,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'origin',
                     'filter',
+                    'include',
                     'page',
                     'size',
                     'sort',
@@ -2994,6 +3732,7 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'origin',
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -3013,6 +3752,13 @@ class EntitiesApi(object):
                         "PARENTS": "PARENTS",
                         "NATIVE": "NATIVE"
                     },
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -3027,6 +3773,8 @@ class EntitiesApi(object):
                         (str,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                     'page':
                         (int,),
                     'size':
@@ -3042,6 +3790,7 @@ class EntitiesApi(object):
                     'workspace_id': 'workspaceId',
                     'origin': 'origin',
                     'filter': 'filter',
+                    'include': 'include',
                     'page': 'page',
                     'size': 'size',
                     'sort': 'sort',
@@ -3052,6 +3801,7 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'origin': 'query',
                     'filter': 'query',
+                    'include': 'query',
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
@@ -3059,6 +3809,7 @@ class EntitiesApi(object):
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'sort': 'multi',
                     'meta_include': 'csv',
                 }
@@ -3354,6 +4105,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
                         "DATASETS": "datasets",
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",
                         "ALL": "ALL"
                     },
@@ -3718,6 +4470,69 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiJwkOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks',
+                'operation_id': 'get_all_entities_jwks',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_all_entities_labels_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiLabelOutList,),
@@ -3885,11 +4700,14 @@ class EntitiesApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4081,6 +4899,130 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserDataFilterOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters',
+                'operation_id': 'get_all_entities_user_data_filters',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'origin',
+                    'filter',
+                    'include',
+                    'page',
+                    'size',
+                    'sort',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'origin',
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('origin',): {
+
+                        "ALL": "ALL",
+                        "PARENTS": "PARENTS",
+                        "NATIVE": "NATIVE"
+                    },
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "USER": "user",
+                        "USERGROUP": "userGroup",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'origin':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'origin': 'origin',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'origin': 'query',
+                    'filter': 'query',
+                    'include': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'sort': 'multi',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_all_entities_user_groups_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiUserGroupOutList,),
@@ -4146,6 +5088,69 @@ class EntitiesApi(object):
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_all_entities_user_identifiers_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserIdentifierOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/userIdentifiers',
+                'operation_id': 'get_all_entities_user_identifiers',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
                     'sort': 'multi',
                 }
             },
@@ -4352,11 +5357,14 @@ class EntitiesApi(object):
                     },
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -4441,6 +5449,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4450,12 +5459,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -4468,6 +5482,12 @@ class EntitiesApi(object):
 
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -4488,6 +5508,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4498,6 +5520,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4508,10 +5531,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4541,6 +5566,7 @@ class EntitiesApi(object):
                     'size',
                     'sort',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -4550,12 +5576,17 @@ class EntitiesApi(object):
                 'enum': [
                     'origin',
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('origin',): {
@@ -4568,6 +5599,12 @@ class EntitiesApi(object):
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -4588,6 +5625,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -4598,6 +5637,7 @@ class EntitiesApi(object):
                     'size': 'size',
                     'sort': 'sort',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -4608,10 +5648,12 @@ class EntitiesApi(object):
                     'size': 'query',
                     'sort': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -4864,7 +5906,7 @@ class EntitiesApi(object):
         )
         self.get_data_source_drivers_endpoint = _Endpoint(
             settings={
-                'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
+                'response_type': ({str: (str,)},),
                 'auth': [],
                 'endpoint_path': '/api/v1/options/availableDrivers',
                 'operation_id': 'get_data_source_drivers',
@@ -4945,6 +5987,7 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -4952,6 +5995,8 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -5073,6 +6118,103 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_attribute_hierarchies_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiAttributeHierarchyOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}',
+                'operation_id': 'get_entity_attribute_hierarchies',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                    'include',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "ATTRIBUTES": "attributes",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                    'include': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_attributes_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiAttributeOutDocument,),
@@ -5116,6 +6258,7 @@ class EntitiesApi(object):
 
                         "DATASETS": "datasets",
                         "LABELS": "labels",
+                        "ATTRIBUTEHIERARCHIES": "attributeHierarchies",
                         "DATASET": "dataset",
                         "DEFAULTVIEW": "defaultView",
                         "ALL": "ALL"
@@ -5449,6 +6592,7 @@ class EntitiesApi(object):
                     'workspace_id',
                     'object_id',
                     'filter',
+                    'include',
                     'x_gdc_validate_relations',
                     'meta_include',
                 ],
@@ -5459,6 +6603,7 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                     'meta_include',
                 ],
                 'validation': [
@@ -5472,6 +6617,13 @@ class EntitiesApi(object):
                     },
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
@@ -5486,6 +6638,8 @@ class EntitiesApi(object):
                         (str,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
                     'meta_include':
@@ -5495,6 +6649,7 @@ class EntitiesApi(object):
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
                     'meta_include': 'metaInclude',
                 },
@@ -5502,10 +6657,12 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'filter': 'query',
+                    'include': 'query',
                     'x_gdc_validate_relations': 'header',
                     'meta_include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                     'meta_include': 'csv',
                 }
             },
@@ -5784,6 +6941,7 @@ class EntitiesApi(object):
                         "ATTRIBUTES": "attributes",
                         "FACTS": "facts",
                         "DATASETS": "datasets",
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "REFERENCES": "references",
                         "ALL": "ALL"
                     },
@@ -6089,6 +7247,67 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiJwkOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks/{id}',
+                'operation_id': 'get_entity_jwks',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_labels_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiLabelOutDocument,),
@@ -6225,11 +7444,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -6497,6 +7719,108 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserDataFilterOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}',
+                'operation_id': 'get_entity_user_data_filters',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'filter',
+                    'include',
+                    'x_gdc_validate_relations',
+                    'meta_include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                    'meta_include',
+                ],
+                'validation': [
+                    'meta_include',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('meta_include',): {
+
+                    },
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "USER": "user",
+                        "USERGROUP": "userGroup",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                    'x_gdc_validate_relations':
+                        (bool,),
+                    'meta_include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                    'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'filter': 'query',
+                    'include': 'query',
+                    'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                    'meta_include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_user_groups_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
@@ -6561,6 +7885,67 @@ class EntitiesApi(object):
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_entity_user_identifiers_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserIdentifierOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/userIdentifiers/{id}',
+                'operation_id': 'get_entity_user_identifiers',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
                 }
             },
             headers_map={
@@ -6752,11 +8137,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                     ('meta_include',): {
@@ -6825,6 +8213,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -6834,18 +8223,29 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERS": "workspaceDataFilters",
                         "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -6860,6 +8260,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -6867,6 +8269,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -6874,9 +8277,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -6903,6 +8308,7 @@ class EntitiesApi(object):
                     'filter',
                     'include',
                     'x_gdc_validate_relations',
+                    'meta_include',
                 ],
                 'required': [
                     'workspace_id',
@@ -6912,18 +8318,29 @@ class EntitiesApi(object):
                 ],
                 'enum': [
                     'include',
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
                     ('include',): {
 
                         "WORKSPACEDATAFILTERSETTINGS": "workspaceDataFilterSettings",
                         "FILTERSETTINGS": "filterSettings",
+                        "ALL": "ALL"
+                    },
+                    ('meta_include',): {
+
+                        "ORIGIN": "origin",
+                        "ALL": "all",
                         "ALL": "ALL"
                     },
                 },
@@ -6938,6 +8355,8 @@ class EntitiesApi(object):
                         ([str],),
                     'x_gdc_validate_relations':
                         (bool,),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
@@ -6945,6 +8364,7 @@ class EntitiesApi(object):
                     'filter': 'filter',
                     'include': 'include',
                     'x_gdc_validate_relations': 'X-GDC-VALIDATE-RELATIONS',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
@@ -6952,9 +8372,11 @@ class EntitiesApi(object):
                     'filter': 'query',
                     'include': 'query',
                     'x_gdc_validate_relations': 'header',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -7231,6 +8653,7 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -7238,6 +8661,8 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -7263,6 +8688,88 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_analytical_dashboard_patch_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.patch_entity_attribute_hierarchies_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiAttributeHierarchyOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}',
+                'operation_id': 'patch_entity_attribute_hierarchies',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_attribute_hierarchy_patch_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_attribute_hierarchy_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "ATTRIBUTES": "attributes",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_attribute_hierarchy_patch_document':
+                        (JsonApiAttributeHierarchyPatchDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_attribute_hierarchy_patch_document': 'body',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -7566,6 +9073,7 @@ class EntitiesApi(object):
                     'object_id',
                     'json_api_dashboard_plugin_patch_document',
                     'filter',
+                    'include',
                 ],
                 'required': [
                     'workspace_id',
@@ -7575,6 +9083,7 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                 ],
                 'validation': [
                 ]
@@ -7583,6 +9092,13 @@ class EntitiesApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -7593,19 +9109,24 @@ class EntitiesApi(object):
                         (JsonApiDashboardPluginPatchDocument,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_patch_document': 'body',
                     'filter': 'query',
+                    'include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -7767,6 +9288,74 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.patch_entity_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiJwkOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks/{id}',
+                'operation_id': 'patch_entity_jwks',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_jwk_patch_document',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                    'json_api_jwk_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_jwk_patch_document':
+                        (JsonApiJwkPatchDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_jwk_patch_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.patch_entity_metrics_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
@@ -7803,11 +9392,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -8069,6 +9661,93 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.patch_entity_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserDataFilterOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}',
+                'operation_id': 'patch_entity_user_data_filters',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_user_data_filter_patch_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_user_data_filter_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "USER": "user",
+                        "USERGROUP": "userGroup",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_user_data_filter_patch_document':
+                        (JsonApiUserDataFilterPatchDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_user_data_filter_patch_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.patch_entity_user_groups_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiUserGroupOutDocument,),
@@ -8266,11 +9945,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -8296,6 +9978,86 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_visualization_object_patch_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.patch_entity_workspace_data_filter_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiWorkspaceDataFilterSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}',
+                'operation_id': 'patch_entity_workspace_data_filter_settings',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_workspace_data_filter_setting_patch_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_workspace_data_filter_setting_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
+                        "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_workspace_data_filter_setting_patch_document':
+                        (JsonApiWorkspaceDataFilterSettingPatchDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_workspace_data_filter_setting_patch_document': 'body',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -8577,6 +10339,7 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
                         "ANALYTICALDASHBOARDS": "analyticalDashboards",
                         "LABELS": "labels",
@@ -8584,6 +10347,8 @@ class EntitiesApi(object):
                         "DATASETS": "datasets",
                         "FILTERCONTEXTS": "filterContexts",
                         "DASHBOARDPLUGINS": "dashboardPlugins",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -8626,68 +10391,76 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
-        self.update_entity_api_tokens_endpoint = _Endpoint(
+        self.update_entity_attribute_hierarchies_endpoint = _Endpoint(
             settings={
-                'response_type': (JsonApiApiTokenOutDocument,),
+                'response_type': (JsonApiAttributeHierarchyOutDocument,),
                 'auth': [],
-                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens/{id}',
-                'operation_id': 'update_entity_api_tokens',
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId}',
+                'operation_id': 'update_entity_attribute_hierarchies',
                 'http_method': 'PUT',
                 'servers': None,
             },
             params_map={
                 'all': [
-                    'user_id',
-                    'id',
-                    'json_api_api_token_in_document',
+                    'workspace_id',
+                    'object_id',
+                    'json_api_attribute_hierarchy_in_document',
                     'filter',
+                    'include',
                 ],
                 'required': [
-                    'user_id',
-                    'id',
-                    'json_api_api_token_in_document',
+                    'workspace_id',
+                    'object_id',
+                    'json_api_attribute_hierarchy_in_document',
                 ],
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                 ],
                 'validation': [
-                    'id',
                 ]
             },
             root_map={
                 'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "ATTRIBUTES": "attributes",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
-                    'user_id':
+                    'workspace_id':
                         (str,),
-                    'id':
+                    'object_id':
                         (str,),
-                    'json_api_api_token_in_document':
-                        (JsonApiApiTokenInDocument,),
+                    'json_api_attribute_hierarchy_in_document':
+                        (JsonApiAttributeHierarchyInDocument,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                 },
                 'attribute_map': {
-                    'user_id': 'userId',
-                    'id': 'id',
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                 },
                 'location_map': {
-                    'user_id': 'path',
-                    'id': 'path',
-                    'json_api_api_token_in_document': 'body',
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_attribute_hierarchy_in_document': 'body',
                     'filter': 'query',
+                    'include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -8986,6 +10759,7 @@ class EntitiesApi(object):
                     'object_id',
                     'json_api_dashboard_plugin_in_document',
                     'filter',
+                    'include',
                 ],
                 'required': [
                     'workspace_id',
@@ -8995,6 +10769,7 @@ class EntitiesApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'include',
                 ],
                 'validation': [
                 ]
@@ -9003,6 +10778,13 @@ class EntitiesApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('include',): {
+
+                        "USERIDENTIFIERS": "userIdentifiers",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
@@ -9013,19 +10795,24 @@ class EntitiesApi(object):
                         (JsonApiDashboardPluginInDocument,),
                     'filter':
                         (str,),
+                    'include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
                     'object_id': 'objectId',
                     'filter': 'filter',
+                    'include': 'include',
                 },
                 'location_map': {
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_dashboard_plugin_in_document': 'body',
                     'filter': 'query',
+                    'include': 'query',
                 },
                 'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -9187,6 +10974,74 @@ class EntitiesApi(object):
             },
             api_client=api_client
         )
+        self.update_entity_jwks_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiJwkOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/jwks/{id}',
+                'operation_id': 'update_entity_jwks',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_jwk_in_document',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                    'json_api_jwk_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_jwk_in_document':
+                        (JsonApiJwkInDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_jwk_in_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.update_entity_metrics_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiMetricOutDocument,),
@@ -9223,11 +11078,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -9477,6 +11335,93 @@ class EntitiesApi(object):
                     'filter': 'query',
                 },
                 'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.update_entity_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiUserDataFilterOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/userDataFilters/{objectId}',
+                'operation_id': 'update_entity_user_data_filters',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_user_data_filter_in_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_user_data_filter_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "USERS": "users",
+                        "USERGROUPS": "userGroups",
+                        "FACTS": "facts",
+                        "ATTRIBUTES": "attributes",
+                        "LABELS": "labels",
+                        "METRICS": "metrics",
+                        "DATASETS": "datasets",
+                        "USER": "user",
+                        "USERGROUP": "userGroup",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_user_data_filter_in_document':
+                        (JsonApiUserDataFilterInDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_user_data_filter_in_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
                 }
             },
             headers_map={
@@ -9760,11 +11705,14 @@ class EntitiesApi(object):
                 'allowed_values': {
                     ('include',): {
 
+                        "USERIDENTIFIERS": "userIdentifiers",
                         "FACTS": "facts",
                         "ATTRIBUTES": "attributes",
                         "LABELS": "labels",
                         "METRICS": "metrics",
                         "DATASETS": "datasets",
+                        "CREATEDBY": "createdBy",
+                        "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
                     },
                 },
@@ -9790,6 +11738,86 @@ class EntitiesApi(object):
                     'workspace_id': 'path',
                     'object_id': 'path',
                     'json_api_visualization_object_in_document': 'body',
+                    'filter': 'query',
+                    'include': 'query',
+                },
+                'collection_format_map': {
+                    'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.update_entity_workspace_data_filter_settings_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiWorkspaceDataFilterSettingOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId}',
+                'operation_id': 'update_entity_workspace_data_filter_settings',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_workspace_data_filter_setting_in_document',
+                    'filter',
+                    'include',
+                ],
+                'required': [
+                    'workspace_id',
+                    'object_id',
+                    'json_api_workspace_data_filter_setting_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                    'include',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('include',): {
+
+                        "WORKSPACEDATAFILTERS": "workspaceDataFilters",
+                        "WORKSPACEDATAFILTER": "workspaceDataFilter",
+                        "ALL": "ALL"
+                    },
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'object_id':
+                        (str,),
+                    'json_api_workspace_data_filter_setting_in_document':
+                        (JsonApiWorkspaceDataFilterSettingInDocument,),
+                    'filter':
+                        (str,),
+                    'include':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                    'object_id': 'objectId',
+                    'filter': 'filter',
+                    'include': 'include',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'object_id': 'path',
+                    'json_api_workspace_data_filter_setting_in_document': 'body',
                     'filter': 'query',
                     'include': 'query',
                 },
@@ -10039,20 +12067,20 @@ class EntitiesApi(object):
     def create_entity_analytical_dashboards(
         self,
         workspace_id,
-        json_api_analytical_dashboard_in_document,
+        json_api_analytical_dashboard_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_analytical_dashboards  # noqa: E501
+        """Post Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_in_document, async_req=True)
+        >>> thread = api.create_entity_analytical_dashboards(workspace_id, json_api_analytical_dashboard_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_analytical_dashboard_in_document (JsonApiAnalyticalDashboardInDocument):
+            json_api_analytical_dashboard_post_optional_id_document (JsonApiAnalyticalDashboardPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -10120,8 +12148,8 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_analytical_dashboard_in_document'] = \
-            json_api_analytical_dashboard_in_document
+        kwargs['json_api_analytical_dashboard_post_optional_id_document'] = \
+            json_api_analytical_dashboard_post_optional_id_document
         return self.create_entity_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_api_tokens(
@@ -10130,7 +12158,7 @@ class EntitiesApi(object):
         json_api_api_token_in_document,
         **kwargs
     ):
-        """create_entity_api_tokens  # noqa: E501
+        """Post a new API token for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -10210,12 +12238,100 @@ class EntitiesApi(object):
             json_api_api_token_in_document
         return self.create_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
 
+    def create_entity_attribute_hierarchies(
+        self,
+        workspace_id,
+        json_api_attribute_hierarchy_in_document,
+        **kwargs
+    ):
+        """Post Attribute Hierarchies  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_attribute_hierarchies(workspace_id, json_api_attribute_hierarchy_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            json_api_attribute_hierarchy_in_document (JsonApiAttributeHierarchyInDocument):
+
+        Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiAttributeHierarchyOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['json_api_attribute_hierarchy_in_document'] = \
+            json_api_attribute_hierarchy_in_document
+        return self.create_entity_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
+
     def create_entity_color_palettes(
         self,
         json_api_color_palette_in_document,
         **kwargs
     ):
-        """create_entity_color_palettes  # noqa: E501
+        """Post Color Pallettes  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -10297,8 +12413,9 @@ class EntitiesApi(object):
         json_api_csp_directive_in_document,
         **kwargs
     ):
-        """create_entity_csp_directives  # noqa: E501
+        """Post CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -10377,20 +12494,20 @@ class EntitiesApi(object):
     def create_entity_custom_application_settings(
         self,
         workspace_id,
-        json_api_custom_application_setting_in_document,
+        json_api_custom_application_setting_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_custom_application_settings  # noqa: E501
+        """Post Custom Application Settings  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document, async_req=True)
+        >>> thread = api.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_custom_application_setting_in_document (JsonApiCustomApplicationSettingInDocument):
+            json_api_custom_application_setting_post_optional_id_document (JsonApiCustomApplicationSettingPostOptionalIdDocument):
 
         Keyword Args:
             meta_include ([str]): Include Meta objects.. [optional]
@@ -10457,29 +12574,30 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_custom_application_setting_in_document'] = \
-            json_api_custom_application_setting_in_document
+        kwargs['json_api_custom_application_setting_post_optional_id_document'] = \
+            json_api_custom_application_setting_post_optional_id_document
         return self.create_entity_custom_application_settings_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_dashboard_plugins(
         self,
         workspace_id,
-        json_api_dashboard_plugin_in_document,
+        json_api_dashboard_plugin_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_dashboard_plugins  # noqa: E501
+        """Post Plugins  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_in_document, async_req=True)
+        >>> thread = api.create_entity_dashboard_plugins(workspace_id, json_api_dashboard_plugin_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_dashboard_plugin_in_document (JsonApiDashboardPluginInDocument):
+            json_api_dashboard_plugin_post_optional_id_document (JsonApiDashboardPluginPostOptionalIdDocument):
 
         Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
@@ -10544,8 +12662,8 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_dashboard_plugin_in_document'] = \
-            json_api_dashboard_plugin_in_document
+        kwargs['json_api_dashboard_plugin_post_optional_id_document'] = \
+            json_api_dashboard_plugin_post_optional_id_document
         return self.create_entity_dashboard_plugins_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_data_sources(
@@ -10553,8 +12671,9 @@ class EntitiesApi(object):
         json_api_data_source_in_document,
         **kwargs
     ):
-        """create_entity_data_sources  # noqa: E501
+        """Post Data Sources  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -10634,20 +12753,20 @@ class EntitiesApi(object):
     def create_entity_filter_contexts(
         self,
         workspace_id,
-        json_api_filter_context_in_document,
+        json_api_filter_context_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_filter_contexts  # noqa: E501
+        """Post Context Filters  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_filter_contexts(workspace_id, json_api_filter_context_in_document, async_req=True)
+        >>> thread = api.create_entity_filter_contexts(workspace_id, json_api_filter_context_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_filter_context_in_document (JsonApiFilterContextInDocument):
+            json_api_filter_context_post_optional_id_document (JsonApiFilterContextPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -10715,27 +12834,110 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_filter_context_in_document'] = \
-            json_api_filter_context_in_document
+        kwargs['json_api_filter_context_post_optional_id_document'] = \
+            json_api_filter_context_post_optional_id_document
         return self.create_entity_filter_contexts_endpoint.call_with_http_info(**kwargs)
+
+    def create_entity_jwks(
+        self,
+        json_api_jwk_in_document,
+        **kwargs
+    ):
+        """Post Jwks  # noqa: E501
+
+        Creates JSON web key - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_jwks(json_api_jwk_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            json_api_jwk_in_document (JsonApiJwkInDocument):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiJwkOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['json_api_jwk_in_document'] = \
+            json_api_jwk_in_document
+        return self.create_entity_jwks_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_metrics(
         self,
         workspace_id,
-        json_api_metric_in_document,
+        json_api_metric_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_metrics  # noqa: E501
+        """Post Metrics  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_metrics(workspace_id, json_api_metric_in_document, async_req=True)
+        >>> thread = api.create_entity_metrics(workspace_id, json_api_metric_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_metric_in_document (JsonApiMetricInDocument):
+            json_api_metric_post_optional_id_document (JsonApiMetricPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -10803,8 +13005,8 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_metric_in_document'] = \
-            json_api_metric_in_document
+        kwargs['json_api_metric_post_optional_id_document'] = \
+            json_api_metric_post_optional_id_document
         return self.create_entity_metrics_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_organization_settings(
@@ -10812,7 +13014,7 @@ class EntitiesApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """create_entity_organization_settings  # noqa: E501
+        """Post Organization Setting entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -10894,7 +13096,7 @@ class EntitiesApi(object):
         json_api_theme_in_document,
         **kwargs
     ):
-        """create_entity_themes  # noqa: E501
+        """Post Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -10971,13 +13173,102 @@ class EntitiesApi(object):
             json_api_theme_in_document
         return self.create_entity_themes_endpoint.call_with_http_info(**kwargs)
 
+    def create_entity_user_data_filters(
+        self,
+        workspace_id,
+        json_api_user_data_filter_post_optional_id_document,
+        **kwargs
+    ):
+        """Post User Data Filters  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_user_data_filters(workspace_id, json_api_user_data_filter_post_optional_id_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            json_api_user_data_filter_post_optional_id_document (JsonApiUserDataFilterPostOptionalIdDocument):
+
+        Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserDataFilterOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['json_api_user_data_filter_post_optional_id_document'] = \
+            json_api_user_data_filter_post_optional_id_document
+        return self.create_entity_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def create_entity_user_groups(
         self,
         json_api_user_group_in_document,
         **kwargs
     ):
-        """create_entity_user_groups  # noqa: E501
+        """Post User Group entities  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -11060,7 +13351,7 @@ class EntitiesApi(object):
         json_api_user_setting_in_document,
         **kwargs
     ):
-        """create_entity_user_settings  # noqa: E501
+        """Post new user settings for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11145,8 +13436,9 @@ class EntitiesApi(object):
         json_api_user_in_document,
         **kwargs
     ):
-        """create_entity_users  # noqa: E501
+        """Post User entities  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -11226,20 +13518,20 @@ class EntitiesApi(object):
     def create_entity_visualization_objects(
         self,
         workspace_id,
-        json_api_visualization_object_in_document,
+        json_api_visualization_object_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_visualization_objects  # noqa: E501
+        """Post Visualization Objects  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_visualization_objects(workspace_id, json_api_visualization_object_in_document, async_req=True)
+        >>> thread = api.create_entity_visualization_objects(workspace_id, json_api_visualization_object_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_visualization_object_in_document (JsonApiVisualizationObjectInDocument):
+            json_api_visualization_object_post_optional_id_document (JsonApiVisualizationObjectPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -11307,9 +13599,97 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_visualization_object_in_document'] = \
-            json_api_visualization_object_in_document
+        kwargs['json_api_visualization_object_post_optional_id_document'] = \
+            json_api_visualization_object_post_optional_id_document
         return self.create_entity_visualization_objects_endpoint.call_with_http_info(**kwargs)
+
+    def create_entity_workspace_data_filter_settings(
+        self,
+        workspace_id,
+        json_api_workspace_data_filter_setting_in_document,
+        **kwargs
+    ):
+        """Post Settings for Workspace Data Filters  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            json_api_workspace_data_filter_setting_in_document (JsonApiWorkspaceDataFilterSettingInDocument):
+
+        Keyword Args:
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiWorkspaceDataFilterSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['json_api_workspace_data_filter_setting_in_document'] = \
+            json_api_workspace_data_filter_setting_in_document
+        return self.create_entity_workspace_data_filter_settings_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_workspace_data_filters(
         self,
@@ -11317,7 +13697,7 @@ class EntitiesApi(object):
         json_api_workspace_data_filter_in_document,
         **kwargs
     ):
-        """create_entity_workspace_data_filters  # noqa: E501
+        """Post Workspace Data Filters  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11331,6 +13711,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -11401,20 +13782,20 @@ class EntitiesApi(object):
     def create_entity_workspace_settings(
         self,
         workspace_id,
-        json_api_workspace_setting_in_document,
+        json_api_workspace_setting_post_optional_id_document,
         **kwargs
     ):
-        """create_entity_workspace_settings  # noqa: E501
+        """Post Settings for Workspaces  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document, async_req=True)
+        >>> thread = api.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_workspace_setting_in_document (JsonApiWorkspaceSettingInDocument):
+            json_api_workspace_setting_post_optional_id_document (JsonApiWorkspaceSettingPostOptionalIdDocument):
 
         Keyword Args:
             meta_include ([str]): Include Meta objects.. [optional]
@@ -11481,8 +13862,8 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_workspace_setting_in_document'] = \
-            json_api_workspace_setting_in_document
+        kwargs['json_api_workspace_setting_post_optional_id_document'] = \
+            json_api_workspace_setting_post_optional_id_document
         return self.create_entity_workspace_settings_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_workspaces(
@@ -11490,8 +13871,9 @@ class EntitiesApi(object):
         json_api_workspace_in_document,
         **kwargs
     ):
-        """create_entity_workspaces  # noqa: E501
+        """Post Workspace entities  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -11575,7 +13957,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_analytical_dashboards  # noqa: E501
+        """Delete a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11662,7 +14044,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_api_tokens  # noqa: E501
+        """Delete an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11743,12 +14125,99 @@ class EntitiesApi(object):
             id
         return self.delete_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
 
+    def delete_entity_attribute_hierarchies(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """Delete an Attribute Hierarchy  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_attribute_hierarchies(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.delete_entity_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_color_palettes(
         self,
         id,
         **kwargs
     ):
-        """delete_entity_color_palettes  # noqa: E501
+        """Delete a Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11831,8 +14300,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_csp_directives  # noqa: E501
+        """Delete CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -11915,7 +14385,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_custom_application_settings  # noqa: E501
+        """Delete a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12002,7 +14472,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_dashboard_plugins  # noqa: E501
+        """Delete a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12088,8 +14558,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_data_sources  # noqa: E501
+        """Delete Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -12172,7 +14643,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_filter_contexts  # noqa: E501
+        """Delete a Context Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12253,13 +14724,97 @@ class EntitiesApi(object):
             object_id
         return self.delete_entity_filter_contexts_endpoint.call_with_http_info(**kwargs)
 
+    def delete_entity_jwks(
+        self,
+        id,
+        **kwargs
+    ):
+        """Delete Jwk  # noqa: E501
+
+        Deletes JSON web key - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_jwks(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.delete_entity_jwks_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_metrics(
         self,
         workspace_id,
         object_id,
         **kwargs
     ):
-        """delete_entity_metrics  # noqa: E501
+        """Delete a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12345,7 +14900,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_organization_settings  # noqa: E501
+        """Delete Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12428,7 +14983,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_themes  # noqa: E501
+        """Delete Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12506,13 +15061,101 @@ class EntitiesApi(object):
             id
         return self.delete_entity_themes_endpoint.call_with_http_info(**kwargs)
 
+    def delete_entity_user_data_filters(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """Delete a User Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_user_data_filters(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.delete_entity_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_user_groups(
         self,
         id,
         **kwargs
     ):
-        """delete_entity_user_groups  # noqa: E501
+        """Delete UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -12595,7 +15238,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_user_settings  # noqa: E501
+        """Delete a setting for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12681,8 +15324,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_users  # noqa: E501
+        """Delete User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -12765,7 +15409,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_visualization_objects  # noqa: E501
+        """Delete a Visualization Object  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12846,13 +15490,100 @@ class EntitiesApi(object):
             object_id
         return self.delete_entity_visualization_objects_endpoint.call_with_http_info(**kwargs)
 
+    def delete_entity_workspace_data_filter_settings(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """Delete a Settings for Workspace Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_workspace_data_filter_settings(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.delete_entity_workspace_data_filter_settings_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_workspace_data_filters(
         self,
         workspace_id,
         object_id,
         **kwargs
     ):
-        """delete_entity_workspace_data_filters  # noqa: E501
+        """Delete a Workspace Data Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12939,7 +15670,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_workspace_settings  # noqa: E501
+        """Delete a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13025,8 +15756,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_workspaces  # noqa: E501
+        """Delete Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -13108,7 +15840,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_analytical_dashboards  # noqa: E501
+        """Get all Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13279,12 +16011,102 @@ class EntitiesApi(object):
             user_id
         return self.get_all_entities_api_tokens_endpoint.call_with_http_info(**kwargs)
 
+    def get_all_entities_attribute_hierarchies(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get all Attribute Hierarchies  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_attribute_hierarchies(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            origin (str): [optional] if omitted the server will use the default value of "ALL"
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiAttributeHierarchyOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_all_entities_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
+
     def get_all_entities_attributes(
         self,
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_attributes  # noqa: E501
+        """Get all Attributes  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13373,7 +16195,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_color_palettes  # noqa: E501
+        """Get all Color Pallettes  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13454,8 +16276,9 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_csp_directives  # noqa: E501
+        """Get CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -13536,7 +16359,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_custom_application_settings  # noqa: E501
+        """Get all Custom Application Settings  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13625,7 +16448,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_dashboard_plugins  # noqa: E501
+        """Get all Plugins  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13639,6 +16462,7 @@ class EntitiesApi(object):
         Keyword Args:
             origin (str): [optional] if omitted the server will use the default value of "ALL"
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
@@ -13713,7 +16537,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_data_source_identifiers  # noqa: E501
+        """Get all Data Source Identifiers  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13881,8 +16705,9 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_data_sources  # noqa: E501
+        """Get Data Source entities  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -13964,7 +16789,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_datasets  # noqa: E501
+        """Get all Datasets  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14053,8 +16878,9 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_entitlements  # noqa: E501
+        """Get Entitlements  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -14135,7 +16961,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_facts  # noqa: E501
+        """Get all Facts  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14225,7 +17051,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_filter_contexts  # noqa: E501
+        """Get all Context Filters  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14310,12 +17136,94 @@ class EntitiesApi(object):
             workspace_id
         return self.get_all_entities_filter_contexts_endpoint.call_with_http_info(**kwargs)
 
+    def get_all_entities_jwks(
+        self,
+        **kwargs
+    ):
+        """Get all Jwks  # noqa: E501
+
+        Returns all JSON web keys - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_jwks(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiJwkOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.get_all_entities_jwks_endpoint.call_with_http_info(**kwargs)
+
     def get_all_entities_labels(
         self,
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_labels  # noqa: E501
+        """Get all Labels  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14405,7 +17313,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_metrics  # noqa: E501
+        """Get all Metrics  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14494,7 +17402,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_organization_settings  # noqa: E501
+        """Get Organization entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14575,7 +17483,7 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_themes  # noqa: E501
+        """Get all Theming entities  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14652,12 +17560,103 @@ class EntitiesApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_themes_endpoint.call_with_http_info(**kwargs)
 
+    def get_all_entities_user_data_filters(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get all User Data Filters  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_user_data_filters(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            origin (str): [optional] if omitted the server will use the default value of "ALL"
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserDataFilterOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_all_entities_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def get_all_entities_user_groups(
         self,
         **kwargs
     ):
-        """get_all_entities_user_groups  # noqa: E501
+        """Get UserGroup entities  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -14733,6 +17732,88 @@ class EntitiesApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_user_groups_endpoint.call_with_http_info(**kwargs)
+
+    def get_all_entities_user_identifiers(
+        self,
+        **kwargs
+    ):
+        """Get UserIdentifier entities  # noqa: E501
+
+        UserIdentifier - represents entity interacting with platform  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_user_identifiers(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserIdentifierOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.get_all_entities_user_identifiers_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_user_settings(
         self,
@@ -14824,8 +17905,9 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_users  # noqa: E501
+        """Get User entities  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -14907,7 +17989,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_visualization_objects  # noqa: E501
+        """Get all Visualization Objects  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -14997,7 +18079,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_workspace_data_filter_settings  # noqa: E501
+        """Get all Settings for Workspace Data Filters  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15016,6 +18098,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15086,7 +18169,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_workspace_data_filters  # noqa: E501
+        """Get all Workspace Data Filters  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15105,6 +18188,7 @@ class EntitiesApi(object):
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -15175,7 +18259,7 @@ class EntitiesApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_workspace_settings  # noqa: E501
+        """Get all Setting for Workspaces  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15263,8 +18347,9 @@ class EntitiesApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_workspaces  # noqa: E501
+        """Get Workspace entities  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -15467,7 +18552,7 @@ class EntitiesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            {str: (bool, date, datetime, dict, float, int, list, str, none_type)}
+            {str: (str,)}
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -15504,7 +18589,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_analytical_dashboards  # noqa: E501
+        """Get a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15594,7 +18679,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_api_tokens  # noqa: E501
+        """Get an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15675,13 +18760,103 @@ class EntitiesApi(object):
             id
         return self.get_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_attribute_hierarchies(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """Get an Attribute Hierarchy  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_attribute_hierarchies(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiAttributeHierarchyOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.get_entity_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
+
     def get_entity_attributes(
         self,
         workspace_id,
         object_id,
         **kwargs
     ):
-        """get_entity_attributes  # noqa: E501
+        """Get an Attribute  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15770,7 +18945,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_color_palettes  # noqa: E501
+        """Get Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15853,7 +19028,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_cookie_security_configurations  # noqa: E501
+        """Get CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -15936,8 +19111,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_csp_directives  # noqa: E501
+        """Get CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -16020,7 +19196,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_custom_application_settings  # noqa: E501
+        """Get a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16109,7 +19285,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_dashboard_plugins  # noqa: E501
+        """Get a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16123,6 +19299,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
             meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
@@ -16197,7 +19374,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_data_source_identifiers  # noqa: E501
+        """Get Data Source Identifier  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16368,8 +19545,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_data_sources  # noqa: E501
+        """Get Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -16453,7 +19631,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_datasets  # noqa: E501
+        """Get a Dataset  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16542,8 +19720,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_entitlements  # noqa: E501
+        """Get Entitlement  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -16626,7 +19805,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_facts  # noqa: E501
+        """Get a Fact  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16716,7 +19895,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_filter_contexts  # noqa: E501
+        """Get a Context Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16800,13 +19979,97 @@ class EntitiesApi(object):
             object_id
         return self.get_entity_filter_contexts_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_jwks(
+        self,
+        id,
+        **kwargs
+    ):
+        """Get Jwk  # noqa: E501
+
+        Returns JSON web key - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_jwks(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiJwkOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.get_entity_jwks_endpoint.call_with_http_info(**kwargs)
+
     def get_entity_labels(
         self,
         workspace_id,
         object_id,
         **kwargs
     ):
-        """get_entity_labels  # noqa: E501
+        """Get a Label  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16896,7 +20159,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_metrics  # noqa: E501
+        """Get a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -16985,7 +20248,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_organization_settings  # noqa: E501
+        """Get Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17068,7 +20331,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_organizations  # noqa: E501
+        """Get Organizations  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17153,7 +20416,7 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_themes  # noqa: E501
+        """Get Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17231,13 +20494,104 @@ class EntitiesApi(object):
             id
         return self.get_entity_themes_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_user_data_filters(
+        self,
+        workspace_id,
+        object_id,
+        **kwargs
+    ):
+        """Get a User Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_user_data_filters(workspace_id, object_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserDataFilterOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        return self.get_entity_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def get_entity_user_groups(
         self,
         id,
         **kwargs
     ):
-        """get_entity_user_groups  # noqa: E501
+        """Get UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -17315,13 +20669,97 @@ class EntitiesApi(object):
             id
         return self.get_entity_user_groups_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_user_identifiers(
+        self,
+        id,
+        **kwargs
+    ):
+        """Get UserIdentifier entity  # noqa: E501
+
+        UserIdentifier - represents basic information about entity interacting with platform  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_user_identifiers(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserIdentifierOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.get_entity_user_identifiers_endpoint.call_with_http_info(**kwargs)
+
     def get_entity_user_settings(
         self,
         user_id,
         id,
         **kwargs
     ):
-        """get_entity_user_settings  # noqa: E501
+        """Get a setting for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17407,8 +20845,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_users  # noqa: E501
+        """Get User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -17492,7 +20931,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_visualization_objects  # noqa: E501
+        """Get a Visualization Object  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17582,7 +21021,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_workspace_data_filter_settings  # noqa: E501
+        """Get a Setting for Workspace Data Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17598,6 +21037,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -17671,7 +21111,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_workspace_data_filters  # noqa: E501
+        """Get a Workspace Data Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17687,6 +21127,7 @@ class EntitiesApi(object):
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             x_gdc_validate_relations (bool): [optional] if omitted the server will use the default value of False
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -17760,7 +21201,7 @@ class EntitiesApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_workspace_settings  # noqa: E501
+        """Get a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -17848,8 +21289,9 @@ class EntitiesApi(object):
         id,
         **kwargs
     ):
-        """get_entity_workspaces  # noqa: E501
+        """Get Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18014,7 +21456,7 @@ class EntitiesApi(object):
         json_api_analytical_dashboard_patch_document,
         **kwargs
     ):
-        """patch_entity_analytical_dashboards  # noqa: E501
+        """Patch a Dashboard  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18099,13 +21541,105 @@ class EntitiesApi(object):
             json_api_analytical_dashboard_patch_document
         return self.patch_entity_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_attribute_hierarchies(
+        self,
+        workspace_id,
+        object_id,
+        json_api_attribute_hierarchy_patch_document,
+        **kwargs
+    ):
+        """Patch an Attribute Hierarchy  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_attribute_hierarchies(workspace_id, object_id, json_api_attribute_hierarchy_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_attribute_hierarchy_patch_document (JsonApiAttributeHierarchyPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiAttributeHierarchyOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_attribute_hierarchy_patch_document'] = \
+            json_api_attribute_hierarchy_patch_document
+        return self.patch_entity_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_color_palettes(
         self,
         id,
         json_api_color_palette_patch_document,
         **kwargs
     ):
-        """patch_entity_color_palettes  # noqa: E501
+        """Patch Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18192,7 +21726,7 @@ class EntitiesApi(object):
         json_api_cookie_security_configuration_patch_document,
         **kwargs
     ):
-        """patch_entity_cookie_security_configurations  # noqa: E501
+        """Patch CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18279,8 +21813,9 @@ class EntitiesApi(object):
         json_api_csp_directive_patch_document,
         **kwargs
     ):
-        """patch_entity_csp_directives  # noqa: E501
+        """Patch CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18367,7 +21902,7 @@ class EntitiesApi(object):
         json_api_custom_application_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_custom_application_settings  # noqa: E501
+        """Patch a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18458,7 +21993,7 @@ class EntitiesApi(object):
         json_api_dashboard_plugin_patch_document,
         **kwargs
     ):
-        """patch_entity_dashboard_plugins  # noqa: E501
+        """Patch a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18473,6 +22008,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -18548,8 +22084,9 @@ class EntitiesApi(object):
         json_api_data_source_patch_document,
         **kwargs
     ):
-        """patch_entity_data_sources  # noqa: E501
+        """Patch Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -18636,7 +22173,7 @@ class EntitiesApi(object):
         json_api_filter_context_patch_document,
         **kwargs
     ):
-        """patch_entity_filter_contexts  # noqa: E501
+        """Patch a Context Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18721,6 +22258,94 @@ class EntitiesApi(object):
             json_api_filter_context_patch_document
         return self.patch_entity_filter_contexts_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_jwks(
+        self,
+        id,
+        json_api_jwk_patch_document,
+        **kwargs
+    ):
+        """Patch Jwk  # noqa: E501
+
+        Patches JSON web key - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_jwks(id, json_api_jwk_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_jwk_patch_document (JsonApiJwkPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiJwkOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_jwk_patch_document'] = \
+            json_api_jwk_patch_document
+        return self.patch_entity_jwks_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_metrics(
         self,
         workspace_id,
@@ -18728,7 +22353,7 @@ class EntitiesApi(object):
         json_api_metric_patch_document,
         **kwargs
     ):
-        """patch_entity_metrics  # noqa: E501
+        """Patch a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18819,7 +22444,7 @@ class EntitiesApi(object):
         json_api_organization_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_organization_settings  # noqa: E501
+        """Patch Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18906,7 +22531,7 @@ class EntitiesApi(object):
         json_api_organization_patch_document,
         **kwargs
     ):
-        """patch_entity_organizations  # noqa: E501
+        """Patch Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -18994,7 +22619,7 @@ class EntitiesApi(object):
         json_api_theme_patch_document,
         **kwargs
     ):
-        """patch_entity_themes  # noqa: E501
+        """Patch Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19075,14 +22700,107 @@ class EntitiesApi(object):
             json_api_theme_patch_document
         return self.patch_entity_themes_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_user_data_filters(
+        self,
+        workspace_id,
+        object_id,
+        json_api_user_data_filter_patch_document,
+        **kwargs
+    ):
+        """Patch a User Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_user_data_filter_patch_document (JsonApiUserDataFilterPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserDataFilterOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_user_data_filter_patch_document'] = \
+            json_api_user_data_filter_patch_document
+        return self.patch_entity_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_user_groups(
         self,
         id,
         json_api_user_group_patch_document,
         **kwargs
     ):
-        """patch_entity_user_groups  # noqa: E501
+        """Patch UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -19169,8 +22887,9 @@ class EntitiesApi(object):
         json_api_user_patch_document,
         **kwargs
     ):
-        """patch_entity_users  # noqa: E501
+        """Patch User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -19258,7 +22977,7 @@ class EntitiesApi(object):
         json_api_visualization_object_patch_document,
         **kwargs
     ):
-        """patch_entity_visualization_objects  # noqa: E501
+        """Patch a Visualization Object  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19343,6 +23062,98 @@ class EntitiesApi(object):
             json_api_visualization_object_patch_document
         return self.patch_entity_visualization_objects_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_workspace_data_filter_settings(
+        self,
+        workspace_id,
+        object_id,
+        json_api_workspace_data_filter_setting_patch_document,
+        **kwargs
+    ):
+        """Patch a Settings for Workspace Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_workspace_data_filter_setting_patch_document (JsonApiWorkspaceDataFilterSettingPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiWorkspaceDataFilterSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_workspace_data_filter_setting_patch_document'] = \
+            json_api_workspace_data_filter_setting_patch_document
+        return self.patch_entity_workspace_data_filter_settings_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_workspace_data_filters(
         self,
         workspace_id,
@@ -19350,7 +23161,7 @@ class EntitiesApi(object):
         json_api_workspace_data_filter_patch_document,
         **kwargs
     ):
-        """patch_entity_workspace_data_filters  # noqa: E501
+        """Patch a Workspace Data Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19442,7 +23253,7 @@ class EntitiesApi(object):
         json_api_workspace_setting_patch_document,
         **kwargs
     ):
-        """patch_entity_workspace_settings  # noqa: E501
+        """Patch a Setting for Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19532,8 +23343,9 @@ class EntitiesApi(object):
         json_api_workspace_patch_document,
         **kwargs
     ):
-        """patch_entity_workspaces  # noqa: E501
+        """Patch Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -19621,7 +23433,7 @@ class EntitiesApi(object):
         json_api_analytical_dashboard_in_document,
         **kwargs
     ):
-        """update_entity_analytical_dashboards  # noqa: E501
+        """Put Dashboards  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19706,28 +23518,29 @@ class EntitiesApi(object):
             json_api_analytical_dashboard_in_document
         return self.update_entity_analytical_dashboards_endpoint.call_with_http_info(**kwargs)
 
-    def update_entity_api_tokens(
+    def update_entity_attribute_hierarchies(
         self,
-        user_id,
-        id,
-        json_api_api_token_in_document,
+        workspace_id,
+        object_id,
+        json_api_attribute_hierarchy_in_document,
         **kwargs
     ):
-        """update_entity_api_tokens  # noqa: E501
+        """Put an Attribute Hierarchy  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.update_entity_api_tokens(user_id, id, json_api_api_token_in_document, async_req=True)
+        >>> thread = api.update_entity_attribute_hierarchies(workspace_id, object_id, json_api_attribute_hierarchy_in_document, async_req=True)
         >>> result = thread.get()
 
         Args:
-            user_id (str):
-            id (str):
-            json_api_api_token_in_document (JsonApiApiTokenInDocument):
+            workspace_id (str):
+            object_id (str):
+            json_api_attribute_hierarchy_in_document (JsonApiAttributeHierarchyInDocument):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -19760,7 +23573,7 @@ class EntitiesApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            JsonApiApiTokenOutDocument
+            JsonApiAttributeHierarchyOutDocument
                 If the method is called asynchronously, returns the request
                 thread.
         """
@@ -19789,13 +23602,13 @@ class EntitiesApi(object):
             '_content_type')
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['user_id'] = \
-            user_id
-        kwargs['id'] = \
-            id
-        kwargs['json_api_api_token_in_document'] = \
-            json_api_api_token_in_document
-        return self.update_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_attribute_hierarchy_in_document'] = \
+            json_api_attribute_hierarchy_in_document
+        return self.update_entity_attribute_hierarchies_endpoint.call_with_http_info(**kwargs)
 
     def update_entity_color_palettes(
         self,
@@ -19803,7 +23616,7 @@ class EntitiesApi(object):
         json_api_color_palette_in_document,
         **kwargs
     ):
-        """update_entity_color_palettes  # noqa: E501
+        """Put Color Pallette  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19890,7 +23703,7 @@ class EntitiesApi(object):
         json_api_cookie_security_configuration_in_document,
         **kwargs
     ):
-        """update_entity_cookie_security_configurations  # noqa: E501
+        """Put CookieSecurityConfiguration  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -19977,8 +23790,9 @@ class EntitiesApi(object):
         json_api_csp_directive_in_document,
         **kwargs
     ):
-        """update_entity_csp_directives  # noqa: E501
+        """Put CSP Directives  # noqa: E501
 
+         Context Security Police Directive  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -20065,7 +23879,7 @@ class EntitiesApi(object):
         json_api_custom_application_setting_in_document,
         **kwargs
     ):
-        """update_entity_custom_application_settings  # noqa: E501
+        """Put a Custom Application Setting  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20156,7 +23970,7 @@ class EntitiesApi(object):
         json_api_dashboard_plugin_in_document,
         **kwargs
     ):
-        """update_entity_dashboard_plugins  # noqa: E501
+        """Put a Plugin  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20171,6 +23985,7 @@ class EntitiesApi(object):
 
         Keyword Args:
             filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -20246,8 +24061,9 @@ class EntitiesApi(object):
         json_api_data_source_in_document,
         **kwargs
     ):
-        """update_entity_data_sources  # noqa: E501
+        """Put Data Source entity  # noqa: E501
 
+        Data Source - represents data source for the workspace  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -20334,7 +24150,7 @@ class EntitiesApi(object):
         json_api_filter_context_in_document,
         **kwargs
     ):
-        """update_entity_filter_contexts  # noqa: E501
+        """Put a Context Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20419,6 +24235,94 @@ class EntitiesApi(object):
             json_api_filter_context_in_document
         return self.update_entity_filter_contexts_endpoint.call_with_http_info(**kwargs)
 
+    def update_entity_jwks(
+        self,
+        id,
+        json_api_jwk_in_document,
+        **kwargs
+    ):
+        """Put Jwk  # noqa: E501
+
+        Updates JSON web key - used to verify JSON web tokens (Jwts)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_jwks(id, json_api_jwk_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_jwk_in_document (JsonApiJwkInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiJwkOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_jwk_in_document'] = \
+            json_api_jwk_in_document
+        return self.update_entity_jwks_endpoint.call_with_http_info(**kwargs)
+
     def update_entity_metrics(
         self,
         workspace_id,
@@ -20426,7 +24330,7 @@ class EntitiesApi(object):
         json_api_metric_in_document,
         **kwargs
     ):
-        """update_entity_metrics  # noqa: E501
+        """Put a Metric  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20517,7 +24421,7 @@ class EntitiesApi(object):
         json_api_organization_setting_in_document,
         **kwargs
     ):
-        """update_entity_organization_settings  # noqa: E501
+        """Put Organization entity  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20604,7 +24508,7 @@ class EntitiesApi(object):
         json_api_organization_in_document,
         **kwargs
     ):
-        """update_entity_organizations  # noqa: E501
+        """Put Organization  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20692,7 +24596,7 @@ class EntitiesApi(object):
         json_api_theme_in_document,
         **kwargs
     ):
-        """update_entity_themes  # noqa: E501
+        """Put Theming  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20773,14 +24677,107 @@ class EntitiesApi(object):
             json_api_theme_in_document
         return self.update_entity_themes_endpoint.call_with_http_info(**kwargs)
 
+    def update_entity_user_data_filters(
+        self,
+        workspace_id,
+        object_id,
+        json_api_user_data_filter_in_document,
+        **kwargs
+    ):
+        """Put a User Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_user_data_filters(workspace_id, object_id, json_api_user_data_filter_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_user_data_filter_in_document (JsonApiUserDataFilterInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiUserDataFilterOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_user_data_filter_in_document'] = \
+            json_api_user_data_filter_in_document
+        return self.update_entity_user_data_filters_endpoint.call_with_http_info(**kwargs)
+
     def update_entity_user_groups(
         self,
         id,
         json_api_user_group_in_document,
         **kwargs
     ):
-        """update_entity_user_groups  # noqa: E501
+        """Put UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -20868,7 +24865,7 @@ class EntitiesApi(object):
         json_api_user_setting_in_document,
         **kwargs
     ):
-        """update_entity_user_settings  # noqa: E501
+        """Put new user settings for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -20958,8 +24955,9 @@ class EntitiesApi(object):
         json_api_user_in_document,
         **kwargs
     ):
-        """update_entity_users  # noqa: E501
+        """Put User entity  # noqa: E501
 
+        User - represents entity interacting with platform  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -21047,7 +25045,7 @@ class EntitiesApi(object):
         json_api_visualization_object_in_document,
         **kwargs
     ):
-        """update_entity_visualization_objects  # noqa: E501
+        """Put a Visualization Object  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -21132,6 +25130,98 @@ class EntitiesApi(object):
             json_api_visualization_object_in_document
         return self.update_entity_visualization_objects_endpoint.call_with_http_info(**kwargs)
 
+    def update_entity_workspace_data_filter_settings(
+        self,
+        workspace_id,
+        object_id,
+        json_api_workspace_data_filter_setting_in_document,
+        **kwargs
+    ):
+        """Put a Settings for Workspace Data Filter  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            object_id (str):
+            json_api_workspace_data_filter_setting_in_document (JsonApiWorkspaceDataFilterSettingInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiWorkspaceDataFilterSettingOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['object_id'] = \
+            object_id
+        kwargs['json_api_workspace_data_filter_setting_in_document'] = \
+            json_api_workspace_data_filter_setting_in_document
+        return self.update_entity_workspace_data_filter_settings_endpoint.call_with_http_info(**kwargs)
+
     def update_entity_workspace_data_filters(
         self,
         workspace_id,
@@ -21139,7 +25229,7 @@ class EntitiesApi(object):
         json_api_workspace_data_filter_in_document,
         **kwargs
     ):
-        """update_entity_workspace_data_filters  # noqa: E501
+        """Put a Workspace Data Filter  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -21231,7 +25321,7 @@ class EntitiesApi(object):
         json_api_workspace_setting_in_document,
         **kwargs
     ):
-        """update_entity_workspace_settings  # noqa: E501
+        """Put a Setting for a Workspace  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -21321,8 +25411,9 @@ class EntitiesApi(object):
         json_api_workspace_in_document,
         **kwargs
     ):
-        """update_entity_workspaces  # noqa: E501
+        """Put Workspace entity  # noqa: E501
 
+        Space of the shared interest  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

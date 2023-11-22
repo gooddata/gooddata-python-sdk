@@ -25,7 +25,7 @@ List of all labels in a given workspace.
 
 ## Example
 
-```Python
+```python
 # Get all labels
 labels = sdk.catalog_workspace_content.get_labels_catalog(workspace_id="123")
 # [

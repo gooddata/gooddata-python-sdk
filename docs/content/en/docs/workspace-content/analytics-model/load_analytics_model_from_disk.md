@@ -23,7 +23,7 @@ Object Containing declarative Analytical Model
 
 ## Example
 
-```Python
+```python
 # Get Analytics model from disk
 declarative_analytics = sdk.catalog_workspace_content.load_analytics_model_from_disk(
     path=Path.cwd()

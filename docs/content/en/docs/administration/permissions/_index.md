@@ -7,12 +7,18 @@ no_list: true
 
 Manage workspace permissions.
 
-See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
+See [Manage Permissions](https://www.gooddata.com/docs/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
 
 ### Declarative Methods
 
 * [get_declarative_permissions](./get_declarative_permissions/)
 * [put_declarative_permissions](./put_declarative_permissions/)
+* [get_declarative_organization_permissions](./get_declarative_organization_permissions/)
+* [put_declarative_permissions](./put_declarative_organization_permissions/)
+* [manage_organization_permissions](./manage_organization_permissions/)
+* [list_available_assignees](./list_available_assignees/)
+* [list_dashboard_permissions](./list_dashboard_permissions/)
+* [manage_dashboard_permissions](./manage_dashboard_permissions/)
 
 ## Example
 

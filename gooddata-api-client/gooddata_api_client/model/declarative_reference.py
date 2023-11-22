@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
     from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
+    globals()['DeclarativeReferenceSource'] = DeclarativeReferenceSource
     globals()['ReferenceIdentifier'] = ReferenceIdentifier
 
 
@@ -60,6 +62,15 @@ class DeclarativeReference(ModelNormal):
     """
 
     allowed_values = {
+        ('source_column_data_types',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {
@@ -90,8 +101,9 @@ class DeclarativeReference(ModelNormal):
         return {
             'identifier': (ReferenceIdentifier,),  # noqa: E501
             'multivalue': (bool,),  # noqa: E501
-            'source_columns': ([str],),  # noqa: E501
             'source_column_data_types': ([str],),  # noqa: E501
+            'source_columns': ([str],),  # noqa: E501
+            'sources': ([DeclarativeReferenceSource],),  # noqa: E501
         }
 
     @cached_property
@@ -102,8 +114,9 @@ class DeclarativeReference(ModelNormal):
     attribute_map = {
         'identifier': 'identifier',  # noqa: E501
         'multivalue': 'multivalue',  # noqa: E501
-        'source_columns': 'sourceColumns',  # noqa: E501
         'source_column_data_types': 'sourceColumnDataTypes',  # noqa: E501
+        'source_columns': 'sourceColumns',  # noqa: E501
+        'sources': 'sources',  # noqa: E501
     }
 
     read_only_vars = {
@@ -113,13 +126,12 @@ class DeclarativeReference(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, identifier, multivalue, source_columns, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, identifier, multivalue, *args, **kwargs):  # noqa: E501
         """DeclarativeReference - a model defined in OpenAPI
 
         Args:
             identifier (ReferenceIdentifier):
             multivalue (bool): The multi-value flag enables many-to-many cardinality for references.
-            source_columns ([str]): An array of source column names for a given reference.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -152,7 +164,9 @@ class DeclarativeReference(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            source_column_data_types ([str]): An array of source column data types for a given reference.. [optional]  # noqa: E501
+            source_column_data_types ([str]): An array of source column data types for a given reference. Deprecated, use 'sources' instead.. [optional]  # noqa: E501
+            source_columns ([str]): An array of source column names for a given reference. Deprecated, use 'sources' instead.. [optional]  # noqa: E501
+            sources ([DeclarativeReferenceSource]): An array of source columns for a given reference.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -186,7 +200,6 @@ class DeclarativeReference(ModelNormal):
 
         self.identifier = identifier
         self.multivalue = multivalue
-        self.source_columns = source_columns
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -207,13 +220,12 @@ class DeclarativeReference(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, identifier, multivalue, source_columns, *args, **kwargs):  # noqa: E501
+    def __init__(self, identifier, multivalue, *args, **kwargs):  # noqa: E501
         """DeclarativeReference - a model defined in OpenAPI
 
         Args:
             identifier (ReferenceIdentifier):
             multivalue (bool): The multi-value flag enables many-to-many cardinality for references.
-            source_columns ([str]): An array of source column names for a given reference.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -246,7 +258,9 @@ class DeclarativeReference(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            source_column_data_types ([str]): An array of source column data types for a given reference.. [optional]  # noqa: E501
+            source_column_data_types ([str]): An array of source column data types for a given reference. Deprecated, use 'sources' instead.. [optional]  # noqa: E501
+            source_columns ([str]): An array of source column names for a given reference. Deprecated, use 'sources' instead.. [optional]  # noqa: E501
+            sources ([DeclarativeReferenceSource]): An array of source columns for a given reference.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -278,7 +292,6 @@ class DeclarativeReference(ModelNormal):
 
         self.identifier = identifier
         self.multivalue = multivalue
-        self.source_columns = source_columns
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

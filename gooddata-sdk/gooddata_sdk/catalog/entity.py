@@ -3,15 +3,84 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import Any, ClassVar, Optional, Type, TypeVar
+from typing import Any, ClassVar, Dict, List, Optional, Type, TypeVar
 
 import attr
 
-from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.base import Base, JsonApiEntityBase
 from gooddata_sdk.compute.model.base import ObjId
+from gooddata_sdk.utils import AllPagedEntities
 
-T = TypeVar("T", bound="CatalogTypeEntity")
-U = TypeVar("U", bound="CatalogTitleEntity")
+T = TypeVar("T", bound="AttrCatalogEntity")
+
+
+@attr.s(auto_attribs=True)
+class AttrCatalogEntity:
+    id: str
+
+    type: str = attr.field(default=attr.Factory(lambda self: self._get_type(), takes_self=True))
+
+    def _get_type(self) -> str:
+        allowed_values = getattr(self.client_class(), "allowed_values")
+        if allowed_values:
+            values = list(allowed_values.get(("type",), {}).values())
+            if len(values) > 0:
+                return values[0]
+        raise ValueError(f"Unable to extract type from ${self.client_class().__name__}")
+
+    # Optional, because write use case -
+    # we need to pass only ID and some properties in attributes when creating an instance of this class
+    json_api_entity: Optional[JsonApiEntityBase] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+    @property
+    def json_api_attributes(self) -> Dict[str, Any]:
+        return self.json_api_entity.attributes if self.json_api_entity else {}
+
+    @property
+    def json_api_relationships(self) -> Dict[str, Any]:
+        return self.json_api_entity.relationships if self.json_api_entity and self.json_api_entity.relationships else {}
+
+    @property
+    def json_api_side_loads(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.side_loads if self.json_api_entity else []
+
+    @property
+    def json_api_related_entities_data(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.related_entities_data if self.json_api_entity else []
+
+    @property
+    def json_api_related_entities_side_loads(self) -> List[Dict[str, Any]]:
+        return self.json_api_entity.related_entities_side_loads if self.json_api_entity else []
+
+    @property
+    def obj_id(self) -> ObjId:
+        return ObjId(self.id, type=self.type)
+
+    @classmethod
+    def from_api(
+        cls: Type[T],
+        entity: Dict[str, Any],
+        side_loads: Optional[List[Any]] = None,
+        related_entities: Optional[AllPagedEntities] = None,
+    ) -> T:
+        """
+        Creates GoodData object from AttrCatalogEntityJsonApi.
+        """
+        json_api_entity = JsonApiEntityBase.from_api(entity, side_loads, related_entities)
+        return cls(
+            id=json_api_entity.id,
+            json_api_entity=json_api_entity,
+            title=json_api_entity.attributes.get("title"),
+            description=json_api_entity.attributes.get("description"),
+            tags=json_api_entity.attributes.get("tags", []),
+        )
+
+    @staticmethod
+    def client_class() -> Any:
+        return NotImplemented
 
 
 class CatalogEntity:
@@ -41,77 +110,6 @@ class CatalogEntity:
     @property
     def obj_id(self) -> ObjId:
         return self._obj_id
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
-
-
-# TODO - rewrite to data classes once it is possible
-# 1. Inheritance does not work, if attributes with defaults are used in parents
-#   https://stackoverflow.com/questions/51575931/class-inheritance-in-python-3-7-dataclasses
-#   fixed in Python 3.10, but now we have to support older python versions
-# 2. Generated attributes are not detected consistently in Sphinx, DOC generation fails
-class CatalogNameEntity:
-    def __init__(self, id: str, name: str):
-        self.id = id
-        self.name = name
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, name={self.name})"
-
-
-class CatalogTypeEntity:
-    def __init__(self, id: str, type: str):
-        self.id = id
-        self.type = type
-
-    @classmethod
-    def from_api(cls: Type[T], entity: dict[str, Any]) -> T:
-        return cls(
-            entity["id"],
-            entity["type"],
-        )
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, type={self.type})"
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, self.__class__):
-            return False
-        return self.id == other.id and self.type == other.type
-
-
-class CatalogTitleEntity:
-    def __init__(self, id: str, title: str):
-        self.id = id
-        self.title = title
-
-    @classmethod
-    def from_api(cls: Type[U], entity: dict[str, Any]) -> U:
-        return cls(
-            entity["id"],
-            entity["title"],
-        )
-
-    def __str__(self) -> str:
-        return self.__repr__()
-
-    def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(id={self.id}, title={self.title})"
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, self.__class__):
-            return False
-        return self.id == other.id and self.title == other.title
 
 
 @attr.s(auto_attribs=True, kw_only=True)

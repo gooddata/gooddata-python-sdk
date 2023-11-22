@@ -21,13 +21,36 @@ class CatalogUserDocument(Base):
 
     @classmethod
     def init(
-        cls, user_id: str, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None
+        cls,
+        user_id: str,
+        firstname: Optional[str] = None,
+        lastname: Optional[str] = None,
+        email: Optional[str] = None,
+        authentication_id: Optional[str] = None,
+        user_group_ids: Optional[List[str]] = None,
     ) -> CatalogUserDocument:
-        user = CatalogUser.init(user_id=user_id, authentication_id=authentication_id, user_group_ids=user_group_ids)
+        user = CatalogUser.init(
+            user_id=user_id,
+            firstname=firstname,
+            lastname=lastname,
+            email=email,
+            authentication_id=authentication_id,
+            user_group_ids=user_group_ids,
+        )
+
         return cls(data=user)
 
-    def update_user(self, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None) -> None:
-        attributes = CatalogUserAttributes(authentication_id=authentication_id)
+    def update_user(
+        self,
+        firstname: Optional[str] = None,
+        lastname: Optional[str] = None,
+        email: Optional[str] = None,
+        authentication_id: Optional[str] = None,
+        user_group_ids: Optional[List[str]] = None,
+    ) -> None:
+        attributes = CatalogUserAttributes(
+            firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
+        )
         relationships = CatalogUserRelationships.create_user_relationships(user_group_ids=user_group_ids)
         self.data.attributes = attributes
         self.data.relationships = relationships
@@ -45,9 +68,17 @@ class CatalogUser(Base):
 
     @classmethod
     def init(
-        cls, user_id: str, authentication_id: Optional[str] = None, user_group_ids: Optional[List[str]] = None
+        cls,
+        user_id: str,
+        firstname: Optional[str] = None,
+        lastname: Optional[str] = None,
+        email: Optional[str] = None,
+        authentication_id: Optional[str] = None,
+        user_group_ids: Optional[List[str]] = None,
     ) -> CatalogUser:
-        attributes = CatalogUserAttributes(authentication_id=authentication_id)
+        attributes = CatalogUserAttributes(
+            firstname=firstname, lastname=lastname, email=email, authentication_id=authentication_id
+        )
         relationships = CatalogUserRelationships.create_user_relationships(user_group_ids=user_group_ids)
         return cls(id=user_id, attributes=attributes, relationships=relationships)
 
@@ -117,6 +148,9 @@ class CatalogUser(Base):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserAttributes(Base):
+    firstname: Optional[str] = None
+    lastname: Optional[str] = None
+    email: Optional[str] = None
     authentication_id: Optional[str] = None
 
 

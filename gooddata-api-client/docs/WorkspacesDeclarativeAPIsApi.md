@@ -38,11 +38,23 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspaces_declarative_apis_api.WorkspacesDeclarativeAPIsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Get workspace layout
         api_response = api_instance.get_workspace_layout(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling WorkspacesDeclarativeAPIsApi->get_workspace_layout: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get workspace layout
+        api_response = api_instance.get_workspace_layout(workspace_id, exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesDeclarativeAPIsApi->get_workspace_layout: %s\n" % e)
@@ -54,6 +66,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -104,11 +117,15 @@ configuration = gooddata_api_client.Configuration(
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspaces_declarative_apis_api.WorkspacesDeclarativeAPIsApi(api_client)
+    exclude = [
+        "ACTIVITY_INFO",
+    ] # [str] |  (optional)
 
-    # example, this endpoint has no required or optional parameters
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get all workspaces layout
-        api_response = api_instance.get_workspaces_layout()
+        api_response = api_instance.get_workspaces_layout(exclude=exclude)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesDeclarativeAPIsApi->get_workspaces_layout: %s\n" % e)
@@ -116,7 +133,10 @@ with gooddata_api_client.ApiClient() as api_client:
 
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **exclude** | **[str]**|  | [optional]
 
 ### Return type
 
@@ -174,29 +194,27 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeAnalyticalDashboardExtension(
                     id="revenues-analysis",
                     permissions=[
-                        DeclarativeAnalyticalDashboardPermission(
-                            assignee=AssigneeIdentifier(
-                                id="id_example",
-                                type="user",
-                            ),
-                            name="EDIT",
-                        ),
+                        DeclarativeAnalyticalDashboardPermissionsInner(None),
                     ],
                 ),
             ],
             analytical_dashboards=[
                 DeclarativeAnalyticalDashboard(
                     content={},
+                    created_at="2023-07-20 12:30",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Period to period comparison of revenues in main sectors.",
                     id="revenues-analysis",
+                    modified_at="2023-07-20 12:30",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     permissions=[
-                        DeclarativeAnalyticalDashboardPermission(
-                            assignee=AssigneeIdentifier(
-                                id="id_example",
-                                type="user",
-                            ),
-                            name="EDIT",
-                        ),
+                        DeclarativeAnalyticalDashboardPermissionsInner(None),
                     ],
                     tags=["Revenues"],
                     title="Revenues analysis",
@@ -205,8 +223,18 @@ with gooddata_api_client.ApiClient() as api_client:
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Three dimensional view of data.",
                     id="dashboard-plugin-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="3D map renderer",
                 ),
@@ -223,8 +251,18 @@ with gooddata_api_client.ApiClient() as api_client:
             metrics=[
                 DeclarativeMetric(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Sales for all the data available.",
                     id="total-sales",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Total sales",
                 ),
@@ -232,14 +270,39 @@ with gooddata_api_client.ApiClient() as api_client:
             visualization_objects=[
                 DeclarativeVisualizationObject(
                     content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     description="Simple number for total goods in current production.",
                     id="visualization-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
                     tags=["Revenues"],
                     title="Count of goods",
                 ),
             ],
         ),
         ldm=DeclarativeLdm(
+            dataset_extensions=[
+                DeclarativeDatasetExtension(
+                    id="customers",
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="workspaceDataFilter",
+                            ),
+                        ),
+                    ],
+                ),
+            ],
             datasets=[
                 DeclarativeDataset(
                     attributes=[
@@ -272,6 +335,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     data_source_table_id=DataSourceTableIdentifier(
                         data_source_id="my-postgres",
                         id="customers",
+                        path=["table_schema","table_name"],
                         type="dataSource",
                     ),
                     description="The customers of ours.",
@@ -300,9 +364,19 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             multivalue=False,
                             source_column_data_types=[
-                                "source_column_data_types_example",
+                                "INT",
                             ],
                             source_columns=["customer_id"],
+                            sources=[
+                                DeclarativeReferenceSource(
+                                    column="customer_id",
+                                    data_type="STRING",
+                                    target=GrainIdentifier(
+                                        id="attr.customers.customer_name",
+                                        type="ATTRIBUTE",
+                                    ),
+                                ),
+                            ],
                         ),
                     ],
                     sql=DeclarativeDatasetSql(
@@ -315,6 +389,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
                             name="customer_id",
+                        ),
+                    ],
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="workspaceDataFilter",
+                            ),
                         ),
                     ],
                 ),
@@ -429,6 +513,7 @@ with gooddata_api_client.ApiClient() as api_client:
         ],
         workspaces=[
             DeclarativeWorkspace(
+                cache_extra_limit=1,
                 custom_application_settings=[
                     DeclarativeCustomApplicationSetting(
                         application_name="Modeler",
@@ -454,29 +539,27 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeAnalyticalDashboardExtension(
                                 id="revenues-analysis",
                                 permissions=[
-                                    DeclarativeAnalyticalDashboardPermission(
-                                        assignee=AssigneeIdentifier(
-                                            id="id_example",
-                                            type="user",
-                                        ),
-                                        name="EDIT",
-                                    ),
+                                    DeclarativeAnalyticalDashboardPermissionsInner(None),
                                 ],
                             ),
                         ],
                         analytical_dashboards=[
                             DeclarativeAnalyticalDashboard(
                                 content={},
+                                created_at="2023-07-20 12:30",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Period to period comparison of revenues in main sectors.",
                                 id="revenues-analysis",
+                                modified_at="2023-07-20 12:30",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 permissions=[
-                                    DeclarativeAnalyticalDashboardPermission(
-                                        assignee=AssigneeIdentifier(
-                                            id="id_example",
-                                            type="user",
-                                        ),
-                                        name="EDIT",
-                                    ),
+                                    DeclarativeAnalyticalDashboardPermissionsInner(None),
                                 ],
                                 tags=["Revenues"],
                                 title="Revenues analysis",
@@ -485,8 +568,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         dashboard_plugins=[
                             DeclarativeDashboardPlugin(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Three dimensional view of data.",
                                 id="dashboard-plugin-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="3D map renderer",
                             ),
@@ -503,8 +596,18 @@ with gooddata_api_client.ApiClient() as api_client:
                         metrics=[
                             DeclarativeMetric(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Sales for all the data available.",
                                 id="total-sales",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Total sales",
                             ),
@@ -512,14 +615,39 @@ with gooddata_api_client.ApiClient() as api_client:
                         visualization_objects=[
                             DeclarativeVisualizationObject(
                                 content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 description="Simple number for total goods in current production.",
                                 id="visualization-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
                                 tags=["Revenues"],
                                 title="Count of goods",
                             ),
                         ],
                     ),
                     ldm=DeclarativeLdm(
+                        dataset_extensions=[
+                            DeclarativeDatasetExtension(
+                                id="customers",
+                                workspace_data_filter_references=[
+                                    DeclarativeWorkspaceDataFilterReferences(
+                                        filter_column="filter_id",
+                                        filter_column_data_type="INT",
+                                        filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                            id="country_id",
+                                            type="workspaceDataFilter",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
                         datasets=[
                             DeclarativeDataset(
                                 attributes=[
@@ -552,6 +680,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                 data_source_table_id=DataSourceTableIdentifier(
                                     data_source_id="my-postgres",
                                     id="customers",
+                                    path=["table_schema","table_name"],
                                     type="dataSource",
                                 ),
                                 description="The customers of ours.",
@@ -580,9 +709,19 @@ with gooddata_api_client.ApiClient() as api_client:
                                         ),
                                         multivalue=False,
                                         source_column_data_types=[
-                                            "source_column_data_types_example",
+                                            "INT",
                                         ],
                                         source_columns=["customer_id"],
+                                        sources=[
+                                            DeclarativeReferenceSource(
+                                                column="customer_id",
+                                                data_type="STRING",
+                                                target=GrainIdentifier(
+                                                    id="attr.customers.customer_name",
+                                                    type="ATTRIBUTE",
+                                                ),
+                                            ),
+                                        ],
                                     ),
                                 ],
                                 sql=DeclarativeDatasetSql(
@@ -595,6 +734,16 @@ with gooddata_api_client.ApiClient() as api_client:
                                     DeclarativeWorkspaceDataFilterColumn(
                                         data_type="INT",
                                         name="customer_id",
+                                    ),
+                                ],
+                                workspace_data_filter_references=[
+                                    DeclarativeWorkspaceDataFilterReferences(
+                                        filter_column="filter_id",
+                                        filter_column_data_type="INT",
+                                        filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                            id="country_id",
+                                            type="workspaceDataFilter",
+                                        ),
                                     ),
                                 ],
                             ),
@@ -630,11 +779,29 @@ with gooddata_api_client.ApiClient() as api_client:
                         name="MANAGE",
                     ),
                 ],
+                prefix="/6bUUGjjNSwg0_bs",
                 settings=[
                     DeclarativeSetting(
                         content={},
-                        id="jbUUGjjNSwg0_bs9ZayIMrKdgNvb6gvxmPb9GcsM61ate1RA89q3w1l4eH4XxEz.5awxoFZxHzs6ED.kjUSnTINkYPUndNl8pmPg5K897Fu1JEFj9R1_dz9rEoBi0LnU8SsOWJ7wYrcziVQdt8mVLxbg4bCLrLBcmXxWQK6MzKSg5jphei0IfRRwpnT_Z.qKa_YppZepezJ0.VmLSUTLYyW.-e_jxxzpBvw.y-PuSI.:A-AOsiPRVvnXrDhh58EJzzOxprDzE3pjHRAkK7vI7kjcoPqzNk-YKJOXJ2zkgYnmU.hV4pJh",
+                        id="/6bUUGjjNSwg0_bs",
                         type="TIMEZONE",
+                    ),
+                ],
+                user_data_filters=[
+                    DeclarativeUserDataFilter(
+                        description="ID of country setting",
+                        id="country_id_setting",
+                        maql="{label/country} = "USA" AND {label/date.year} = THIS(YEAR)",
+                        tags=["Revenues"],
+                        title="Country ID setting",
+                        user=DeclarativeUserIdentifier(
+                            id="employee123",
+                            type="user",
+                        ),
+                        user_group=UserGroupIdentifier(
+                            id="group.admins",
+                            type="userGroup",
+                        ),
                     ),
                 ],
             ),

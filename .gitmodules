@@ -1,4 +1,0 @@
-# (C) 2022 GoodData Corporation
-[submodule "docs/themes/docsy"]
-	path = docs/themes/docsy
-	url = https://github.com/google/docsy.git

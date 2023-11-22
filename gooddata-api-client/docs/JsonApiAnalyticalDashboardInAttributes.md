@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Free-form JSON content. Maximum supported length is 250000 characters. | 
 **are_relations_valid** | **bool** |  | [optional] 
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Free-form JSON content. | [optional] 
 **description** | **str** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

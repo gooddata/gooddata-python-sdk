@@ -479,8 +479,9 @@ class UserGroupsEntityAPIsApi(object):
         json_api_user_group_in_document,
         **kwargs
     ):
-        """create_entity_user_groups  # noqa: E501
+        """Post User Group entities  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -562,8 +563,9 @@ class UserGroupsEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_user_groups  # noqa: E501
+        """Delete UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -644,8 +646,9 @@ class UserGroupsEntityAPIsApi(object):
         self,
         **kwargs
     ):
-        """get_all_entities_user_groups  # noqa: E501
+        """Get UserGroup entities  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -727,8 +730,9 @@ class UserGroupsEntityAPIsApi(object):
         id,
         **kwargs
     ):
-        """get_entity_user_groups  # noqa: E501
+        """Get UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -812,8 +816,9 @@ class UserGroupsEntityAPIsApi(object):
         json_api_user_group_patch_document,
         **kwargs
     ):
-        """patch_entity_user_groups  # noqa: E501
+        """Patch UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
@@ -900,8 +905,9 @@ class UserGroupsEntityAPIsApi(object):
         json_api_user_group_in_document,
         **kwargs
     ):
-        """update_entity_user_groups  # noqa: E501
+        """Put UserGroup entity  # noqa: E501
 
+        User Group - creates tree-like structure for categorizing users  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

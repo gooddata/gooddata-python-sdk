@@ -116,6 +116,21 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "workspaceId_example" # str | 
     declarative_model = DeclarativeModel(
         ldm=DeclarativeLdm(
+            dataset_extensions=[
+                DeclarativeDatasetExtension(
+                    id="customers",
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="workspaceDataFilter",
+                            ),
+                        ),
+                    ],
+                ),
+            ],
             datasets=[
                 DeclarativeDataset(
                     attributes=[
@@ -148,6 +163,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     data_source_table_id=DataSourceTableIdentifier(
                         data_source_id="my-postgres",
                         id="customers",
+                        path=["table_schema","table_name"],
                         type="dataSource",
                     ),
                     description="The customers of ours.",
@@ -176,9 +192,19 @@ with gooddata_api_client.ApiClient() as api_client:
                             ),
                             multivalue=False,
                             source_column_data_types=[
-                                "source_column_data_types_example",
+                                "INT",
                             ],
                             source_columns=["customer_id"],
+                            sources=[
+                                DeclarativeReferenceSource(
+                                    column="customer_id",
+                                    data_type="STRING",
+                                    target=GrainIdentifier(
+                                        id="attr.customers.customer_name",
+                                        type="ATTRIBUTE",
+                                    ),
+                                ),
+                            ],
                         ),
                     ],
                     sql=DeclarativeDatasetSql(
@@ -191,6 +217,16 @@ with gooddata_api_client.ApiClient() as api_client:
                         DeclarativeWorkspaceDataFilterColumn(
                             data_type="INT",
                             name="customer_id",
+                        ),
+                    ],
+                    workspace_data_filter_references=[
+                        DeclarativeWorkspaceDataFilterReferences(
+                            filter_column="filter_id",
+                            filter_column_data_type="INT",
+                            filter_id=DatasetWorkspaceDataFilterIdentifier(
+                                id="country_id",
+                                type="workspaceDataFilter",
+                            ),
                         ),
                     ],
                 ),

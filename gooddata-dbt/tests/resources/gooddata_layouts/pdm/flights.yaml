@@ -1,0 +1,58 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: INT
+    isPrimaryKey: false
+    name: arr_delay
+  - dataType: STRING
+    isPrimaryKey: false
+    name: cancelled
+  - dataType: STRING
+    isPrimaryKey: false
+    name: carrier
+    referencedTableColumn: code
+    referencedTableId: carriers
+  - dataType: INT
+    isPrimaryKey: false
+    name: dep_delay
+  - dataType: TIMESTAMP
+    isPrimaryKey: false
+    name: dep_time
+  - dataType: STRING
+    isPrimaryKey: false
+    name: destination
+  - dataType: INT
+    isPrimaryKey: false
+    name: distance
+  - dataType: STRING
+    isPrimaryKey: false
+    name: diverted
+  - dataType: STRING
+    isPrimaryKey: false
+    name: flight_num
+  - dataType: INT
+    isPrimaryKey: false
+    name: flight_time
+  - dataType: STRING
+    isPrimaryKey: true
+    name: id2
+  - dataType: STRING
+    isPrimaryKey: false
+    name: origin
+    referencedTableColumn: code
+    referencedTableId: airports
+  - dataType: STRING
+    isPrimaryKey: false
+    name: tail_num
+    referencedTableColumn: tail_num
+    referencedTableId: aircraft
+  - dataType: INT
+    isPrimaryKey: false
+    name: taxi_in
+  - dataType: INT
+    isPrimaryKey: false
+    name: taxi_out
+id: flights
+path:
+  - cicd_output_stage
+  - flights
+type: TABLE

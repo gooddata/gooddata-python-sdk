@@ -26,7 +26,9 @@ from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
 from gooddata_api_client.model.declarative_model import DeclarativeModel
 from gooddata_api_client.model.declarative_organization import DeclarativeOrganization
+from gooddata_api_client.model.declarative_organization_permission import DeclarativeOrganizationPermission
 from gooddata_api_client.model.declarative_pdm import DeclarativePdm
+from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
 from gooddata_api_client.model.declarative_user_group_permissions import DeclarativeUserGroupPermissions
 from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
 from gooddata_api_client.model.declarative_user_permissions import DeclarativeUserPermissions
@@ -61,6 +63,7 @@ class LayoutApi(object):
             params_map={
                 'all': [
                     'workspace_id',
+                    'exclude',
                 ],
                 'required': [
                     'workspace_id',
@@ -68,6 +71,7 @@ class LayoutApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'exclude',
                 ],
                 'validation': [
                 ]
@@ -76,18 +80,27 @@ class LayoutApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
+                    'exclude':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'exclude': 'exclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                    'exclude': 'query',
                 },
                 'collection_format_map': {
+                    'exclude': 'multi',
                 }
             },
             headers_map={
@@ -205,6 +218,59 @@ class LayoutApi(object):
             },
             params_map={
                 'all': [
+                    'exclude',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                    'exclude',
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
+                },
+                'openapi_types': {
+                    'exclude':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'exclude': 'exclude',
+                },
+                'location_map': {
+                    'exclude': 'query',
+                },
+                'collection_format_map': {
+                    'exclude': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_organization_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': ([DeclarativeOrganizationPermission],),
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/organization/permissions',
+                'operation_id': 'get_organization_permissions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
                 ],
                 'required': [],
                 'nullable': [
@@ -273,6 +339,55 @@ class LayoutApi(object):
                 },
                 'location_map': {
                     'data_source_id': 'path',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.get_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': (DeclarativeUserDataFilters,),
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/userDataFilters',
+                'operation_id': 'get_user_data_filters',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                ],
+                'required': [
+                    'workspace_id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
                 },
                 'collection_format_map': {
                 }
@@ -563,6 +678,7 @@ class LayoutApi(object):
             params_map={
                 'all': [
                     'workspace_id',
+                    'exclude',
                 ],
                 'required': [
                     'workspace_id',
@@ -570,6 +686,7 @@ class LayoutApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'exclude',
                 ],
                 'validation': [
                 ]
@@ -578,18 +695,27 @@ class LayoutApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
+                    'exclude':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'exclude': 'exclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                    'exclude': 'query',
                 },
                 'collection_format_map': {
+                    'exclude': 'multi',
                 }
             },
             headers_map={
@@ -660,11 +786,13 @@ class LayoutApi(object):
             },
             params_map={
                 'all': [
+                    'exclude',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
+                    'exclude',
                 ],
                 'validation': [
                 ]
@@ -673,14 +801,23 @@ class LayoutApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
                 },
                 'openapi_types': {
+                    'exclude':
+                        ([str],),
                 },
                 'attribute_map': {
+                    'exclude': 'exclude',
                 },
                 'location_map': {
+                    'exclude': 'query',
                 },
                 'collection_format_map': {
+                    'exclude': 'multi',
                 }
             },
             headers_map={
@@ -1093,6 +1230,54 @@ class LayoutApi(object):
             },
             api_client=api_client
         )
+        self.set_organization_permissions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/organization/permissions',
+                'operation_id': 'set_organization_permissions',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'declarative_organization_permission',
+                ],
+                'required': [
+                    'declarative_organization_permission',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'declarative_organization_permission':
+                        ([DeclarativeOrganizationPermission],),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'declarative_organization_permission': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
         self.set_pdm_layout_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -1135,6 +1320,60 @@ class LayoutApi(object):
                 'location_map': {
                     'data_source_id': 'path',
                     'declarative_pdm': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.set_user_data_filters_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/layout/workspaces/{workspaceId}/userDataFilters',
+                'operation_id': 'set_user_data_filters',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'workspace_id',
+                    'declarative_user_data_filters',
+                ],
+                'required': [
+                    'workspace_id',
+                    'declarative_user_data_filters',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'workspace_id':
+                        (str,),
+                    'declarative_user_data_filters':
+                        (DeclarativeUserDataFilters,),
+                },
+                'attribute_map': {
+                    'workspace_id': 'workspaceId',
+                },
+                'location_map': {
+                    'workspace_id': 'path',
+                    'declarative_user_data_filters': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -1424,6 +1663,7 @@ class LayoutApi(object):
             workspace_id (str):
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1666,6 +1906,7 @@ class LayoutApi(object):
 
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1728,6 +1969,84 @@ class LayoutApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_organization_layout_endpoint.call_with_http_info(**kwargs)
+
+    def get_organization_permissions(
+        self,
+        **kwargs
+    ):
+        """Get organization permissions  # noqa: E501
+
+        Retrieve organization permissions  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_organization_permissions(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [DeclarativeOrganizationPermission]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.get_organization_permissions_endpoint.call_with_http_info(**kwargs)
 
     def get_pdm_layout(
         self,
@@ -1811,6 +2130,89 @@ class LayoutApi(object):
         kwargs['data_source_id'] = \
             data_source_id
         return self.get_pdm_layout_endpoint.call_with_http_info(**kwargs)
+
+    def get_user_data_filters(
+        self,
+        workspace_id,
+        **kwargs
+    ):
+        """Get user data filters  # noqa: E501
+
+        Retrieve current user data filters assigned to the workspace.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_user_data_filters(workspace_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            DeclarativeUserDataFilters
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        return self.get_user_data_filters_endpoint.call_with_http_info(**kwargs)
 
     def get_user_group_permissions(
         self,
@@ -2308,6 +2710,7 @@ class LayoutApi(object):
             workspace_id (str):
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -2471,6 +2874,7 @@ class LayoutApi(object):
 
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -3210,6 +3614,89 @@ class LayoutApi(object):
             declarative_organization
         return self.set_organization_layout_endpoint.call_with_http_info(**kwargs)
 
+    def set_organization_permissions(
+        self,
+        declarative_organization_permission,
+        **kwargs
+    ):
+        """Set organization permissions  # noqa: E501
+
+        Sets organization permissions  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.set_organization_permissions(declarative_organization_permission, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            declarative_organization_permission ([DeclarativeOrganizationPermission]):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['declarative_organization_permission'] = \
+            declarative_organization_permission
+        return self.set_organization_permissions_endpoint.call_with_http_info(**kwargs)
+
     def set_pdm_layout(
         self,
         data_source_id,
@@ -3296,6 +3783,93 @@ class LayoutApi(object):
         kwargs['declarative_pdm'] = \
             declarative_pdm
         return self.set_pdm_layout_endpoint.call_with_http_info(**kwargs)
+
+    def set_user_data_filters(
+        self,
+        workspace_id,
+        declarative_user_data_filters,
+        **kwargs
+    ):
+        """Set user data filters  # noqa: E501
+
+        Set user data filters assigned to the workspace.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.set_user_data_filters(workspace_id, declarative_user_data_filters, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            workspace_id (str):
+            declarative_user_data_filters (DeclarativeUserDataFilters):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['workspace_id'] = \
+            workspace_id
+        kwargs['declarative_user_data_filters'] = \
+            declarative_user_data_filters
+        return self.set_user_data_filters_endpoint.call_with_http_info(**kwargs)
 
     def set_user_group_permissions(
         self,

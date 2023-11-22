@@ -119,7 +119,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="customers",
                     name_prefix="out_gooddata",
                     path=["table_schema","table_name"],
-                    type="VIEW",
+                    type="TABLE",
                 ),
             ],
         ),

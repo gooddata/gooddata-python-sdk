@@ -1,5 +1,5 @@
 # (C) 2021 GoodData Corporation
-FROM postgres:12-alpine
+FROM postgres:12.14-alpine
 
 #
 # Docker image that adds multicorn & gooddata-fdw on top of official PostgreSQL image.

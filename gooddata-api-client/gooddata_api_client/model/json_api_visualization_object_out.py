@@ -31,11 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
-    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
-    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
 
 
@@ -72,7 +72,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -100,10 +100,10 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
-            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
         }
 
@@ -113,9 +113,9 @@ class JsonApiVisualizationObjectOut(ModelNormal):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
     }
@@ -127,10 +127,11 @@ class JsonApiVisualizationObjectOut(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, id, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectOut - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -165,8 +166,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """
 
@@ -200,6 +200,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():
@@ -222,10 +223,11 @@ class JsonApiVisualizationObjectOut(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, *args, **kwargs):  # noqa: E501
+    def __init__(self, attributes, id, *args, **kwargs):  # noqa: E501
         """JsonApiVisualizationObjectOut - a model defined in OpenAPI
 
         Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
 
         Keyword Args:
@@ -260,8 +262,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
         """
 
@@ -293,6 +294,7 @@ class JsonApiVisualizationObjectOut(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.attributes = attributes
         self.id = id
         self.type = type
         for var_name, var_value in kwargs.items():

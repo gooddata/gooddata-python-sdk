@@ -28,7 +28,7 @@ Object Containing declarative Logical Data Model
 
 ## Example
 
-```Python
+```python
 # Load stored declarative Logical Data Model
 logical_model = sdk.catalog_workspace_content.load_declarative_ldm(
     workspace_id="123",

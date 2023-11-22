@@ -1,0 +1,70 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: churn
+  - dataType: STRING
+    isPrimaryKey: false
+    name: contract
+  - dataType: STRING
+    isPrimaryKey: true
+    name: customerid
+  - dataType: STRING
+    isPrimaryKey: false
+    name: dependents
+  - dataType: STRING
+    isPrimaryKey: false
+    name: deviceprotection
+  - dataType: STRING
+    isPrimaryKey: false
+    name: gender
+  - dataType: STRING
+    isPrimaryKey: false
+    name: internetservice
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: monthlycharges
+  - dataType: STRING
+    isPrimaryKey: false
+    name: multiplelines
+  - dataType: STRING
+    isPrimaryKey: false
+    name: onlinebackup
+  - dataType: STRING
+    isPrimaryKey: false
+    name: onlinesecurity
+  - dataType: STRING
+    isPrimaryKey: false
+    name: paperlessbilling
+  - dataType: STRING
+    isPrimaryKey: false
+    name: partner
+  - dataType: STRING
+    isPrimaryKey: false
+    name: paymentmethod
+  - dataType: STRING
+    isPrimaryKey: false
+    name: phoneservice
+  - dataType: STRING
+    isPrimaryKey: false
+    name: seniorcitizen
+  - dataType: STRING
+    isPrimaryKey: false
+    name: streamingmovies
+  - dataType: STRING
+    isPrimaryKey: false
+    name: streamingtv
+  - dataType: STRING
+    isPrimaryKey: false
+    name: techsupport
+  - dataType: STRING
+    isPrimaryKey: false
+    name: tenure
+  - dataType: STRING
+    isPrimaryKey: false
+    name: totalcharges
+id: telco_customer_churn
+path:
+  - cicd_output_stage
+  - telco_customer_churn
+type: TABLE

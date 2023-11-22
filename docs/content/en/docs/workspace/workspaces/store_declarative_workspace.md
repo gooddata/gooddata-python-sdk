@@ -46,7 +46,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Store workspace layout
 sdk.catalog_workspace.store_declarative_workspace(workspace_id="123",layout_root_path=Path.cwd())
 ```

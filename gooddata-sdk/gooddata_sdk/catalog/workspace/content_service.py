@@ -1,13 +1,16 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 import functools
 from pathlib import Path
 from typing import List, Optional, Union
 
 import gooddata_api_client.models as afm_models
+from gooddata_api_client.model.elements_request import ElementsRequest
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
+from gooddata_sdk.catalog.depends_on import CatalogDependsOn
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
@@ -27,6 +30,7 @@ from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
 from gooddata_sdk.catalog.workspace.model_container import CatalogWorkspaceContent
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
+from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.execution import ExecutionDefinition, compute_model_to_api_model
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
@@ -36,6 +40,8 @@ ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, C
 
 # Use typing collection types to support python < py3.9
 ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
+
+LabelElementsInputType = Union[str, ObjId]
 
 
 class CatalogWorkspaceContentService(CatalogServiceBase):
@@ -50,16 +56,19 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     # Entities methods
 
-    def get_full_catalog(self, workspace_id: str) -> CatalogWorkspaceContent:
+    def get_full_catalog(self, workspace_id: str, inject_valid_objects_func: bool = True) -> CatalogWorkspaceContent:
         """Retrieves catalog for a workspace. Catalog contains all data sets and metrics defined in that workspace.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            inject_valid_objects_func (bool):
+                Should valid_objects func be injected into the result container?
+                When turned off, it enables pickling of the result, which is useful e.g. in Streamlit caching
+                In such a case, developers must call compute_valid_objects in this service.
 
         Returns:
-            CatalogWorkspaceContent:
-                Object containing all data sets and metrics.
+            CatalogWorkspaceContent: Object containing all data sets and metrics.
         """
         get_datasets = functools.partial(
             self._entities_api.get_all_entities_datasets,
@@ -71,7 +80,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         get_attributes = functools.partial(
             self._entities_api.get_all_entities_attributes,
             workspace_id,
-            include=["labels"],
+            include=["labels", "datasets"],
             _check_return_type=False,
         )
 
@@ -83,7 +92,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         datasets = load_all_entities(get_datasets)
         metrics = load_all_entities(get_metrics)
 
-        valid_obj_fun = functools.partial(self.compute_valid_objects, workspace_id)
+        valid_obj_fun = None
+        if inject_valid_objects_func:
+            valid_obj_fun = functools.partial(self.compute_valid_objects, workspace_id)
 
         return CatalogWorkspaceContent.create_workspace_content_catalog(valid_obj_fun, datasets, attributes, metrics)
 
@@ -101,11 +112,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         get_attributes = functools.partial(
             self._entities_api.get_all_entities_attributes,
             workspace_id,
+            include=["labels"],
             _check_return_type=False,
         )
         attributes = load_all_entities(get_attributes)
-        # Empty labels list is set. It will be changed in the future.
-        catalog_attributes = [CatalogAttribute(attribute, []) for attribute in attributes.data]
+        catalog_attributes = [CatalogAttribute.from_api(a, side_loads=attributes.included) for a in attributes.data]
         return catalog_attributes
 
     def get_labels_catalog(self, workspace_id: str) -> list[CatalogLabel]:
@@ -125,7 +136,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             _check_return_type=False,
         )
         labels = load_all_entities(get_labels)
-        catalog_labels = [CatalogLabel(label) for label in labels.data]
+        catalog_labels = [CatalogLabel.from_api(label) for label in labels.data]
         return catalog_labels
 
     def get_metrics_catalog(self, workspace_id: str) -> list[CatalogMetric]:
@@ -143,7 +154,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             self._entities_api.get_all_entities_metrics, workspace_id, _check_return_type=False
         )
         metrics = load_all_entities(get_metrics)
-        catalog_metrics = [CatalogMetric(metric) for metric in metrics.data]
+        catalog_metrics = [CatalogMetric.from_api(metric) for metric in metrics.data]
         return catalog_metrics
 
     def get_facts_catalog(self, workspace_id: str) -> list[CatalogFact]:
@@ -159,7 +170,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         """
         get_facts = functools.partial(self._entities_api.get_all_entities_facts, workspace_id, _check_return_type=False)
         facts = load_all_entities(get_facts)
-        catalog_facts = [CatalogFact(fact) for fact in facts.data]
+        catalog_facts = [CatalogFact.from_api(fact) for fact in facts.data]
         return catalog_facts
 
     def get_dependent_entities_graph(self, workspace_id: str) -> CatalogDependentEntitiesResponse:
@@ -219,7 +230,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         return CatalogDeclarativeModel.from_api(self._layout_api.get_logical_model(workspace_id))
 
     def put_declarative_ldm(
-        self, workspace_id: str, ldm: CatalogDeclarativeModel, validator: Optional[DataSourceValidator] = None
+        self,
+        workspace_id: str,
+        ldm: CatalogDeclarativeModel,
+        validator: Optional[DataSourceValidator] = None,
+        standalone_copy: bool = False,
     ) -> None:
         """Set declarative logical data model for a given workspace.
 
@@ -231,12 +246,18 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             validator (Optional[DataSourceValidator], optional):
                 Object that manages validation, whether each data_source_id in LDM corresponds
                 to existing data source. Defaults to None.
+            standalone_copy (bool):
+                If true, then workspace data filter references will be removed from LDM.
+                Note that first, the copy is made so we do not interfere with the original input.
 
         Returns:
             None
         """
         if validator is not None:
             validator.validate_ldm(ldm)
+        if standalone_copy:
+            ldm = copy.deepcopy(ldm)
+            ldm.remove_wdf_refs()
         self._layout_api.set_logical_model(workspace_id, ldm.to_api())
 
     def store_declarative_ldm(self, workspace_id: str, layout_root_path: Path = Path.cwd()) -> None:
@@ -277,6 +298,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         workspace_id: str,
         layout_root_path: Path = Path.cwd(),
         validator: Optional[DataSourceValidator] = None,
+        standalone_copy: bool = False,
     ) -> None:
         """This method combines load_declarative_ldm and put_declarative_ldm
         methods to load and set layouts stored using store_declarative_ldm.
@@ -289,12 +311,15 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             validator (Optional[DataSourceValidator], optional):
                 Object that manages validation, whether each data_source_id in LDM corresponds
                 to existing data source. Defaults to None.
+            standalone_copy (bool):
+                If true, then workspace data filter references will be removed from LDM.
+                Note that first, the copy is made so we do not interfere with the original input.
 
         Returns:
             None
         """
         declarative_ldm = self.load_declarative_ldm(workspace_id, layout_root_path)
-        self.put_declarative_ldm(workspace_id, declarative_ldm, validator)
+        self.put_declarative_ldm(workspace_id, declarative_ldm, validator, standalone_copy)
 
     def store_ldm_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
         """Store declarative logical data model for a given workspace in directory hierarchy.
@@ -328,18 +353,26 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
 
     # Declarative methods for analytics model
 
-    def get_declarative_analytics_model(self, workspace_id: str) -> CatalogDeclarativeAnalytics:
+    def get_declarative_analytics_model(
+        self, workspace_id: str, exclude: Optional[List[str]] = None
+    ) -> CatalogDeclarativeAnalytics:
         """Retrieves declarative analytics model. The model is tied to the workspace and organization.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
             CatalogDeclarativeAnalytics:
                 Object Containing declarative Analytical Model
         """
-        return CatalogDeclarativeAnalytics.from_api(self._layout_api.get_analytics_model(workspace_id))
+        if exclude is None:
+            exclude = []
+        return CatalogDeclarativeAnalytics.from_api(
+            self._layout_api.get_analytics_model(workspace_id=workspace_id, exclude=exclude)
+        )
 
     def put_declarative_analytics_model(self, workspace_id: str, analytics_model: CatalogDeclarativeAnalytics) -> None:
         """Sets the declarative analytics model for a given workspace.
@@ -407,7 +440,9 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         declarative_analytics_model = self.load_declarative_analytics_model(workspace_id, layout_root_path)
         self.put_declarative_analytics_model(workspace_id, declarative_analytics_model)
 
-    def store_analytics_model_to_disk(self, workspace_id: str, path: Path = Path.cwd()) -> None:
+    def store_analytics_model_to_disk(
+        self, workspace_id: str, path: Path = Path.cwd(), exclude: Optional[List[str]] = None
+    ) -> None:
         """Store analytics model for a given workspace in directory hierarchy.This method does not tie the declarative
             analytics model to the workspace and organization, thus it is recommended for migration between workspaces.
             If you want to migrate analytics model between workspaces, use store_analytics_model_to_disk.
@@ -417,11 +452,13 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 Workspace identification string e.g. "demo"
             path (Path, optional):
                 Path to the root of the layout directory. Defaults to Path.cwd().
+            exclude (Optional[List[str]]):
+                Defines properties which should not be included in the payload. E.g.: ["ACTIVITY_INFO"]
 
         Returns:
             None
         """
-        self.get_declarative_analytics_model(workspace_id).store_to_disk(path)
+        self.get_declarative_analytics_model(workspace_id, exclude).store_to_disk(path)
 
     @staticmethod
     def load_analytics_model_from_disk(path: Path = Path.cwd()) -> CatalogDeclarativeAnalytics:
@@ -515,3 +552,35 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             items_of_type.add(available["id"])
 
         return by_type
+
+    def get_label_elements(
+        self, workspace_id: str, label_id: LabelElementsInputType, depends_on: Optional[List[CatalogDependsOn]] = None
+    ) -> List[str]:
+        """
+        Get existing values for a label.
+        Under-the-hood, it basically executes SELECT DISTINCT <label_column_name> from corresponding table.
+        Values are automatically sorted lexicographically.
+
+        Args:
+            workspace_id (str):
+                Workspace identification string e.g. "demo".
+            label_id (str):
+                Label ID. We support string or ObjId types.
+                String may not contain "label/" prefix, we append it if necessary.
+            depends_on (Optional[List[CatalogDependsOn]]):
+                Optional parameter specifying dependencies on other labels.
+        Returns:
+            list of label values
+        """
+
+        if depends_on is None:
+            depends_on = []
+
+        # API expects ID without type prefix
+        parts = str(label_id).split("/")
+        if len(parts) == 2:
+            label_id = parts[1]
+        request = ElementsRequest(label=label_id, depends_on=[d.to_api() for d in depends_on])
+        # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
+        values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
+        return [v["title"] for v in values["elements"]]

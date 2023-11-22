@@ -31,11 +31,13 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_workspace_data_filter_in_attributes import JsonApiWorkspaceDataFilterInAttributes
     from gooddata_api_client.model.json_api_workspace_data_filter_in_relationships import JsonApiWorkspaceDataFilterInRelationships
     from gooddata_api_client.model.json_api_workspace_data_filter_out import JsonApiWorkspaceDataFilterOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiWorkspaceDataFilterInAttributes'] = JsonApiWorkspaceDataFilterInAttributes
     globals()['JsonApiWorkspaceDataFilterInRelationships'] = JsonApiWorkspaceDataFilterInRelationships
     globals()['JsonApiWorkspaceDataFilterOut'] = JsonApiWorkspaceDataFilterOut
@@ -76,7 +78,7 @@ class JsonApiWorkspaceDataFilterOutWithLinks(ModelComposed):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -107,6 +109,7 @@ class JsonApiWorkspaceDataFilterOutWithLinks(ModelComposed):
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'attributes': (JsonApiWorkspaceDataFilterInAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiWorkspaceDataFilterInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -120,6 +123,7 @@ class JsonApiWorkspaceDataFilterOutWithLinks(ModelComposed):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -166,6 +170,7 @@ class JsonApiWorkspaceDataFilterOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiWorkspaceDataFilterInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceDataFilterInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -275,6 +280,7 @@ class JsonApiWorkspaceDataFilterOutWithLinks(ModelComposed):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             attributes (JsonApiWorkspaceDataFilterInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiWorkspaceDataFilterInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """

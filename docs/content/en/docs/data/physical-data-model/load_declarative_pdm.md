@@ -25,7 +25,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Load declarative Physical Data model
 declarative_tables = sdk.catalog_data_source.load_declarative_pdm(
     data_source_id="123",

@@ -4,11 +4,15 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Custom setting content in JSON format. | 
+**content** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | 
 **id** | **str** | Analytical dashboard ID. | 
 **title** | **str** | Analytical dashboard title. | 
+**created_at** | **str, none_type** | Time of the entity creation. | [optional] 
+**created_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
 **description** | **str** | Analytical dashboard description. | [optional] 
-**permissions** | [**[DeclarativeAnalyticalDashboardPermission]**](DeclarativeAnalyticalDashboardPermission.md) | A list of permissions. | [optional] 
+**modified_at** | **str, none_type** | Time of the last entity modification. | [optional] 
+**modified_by** | [**DeclarativeUserIdentifier**](DeclarativeUserIdentifier.md) |  | [optional] 
+**permissions** | [**[DeclarativeAnalyticalDashboardPermissionsInner]**](DeclarativeAnalyticalDashboardPermissionsInner.md) | A list of permissions. | [optional] 
 **tags** | **[str]** | A list of tags. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 

@@ -57,8 +57,11 @@ class ApiEntitlement(ModelNormal):
 
     allowed_values = {
         ('name',): {
+            'CACHESTRATEGY': "CacheStrategy",
             'CONTRACT': "Contract",
             'CUSTOMTHEMING': "CustomTheming",
+            'EXTRACACHE': "ExtraCache",
+            'HIPAA': "Hipaa",
             'PDFEXPORTS': "PdfExports",
             'MANAGEDOIDC': "ManagedOIDC",
             'UILOCALIZATION': "UiLocalization",
@@ -68,6 +71,7 @@ class ApiEntitlement(ModelNormal):
             'UNLIMITEDWORKSPACES': "UnlimitedWorkspaces",
             'WHITELABELING': "WhiteLabeling",
             'WORKSPACECOUNT': "WorkspaceCount",
+            'USERTELEMETRYDISABLED': "UserTelemetryDisabled",
         },
     }
 

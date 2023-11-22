@@ -48,7 +48,7 @@ Useful when migrating to Snowflake, which is the only DB with upper-case default
 
 ## Example
 
-```Python
+```python
 # Clones complete workspace content - LDM, ADM, permissions.
 sdk.catalog_workspace.clone_workspace(
         source_workspace_id="123",

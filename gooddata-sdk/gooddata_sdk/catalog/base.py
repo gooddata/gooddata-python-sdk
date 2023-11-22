@@ -1,12 +1,15 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 import attr
 from cattrs import structure
 
+from gooddata_sdk.utils import AllPagedEntities
+
 T = TypeVar("T", bound="Base")
+U = TypeVar("U", bound="JsonApiEntityBase")
 
 
 def value_in_allowed(
@@ -68,3 +71,47 @@ class Base:
     def to_api(self) -> Any:
         dictionary = self._get_snake_dict()
         return self.client_class().from_dict(dictionary, camel_case=False)
+
+
+@attr.s(auto_attribs=True)
+class JsonApiEntityBase:
+    id: str
+    type: str
+    attributes: Dict[str, Any] = attr.field(repr=False)
+    relationships: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
+    meta: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
+    links: Optional[Dict[str, Any]] = attr.field(repr=False, default=None)
+    related_entities_data: List[Dict[str, Any]] = attr.field(repr=False, default=list)
+    related_entities_side_loads: List[Dict[str, Any]] = attr.field(repr=False, default=list)
+    side_loads: List[Dict[str, Any]] = attr.field(repr=False, default=list)
+
+    @classmethod
+    def from_api(
+        cls,
+        entity: Dict[str, Any],
+        side_loads: Optional[List[Any]] = None,
+        related_entities: Optional[AllPagedEntities] = None,
+    ) -> JsonApiEntityBase:
+        """
+        Creates object from entity passed by client class, which represents it as dictionary.
+        """
+        entity["side_loads"] = side_loads or []
+        entity["related_entities_data"] = related_entities.data if related_entities else []
+        entity["related_entities_side_loads"] = related_entities.included if related_entities else []
+        return structure(entity, cls)
+
+    @classmethod
+    def from_dict(cls: Type[U], data: Dict[str, Any]) -> U:
+        return NotImplemented
+
+    @staticmethod
+    def to_dict() -> Dict[str, Any]:
+        return NotImplemented
+
+    @staticmethod
+    def to_api() -> Any:
+        return NotImplemented
+
+    @staticmethod
+    def client_class() -> Any:
+        return NotImplemented

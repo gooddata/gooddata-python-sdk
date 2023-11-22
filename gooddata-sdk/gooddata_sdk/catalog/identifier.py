@@ -6,6 +6,8 @@ from typing import Type
 import attr
 
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
+from gooddata_api_client.model.dataset_workspace_data_filter_identifier import DatasetWorkspaceDataFilterIdentifier
+from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
@@ -63,6 +65,16 @@ class CatalogUserGroupIdentifier(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class CatalogUserIdentifier(Base):
+    id: str
+    type: str = attr.field(validator=value_in_allowed)
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeUserIdentifier]:
+        return DeclarativeUserIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogLabelIdentifier(Base):
     id: str
     type: str = attr.field(validator=value_in_allowed)
@@ -70,3 +82,12 @@ class CatalogLabelIdentifier(Base):
     @staticmethod
     def client_class() -> Type[LabelIdentifier]:
         return LabelIdentifier
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDatasetWorkspaceDataFilterIdentifier(Base):
+    id: str
+
+    @staticmethod
+    def client_class() -> Type[DatasetWorkspaceDataFilterIdentifier]:
+        return DatasetWorkspaceDataFilterIdentifier

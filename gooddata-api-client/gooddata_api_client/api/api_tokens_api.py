@@ -296,80 +296,6 @@ class APITokensApi(object):
             },
             api_client=api_client
         )
-        self.update_entity_api_tokens_endpoint = _Endpoint(
-            settings={
-                'response_type': (JsonApiApiTokenOutDocument,),
-                'auth': [],
-                'endpoint_path': '/api/v1/entities/users/{userId}/apiTokens/{id}',
-                'operation_id': 'update_entity_api_tokens',
-                'http_method': 'PUT',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'user_id',
-                    'id',
-                    'json_api_api_token_in_document',
-                    'filter',
-                ],
-                'required': [
-                    'user_id',
-                    'id',
-                    'json_api_api_token_in_document',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                    'id',
-                ]
-            },
-            root_map={
-                'validations': {
-                    ('id',): {
-
-                        'regex': {
-                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
-                        },
-                    },
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'user_id':
-                        (str,),
-                    'id':
-                        (str,),
-                    'json_api_api_token_in_document':
-                        (JsonApiApiTokenInDocument,),
-                    'filter':
-                        (str,),
-                },
-                'attribute_map': {
-                    'user_id': 'userId',
-                    'id': 'id',
-                    'filter': 'filter',
-                },
-                'location_map': {
-                    'user_id': 'path',
-                    'id': 'path',
-                    'json_api_api_token_in_document': 'body',
-                    'filter': 'query',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/vnd.gooddata.api+json'
-                ],
-                'content_type': [
-                    'application/vnd.gooddata.api+json'
-                ]
-            },
-            api_client=api_client
-        )
 
     def create_entity_api_tokens(
         self,
@@ -377,7 +303,7 @@ class APITokensApi(object):
         json_api_api_token_in_document,
         **kwargs
     ):
-        """create_entity_api_tokens  # noqa: E501
+        """Post a new API token for the user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -463,7 +389,7 @@ class APITokensApi(object):
         id,
         **kwargs
     ):
-        """delete_entity_api_tokens  # noqa: E501
+        """Delete an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -636,7 +562,7 @@ class APITokensApi(object):
         id,
         **kwargs
     ):
-        """get_entity_api_tokens  # noqa: E501
+        """Get an API Token for a user  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -716,95 +642,4 @@ class APITokensApi(object):
         kwargs['id'] = \
             id
         return self.get_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
-
-    def update_entity_api_tokens(
-        self,
-        user_id,
-        id,
-        json_api_api_token_in_document,
-        **kwargs
-    ):
-        """update_entity_api_tokens  # noqa: E501
-
-        This method makes a synchronous HTTP request by default. To make an
-        asynchronous HTTP request, please pass async_req=True
-
-        >>> thread = api.update_entity_api_tokens(user_id, id, json_api_api_token_in_document, async_req=True)
-        >>> result = thread.get()
-
-        Args:
-            user_id (str):
-            id (str):
-            json_api_api_token_in_document (JsonApiApiTokenInDocument):
-
-        Keyword Args:
-            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
-            _return_http_data_only (bool): response data without head status
-                code and headers. Default is True.
-            _preload_content (bool): if False, the urllib3.HTTPResponse object
-                will be returned without reading/decoding response data.
-                Default is True.
-            _request_timeout (int/float/tuple): timeout setting for this request. If
-                one number provided, it will be total request timeout. It can also
-                be a pair (tuple) of (connection, read) timeouts.
-                Default is None.
-            _check_input_type (bool): specifies if type checking
-                should be done one the data sent to the server.
-                Default is True.
-            _check_return_type (bool): specifies if type checking
-                should be done one the data received from the server.
-                Default is True.
-            _spec_property_naming (bool): True if the variable names in the input data
-                are serialized names, as specified in the OpenAPI document.
-                False if the variable names in the input data
-                are pythonic names, e.g. snake case (default)
-            _content_type (str/None): force body content-type.
-                Default is None and content-type will be predicted by allowed
-                content-types and body.
-            _host_index (int/None): specifies the index of the server
-                that we want to use.
-                Default is read from the configuration.
-            _request_auths (list): set to override the auth_settings for an a single
-                request; this effectively ignores the authentication
-                in the spec for a single request.
-                Default is None
-            async_req (bool): execute request asynchronously
-
-        Returns:
-            JsonApiApiTokenOutDocument
-                If the method is called asynchronously, returns the request
-                thread.
-        """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
-        )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
-        kwargs['user_id'] = \
-            user_id
-        kwargs['id'] = \
-            id
-        kwargs['json_api_api_token_in_document'] = \
-            json_api_api_token_in_document
-        return self.update_entity_api_tokens_endpoint.call_with_http_info(**kwargs)
 

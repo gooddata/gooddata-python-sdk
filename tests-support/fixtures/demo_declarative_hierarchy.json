@@ -19,6 +19,10 @@
                   "sections": [
                     {
                       "type": "IDashboardLayoutSection",
+                      "header": {
+                        "title": "Spend breakdown and Revenue",
+                        "description": "The first insight shows a breakdown of spend by category and campaign. The second shows revenue per $ spend, for each campaign, to demonstrate, how campaigns are successful."
+                      },
                       "items": [
                         {
                           "type": "IDashboardLayoutItem",
@@ -70,6 +74,14 @@
                 },
                 "version": "2"
               },
+              "permissions": [
+                {
+                  "assigneeRule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ],
               "description": "",
               "id": "campaign",
               "title": "Campaign"
@@ -2652,6 +2664,19 @@
       "model": {
         "analytics": {
           "analyticalDashboards": [],
+          "analyticalDashboardExtensions": [
+            {
+              "id": "campaign",
+              "permissions": [
+                {
+                  "assigneeRule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ]
+            }
+          ],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],

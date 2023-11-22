@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_users**](UsersEntityAPIsApi.md#create_entity_users) | **POST** /api/v1/entities/users | 
-[**delete_entity_users**](UsersEntityAPIsApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | 
-[**get_all_entities_users**](UsersEntityAPIsApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | 
-[**get_entity_users**](UsersEntityAPIsApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | 
-[**patch_entity_users**](UsersEntityAPIsApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | 
-[**update_entity_users**](UsersEntityAPIsApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | 
+[**create_entity_users**](UsersEntityAPIsApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
+[**delete_entity_users**](UsersEntityAPIsApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
+[**get_all_entities_users**](UsersEntityAPIsApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
+[**get_entity_users**](UsersEntityAPIsApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
+[**patch_entity_users**](UsersEntityAPIsApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
+[**update_entity_users**](UsersEntityAPIsApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
 
 
 # **create_entity_users**
 > JsonApiUserOutDocument create_entity_users(json_api_user_in_document)
 
+Post User entities
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -66,6 +68,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post User entities
         api_response = api_instance.create_entity_users(json_api_user_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -74,6 +77,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post User entities
         api_response = api_instance.create_entity_users(json_api_user_in_document, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -113,7 +117,9 @@ No authorization required
 # **delete_entity_users**
 > delete_entity_users(id)
 
+Delete User entity
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -139,6 +145,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete User entity
         api_instance.delete_entity_users(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UsersEntityAPIsApi->delete_entity_users: %s\n" % e)
@@ -146,6 +153,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete User entity
         api_instance.delete_entity_users(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UsersEntityAPIsApi->delete_entity_users: %s\n" % e)
@@ -184,7 +192,9 @@ No authorization required
 # **get_all_entities_users**
 > JsonApiUserOutList get_all_entities_users()
 
+Get User entities
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -219,6 +229,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get User entities
         api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -261,7 +272,9 @@ No authorization required
 # **get_entity_users**
 > JsonApiUserOutDocument get_entity_users(id)
 
+Get User entity
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -291,6 +304,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get User entity
         api_response = api_instance.get_entity_users(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -299,6 +313,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get User entity
         api_response = api_instance.get_entity_users(id, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -339,7 +354,9 @@ No authorization required
 # **patch_entity_users**
 > JsonApiUserOutDocument patch_entity_users(id, json_api_user_patch_document)
 
+Patch User entity
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -392,6 +409,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch User entity
         api_response = api_instance.patch_entity_users(id, json_api_user_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -400,6 +418,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch User entity
         api_response = api_instance.patch_entity_users(id, json_api_user_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -441,7 +460,9 @@ No authorization required
 # **update_entity_users**
 > JsonApiUserOutDocument update_entity_users(id, json_api_user_in_document)
 
+Put User entity
 
+User - represents entity interacting with platform
 
 ### Example
 
@@ -494,6 +515,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put User entity
         api_response = api_instance.update_entity_users(id, json_api_user_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -502,6 +524,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put User entity
         api_response = api_instance.update_entity_users(id, json_api_user_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

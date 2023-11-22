@@ -29,19 +29,21 @@ interactions:
           - keep-alive
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: &id001
+        DATE: &id001
           - PLACEHOLDER
         Expires:
           - '0'
@@ -72,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '4826'
+          - '6045'
       body:
         string:
           ldm:
@@ -82,6 +84,7 @@ interactions:
                     id: campaign_channel_id
                     labels: []
                     sourceColumn: campaign_channel_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Campaign channel id
@@ -89,6 +92,7 @@ interactions:
                     id: campaign_channels.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Category
@@ -96,24 +100,30 @@ interactions:
                     id: type
                     labels: []
                     sourceColumn: type
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Type
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaign_channels
+                  path:
+                    - demo
+                    - campaign_channels
                   type: dataSource
                 description: Campaign channels
                 facts:
                   - description: Budget
                     id: budget
                     sourceColumn: budget
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Budget
                   - description: Spend
                     id: spend
                     sourceColumn: spend
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Spend
@@ -126,6 +136,8 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                 tags:
@@ -136,6 +148,7 @@ interactions:
                     id: campaign_id
                     labels: []
                     sourceColumn: campaign_id
+                    sourceColumnDataType: INT
                     tags:
                       - Campaigns
                     title: Campaign id
@@ -143,12 +156,16 @@ interactions:
                     id: campaign_name
                     labels: []
                     sourceColumn: campaign_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaigns
                     title: Campaign name
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaigns
+                  path:
+                    - demo
+                    - campaigns
                   type: dataSource
                 description: Campaigns
                 facts: []
@@ -165,6 +182,7 @@ interactions:
                     id: customer_id
                     labels: []
                     sourceColumn: customer_id
+                    sourceColumnDataType: INT
                     tags:
                       - Customers
                     title: Customer id
@@ -172,6 +190,7 @@ interactions:
                     id: customer_name
                     labels: []
                     sourceColumn: customer_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Customer name
@@ -179,6 +198,7 @@ interactions:
                     id: region
                     labels: []
                     sourceColumn: region
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Region
@@ -188,16 +208,21 @@ interactions:
                       - description: Location
                         id: geo__state__location
                         sourceColumn: geo__state__location
+                        sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
                     sourceColumn: state
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: State
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: customers
+                  path:
+                    - demo
+                    - customers
                   type: dataSource
                 description: Customers
                 facts: []
@@ -214,6 +239,7 @@ interactions:
                     id: order_id
                     labels: []
                     sourceColumn: order_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order id
@@ -221,6 +247,7 @@ interactions:
                     id: order_line_id
                     labels: []
                     sourceColumn: order_line_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order line id
@@ -228,24 +255,30 @@ interactions:
                     id: order_status
                     labels: []
                     sourceColumn: order_status
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order status
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: order_lines
+                  path:
+                    - demo
+                    - order_lines
                   type: dataSource
                 description: Order lines
                 facts:
                   - description: Price
                     id: price
                     sourceColumn: price
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Price
                   - description: Quantity
                     id: quantity
                     sourceColumn: quantity
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Quantity
@@ -258,34 +291,54 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - customer_id
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - DATE
                     sourceColumns:
                       - date
                   - identifier:
                       id: products
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - product_id
                 tags:
                   - Order lines
                 title: Order lines
+                workspaceDataFilterColumns:
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
+                workspaceDataFilterReferences:
+                  - filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                    filterId:
+                      id: wdf__region
+                      type: workspaceDataFilter
               - attributes:
                   - description: Product id
                     id: product_id
                     labels: []
                     sourceColumn: product_id
+                    sourceColumnDataType: INT
                     tags:
                       - Products
                     title: Product id
@@ -293,6 +346,7 @@ interactions:
                     id: product_name
                     labels: []
                     sourceColumn: product_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Product name
@@ -300,12 +354,16 @@ interactions:
                     id: products.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Category
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: products
+                  path:
+                    - demo
+                    - products
                   type: dataSource
                 description: Products
                 facts: []
@@ -370,17 +428,19 @@ interactions:
           - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Date: *id001
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -436,22 +496,24 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -486,7 +548,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
+              allowedOrigins: []
+              oauthClientId: 3525347e-b7f7-4639-8f36-4c8871c1e53b
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -517,19 +580,21 @@ interactions:
           - keep-alive
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -559,7 +624,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '4826'
+          - '6045'
       body:
         string:
           ldm:
@@ -569,6 +634,7 @@ interactions:
                     id: campaign_channel_id
                     labels: []
                     sourceColumn: campaign_channel_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Campaign channel id
@@ -576,6 +642,7 @@ interactions:
                     id: campaign_channels.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Category
@@ -583,24 +650,30 @@ interactions:
                     id: type
                     labels: []
                     sourceColumn: type
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaign channels
                     title: Type
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaign_channels
+                  path:
+                    - demo
+                    - campaign_channels
                   type: dataSource
                 description: Campaign channels
                 facts:
                   - description: Budget
                     id: budget
                     sourceColumn: budget
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Budget
                   - description: Spend
                     id: spend
                     sourceColumn: spend
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Campaign channels
                     title: Spend
@@ -613,6 +686,8 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                 tags:
@@ -623,6 +698,7 @@ interactions:
                     id: campaign_id
                     labels: []
                     sourceColumn: campaign_id
+                    sourceColumnDataType: INT
                     tags:
                       - Campaigns
                     title: Campaign id
@@ -630,12 +706,16 @@ interactions:
                     id: campaign_name
                     labels: []
                     sourceColumn: campaign_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Campaigns
                     title: Campaign name
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: campaigns
+                  path:
+                    - demo
+                    - campaigns
                   type: dataSource
                 description: Campaigns
                 facts: []
@@ -652,6 +732,7 @@ interactions:
                     id: customer_id
                     labels: []
                     sourceColumn: customer_id
+                    sourceColumnDataType: INT
                     tags:
                       - Customers
                     title: Customer id
@@ -659,6 +740,7 @@ interactions:
                     id: customer_name
                     labels: []
                     sourceColumn: customer_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Customer name
@@ -666,6 +748,7 @@ interactions:
                     id: region
                     labels: []
                     sourceColumn: region
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: Region
@@ -675,16 +758,21 @@ interactions:
                       - description: Location
                         id: geo__state__location
                         sourceColumn: geo__state__location
+                        sourceColumnDataType: STRING
                         tags:
                           - Customers
                         title: Location
                     sourceColumn: state
+                    sourceColumnDataType: STRING
                     tags:
                       - Customers
                     title: State
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: customers
+                  path:
+                    - demo
+                    - customers
                   type: dataSource
                 description: Customers
                 facts: []
@@ -701,6 +789,7 @@ interactions:
                     id: order_id
                     labels: []
                     sourceColumn: order_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order id
@@ -708,6 +797,7 @@ interactions:
                     id: order_line_id
                     labels: []
                     sourceColumn: order_line_id
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order line id
@@ -715,24 +805,30 @@ interactions:
                     id: order_status
                     labels: []
                     sourceColumn: order_status
+                    sourceColumnDataType: STRING
                     tags:
                       - Order lines
                     title: Order status
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: order_lines
+                  path:
+                    - demo
+                    - order_lines
                   type: dataSource
                 description: Order lines
                 facts:
                   - description: Price
                     id: price
                     sourceColumn: price
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Price
                   - description: Quantity
                     id: quantity
                     sourceColumn: quantity
+                    sourceColumnDataType: NUMERIC
                     tags:
                       - Order lines
                     title: Quantity
@@ -745,34 +841,54 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - campaign_id
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - customer_id
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - DATE
                     sourceColumns:
                       - date
                   - identifier:
                       id: products
                       type: dataset
                     multivalue: false
+                    sourceColumnDataTypes:
+                      - INT
                     sourceColumns:
                       - product_id
                 tags:
                   - Order lines
                 title: Order lines
+                workspaceDataFilterColumns:
+                  - dataType: STRING
+                    name: wdf__region
+                  - dataType: STRING
+                    name: wdf__state
+                workspaceDataFilterReferences:
+                  - filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                    filterId:
+                      id: wdf__region
+                      type: workspaceDataFilter
               - attributes:
                   - description: Product id
                     id: product_id
                     labels: []
                     sourceColumn: product_id
+                    sourceColumnDataType: INT
                     tags:
                       - Products
                     title: Product id
@@ -780,6 +896,7 @@ interactions:
                     id: product_name
                     labels: []
                     sourceColumn: product_name
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Product name
@@ -787,12 +904,16 @@ interactions:
                     id: products.category
                     labels: []
                     sourceColumn: category
+                    sourceColumnDataType: STRING
                     tags:
                       - Products
                     title: Category
                 dataSourceTableId:
                   dataSourceId: demo-test-ds
                   id: products
+                  path:
+                    - demo
+                    - products
                   type: dataSource
                 description: Products
                 facts: []
@@ -857,17 +978,19 @@ interactions:
           - '0'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
-        Date: *id001
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -923,22 +1046,24 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
-            ''unsafe-eval'' *.wistia.com *.wistia.net src.litix.io matomo.anywhere.gooddata.com
-            code.jquery.com unpkg.com cdn.jsdelivr.net cdnjs.cloudflare.com; img-src
-            ''self'' data: blob: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net
-            privacy-policy.truste.com www.gooddata.com; style-src ''self'' ''unsafe-inline''
-            fonts.googleapis.com cdn.jsdelivr.net fast.fonts.net; font-src ''self''
-            data: fonts.gstatic.com *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com;
-            frame-src ''self''; object-src ''none''; worker-src ''self'' blob:; child-src
-            blob:; connect-src ''self'' *.tiles.mapbox.com *.mapbox.com *.litix.io
-            *.wistia.com embedwistia-a.akamaihd.net matomo.anywhere.gooddata.com;
-            media-src ''self'' blob: data: *.wistia.com *.wistia.net embedwistia-a.akamaihd.net'
+            ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
+            src.litix.io matomo.anywhere.gooddata.com *.jquery.com unpkg.com cdn.jsdelivr.net
+            cdnjs.cloudflare.com; img-src ''self'' data: blob: *.wistia.com *.wistia.net
+            *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net privacy-policy.truste.com
+            www.gooddata.com; style-src ''self'' ''unsafe-inline'' fonts.googleapis.com
+            cdn.jsdelivr.net fast.fonts.net; font-src ''self'' data: fonts.gstatic.com
+            *.alicdn.com *.wistia.com cdn.jsdelivr.net info.gooddata.com; frame-src
+            ''self'' *.hsforms.net *.hsforms.com; object-src ''none''; worker-src
+            ''self'' blob:; child-src blob:; connect-src ''self'' *.tiles.mapbox.com
+            *.mapbox.com *.litix.io *.wistia.com *.hsforms.net *.hsforms.com embedwistia-a.akamaihd.net
+            matomo.anywhere.gooddata.com; media-src ''self'' blob: data: *.wistia.com
+            *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/vnd.gooddata.api+json
-        Date: *id001
+        DATE: *id001
         Expires:
           - '0'
         GoodData-Deployment:
@@ -973,6 +1098,7 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: 56791950-5fac-4234-8dd7-4f72c7c54838
+              allowedOrigins: []
+              oauthClientId: 3525347e-b7f7-4639-8f36-4c8871c1e53b
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

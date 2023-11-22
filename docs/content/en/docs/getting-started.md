@@ -12,7 +12,7 @@ Start integrating GoodData into your Python application right now.
 
 1. Ensure you have a running instance of GoodData. If you just want to try things out, we recommend you sign up for a [trial of GoodData Cloud](https://www.gooddata.com/trial/).
 
-1. [Create a personal access token for GoodData API](https://www.gooddata.com/developers/cloud-native/doc/cloud/getting-started/create-api-token/)
+1. [Create a personal access token for GoodData API](https://www.gooddata.com/docs/cloud/getting-started/create-api-token/)
 
 1. Import Python SDK into your script:
 

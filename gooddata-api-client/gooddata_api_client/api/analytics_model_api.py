@@ -48,6 +48,7 @@ class AnalyticsModelApi(object):
             params_map={
                 'all': [
                     'workspace_id',
+                    'exclude',
                 ],
                 'required': [
                     'workspace_id',
@@ -55,6 +56,7 @@ class AnalyticsModelApi(object):
                 'nullable': [
                 ],
                 'enum': [
+                    'exclude',
                 ],
                 'validation': [
                 ]
@@ -63,18 +65,27 @@ class AnalyticsModelApi(object):
                 'validations': {
                 },
                 'allowed_values': {
+                    ('exclude',): {
+
+                        "ACTIVITY_INFO": "ACTIVITY_INFO"
+                    },
                 },
                 'openapi_types': {
                     'workspace_id':
                         (str,),
+                    'exclude':
+                        ([str],),
                 },
                 'attribute_map': {
                     'workspace_id': 'workspaceId',
+                    'exclude': 'exclude',
                 },
                 'location_map': {
                     'workspace_id': 'path',
+                    'exclude': 'query',
                 },
                 'collection_format_map': {
+                    'exclude': 'multi',
                 }
             },
             headers_map={
@@ -158,6 +169,7 @@ class AnalyticsModelApi(object):
             workspace_id (str):
 
         Keyword Args:
+            exclude ([str]): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

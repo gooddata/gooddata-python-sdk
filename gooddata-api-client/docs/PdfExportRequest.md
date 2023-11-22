@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **dashboard_id** | **str** | Dashboard identifier | 
 **file_name** | **str** | File name to be used for retrieving the pdf document. | 
-**metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Custom setting content in JSON format. | [optional] 
+**metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | A definition of the metric in JSON format. | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

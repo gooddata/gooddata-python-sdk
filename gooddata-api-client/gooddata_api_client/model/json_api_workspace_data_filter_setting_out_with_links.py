@@ -31,14 +31,16 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
+    from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_attributes import JsonApiWorkspaceDataFilterSettingInAttributes
+    from gooddata_api_client.model.json_api_workspace_data_filter_setting_in_relationships import JsonApiWorkspaceDataFilterSettingInRelationships
     from gooddata_api_client.model.json_api_workspace_data_filter_setting_out import JsonApiWorkspaceDataFilterSettingOut
-    from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_attributes import JsonApiWorkspaceDataFilterSettingOutAttributes
-    from gooddata_api_client.model.json_api_workspace_data_filter_setting_out_relationships import JsonApiWorkspaceDataFilterSettingOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
+    globals()['JsonApiWorkspaceDataFilterSettingInAttributes'] = JsonApiWorkspaceDataFilterSettingInAttributes
+    globals()['JsonApiWorkspaceDataFilterSettingInRelationships'] = JsonApiWorkspaceDataFilterSettingInRelationships
     globals()['JsonApiWorkspaceDataFilterSettingOut'] = JsonApiWorkspaceDataFilterSettingOut
-    globals()['JsonApiWorkspaceDataFilterSettingOutAttributes'] = JsonApiWorkspaceDataFilterSettingOutAttributes
-    globals()['JsonApiWorkspaceDataFilterSettingOutRelationships'] = JsonApiWorkspaceDataFilterSettingOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
     globals()['ObjectLinksContainer'] = ObjectLinksContainer
 
@@ -76,7 +78,7 @@ class JsonApiWorkspaceDataFilterSettingOutWithLinks(ModelComposed):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -106,8 +108,9 @@ class JsonApiWorkspaceDataFilterSettingOutWithLinks(ModelComposed):
         return {
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiWorkspaceDataFilterSettingOutAttributes,),  # noqa: E501
-            'relationships': (JsonApiWorkspaceDataFilterSettingOutRelationships,),  # noqa: E501
+            'attributes': (JsonApiWorkspaceDataFilterSettingInAttributes,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
+            'relationships': (JsonApiWorkspaceDataFilterSettingInRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -120,6 +123,7 @@ class JsonApiWorkspaceDataFilterSettingOutWithLinks(ModelComposed):
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
         'attributes': 'attributes',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
@@ -165,8 +169,9 @@ class JsonApiWorkspaceDataFilterSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceDataFilterSettingOutAttributes): [optional]  # noqa: E501
-            relationships (JsonApiWorkspaceDataFilterSettingOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceDataFilterSettingInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceDataFilterSettingInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -274,8 +279,9 @@ class JsonApiWorkspaceDataFilterSettingOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiWorkspaceDataFilterSettingOutAttributes): [optional]  # noqa: E501
-            relationships (JsonApiWorkspaceDataFilterSettingOutRelationships): [optional]  # noqa: E501
+            attributes (JsonApiWorkspaceDataFilterSettingInAttributes): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
+            relationships (JsonApiWorkspaceDataFilterSettingInRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

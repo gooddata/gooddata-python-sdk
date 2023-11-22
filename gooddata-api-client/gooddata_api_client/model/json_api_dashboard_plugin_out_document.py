@@ -32,8 +32,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_dashboard_plugin_out import JsonApiDashboardPluginOut
+    from gooddata_api_client.model.json_api_user_identifier_out_with_links import JsonApiUserIdentifierOutWithLinks
     from gooddata_api_client.model.object_links import ObjectLinks
     globals()['JsonApiDashboardPluginOut'] = JsonApiDashboardPluginOut
+    globals()['JsonApiUserIdentifierOutWithLinks'] = JsonApiUserIdentifierOutWithLinks
     globals()['ObjectLinks'] = ObjectLinks
 
 
@@ -65,6 +67,8 @@ class JsonApiDashboardPluginOutDocument(ModelNormal):
     }
 
     validations = {
+        ('included',): {
+        },
     }
 
     @cached_property
@@ -91,6 +95,7 @@ class JsonApiDashboardPluginOutDocument(ModelNormal):
         lazy_import()
         return {
             'data': (JsonApiDashboardPluginOut,),  # noqa: E501
+            'included': ([JsonApiUserIdentifierOutWithLinks],),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
 
@@ -101,6 +106,7 @@ class JsonApiDashboardPluginOutDocument(ModelNormal):
 
     attribute_map = {
         'data': 'data',  # noqa: E501
+        'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
     }
 
@@ -148,6 +154,7 @@ class JsonApiDashboardPluginOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 
@@ -238,6 +245,7 @@ class JsonApiDashboardPluginOutDocument(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            included ([JsonApiUserIdentifierOutWithLinks]): Included resources. [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
 

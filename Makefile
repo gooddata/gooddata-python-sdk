@@ -14,28 +14,26 @@ all:
 
 .PHONY: dev
 dev:
-	python3.10 -m venv .venv --upgrade-deps
+	rm -rf .venv
+	python3.11 -m venv .venv --upgrade-deps
 	.venv/bin/pip3 install -r dev-requirements.txt
 	.venv/bin/pre-commit install
 
-.PHONY: lint
-lint:
-	ruff .
-
 .PHONY: format
 format:
-	black --check .
-	isort --check .
+	.venv/bin/ruff format --check .
+	.venv/bin/isort --check .
 
 .PHONY: format-diff
 format-diff:
-	black --diff .
-	isort --diff .
+	.venv/bin/ruff format --diff .
+	.venv/bin/isort --diff .
 
 .PHONY: format-fix
 format-fix:
-	black .
-	isort .
+	.venv/bin/ruff .
+	.venv/bin/ruff format .
+	.venv/bin/isort .
 
 
 define download_client
@@ -50,8 +48,8 @@ endef
 
 .PHONY: api-client
 api-client: download
-	rm -f schemas/gooddata-api-client.json+
-	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' > "schemas/gooddata-api-client.json"
+	rm -f schemas/gooddata-api-client.json
+	cat schemas/gooddata-*.json | jq -S -s 'reduce .[] as $$item ({}; . * $$item) + { tags : ( reduce .[].tags as $$item (null; . + $$item) | unique_by(.name) ) }' | sed '/\u0000/d' > "schemas/gooddata-api-client.json"
 	$(call generate_client,api)
 
 .PHONY: download
@@ -77,6 +75,11 @@ test:
 release:
 	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release VERSION=X.Y.Z'"; false; else \
 	tbump $(VERSION) --no-tag --no-push ; fi
+
+.PHONY: release-ci
+release-ci:
+	if [ -z "$(VERSION)" ]; then echo "Usage: 'make release-ci VERSION=X.Y.Z'"; false; else \
+	tbump $(VERSION) --only-patch --non-interactive ; fi
 
 .PHONY: check-copyright
 check-copyright:

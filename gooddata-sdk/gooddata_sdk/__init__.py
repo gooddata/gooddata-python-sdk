@@ -46,10 +46,29 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 )
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
-from gooddata_sdk.catalog.entity import BasicCredentials, TokenCredentialsFromFile
-from gooddata_sdk.catalog.export.request import ExportRequest
-from gooddata_sdk.catalog.identifier import CatalogWorkspaceIdentifier
+from gooddata_sdk.catalog.depends_on import CatalogDependsOn
+from gooddata_sdk.catalog.entity import AttrCatalogEntity, BasicCredentials, TokenCredentialsFromFile
+from gooddata_sdk.catalog.export.request import (
+    ExportCustomLabel,
+    ExportCustomMetric,
+    ExportCustomOverride,
+    ExportRequest,
+    ExportSettings,
+)
+from gooddata_sdk.catalog.identifier import (
+    CatalogAssigneeIdentifier,
+    CatalogDatasetWorkspaceDataFilterIdentifier,
+    CatalogWorkspaceIdentifier,
+)
+from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
+from gooddata_sdk.catalog.organization.entity_model.jwk import (
+    CatalogJwk,
+    CatalogJwkAttributes,
+    CatalogJwkDocument,
+    CatalogRsaSpecification,
+)
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization
+from gooddata_sdk.catalog.organization.entity_model.setting import CatalogOrganizationSetting
 from gooddata_sdk.catalog.organization.service import CatalogOrganizationService
 from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import (
     CatalogAvailableAssignees,
@@ -64,15 +83,20 @@ from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions imp
 )
 from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
     CatalogDashboardAssigneeIdentifier,
-    CatalogPermissionsForAssignee,
+    CatalogPermissionsForAssigneeIdentifier,
+    CatalogPermissionsForAssigneeRule,
 )
 from gooddata_sdk.catalog.permission.declarative_model.permission import (
-    CatalogAssigneeIdentifier,
+    CatalogDeclarativeDashboardPermissionsForAssignee,
+    CatalogDeclarativeDashboardPermissionsForAssigneeRule,
     CatalogDeclarativeDataSourcePermission,
+    CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeSingleWorkspacePermission,
     CatalogDeclarativeWorkspaceHierarchyPermission,
     CatalogDeclarativeWorkspacePermissions,
+    CatalogOrganizationPermissionAssignment,
 )
+from gooddata_sdk.catalog.rule import CatalogAssigneeRule
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import (
@@ -86,6 +110,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.
     CatalogDeclarativeAnalytics,
     CatalogDeclarativeMetric,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
+    CatalogDeclarativeWorkspaceDataFilterReferences,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset.dataset import (
     CatalogDataSourceTableIdentifier,
     CatalogDeclarativeAttribute,
@@ -96,6 +123,9 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.da
     CatalogDeclarativeReference,
     CatalogDeclarativeWorkspaceDataFilterColumn,
 )
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.dataset_extensions.dataset_extension import (  # noqa: E501
+    CatalogDeclarativeDatasetExtension,
+)
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.date_dataset.date_dataset import (
     CatalogDeclarativeDateDataset,
     CatalogGranularitiesFormatting,
@@ -105,6 +135,8 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.ld
     CatalogDeclarativeModel,
 )
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
+    CatalogDeclarativeUserDataFilter,
+    CatalogDeclarativeUserDataFilters,
     CatalogDeclarativeWorkspace,
     CatalogDeclarativeWorkspaceDataFilter,
     CatalogDeclarativeWorkspaceDataFilters,
@@ -119,12 +151,18 @@ from gooddata_sdk.catalog.workspace.entity_model.content_objects.dataset import 
     CatalogLabel,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.metric import CatalogMetric
+from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
 from gooddata_sdk.catalog.workspace.entity_model.graph_objects.graph import (
     CatalogDependentEntitiesGraph,
     CatalogDependentEntitiesNode,
     CatalogDependentEntitiesRequest,
     CatalogDependentEntitiesResponse,
     CatalogEntityIdentifier,
+)
+from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
+    CatalogUserDataFilter,
+    CatalogUserDataFilterAttributes,
+    CatalogUserDataFilterRelationships,
 )
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
@@ -169,4 +207,4 @@ from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
 
 # by default don't log anything
-logging.getLogger().addHandler(logging.NullHandler())
+logging.getLogger(__name__).addHandler(logging.NullHandler())

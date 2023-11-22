@@ -24,7 +24,7 @@ Data source identification string. e.g. "demo"
 
 ## Example
 
-```Python
+```python
 # Load declarative tables
 declarative_tables = sdk.catalog_data_source.load_declarative_pdm(
     data_source_id="123",

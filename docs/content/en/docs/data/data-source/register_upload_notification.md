@@ -24,7 +24,7 @@ Data source identification string. e.g. "demo"
 
 ## Example
 
-```Python
+```python
 # Recompute analytics by invalidating cache
 sdk.catalog_data_source.register_upload_notification(data_source_id="123")
 ```

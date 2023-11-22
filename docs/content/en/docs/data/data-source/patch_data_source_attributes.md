@@ -29,7 +29,7 @@ A dictionary containing attributes of the data source to be changed.
 
 ## Example
 
-```Python
+```python
 # Patch data source attribute(s)
 sdk.catalog_data_source.patch_data_source_attributes(data_source_id="test",attributes={"name": "Name2"})
 ```

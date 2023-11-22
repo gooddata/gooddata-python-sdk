@@ -28,7 +28,7 @@ List of data source table objects
 
 ## Example
 
-```Python
+```python
 # List data source tables
 source_tables = sdk.catalog_data_source.list_data_source_tables(data_source_id="123")
 

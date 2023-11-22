@@ -13,9 +13,13 @@ from gooddata_api_client.model.declarative_dataset_sql import DeclarativeDataset
 from gooddata_api_client.model.declarative_fact import DeclarativeFact
 from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
+from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
+from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
+    CatalogDeclarativeWorkspaceDataFilterReferences,
+)
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 
 LAYOUT_DATASETS_DIR = "datasets"
@@ -34,6 +38,7 @@ class CatalogDeclarativeDataset(Base):
     sql: Optional[CatalogDeclarativeDatasetSql] = None
     tags: Optional[List[str]] = None
     workspace_data_filter_columns: Optional[List[CatalogDeclarativeWorkspaceDataFilterColumn]] = None
+    workspace_data_filter_references: Optional[List[CatalogDeclarativeWorkspaceDataFilterReferences]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeDataset]:
@@ -85,6 +90,7 @@ class CatalogDeclarativeFact(Base):
 class CatalogDataSourceTableIdentifier(Base):
     id: str
     data_source_id: str
+    path: Optional[List[str]] = None
 
     @staticmethod
     def client_class() -> Type[DataSourceTableIdentifier]:
@@ -120,8 +126,9 @@ class CatalogDeclarativeLabel(Base):
 class CatalogDeclarativeReference(Base):
     identifier: CatalogReferenceIdentifier
     multivalue: bool
-    source_columns: List[str]
+    source_columns: Optional[List[str]] = None
     source_column_data_types: Optional[List[str]] = None
+    sources: Optional[List[CatalogDeclarativeReferenceSource]] = None
 
     @staticmethod
     def client_class() -> Type[DeclarativeReference]:
@@ -136,3 +143,14 @@ class CatalogDeclarativeWorkspaceDataFilterColumn(Base):
     @staticmethod
     def client_class() -> Type[DeclarativeWorkspaceDataFilterColumn]:
         return DeclarativeWorkspaceDataFilterColumn
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeReferenceSource(Base):
+    column: str
+    target: CatalogGrainIdentifier
+    data_type: Optional[str] = None
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeReferenceSource]:
+        return DeclarativeReferenceSource

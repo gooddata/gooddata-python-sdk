@@ -1,15 +1,16 @@
 -r ./tox-requirements.txt
-tbump~=6.6.0
-pre-commit~=2.14.0
+-r ./release-requirements.txt
+pre-commit~=3.5.0
 
 -r ./fmt-requirements.txt
--r ./lint-requirements.txt
 
 -r ./gooddata-api-client/requirements.txt
 -r ./gooddata-sdk/requirements.txt
 -r ./gooddata-pandas/requirements.txt
 -r ./gooddata-fdw/requirements.txt
+-r ./gooddata-dbt/requirements.txt
 -r ./gooddata-sdk/test-requirements.txt
 -r ./gooddata-pandas/test-requirements.txt
 -r ./gooddata-fdw/test-requirements.txt
+-r ./gooddata-dbt/test-requirements.txt
 -r ./tests-support/requirements.txt

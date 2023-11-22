@@ -10,7 +10,7 @@ cascade:
     path: "/*/**"
 ---
 
-GoodData Python SDK provides a clean and convenient way to interact with the [GoodData API](https://www.gooddata.com/developers/cloud-native/doc/cloud/api-and-sdk/api/) in Python applications.
+GoodData Python SDK provides a clean and convenient way to interact with the [GoodData API](https://www.gooddata.com/docs/cloud/api-and-sdk/api/) in Python applications.
 
 Python is a popular language for working with large amounts of data and data analytics; It is for this reason that we are actively developing this SDK to let Python developers integrate the GoodData analytical engine into their own applications as seamlessly as possible, or to automate their administrative workflow.
 
@@ -108,4 +108,8 @@ You can also perform certain administration tasks:
 
 Get started with Python SDK right now by following the [Quick Start](./getting-started/#quick-start) guide.
 
-New to GoodData? Follow the [Getting Started](https://www.gooddata.com/developers/cloud-native/doc/cloud/getting-started/) series of articles that include Python SDK code examples.
+New to GoodData? Follow the [Getting Started](https://www.gooddata.com/docs/cloud/getting-started/) series of articles that include Python SDK code examples.
+
+### Troubleshooting
+
+In case of any issues with Python SDK, feel free to reach out to us on our [community slack](https://www.gooddata.com/slack/) or create a [GitHub issue](https://github.com/gooddata/gooddata-python-sdk/issues).

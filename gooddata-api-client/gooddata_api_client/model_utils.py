@@ -1873,6 +1873,12 @@ def get_oneof_instance(cls, model_kwargs, constant_kwargs, model_arg=None):
                     oneof_instance = oneof_class._from_openapi_data(**model_kwargs, **constant_kwargs)
                 else:
                     oneof_instance = oneof_class(**model_kwargs, **constant_kwargs)
+
+                # Workaround for missing OneOf schema support by the generator
+                # Checks if the defined schema is a subset of received model
+                # This way we can ensure forward-compatibility support of new fields in API
+                assert set(oneof_class.openapi_types.keys()) <= set(model_kwargs.keys())
+
             else:
                 if issubclass(oneof_class, ModelSimple):
                     if constant_kwargs.get('_spec_property_naming'):

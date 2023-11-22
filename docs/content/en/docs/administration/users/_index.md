@@ -7,7 +7,7 @@ no_list: true
 
 Manage users.
 
-See [Manage Users and UserGroups](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-users/) to learn how user management works in GoodData.
+See [Manage Users and UserGroups](https://www.gooddata.com/docs/cloud/manage-deployment/manage-users/) to learn how user management works in GoodData.
 
 
 ### Entity Methods
@@ -48,6 +48,9 @@ print(users)
 #   CatalogUser(
 #       id='demo2',
 #       attributes=CatalogUserAttributes(
+#            firstname='John',
+#            lastname='Doe',
+#            email='john.doe@email.com',
 #            authentication_id='abc'
 #       ),
 #       relationships=CatalogUserRelationships(
@@ -65,7 +68,7 @@ print(users)
 # ]
 
 # Define user
-user = CatalogUser.init(user_id="abc", authentication_id="xyz",user_group_ids=["demoGroup"])
+user = CatalogUser.init(user_id="abc", firstname="John", lastname="Doe", email="john.doe@email.com", authentication_id="xyz", user_group_ids=["demoGroup"])
 
 # Create user
 sdk.catalog_user.create_or_update_user(user=user)

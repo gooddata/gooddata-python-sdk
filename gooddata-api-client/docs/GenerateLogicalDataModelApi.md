@@ -56,6 +56,23 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="My special dataset",
                 ),
             ],
+            tables=[
+                DeclarativeTable(
+                    columns=[
+                        DeclarativeColumn(
+                            data_type="INT",
+                            is_primary_key=True,
+                            name="customer_id",
+                            referenced_table_column="customer_id",
+                            referenced_table_id="customers",
+                        ),
+                    ],
+                    id="customers",
+                    name_prefix="out_gooddata",
+                    path=["table_schema","table_name"],
+                    type="TABLE",
+                ),
+            ],
         ),
         primary_label_prefix="pl",
         reference_prefix="r",
@@ -64,6 +81,7 @@ with gooddata_api_client.ApiClient() as api_client:
         table_prefix="out_table",
         view_prefix="out_view",
         wdf_prefix="wdf",
+        workspace_id="workspace_id_example",
     ) # GenerateLdmRequest | 
 
     # example passing only required values which don't have defaults set

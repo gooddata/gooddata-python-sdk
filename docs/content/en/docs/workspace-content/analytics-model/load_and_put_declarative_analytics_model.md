@@ -29,9 +29,9 @@ The load and put can be done two ways.
 
 Either by one call:
 
-```Python
+```python
 # Load and put on server the stored layout
-sdk.catalog_workspace.load_and_put_declarative_analytics_model(
+sdk.catalog_workspace_content.load_and_put_declarative_analytics_model(
     workspace_id="123",
     layout_root_path=Path.cwd()
 )
@@ -39,7 +39,7 @@ sdk.catalog_workspace.load_and_put_declarative_analytics_model(
 
 Or by two separate calls:
 
-```Python
+```python
 # Get analytics layout
 declarative_analytics = sdk.catalog_workspace_content.load_declarative_analytics_model(
     workspace_id="123",

@@ -27,7 +27,7 @@ Object Containing declarative Logical Data Model and declarative Analytical Mode
 {{% /parameters-block %}}
 ## Example
 
-```Python
+```python
 # Load a declarative workspace
 declarative_workspace = sdk.catalog_workspace.load_declarative_workspace(
     workspace_id="123",

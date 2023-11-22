@@ -68,6 +68,12 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
         ('name',): {
             'max_length': 255,
         },
+        ('prefix',): {
+            'max_length': 255,
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -91,9 +97,11 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
+            'cache_extra_limit': (int,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'prefix': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -102,9 +110,11 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
 
 
     attribute_map = {
+        'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'prefix': 'prefix',  # noqa: E501
     }
 
     read_only_vars = {
@@ -148,9 +158,11 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -236,9 +248,11 @@ class JsonApiWorkspaceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

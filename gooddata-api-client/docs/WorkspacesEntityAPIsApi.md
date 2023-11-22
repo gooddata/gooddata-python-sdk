@@ -4,18 +4,20 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_workspaces**](WorkspacesEntityAPIsApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | 
-[**delete_entity_workspaces**](WorkspacesEntityAPIsApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | 
-[**get_all_entities_workspaces**](WorkspacesEntityAPIsApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | 
-[**get_entity_workspaces**](WorkspacesEntityAPIsApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | 
-[**patch_entity_workspaces**](WorkspacesEntityAPIsApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | 
-[**update_entity_workspaces**](WorkspacesEntityAPIsApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | 
+[**create_entity_workspaces**](WorkspacesEntityAPIsApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
+[**delete_entity_workspaces**](WorkspacesEntityAPIsApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
+[**get_all_entities_workspaces**](WorkspacesEntityAPIsApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
+[**get_entity_workspaces**](WorkspacesEntityAPIsApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
+[**patch_entity_workspaces**](WorkspacesEntityAPIsApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
+[**update_entity_workspaces**](WorkspacesEntityAPIsApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
 
 
 # **create_entity_workspaces**
 > JsonApiWorkspaceOutDocument create_entity_workspaces(json_api_workspace_in_document)
 
+Post Workspace entities
 
+Space of the shared interest
 
 ### Example
 
@@ -41,9 +43,11 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_workspace_in_document = JsonApiWorkspaceInDocument(
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
+                cache_extra_limit=1,
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
@@ -63,6 +67,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Post Workspace entities
         api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -71,6 +76,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Post Workspace entities
         api_response = api_instance.create_entity_workspaces(json_api_workspace_in_document, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -111,7 +117,9 @@ No authorization required
 # **delete_entity_workspaces**
 > delete_entity_workspaces(id)
 
+Delete Workspace entity
 
+Space of the shared interest
 
 ### Example
 
@@ -137,6 +145,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete Workspace entity
         api_instance.delete_entity_workspaces(id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesEntityAPIsApi->delete_entity_workspaces: %s\n" % e)
@@ -144,6 +153,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete Workspace entity
         api_instance.delete_entity_workspaces(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesEntityAPIsApi->delete_entity_workspaces: %s\n" % e)
@@ -182,7 +192,9 @@ No authorization required
 # **get_all_entities_workspaces**
 > JsonApiWorkspaceOutList get_all_entities_workspaces()
 
+Get Workspace entities
 
+Space of the shared interest
 
 ### Example
 
@@ -220,6 +232,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Workspace entities
         api_response = api_instance.get_all_entities_workspaces(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -263,7 +276,9 @@ No authorization required
 # **get_entity_workspaces**
 > JsonApiWorkspaceOutDocument get_entity_workspaces(id)
 
+Get Workspace entity
 
+Space of the shared interest
 
 ### Example
 
@@ -296,6 +311,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get Workspace entity
         api_response = api_instance.get_entity_workspaces(id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -304,6 +320,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get Workspace entity
         api_response = api_instance.get_entity_workspaces(id, filter=filter, include=include, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -345,7 +362,9 @@ No authorization required
 # **patch_entity_workspaces**
 > JsonApiWorkspaceOutDocument patch_entity_workspaces(id, json_api_workspace_patch_document)
 
+Patch Workspace entity
 
+Space of the shared interest
 
 ### Example
 
@@ -372,9 +391,11 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_workspace_patch_document = JsonApiWorkspacePatchDocument(
         data=JsonApiWorkspacePatch(
             attributes=JsonApiWorkspaceInAttributes(
+                cache_extra_limit=1,
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
@@ -392,6 +413,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch Workspace entity
         api_response = api_instance.patch_entity_workspaces(id, json_api_workspace_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -400,6 +422,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch Workspace entity
         api_response = api_instance.patch_entity_workspaces(id, json_api_workspace_patch_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -441,7 +464,9 @@ No authorization required
 # **update_entity_workspaces**
 > JsonApiWorkspaceOutDocument update_entity_workspaces(id, json_api_workspace_in_document)
 
+Put Workspace entity
 
+Space of the shared interest
 
 ### Example
 
@@ -468,9 +493,11 @@ with gooddata_api_client.ApiClient() as api_client:
     json_api_workspace_in_document = JsonApiWorkspaceInDocument(
         data=JsonApiWorkspaceIn(
             attributes=JsonApiWorkspaceInAttributes(
+                cache_extra_limit=1,
                 description="description_example",
                 early_access="early_access_example",
                 name="name_example",
+                prefix="/6bUUGjjNSwg0_bs",
             ),
             id="id1",
             relationships=JsonApiWorkspaceInRelationships(
@@ -488,6 +515,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put Workspace entity
         api_response = api_instance.update_entity_workspaces(id, json_api_workspace_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -496,6 +524,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put Workspace entity
         api_response = api_instance.update_entity_workspaces(id, json_api_workspace_in_document, filter=filter, include=include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

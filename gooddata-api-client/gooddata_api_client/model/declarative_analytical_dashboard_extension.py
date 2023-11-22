@@ -31,8 +31,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.declarative_analytical_dashboard_permission import DeclarativeAnalyticalDashboardPermission
-    globals()['DeclarativeAnalyticalDashboardPermission'] = DeclarativeAnalyticalDashboardPermission
+    from gooddata_api_client.model.declarative_analytical_dashboard_permissions_inner import DeclarativeAnalyticalDashboardPermissionsInner
+    globals()['DeclarativeAnalyticalDashboardPermissionsInner'] = DeclarativeAnalyticalDashboardPermissionsInner
 
 
 class DeclarativeAnalyticalDashboardExtension(ModelNormal):
@@ -65,7 +65,7 @@ class DeclarativeAnalyticalDashboardExtension(ModelNormal):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -94,7 +94,7 @@ class DeclarativeAnalyticalDashboardExtension(ModelNormal):
         lazy_import()
         return {
             'id': (str,),  # noqa: E501
-            'permissions': ([DeclarativeAnalyticalDashboardPermission],),  # noqa: E501
+            'permissions': ([DeclarativeAnalyticalDashboardPermissionsInner],),  # noqa: E501
         }
 
     @cached_property
@@ -119,7 +119,7 @@ class DeclarativeAnalyticalDashboardExtension(ModelNormal):
 
         Args:
             id (str): Analytical dashboard ID.
-            permissions ([DeclarativeAnalyticalDashboardPermission]): A list of permissions.
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -210,7 +210,7 @@ class DeclarativeAnalyticalDashboardExtension(ModelNormal):
 
         Args:
             id (str): Analytical dashboard ID.
-            permissions ([DeclarativeAnalyticalDashboardPermission]): A list of permissions.
+            permissions ([DeclarativeAnalyticalDashboardPermissionsInner]): A list of permissions.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

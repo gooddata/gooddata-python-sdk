@@ -58,7 +58,7 @@ class JsonApiDatasetOutAttributesGrainInner(ModelNormal):
     allowed_values = {
         ('type',): {
             'ATTRIBUTE': "attribute",
-            'DATASET': "dataset",
+            'DATE': "date",
         },
     }
 

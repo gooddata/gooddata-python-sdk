@@ -31,14 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
-    from gooddata_api_client.model.json_api_attribute_out_meta import JsonApiAttributeOutMeta
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
+    from gooddata_api_client.model.json_api_attribute_hierarchy_out_meta import JsonApiAttributeHierarchyOutMeta
     from gooddata_api_client.model.json_api_metric_out_relationships import JsonApiMetricOutRelationships
     from gooddata_api_client.model.json_api_visualization_object_out import JsonApiVisualizationObjectOut
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
-    globals()['JsonApiAttributeOutMeta'] = JsonApiAttributeOutMeta
+    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
+    globals()['JsonApiAttributeHierarchyOutMeta'] = JsonApiAttributeHierarchyOutMeta
     globals()['JsonApiMetricOutRelationships'] = JsonApiMetricOutRelationships
     globals()['JsonApiVisualizationObjectOut'] = JsonApiVisualizationObjectOut
     globals()['ObjectLinks'] = ObjectLinks
@@ -78,7 +78,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -106,10 +106,10 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
-            'meta': (JsonApiAttributeOutMeta,),  # noqa: E501
+            'meta': (JsonApiAttributeHierarchyOutMeta,),  # noqa: E501
             'relationships': (JsonApiMetricOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
         }
@@ -120,9 +120,9 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
@@ -137,6 +137,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -169,8 +170,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """
@@ -247,6 +247,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
         """JsonApiVisualizationObjectOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "visualizationObject", must be one of ["visualizationObject", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -279,8 +280,7 @@ class JsonApiVisualizationObjectOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
-            meta (JsonApiAttributeOutMeta): [optional]  # noqa: E501
+            meta (JsonApiAttributeHierarchyOutMeta): [optional]  # noqa: E501
             relationships (JsonApiMetricOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
         """

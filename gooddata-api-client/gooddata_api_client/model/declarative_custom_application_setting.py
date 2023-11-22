@@ -64,7 +64,7 @@ class DeclarativeCustomApplicationSetting(ModelNormal):
         },
         ('id',): {
             'regex': {
-                'pattern': r'^(?:(?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -118,7 +118,7 @@ class DeclarativeCustomApplicationSetting(ModelNormal):
 
         Args:
             application_name (str): The application id
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Custom Application Setting ID.
 
         Keyword Args:
@@ -211,7 +211,7 @@ class DeclarativeCustomApplicationSetting(ModelNormal):
 
         Args:
             application_name (str): The application id
-            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Custom setting content in JSON format.
+            content ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): A definition of the metric in JSON format.
             id (str): Custom Application Setting ID.
 
         Keyword Args:

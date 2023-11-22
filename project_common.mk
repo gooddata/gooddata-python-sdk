@@ -23,24 +23,21 @@ CURR_DIR_BASE_NAME = $(notdir $(CURDIR))
 all:
 	echo "Nothing here yet."
 
-.PHONY: lint
-lint:
-	(cd ..; ruff $(CURR_DIR_BASE_NAME))
-
 .PHONY: format
 format:
-	(cd ..; black --check $(CURR_DIR_BASE_NAME))
-	(cd ..; isort --check $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/ruff format --check $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/isort --check $(CURR_DIR_BASE_NAME))
 
 .PHONY: format-diff
 format-diff:
-	(cd ..; black --diff $(CURR_DIR_BASE_NAME))
-	(cd ..; isort --diff $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/ruff format --diff $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/isort --diff $(CURR_DIR_BASE_NAME))
 
 .PHONY: format-fix
 format-fix:
-	(cd ..; black $(CURR_DIR_BASE_NAME))
-	(cd ..; isort $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/ruff $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/ruff format $(CURR_DIR_BASE_NAME))
+	(cd ..; .venv/bin/isort $(CURR_DIR_BASE_NAME))
 
 .PHONY: mypy
 mypy:

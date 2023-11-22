@@ -8,6 +8,7 @@ import attr
 
 from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
 from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+from gooddata_sdk import CatalogDeclarativeWorkspaceHierarchyPermission
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserGroupIdentifier
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
@@ -45,7 +46,9 @@ class CatalogDeclarativeUserGroups(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDeclarativeUserGroup(Base):
     id: str
+    name: Optional[str] = None
     parents: Optional[List[CatalogUserGroupIdentifier]] = None
+    permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeUserGroup]:

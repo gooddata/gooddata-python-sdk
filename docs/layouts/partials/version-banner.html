@@ -1,5 +1,6 @@
 {{ $currentVersion := $.Page.Section }}
 {{ $versionRE := "\\d\\.\\d" }}
+{{ $devVersion := .Site.Params.devVersion }}
 
 {{ $data := newScratch }}
 
@@ -12,23 +13,45 @@
 {{ end }}
 
 {{ $latestVersion := $data.Get "latestVersion" }}
+{{ if .Site.Params.latestVersion }}
+  {{ $latestVersion := .Site.Params.latestVersion }}
+{{ end }}
 
-{{ if and (ne $currentVersion $latestVersion) (gt (len (findRE $versionRE $currentVersion 1)) 0) }}
-  <div class="alert alert-label" role="alert">
+<!-- In case of the dev version, we want to provide different banner, as it is unstable. -->
+{{ if (eq $currentVersion $devVersion) }}
+  <div class="alert alert-label alert-label-warning" role="warning">
     {{ with resources.Get "icons/icon-info.svg" }}
       {{ ( . | minify).Content | safeHTML }}
     {{ end }}
-    This documentation is for an older version of GoodData.
-
+    This documentation is for the unstable version of GoodData, currrently in development.<br>
     {{ $latestVersionPath := string (delimit (union (slice "" $latestVersion) (after 2 (split .RelPermalink "/"))) "/") }}
     {{ if .GetPage $latestVersionPath }}
       {{ with .GetPage $latestVersionPath }}
-        Go to <a href="{{ .Permalink }}">the latest version of this article</a>.
+        For stable version, go to <a href="{{ .Permalink }}">the latest stable version of this article</a>.
       {{ end}}
     {{ else }}
       {{ with .GetPage (string (delimit (slice "" $latestVersion) "/")) }}
-        Go to <a href="{{ .Permalink }}">the latest version</a>.
+        For stable version, go to <a href="{{ .Permalink }}">the latest stable version of this article</a>.
       {{ end}}
     {{ end }}
   </div>
+{{ else }}
+  {{ if and (ne $currentVersion $latestVersion) (gt (len (findRE $versionRE $currentVersion 1)) 0) }}
+    <div class="alert alert-label" role="alert">
+      {{ with resources.Get "icons/icon-info.svg" }}
+        {{ ( . | minify).Content | safeHTML }}
+      {{ end }}
+      This documentation is for an older version of GoodData.
+      {{ $latestVersionPath := string (delimit (union (slice "" $latestVersion) (after 2 (split .RelPermalink "/"))) "/") }}
+      {{ if .GetPage $latestVersionPath }}
+        {{ with .GetPage $latestVersionPath }}
+          Go to <a href="{{ .Permalink }}">the latest version of this article</a>.
+        {{ end}}
+      {{ else }}
+        {{ with .GetPage (string (delimit (slice "" $latestVersion) "/")) }}
+          Go to <a href="{{ .Permalink }}">the latest version</a>.
+        {{ end}}
+      {{ end }}
+    </div>
+  {{ end }}
 {{ end }}

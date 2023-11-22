@@ -1,0 +1,22 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: age
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: annualincome
+  - dataType: STRING
+    isPrimaryKey: true
+    name: customerid
+  - dataType: STRING
+    isPrimaryKey: false
+    name: gender
+  - dataType: NUMERIC
+    isPrimaryKey: false
+    name: spendingscore
+id: mall_customers
+path:
+  - cicd_output_stage
+  - mall_customers
+type: TABLE

@@ -4,26 +4,26 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_entity_custom_application_settings**](WorkspacesSettingsApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | 
-[**create_entity_workspace_settings**](WorkspacesSettingsApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | 
-[**delete_entity_custom_application_settings**](WorkspacesSettingsApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
-[**delete_entity_workspace_settings**](WorkspacesSettingsApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
-[**get_all_entities_custom_application_settings**](WorkspacesSettingsApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | 
-[**get_all_entities_workspace_settings**](WorkspacesSettingsApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | 
-[**get_entity_custom_application_settings**](WorkspacesSettingsApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
-[**get_entity_workspace_settings**](WorkspacesSettingsApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
-[**patch_entity_custom_application_settings**](WorkspacesSettingsApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
-[**patch_entity_workspace_settings**](WorkspacesSettingsApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
-[**update_entity_custom_application_settings**](WorkspacesSettingsApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | 
-[**update_entity_workspace_settings**](WorkspacesSettingsApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | 
+[**create_entity_custom_application_settings**](WorkspacesSettingsApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
+[**create_entity_workspace_settings**](WorkspacesSettingsApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Post Settings for Workspaces
+[**delete_entity_custom_application_settings**](WorkspacesSettingsApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
+[**delete_entity_workspace_settings**](WorkspacesSettingsApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
+[**get_all_entities_custom_application_settings**](WorkspacesSettingsApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
+[**get_all_entities_workspace_settings**](WorkspacesSettingsApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Get all Setting for Workspaces
+[**get_entity_custom_application_settings**](WorkspacesSettingsApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Get a Custom Application Setting
+[**get_entity_workspace_settings**](WorkspacesSettingsApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Get a Setting for Workspace
+[**patch_entity_custom_application_settings**](WorkspacesSettingsApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Patch a Custom Application Setting
+[**patch_entity_workspace_settings**](WorkspacesSettingsApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
+[**update_entity_custom_application_settings**](WorkspacesSettingsApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
+[**update_entity_workspace_settings**](WorkspacesSettingsApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 [**workspace_resolve_all_settings**](WorkspacesSettingsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](WorkspacesSettingsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
 
 # **create_entity_custom_application_settings**
-> JsonApiCustomApplicationSettingOutDocument create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document)
+> JsonApiCustomApplicationSettingOutDocument create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_post_optional_id_document)
 
-
+Post Custom Application Settings
 
 ### Example
 
@@ -32,8 +32,8 @@ Method | HTTP request | Description
 import time
 import gooddata_api_client
 from gooddata_api_client.api import workspaces_settings_api
-from gooddata_api_client.model.json_api_custom_application_setting_in_document import JsonApiCustomApplicationSettingInDocument
 from gooddata_api_client.model.json_api_custom_application_setting_out_document import JsonApiCustomApplicationSettingOutDocument
+from gooddata_api_client.model.json_api_custom_application_setting_post_optional_id_document import JsonApiCustomApplicationSettingPostOptionalIdDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -47,8 +47,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspaces_settings_api.WorkspacesSettingsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    json_api_custom_application_setting_in_document = JsonApiCustomApplicationSettingInDocument(
-        data=JsonApiCustomApplicationSettingIn(
+    json_api_custom_application_setting_post_optional_id_document = JsonApiCustomApplicationSettingPostOptionalIdDocument(
+        data=JsonApiCustomApplicationSettingPostOptionalId(
             attributes=JsonApiCustomApplicationSettingInAttributes(
                 application_name="application_name_example",
                 content={},
@@ -56,14 +56,15 @@ with gooddata_api_client.ApiClient() as api_client:
             id="id1",
             type="customApplicationSetting",
         ),
-    ) # JsonApiCustomApplicationSettingInDocument | 
+    ) # JsonApiCustomApplicationSettingPostOptionalIdDocument | 
     meta_include = [
         "metaInclude=origin,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document)
+        # Post Custom Application Settings
+        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->create_entity_custom_application_settings: %s\n" % e)
@@ -71,7 +72,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_in_document, meta_include=meta_include)
+        # Post Custom Application Settings
+        api_response = api_instance.create_entity_custom_application_settings(workspace_id, json_api_custom_application_setting_post_optional_id_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->create_entity_custom_application_settings: %s\n" % e)
@@ -83,7 +85,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **json_api_custom_application_setting_in_document** | [**JsonApiCustomApplicationSettingInDocument**](JsonApiCustomApplicationSettingInDocument.md)|  |
+ **json_api_custom_application_setting_post_optional_id_document** | [**JsonApiCustomApplicationSettingPostOptionalIdDocument**](JsonApiCustomApplicationSettingPostOptionalIdDocument.md)|  |
  **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
@@ -109,9 +111,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **create_entity_workspace_settings**
-> JsonApiWorkspaceSettingOutDocument create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document)
+> JsonApiWorkspaceSettingOutDocument create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document)
 
-
+Post Settings for Workspaces
 
 ### Example
 
@@ -120,7 +122,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import workspaces_settings_api
-from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
+from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import JsonApiWorkspaceSettingPostOptionalIdDocument
 from gooddata_api_client.model.json_api_workspace_setting_out_document import JsonApiWorkspaceSettingOutDocument
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
@@ -135,8 +137,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = workspaces_settings_api.WorkspacesSettingsApi(api_client)
     workspace_id = "workspaceId_example" # str | 
-    json_api_workspace_setting_in_document = JsonApiWorkspaceSettingInDocument(
-        data=JsonApiWorkspaceSettingIn(
+    json_api_workspace_setting_post_optional_id_document = JsonApiWorkspaceSettingPostOptionalIdDocument(
+        data=JsonApiWorkspaceSettingPostOptionalId(
             attributes=JsonApiOrganizationSettingInAttributes(
                 content={},
                 type="TIMEZONE",
@@ -144,14 +146,15 @@ with gooddata_api_client.ApiClient() as api_client:
             id="id1",
             type="workspaceSetting",
         ),
-    ) # JsonApiWorkspaceSettingInDocument | 
+    ) # JsonApiWorkspaceSettingPostOptionalIdDocument | 
     meta_include = [
         "metaInclude=origin,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
-        api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document)
+        # Post Settings for Workspaces
+        api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->create_entity_workspace_settings: %s\n" % e)
@@ -159,7 +162,8 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
-        api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_in_document, meta_include=meta_include)
+        # Post Settings for Workspaces
+        api_response = api_instance.create_entity_workspace_settings(workspace_id, json_api_workspace_setting_post_optional_id_document, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->create_entity_workspace_settings: %s\n" % e)
@@ -171,7 +175,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **workspace_id** | **str**|  |
- **json_api_workspace_setting_in_document** | [**JsonApiWorkspaceSettingInDocument**](JsonApiWorkspaceSettingInDocument.md)|  |
+ **json_api_workspace_setting_post_optional_id_document** | [**JsonApiWorkspaceSettingPostOptionalIdDocument**](JsonApiWorkspaceSettingPostOptionalIdDocument.md)|  |
  **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
@@ -199,7 +203,7 @@ No authorization required
 # **delete_entity_custom_application_settings**
 > delete_entity_custom_application_settings(workspace_id, object_id)
 
-
+Delete a Custom Application Setting
 
 ### Example
 
@@ -226,6 +230,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Custom Application Setting
         api_instance.delete_entity_custom_application_settings(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->delete_entity_custom_application_settings: %s\n" % e)
@@ -233,6 +238,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete a Custom Application Setting
         api_instance.delete_entity_custom_application_settings(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->delete_entity_custom_application_settings: %s\n" % e)
@@ -272,7 +278,7 @@ No authorization required
 # **delete_entity_workspace_settings**
 > delete_entity_workspace_settings(workspace_id, object_id)
 
-
+Delete a Setting for Workspace
 
 ### Example
 
@@ -299,6 +305,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Delete a Setting for Workspace
         api_instance.delete_entity_workspace_settings(workspace_id, object_id)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->delete_entity_workspace_settings: %s\n" % e)
@@ -306,6 +313,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Delete a Setting for Workspace
         api_instance.delete_entity_workspace_settings(workspace_id, object_id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling WorkspacesSettingsApi->delete_entity_workspace_settings: %s\n" % e)
@@ -345,7 +353,7 @@ No authorization required
 # **get_all_entities_custom_application_settings**
 > JsonApiCustomApplicationSettingOutList get_all_entities_custom_application_settings(workspace_id)
 
-
+Get all Custom Application Settings
 
 ### Example
 
@@ -382,6 +390,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Custom Application Settings
         api_response = api_instance.get_all_entities_custom_application_settings(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -390,6 +399,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Custom Application Settings
         api_response = api_instance.get_all_entities_custom_application_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -435,7 +445,7 @@ No authorization required
 # **get_all_entities_workspace_settings**
 > JsonApiWorkspaceSettingOutList get_all_entities_workspace_settings(workspace_id)
 
-
+Get all Setting for Workspaces
 
 ### Example
 
@@ -472,6 +482,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get all Setting for Workspaces
         api_response = api_instance.get_all_entities_workspace_settings(workspace_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -480,6 +491,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get all Setting for Workspaces
         api_response = api_instance.get_all_entities_workspace_settings(workspace_id, origin=origin, filter=filter, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -525,7 +537,7 @@ No authorization required
 # **get_entity_custom_application_settings**
 > JsonApiCustomApplicationSettingOutDocument get_entity_custom_application_settings(workspace_id, object_id)
 
-
+Get a Custom Application Setting
 
 ### Example
 
@@ -557,6 +569,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Custom Application Setting
         api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -565,6 +578,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Custom Application Setting
         api_response = api_instance.get_entity_custom_application_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -607,7 +621,7 @@ No authorization required
 # **get_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument get_entity_workspace_settings(workspace_id, object_id)
 
-
+Get a Setting for Workspace
 
 ### Example
 
@@ -639,6 +653,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Get a Setting for Workspace
         api_response = api_instance.get_entity_workspace_settings(workspace_id, object_id)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -647,6 +662,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Get a Setting for Workspace
         api_response = api_instance.get_entity_workspace_settings(workspace_id, object_id, filter=filter, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -689,7 +705,7 @@ No authorization required
 # **patch_entity_custom_application_settings**
 > JsonApiCustomApplicationSettingOutDocument patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document)
 
-
+Patch a Custom Application Setting
 
 ### Example
 
@@ -728,6 +744,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Custom Application Setting
         api_response = api_instance.patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -736,6 +753,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Custom Application Setting
         api_response = api_instance.patch_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -777,7 +795,7 @@ No authorization required
 # **patch_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument patch_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_patch_document)
 
-
+Patch a Setting for Workspace
 
 ### Example
 
@@ -816,6 +834,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Patch a Setting for Workspace
         api_response = api_instance.patch_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_patch_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -824,6 +843,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Patch a Setting for Workspace
         api_response = api_instance.patch_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_patch_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -865,7 +885,7 @@ No authorization required
 # **update_entity_custom_application_settings**
 > JsonApiCustomApplicationSettingOutDocument update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document)
 
-
+Put a Custom Application Setting
 
 ### Example
 
@@ -904,6 +924,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Custom Application Setting
         api_response = api_instance.update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -912,6 +933,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Custom Application Setting
         api_response = api_instance.update_entity_custom_application_settings(workspace_id, object_id, json_api_custom_application_setting_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -953,7 +975,7 @@ No authorization required
 # **update_entity_workspace_settings**
 > JsonApiWorkspaceSettingOutDocument update_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_in_document)
 
-
+Put a Setting for a Workspace
 
 ### Example
 
@@ -992,6 +1014,7 @@ with gooddata_api_client.ApiClient() as api_client:
 
     # example passing only required values which don't have defaults set
     try:
+        # Put a Setting for a Workspace
         api_response = api_instance.update_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_in_document)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
@@ -1000,6 +1023,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # example passing only required values which don't have defaults set
     # and optional values
     try:
+        # Put a Setting for a Workspace
         api_response = api_instance.update_entity_workspace_settings(workspace_id, object_id, json_api_workspace_setting_in_document, filter=filter)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:

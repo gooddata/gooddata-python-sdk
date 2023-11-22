@@ -40,7 +40,7 @@ Physical Data Model scan result object.
 {{% /parameters-block %}}
 
 ## Example
-```Python
+```python
 # Scan data source
 scan_result_pdm = sdk.catalog_data_source.scan_data_source(data_source_id="demo-test-ds")
 ```

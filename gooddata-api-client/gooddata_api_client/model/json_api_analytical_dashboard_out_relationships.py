@@ -32,6 +32,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_analytical_dashboards import JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_created_by import JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_dashboard_plugins import JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_datasets import JsonApiAnalyticalDashboardOutRelationshipsDatasets
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_filter_contexts import JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
@@ -39,6 +40,7 @@ def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_metrics import JsonApiAnalyticalDashboardOutRelationshipsMetrics
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_visualization_objects import JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects
     globals()['JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards'] = JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards
+    globals()['JsonApiAnalyticalDashboardOutRelationshipsCreatedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins'] = JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins
     globals()['JsonApiAnalyticalDashboardOutRelationshipsDatasets'] = JsonApiAnalyticalDashboardOutRelationshipsDatasets
     globals()['JsonApiAnalyticalDashboardOutRelationshipsFilterContexts'] = JsonApiAnalyticalDashboardOutRelationshipsFilterContexts
@@ -101,11 +103,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
         lazy_import()
         return {
             'analytical_dashboards': (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards,),  # noqa: E501
+            'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
             'dashboard_plugins': (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins,),  # noqa: E501
             'datasets': (JsonApiAnalyticalDashboardOutRelationshipsDatasets,),  # noqa: E501
             'filter_contexts': (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts,),  # noqa: E501
             'labels': (JsonApiAnalyticalDashboardOutRelationshipsLabels,),  # noqa: E501
             'metrics': (JsonApiAnalyticalDashboardOutRelationshipsMetrics,),  # noqa: E501
+            'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
             'visualization_objects': (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects,),  # noqa: E501
         }
 
@@ -116,11 +120,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
 
     attribute_map = {
         'analytical_dashboards': 'analyticalDashboards',  # noqa: E501
+        'created_by': 'createdBy',  # noqa: E501
         'dashboard_plugins': 'dashboardPlugins',  # noqa: E501
         'datasets': 'datasets',  # noqa: E501
         'filter_contexts': 'filterContexts',  # noqa: E501
         'labels': 'labels',  # noqa: E501
         'metrics': 'metrics',  # noqa: E501
+        'modified_by': 'modifiedBy',  # noqa: E501
         'visualization_objects': 'visualizationObjects',  # noqa: E501
     }
 
@@ -166,11 +172,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 
@@ -258,11 +266,13 @@ class JsonApiAnalyticalDashboardOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             analytical_dashboards (JsonApiAnalyticalDashboardOutRelationshipsAnalyticalDashboards): [optional]  # noqa: E501
+            created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             dashboard_plugins (JsonApiAnalyticalDashboardOutRelationshipsDashboardPlugins): [optional]  # noqa: E501
             datasets (JsonApiAnalyticalDashboardOutRelationshipsDatasets): [optional]  # noqa: E501
             filter_contexts (JsonApiAnalyticalDashboardOutRelationshipsFilterContexts): [optional]  # noqa: E501
             labels (JsonApiAnalyticalDashboardOutRelationshipsLabels): [optional]  # noqa: E501
             metrics (JsonApiAnalyticalDashboardOutRelationshipsMetrics): [optional]  # noqa: E501
+            modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             visualization_objects (JsonApiAnalyticalDashboardOutRelationshipsVisualizationObjects): [optional]  # noqa: E501
         """
 

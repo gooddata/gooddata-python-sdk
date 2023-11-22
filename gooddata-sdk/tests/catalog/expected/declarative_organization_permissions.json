@@ -1,0 +1,16 @@
+[
+  {
+    "assignee": {
+      "id": "adminGroup",
+      "type": "userGroup"
+    },
+    "name": "MANAGE"
+  },
+  {
+    "assignee": {
+      "id": "adminGroup",
+      "type": "userGroup"
+    },
+    "name": "SELF_CREATE_TOKEN"
+  }
+]

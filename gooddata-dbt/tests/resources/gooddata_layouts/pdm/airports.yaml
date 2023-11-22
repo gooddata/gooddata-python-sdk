@@ -1,0 +1,31 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: true
+    name: code
+  - dataType: INT
+    isPrimaryKey: false
+    name: elevation
+  - dataType: STRING
+    isPrimaryKey: false
+    name: faa_region
+  - dataType: STRING
+    isPrimaryKey: false
+    name: fac_type
+  - dataType: STRING
+    isPrimaryKey: false
+    name: latitude
+  - dataType: STRING
+    isPrimaryKey: false
+    name: longitude
+  - dataType: STRING
+    isPrimaryKey: false
+    name: name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: state
+id: airports
+path:
+  - cicd_output_stage
+  - airports
+type: TABLE

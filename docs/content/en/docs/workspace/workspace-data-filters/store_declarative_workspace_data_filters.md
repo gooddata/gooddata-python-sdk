@@ -29,7 +29,7 @@ Path to the root of the layout directory. Defaults to Path.cwd().
 
 ## Example
 
-```Python
+```python
 # Store the workspace filters
 sdk.catalog_workspace.store_declarative_workspace_data_filters(layout_root_path=Path.cwd())
 ```

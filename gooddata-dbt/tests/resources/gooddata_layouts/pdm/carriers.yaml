@@ -1,0 +1,16 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: true
+    name: code
+  - dataType: STRING
+    isPrimaryKey: false
+    name: name
+  - dataType: STRING
+    isPrimaryKey: false
+    name: nickname
+id: carriers
+path:
+  - cicd_output_stage
+  - carriers
+type: TABLE

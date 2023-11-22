@@ -22,12 +22,11 @@ select = [
 "gooddata-pandas/gooddata_pandas/__init__.py" = ["F401"]
 "gooddata-sdk/gooddata_sdk/*/__init__.py" = ["F401"]
 "gooddata-sdk/gooddata_sdk/__init__.py" = ["F401"]
+"gooddata-dbt/gooddata_dbt/__init__.py" = ["F401"]
 "gooddata-fdw/gooddata_fdw/__init__.py" = ["F401"]
 
-[tool.black]
-line-length = 120
-# intentionally ignore the generated clients
-extend-exclude = '(gooddata-api-client|.*\.snapshot\..*)'
+[tool.ruff.format]
+exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
 
 [tool.isort]
 # make isort setup compatible with black
@@ -48,14 +47,16 @@ src_paths = [
 # github_url = "https://github.com/<user or organization>/<project>/"
 
 [tool.tbump.version]
-current = "1.3.0"
+current = "1.9.0"
 regex = '''
   (?P<major>\d+)
   \.
   (?P<minor>\d+)
   \.
   (?P<patch>\d+)
-  (a(?P<alpha>\d+))?
+  ((a(?P<alpha>\d+))?
+  |
+  (\.dev(?P<dev>\d+))?)
   '''
 
 [[tool.tbump.field]]
@@ -102,6 +103,16 @@ src = "gooddata-sdk/setup.py"
 search = "gooddata-.*-client~={current_version}"
 
 [[tool.tbump.file]]
+# sdk setup.py
+src = "gooddata-dbt/setup.py"
+search = "version=\"{current_version}\""
+
+[[tool.tbump.file]]
+# sdk setup.py dependency
+src = "gooddata-dbt/setup.py"
+search = "gooddata-sdk~={current_version}"
+
+[[tool.tbump.file]]
 # clients README
 src = "gooddata-*-client/README.md"
 
@@ -123,7 +134,11 @@ src = ".openapi-generator/configs/gooddata-*-client.yaml"
 
 [[tool.tbump.file]]
 src = "gooddata-sdk/setup.py"
-search = '"Documentation": "https://gooddata-sdk.readthedocs.io/en/v{current_version}"'
+search = '"Documentation": "https://www.gooddata.com/docs/python-sdk/{current_version}"'
+
+[[tool.tbump.file]]
+src = "gooddata-sdk/README.md"
+search = "https://www.gooddata.com/docs/python-sdk/{current_version}"
 
 [[tool.tbump.file]]
 src = "gooddata-pandas/setup.py"

@@ -56,9 +56,27 @@ class EntityIdentifier(ModelNormal):
     """
 
     allowed_values = {
+        ('type',): {
+            'ANALYTICALDASHBOARD': "analyticalDashboard",
+            'ATTRIBUTE': "attribute",
+            'DASHBOARDPLUGIN': "dashboardPlugin",
+            'DATASET': "dataset",
+            'FACT': "fact",
+            'LABEL': "label",
+            'METRIC': "metric",
+            'USERDATAFILTER': "userDataFilter",
+            'PROMPT': "prompt",
+            'VISUALIZATIONOBJECT': "visualizationObject",
+            'FILTERCONTEXT': "filterContext",
+        },
     }
 
     validations = {
+        ('id',): {
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -107,7 +125,7 @@ class EntityIdentifier(ModelNormal):
         """EntityIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Object identifier.
             type (str):
 
         Keyword Args:
@@ -198,7 +216,7 @@ class EntityIdentifier(ModelNormal):
         """EntityIdentifier - a model defined in OpenAPI
 
         Args:
-            id (str):
+            id (str): Object identifier.
             type (str):
 
         Keyword Args:

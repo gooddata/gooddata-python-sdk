@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_table import DeclarativeTable
     from gooddata_api_client.model.pdm_sql import PdmSql
+    globals()['DeclarativeTable'] = DeclarativeTable
     globals()['PdmSql'] = PdmSql
 
 
@@ -89,6 +91,7 @@ class PdmLdmRequest(ModelNormal):
         lazy_import()
         return {
             'sqls': ([PdmSql],),  # noqa: E501
+            'tables': ([DeclarativeTable],),  # noqa: E501
         }
 
     @cached_property
@@ -98,6 +101,7 @@ class PdmLdmRequest(ModelNormal):
 
     attribute_map = {
         'sqls': 'sqls',  # noqa: E501
+        'tables': 'tables',  # noqa: E501
     }
 
     read_only_vars = {
@@ -142,6 +146,7 @@ class PdmLdmRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             sqls ([PdmSql]): List of SQL datasets.. [optional]  # noqa: E501
+            tables ([DeclarativeTable]): List of physical database tables.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -228,6 +233,7 @@ class PdmLdmRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             sqls ([PdmSql]): List of SQL datasets.. [optional]  # noqa: E501
+            tables ([DeclarativeTable]): List of physical database tables.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

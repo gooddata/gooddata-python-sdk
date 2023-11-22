@@ -84,7 +84,7 @@ class AttributeFilterElements(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'values': ([str],),  # noqa: E501
+            'values': ([str, none_type],),  # noqa: E501
         }
 
     @cached_property
@@ -107,7 +107,7 @@ class AttributeFilterElements(ModelNormal):
         """AttributeFilterElements - a model defined in OpenAPI
 
         Args:
-            values ([str]): Set of label values.
+            values ([str, none_type]): Set of label values.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -196,7 +196,7 @@ class AttributeFilterElements(ModelNormal):
         """AttributeFilterElements - a model defined in OpenAPI
 
         Args:
-            values ([str]): Set of label values.
+            values ([str, none_type]): Set of label values.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

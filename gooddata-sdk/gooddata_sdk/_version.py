@@ -4,4 +4,7 @@ try:
 except ImportError:
     import importlib_metadata as metadata  # type: ignore # mypy issue #1153
 
-__version__: str = metadata.version("gooddata-sdk")
+try:
+    __version__ = metadata.version("gooddata-sdk")
+except metadata.PackageNotFoundError:
+    __version__ = "unknown-version"

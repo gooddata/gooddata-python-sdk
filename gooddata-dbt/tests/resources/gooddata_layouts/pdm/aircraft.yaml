@@ -1,0 +1,15 @@
+# (C) 2023 GoodData Corporation
+columns:
+  - dataType: STRING
+    isPrimaryKey: false
+    name: aircraft_model_code
+    referencedTableColumn: aircraft_model_code
+    referencedTableId: aircraft_models
+  - dataType: STRING
+    isPrimaryKey: true
+    name: tail_num
+id: aircraft
+path:
+  - cicd_output_stage
+  - aircraft
+type: TABLE

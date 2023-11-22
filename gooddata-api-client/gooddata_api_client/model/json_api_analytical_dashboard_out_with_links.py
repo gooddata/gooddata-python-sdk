@@ -31,14 +31,14 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_analytical_dashboard_in_attributes import JsonApiAnalyticalDashboardInAttributes
     from gooddata_api_client.model.json_api_analytical_dashboard_out import JsonApiAnalyticalDashboardOut
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes import JsonApiAnalyticalDashboardOutAttributes
     from gooddata_api_client.model.json_api_analytical_dashboard_out_meta import JsonApiAnalyticalDashboardOutMeta
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships import JsonApiAnalyticalDashboardOutRelationships
     from gooddata_api_client.model.object_links import ObjectLinks
     from gooddata_api_client.model.object_links_container import ObjectLinksContainer
-    globals()['JsonApiAnalyticalDashboardInAttributes'] = JsonApiAnalyticalDashboardInAttributes
     globals()['JsonApiAnalyticalDashboardOut'] = JsonApiAnalyticalDashboardOut
+    globals()['JsonApiAnalyticalDashboardOutAttributes'] = JsonApiAnalyticalDashboardOutAttributes
     globals()['JsonApiAnalyticalDashboardOutMeta'] = JsonApiAnalyticalDashboardOutMeta
     globals()['JsonApiAnalyticalDashboardOutRelationships'] = JsonApiAnalyticalDashboardOutRelationships
     globals()['ObjectLinks'] = ObjectLinks
@@ -78,7 +78,7 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
     validations = {
         ('id',): {
             'regex': {
-                'pattern': r'^((?!\.)[.A-Za-z0-9_-]{1,255}:)?(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
             },
         },
     }
@@ -106,9 +106,9 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """
         lazy_import()
         return {
+            'attributes': (JsonApiAnalyticalDashboardOutAttributes,),  # noqa: E501
             'id': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'attributes': (JsonApiAnalyticalDashboardInAttributes,),  # noqa: E501
             'meta': (JsonApiAnalyticalDashboardOutMeta,),  # noqa: E501
             'relationships': (JsonApiAnalyticalDashboardOutRelationships,),  # noqa: E501
             'links': (ObjectLinks,),  # noqa: E501
@@ -120,9 +120,9 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
 
 
     attribute_map = {
+        'attributes': 'attributes',  # noqa: E501
         'id': 'id',  # noqa: E501
         'type': 'type',  # noqa: E501
-        'attributes': 'attributes',  # noqa: E501
         'meta': 'meta',  # noqa: E501
         'relationships': 'relationships',  # noqa: E501
         'links': 'links',  # noqa: E501
@@ -137,6 +137,7 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """JsonApiAnalyticalDashboardOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "analyticalDashboard", must be one of ["analyticalDashboard", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -169,7 +170,6 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501
@@ -247,6 +247,7 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
         """JsonApiAnalyticalDashboardOutWithLinks - a model defined in OpenAPI
 
         Keyword Args:
+            attributes (JsonApiAnalyticalDashboardOutAttributes):
             id (str): API identifier of an object
             type (str): Object type. defaults to "analyticalDashboard", must be one of ["analyticalDashboard", ]  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
@@ -279,7 +280,6 @@ class JsonApiAnalyticalDashboardOutWithLinks(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            attributes (JsonApiAnalyticalDashboardInAttributes): [optional]  # noqa: E501
             meta (JsonApiAnalyticalDashboardOutMeta): [optional]  # noqa: E501
             relationships (JsonApiAnalyticalDashboardOutRelationships): [optional]  # noqa: E501
             links (ObjectLinks): [optional]  # noqa: E501

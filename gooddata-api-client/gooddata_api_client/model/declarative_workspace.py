@@ -34,12 +34,14 @@ def lazy_import():
     from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
     from gooddata_api_client.model.declarative_single_workspace_permission import DeclarativeSingleWorkspacePermission
+    from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
     from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
     globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
     globals()['DeclarativeSetting'] = DeclarativeSetting
     globals()['DeclarativeSingleWorkspacePermission'] = DeclarativeSingleWorkspacePermission
+    globals()['DeclarativeUserDataFilter'] = DeclarativeUserDataFilter
     globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
     globals()['DeclarativeWorkspaceModel'] = DeclarativeWorkspaceModel
     globals()['WorkspaceIdentifier'] = WorkspaceIdentifier
@@ -87,6 +89,12 @@ class DeclarativeWorkspace(ModelNormal):
         ('early_access',): {
             'max_length': 255,
         },
+        ('prefix',): {
+            'max_length': 255,
+            'regex': {
+                'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+            },
+        },
     }
 
     @cached_property
@@ -114,6 +122,7 @@ class DeclarativeWorkspace(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
+            'cache_extra_limit': (int,),  # noqa: E501
             'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
@@ -121,7 +130,9 @@ class DeclarativeWorkspace(ModelNormal):
             'model': (DeclarativeWorkspaceModel,),  # noqa: E501
             'parent': (WorkspaceIdentifier,),  # noqa: E501
             'permissions': ([DeclarativeSingleWorkspacePermission],),  # noqa: E501
+            'prefix': (str,),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
+            'user_data_filters': ([DeclarativeUserDataFilter],),  # noqa: E501
         }
 
     @cached_property
@@ -132,6 +143,7 @@ class DeclarativeWorkspace(ModelNormal):
     attribute_map = {
         'id': 'id',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
         'custom_application_settings': 'customApplicationSettings',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
@@ -139,7 +151,9 @@ class DeclarativeWorkspace(ModelNormal):
         'model': 'model',  # noqa: E501
         'parent': 'parent',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
+        'prefix': 'prefix',  # noqa: E501
         'settings': 'settings',  # noqa: E501
+        'user_data_filters': 'userDataFilters',  # noqa: E501
     }
 
     read_only_vars = {
@@ -187,6 +201,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
@@ -194,7 +209,9 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -286,6 +303,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
@@ -293,7 +311,9 @@ class DeclarativeWorkspace(ModelNormal):
             model (DeclarativeWorkspaceModel): [optional]  # noqa: E501
             parent (WorkspaceIdentifier): [optional]  # noqa: E501
             permissions ([DeclarativeSingleWorkspacePermission]): [optional]  # noqa: E501
+            prefix (str): Custom prefix of entity identifiers in workspace. [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of workspace settings.. [optional]  # noqa: E501
+            user_data_filters ([DeclarativeUserDataFilter]): A list of workspace user data filters.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

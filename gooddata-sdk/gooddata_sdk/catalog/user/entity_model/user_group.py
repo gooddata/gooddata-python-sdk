@@ -30,6 +30,7 @@ class CatalogUserGroupDocument(Base):
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogUserGroup(Base):
     id: str
+    attributes: Optional[CatalogUserGroupAttributes] = None
     relationships: Optional[CatalogUserGroupRelationships] = None
 
     @staticmethod
@@ -37,13 +38,25 @@ class CatalogUserGroup(Base):
         return JsonApiUserGroupIn
 
     @classmethod
-    def init(cls, user_group_id: str, user_group_parent_ids: Optional[List[str]] = None) -> CatalogUserGroup:
+    def init(
+        cls,
+        user_group_id: str,
+        user_group_name: Optional[str] = None,
+        user_group_parent_ids: Optional[List[str]] = None,
+    ) -> CatalogUserGroup:
+        attributes = CatalogUserGroupAttributes(name=user_group_name)
         relationships = CatalogUserGroupRelationships.create_user_group_relationships(user_group_parent_ids)
-        return cls(id=user_group_id, relationships=relationships)
+        return cls(id=user_group_id, attributes=attributes, relationships=relationships)
 
     @property
     def get_parents(self) -> List[str]:
         return self.relationships.get_parents if self.relationships is not None else []
+
+    @property
+    def name(self) -> Optional[str]:
+        if self.attributes is not None:
+            return self.attributes.name
+        return None
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -64,6 +77,11 @@ class CatalogUserGroupRelationships(Base):
     @property
     def get_parents(self) -> List[str]:
         return self.parents.get_parents if self.parents is not None else []
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogUserGroupAttributes(Base):
+    name: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, kw_only=True)

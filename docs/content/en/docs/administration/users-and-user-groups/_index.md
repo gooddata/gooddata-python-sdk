@@ -7,7 +7,7 @@ no_list: true
 
 Manage users and user groups together.
 
-See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
+See [Manage Permissions](https://www.gooddata.com/docs/cloud/manage-deployment/manage-permissions/) to learn how permissions work in GoodData.
 
 ### Declarative Methods
 
@@ -20,7 +20,7 @@ See [Manage Permissions](https://www.gooddata.com/developers/cloud-native/doc/cl
 ## Example
 List, create and delete users and user groups:
 
-```Python
+```python
 from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 

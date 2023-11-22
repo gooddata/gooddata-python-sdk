@@ -32,7 +32,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.dataset_reference_identifier import DatasetReferenceIdentifier
+    from gooddata_api_client.model.reference_source_column import ReferenceSourceColumn
     globals()['DatasetReferenceIdentifier'] = DatasetReferenceIdentifier
+    globals()['ReferenceSourceColumn'] = ReferenceSourceColumn
 
 
 class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
@@ -60,6 +62,15 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
     """
 
     allowed_values = {
+        ('source_column_data_types',): {
+            'INT': "INT",
+            'STRING': "STRING",
+            'DATE': "DATE",
+            'NUMERIC': "NUMERIC",
+            'TIMESTAMP': "TIMESTAMP",
+            'TIMESTAMP_TZ': "TIMESTAMP_TZ",
+            'BOOLEAN': "BOOLEAN",
+        },
     }
 
     validations = {
@@ -90,8 +101,9 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
         return {
             'identifier': (DatasetReferenceIdentifier,),  # noqa: E501
             'multivalue': (bool,),  # noqa: E501
-            'source_columns': ([str],),  # noqa: E501
             'source_column_data_types': ([str],),  # noqa: E501
+            'source_columns': ([str],),  # noqa: E501
+            'sources': ([ReferenceSourceColumn],),  # noqa: E501
         }
 
     @cached_property
@@ -102,8 +114,9 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
     attribute_map = {
         'identifier': 'identifier',  # noqa: E501
         'multivalue': 'multivalue',  # noqa: E501
-        'source_columns': 'sourceColumns',  # noqa: E501
         'source_column_data_types': 'sourceColumnDataTypes',  # noqa: E501
+        'source_columns': 'sourceColumns',  # noqa: E501
+        'sources': 'sources',  # noqa: E501
     }
 
     read_only_vars = {
@@ -113,13 +126,12 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, identifier, multivalue, source_columns, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, identifier, multivalue, *args, **kwargs):  # noqa: E501
         """JsonApiDatasetOutAttributesReferencePropertiesInner - a model defined in OpenAPI
 
         Args:
             identifier (DatasetReferenceIdentifier):
             multivalue (bool):
-            source_columns ([str]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -153,6 +165,8 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             source_column_data_types ([str]): [optional]  # noqa: E501
+            source_columns ([str]): [optional]  # noqa: E501
+            sources ([ReferenceSourceColumn]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -186,7 +200,6 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
 
         self.identifier = identifier
         self.multivalue = multivalue
-        self.source_columns = source_columns
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -207,13 +220,12 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, identifier, multivalue, source_columns, *args, **kwargs):  # noqa: E501
+    def __init__(self, identifier, multivalue, *args, **kwargs):  # noqa: E501
         """JsonApiDatasetOutAttributesReferencePropertiesInner - a model defined in OpenAPI
 
         Args:
             identifier (DatasetReferenceIdentifier):
             multivalue (bool):
-            source_columns ([str]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -247,6 +259,8 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             source_column_data_types ([str]): [optional]  # noqa: E501
+            source_columns ([str]): [optional]  # noqa: E501
+            sources ([ReferenceSourceColumn]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -278,7 +292,6 @@ class JsonApiDatasetOutAttributesReferencePropertiesInner(ModelNormal):
 
         self.identifier = identifier
         self.multivalue = multivalue
-        self.source_columns = source_columns
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
