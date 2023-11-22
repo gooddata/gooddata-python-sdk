@@ -1,0 +1,66 @@
+name: "gitflow-merge"
+description: "Promote or backmerge (infra) gitflow repository branches"
+inputs:
+  cutoff:
+    description: "Cutoff date for promote/backmerge (e.g., 'X days ago')"
+    type: string
+    default: "now"
+  merge:
+    description: "Merge the created PR (left open for review if false)"
+    type: boolean
+    default: false
+  source:
+    description: "Head branch to backmerge"
+    type: string
+    required: true
+  target:
+    description: "Target branch to backmerge into"
+    type: string
+    required: true
+  token_pr:
+    description: "GitHub token to use for PR creation/merge"
+    type: string
+    required: true
+  token_push:
+    description: "GitHub token to use for pull/push"
+    type: string
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout source branch
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        ref: "${{ inputs.source }}"
+        token: "${{ inputs.token_push }}"
+    - name: Checkout and push new branch
+      run: |
+        commit=$(git log --until="${{ inputs.cutoff }}" --format="%H" -n 1)
+        git checkout $commit
+        short=$(git rev-parse --short HEAD)
+        branch="snapshot-${{ inputs.source }}-${short}-to-${{ inputs.target }}"
+        git checkout -b $branch
+        git push origin $branch
+        echo "commit=${commit}" >> $GITHUB_OUTPUT
+        echo "short=${short}" >> $GITHUB_OUTPUT
+        echo "branch=${branch}" >> $GITHUB_OUTPUT
+      shell: bash
+      id: push
+    - name: Create the promote/backmerge PR
+      run: |
+        gh pr create \
+          --title "[bot] Merge ${{ inputs.source }}/${{ steps.push.outputs.short }} into ${{ inputs.target }}" \
+          --body ":rocket: Automated PR to perform merge from **${{ inputs.source }}** into **${{ inputs.target }}** with changes up to ${{ steps.push.outputs.short }} (created by ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
+          --base ${{ inputs.target }} --head ${{ steps.push.outputs.branch }} \
+        | tee -a $GITHUB_STEP_SUMMARY
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token_pr }}
+    - name: Merge the created PR
+      if: ${{ inputs.merge == 'true' }}
+      run: gh pr merge --merge --admin
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token_pr }}
