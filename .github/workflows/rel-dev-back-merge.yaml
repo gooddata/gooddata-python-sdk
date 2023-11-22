@@ -14,7 +14,7 @@ jobs:
       pull-requests: write
     runs-on: infra1-small
     steps:
-      - uses: gooddata/github-actions/gitflow/merge@master
+      - uses: gooddata/gooddata-python-sdk/.github/actions/merge@master
         with:
           merge: true
           source: "master"
