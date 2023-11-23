@@ -53,7 +53,6 @@ runs:
       shell: bash
       id: push
     - name: Create the promote/backmerge PR
-      id: pr
       run: |
         gh pr create \
           --title "[bot] Merge ${{ inputs.source }}/${{ steps.push.outputs.short }} into ${{ inputs.target }}" \
@@ -71,7 +70,12 @@ runs:
         GH_TOKEN: ${{ inputs.token_pr }}
     - name: Delete the source branch
       if: ${{ inputs.merge == 'true' && inputs.delete_branch == 'true' }}
-      run: git push origin -d ${{ steps.push.outputs.branch }}
+      run: |
+        if git show-ref --verify --quiet refs/heads/${{ steps.push.outputs.branch }}; then
+          git branch -d ${{ steps.push.outputs.branch }}
+        else
+          echo "Nothing to delete. Branch ${{ steps.push.outputs.branch }} does not exist."
+        fi
       shell: bash
       env:
           GH_TOKEN: ${{ inputs.token_pr }}
