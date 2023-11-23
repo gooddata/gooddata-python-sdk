@@ -72,7 +72,7 @@ runs:
       if: ${{ inputs.merge == 'true' && inputs.delete_branch == 'true' }}
       run: |
         if git show-ref --verify --quiet refs/heads/${{ steps.push.outputs.branch }}; then
-          git branch -d ${{ steps.push.outputs.branch }}
+          git push origin -d ${{ steps.push.outputs.branch }}
         else
           echo "Nothing to delete. Branch ${{ steps.push.outputs.branch }} does not exist."
         fi
