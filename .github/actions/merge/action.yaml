@@ -25,10 +25,6 @@ inputs:
     description: "GitHub token to use for pull/push"
     type: string
     required: true
-  delete_branch:
-    description: "Delete the source branch after merge"
-    type: boolean
-    default: false
 
 runs:
   using: "composite"
@@ -64,18 +60,7 @@ runs:
         GH_TOKEN: ${{ inputs.token_pr }}
     - name: Merge the created PR
       if: ${{ inputs.merge == 'true' }}
-      run: gh pr merge --merge --admin
+      run: gh pr merge --merge --admin --delete-branch
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.token_pr }}
-    - name: Delete the source branch
-      if: ${{ inputs.merge == 'true' && inputs.delete_branch == 'true' }}
-      run: |
-        if git show-ref --verify --quiet refs/heads/${{ steps.push.outputs.branch }}; then
-          git push origin -d ${{ steps.push.outputs.branch }}
-        else
-          echo "Nothing to delete. Branch ${{ steps.push.outputs.branch }} does not exist."
-        fi
-      shell: bash
-      env:
-          GH_TOKEN: ${{ inputs.token_pr }}
