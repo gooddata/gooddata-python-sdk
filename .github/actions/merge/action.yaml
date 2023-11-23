@@ -25,6 +25,10 @@ inputs:
     description: "GitHub token to use for pull/push"
     type: string
     required: true
+  delete_branch:
+    description: "Delete the source branch after merge"
+    type: boolean
+    default: false
 
 runs:
   using: "composite"
@@ -49,6 +53,7 @@ runs:
       shell: bash
       id: push
     - name: Create the promote/backmerge PR
+      id: pr
       run: |
         gh pr create \
           --title "[bot] Merge ${{ inputs.source }}/${{ steps.push.outputs.short }} into ${{ inputs.target }}" \
@@ -64,3 +69,9 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.token_pr }}
+    - name: Delete the source branch
+      if: ${{ inputs.merge == 'true' && inputs.delete_branch == 'true' }}
+      run: git push origin -d ${{ steps.push.outputs.branch }}
+      shell: bash
+      env:
+          GH_TOKEN: ${{ inputs.token_pr }}
