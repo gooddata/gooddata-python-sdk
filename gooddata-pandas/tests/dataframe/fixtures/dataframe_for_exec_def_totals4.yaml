@@ -198,10 +198,10 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a30cf015f70a435e9c839143ae322a11f1047174
+              executionResult: 22a637cb646223a4a058894cad0af6dc17934ea8
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a30cf015f70a435e9c839143ae322a11f1047174/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/22a637cb646223a4a058894cad0af6dc17934ea8/metadata
       body: null
       headers:
         Accept:
@@ -370,7 +370,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a30cf015f70a435e9c839143ae322a11f1047174
+              executionResult: 22a637cb646223a4a058894cad0af6dc17934ea8
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -403,7 +403,7 @@ interactions:
           resultSize: 15292
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a30cf015f70a435e9c839143ae322a11f1047174?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/22a637cb646223a4a058894cad0af6dc17934ea8?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -473,7 +473,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '24890'
+          - '24881'
       body:
         string:
           data:
@@ -2700,7 +2700,7 @@ interactions:
                         primaryLabelValue: Outdoor
           grandTotals:
             - data:
-                - - 4983.36
+                - - 4983.360000000001
                   - null
                 - - null
                   - 2664.71
@@ -2728,7 +2728,7 @@ interactions:
                   - null
                 - - null
                   - 1048.14
-                - - 3239.7200000000003
+                - - 3239.72
                   - null
                 - - null
                   - 1355.06
@@ -2756,11 +2756,11 @@ interactions:
                   - null
                 - - null
                   - 3205.41
-                - - 5982.7
+                - - 5982.700000000001
                   - null
                 - - null
                   - 3939.72
-                - - 8467.679999999998
+                - - 8467.68
                   - null
                 - - null
                   - 3542.07
@@ -2772,7 +2772,7 @@ interactions:
                   - null
                 - - null
                   - 1671.49
-                - - 6511.789999999999
+                - - 6511.79
                   - null
                 - - null
                   - 2185.98
@@ -2784,7 +2784,7 @@ interactions:
                   - null
                 - - null
                   - 1729.45
-                - - 7745.420000000001
+                - - 7745.42
                   - null
                 - - null
                   - 5617.86
@@ -2820,7 +2820,7 @@ interactions:
                   - null
                 - - null
                   - 1129.66
-                - - 1328.97
+                - - 1328.9699999999998
                   - null
                 - - null
                   - 540.36
@@ -2844,7 +2844,7 @@ interactions:
                   - null
                 - - null
                   - 6328.89
-                - - 4465.110000000001
+                - - 4465.11
                   - null
                 - - null
                   - 2074.55
@@ -2868,7 +2868,7 @@ interactions:
                   - null
                 - - null
                   - 1995.05
-                - - 44253.95
+                - - 44253.950000000004
                   - null
                 - - null
                   - 22670.23
@@ -2918,7 +2918,7 @@ interactions:
               - 17
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a30cf015f70a435e9c839143ae322a11f1047174/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/22a637cb646223a4a058894cad0af6dc17934ea8/metadata
       body: null
       headers:
         Accept:
@@ -3087,7 +3087,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: a30cf015f70a435e9c839143ae322a11f1047174
+              executionResult: 22a637cb646223a4a058894cad0af6dc17934ea8
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -3120,7 +3120,7 @@ interactions:
           resultSize: 15292
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a30cf015f70a435e9c839143ae322a11f1047174?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/22a637cb646223a4a058894cad0af6dc17934ea8?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -3190,7 +3190,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '24890'
+          - '24881'
       body:
         string:
           data:
@@ -5417,7 +5417,7 @@ interactions:
                         primaryLabelValue: Outdoor
           grandTotals:
             - data:
-                - - 4983.36
+                - - 4983.360000000001
                   - null
                 - - null
                   - 2664.71
@@ -5445,7 +5445,7 @@ interactions:
                   - null
                 - - null
                   - 1048.14
-                - - 3239.7200000000003
+                - - 3239.72
                   - null
                 - - null
                   - 1355.06
@@ -5473,11 +5473,11 @@ interactions:
                   - null
                 - - null
                   - 3205.41
-                - - 5982.7
+                - - 5982.700000000001
                   - null
                 - - null
                   - 3939.72
-                - - 8467.679999999998
+                - - 8467.68
                   - null
                 - - null
                   - 3542.07
@@ -5489,7 +5489,7 @@ interactions:
                   - null
                 - - null
                   - 1671.49
-                - - 6511.789999999999
+                - - 6511.79
                   - null
                 - - null
                   - 2185.98
@@ -5501,7 +5501,7 @@ interactions:
                   - null
                 - - null
                   - 1729.45
-                - - 7745.420000000001
+                - - 7745.42
                   - null
                 - - null
                   - 5617.86
@@ -5537,7 +5537,7 @@ interactions:
                   - null
                 - - null
                   - 1129.66
-                - - 1328.97
+                - - 1328.9699999999998
                   - null
                 - - null
                   - 540.36
@@ -5561,7 +5561,7 @@ interactions:
                   - null
                 - - null
                   - 6328.89
-                - - 4465.110000000001
+                - - 4465.11
                   - null
                 - - null
                   - 2074.55
@@ -5585,7 +5585,7 @@ interactions:
                   - null
                 - - null
                   - 1995.05
-                - - 44253.95
+                - - 44253.950000000004
                   - null
                 - - null
                   - 22670.23

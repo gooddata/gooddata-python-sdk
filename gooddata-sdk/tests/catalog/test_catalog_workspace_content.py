@@ -152,7 +152,8 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_e.ldm.datasets[0].data_source_table_id.id == table_id.upper()
     assert ldm_e.ldm.datasets[0].attributes[0].source_column == attribute_column.upper()
     assert ldm_e.ldm.datasets[0].facts[0].source_column == fact_column.upper()
-    assert ldm_e.ldm.datasets[0].references[0].source_columns == [reference_column.upper()]
+    assert ldm_e.ldm.datasets[0].references[0].source_columns is None
+    assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column.upper()
     # Test chaining approach as well
     data_source_mapping = {test_config["data_source"]: test_config["data_source2"]}
     ldm_o = attrs.evolve(
@@ -162,7 +163,8 @@ def test_load_ldm_and_modify_tables_columns_case(test_config):
     assert ldm_o.ldm.datasets[0].data_source_table_id.id == table_id
     assert ldm_o.ldm.datasets[0].attributes[0].source_column == attribute_column
     assert ldm_o.ldm.datasets[0].facts[0].source_column == fact_column
-    assert ldm_o.ldm.datasets[0].references[0].source_columns == [reference_column]
+    assert ldm_o.ldm.datasets[0].references[0].source_columns is None
+    assert ldm_e.ldm.datasets[0].references[0].sources[0].column == reference_column
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_store_declarative_analytics_model.yaml"))

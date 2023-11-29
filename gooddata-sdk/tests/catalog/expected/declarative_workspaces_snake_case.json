@@ -21,11 +21,15 @@
                     "id": "campaigns"
                   },
                   "multivalue": false,
-                  "source_columns": [
-                    "campaign_id"
-                  ],
-                  "source_column_data_types": [
-                    "INT"
+                  "sources": [
+                    {
+                      "column": "campaign_id",
+                      "target": {
+                        "id": "campaign_id",
+                        "type": "attribute"
+                      },
+                      "data_type": "INT"
+                    }
                   ]
                 }
               ],
@@ -243,11 +247,15 @@
                     "id": "campaigns"
                   },
                   "multivalue": false,
-                  "source_columns": [
-                    "campaign_id"
-                  ],
-                  "source_column_data_types": [
-                    "INT"
+                  "sources": [
+                    {
+                      "column": "campaign_id",
+                      "target": {
+                        "id": "campaign_id",
+                        "type": "attribute"
+                      },
+                      "data_type": "INT"
+                    }
                   ]
                 },
                 {
@@ -255,11 +263,15 @@
                     "id": "customers"
                   },
                   "multivalue": false,
-                  "source_columns": [
-                    "customer_id"
-                  ],
-                  "source_column_data_types": [
-                    "INT"
+                  "sources": [
+                    {
+                      "column": "customer_id",
+                      "target": {
+                        "id": "customer_id",
+                        "type": "attribute"
+                      },
+                      "data_type": "INT"
+                    }
                   ]
                 },
                 {
@@ -267,11 +279,15 @@
                     "id": "date"
                   },
                   "multivalue": false,
-                  "source_columns": [
-                    "date"
-                  ],
-                  "source_column_data_types": [
-                    "DATE"
+                  "sources": [
+                    {
+                      "column": "date",
+                      "target": {
+                        "id": "date",
+                        "type": "date"
+                      },
+                      "data_type": "DATE"
+                    }
                   ]
                 },
                 {
@@ -279,11 +295,15 @@
                     "id": "products"
                   },
                   "multivalue": false,
-                  "source_columns": [
-                    "product_id"
-                  ],
-                  "source_column_data_types": [
-                    "INT"
+                  "sources": [
+                    {
+                      "column": "product_id",
+                      "target": {
+                        "id": "product_id",
+                        "type": "attribute"
+                      },
+                      "data_type": "INT"
+                    }
                   ]
                 }
               ],
@@ -540,6 +560,14 @@
                 },
                 "version": "2"
               },
+              "permissions": [
+                {
+                  "assignee_rule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ],
               "description": ""
             },
             {
@@ -2772,7 +2800,19 @@
         },
         "analytics": {
           "analytical_dashboards": [],
-          "analytical_dashboard_extensions": [],
+          "analytical_dashboard_extensions": [
+            {
+              "id": "campaign",
+              "permissions": [
+                {
+                  "assignee_rule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ]
+            }
+          ],
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],

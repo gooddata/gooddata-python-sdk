@@ -1,6 +1,6 @@
 # DataSourceTableIdentifier
 
-An id of the table from PDM mapped to this dataset. Including ID of data source.
+An id of the table. Including ID of data source.
 
 ## Properties
 Name | Type | Description | Notes

@@ -14,7 +14,6 @@ Name | Type | Description | Notes
 **enable_caching** | **bool** | Enable caching of intermediate results. | [optional] 
 **parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **password** | **str** | Password for the data-source user, property is never returned back. | [optional] 
-**pdm** | [**DeclarativeTables**](DeclarativeTables.md) |  | [optional] 
 **permissions** | [**[DeclarativeDataSourcePermission]**](DeclarativeDataSourcePermission.md) |  | [optional] 
 **token** | **str** | Token as an alternative to username and password. | [optional] 
 **url** | **str** | An connection string relevant to type of database. | [optional] 

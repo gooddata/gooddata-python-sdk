@@ -1002,12 +1002,12 @@
                 ],
                 "properties": {},
                 "sorts": [
-                    {
-                      "attributeSortItem": {
-                        "attributeIdentifier": "7a4045fd00ac44579f52406df679435f",
-                        "direction": "asc"
-                      }
+                  {
+                    "attributeSortItem": {
+                      "attributeIdentifier": "7a4045fd00ac44579f52406df679435f",
+                      "direction": "asc"
                     }
+                  }
                 ],
                 "version": "2",
                 "visualizationUrl": "local:table"
@@ -1676,12 +1676,12 @@
                 ],
                 "properties": {},
                 "sorts": [
-                    {
-                        "attributeSortItem": {
-                            "attributeIdentifier": "06bc6b3b9949466494e4f594c11f1bff",
-                            "direction": "asc"
-                        }
+                  {
+                    "attributeSortItem": {
+                      "attributeIdentifier": "06bc6b3b9949466494e4f594c11f1bff",
+                      "direction": "asc"
                     }
+                  }
                 ],
                 "version": "2",
                 "visualizationUrl": "local:table"
@@ -2261,8 +2261,9 @@
                 {
                   "description": "Campaign channel id",
                   "id": "campaign_channel_id",
-                  "labels": [],
                   "sourceColumn": "campaign_channel_id",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2271,8 +2272,9 @@
                 {
                   "description": "Category",
                   "id": "campaign_channels.category",
-                  "labels": [],
                   "sourceColumn": "category",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2281,8 +2283,9 @@
                 {
                   "description": "Type",
                   "id": "type",
-                  "labels": [],
                   "sourceColumn": "type",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2292,6 +2295,7 @@
               "dataSourceTableId": {
                 "dataSourceId": "demo-test-ds",
                 "id": "campaign_channels",
+                "path": [ "demo", "campaign_channels" ],
                 "type": "dataSource"
               },
               "description": "Campaign channels",
@@ -2300,6 +2304,7 @@
                   "description": "Budget",
                   "id": "budget",
                   "sourceColumn": "budget",
+                  "sourceColumnDataType": "NUMERIC",
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2309,6 +2314,7 @@
                   "description": "Spend",
                   "id": "spend",
                   "sourceColumn": "spend",
+                  "sourceColumnDataType": "NUMERIC",
                   "tags": [
                     "Campaign channels"
                   ],
@@ -2331,7 +2337,8 @@
                   "multivalue": false,
                   "sourceColumns": [
                     "campaign_id"
-                  ]
+                  ],
+                  "sourceColumnDataTypes": [ "INT" ]
                 }
               ],
               "tags": [
@@ -2344,8 +2351,9 @@
                 {
                   "description": "Campaign id",
                   "id": "campaign_id",
-                  "labels": [],
                   "sourceColumn": "campaign_id",
+                  "sourceColumnDataType": "INT",
+                  "labels": [],
                   "tags": [
                     "Campaigns"
                   ],
@@ -2354,8 +2362,9 @@
                 {
                   "description": "Campaign name",
                   "id": "campaign_name",
-                  "labels": [],
                   "sourceColumn": "campaign_name",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Campaigns"
                   ],
@@ -2365,6 +2374,7 @@
               "dataSourceTableId": {
                 "dataSourceId": "demo-test-ds",
                 "id": "campaigns",
+                "path": [ "demo", "campaigns" ],
                 "type": "dataSource"
               },
               "description": "Campaigns",
@@ -2387,8 +2397,9 @@
                 {
                   "description": "Customer id",
                   "id": "customer_id",
-                  "labels": [],
                   "sourceColumn": "customer_id",
+                  "sourceColumnDataType": "INT",
+                  "labels": [],
                   "tags": [
                     "Customers"
                   ],
@@ -2397,8 +2408,9 @@
                 {
                   "description": "Customer name",
                   "id": "customer_name",
-                  "labels": [],
                   "sourceColumn": "customer_name",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Customers"
                   ],
@@ -2407,8 +2419,9 @@
                 {
                   "description": "Region",
                   "id": "region",
-                  "labels": [],
                   "sourceColumn": "region",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Customers"
                   ],
@@ -2417,18 +2430,20 @@
                 {
                   "description": "State",
                   "id": "state",
+                  "sourceColumn": "state",
+                  "sourceColumnDataType" : "STRING",
                   "labels": [
                     {
                       "description": "Location",
                       "id": "geo__state__location",
                       "sourceColumn": "geo__state__location",
+                      "sourceColumnDataType": "STRING",
                       "tags": [
                         "Customers"
                       ],
                       "title": "Location"
                     }
                   ],
-                  "sourceColumn": "state",
                   "tags": [
                     "Customers"
                   ],
@@ -2438,6 +2453,7 @@
               "dataSourceTableId": {
                 "dataSourceId": "demo-test-ds",
                 "id": "customers",
+                "path": [ "demo", "customers" ],
                 "type": "dataSource"
               },
               "description": "Customers",
@@ -2460,8 +2476,9 @@
                 {
                   "description": "Order id",
                   "id": "order_id",
-                  "labels": [],
                   "sourceColumn": "order_id",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Order lines"
                   ],
@@ -2470,8 +2487,9 @@
                 {
                   "description": "Order line id",
                   "id": "order_line_id",
-                  "labels": [],
                   "sourceColumn": "order_line_id",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Order lines"
                   ],
@@ -2480,8 +2498,9 @@
                 {
                   "description": "Order status",
                   "id": "order_status",
-                  "labels": [],
                   "sourceColumn": "order_status",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Order lines"
                   ],
@@ -2491,6 +2510,7 @@
               "dataSourceTableId": {
                 "dataSourceId": "demo-test-ds",
                 "id": "order_lines",
+                "path": [ "demo", "order_lines" ],
                 "type": "dataSource"
               },
               "description": "Order lines",
@@ -2499,6 +2519,7 @@
                   "description": "Price",
                   "id": "price",
                   "sourceColumn": "price",
+                  "sourceColumnDataType": "NUMERIC",
                   "tags": [
                     "Order lines"
                   ],
@@ -2508,6 +2529,7 @@
                   "description": "Quantity",
                   "id": "quantity",
                   "sourceColumn": "quantity",
+                  "sourceColumnDataType": "NUMERIC",
                   "tags": [
                     "Order lines"
                   ],
@@ -2530,7 +2552,8 @@
                   "multivalue": false,
                   "sourceColumns": [
                     "campaign_id"
-                  ]
+                  ],
+                  "sourceColumnDataTypes": [ "INT" ]
                 },
                 {
                   "identifier": {
@@ -2540,7 +2563,8 @@
                   "multivalue": false,
                   "sourceColumns": [
                     "customer_id"
-                  ]
+                  ],
+                  "sourceColumnDataTypes": [ "INT" ]
                 },
                 {
                   "identifier": {
@@ -2550,7 +2574,8 @@
                   "multivalue": false,
                   "sourceColumns": [
                     "date"
-                  ]
+                  ],
+                  "sourceColumnDataTypes": [ "DATE" ]
                 },
                 {
                   "identifier": {
@@ -2560,21 +2585,40 @@
                   "multivalue": false,
                   "sourceColumns": [
                     "product_id"
-                  ]
+                  ],
+                  "sourceColumnDataTypes": [ "INT" ]
                 }
               ],
               "tags": [
                 "Order lines"
               ],
-              "title": "Order lines"
+              "title": "Order lines",
+              "workspaceDataFilterColumns": [ {
+                "dataType": "STRING",
+                "name": "wdf__region"
+              }, {
+                "dataType": "STRING",
+                "name": "wdf__state"
+              } ],
+              "workspaceDataFilterReferences": [
+                {
+                  "filterColumn": "wdf__region",
+                  "filterColumnDataType": "STRING",
+                  "filterId": {
+                    "id": "wdf__region",
+                    "type": "workspaceDataFilter"
+                  }
+                }
+              ]
             },
             {
               "attributes": [
                 {
                   "description": "Product id",
                   "id": "product_id",
-                  "labels": [],
                   "sourceColumn": "product_id",
+                  "sourceColumnDataType": "INT",
+                  "labels": [],
                   "tags": [
                     "Products"
                   ],
@@ -2583,8 +2627,9 @@
                 {
                   "description": "Product name",
                   "id": "product_name",
-                  "labels": [],
                   "sourceColumn": "product_name",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Products"
                   ],
@@ -2593,8 +2638,9 @@
                 {
                   "description": "Category",
                   "id": "products.category",
-                  "labels": [],
                   "sourceColumn": "category",
+                  "sourceColumnDataType": "STRING",
+                  "labels": [],
                   "tags": [
                     "Products"
                   ],
@@ -2604,6 +2650,7 @@
               "dataSourceTableId": {
                 "dataSourceId": "demo-test-ds",
                 "id": "products",
+                "path": [ "demo", "products" ],
                 "type": "dataSource"
               },
               "description": "Products",
@@ -2624,23 +2671,12 @@
           ],
           "dateInstances": [
             {
-              "description": "",
               "granularities": [
-                "MINUTE",
-                "HOUR",
                 "DAY",
-                "WEEK",
                 "MONTH",
                 "QUARTER",
-                "YEAR",
-                "MINUTE_OF_HOUR",
-                "HOUR_OF_DAY",
-                "DAY_OF_WEEK",
-                "DAY_OF_MONTH",
-                "DAY_OF_YEAR",
-                "WEEK_OF_YEAR",
-                "MONTH_OF_YEAR",
-                "QUARTER_OF_YEAR"
+                "WEEK",
+                "YEAR"
               ],
               "granularitiesFormatting": {
                 "titleBase": "",
@@ -2683,6 +2719,21 @@
           "visualizationObjects": []
         },
         "ldm": {
+          "datasetExtensions": [
+            {
+              "id": "order_lines",
+              "workspaceDataFilterReferences": [
+                {
+                  "filterColumn": "wdf__state",
+                  "filterColumnDataType": "STRING",
+                  "filterId": {
+                    "id": "wdf__state",
+                    "type": "workspaceDataFilter"
+                  }
+                }
+              ]
+            }
+          ],
           "datasets": [],
           "dateInstances": []
         }

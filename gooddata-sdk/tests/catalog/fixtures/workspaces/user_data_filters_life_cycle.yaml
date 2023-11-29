@@ -156,7 +156,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4e92a4b7cb9f7c5f
+          traceId: 2830cefb1979be2a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -367,7 +367,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRjMmZmNDZkNC04Y2RlLTRhM2UtODk4OS0yNDk5YzkwYjU0YmYSBWxvY2Fs
+                authenticationId: CiRmM2ViMjJjYi03OTkzLTRlNzEtOTVjYS0yNTIxYTVmYjU3MTESBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
           links:
@@ -470,7 +470,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRjMmZmNDZkNC04Y2RlLTRhM2UtODk4OS0yNDk5YzkwYjU0YmYSBWxvY2Fs
+                authenticationId: CiRmM2ViMjJjYi03OTkzLTRlNzEtOTVjYS0yNTIxYTVmYjU3MTESBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
             - id: order_status
@@ -731,6 +731,10 @@ interactions:
                       version: '2'
                     id: campaign
                     title: Campaign
+                    permissions:
+                      - assigneeRule:
+                          type: allWorkspaceUsers
+                        name: VIEW
                     description: ''
                   - content:
                       filterContextRef:
@@ -2004,10 +2008,12 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - campaign_id
+                        sources:
+                          - column: campaign_id
+                            target:
+                              id: campaign_id
+                              type: attribute
+                            dataType: INT
                     title: Campaign channels
                     attributes:
                       - id: campaign_channel_id
@@ -2159,34 +2165,42 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - campaign_id
+                        sources:
+                          - column: campaign_id
+                            target:
+                              id: campaign_id
+                              type: attribute
+                            dataType: INT
                       - identifier:
                           id: customers
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - customer_id
+                        sources:
+                          - column: customer_id
+                            target:
+                              id: customer_id
+                              type: attribute
+                            dataType: INT
                       - identifier:
                           id: date
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - DATE
-                        sourceColumns:
-                          - date
+                        sources:
+                          - column: date
+                            target:
+                              id: date
+                              type: date
+                            dataType: DATE
                       - identifier:
                           id: products
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - product_id
+                        sources:
+                          - column: product_id
+                            target:
+                              id: product_id
+                              type: attribute
+                            dataType: INT
                     title: Order lines
                     attributes:
                       - id: order_id
@@ -2333,7 +2347,12 @@ interactions:
             hierarchyPermissions: []
             model:
               analytics:
-                analyticalDashboardExtensions: []
+                analyticalDashboardExtensions:
+                  - id: campaign
+                    permissions:
+                      - assigneeRule:
+                          type: allWorkspaceUsers
+                        name: VIEW
                 analyticalDashboards: []
                 dashboardPlugins: []
                 filterContexts: []

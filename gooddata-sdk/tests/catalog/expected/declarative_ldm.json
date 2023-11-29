@@ -16,11 +16,15 @@
               "type": "dataset"
             },
             "multivalue": false,
-            "sourceColumns": [
-              "campaign_id"
-            ],
-            "sourceColumnDataTypes": [
-              "INT"
+            "sources": [
+              {
+                "column": "campaign_id",
+                "target": {
+                  "id": "campaign_id",
+                  "type": "attribute"
+                },
+                "dataType": "INT"
+              }
             ]
           }
         ],
@@ -242,11 +246,15 @@
               "type": "dataset"
             },
             "multivalue": false,
-            "sourceColumns": [
-              "campaign_id"
-            ],
-            "sourceColumnDataTypes": [
-              "INT"
+            "sources": [
+              {
+                "column": "campaign_id",
+                "target": {
+                  "id": "campaign_id",
+                  "type": "attribute"
+                },
+                "dataType": "INT"
+              }
             ]
           },
           {
@@ -255,11 +263,15 @@
               "type": "dataset"
             },
             "multivalue": false,
-            "sourceColumns": [
-              "customer_id"
-            ],
-            "sourceColumnDataTypes": [
-              "INT"
+            "sources": [
+              {
+                "column": "customer_id",
+                "target": {
+                  "id": "customer_id",
+                  "type": "attribute"
+                },
+                "dataType": "INT"
+              }
             ]
           },
           {
@@ -268,11 +280,15 @@
               "type": "dataset"
             },
             "multivalue": false,
-            "sourceColumns": [
-              "date"
-            ],
-            "sourceColumnDataTypes": [
-              "DATE"
+            "sources": [
+              {
+                "column": "date",
+                "target": {
+                  "id": "date",
+                  "type": "date"
+                },
+                "dataType": "DATE"
+              }
             ]
           },
           {
@@ -281,11 +297,15 @@
               "type": "dataset"
             },
             "multivalue": false,
-            "sourceColumns": [
-              "product_id"
-            ],
-            "sourceColumnDataTypes": [
-              "INT"
+            "sources": [
+              {
+                "column": "product_id",
+                "target": {
+                  "id": "product_id",
+                  "type": "attribute"
+                },
+                "dataType": "INT"
+              }
             ]
           }
         ],

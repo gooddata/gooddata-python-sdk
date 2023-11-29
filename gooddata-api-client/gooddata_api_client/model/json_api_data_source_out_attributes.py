@@ -75,6 +75,8 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'AZURESQL': "AZURESQL",
             'SYNAPSESQL': "SYNAPSESQL",
             'DATABRICKS': "DATABRICKS",
+            'GD_STORAGE': "GD_STORAGE",
+            'CLICKHOUSE': "CLICKHOUSE",
         },
     }
 

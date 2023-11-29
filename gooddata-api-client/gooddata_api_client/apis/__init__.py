@@ -34,6 +34,7 @@ from gooddata_api_client.api.entitlement_api import EntitlementApi
 from gooddata_api_client.api.exporting_api import ExportingApi
 from gooddata_api_client.api.facts_api import FactsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
+from gooddata_api_client.api.get_staging_location_api import GetStagingLocationApi
 from gooddata_api_client.api.hierarchy_api import HierarchyApi
 from gooddata_api_client.api.invalidate_cache_api import InvalidateCacheApi
 from gooddata_api_client.api.jwks_api import JWKSApi
@@ -43,7 +44,6 @@ from gooddata_api_client.api.metrics_api import MetricsApi
 from gooddata_api_client.api.options_api import OptionsApi
 from gooddata_api_client.api.organization_declarative_apis_api import OrganizationDeclarativeAPIsApi
 from gooddata_api_client.api.organization_entity_apis_api import OrganizationEntityAPIsApi
-from gooddata_api_client.api.pdm_declarative_apis_api import PDMDeclarativeAPIsApi
 from gooddata_api_client.api.permissions_api import PermissionsApi
 from gooddata_api_client.api.plugins_api import PluginsApi
 from gooddata_api_client.api.reporting_settings_api import ReportingSettingsApi

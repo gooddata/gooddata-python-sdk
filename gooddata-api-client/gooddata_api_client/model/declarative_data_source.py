@@ -32,10 +32,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_data_source_permission import DeclarativeDataSourcePermission
-    from gooddata_api_client.model.declarative_tables import DeclarativeTables
     from gooddata_api_client.model.parameter import Parameter
     globals()['DeclarativeDataSourcePermission'] = DeclarativeDataSourcePermission
-    globals()['DeclarativeTables'] = DeclarativeTables
     globals()['Parameter'] = Parameter
 
 
@@ -79,6 +77,8 @@ class DeclarativeDataSource(ModelNormal):
             'AZURESQL': "AZURESQL",
             'SYNAPSESQL': "SYNAPSESQL",
             'DATABRICKS': "DATABRICKS",
+            'GD_STORAGE': "GD_STORAGE",
+            'CLICKHOUSE': "CLICKHOUSE",
         },
     }
 
@@ -140,7 +140,6 @@ class DeclarativeDataSource(ModelNormal):
             'enable_caching': (bool,),  # noqa: E501
             'parameters': ([Parameter],),  # noqa: E501
             'password': (str,),  # noqa: E501
-            'pdm': (DeclarativeTables,),  # noqa: E501
             'permissions': ([DeclarativeDataSourcePermission],),  # noqa: E501
             'token': (str,),  # noqa: E501
             'url': (str,),  # noqa: E501
@@ -162,7 +161,6 @@ class DeclarativeDataSource(ModelNormal):
         'enable_caching': 'enableCaching',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
-        'pdm': 'pdm',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
         'token': 'token',  # noqa: E501
         'url': 'url',  # noqa: E501
@@ -221,7 +219,6 @@ class DeclarativeDataSource(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
-            pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
             token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
             url (str): An connection string relevant to type of database.. [optional]  # noqa: E501
@@ -326,7 +323,6 @@ class DeclarativeDataSource(ModelNormal):
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
             password (str): Password for the data-source user, property is never returned back.. [optional]  # noqa: E501
-            pdm (DeclarativeTables): [optional]  # noqa: E501
             permissions ([DeclarativeDataSourcePermission]): [optional]  # noqa: E501
             token (str): Token as an alternative to username and password.. [optional]  # noqa: E501
             url (str): An connection string relevant to type of database.. [optional]  # noqa: E501
