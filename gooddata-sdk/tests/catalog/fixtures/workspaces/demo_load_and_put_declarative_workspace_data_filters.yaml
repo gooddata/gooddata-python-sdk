@@ -401,7 +401,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 3525347e-b7f7-4639-8f36-4c8871c1e53b
+              oauthClientId: 58c395d3-ddbb-4cd4-aa60-1f9e79c615e4
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -705,6 +705,10 @@ interactions:
                       version: '2'
                     id: campaign
                     title: Campaign
+                    permissions:
+                      - assigneeRule:
+                          type: allWorkspaceUsers
+                        name: VIEW
                     description: ''
                   - content:
                       filterContextRef:
@@ -1978,10 +1982,12 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - campaign_id
+                        sources:
+                          - column: campaign_id
+                            target:
+                              id: campaign_id
+                              type: attribute
+                            dataType: INT
                     title: Campaign channels
                     attributes:
                       - id: campaign_channel_id
@@ -2133,34 +2139,42 @@ interactions:
                           id: campaigns
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - campaign_id
+                        sources:
+                          - column: campaign_id
+                            target:
+                              id: campaign_id
+                              type: attribute
+                            dataType: INT
                       - identifier:
                           id: customers
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - customer_id
+                        sources:
+                          - column: customer_id
+                            target:
+                              id: customer_id
+                              type: attribute
+                            dataType: INT
                       - identifier:
                           id: date
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - DATE
-                        sourceColumns:
-                          - date
+                        sources:
+                          - column: date
+                            target:
+                              id: date
+                              type: date
+                            dataType: DATE
                       - identifier:
                           id: products
                           type: dataset
                         multivalue: false
-                        sourceColumnDataTypes:
-                          - INT
-                        sourceColumns:
-                          - product_id
+                        sources:
+                          - column: product_id
+                            target:
+                              id: product_id
+                              type: attribute
+                            dataType: INT
                     title: Order lines
                     attributes:
                       - id: order_id
@@ -2307,7 +2321,12 @@ interactions:
             hierarchyPermissions: []
             model:
               analytics:
-                analyticalDashboardExtensions: []
+                analyticalDashboardExtensions:
+                  - id: campaign
+                    permissions:
+                      - assigneeRule:
+                          type: allWorkspaceUsers
+                        name: VIEW
                 analyticalDashboards: []
                 dashboardPlugins: []
                 filterContexts: []

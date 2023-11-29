@@ -82,9 +82,9 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
+                name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
-                name: demo-test-ds
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
           links:
@@ -167,7 +167,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6fd28e38ce986e15
+          traceId: fdbb879a415bfea0
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -265,9 +265,9 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
+              name: Test
               type: POSTGRESQL
               schema: demo
-              name: Test
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -352,9 +352,9 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
+              name: Test
               type: POSTGRESQL
               schema: demo
-              name: Test
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -439,9 +439,9 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
+              name: Test
               type: POSTGRESQL
               schema: demo
-              name: Test
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -537,9 +537,9 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=false
               username: demouser
               enableCaching: false
+              name: Test2
               type: POSTGRESQL
               schema: demo
-              name: Test2
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
   - request:
@@ -622,9 +622,9 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
+                name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
-                name: demo-test-ds
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
             - id: test
@@ -633,9 +633,9 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo?autosave=false
                 username: demouser
                 enableCaching: false
+                name: Test2
                 type: POSTGRESQL
                 schema: demo
-                name: Test2
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/test
           links:
@@ -788,9 +788,9 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
+                name: demo-test-ds
                 type: POSTGRESQL
                 schema: demo
-                name: demo-test-ds
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
           links:

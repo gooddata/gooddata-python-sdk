@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '35703'
+          - '36054'
       body:
         string:
           workspaceDataFilters:
@@ -171,6 +171,10 @@ interactions:
                         version: '2'
                       description: ''
                       id: campaign
+                      permissions:
+                        - assigneeRule:
+                            type: allWorkspaceUsers
+                          name: VIEW
                       title: Campaign
                     - content:
                         filterContextRef:
@@ -1493,10 +1497,12 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - campaign_id
+                          sources:
+                            - column: campaign_id
+                              dataType: INT
+                              target:
+                                id: campaign_id
+                                type: attribute
                       tags:
                         - Campaign channels
                       title: Campaign channels
@@ -1648,34 +1654,42 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - campaign_id
+                          sources:
+                            - column: campaign_id
+                              dataType: INT
+                              target:
+                                id: campaign_id
+                                type: attribute
                         - identifier:
                             id: customers
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - customer_id
+                          sources:
+                            - column: customer_id
+                              dataType: INT
+                              target:
+                                id: customer_id
+                                type: attribute
                         - identifier:
                             id: date
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - DATE
-                          sourceColumns:
-                            - date
+                          sources:
+                            - column: date
+                              dataType: DATE
+                              target:
+                                id: date
+                                type: date
                         - identifier:
                             id: products
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - product_id
+                          sources:
+                            - column: product_id
+                              dataType: INT
+                              target:
+                                id: product_id
+                                type: attribute
                       tags:
                         - Order lines
                       title: Order lines
@@ -1774,7 +1788,12 @@ interactions:
               id: demo_west
               model:
                 analytics:
-                  analyticalDashboardExtensions: []
+                  analyticalDashboardExtensions:
+                    - id: campaign
+                      permissions:
+                        - assigneeRule:
+                            type: allWorkspaceUsers
+                          name: VIEW
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []
@@ -1891,7 +1910,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '35703'
+          - '36054'
       body:
         string:
           workspaceDataFilters:
@@ -1988,6 +2007,10 @@ interactions:
                         version: '2'
                       description: ''
                       id: campaign
+                      permissions:
+                        - assigneeRule:
+                            type: allWorkspaceUsers
+                          name: VIEW
                       title: Campaign
                     - content:
                         filterContextRef:
@@ -3310,10 +3333,12 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - campaign_id
+                          sources:
+                            - column: campaign_id
+                              dataType: INT
+                              target:
+                                id: campaign_id
+                                type: attribute
                       tags:
                         - Campaign channels
                       title: Campaign channels
@@ -3465,34 +3490,42 @@ interactions:
                             id: campaigns
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - campaign_id
+                          sources:
+                            - column: campaign_id
+                              dataType: INT
+                              target:
+                                id: campaign_id
+                                type: attribute
                         - identifier:
                             id: customers
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - customer_id
+                          sources:
+                            - column: customer_id
+                              dataType: INT
+                              target:
+                                id: customer_id
+                                type: attribute
                         - identifier:
                             id: date
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - DATE
-                          sourceColumns:
-                            - date
+                          sources:
+                            - column: date
+                              dataType: DATE
+                              target:
+                                id: date
+                                type: date
                         - identifier:
                             id: products
                             type: dataset
                           multivalue: false
-                          sourceColumnDataTypes:
-                            - INT
-                          sourceColumns:
-                            - product_id
+                          sources:
+                            - column: product_id
+                              dataType: INT
+                              target:
+                                id: product_id
+                                type: attribute
                       tags:
                         - Order lines
                       title: Order lines
@@ -3591,7 +3624,12 @@ interactions:
               id: demo_west
               model:
                 analytics:
-                  analyticalDashboardExtensions: []
+                  analyticalDashboardExtensions:
+                    - id: campaign
+                      permissions:
+                        - assigneeRule:
+                            type: allWorkspaceUsers
+                          name: VIEW
                   analyticalDashboards: []
                   dashboardPlugins: []
                   filterContexts: []

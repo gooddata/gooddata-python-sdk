@@ -92,6 +92,22 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: spend
+              type: fact
+              attributes:
+                title: Spend
+                description: Spend
+                tags:
+                  - Campaign channels
+                sourceColumn: spend
+                sourceColumnDataType: NUMERIC
+                areRelationsValid: true
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: price
               type: fact
               attributes:
@@ -120,22 +136,6 @@ interactions:
                 areRelationsValid: true
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/quantity
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: spend
-              type: fact
-              attributes:
-                title: Spend
-                description: Spend
-                tags:
-                  - Campaign channels
-                sourceColumn: spend
-                sourceColumnDataType: NUMERIC
-                areRelationsValid: true
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/facts/spend
               meta:
                 origin:
                   originType: NATIVE
