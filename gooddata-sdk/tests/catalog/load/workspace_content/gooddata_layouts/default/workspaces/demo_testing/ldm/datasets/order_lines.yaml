@@ -1,9 +1,10 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 attributes:
   - description: Order id
     id: order_id
     labels: []
     sourceColumn: order_id
+    sourceColumnDataType: STRING
     tags:
       - Order lines
     title: Order id
@@ -11,6 +12,7 @@ attributes:
     id: order_line_id
     labels: []
     sourceColumn: order_line_id
+    sourceColumnDataType: STRING
     tags:
       - Order lines
     title: Order line id
@@ -18,24 +20,30 @@ attributes:
     id: order_status
     labels: []
     sourceColumn: order_status
+    sourceColumnDataType: STRING
     tags:
       - Order lines
     title: Order status
 dataSourceTableId:
   dataSourceId: demo-test-ds
   id: order_lines
+  path:
+    - demo
+    - order_lines
   type: dataSource
 description: Order lines
 facts:
   - description: Price
     id: price
     sourceColumn: price
+    sourceColumnDataType: NUMERIC
     tags:
       - Order lines
     title: Price
   - description: Quantity
     id: quantity
     sourceColumn: quantity
+    sourceColumnDataType: NUMERIC
     tags:
       - Order lines
     title: Quantity
@@ -48,26 +56,45 @@ references:
       id: campaigns
       type: dataset
     multivalue: false
+    sourceColumnDataTypes:
+      - INT
     sourceColumns:
       - campaign_id
   - identifier:
       id: customers
       type: dataset
     multivalue: false
+    sourceColumnDataTypes:
+      - INT
     sourceColumns:
       - customer_id
   - identifier:
       id: date
       type: dataset
     multivalue: false
+    sourceColumnDataTypes:
+      - DATE
     sourceColumns:
       - date
   - identifier:
       id: products
       type: dataset
     multivalue: false
+    sourceColumnDataTypes:
+      - INT
     sourceColumns:
       - product_id
 tags:
   - Order lines
 title: Order lines
+workspaceDataFilterColumns:
+  - dataType: STRING
+    name: wdf__region
+  - dataType: STRING
+    name: wdf__state
+workspaceDataFilterReferences:
+  - filterColumn: wdf__region
+    filterColumnDataType: STRING
+    filterId:
+      id: wdf__region
+      type: workspaceDataFilter

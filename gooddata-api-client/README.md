@@ -190,6 +190,7 @@ Class | Method | HTTP request | Description
 *FactsApi* | [**get_all_entities_facts**](docs/FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 *FactsApi* | [**get_entity_facts**](docs/FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *GenerateLogicalDataModelApi* | [**generate_logical_model**](docs/GenerateLogicalDataModelApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
+*GetStagingLocationApi* | [**get_staging_upload_location**](docs/GetStagingLocationApi.md#get_staging_upload_location) | **POST** /api/v1/actions/dataSources/{dataSourceId}/staging/upload | Get a staging upload location
 *HierarchyApi* | [**check_entity_overrides**](docs/HierarchyApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *HierarchyApi* | [**inherited_entity_conflicts**](docs/HierarchyApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *HierarchyApi* | [**inherited_entity_prefixes**](docs/HierarchyApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
@@ -224,8 +225,6 @@ Class | Method | HTTP request | Description
 *OrganizationEntityAPIsApi* | [**patch_entity_organizations**](docs/OrganizationEntityAPIsApi.md#patch_entity_organizations) | **PATCH** /api/v1/entities/admin/organizations/{id} | Patch Organization
 *OrganizationEntityAPIsApi* | [**update_entity_organization_settings**](docs/OrganizationEntityAPIsApi.md#update_entity_organization_settings) | **PUT** /api/v1/entities/organizationSettings/{id} | Put Organization entity
 *OrganizationEntityAPIsApi* | [**update_entity_organizations**](docs/OrganizationEntityAPIsApi.md#update_entity_organizations) | **PUT** /api/v1/entities/admin/organizations/{id} | Put Organization
-*PDMDeclarativeAPIsApi* | [**get_pdm_layout**](docs/PDMDeclarativeAPIsApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
-*PDMDeclarativeAPIsApi* | [**set_pdm_layout**](docs/PDMDeclarativeAPIsApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 *PermissionsApi* | [**available_assignees**](docs/PermissionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *PermissionsApi* | [**dashboard_permissions**](docs/PermissionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
 *PermissionsApi* | [**get_organization_permissions**](docs/PermissionsApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
@@ -310,6 +309,7 @@ Class | Method | HTTP request | Description
 *WorkspacesSettingsApi* | [**update_entity_workspace_settings**](docs/WorkspacesSettingsApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 *WorkspacesSettingsApi* | [**workspace_resolve_all_settings**](docs/WorkspacesSettingsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 *WorkspacesSettingsApi* | [**workspace_resolve_settings**](docs/WorkspacesSettingsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
+*ActionsApi* | [**add_group_members**](docs/ActionsApi.md#add_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/addMembers | 
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -326,15 +326,24 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_dependent_entities_graph**](docs/ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 *ActionsApi* | [**get_dependent_entities_graph_from_entry_points**](docs/ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
+*ActionsApi* | [**get_group_members**](docs/ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
+*ActionsApi* | [**get_staging_upload_location**](docs/ActionsApi.md#get_staging_upload_location) | **POST** /api/v1/actions/dataSources/{dataSourceId}/staging/upload | Get a staging upload location
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
+*ActionsApi* | [**list_user_groups**](docs/ActionsApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/groups | 
+*ActionsApi* | [**list_users**](docs/ActionsApi.md#list_users) | **GET** /api/v1/actions/userManagement/users | 
+*ActionsApi* | [**list_workspace_permissions_for_user**](docs/ActionsApi.md#list_workspace_permissions_for_user) | **GET** /api/v1/actions/userManagement/users/{userId}/permissions | 
+*ActionsApi* | [**list_workspace_permissions_for_user_group**](docs/ActionsApi.md#list_workspace_permissions_for_user_group) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 *ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+*ActionsApi* | [**manage_workspace_permissions_for_user**](docs/ActionsApi.md#manage_workspace_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
+*ActionsApi* | [**manage_workspace_permissions_for_user_group**](docs/ActionsApi.md#manage_workspace_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 *ActionsApi* | [**particular_platform_usage**](docs/ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *ActionsApi* | [**register_upload_notification**](docs/ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
+*ActionsApi* | [**remove_group_members**](docs/ActionsApi.md#remove_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/removeMembers | 
 *ActionsApi* | [**resolve_all_entitlements**](docs/ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 *ActionsApi* | [**resolve_all_settings_without_workspace**](docs/ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 *ActionsApi* | [**resolve_requested_entitlements**](docs/ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
@@ -508,7 +517,6 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
 *LayoutApi* | [**get_organization_permissions**](docs/LayoutApi.md#get_organization_permissions) | **GET** /api/v1/layout/organization/permissions | Get organization permissions
-*LayoutApi* | [**get_pdm_layout**](docs/LayoutApi.md#get_pdm_layout) | **GET** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Get data source physical model layout
 *LayoutApi* | [**get_user_data_filters**](docs/LayoutApi.md#get_user_data_filters) | **GET** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Get user data filters
 *LayoutApi* | [**get_user_group_permissions**](docs/LayoutApi.md#get_user_group_permissions) | **GET** /api/v1/layout/userGroups/{userGroupId}/permissions | Get permissions for the user-group
 *LayoutApi* | [**get_user_groups_layout**](docs/LayoutApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
@@ -528,7 +536,6 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_organization_permissions**](docs/LayoutApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
-*LayoutApi* | [**set_pdm_layout**](docs/LayoutApi.md#set_pdm_layout) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/physicalModel | Set data source physical model layout
 *LayoutApi* | [**set_user_data_filters**](docs/LayoutApi.md#set_user_data_filters) | **PUT** /api/v1/layout/workspaces/{workspaceId}/userDataFilters | Set user data filters
 *LayoutApi* | [**set_user_group_permissions**](docs/LayoutApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 *LayoutApi* | [**set_user_permissions**](docs/LayoutApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
@@ -775,7 +782,6 @@ Class | Method | HTTP request | Description
  - [DeclarativeOrganization](docs/DeclarativeOrganization.md)
  - [DeclarativeOrganizationInfo](docs/DeclarativeOrganizationInfo.md)
  - [DeclarativeOrganizationPermission](docs/DeclarativeOrganizationPermission.md)
- - [DeclarativePdm](docs/DeclarativePdm.md)
  - [DeclarativeReference](docs/DeclarativeReference.md)
  - [DeclarativeReferenceSource](docs/DeclarativeReferenceSource.md)
  - [DeclarativeRsaSpecification](docs/DeclarativeRsaSpecification.md)
@@ -1281,6 +1287,7 @@ Class | Method | HTTP request | Description
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
  - [SqlColumn](docs/SqlColumn.md)
+ - [StagingUploadLocation](docs/StagingUploadLocation.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
@@ -1295,8 +1302,16 @@ Class | Method | HTTP request | Description
  - [UserGroupAssignee](docs/UserGroupAssignee.md)
  - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
  - [UserGroupPermission](docs/UserGroupPermission.md)
+ - [UserManagementUserGroupMember](docs/UserManagementUserGroupMember.md)
+ - [UserManagementUserGroupMembers](docs/UserManagementUserGroupMembers.md)
+ - [UserManagementUserGroups](docs/UserManagementUserGroups.md)
+ - [UserManagementUserGroupsItem](docs/UserManagementUserGroupsItem.md)
+ - [UserManagementUsers](docs/UserManagementUsers.md)
+ - [UserManagementUsersItem](docs/UserManagementUsersItem.md)
  - [UserPermission](docs/UserPermission.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
+ - [WorkspacePermissionAssignment](docs/WorkspacePermissionAssignment.md)
+ - [WorkspacePermissionAssignments](docs/WorkspacePermissionAssignments.md)
 
 
 ## Documentation For Authorization

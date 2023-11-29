@@ -104,7 +104,6 @@ docs/DeclarativeModel.md
 docs/DeclarativeOrganization.md
 docs/DeclarativeOrganizationInfo.md
 docs/DeclarativeOrganizationPermission.md
-docs/DeclarativePdm.md
 docs/DeclarativeReference.md
 docs/DeclarativeReferenceSource.md
 docs/DeclarativeRsaSpecification.md
@@ -166,6 +165,7 @@ docs/FilterDefinition.md
 docs/FilterDefinitionForSimpleMeasure.md
 docs/GenerateLdmRequest.md
 docs/GenerateLogicalDataModelApi.md
+docs/GetStagingLocationApi.md
 docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
@@ -577,7 +577,6 @@ docs/OrganizationDeclarativeAPIsApi.md
 docs/OrganizationEntityAPIsApi.md
 docs/OrganizationModelControllerApi.md
 docs/OrganizationPermissionAssignment.md
-docs/PDMDeclarativeAPIsApi.md
 docs/Paging.md
 docs/Parameter.md
 docs/PdfExportRequest.md
@@ -633,6 +632,7 @@ docs/SortKeyTotalTotal.md
 docs/SortKeyValue.md
 docs/SortKeyValueValue.md
 docs/SqlColumn.md
+docs/StagingUploadLocation.md
 docs/TableWarning.md
 docs/TabularExportRequest.md
 docs/TestConnectionApi.md
@@ -653,6 +653,12 @@ docs/UserGroupPermission.md
 docs/UserGroupsDeclarativeAPIsApi.md
 docs/UserGroupsEntityAPIsApi.md
 docs/UserIdentifiersApi.md
+docs/UserManagementUserGroupMember.md
+docs/UserManagementUserGroupMembers.md
+docs/UserManagementUserGroups.md
+docs/UserManagementUserGroupsItem.md
+docs/UserManagementUsers.md
+docs/UserManagementUsersItem.md
 docs/UserModelControllerApi.md
 docs/UserPermission.md
 docs/UserSettingsApi.md
@@ -661,6 +667,8 @@ docs/UsersEntityAPIsApi.md
 docs/VisualizationObjectApi.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
+docs/WorkspacePermissionAssignment.md
+docs/WorkspacePermissionAssignments.md
 docs/WorkspacesDeclarativeAPIsApi.md
 docs/WorkspacesEntityAPIsApi.md
 docs/WorkspacesSettingsApi.md
@@ -689,6 +697,7 @@ gooddata_api_client/api/entitlement_api.py
 gooddata_api_client/api/exporting_api.py
 gooddata_api_client/api/facts_api.py
 gooddata_api_client/api/generate_logical_data_model_api.py
+gooddata_api_client/api/get_staging_location_api.py
 gooddata_api_client/api/hierarchy_api.py
 gooddata_api_client/api/invalidate_cache_api.py
 gooddata_api_client/api/jwks_api.py
@@ -701,7 +710,6 @@ gooddata_api_client/api/organization_controller_api.py
 gooddata_api_client/api/organization_declarative_apis_api.py
 gooddata_api_client/api/organization_entity_apis_api.py
 gooddata_api_client/api/organization_model_controller_api.py
-gooddata_api_client/api/pdm_declarative_apis_api.py
 gooddata_api_client/api/permissions_api.py
 gooddata_api_client/api/plugins_api.py
 gooddata_api_client/api/reporting_settings_api.py
@@ -813,7 +821,6 @@ gooddata_api_client/model/declarative_model.py
 gooddata_api_client/model/declarative_organization.py
 gooddata_api_client/model/declarative_organization_info.py
 gooddata_api_client/model/declarative_organization_permission.py
-gooddata_api_client/model/declarative_pdm.py
 gooddata_api_client/model/declarative_reference.py
 gooddata_api_client/model/declarative_reference_source.py
 gooddata_api_client/model/declarative_rsa_specification.py
@@ -1319,6 +1326,7 @@ gooddata_api_client/model/sort_key_total_total.py
 gooddata_api_client/model/sort_key_value.py
 gooddata_api_client/model/sort_key_value_value.py
 gooddata_api_client/model/sql_column.py
+gooddata_api_client/model/staging_upload_location.py
 gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/test_definition_request.py
@@ -1333,8 +1341,16 @@ gooddata_api_client/model/user_assignee.py
 gooddata_api_client/model/user_group_assignee.py
 gooddata_api_client/model/user_group_identifier.py
 gooddata_api_client/model/user_group_permission.py
+gooddata_api_client/model/user_management_user_group_member.py
+gooddata_api_client/model/user_management_user_group_members.py
+gooddata_api_client/model/user_management_user_groups.py
+gooddata_api_client/model/user_management_user_groups_item.py
+gooddata_api_client/model/user_management_users.py
+gooddata_api_client/model/user_management_users_item.py
 gooddata_api_client/model/user_permission.py
 gooddata_api_client/model/workspace_identifier.py
+gooddata_api_client/model/workspace_permission_assignment.py
+gooddata_api_client/model/workspace_permission_assignments.py
 gooddata_api_client/model_utils.py
 gooddata_api_client/models/__init__.py
 gooddata_api_client/rest.py

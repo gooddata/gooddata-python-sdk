@@ -10,7 +10,6 @@ from gooddata_api_client.model.declarative_data_source import DeclarativeDataSou
 from gooddata_api_client.model.declarative_data_sources import DeclarativeDataSources
 from gooddata_api_client.model.test_definition_request import TestDefinitionRequest
 from gooddata_sdk.catalog.base import Base, value_in_allowed
-from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.entity import TokenCredentialsFromFile
 from gooddata_sdk.catalog.parameter import CatalogParameter
 from gooddata_sdk.catalog.permission.declarative_model.permission import CatalogDeclarativeDataSourcePermission
@@ -71,7 +70,6 @@ class CatalogDeclarativeDataSource(Base):
     url: Optional[str] = None
     schema: str
     enable_caching: Optional[bool] = None
-    pdm: CatalogDeclarativeTables = CatalogDeclarativeTables()
     cache_path: Optional[List[str]] = None
     username: Optional[str] = None
     parameters: Optional[List[CatalogParameter]] = None
@@ -106,8 +104,6 @@ class CatalogDeclarativeDataSource(Base):
         self, password: Optional[str] = None, token: Optional[str] = None, include_nested_structures: bool = True
     ) -> DeclarativeDataSource:
         dictionary = self._get_snake_dict()
-        if not include_nested_structures:
-            del dictionary["pdm"]
         if password is not None:
             dictionary["password"] = password
         if token is not None:
@@ -121,15 +117,10 @@ class CatalogDeclarativeDataSource(Base):
 
         write_layout_to_file(file_path, data_source_dict)
 
-        if self.pdm is not None:
-            self.pdm.store_to_disk(data_source_folder)
-
     @classmethod
     def load_from_disk(cls, data_sources_folder: Path, data_source_id: str) -> CatalogDeclarativeDataSource:
         data_source_folder = data_sources_folder / data_source_id
         data_source_file_path = data_source_folder / f"{data_source_id}.yaml"
-        pdm = CatalogDeclarativeTables.load_from_disk(data_source_folder)
         data_source_dict = read_layout_from_file(data_source_file_path)
         data_source = CatalogDeclarativeDataSource.from_dict(data_source_dict)
-        data_source.pdm = pdm
         return data_source

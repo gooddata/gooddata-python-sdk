@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '6045'
+          - '6227'
       body:
         string:
           ldm:
@@ -136,10 +136,12 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - campaign_id
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Campaign channels
                 title: Campaign channels
@@ -291,34 +293,42 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - campaign_id
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - customer_id
+                    sources:
+                      - column: customer_id
+                        dataType: INT
+                        target:
+                          id: customer_id
+                          type: attribute
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - DATE
-                    sourceColumns:
-                      - date
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                   - identifier:
                       id: products
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - product_id
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        target:
+                          id: product_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines
@@ -406,6 +416,127 @@ interactions:
       body:
         separator: __
         wdfPrefix: wdf
+        pdm:
+          tables:
+            - columns:
+                - dataType: NUMERIC
+                  name: budget
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: campaign_channel_id
+                  isPrimaryKey: true
+                - dataType: INT
+                  name: campaign_id
+                  isPrimaryKey: false
+                  referencedTableId: campaigns
+                  referencedTableColumn: campaign_id
+                - dataType: STRING
+                  name: category
+                  isPrimaryKey: false
+                - dataType: NUMERIC
+                  name: spend
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: type
+                  isPrimaryKey: false
+              id: campaign_channels
+              path:
+                - demo
+                - campaign_channels
+              type: TABLE
+            - columns:
+                - dataType: INT
+                  name: campaign_id
+                  isPrimaryKey: true
+                - dataType: STRING
+                  name: campaign_name
+                  isPrimaryKey: false
+              id: campaigns
+              path:
+                - demo
+                - campaigns
+              type: TABLE
+            - columns:
+                - dataType: INT
+                  name: customer_id
+                  isPrimaryKey: true
+                - dataType: STRING
+                  name: customer_name
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: geo__state__location
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: region
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: state
+                  isPrimaryKey: false
+              id: customers
+              path:
+                - demo
+                - customers
+              type: TABLE
+            - columns:
+                - dataType: INT
+                  name: campaign_id
+                  isPrimaryKey: false
+                  referencedTableId: campaigns
+                  referencedTableColumn: campaign_id
+                - dataType: INT
+                  name: customer_id
+                  isPrimaryKey: false
+                  referencedTableId: customers
+                  referencedTableColumn: customer_id
+                - dataType: DATE
+                  name: date
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: order_id
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: order_line_id
+                  isPrimaryKey: true
+                - dataType: STRING
+                  name: order_status
+                  isPrimaryKey: false
+                - dataType: NUMERIC
+                  name: price
+                  isPrimaryKey: false
+                - dataType: INT
+                  name: product_id
+                  isPrimaryKey: false
+                  referencedTableId: products
+                  referencedTableColumn: product_id
+                - dataType: NUMERIC
+                  name: quantity
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: wdf__region
+                  isPrimaryKey: false
+                - dataType: STRING
+                  name: wdf__state
+                  isPrimaryKey: false
+              id: order_lines
+              path:
+                - demo
+                - order_lines
+              type: TABLE
+            - columns:
+                - dataType: STRING
+                  name: category
+                  isPrimaryKey: false
+                - dataType: INT
+                  name: product_id
+                  isPrimaryKey: true
+                - dataType: STRING
+                  name: product_name
+                  isPrimaryKey: false
+              id: products
+              path:
+                - demo
+                - products
+              type: TABLE
         workspaceId: demo
       headers:
         Accept:
@@ -477,7 +608,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '6028'
+          - '6210'
       body:
         string:
           ldm:
@@ -539,10 +670,12 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - campaign_id
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
                 tags:
                   - Campaign channels
                 title: Campaign channels
@@ -694,34 +827,42 @@ interactions:
                       id: campaigns
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - campaign_id
+                    sources:
+                      - column: campaign_id
+                        dataType: INT
+                        target:
+                          id: campaign_id
+                          type: attribute
                   - identifier:
                       id: customers
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - customer_id
+                    sources:
+                      - column: customer_id
+                        dataType: INT
+                        target:
+                          id: customer_id
+                          type: attribute
                   - identifier:
                       id: date
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - DATE
-                    sourceColumns:
-                      - date
+                    sources:
+                      - column: date
+                        dataType: DATE
+                        target:
+                          id: date
+                          type: date
                   - identifier:
                       id: products
                       type: dataset
                     multivalue: false
-                    sourceColumnDataTypes:
-                      - INT
-                    sourceColumns:
-                      - product_id
+                    sources:
+                      - column: product_id
+                        dataType: INT
+                        target:
+                          id: product_id
+                          type: attribute
                 tags:
                   - Order lines
                 title: Order lines

@@ -151,7 +151,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2023-11-10 10:43
+              createdAt: 2023-11-29 11:59
             relationships:
               createdBy:
                 data:
@@ -195,7 +195,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2023-11-10 10:43
+                createdAt: 2023-11-29 11:59
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -205,7 +205,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2023-11-10 10:43
+                createdAt: 2023-11-29 11:59
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -375,10 +375,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: a7cc1f11943368aafe33359c383a0d07970a9c2f
+              executionResult: 869678542fe46ee9682112428b3ac6ed61ad216d
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/a7cc1f11943368aafe33359c383a0d07970a9c2f?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/869678542fe46ee9682112428b3ac6ed61ad216d?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -536,7 +536,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: a7cc1f11943368aafe33359c383a0d07970a9c2f
+        executionResult: 869678542fe46ee9682112428b3ac6ed61ad216d
         fileName: Customers Trend
         format: XLSX
         customOverride:
@@ -621,10 +621,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: bfa402b3c3c37fd8a4400793a68cf87e3f0bc24b
+          exportResult: 3661d9c80c052ceef64bfe1d7b3fb6c1c7467c44
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/bfa402b3c3c37fd8a4400793a68cf87e3f0bc24b
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3661d9c80c052ceef64bfe1d7b3fb6c1c7467c44
       body: null
       headers:
         Accept:
@@ -695,7 +695,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/bfa402b3c3c37fd8a4400793a68cf87e3f0bc24b
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/3661d9c80c052ceef64bfe1d7b3fb6c1c7467c44
       body: null
       headers:
         Accept:
@@ -724,7 +724,7 @@ interactions:
         Content-Disposition:
           - attachment; filename*=UTF-8''Customers%20Trend.xlsx
         Content-Length:
-          - '6155'
+          - '6156'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -853,28 +853,28 @@ interactions:
           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
-          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
+          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

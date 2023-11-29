@@ -127,25 +127,6 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 password="*****",
-                pdm=DeclarativeTables(
-                    tables=[
-                        DeclarativeTable(
-                            columns=[
-                                DeclarativeColumn(
-                                    data_type="INT",
-                                    is_primary_key=True,
-                                    name="customer_id",
-                                    referenced_table_column="customer_id",
-                                    referenced_table_id="customers",
-                                ),
-                            ],
-                            id="customers",
-                            name_prefix="out_gooddata",
-                            path=["table_schema","table_name"],
-                            type="TABLE",
-                        ),
-                    ],
-                ),
                 permissions=[
                     DeclarativeDataSourcePermission(
                         assignee=AssigneeIdentifier(

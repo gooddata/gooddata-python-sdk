@@ -62,9 +62,11 @@ class DeclarativeSetting(ModelNormal):
             'ACTIVE_COLOR_PALETTE': "ACTIVE_COLOR_PALETTE",
             'WHITE_LABELING': "WHITE_LABELING",
             'LOCALE': "LOCALE",
+            'METADATA_LOCALE': "METADATA_LOCALE",
             'FORMAT_LOCALE': "FORMAT_LOCALE",
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
             'WEEK_START': "WEEK_START",
+            'SHOW_HIDDEN_CATALOG_ITEMS': "SHOW_HIDDEN_CATALOG_ITEMS",
         },
     }
 

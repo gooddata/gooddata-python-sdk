@@ -966,7 +966,7 @@
         "type": "object"
       },
       "DataSourceTableIdentifier": {
-        "description": "An id of the table from PDM mapped to this dataset. Including ID of data source.",
+        "description": "An id of the table. Including ID of data source.",
         "example": {
           "dataSourceId": "my-postgres",
           "id": "customers",
@@ -1621,9 +1621,6 @@
             "maxLength": 255,
             "type": "string"
           },
-          "pdm": {
-            "$ref": "#/components/schemas/DeclarativeTables"
-          },
           "permissions": {
             "items": {
               "$ref": "#/components/schemas/DeclarativeDataSourcePermission"
@@ -1658,7 +1655,9 @@
               "GREENPLUM",
               "AZURESQL",
               "SYNAPSESQL",
-              "DATABRICKS"
+              "DATABRICKS",
+              "GD_STORAGE",
+              "CLICKHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -2401,19 +2400,6 @@
         ],
         "type": "object"
       },
-      "DeclarativePdm": {
-        "deprecated": true,
-        "description": "A physical data model (PDM) representation for single data source.",
-        "properties": {
-          "pdm": {
-            "$ref": "#/components/schemas/DeclarativeTables"
-          }
-        },
-        "required": [
-          "pdm"
-        ],
-        "type": "object"
-      },
       "DeclarativeReference": {
         "description": "A dataset reference.",
         "properties": {
@@ -2586,9 +2572,11 @@
               "ACTIVE_COLOR_PALETTE",
               "WHITE_LABELING",
               "LOCALE",
+              "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
-              "WEEK_START"
+              "WEEK_START",
+              "SHOW_HIDDEN_CATALOG_ITEMS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -2672,7 +2660,6 @@
         "type": "object"
       },
       "DeclarativeTables": {
-        "deprecated": true,
         "description": "A physical data model (PDM) tables.",
         "properties": {
           "tables": {
@@ -3587,7 +3574,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -3787,7 +3774,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -3832,7 +3819,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -6818,7 +6805,9 @@
                   "GREENPLUM",
                   "AZURESQL",
                   "SYNAPSESQL",
-                  "DATABRICKS"
+                  "DATABRICKS",
+                  "GD_STORAGE",
+                  "CLICKHOUSE"
                 ],
                 "type": "string"
               }
@@ -6978,7 +6967,9 @@
                   "GREENPLUM",
                   "AZURESQL",
                   "SYNAPSESQL",
-                  "DATABRICKS"
+                  "DATABRICKS",
+                  "GD_STORAGE",
+                  "CLICKHOUSE"
                 ],
                 "type": "string"
               },
@@ -7107,7 +7098,9 @@
                   "GREENPLUM",
                   "AZURESQL",
                   "SYNAPSESQL",
-                  "DATABRICKS"
+                  "DATABRICKS",
+                  "GD_STORAGE",
+                  "CLICKHOUSE"
                 ],
                 "type": "string"
               },
@@ -7276,7 +7269,9 @@
                   "GREENPLUM",
                   "AZURESQL",
                   "SYNAPSESQL",
-                  "DATABRICKS"
+                  "DATABRICKS",
+                  "GD_STORAGE",
+                  "CLICKHOUSE"
                 ],
                 "type": "string"
               },
@@ -9828,9 +9823,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -9886,9 +9883,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -9976,9 +9975,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -11400,9 +11401,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -11458,9 +11461,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -12995,9 +13000,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -13053,9 +13060,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -13169,9 +13178,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -13227,9 +13238,11 @@
                   "ACTIVE_COLOR_PALETTE",
                   "WHITE_LABELING",
                   "LOCALE",
+                  "METADATA_LOCALE",
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
-                  "WEEK_START"
+                  "WEEK_START",
+                  "SHOW_HIDDEN_CATALOG_ITEMS"
                 ],
                 "type": "string"
               }
@@ -14052,9 +14065,11 @@
               "ACTIVE_COLOR_PALETTE",
               "WHITE_LABELING",
               "LOCALE",
+              "METADATA_LOCALE",
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
-              "WEEK_START"
+              "WEEK_START",
+              "SHOW_HIDDEN_CATALOG_ITEMS"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -14551,6 +14566,24 @@
         ],
         "type": "object"
       },
+      "StagingUploadLocation": {
+        "description": "Information related to uploading a file to the staging area.",
+        "properties": {
+          "location": {
+            "description": "Location relative to the root of the storage.",
+            "type": "string"
+          },
+          "uploadUrl": {
+            "description": "Pre-signed upload URL to PUT the file to.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location",
+          "uploadUrl"
+        ],
+        "type": "object"
+      },
       "TableWarning": {
         "description": "Warnings related to single table.",
         "properties": {
@@ -14656,7 +14689,9 @@
               "GREENPLUM",
               "AZURESQL",
               "SYNAPSESQL",
-              "DATABRICKS"
+              "DATABRICKS",
+              "GD_STORAGE",
+              "CLICKHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -14947,6 +14982,149 @@
         ],
         "type": "object"
       },
+      "UserManagementUserGroupMember": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "readOnly": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "UserManagementUserGroupMembers": {
+        "properties": {
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementUserGroupMember"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "members"
+        ],
+        "type": "object"
+      },
+      "UserManagementUserGroups": {
+        "properties": {
+          "userGroups": {
+            "description": "List of groups",
+            "items": {
+              "$ref": "#/components/schemas/UserManagementUserGroupsItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "userGroups"
+        ],
+        "type": "object"
+      },
+      "UserManagementUserGroupsItem": {
+        "description": "List of groups",
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "name": {
+            "description": "Group name",
+            "example": "admins",
+            "type": "string"
+          },
+          "organizationAdmin": {
+            "description": "Is group organization admin",
+            "example": false,
+            "type": "boolean"
+          },
+          "userCount": {
+            "description": "Child groups where group belongs to",
+            "format": "int32",
+            "type": "integer"
+          },
+          "workspaces": {
+            "description": "Workspaces where group can access",
+            "items": {
+              "description": "Workspaces where group can access",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "groupId",
+          "organizationAdmin",
+          "userCount",
+          "workspaces"
+        ],
+        "type": "object"
+      },
+      "UserManagementUsers": {
+        "properties": {
+          "users": {
+            "description": "List of users",
+            "items": {
+              "$ref": "#/components/schemas/UserManagementUsersItem"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "users"
+        ],
+        "type": "object"
+      },
+      "UserManagementUsersItem": {
+        "description": "List of users",
+        "properties": {
+          "email": {
+            "description": "User email address",
+            "example": "user@example.com",
+            "type": "string"
+          },
+          "groups": {
+            "description": "Groups where user belongs to",
+            "items": {
+              "description": "Groups where user belongs to",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "User name",
+            "example": "John Wick",
+            "type": "string"
+          },
+          "organizationAdmin": {
+            "description": "Is user organization admin",
+            "example": false,
+            "type": "boolean"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "workspaces": {
+            "description": "Workspaces where can access",
+            "items": {
+              "description": "Workspaces where can access",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "groups",
+          "organizationAdmin",
+          "userId",
+          "workspaces"
+        ],
+        "type": "object"
+      },
       "UserPermission": {
         "description": "List of users",
         "properties": {
@@ -14998,6 +15176,66 @@
         "required": [
           "id",
           "type"
+        ],
+        "type": "object"
+      },
+      "WorkspacePermissionAssignment": {
+        "description": "Workspace permission assignments",
+        "properties": {
+          "hierarchyPermissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "ANALYZE",
+                "EXPORT",
+                "EXPORT_TABULAR",
+                "EXPORT_PDF",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "permissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "ANALYZE",
+                "EXPORT",
+                "EXPORT_TABULAR",
+                "EXPORT_PDF",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "hierarchyPermissions",
+          "id",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "WorkspacePermissionAssignments": {
+        "properties": {
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/WorkspacePermissionAssignment"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "workspaces"
         ],
         "type": "object"
       }
@@ -15415,6 +15653,45 @@
         }
       }
     },
+    "/api/v1/actions/dataSources/{dataSourceId}/staging/upload": {
+      "post": {
+        "description": "Provides a location for uploading staging files.",
+        "operationId": "getStagingUploadLocation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StagingUploadLocation"
+                }
+              }
+            },
+            "description": "Staging upload location was registered."
+          }
+        },
+        "summary": "Get a staging upload location",
+        "tags": [
+          "Get staging location",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/dataSources/{dataSourceId}/test": {
       "post": {
         "description": "Test if it is possible to connect to a database using an existing data source definition.",
@@ -15526,6 +15803,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "description": "An array of organization permissions assignments",
                 "items": {
                   "$ref": "#/components/schemas/OrganizationPermissionAssignment"
                 },
@@ -15679,6 +15957,264 @@
         ]
       }
     },
+    "/api/v1/actions/userManagement/groups": {
+      "get": {
+        "operationId": "listUserGroups",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserManagementUserGroups"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/userGroups/{userGroupId}/addMembers": {
+      "post": {
+        "operationId": "addGroupMembers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userGroupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserManagementUserGroupMembers"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/userGroups/{userGroupId}/members": {
+      "get": {
+        "operationId": "getGroupMembers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userGroupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserManagementUserGroupMembers"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/userGroups/{userGroupId}/permissions": {
+      "get": {
+        "operationId": "listWorkspacePermissionsForUserGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userGroupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "manageWorkspacePermissionsForUserGroup",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userGroupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/userGroups/{userGroupId}/removeMembers": {
+      "post": {
+        "operationId": "removeGroupMembers",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userGroupId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserManagementUserGroupMembers"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/users": {
+      "get": {
+        "operationId": "listUsers",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserManagementUsers"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/users/{userId}/permissions": {
+      "get": {
+        "operationId": "listWorkspacePermissionsForUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "manageWorkspacePermissionsForUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees": {
       "get": {
         "operationId": "availableAssignees",
@@ -15744,7 +16280,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "description": "An array of permissions assignments",
+                "description": "An array of dashboard permissions assignments",
                 "items": {
                   "oneOf": [
                     {
@@ -27597,87 +28133,6 @@
         }
       }
     },
-    "/api/v1/layout/dataSources/{dataSourceId}/physicalModel": {
-      "get": {
-        "deprecated": true,
-        "description": "Retrieve complete layout of tables with their columns",
-        "operationId": "getPdmLayout",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dataSourceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeclarativePdm"
-                }
-              }
-            },
-            "description": "Retrieved data source physical mode layout."
-          }
-        },
-        "summary": "Get data source physical model layout",
-        "tags": [
-          "layout",
-          "PDM - Declarative APIs"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "USE"
-          ]
-        }
-      },
-      "put": {
-        "deprecated": true,
-        "description": "Sets complete layout of tables with their columns under corresponding Data Source.",
-        "operationId": "setPdmLayout",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dataSourceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeclarativePdm"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "Data source physical mode layout set successfully."
-          }
-        },
-        "summary": "Set data source physical model layout",
-        "tags": [
-          "layout",
-          "PDM - Declarative APIs"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      }
-    },
     "/api/v1/layout/organization": {
       "get": {
         "description": "Retrieve complete layout of organization, workspaces, user-groups, etc.",
@@ -27792,6 +28247,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "description": "An array of declarative organization permissions assignments",
                 "items": {
                   "$ref": "#/components/schemas/DeclarativeOrganizationPermission"
                 },
