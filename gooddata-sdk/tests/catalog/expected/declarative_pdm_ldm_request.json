@@ -1,0 +1,197 @@
+{
+  "tables": [
+    {
+      "columns": [
+        {
+          "data_type": "NUMERIC",
+          "isPrimaryKey": false,
+          "name": "budget"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": true,
+          "name": "campaign_channel_id"
+        },
+        {
+          "data_type": "INT",
+          "isPrimaryKey": false,
+          "name": "campaign_id",
+          "referencedTableColumn": "campaign_id",
+          "referencedTableId": "campaigns"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "category"
+        },
+        {
+          "data_type": "NUMERIC",
+          "isPrimaryKey": false,
+          "name": "spend"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "type"
+        }
+      ],
+      "id": "campaign_channels",
+      "path": [
+        "demo",
+        "campaign_channels"
+      ],
+      "type": "TABLE"
+    },
+    {
+      "columns": [
+        {
+          "data_type": "INT",
+          "isPrimaryKey": true,
+          "name": "campaign_id"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "campaign_name"
+        }
+      ],
+      "id": "campaigns",
+      "path": [
+        "demo",
+        "campaigns"
+      ],
+      "type": "TABLE"
+    },
+    {
+      "columns": [
+        {
+          "data_type": "INT",
+          "isPrimaryKey": true,
+          "name": "customer_id"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "customer_name"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "geo__state__location"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "region"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "state"
+        }
+      ],
+      "id": "customers",
+      "path": [
+        "demo",
+        "customers"
+      ],
+      "type": "TABLE"
+    },
+    {
+      "columns": [
+        {
+          "data_type": "INT",
+          "isPrimaryKey": false,
+          "name": "campaign_id",
+          "referencedTableColumn": "campaign_id",
+          "referencedTableId": "campaigns"
+        },
+        {
+          "data_type": "INT",
+          "isPrimaryKey": false,
+          "name": "customer_id",
+          "referencedTableColumn": "customer_id",
+          "referencedTableId": "customers"
+        },
+        {
+          "data_type": "DATE",
+          "isPrimaryKey": false,
+          "name": "date"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "order_id"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": true,
+          "name": "order_line_id"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "order_status"
+        },
+        {
+          "data_type": "NUMERIC",
+          "isPrimaryKey": false,
+          "name": "price"
+        },
+        {
+          "data_type": "INT",
+          "isPrimaryKey": false,
+          "name": "product_id",
+          "referencedTableColumn": "product_id",
+          "referencedTableId": "products"
+        },
+        {
+          "data_type": "NUMERIC",
+          "isPrimaryKey": false,
+          "name": "quantity"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "wdf__region"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "wdf__state"
+        }
+      ],
+      "id": "order_lines",
+      "path": [
+        "demo",
+        "order_lines"
+      ],
+      "type": "TABLE"
+    },
+    {
+      "columns": [
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "category"
+        },
+        {
+          "data_type": "INT",
+          "isPrimaryKey": true,
+          "name": "product_id"
+        },
+        {
+          "data_type": "STRING",
+          "isPrimaryKey": false,
+          "name": "product_name"
+        }
+      ],
+      "id": "products",
+      "path": [
+        "demo",
+        "products"
+      ],
+      "type": "TABLE"
+    }
+  ]
+}

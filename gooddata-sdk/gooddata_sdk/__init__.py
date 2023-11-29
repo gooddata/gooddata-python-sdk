@@ -19,8 +19,8 @@ from gooddata_sdk.catalog.data_source.action_model.sql_column import SqlColumn
 from gooddata_sdk.catalog.data_source.declarative_model.data_source import (
     CatalogDeclarativeDataSource,
     CatalogDeclarativeDataSources,
-    CatalogDeclarativeTables,
 )
+from gooddata_sdk.catalog.data_source.declarative_model.physical_model.pdm import CatalogDeclarativeTables
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import (
     CatalogDeclarativeColumn,
     CatalogDeclarativeTable,
