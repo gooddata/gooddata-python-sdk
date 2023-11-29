@@ -374,7 +374,9 @@
               "GREENPLUM",
               "AZURESQL",
               "SYNAPSESQL",
-              "DATABRICKS"
+              "DATABRICKS",
+              "GD_STORAGE",
+              "CLICKHOUSE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
