@@ -1,9 +1,10 @@
-# (C) 2022 GoodData Corporation
+# (C) 2023 GoodData Corporation
 attributes:
   - description: Campaign id
     id: campaign_id
     labels: []
     sourceColumn: campaign_id
+    sourceColumnDataType: INT
     tags:
       - Campaigns
     title: Campaign id
@@ -11,12 +12,16 @@ attributes:
     id: campaign_name
     labels: []
     sourceColumn: campaign_name
+    sourceColumnDataType: STRING
     tags:
       - Campaigns
     title: Campaign name
 dataSourceTableId:
   dataSourceId: demo-test-ds
   id: campaigns
+  path:
+    - demo
+    - campaigns
   type: dataSource
 description: Campaigns
 facts: []

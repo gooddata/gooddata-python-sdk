@@ -46,5 +46,9 @@ content:
     type: IDashboardLayout
   version: '2'
 description: ''
+permissions:
+  - assigneeRule:
+      type: allWorkspaceUsers
+    name: VIEW
 id: campaign
 title: Campaign

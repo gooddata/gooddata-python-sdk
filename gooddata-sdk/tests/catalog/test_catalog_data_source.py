@@ -136,6 +136,7 @@ def build_pdm_sql_datasets() -> List[CatalogPdmSql]:
 
 #    path = _current_dir / "expected" / "scan_result_pdm.json"
 
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_generate_logical_model_sql_datasets.yaml"))
 def test_generate_logical_model_with_sql_datasets(test_config: dict):
     expected_json_path = _current_dir / "expected" / "declarative_ldm_with_sql_dataset.json"

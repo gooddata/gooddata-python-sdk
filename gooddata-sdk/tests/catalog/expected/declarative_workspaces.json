@@ -91,6 +91,14 @@
                 },
                 "version": "2"
               },
+              "permissions": [
+                {
+                  "assigneeRule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ],
               "description": "",
               "id": "campaign",
               "title": "Campaign"
@@ -2347,11 +2355,15 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumnDataTypes": [
-                    "INT"
-                  ],
-                  "sourceColumns": [
-                    "campaign_id"
+                  "sources": [
+                    {
+                      "column": "campaign_id",
+                      "target": {
+                        "id": "campaign_id",
+                        "type": "attribute"
+                      },
+                      "dataType": "INT"
+                    }
                   ]
                 }
               ],
@@ -2573,11 +2585,15 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumnDataTypes": [
-                    "INT"
-                  ],
-                  "sourceColumns": [
-                    "campaign_id"
+                  "sources": [
+                    {
+                      "column": "campaign_id",
+                      "target": {
+                        "id": "campaign_id",
+                        "type": "attribute"
+                      },
+                      "dataType": "INT"
+                    }
                   ]
                 },
                 {
@@ -2586,11 +2602,15 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumnDataTypes": [
-                    "INT"
-                  ],
-                  "sourceColumns": [
-                    "customer_id"
+                  "sources": [
+                    {
+                      "column": "customer_id",
+                      "target": {
+                        "id": "customer_id",
+                        "type": "attribute"
+                      },
+                      "dataType": "INT"
+                    }
                   ]
                 },
                 {
@@ -2599,11 +2619,15 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumnDataTypes": [
-                    "DATE"
-                  ],
-                  "sourceColumns": [
-                    "date"
+                  "sources": [
+                    {
+                      "column": "date",
+                      "target": {
+                        "id": "date",
+                        "type": "date"
+                      },
+                      "dataType": "DATE"
+                    }
                   ]
                 },
                 {
@@ -2612,11 +2636,15 @@
                     "type": "dataset"
                   },
                   "multivalue": false,
-                  "sourceColumnDataTypes": [
-                    "INT"
-                  ],
-                  "sourceColumns": [
-                    "product_id"
+                  "sources": [
+                    {
+                      "column": "product_id",
+                      "target": {
+                        "id": "product_id",
+                        "type": "attribute"
+                      },
+                      "dataType": "INT"
+                    }
                   ]
                 }
               ],
@@ -2765,7 +2793,19 @@
       "id": "demo_west",
       "model": {
         "analytics": {
-          "analyticalDashboardExtensions": [],
+          "analyticalDashboardExtensions": [
+            {
+              "id": "campaign",
+              "permissions": [
+                {
+                  "assigneeRule": {
+                    "type": "allWorkspaceUsers"
+                  },
+                  "name": "VIEW"
+                }
+              ]
+            }
+          ],
           "analyticalDashboards": [],
           "dashboardPlugins": [],
           "filterContexts": [],
