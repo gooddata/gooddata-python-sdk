@@ -9,9 +9,10 @@ on:
 
 env:
   GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
-  NETLIFY_SITE_NAME: ${{ github.event.repository.name }}
+  BASE_URL:  https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ github.event.repository.name }}.netlify.app
+
 jobs:
-  netlify-deploy:
+  build-test-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,7 +32,7 @@ jobs:
       - name: Generate Versioned Docs
         uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
         with:
-          base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
+          base-url: ${{ env.BASE_URL }}
           keep-master: keep_master
           fetch-from: upstream
       - name: Publish
@@ -41,16 +42,21 @@ jobs:
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-# `htmltest` is after publishing, so we can see the artifact.
-      - name: htmltest
+      - name: htmltest # `htmltest` is after publishing, so we can see the artifact.
         run: |
           rm -f htmltest.sh
           wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/htmltest.sh
           chmod +x ./htmltest.sh
           ./htmltest.sh -c docs/.htmltest.yml docs/public
-# Commented out, because it has been failing. Check up later.
-#      - name: Comment PR
-#        uses: thollander/actions-comment-pull-request@v2
-#        with:
-#          message: |
-#            https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app/
+
+  pr-comment:
+    runs-on: infra1-small
+    needs: [build-test-and-deploy]
+    permissions:
+      id-token: write
+    steps:
+      - uses: gooddata/github-actions/pr-comment@master
+        with:
+          vault-auth-role: "common-action"
+          job-reference: "build-test-and-deploy"
+          comment: "Preview successful, see the results at:\n\n${{ env.BASE_URL }}"
