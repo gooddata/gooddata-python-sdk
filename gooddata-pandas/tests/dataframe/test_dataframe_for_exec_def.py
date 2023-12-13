@@ -239,7 +239,7 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
             ),
         ],
     )
-    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96), expected_row_totals=[[17, 18], []])
+    _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(19, 96), expected_row_totals=[[17, 18], [17, 18]])
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_exec_def_totals3.yaml"))
