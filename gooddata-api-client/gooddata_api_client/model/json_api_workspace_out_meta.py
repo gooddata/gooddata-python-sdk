@@ -32,7 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_workspace_out_meta_config import JsonApiWorkspaceOutMetaConfig
+    from gooddata_api_client.model.json_api_workspace_out_meta_data_model import JsonApiWorkspaceOutMetaDataModel
+    from gooddata_api_client.model.json_api_workspace_out_meta_hierarchy import JsonApiWorkspaceOutMetaHierarchy
     globals()['JsonApiWorkspaceOutMetaConfig'] = JsonApiWorkspaceOutMetaConfig
+    globals()['JsonApiWorkspaceOutMetaDataModel'] = JsonApiWorkspaceOutMetaDataModel
+    globals()['JsonApiWorkspaceOutMetaHierarchy'] = JsonApiWorkspaceOutMetaHierarchy
 
 
 class JsonApiWorkspaceOutMeta(ModelNormal):
@@ -97,6 +101,8 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
         lazy_import()
         return {
             'config': (JsonApiWorkspaceOutMetaConfig,),  # noqa: E501
+            'data_model': (JsonApiWorkspaceOutMetaDataModel,),  # noqa: E501
+            'hierarchy': (JsonApiWorkspaceOutMetaHierarchy,),  # noqa: E501
             'permissions': ([str],),  # noqa: E501
         }
 
@@ -107,6 +113,8 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
 
     attribute_map = {
         'config': 'config',  # noqa: E501
+        'data_model': 'dataModel',  # noqa: E501
+        'hierarchy': 'hierarchy',  # noqa: E501
         'permissions': 'permissions',  # noqa: E501
     }
 
@@ -152,6 +160,8 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
+            data_model (JsonApiWorkspaceOutMetaDataModel): [optional]  # noqa: E501
+            hierarchy (JsonApiWorkspaceOutMetaHierarchy): [optional]  # noqa: E501
             permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 
@@ -239,6 +249,8 @@ class JsonApiWorkspaceOutMeta(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             config (JsonApiWorkspaceOutMetaConfig): [optional]  # noqa: E501
+            data_model (JsonApiWorkspaceOutMetaDataModel): [optional]  # noqa: E501
+            hierarchy (JsonApiWorkspaceOutMetaHierarchy): [optional]  # noqa: E501
             permissions ([str]): List of valid permissions for a logged-in user.. [optional]  # noqa: E501
         """
 

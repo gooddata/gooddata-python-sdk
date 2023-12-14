@@ -23,7 +23,6 @@ Method | HTTP request | Description
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 [**get_group_members**](ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
-[**get_staging_upload_location**](ActionsApi.md#get_staging_upload_location) | **POST** /api/v1/actions/dataSources/{dataSourceId}/staging/upload | Get a staging upload location
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
@@ -360,7 +359,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100,
+        data_sampling_percentage=100.0,
         depends_on=[
             DependsOn(
                 complement_filter=False,
@@ -1648,73 +1647,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Json metadata representation |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **get_staging_upload_location**
-> StagingUploadLocation get_staging_upload_location(data_source_id)
-
-Get a staging upload location
-
-Provides a location for uploading staging files.
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.staging_upload_location import StagingUploadLocation
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    data_source_id = "dataSourceId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        # Get a staging upload location
-        api_response = api_instance.get_staging_upload_location(data_source_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->get_staging_upload_location: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **data_source_id** | **str**|  |
-
-### Return type
-
-[**StagingUploadLocation**](StagingUploadLocation.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Staging upload location was registered. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

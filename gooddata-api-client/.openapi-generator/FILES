@@ -165,7 +165,6 @@ docs/FilterDefinition.md
 docs/FilterDefinitionForSimpleMeasure.md
 docs/GenerateLdmRequest.md
 docs/GenerateLogicalDataModelApi.md
-docs/GetStagingLocationApi.md
 docs/GrainIdentifier.md
 docs/GrantedPermission.md
 docs/GranularitiesFormatting.md
@@ -538,6 +537,8 @@ docs/JsonApiWorkspaceOutDocument.md
 docs/JsonApiWorkspaceOutList.md
 docs/JsonApiWorkspaceOutMeta.md
 docs/JsonApiWorkspaceOutMetaConfig.md
+docs/JsonApiWorkspaceOutMetaDataModel.md
+docs/JsonApiWorkspaceOutMetaHierarchy.md
 docs/JsonApiWorkspaceOutWithLinks.md
 docs/JsonApiWorkspacePatch.md
 docs/JsonApiWorkspacePatchDocument.md
@@ -632,7 +633,6 @@ docs/SortKeyTotalTotal.md
 docs/SortKeyValue.md
 docs/SortKeyValueValue.md
 docs/SqlColumn.md
-docs/StagingUploadLocation.md
 docs/TableWarning.md
 docs/TabularExportRequest.md
 docs/TestConnectionApi.md
@@ -697,7 +697,6 @@ gooddata_api_client/api/entitlement_api.py
 gooddata_api_client/api/exporting_api.py
 gooddata_api_client/api/facts_api.py
 gooddata_api_client/api/generate_logical_data_model_api.py
-gooddata_api_client/api/get_staging_location_api.py
 gooddata_api_client/api/hierarchy_api.py
 gooddata_api_client/api/invalidate_cache_api.py
 gooddata_api_client/api/jwks_api.py
@@ -1245,6 +1244,8 @@ gooddata_api_client/model/json_api_workspace_out_document.py
 gooddata_api_client/model/json_api_workspace_out_list.py
 gooddata_api_client/model/json_api_workspace_out_meta.py
 gooddata_api_client/model/json_api_workspace_out_meta_config.py
+gooddata_api_client/model/json_api_workspace_out_meta_data_model.py
+gooddata_api_client/model/json_api_workspace_out_meta_hierarchy.py
 gooddata_api_client/model/json_api_workspace_out_with_links.py
 gooddata_api_client/model/json_api_workspace_patch.py
 gooddata_api_client/model/json_api_workspace_patch_document.py
@@ -1326,7 +1327,6 @@ gooddata_api_client/model/sort_key_total_total.py
 gooddata_api_client/model/sort_key_value.py
 gooddata_api_client/model/sort_key_value_value.py
 gooddata_api_client/model/sql_column.py
-gooddata_api_client/model/staging_upload_location.py
 gooddata_api_client/model/table_warning.py
 gooddata_api_client/model/tabular_export_request.py
 gooddata_api_client/model/test_definition_request.py

@@ -476,17 +476,6 @@ interactions:
                 name: Demo
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo
-            - id: demo_west_california
-              type: workspace
-              attributes:
-                name: Demo West California
-              relationships:
-                parent:
-                  data:
-                    id: demo_west
-                    type: workspace
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
             - id: demo_west
               type: workspace
               attributes:
@@ -498,6 +487,17 @@ interactions:
                     type: workspace
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo_west
+            - id: demo_west_california
+              type: workspace
+              attributes:
+                name: Demo West California
+              relationships:
+                parent:
+                  data:
+                    id: demo_west
+                    type: workspace
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo_west_california
           included:
             - id: demo
               type: workspace

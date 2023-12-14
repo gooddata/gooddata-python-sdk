@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4d8801be305db917
+          traceId: 0e66ac1330992e4d
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -177,8 +177,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -264,8 +264,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test
               type: SNOWFLAKE
+              name: Test
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

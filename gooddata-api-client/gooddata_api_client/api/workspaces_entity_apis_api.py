@@ -84,6 +84,8 @@ class WorkspacesEntityAPIsApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -225,6 +227,8 @@ class WorkspacesEntityAPIsApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -326,6 +330,8 @@ class WorkspacesEntityAPIsApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
