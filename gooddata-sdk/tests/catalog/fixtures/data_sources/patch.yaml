@@ -82,8 +82,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                name: demo-test-ds
                 type: POSTGRESQL
+                name: demo-test-ds
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -167,7 +167,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6a36be9b72f20fbf
+          traceId: 0ec958df1bf2968c
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -265,8 +265,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -352,8 +352,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -439,8 +439,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test
               type: POSTGRESQL
+              name: Test
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -535,8 +535,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test2
               type: POSTGRESQL
+              name: Test2
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -622,8 +622,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              name: Test2
               type: POSTGRESQL
+              name: Test2
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

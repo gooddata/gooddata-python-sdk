@@ -870,7 +870,7 @@
               "AZURESQL",
               "SYNAPSESQL",
               "DATABRICKS",
-              "GD_STORAGE",
+              "GDSTORAGE",
               "CLICKHOUSE"
             ],
             "example": "POSTGRESQL",
@@ -5478,7 +5478,7 @@
                   "AZURESQL",
                   "SYNAPSESQL",
                   "DATABRICKS",
-                  "GD_STORAGE",
+                  "GDSTORAGE",
                   "CLICKHOUSE"
                 ],
                 "type": "string"
@@ -5640,7 +5640,7 @@
                   "AZURESQL",
                   "SYNAPSESQL",
                   "DATABRICKS",
-                  "GD_STORAGE",
+                  "GDSTORAGE",
                   "CLICKHOUSE"
                 ],
                 "type": "string"
@@ -5771,7 +5771,7 @@
                   "AZURESQL",
                   "SYNAPSESQL",
                   "DATABRICKS",
-                  "GD_STORAGE",
+                  "GDSTORAGE",
                   "CLICKHOUSE"
                 ],
                 "type": "string"
@@ -5942,7 +5942,7 @@
                   "AZURESQL",
                   "SYNAPSESQL",
                   "DATABRICKS",
-                  "GD_STORAGE",
+                  "GDSTORAGE",
                   "CLICKHOUSE"
                 ],
                 "type": "string"
@@ -11469,6 +11469,32 @@
                 },
                 "type": "object"
               },
+              "dataModel": {
+                "properties": {
+                  "datasetCount": {
+                    "description": "include the number of dataset of each workspace",
+                    "format": "int32",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "datasetCount"
+                ],
+                "type": "object"
+              },
+              "hierarchy": {
+                "properties": {
+                  "childrenCount": {
+                    "description": "include the number of direct children of each workspace",
+                    "format": "int32",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "childrenCount"
+                ],
+                "type": "object"
+              },
               "permissions": {
                 "description": "List of valid permissions for a logged-in user.",
                 "items": {
@@ -12401,24 +12427,6 @@
         ],
         "type": "object"
       },
-      "StagingUploadLocation": {
-        "description": "Information related to uploading a file to the staging area.",
-        "properties": {
-          "location": {
-            "description": "Location relative to the root of the storage.",
-            "type": "string"
-          },
-          "uploadUrl": {
-            "description": "Pre-signed upload URL to PUT the file to.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "location",
-          "uploadUrl"
-        ],
-        "type": "object"
-      },
       "UserAssignee": {
         "description": "List of users",
         "properties": {
@@ -12886,45 +12894,6 @@
         "summary": "Generate logical data model (LDM) from physical data model (PDM)",
         "tags": [
           "Generate Logical Data Model",
-          "actions"
-        ],
-        "x-gdc-security-info": {
-          "description": "Minimal permission required to use this endpoint.",
-          "permissions": [
-            "MANAGE"
-          ]
-        }
-      }
-    },
-    "/api/v1/actions/dataSources/{dataSourceId}/staging/upload": {
-      "post": {
-        "description": "Provides a location for uploading staging files.",
-        "operationId": "getStagingUploadLocation",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dataSourceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StagingUploadLocation"
-                }
-              }
-            },
-            "description": "Staging upload location was registered."
-          }
-        },
-        "summary": "Get a staging upload location",
-        "tags": [
-          "Get staging location",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -17425,7 +17394,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -17436,6 +17405,8 @@
                 "enum": [
                   "config",
                   "permissions",
+                  "hierarchy",
+                  "dataModelDatasets",
                   "all",
                   "ALL"
                 ],
@@ -17498,7 +17469,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -17509,6 +17480,8 @@
                 "enum": [
                   "config",
                   "permissions",
+                  "hierarchy",
+                  "dataModelDatasets",
                   "all",
                   "ALL"
                 ],
@@ -17630,7 +17603,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -17641,6 +17614,8 @@
                 "enum": [
                   "config",
                   "permissions",
+                  "hierarchy",
+                  "dataModelDatasets",
                   "all",
                   "ALL"
                 ],
