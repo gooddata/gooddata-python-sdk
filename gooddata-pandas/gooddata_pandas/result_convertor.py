@@ -30,7 +30,7 @@ class _DataWithHeaders:
     data: List[_DataArray]
     data_headers: Tuple[_DataHeaders, Optional[_DataHeaders]]
     grand_totals: Tuple[Optional[List[_DataArray]], Optional[List[_DataArray]]]
-    grand_total_headers: Tuple[Optional[_DataHeaders], Optional[_DataHeaders]]
+    grand_total_headers: Tuple[Optional[List[Dict[str, _DataHeaders]]], Optional[List[Dict[str, _DataHeaders]]]]
 
 
 @define
@@ -50,7 +50,9 @@ class _AccumulatedData:
     data: List[_DataArray] = field(init=False, factory=list)
     data_headers: List[Optional[_DataHeaders]] = field(init=False, factory=lambda: [None, None])
     grand_totals: List[Optional[List[_DataArray]]] = field(init=False, factory=lambda: [None, None])
-    grand_totals_headers: List[Optional[_DataHeaders]] = field(init=False, factory=lambda: [None, None])
+    grand_totals_headers: List[Optional[List[Dict[str, _DataHeaders]]]] = field(
+        init=False, factory=lambda: [None, None]
+    )
 
     def accumulate_data(self, from_result: ExecutionResult) -> None:
         """
@@ -119,6 +121,14 @@ class _AccumulatedData:
         for grand_total in grand_totals:
             # 2-dim results have always 1-dim grand totals (3-dim results have 2-dim gt but DataFrame stores 2D only)
             dims = grand_total["totalDimensions"]
+
+            # if dims are empty then data contain total of column and row grandtotals so extend existing data array
+            if len(dims) == 0:
+                grand_totals_item = cast(List[_DataArray], self.grand_totals[0])
+                for total_idx, total_data in enumerate(grand_total["data"]):
+                    grand_totals_item[total_idx].extend(total_data)
+                continue
+
             assert len(dims) == 1, "Only 2-dimensional results are supported"
             dim_idx = dim_idx_dict[dims[0]]
             # the dimension id specified on the grand total says from what dimension were
@@ -134,11 +144,7 @@ class _AccumulatedData:
                 # grand totals not initialized yet; initialize both data and headers by making
                 # a shallow copy from the results
                 self.grand_totals[opposite_dim] = grand_total["data"][:]
-                # TODO: row total measure headers are currently not supported (only aggregation info w/o measure label)
-                #       measure header defs are under ["headerGroups"][>0]
-                self.grand_totals_headers[opposite_dim] = grand_total["dimensionHeaders"][0]["headerGroups"][0][
-                    "headers"
-                ][:]
+                self.grand_totals_headers[opposite_dim] = grand_total["dimensionHeaders"][0]["headerGroups"]
             elif paging_dim != opposite_dim:
                 # grand totals are already initialized and the code is paging in the direction that reveals
                 # additional grand total values; append them accordingly; no need to consider total headers:
@@ -446,10 +452,8 @@ def _merge_grand_total_headers_into_headers(extract: _DataWithHeaders) -> Tuple[
         if grand_total_headers is None:
             continue
         header = cast(List[List[Any]], headers[dim_idx])
-        header[0].extend(grand_total_headers)
-        padding = [None] * len(grand_total_headers)
-        for other_headers in header[1:]:
-            other_headers.extend(padding)
+        for level, grand_total_header in enumerate(grand_total_headers):
+            header[level].extend(grand_total_header["headers"])
 
     return headers
 
