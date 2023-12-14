@@ -564,6 +564,8 @@ class OrganizationModelControllerApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -1929,6 +1931,8 @@ class OrganizationModelControllerApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -2760,6 +2764,8 @@ class OrganizationModelControllerApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

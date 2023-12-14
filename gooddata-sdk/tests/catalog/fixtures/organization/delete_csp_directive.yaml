@@ -235,7 +235,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: bcbfa6217a7d3ae8
+          traceId: b327d1325f1dcf8c
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/cspDirectives?page=0&size=500

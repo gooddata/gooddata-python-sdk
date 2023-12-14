@@ -82,8 +82,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                name: demo-test-ds
                 type: POSTGRESQL
+                name: demo-test-ds
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds

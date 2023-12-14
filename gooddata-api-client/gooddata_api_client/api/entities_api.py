@@ -1703,6 +1703,8 @@ class EntitiesApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -5814,6 +5816,8 @@ class EntitiesApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -8522,6 +8526,8 @@ class EntitiesApi(object):
 
                         "CONFIG": "config",
                         "PERMISSIONS": "permissions",
+                        "HIERARCHY": "hierarchy",
+                        "DATAMODELDATASETS": "dataModelDatasets",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

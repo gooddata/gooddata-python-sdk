@@ -190,7 +190,6 @@ Class | Method | HTTP request | Description
 *FactsApi* | [**get_all_entities_facts**](docs/FactsApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 *FactsApi* | [**get_entity_facts**](docs/FactsApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 *GenerateLogicalDataModelApi* | [**generate_logical_model**](docs/GenerateLogicalDataModelApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
-*GetStagingLocationApi* | [**get_staging_upload_location**](docs/GetStagingLocationApi.md#get_staging_upload_location) | **POST** /api/v1/actions/dataSources/{dataSourceId}/staging/upload | Get a staging upload location
 *HierarchyApi* | [**check_entity_overrides**](docs/HierarchyApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 *HierarchyApi* | [**inherited_entity_conflicts**](docs/HierarchyApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *HierarchyApi* | [**inherited_entity_prefixes**](docs/HierarchyApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
@@ -328,7 +327,6 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_exported_file**](docs/ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
 *ActionsApi* | [**get_group_members**](docs/ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
-*ActionsApi* | [**get_staging_upload_location**](docs/ActionsApi.md#get_staging_upload_location) | **POST** /api/v1/actions/dataSources/{dataSourceId}/staging/upload | Get a staging upload location
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
@@ -1206,6 +1204,8 @@ Class | Method | HTTP request | Description
  - [JsonApiWorkspaceOutList](docs/JsonApiWorkspaceOutList.md)
  - [JsonApiWorkspaceOutMeta](docs/JsonApiWorkspaceOutMeta.md)
  - [JsonApiWorkspaceOutMetaConfig](docs/JsonApiWorkspaceOutMetaConfig.md)
+ - [JsonApiWorkspaceOutMetaDataModel](docs/JsonApiWorkspaceOutMetaDataModel.md)
+ - [JsonApiWorkspaceOutMetaHierarchy](docs/JsonApiWorkspaceOutMetaHierarchy.md)
  - [JsonApiWorkspaceOutWithLinks](docs/JsonApiWorkspaceOutWithLinks.md)
  - [JsonApiWorkspacePatch](docs/JsonApiWorkspacePatch.md)
  - [JsonApiWorkspacePatchDocument](docs/JsonApiWorkspacePatchDocument.md)
@@ -1287,7 +1287,6 @@ Class | Method | HTTP request | Description
  - [SortKeyValue](docs/SortKeyValue.md)
  - [SortKeyValueValue](docs/SortKeyValueValue.md)
  - [SqlColumn](docs/SqlColumn.md)
- - [StagingUploadLocation](docs/StagingUploadLocation.md)
  - [TableWarning](docs/TableWarning.md)
  - [TabularExportRequest](docs/TabularExportRequest.md)
  - [TestDefinitionRequest](docs/TestDefinitionRequest.md)
