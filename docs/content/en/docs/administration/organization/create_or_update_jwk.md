@@ -5,4 +5,15 @@ superheading: "catalog_organization."
 weight: 100
 ---
 
-{{< python "sdk.CatalogOrganizationService.create_or_update_jwk" >}}
+``create_or_update_jwk( jwk: CatalogJwk ) -> None``
+
+Create a new jwk or overwrite an existing jwk with the same id.
+
+## Parameters
+
+| name |	type	| description |
+| jwk	| CatalogJwk	 | Catalog Jwk object to be created or updated. |
+
+## Returns
+
+_None_
