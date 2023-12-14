@@ -446,7 +446,11 @@ class DbtModelTables:
                         "id": column.ldm_id,
                         "title": column.gooddata_ldm_title,
                         "description": column.description,
-                        "tags": [table.gooddata_ldm_title] + column.tags,
+                        # Put them all to a dedicated tag(folder).
+                        # Date dims are not put to the corresponding folder in our Analytical Designer.
+                        # Also, the same date dim can be created from multiple columns (shared date dims).
+                        # So the tagging is useless here now, we should think about it in the future.
+                        "tags": ["Date dimensions"],
                         "granularities": granularities,
                         "granularities_formatting": {
                             "title_base": "",
