@@ -431,7 +431,8 @@ class DbtModelTables:
                 )
         return attributes
 
-    def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
+    @staticmethod
+    def make_date_datasets(table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
         date_datasets = []
         for column in table.columns.values():
             existing_dataset_ids = [d["id"] for d in existing_date_datasets]
@@ -443,7 +444,7 @@ class DbtModelTables:
                 date_datasets.append(
                     {
                         "id": column.ldm_id,
-                        "title": self.get_ldm_title(column),
+                        "title": column.gooddata_ldm_title,
                         "description": column.description,
                         "tags": [table.gooddata_ldm_title] + column.tags,
                         "granularities": granularities,
