@@ -3,7 +3,7 @@
 
 set -e
 
-latest_version=$( curl -L -s https://pypi.org/pypi/gooddata-sdk/json | jq -r '.releases | keys | .[]' | sort -r | awk 'NR==1 {print}')
+latest_version=$( curl -L -s https://pypi.org/pypi/gooddata-sdk/json | jq -r '.releases | keys | .[]' | sort -Vr | awk 'NR==1 {print}')
 
 if [[ $latest_version =~ ^[0-9]+\.[0-9]+\.[0-9]+\.dev[0-9]+$ ]]; then
     # split the version number string into its components
