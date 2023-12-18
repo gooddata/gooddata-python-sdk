@@ -3,7 +3,7 @@ import copy
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attrs
 from gooddata_dbt.dbt.base import (
@@ -15,7 +15,9 @@ from gooddata_dbt.dbt.base import (
     TIMESTAMP_DATA_TYPES,
     TIMESTAMP_GRANULARITIES,
     Base,
-    GoodDataLdmTypes,
+    GoodDataLabelType,
+    GoodDataLdmType,
+    GoodDataSortDirection,
 )
 from gooddata_dbt.dbt.cloud import DbtConnection
 
@@ -31,10 +33,13 @@ class DbtModelMetaGoodDataTableProps(Base):
 @attrs.define(auto_attribs=True, kw_only=True)
 class DbtModelMetaGoodDataColumnProps(Base):
     id: Optional[str] = None
-    ldm_type: Optional[str] = None
+    ldm_type: Optional[GoodDataLdmType] = None
     referenced_table: Optional[str] = None
-    label_type: Optional[str] = None
+    label_type: Optional[GoodDataLabelType] = None
     attribute_column: Optional[str] = None
+    sort_column: Optional[str] = None
+    sort_direction: Optional[GoodDataSortDirection] = None
+    default_view: Optional[bool] = None
 
     @property
     def gooddata_ref_table_ldm_id(self) -> Optional[str]:
@@ -47,6 +52,8 @@ class DbtModelMetaGoodDataColumnProps(Base):
             self.referenced_table = self.referenced_table.upper()
         if self.attribute_column:
             self.attribute_column = self.attribute_column.upper()
+        if self.sort_column:
+            self.sort_column = self.sort_column.upper()
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -122,11 +129,32 @@ class DbtModelColumn(DbtModelBase):
     def ldm_id(self) -> str:
         return self.meta.gooddata.id or self.gooddata_ldm_id
 
+    @property
+    def ldm_type(self) -> Optional[str]:
+        if self.meta.gooddata.ldm_type is None:
+            return None
+        else:
+            return self.meta.gooddata.ldm_type.value
+
+    @property
+    def label_type(self) -> Optional[str]:
+        if self.meta.gooddata.label_type is None:
+            return None
+        else:
+            return self.meta.gooddata.label_type.value
+
+    @property
+    def sort_direction(self) -> Optional[str]:
+        if self.meta.gooddata.sort_direction is None:
+            return None
+        else:
+            return self.meta.gooddata.sort_direction.value
+
     def gooddata_is_fact(self) -> bool:
-        return (self.meta.gooddata.ldm_type == GoodDataLdmTypes.FACT.value) or self.is_number()
+        return (self.meta.gooddata.ldm_type == GoodDataLdmType.FACT) or self.is_number()
 
     def gooddata_is_attribute(self) -> bool:
-        valid_ldm_types = [GoodDataLdmTypes.ATTRIBUTE.value, GoodDataLdmTypes.PRIMARY_KEY.value]
+        valid_ldm_types = [GoodDataLdmType.ATTRIBUTE, GoodDataLdmType.PRIMARY_KEY]
         # Without GD metadata, attribute is default unless it is DATETIME/NUMBER(FLOAT) data type
         return self.meta.gooddata.ldm_type in valid_ldm_types or (
             self.meta.gooddata.ldm_type is None and not self.is_date() and not self.is_number()
@@ -134,14 +162,14 @@ class DbtModelColumn(DbtModelBase):
 
     def gooddata_is_label(self, attribute_column_name: str) -> bool:
         return (
-            self.meta.gooddata.ldm_type == GoodDataLdmTypes.LABEL.value
+            self.meta.gooddata.ldm_type == GoodDataLdmType.LABEL
             and attribute_column_name == self.meta.gooddata.attribute_column
         )
 
     def is_date(self) -> bool:
         if self.data_type is None:
             return False
-        gooddata_date = self.meta.gooddata.ldm_type == "date"
+        gooddata_date = self.meta.gooddata.ldm_type == GoodDataLdmType.DATE
         return gooddata_date or self.data_type.upper() in DATETIME_DATA_TYPES
 
     def is_number(self) -> bool:
@@ -150,7 +178,7 @@ class DbtModelColumn(DbtModelBase):
         return self.data_type.upper() in NUMERIC_DATA_TYPES
 
     def is_reference(self) -> bool:
-        return self.meta.gooddata.ldm_type == GoodDataLdmTypes.REFERENCE.value
+        return self.meta.gooddata.ldm_type == GoodDataLdmType.REFERENCE
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
@@ -273,7 +301,7 @@ class DbtModelTables:
         # for test in column.tests:
         #     if DbtTests.PRIMARY_KEY.value in test:
         #         result = True
-        if column.meta.gooddata.ldm_type == GoodDataLdmTypes.PRIMARY_KEY.value:
+        if column.meta.gooddata.ldm_type == GoodDataLdmType.PRIMARY_KEY:
             result = True
         return result
 
@@ -288,7 +316,7 @@ class DbtModelTables:
     # @staticmethod
     # def get_dbt_foreign_key(column: DbtModelColumn) -> Optional[str]:
     #     referenced_object_id = None
-    #     if column.meta.gooddata.ldm_type == GoodDataLdmTypes.REFERENCE.value:
+    #     if column.meta.gooddata.ldm_type == GoodDataLdmType.REFERENCE:
     #         referenced_object_id = column.meta.gooddata.gooddata_ref_table_ldm_id
     #     else:
     #         for test in column.tests:
@@ -358,8 +386,9 @@ class DbtModelTables:
         return facts
 
     @staticmethod
-    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> List[Dict]:
+    def make_labels(table: DbtModelTable, attribute_column: DbtModelColumn) -> Tuple[List[Dict], Optional[dict]]:
         labels = []
+        default_view = None
         for column in table.columns.values():
             if column.gooddata_is_label(attribute_column.name):
                 labels.append(
@@ -369,17 +398,23 @@ class DbtModelTables:
                         "description": column.gooddata_ldm_description,
                         "source_column": column.name,
                         "source_column_data_type": column.data_type,
-                        "value_type": column.meta.gooddata.label_type,
+                        "value_type": column.label_type,
                         "tags": [table.gooddata_ldm_title] + column.tags,
                     }
                 )
-        return labels
+                if column.meta.gooddata.default_view:
+                    default_view = {
+                        "id": column.ldm_id,
+                        "type": "label",
+                    }
+        return labels, default_view
 
     def make_attributes(self, table: DbtModelTable) -> List[Dict]:
         attributes = []
         for column in table.columns.values():
             # Default is attribute
             if column.gooddata_is_attribute():
+                labels, default_view = self.make_labels(table, column)
                 attributes.append(
                     {
                         "id": column.ldm_id,
@@ -388,12 +423,16 @@ class DbtModelTables:
                         "source_column": column.name,
                         "source_column_data_type": column.data_type,
                         "tags": [table.gooddata_ldm_title] + column.tags,
-                        "labels": self.make_labels(table, column),
+                        "labels": labels,
+                        "sort_column": column.meta.gooddata.sort_column,
+                        "sort_direction": column.sort_direction,
+                        "default_view": default_view,
                     }
                 )
         return attributes
 
-    def make_date_datasets(self, table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
+    @staticmethod
+    def make_date_datasets(table: DbtModelTable, existing_date_datasets: List[Dict]) -> List[Dict]:
         date_datasets = []
         for column in table.columns.values():
             existing_dataset_ids = [d["id"] for d in existing_date_datasets]
@@ -405,9 +444,13 @@ class DbtModelTables:
                 date_datasets.append(
                     {
                         "id": column.ldm_id,
-                        "title": self.get_ldm_title(column),
+                        "title": column.gooddata_ldm_title,
                         "description": column.description,
-                        "tags": [table.gooddata_ldm_title] + column.tags,
+                        # Put them all to a dedicated tag(folder).
+                        # Date dims are not put to the corresponding folder in our Analytical Designer.
+                        # Also, the same date dim can be created from multiple columns (shared date dims).
+                        # So the tagging is useless here now, we should think about it in the future.
+                        "tags": ["Date dimensions"],
                         "granularities": granularities,
                         "granularities_formatting": {
                             "title_base": "",
@@ -482,5 +525,5 @@ class DbtModelTables:
             if table.name == comp_table_name:
                 for column in table.columns.values():
                     if column.name == comp_column_name:
-                        return column.meta.gooddata.ldm_type
+                        return column.ldm_type
         return None

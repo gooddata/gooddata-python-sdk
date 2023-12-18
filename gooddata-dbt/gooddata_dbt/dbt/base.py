@@ -7,13 +7,25 @@ import attrs
 from cattrs import structure
 
 
-class GoodDataLdmTypes(Enum):
+class GoodDataLdmType(Enum):
     PRIMARY_KEY = "primary_key"
     REFERENCE = "reference"
     DATE = "date"
     FACT = "fact"
     ATTRIBUTE = "attribute"
     LABEL = "label"
+
+
+class GoodDataLabelType(Enum):
+    TEXT = "TEXT"
+    HYPERLINK = "HYPERLINK"
+    GEO_LATITUDE = "GEO_LATITUDE"
+    GEO_LONGITUDE = "GEO_LONGITUDE"
+
+
+class GoodDataSortDirection(Enum):
+    ASC = "ASC"
+    DESC = "DESC"
 
 
 DATE_GRANULARITIES = [
