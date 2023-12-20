@@ -87,19 +87,20 @@ jobs:
             done
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#    create-release-branch:
-#      needs:
-#        - bump-version
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Checkout
-#          uses: actions/checkout@v3
-#        - name: Create documentation rel/${{ github.event.inputs.bump_type }} branch
-#          run: |
-#            git config user.name GitHub Actions
-#            git config user.email github-actions@github.com
-#            git checkout -b rel/${{ needs.bump-version.outputs.new_version }}
-#            git push origin rel/${{ needs.bump-version.outputs.new_version }}
+    create-release-branch:
+      needs:
+        - bump-version
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        - name: Create documentation rel/${{ github.event.inputs.bump_type }} branch
+          run: |
+            git config user.name GitHub Actions
+            git config user.email github-actions@github.com
+            git checkout -b rel/${{ needs.bump-version.outputs.new_version }}
+            git push origin rel/${{ needs.bump-version.outputs.new_version }}
+# TODO: this part waits for docs build and publish optimization it takes too long (~15 minutes)
 #    trigger-release:
 #      needs:
 #        - bump-version
