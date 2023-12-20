@@ -39,11 +39,9 @@ class Base:
         """
         Creates object from dictionary. It needs to be specified if the dictionary is in camelCase or snake_case.
         """
-        # This branch does not have to exist, but in case of camel_case=False it can perform fewer calls
-        if not camel_case:
-            return structure(data, cls)
-        client_object = cls.client_class().from_dict(data, camel_case)
-        return cls.from_api(client_object)
+        if camel_case:
+            data = cls.client_class().from_dict(data, camel_case).to_dict()
+        return structure(data, cls)
 
     def to_dict(self, camel_case: bool = True) -> Dict[str, Any]:
         """
