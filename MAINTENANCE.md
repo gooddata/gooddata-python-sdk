@@ -2,10 +2,12 @@
 
 ## How to release
 * manually run [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow
-* dispatch the GitHub workflow `netlify-deploy` on the `master` branch (takes ~15 minutes)
+* after the previous workflow finishes, dispatch the GitHub workflow `netlify-deploy` on the `master` branch (takes ~15 minutes)
   * The styling of the documentation is taken from the `master` branch. For more details see [./scripts/generate.sh](scripts/generate.sh) and [netlify-deploy](.github/workflows/netlify-deploy.yaml) workflow.
-* checkout latest master branch and tag it `vX.Y.Z`
-* push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
+* after the previous workflow finishes, push tag
+  * the version should be the same as the one in [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow log
+  * checkout latest master branch and tag it `vX.Y.Z`
+  * push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
 
 
 ### Releasing Alpha versions
