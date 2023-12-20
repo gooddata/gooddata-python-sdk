@@ -910,7 +910,7 @@ class CatalogWorkspaceService(CatalogServiceBase):
             _check_return_type=False,
         ).data
 
-        return CatalogUserDataFilter.from_dict(user_data_filter_dict, camel_case=False)
+        return CatalogUserDataFilter.from_dict(user_data_filter_dict, camel_case=True)
 
     def delete_user_data_filter(self, workspace_id: str, user_data_filter_id: str) -> None:
         """Delete user data filter.
