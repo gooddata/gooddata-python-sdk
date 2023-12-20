@@ -74,6 +74,11 @@ def _empty_user_data_filters(workspace_id: str, sdk: GoodDataSdk) -> None:
     assert empty_user_data_filters_e.to_dict(camel_case=True) == empty_user_data_filters_o.to_dict(camel_case=True)
 
 
+def _are_user_data_filters_empty(sdk: GoodDataSdk, workspace_id: str) -> None:
+    user_data_filters = sdk.catalog_workspace.list_user_data_filters(workspace_id)
+    assert len(user_data_filters) == 0
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_load_and_put_declarative_workspaces.yaml"))
 def test_load_and_put_declarative_workspaces(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
@@ -406,8 +411,7 @@ def test_put_declarative_workspace_data_filters(test_config):
 @gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_life_cycle.yaml"))
 def test_user_data_filters_life_cycle(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
-    user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
-    assert len(user_data_filters) == 0
+    _are_user_data_filters_empty(sdk, test_config["workspace"])
 
     try:
         user_data_filter = CatalogUserDataFilter.init(
@@ -437,8 +441,45 @@ def test_user_data_filters_life_cycle(test_config):
             workspace_id=test_config["workspace"], user_data_filter_id=get_filter.id
         )
 
+        _are_user_data_filters_empty(sdk, test_config["workspace"])
+    finally:
+        _refresh_workspaces(sdk)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "user_data_filters_for_user_group.yaml"))
+def test_user_data_filters_for_user_group(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    _are_user_data_filters_empty(sdk, test_config["workspace"])
+
+    try:
+        user_data_filter = CatalogUserDataFilter.init(
+            user_data_filter_id=test_config["test_new_user_data_filter"],
+            maql='{label/order_status} IN ("returned")',
+            title="test_new_user_data_filter",
+            user_group_id=test_config["test_user_group"],
+        )
+        sdk.catalog_workspace.create_or_update_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter=user_data_filter
+        )
         user_data_filters = sdk.catalog_workspace.list_user_data_filters(test_config["workspace"])
-        assert len(user_data_filters) == 0
+        assert len(user_data_filters) == 1
+        assert user_data_filters[0].id == user_data_filter.id
+
+        get_filter = sdk.catalog_workspace.get_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter_id=user_data_filter.id
+        )
+
+        assert get_filter is not None
+        assert get_filter.id == user_data_filter.id
+        assert get_filter.user_id is None
+        assert get_filter.user_group_id == test_config["test_user_group"]
+        assert get_filter.label_ids == ["order_status"]
+
+        sdk.catalog_workspace.delete_user_data_filter(
+            workspace_id=test_config["workspace"], user_data_filter_id=get_filter.id
+        )
+
+        _are_user_data_filters_empty(sdk, test_config["workspace"])
     finally:
         _refresh_workspaces(sdk)
 
