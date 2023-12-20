@@ -1,15 +1,8 @@
 # Repository maintenance and release
 
 ## How to release
-* add new documentation version
-  * edit redirects in [./docs/layouts/index.redir](docs/layouts/index.redir)
-  * add the new version to the version picker in [./docs/config/production/params.toml](docs/config/production/params.toml)
-* run `make release VERSION=X.Y.Z`
-* create a pull request with the latest commit with bumped versions
-  * ask for merge of a pull request
-* create a new branch named `rel/X.Y.Z` from master
-  * This branch now hosts the content for documentation of the X.Y.Z version. Any changes to the content in the branch will be public.
-* dispatch the GitHub workflow `netlify-deploy` on the `master` branch
+* manually run [Bump version & trigger release](.github/workflows/bump-version.yaml) workflow
+* dispatch the GitHub workflow `netlify-deploy` on the `master` branch (takes ~15 minutes)
   * The styling of the documentation is taken from the `master` branch. For more details see [./scripts/generate.sh](scripts/generate.sh) and [netlify-deploy](.github/workflows/netlify-deploy.yaml) workflow.
 * checkout latest master branch and tag it `vX.Y.Z`
 * push the tag to the gooddata/gooddata-python-sdk repository (e.g. `git push <remote> vX.Y.Z`)
