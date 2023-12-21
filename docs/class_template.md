@@ -1,6 +1,11 @@
 ---
-linkTitle: "LINK"
+title: "CLASS_NAME"
+linkTitle: "CLASS_NAME"
 no_list: true
 ---
 
-{{< python-class "PATH" >}}
+CLASS_DESCRIPTION
+
+PROPERTIES
+
+METHODS

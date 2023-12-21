@@ -88,22 +88,17 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
               rm -rf api_spec.toml
             fi
             python3 ../scripts/docs/json_builder.py
-            mv -f data.json ./versioned_docs/"$target_section"/
-            python3 ../scripts/docs/python_ref_builder.py api_spec.toml ./versioned_docs/"$target_section"/data.json "$target_section" versioned_docs
+            python3 ../scripts/docs/python_ref_builder.py api_spec.toml data.json "$target_section" versioned_docs
         fi
     fi
 done
 
 
 ## Moving the highest version to latest
-highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | tail -n 1)
+highest_version=$(ls ./versioned_docs/ | grep -E '^[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
 echo "Moving ${highest_version} to /latest"
 mv -f ./versioned_docs/$highest_version ./versioned_docs/latest
 
-# Replace "/${highest_version}/" with "/latest/" using sed
-sed "s|${highest_version}|latest|g" ./versioned_docs/latest/links.json > temp.json
-
-mv temp.json ./versioned_docs/latest/links.json
 
 if [ "$keep_master" != "keep_master" ] ; then
     echo "master docs will not be published, removing"

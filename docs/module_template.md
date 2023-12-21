@@ -1,7 +1,11 @@
 ---
-title: "NAME"
-linkTitle: "LINK"
+title: "MODULE_NAME"
+linkTitle: "MODULE_NAME"
 no_list: true
 ---
 
-{{< python-module "PATH" >}}
+MODULE_DESCRIPTION
+
+CLASSES
+
+MODULES
