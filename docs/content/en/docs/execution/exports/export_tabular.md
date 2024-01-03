@@ -6,7 +6,7 @@ superheading: "export."
 ---
 
 ``export_tabular(workspace_id: str,
-        dashboard_id: str,
+        export_request: ExportRequest,
         file_name: str,
         store_path: Union[str, Path] = Path.cwd(),
         timeout: float = 60.0,
@@ -21,8 +21,8 @@ superheading: "export."
 {{< parameter p_name="workspace_id" p_type="string" >}}
 The ID of the GoodData Workspace.
 {{< /parameter >}}
-{{< parameter p_name="dashboard_id" p_type="string" >}}
-The ID of the GoodData Dashboard.
+{{< parameter p_name="export_request" p_type="ExportRequest" >}}
+An instance of ExportRequest containing the required information for the tabular export.
 {{< /parameter >}}
 {{< parameter p_name="store_path" p_type="Union[String, Path]" >}}
 The path to save the exported tabular data. Defaults to Path.cwd().
@@ -45,7 +45,6 @@ The maximum retry wait time (in seconds). Defaults to 5.0.
 ## Example
 
 ```python
-
 host = "https://www.example.com"
 token = "<your_personal_access_token>"
 sdk = GoodDataSdk.create(host, token)
