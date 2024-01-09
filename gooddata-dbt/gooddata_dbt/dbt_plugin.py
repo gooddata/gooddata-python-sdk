@@ -1,7 +1,6 @@
 # (C) 2023 GoodData Corporation
 import asyncio
 import logging
-import os
 from argparse import Namespace
 from asyncio import Semaphore
 from pathlib import Path
@@ -18,7 +17,7 @@ from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganization, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
-from gooddata_dbt.utils import get_duration, report_message_to_merge_request
+from gooddata_dbt.utils import get_duration, report_message_to_git_vendor
 
 from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Insight
 
@@ -202,6 +201,7 @@ async def test_insights(
 
 
 def create_localized_workspaces(
+    logger: logging.Logger,
     data_product: GoodDataConfigProduct,
     sdk_facade: GoodDataApiWrapper,
     workspace_id: str,
@@ -209,21 +209,26 @@ def create_localized_workspaces(
     if data_product.localization is None:
         return
     for to in data_product.localization.to:
-        from deep_translator import GoogleTranslator
+        try:
+            from deep_translator import GoogleTranslator
 
-        translator_func = GoogleTranslator(
-            source=data_product.localization.from_language, target=to.language
-        ).translate_batch
-        logging.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
-        sdk_facade.generate_localized_workspaces(
-            workspace_id,
-            to=to,
-            data_product=data_product,
-            translator_func=translator_func,
-            layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
-            provision_workspace=True,
-            store_layouts=False,
-        )
+            translator_func = GoogleTranslator(
+                source=data_product.localization.from_language, target=to.language
+            ).translate_batch
+            logger.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
+            sdk_facade.generate_localized_workspaces(
+                workspace_id,
+                to=to,
+                data_product=data_product,
+                translator_func=translator_func,
+                layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
+                provision_workspace=True,
+                store_layouts=False,
+            )
+        except ImportError:
+            logger.warning(
+                "create_localized_workspaces: deep_translator module not found, will not be able to localize workspaces"
+            )
 
 
 def get_table(data: List[list], headers: List[str], fmt: str) -> str:
@@ -268,20 +273,9 @@ def dbt_cloud_stats_degradations(
     else:
         logger.info(f"Stats for historical executions:\n{pretty_table}")
 
-    gitlab_token = os.getenv("GITLAB_TOKEN")
-    if os.getenv("CI_MERGE_REQUEST_IID") and gitlab_token:
-        # Running in Gitlab CI pipeline, report performance of executions to the merge request to notify code reviewer
-        git_table = get_table(differences, headers, "github")
-        logger.info("Sending report to related Gitlab merge request as comment")
-        if degradations > 0:
-            message = (
-                "WARNING: some executions of dbt models in this merge request are slower than average!"
-                + f"Threshold={args.allowed_degradation}%\n\n{git_table}"
-            )
-            report_message_to_merge_request(gitlab_token, message)
-        else:
-            message = f"INFO: performance of all executions of dbt models is OK!\n\n{git_table}"
-            report_message_to_merge_request(gitlab_token, message)
+    git_table = get_table(differences, headers, "github")
+
+    report_message_to_git_vendor(logger, degradations, args.allowed_degradation, git_table)
 
 
 def dbt_cloud_stats(
@@ -360,7 +354,7 @@ def process_organization(
                             logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id
                         )
                         if data_product.localization:
-                            create_localized_workspaces(data_product, sdk_wrapper.sdk_facade, workspace_id)
+                            create_localized_workspaces(logger, data_product, sdk_wrapper.sdk_facade, workspace_id)
                     elif args.method == "store_analytics":
                         store_analytics(logger, sdk_wrapper.sdk, workspace_id, data_product)
                     elif args.method == "deploy_analytics":
