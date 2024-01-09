@@ -1,7 +1,6 @@
 # (C) 2023 GoodData Corporation
 import asyncio
 import logging
-import os
 from argparse import Namespace
 from asyncio import Semaphore
 from pathlib import Path
@@ -18,7 +17,7 @@ from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
 from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganization, GoodDataConfigProduct
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
-from gooddata_dbt.utils import get_duration, report_message_to_merge_request
+from gooddata_dbt.utils import get_duration, report_message_to_git_vendor
 
 from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Insight
 
@@ -268,20 +267,9 @@ def dbt_cloud_stats_degradations(
     else:
         logger.info(f"Stats for historical executions:\n{pretty_table}")
 
-    gitlab_token = os.getenv("GITLAB_TOKEN")
-    if os.getenv("CI_MERGE_REQUEST_IID") and gitlab_token:
-        # Running in Gitlab CI pipeline, report performance of executions to the merge request to notify code reviewer
-        git_table = get_table(differences, headers, "github")
-        logger.info("Sending report to related Gitlab merge request as comment")
-        if degradations > 0:
-            message = (
-                "WARNING: some executions of dbt models in this merge request are slower than average!"
-                + f"Threshold={args.allowed_degradation}%\n\n{git_table}"
-            )
-            report_message_to_merge_request(gitlab_token, message)
-        else:
-            message = f"INFO: performance of all executions of dbt models is OK!\n\n{git_table}"
-            report_message_to_merge_request(gitlab_token, message)
+    git_table = get_table(differences, headers, "github")
+
+    report_message_to_git_vendor(logger, degradations, args.allowed_degradation, git_table)
 
 
 def dbt_cloud_stats(

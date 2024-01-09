@@ -142,10 +142,9 @@ class DbtConnection(DbtCloudBase):
     def run_job(self, logger: logging.Logger, job_id: str) -> Tuple[str, str]:
         url = f"{self.base_v2}/accounts/{self.credentials.account_id}/jobs/{job_id}/run/"
         data = {"cause": "Triggered via API by gooddata-dbt plugin"}
-        # Allow testing from localhost where CI_COMMIT_SHA is not set
-        # TODO - Gitlab only! Allow override it from the outside in the future
-        if os.getenv("CI_COMMIT_SHA"):
-            commit_sha = os.environ["CI_COMMIT_SHA"]
+        # Allow testing from localhost where COMMIT_SHA is not set
+        commit_sha = os.getenv("GITHUB_SHA") or os.getenv("CI_COMMIT_SHA")
+        if commit_sha:
             data = {
                 "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=}",
                 "git_sha": commit_sha,
