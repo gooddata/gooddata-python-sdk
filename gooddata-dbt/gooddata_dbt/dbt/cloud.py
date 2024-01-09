@@ -143,7 +143,10 @@ class DbtConnection(DbtCloudBase):
         url = f"{self.base_v2}/accounts/{self.credentials.account_id}/jobs/{job_id}/run/"
         data = {"cause": "Triggered via API by gooddata-dbt plugin"}
         # Allow testing from localhost where COMMIT_SHA is not set
-        commit_sha = os.getenv("GITHUB_SHA") or os.getenv("CI_COMMIT_SHA")
+        # GitHub does not propagate CI_COMMIT_SHA to environment variable in workers
+        # Developers must propagate it manually from ${{ github.event.pull_request.head.sha }} to GOODDATA_GITHUB_SHA
+        # DOC: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+        commit_sha = os.getenv("GOODDATA_GITHUB_SHA") or os.getenv("CI_COMMIT_SHA")
         if commit_sha:
             data = {
                 "cause": f"Triggered via API by gooddata-dbt plugin - {commit_sha=}",
