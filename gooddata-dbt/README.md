@@ -10,6 +10,14 @@ pip install gooddata-dbt
 pip install gooddata-dbt==1.0.0
 ```
 
+You can also install optional dependencies:
+```shell
+# To allow sending comments to GitHub pull requests
+pip install PyGithub
+# To allow automatic translation of GoodData metadata
+pip install deep-translator
+```
+
 ## Configuration, parametrization
 Create `gooddata.yaml` file to configure so-called data products and environments.
 Check [gooddata_example.yml](gooddata_example.yml) file for more details.
@@ -50,6 +58,12 @@ The plugin provides the following use cases:
   - Reads analytics model from GoodData instance and stores it to disk to `gooddata_layout` folder
 - test_insights
   - Lists all insights(reports) from GoodData instance, and executes each report to validate it
+- dbt_cloud
+  - Runs dbt cloud job through their API. Alternative to running dbt-core locally.
+  - If running in CI pipeline, it can also notify about performance degradations in a form of GitHub/Gitlab comment.
+- dbt_cloud_stats
+  - Esp. for testing purposes. It's triggered from dbt_cloud as well. It collects stats and reports perf degradations.
+  - Check [.env.dev](.env.dev)/[.env.custom.dev](.env.custom.dev) files for how to set related env variables.
 
 ## Custom metadata in dbt models (optional)
 If you want to generate optimal LDM from dbt models, sometimes you need to specify semantic metadata in dbt models.
