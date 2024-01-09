@@ -10,6 +10,14 @@ pip install gooddata-dbt
 pip install gooddata-dbt==1.0.0
 ```
 
+You can also install optional dependencies:
+```shell
+# To allow sending comments to GitHub pull requests
+pip install PyGithub
+# To allow automatic translation of GoodData metadata
+pip install deep-translator
+```
+
 ## Configuration, parametrization
 Create `gooddata.yaml` file to configure so-called data products and environments.
 Check [gooddata_example.yml](gooddata_example.yml) file for more details.

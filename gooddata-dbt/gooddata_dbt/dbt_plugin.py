@@ -201,6 +201,7 @@ async def test_insights(
 
 
 def create_localized_workspaces(
+    logger: logging.Logger,
     data_product: GoodDataConfigProduct,
     sdk_facade: GoodDataApiWrapper,
     workspace_id: str,
@@ -208,21 +209,26 @@ def create_localized_workspaces(
     if data_product.localization is None:
         return
     for to in data_product.localization.to:
-        from deep_translator import GoogleTranslator
+        try:
+            from deep_translator import GoogleTranslator
 
-        translator_func = GoogleTranslator(
-            source=data_product.localization.from_language, target=to.language
-        ).translate_batch
-        logging.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
-        sdk_facade.generate_localized_workspaces(
-            workspace_id,
-            to=to,
-            data_product=data_product,
-            translator_func=translator_func,
-            layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
-            provision_workspace=True,
-            store_layouts=False,
-        )
+            translator_func = GoogleTranslator(
+                source=data_product.localization.from_language, target=to.language
+            ).translate_batch
+            logger.info(f"create_localized_workspaces layout_root_path={GOODDATA_LAYOUTS_DIR / data_product.id}")
+            sdk_facade.generate_localized_workspaces(
+                workspace_id,
+                to=to,
+                data_product=data_product,
+                translator_func=translator_func,
+                layout_path=GOODDATA_LAYOUTS_DIR / data_product.id,
+                provision_workspace=True,
+                store_layouts=False,
+            )
+        except ImportError:
+            logger.warning(
+                "create_localized_workspaces: deep_translator module not found, will not be able to localize workspaces"
+            )
 
 
 def get_table(data: List[list], headers: List[str], fmt: str) -> str:
@@ -348,7 +354,7 @@ def process_organization(
                             logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id
                         )
                         if data_product.localization:
-                            create_localized_workspaces(data_product, sdk_wrapper.sdk_facade, workspace_id)
+                            create_localized_workspaces(logger, data_product, sdk_wrapper.sdk_facade, workspace_id)
                     elif args.method == "store_analytics":
                         store_analytics(logger, sdk_wrapper.sdk, workspace_id, data_product)
                     elif args.method == "deploy_analytics":

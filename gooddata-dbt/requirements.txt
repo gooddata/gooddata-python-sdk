@@ -3,4 +3,3 @@ attrs>=21.4.0,<=23.1.0
 cattrs>=22.1.0,<=23.2.3
 requests~=2.31.0
 tabulate~=0.8.10
-PyGithub==2.1.1

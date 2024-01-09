@@ -4,7 +4,6 @@ import time
 from logging import Logger
 
 import requests
-from github import Auth, Github
 
 
 def post_gitlab_rest(url: str, headers: dict, data: dict) -> dict:
@@ -26,13 +25,18 @@ def report_message_to_merge_request(token: str, merge_request_id: str, text: str
     post_gitlab_rest(url, headers, data)
 
 
-def report_message_to_pull_request(token: str, pull_request_id: int, text: str) -> None:
-    auth = Auth.Token(token)
-    g = Github(auth=auth)
-    repo = g.get_repo(os.getenv("GITHUB_REPOSITORY"))
-    issue = repo.get_issue(number=pull_request_id)
-    print(f"{issue.user.id=} {issue.user.login=} {issue.user.name=}")
-    issue.create_comment(text)
+def report_message_to_pull_request(logger: Logger, token: str, pull_request_id: int, text: str) -> None:
+    try:
+        from github import Auth, Github
+
+        auth = Auth.Token(token)
+        g = Github(auth=auth)
+        repo = g.get_repo(os.getenv("GITHUB_REPOSITORY"))
+        issue = repo.get_issue(number=pull_request_id)
+        print(f"{issue.user.id=} {issue.user.login=} {issue.user.name=}")
+        issue.create_comment(text)
+    except ImportError:
+        logger.warning("PyGithub module not found, will not be able to report performance to GitHub pull request")
 
 
 def report_message_to_git_vendor(logger: Logger, degradations: int, allowed_degradation: int, git_table: str) -> None:
@@ -59,7 +63,7 @@ def report_message_to_git_vendor(logger: Logger, degradations: int, allowed_degr
 
     if github_token and pull_request_id:
         logger.info(f"Sending report to related Github pull request as comment {pull_request_id=}")
-        report_message_to_pull_request(github_token, pull_request_id, message)
+        report_message_to_pull_request(logger, github_token, pull_request_id, message)
     elif gitlab_token and merge_request_id:
         logger.info(f"Sending report to related Gitlab merge request as comment {merge_request_id=}")
         report_message_to_merge_request(gitlab_token, merge_request_id, message)
