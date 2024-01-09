@@ -101,4 +101,8 @@ columns:
         referenced_table: <table name, target of reference (FK), if ldm_type=reference>
         label_type: TEXT/HYPERLINK/GEO_LATITUDE/GEO_LONGITUDE
         attribute_column: <column name of attribute of label, if ldm_type=label>
+        sort_column: "<any column in the same table, may not be exposed as LDM object>"
+        sort_direction: "DESC"
+        # Only for labels, this label will be displayed by default in reports
+        default_view: true
 ```
