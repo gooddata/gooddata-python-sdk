@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -43,7 +43,7 @@ interactions:
             *.wistia.net embedwistia-a.akamaihd.net'
         Content-Type:
           - application/json
-        DATE: &id001
+        DATE:
           - PLACEHOLDER
         Expires:
           - '0'
@@ -70,7 +70,6 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:

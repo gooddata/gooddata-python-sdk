@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -132,10 +132,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: e3d558e815bd19dd49d095adbbb438174f9d598a
+              executionResult: 5df08ece988ca1f33c3ec668f9cf16befc6e2a3b
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/e3d558e815bd19dd49d095adbbb438174f9d598a?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/5df08ece988ca1f33c3ec668f9cf16befc6e2a3b?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -209,11 +209,11 @@ interactions:
       body:
         string:
           data:
-            - - 61.0
-            - - 111.0
-            - - 131.0
-            - - 111.0
-            - - 78.0
+            - - 66.0
+            - - 108.0
+            - - 130.0
+            - - 114.0
+            - - 74.0
             - - 99.0
             - - 94.0
             - - 104.0
@@ -249,56 +249,20 @@ interactions:
             - - 125.0
             - - 228.0
             - - 160.0
-            - - 141.0
-            - - 164.0
-            - - 155.0
-            - - 156.0
-            - - 149.0
-            - - 191.0
-            - - 238.0
-            - - 316.0
-            - - 220.0
-            - - 170.0
-            - - 204.0
+            - - 152.0
+            - - 153.0
+            - - 168.0
+            - - 151.0
+            - - 147.0
+            - - 189.0
+            - - 267.0
+            - - 294.0
+            - - 217.0
+            - - 165.0
+            - - 201.0
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2019-10
-                        primaryLabelValue: 2019-10
-                    - attributeHeader:
-                        labelValue: 2019-11
-                        primaryLabelValue: 2019-11
-                    - attributeHeader:
-                        labelValue: 2019-12
-                        primaryLabelValue: 2019-12
-                    - attributeHeader:
-                        labelValue: 2020-01
-                        primaryLabelValue: 2020-01
-                    - attributeHeader:
-                        labelValue: 2020-02
-                        primaryLabelValue: 2020-02
-                    - attributeHeader:
-                        labelValue: 2020-03
-                        primaryLabelValue: 2020-03
-                    - attributeHeader:
-                        labelValue: 2020-04
-                        primaryLabelValue: 2020-04
-                    - attributeHeader:
-                        labelValue: 2020-05
-                        primaryLabelValue: 2020-05
-                    - attributeHeader:
-                        labelValue: 2020-06
-                        primaryLabelValue: 2020-06
-                    - attributeHeader:
-                        labelValue: 2020-07
-                        primaryLabelValue: 2020-07
-                    - attributeHeader:
-                        labelValue: 2020-08
-                        primaryLabelValue: 2020-08
-                    - attributeHeader:
-                        labelValue: 2020-09
-                        primaryLabelValue: 2020-09
                     - attributeHeader:
                         labelValue: 2020-10
                         primaryLabelValue: 2020-10
@@ -416,6 +380,42 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-12
                         primaryLabelValue: 2023-12
+                    - attributeHeader:
+                        labelValue: 2024-01
+                        primaryLabelValue: 2024-01
+                    - attributeHeader:
+                        labelValue: 2024-02
+                        primaryLabelValue: 2024-02
+                    - attributeHeader:
+                        labelValue: 2024-03
+                        primaryLabelValue: 2024-03
+                    - attributeHeader:
+                        labelValue: 2024-04
+                        primaryLabelValue: 2024-04
+                    - attributeHeader:
+                        labelValue: 2024-05
+                        primaryLabelValue: 2024-05
+                    - attributeHeader:
+                        labelValue: 2024-06
+                        primaryLabelValue: 2024-06
+                    - attributeHeader:
+                        labelValue: 2024-07
+                        primaryLabelValue: 2024-07
+                    - attributeHeader:
+                        labelValue: 2024-08
+                        primaryLabelValue: 2024-08
+                    - attributeHeader:
+                        labelValue: 2024-09
+                        primaryLabelValue: 2024-09
+                    - attributeHeader:
+                        labelValue: 2024-10
+                        primaryLabelValue: 2024-10
+                    - attributeHeader:
+                        labelValue: 2024-11
+                        primaryLabelValue: 2024-11
+                    - attributeHeader:
+                        labelValue: 2024-12
+                        primaryLabelValue: 2024-12
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -570,10 +570,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: bf653c7c0960cc34ccf6f3800a4a0d77a6469f05
+              executionResult: 654d1ffa9e9d1d9c492a72eb9494f3d3c896957b
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/bf653c7c0960cc34ccf6f3800a4a0d77a6469f05?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/654d1ffa9e9d1d9c492a72eb9494f3d3c896957b?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -692,50 +692,14 @@ interactions:
             - - null
             - - 1.0
             - - null
-            - - 3.0
-            - - 9.0
-            - - 1.0
-            - - 9.0
+            - - 4.0
+            - - 8.0
+            - - 6.0
+            - - 4.0
             - - 5.0
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2019-11
-                        primaryLabelValue: 2019-11
-                    - attributeHeader:
-                        labelValue: 2019-12
-                        primaryLabelValue: 2019-12
-                    - attributeHeader:
-                        labelValue: 2020-01
-                        primaryLabelValue: 2020-01
-                    - attributeHeader:
-                        labelValue: 2020-02
-                        primaryLabelValue: 2020-02
-                    - attributeHeader:
-                        labelValue: 2020-03
-                        primaryLabelValue: 2020-03
-                    - attributeHeader:
-                        labelValue: 2020-04
-                        primaryLabelValue: 2020-04
-                    - attributeHeader:
-                        labelValue: 2020-05
-                        primaryLabelValue: 2020-05
-                    - attributeHeader:
-                        labelValue: 2020-06
-                        primaryLabelValue: 2020-06
-                    - attributeHeader:
-                        labelValue: 2020-07
-                        primaryLabelValue: 2020-07
-                    - attributeHeader:
-                        labelValue: 2020-08
-                        primaryLabelValue: 2020-08
-                    - attributeHeader:
-                        labelValue: 2020-09
-                        primaryLabelValue: 2020-09
-                    - attributeHeader:
-                        labelValue: 2020-10
-                        primaryLabelValue: 2020-10
                     - attributeHeader:
                         labelValue: 2020-11
                         primaryLabelValue: 2020-11
@@ -850,6 +814,42 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-12
                         primaryLabelValue: 2023-12
+                    - attributeHeader:
+                        labelValue: 2024-01
+                        primaryLabelValue: 2024-01
+                    - attributeHeader:
+                        labelValue: 2024-02
+                        primaryLabelValue: 2024-02
+                    - attributeHeader:
+                        labelValue: 2024-03
+                        primaryLabelValue: 2024-03
+                    - attributeHeader:
+                        labelValue: 2024-04
+                        primaryLabelValue: 2024-04
+                    - attributeHeader:
+                        labelValue: 2024-05
+                        primaryLabelValue: 2024-05
+                    - attributeHeader:
+                        labelValue: 2024-06
+                        primaryLabelValue: 2024-06
+                    - attributeHeader:
+                        labelValue: 2024-07
+                        primaryLabelValue: 2024-07
+                    - attributeHeader:
+                        labelValue: 2024-08
+                        primaryLabelValue: 2024-08
+                    - attributeHeader:
+                        labelValue: 2024-09
+                        primaryLabelValue: 2024-09
+                    - attributeHeader:
+                        labelValue: 2024-10
+                        primaryLabelValue: 2024-10
+                    - attributeHeader:
+                        labelValue: 2024-11
+                        primaryLabelValue: 2024-11
+                    - attributeHeader:
+                        labelValue: 2024-12
+                        primaryLabelValue: 2024-12
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -1004,10 +1004,10 @@ interactions:
                       - localIdentifier: metric1
                 localIdentifier: dim_1
             links:
-              executionResult: 33fef9b6d4d2cd22d2e3dd79250c2fafa1d34285
+              executionResult: 784be3fa913515c503bee8f1a81f43a26694a0ab
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/33fef9b6d4d2cd22d2e3dd79250c2fafa1d34285?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/784be3fa913515c503bee8f1a81f43a26694a0ab?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -1107,32 +1107,14 @@ interactions:
             - - 10.0
             - - 3.0
             - - 1.0
-            - - 3.0
-            - - 9.0
-            - - 1.0
-            - - 9.0
+            - - 4.0
+            - - 8.0
+            - - 6.0
+            - - 4.0
             - - 5.0
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2019-11
-                        primaryLabelValue: 2019-11
-                    - attributeHeader:
-                        labelValue: 2019-12
-                        primaryLabelValue: 2019-12
-                    - attributeHeader:
-                        labelValue: 2020-01
-                        primaryLabelValue: 2020-01
-                    - attributeHeader:
-                        labelValue: 2020-02
-                        primaryLabelValue: 2020-02
-                    - attributeHeader:
-                        labelValue: 2020-04
-                        primaryLabelValue: 2020-04
-                    - attributeHeader:
-                        labelValue: 2020-09
-                        primaryLabelValue: 2020-09
                     - attributeHeader:
                         labelValue: 2020-11
                         primaryLabelValue: 2020-11
@@ -1140,41 +1122,38 @@ interactions:
                         labelValue: 2020-12
                         primaryLabelValue: 2020-12
                     - attributeHeader:
+                        labelValue: 2021-01
+                        primaryLabelValue: 2021-01
+                    - attributeHeader:
                         labelValue: 2021-02
                         primaryLabelValue: 2021-02
-                    - attributeHeader:
-                        labelValue: 2021-03
-                        primaryLabelValue: 2021-03
                     - attributeHeader:
                         labelValue: 2021-04
                         primaryLabelValue: 2021-04
                     - attributeHeader:
-                        labelValue: 2021-05
-                        primaryLabelValue: 2021-05
-                    - attributeHeader:
-                        labelValue: 2021-08
-                        primaryLabelValue: 2021-08
-                    - attributeHeader:
-                        labelValue: 2021-10
-                        primaryLabelValue: 2021-10
+                        labelValue: 2021-09
+                        primaryLabelValue: 2021-09
                     - attributeHeader:
                         labelValue: 2021-11
                         primaryLabelValue: 2021-11
                     - attributeHeader:
+                        labelValue: 2021-12
+                        primaryLabelValue: 2021-12
+                    - attributeHeader:
                         labelValue: 2022-02
                         primaryLabelValue: 2022-02
+                    - attributeHeader:
+                        labelValue: 2022-03
+                        primaryLabelValue: 2022-03
+                    - attributeHeader:
+                        labelValue: 2022-04
+                        primaryLabelValue: 2022-04
                     - attributeHeader:
                         labelValue: 2022-05
                         primaryLabelValue: 2022-05
                     - attributeHeader:
-                        labelValue: 2022-06
-                        primaryLabelValue: 2022-06
-                    - attributeHeader:
                         labelValue: 2022-08
                         primaryLabelValue: 2022-08
-                    - attributeHeader:
-                        labelValue: 2022-09
-                        primaryLabelValue: 2022-09
                     - attributeHeader:
                         labelValue: 2022-10
                         primaryLabelValue: 2022-10
@@ -1182,14 +1161,11 @@ interactions:
                         labelValue: 2022-11
                         primaryLabelValue: 2022-11
                     - attributeHeader:
-                        labelValue: 2022-12
-                        primaryLabelValue: 2022-12
-                    - attributeHeader:
-                        labelValue: 2023-01
-                        primaryLabelValue: 2023-01
-                    - attributeHeader:
                         labelValue: 2023-02
                         primaryLabelValue: 2023-02
+                    - attributeHeader:
+                        labelValue: 2023-05
+                        primaryLabelValue: 2023-05
                     - attributeHeader:
                         labelValue: 2023-06
                         primaryLabelValue: 2023-06
@@ -1208,6 +1184,30 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-12
                         primaryLabelValue: 2023-12
+                    - attributeHeader:
+                        labelValue: 2024-01
+                        primaryLabelValue: 2024-01
+                    - attributeHeader:
+                        labelValue: 2024-02
+                        primaryLabelValue: 2024-02
+                    - attributeHeader:
+                        labelValue: 2024-06
+                        primaryLabelValue: 2024-06
+                    - attributeHeader:
+                        labelValue: 2024-08
+                        primaryLabelValue: 2024-08
+                    - attributeHeader:
+                        labelValue: 2024-09
+                        primaryLabelValue: 2024-09
+                    - attributeHeader:
+                        labelValue: 2024-10
+                        primaryLabelValue: 2024-10
+                    - attributeHeader:
+                        labelValue: 2024-11
+                        primaryLabelValue: 2024-11
+                    - attributeHeader:
+                        labelValue: 2024-12
+                        primaryLabelValue: 2024-12
             - headerGroups:
                 - headers:
                     - measureHeader:

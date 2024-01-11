@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -156,7 +156,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: a3ecda4dd701dba8
+          traceId: faec3269dd9bf95b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -367,7 +367,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRlZjExYjZiNC04ZDMyLTQ4OTItODNhNC1jMDNlNmJmZTE2NTESBWxvY2Fs
+                authenticationId: CiRiNGU4OTFkYy1iMWVjLTRkNjAtYWUwZC1kNGRhNjFjNDI2MzQSBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
           links:
@@ -470,7 +470,7 @@ interactions:
             - id: demo
               type: user
               attributes:
-                authenticationId: CiRlZjExYjZiNC04ZDMyLTQ4OTItODNhNC1jMDNlNmJmZTE2NTESBWxvY2Fs
+                authenticationId: CiRiNGU4OTFkYy1iMWVjLTRkNjAtYWUwZC1kNGRhNjFjNDI2MzQSBWxvY2Fs
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/users/demo
             - id: order_status
@@ -917,6 +917,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -2354,6 +2355,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -2383,6 +2385,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []

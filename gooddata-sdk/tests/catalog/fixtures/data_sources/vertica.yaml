@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 1eb831dec5f28817
+          traceId: 70eb0ee268478e7b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -173,8 +173,8 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               enableCaching: false
-              type: VERTICA
               name: Test2
+              type: VERTICA
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -258,8 +258,8 @@ interactions:
               url: jdbc:vertica://localhost:5433/demo?TLSmode=false
               username: demouser
               enableCaching: false
-              type: VERTICA
               name: Test2
+              type: VERTICA
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

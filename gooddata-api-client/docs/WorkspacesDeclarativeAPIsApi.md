@@ -220,6 +220,25 @@ with gooddata_api_client.ApiClient() as api_client:
                     title="Revenues analysis",
                 ),
             ],
+            attribute_hierarchies=[
+                DeclarativeAttributeHierarchy(
+                    content={},
+                    created_at="["2023-07-20 12:30"]",
+                    created_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    description="Simple number for total goods in current production.",
+                    id="hierarchy-1",
+                    modified_at="["2023-07-20 12:30"]",
+                    modified_by=DeclarativeUserIdentifier(
+                        id="employee123",
+                        type="user",
+                    ),
+                    tags=["Revenues"],
+                    title="Count of goods",
+                ),
+            ],
             dashboard_plugins=[
                 DeclarativeDashboardPlugin(
                     content={},
@@ -563,6 +582,25 @@ with gooddata_api_client.ApiClient() as api_client:
                                 ],
                                 tags=["Revenues"],
                                 title="Revenues analysis",
+                            ),
+                        ],
+                        attribute_hierarchies=[
+                            DeclarativeAttributeHierarchy(
+                                content={},
+                                created_at="["2023-07-20 12:30"]",
+                                created_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                description="Simple number for total goods in current production.",
+                                id="hierarchy-1",
+                                modified_at="["2023-07-20 12:30"]",
+                                modified_by=DeclarativeUserIdentifier(
+                                    id="employee123",
+                                    type="user",
+                                ),
+                                tags=["Revenues"],
+                                title="Count of goods",
                             ),
                         ],
                         dashboard_plugins=[

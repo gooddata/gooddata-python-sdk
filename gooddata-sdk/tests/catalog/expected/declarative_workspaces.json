@@ -380,6 +380,7 @@
               "title": "Product & Category"
             }
           ],
+          "attributeHierarchies": [],
           "dashboardPlugins": [
             {
               "content": {
@@ -2807,6 +2808,7 @@
             }
           ],
           "analyticalDashboards": [],
+          "attributeHierarchies": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],
@@ -2849,6 +2851,7 @@
         "analytics": {
           "analyticalDashboardExtensions": [],
           "analyticalDashboards": [],
+          "attributeHierarchies": [],
           "dashboardPlugins": [],
           "filterContexts": [],
           "metrics": [],

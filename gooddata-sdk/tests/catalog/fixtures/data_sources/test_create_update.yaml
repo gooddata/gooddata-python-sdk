@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -82,8 +82,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -167,7 +167,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 38c4619049c8b263
+          traceId: 1e77d03b429c40a0
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -265,8 +265,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -352,8 +352,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -439,8 +439,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: POSTGRESQL
               name: Test
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -537,8 +537,8 @@ interactions:
               url: jdbc:postgresql://localhost:5432/demo?autosave=false
               username: demouser
               enableCaching: false
-              type: POSTGRESQL
               name: Test2
+              type: POSTGRESQL
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -622,8 +622,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -633,8 +633,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo?autosave=false
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: Test2
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -788,8 +788,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds

@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -200,7 +200,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3c75f1a6bf7d4952
+          traceId: ccfe80c33cd4794a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/userGroups
@@ -459,6 +459,17 @@ interactions:
       body:
         string:
           data:
+            - id: newUserGroup
+              type: userGroup
+              attributes:
+                name: NEWUSERGROUP
+              relationships:
+                parents:
+                  data:
+                    - id: demoGroup
+                      type: userGroup
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
             - id: adminGroup
               type: userGroup
               attributes: {}
@@ -480,17 +491,6 @@ interactions:
                 name: demo group
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
-            - id: newUserGroup
-              type: userGroup
-              attributes:
-                name: NEWUSERGROUP
-              relationships:
-                parents:
-                  data:
-                    - id: demoGroup
-                      type: userGroup
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/newUserGroup
             - id: visitorsGroup
               type: userGroup
               attributes:
