@@ -11,7 +11,9 @@ Method | HTTP request | Description
 [**get_user_permissions**](PermissionsApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 [**get_workspace_permissions**](PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 [**manage_dashboard_permissions**](PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+[**manage_data_source_permissions**](PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_organization_permissions**](PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+[**manage_workspace_permissions**](PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**set_organization_permissions**](PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 [**set_user_group_permissions**](PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 [**set_user_permissions**](PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
@@ -486,6 +488,84 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_data_source_permissions**
+> manage_data_source_permissions(data_source_id, data_source_permission_assignment)
+
+Manage Permissions for a Data Source
+
+Manage Permissions for a Data Source
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.data_source_permission_assignment import DataSourcePermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    data_source_permission_assignment = [
+        DataSourcePermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [DataSourcePermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Data Source
+        api_instance.manage_data_source_permissions(data_source_id, data_source_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_data_source_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **data_source_permission_assignment** | [**[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_organization_permissions**
 > manage_organization_permissions(organization_permission_assignment)
 
@@ -539,6 +619,87 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **organization_permission_assignment** | [**[OrganizationPermissionAssignment]**](OrganizationPermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_workspace_permissions**
+> manage_workspace_permissions(workspace_id, workspace_permission_assignment)
+
+Manage Permissions for a Workspace
+
+Manage Permissions for a Workspace and its Workspace Hierarchy
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import permissions_api
+from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = permissions_api.PermissionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_permission_assignment = [
+        WorkspacePermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            hierarchy_permissions=[
+                "MANAGE",
+            ],
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [WorkspacePermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Workspace
+        api_instance.manage_workspace_permissions(workspace_id, workspace_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling PermissionsApi->manage_workspace_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_permission_assignment** | [**[WorkspacePermissionAssignment]**](WorkspacePermissionAssignment.md)|  |
 
 ### Return type
 

@@ -7,11 +7,11 @@ import attr
 
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_api_client.model.dataset_workspace_data_filter_identifier import DatasetWorkspaceDataFilterIdentifier
+from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
 from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
 from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
-from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
 from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
@@ -55,13 +55,13 @@ class CatalogAssigneeIdentifier(Base):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
-class CatalogUserGroupIdentifier(Base):
+class CatalogDeclarativeUserGroupIdentifier(Base):
     id: str
     type: str = attr.field(validator=value_in_allowed)
 
     @staticmethod
-    def client_class() -> Type[UserGroupIdentifier]:
-        return UserGroupIdentifier
+    def client_class() -> Type[DeclarativeUserGroupIdentifier]:
+        return DeclarativeUserGroupIdentifier
 
 
 @attr.s(auto_attribs=True, kw_only=True)

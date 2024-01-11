@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
+[**clean_translations**](ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 [**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -24,6 +25,7 @@ Method | HTTP request | Description
 [**get_group_members**](ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
+[**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 [**list_user_groups**](ActionsApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/groups | 
@@ -31,7 +33,9 @@ Method | HTTP request | Description
 [**list_workspace_permissions_for_user**](ActionsApi.md#list_workspace_permissions_for_user) | **GET** /api/v1/actions/userManagement/users/{userId}/permissions | 
 [**list_workspace_permissions_for_user_group**](ActionsApi.md#list_workspace_permissions_for_user_group) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+[**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+[**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**manage_workspace_permissions_for_user**](ActionsApi.md#manage_workspace_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
 [**manage_workspace_permissions_for_user_group**](ActionsApi.md#manage_workspace_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -46,6 +50,7 @@ Method | HTTP request | Description
 [**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 [**scan_data_source**](ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
+[**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 [**test_data_source_definition**](ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
@@ -328,6 +333,76 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **clean_translations**
+> clean_translations(workspace_id, locale_request)
+
+Cleans up translations.
+
+Cleans up all translations for a particular locale. Cleaning up the special 'default' locale value is forbidden.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.locale_request import LocaleRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    locale_request = LocaleRequest(
+        locale="en-US",
+    ) # LocaleRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Cleans up translations.
+        api_instance.clean_translations(workspace_id, locale_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->clean_translations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **locale_request** | [**LocaleRequest**](LocaleRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Translations were successfully removed. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **compute_label_elements_post**
 > ElementsResponse compute_label_elements_post(workspace_id, elements_request)
 
@@ -363,9 +438,9 @@ with gooddata_api_client.ApiClient() as api_client:
         depends_on=[
             DependsOn(
                 complement_filter=False,
-                label="null",
+                label="label_example",
                 values=[
-                    "null",
+                    "values_example",
                 ],
             ),
         ],
@@ -379,8 +454,8 @@ with gooddata_api_client.ApiClient() as api_client:
         label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
-        valid_label_elements=[
-            ValidLabelElementsItem(
+        validate_by=[
+            ValidateByItem(
                 id="id_example",
                 type="fact",
             ),
@@ -1724,6 +1799,72 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_translation_tags**
+> [str] get_translation_tags(workspace_id)
+
+Get translation tags.
+
+Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get translation tags.
+        api_response = api_instance.get_translation_tags(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_translation_tags: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+**[str]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved list of translation tags. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **inherited_entity_conflicts**
 > [IdentifierDuplications] inherited_entity_conflicts(workspace_id)
 
@@ -1978,7 +2119,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_workspace_permissions_for_user**
-> WorkspacePermissionAssignments list_workspace_permissions_for_user(user_id)
+> UserManagementWorkspacePermissionAssignments list_workspace_permissions_for_user(user_id)
 
 
 
@@ -1989,7 +2130,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workspace_permission_assignments import WorkspacePermissionAssignments
+from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2021,7 +2162,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**WorkspacePermissionAssignments**](WorkspacePermissionAssignments.md)
+[**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)
 
 ### Authorization
 
@@ -2042,7 +2183,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_workspace_permissions_for_user_group**
-> WorkspacePermissionAssignments list_workspace_permissions_for_user_group(user_group_id)
+> UserManagementWorkspacePermissionAssignments list_workspace_permissions_for_user_group(user_group_id)
 
 
 
@@ -2053,7 +2194,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workspace_permission_assignments import WorkspacePermissionAssignments
+from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2085,7 +2226,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**WorkspacePermissionAssignments**](WorkspacePermissionAssignments.md)
+[**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)
 
 ### Authorization
 
@@ -2152,6 +2293,84 @@ Name | Type | Description  | Notes
  **workspace_id** | **str**|  |
  **dashboard_id** | **str**|  |
  **manage_dashboard_permissions_request_inner** | [**[ManageDashboardPermissionsRequestInner]**](ManageDashboardPermissionsRequestInner.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **manage_data_source_permissions**
+> manage_data_source_permissions(data_source_id, data_source_permission_assignment)
+
+Manage Permissions for a Data Source
+
+Manage Permissions for a Data Source
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.data_source_permission_assignment import DataSourcePermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    data_source_permission_assignment = [
+        DataSourcePermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [DataSourcePermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Data Source
+        api_instance.manage_data_source_permissions(data_source_id, data_source_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_data_source_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **data_source_permission_assignment** | [**[DataSourcePermissionAssignment]**](DataSourcePermissionAssignment.md)|  |
 
 ### Return type
 
@@ -2251,8 +2470,89 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **manage_workspace_permissions**
+> manage_workspace_permissions(workspace_id, workspace_permission_assignment)
+
+Manage Permissions for a Workspace
+
+Manage Permissions for a Workspace and its Workspace Hierarchy
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.workspace_permission_assignment import WorkspacePermissionAssignment
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    workspace_permission_assignment = [
+        WorkspacePermissionAssignment(
+            assignee_identifier=AssigneeIdentifier(
+                id="id_example",
+                type="user",
+            ),
+            hierarchy_permissions=[
+                "MANAGE",
+            ],
+            permissions=[
+                "MANAGE",
+            ],
+        ),
+    ] # [WorkspacePermissionAssignment] | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Manage Permissions for a Workspace
+        api_instance.manage_workspace_permissions(workspace_id, workspace_permission_assignment)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->manage_workspace_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **workspace_permission_assignment** | [**[WorkspacePermissionAssignment]**](WorkspacePermissionAssignment.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **manage_workspace_permissions_for_user**
-> manage_workspace_permissions_for_user(user_id, workspace_permission_assignments)
+> manage_workspace_permissions_for_user(user_id, user_management_workspace_permission_assignments)
 
 
 
@@ -2263,7 +2563,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workspace_permission_assignments import WorkspacePermissionAssignments
+from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2277,9 +2577,9 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     user_id = "userId_example" # str | 
-    workspace_permission_assignments = WorkspacePermissionAssignments(
+    user_management_workspace_permission_assignments = UserManagementWorkspacePermissionAssignments(
         workspaces=[
-            WorkspacePermissionAssignment(
+            UserManagementWorkspacePermissionAssignment(
                 hierarchy_permissions=[
                     "MANAGE",
                 ],
@@ -2289,11 +2589,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
             ),
         ],
-    ) # WorkspacePermissionAssignments | 
+    ) # UserManagementWorkspacePermissionAssignments | 
 
     # example passing only required values which don't have defaults set
     try:
-        api_instance.manage_workspace_permissions_for_user(user_id, workspace_permission_assignments)
+        api_instance.manage_workspace_permissions_for_user(user_id, user_management_workspace_permission_assignments)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_workspace_permissions_for_user: %s\n" % e)
 ```
@@ -2304,7 +2604,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_id** | **str**|  |
- **workspace_permission_assignments** | [**WorkspacePermissionAssignments**](WorkspacePermissionAssignments.md)|  |
+ **user_management_workspace_permission_assignments** | [**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)|  |
 
 ### Return type
 
@@ -2329,7 +2629,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **manage_workspace_permissions_for_user_group**
-> manage_workspace_permissions_for_user_group(user_group_id, workspace_permission_assignments)
+> manage_workspace_permissions_for_user_group(user_group_id, user_management_workspace_permission_assignments)
 
 
 
@@ -2340,7 +2640,7 @@ No authorization required
 import time
 import gooddata_api_client
 from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.workspace_permission_assignments import WorkspacePermissionAssignments
+from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -2354,9 +2654,9 @@ with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = actions_api.ActionsApi(api_client)
     user_group_id = "userGroupId_example" # str | 
-    workspace_permission_assignments = WorkspacePermissionAssignments(
+    user_management_workspace_permission_assignments = UserManagementWorkspacePermissionAssignments(
         workspaces=[
-            WorkspacePermissionAssignment(
+            UserManagementWorkspacePermissionAssignment(
                 hierarchy_permissions=[
                     "MANAGE",
                 ],
@@ -2366,11 +2666,11 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
             ),
         ],
-    ) # WorkspacePermissionAssignments | 
+    ) # UserManagementWorkspacePermissionAssignments | 
 
     # example passing only required values which don't have defaults set
     try:
-        api_instance.manage_workspace_permissions_for_user_group(user_group_id, workspace_permission_assignments)
+        api_instance.manage_workspace_permissions_for_user_group(user_group_id, user_management_workspace_permission_assignments)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling ActionsApi->manage_workspace_permissions_for_user_group: %s\n" % e)
 ```
@@ -2381,7 +2681,7 @@ with gooddata_api_client.ApiClient() as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_group_id** | **str**|  |
- **workspace_permission_assignments** | [**WorkspacePermissionAssignments**](WorkspacePermissionAssignments.md)|  |
+ **user_management_workspace_permission_assignments** | [**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)|  |
 
 ### Return type
 
@@ -3253,6 +3553,122 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The result of the scan. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **set_translations**
+> set_translations(workspace_id, xliff)
+
+Set translations for entities.
+
+Set translation for existing entities in a particular locale.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.xliff import Xliff
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    xliff = Xliff(
+        file=[
+            File(
+                any=[
+                    {},
+                ],
+                can_resegment="YES",
+                id="id_example",
+                notes=Notes(
+                    note=[
+                        Note(
+                            applies_to="SOURCE",
+                            category="category_example",
+                            content="content_example",
+                            id="id_example",
+                            other_attributes={
+                                "key": "key_example",
+                            },
+                            priority=1,
+                        ),
+                    ],
+                ),
+                original="original_example",
+                other_attributes={
+                    "key": "key_example",
+                },
+                skeleton=Skeleton(
+                    content=[
+                        {},
+                    ],
+                    href="href_example",
+                ),
+                space="space_example",
+                src_dir="LTR",
+                translate="YES",
+                trg_dir="LTR",
+                unit_or_group=[
+                    {},
+                ],
+            ),
+        ],
+        other_attributes={
+            "key": "key_example",
+        },
+        space="space_example",
+        src_lang="src_lang_example",
+        trg_lang="trg_lang_example",
+        version="version_example",
+    ) # Xliff | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set translations for entities.
+        api_instance.set_translations(workspace_id, xliff)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->set_translations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **xliff** | [**Xliff**](Xliff.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/xml
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Translations were successfully set. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

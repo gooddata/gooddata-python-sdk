@@ -689,15 +689,13 @@
             "type": "boolean"
           },
           "label": {
-            "default": "null",
             "description": "Specifies on which label the filter depends on.",
             "type": "string"
           },
           "values": {
             "description": "Specifies values of the label for element filtering.",
             "items": {
-              "default": "null",
-              "description": "Specifies values of the label for element filtering.",
+              "nullable": true,
               "type": "string"
             },
             "type": "array"
@@ -831,10 +829,10 @@
             ],
             "type": "string"
           },
-          "validLabelElements": {
-            "description": "Return only items, what are computable on metric. This feature is experimental.",
+          "validateBy": {
+            "description": "Return only items, what are computable on metric.",
             "items": {
-              "$ref": "#/components/schemas/ValidLabelElementsItem"
+              "$ref": "#/components/schemas/ValidateByItem"
             },
             "type": "array"
           }
@@ -1978,7 +1976,7 @@
         ],
         "type": "object"
       },
-      "ValidLabelElementsItem": {
+      "ValidateByItem": {
         "nullable": true,
         "properties": {
           "id": {

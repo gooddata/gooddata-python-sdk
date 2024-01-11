@@ -48,6 +48,7 @@ from gooddata_api_client.api.plugins_api import PluginsApi
 from gooddata_api_client.api.reporting_settings_api import ReportingSettingsApi
 from gooddata_api_client.api.scanning_api import ScanningApi
 from gooddata_api_client.api.test_connection_api import TestConnectionApi
+from gooddata_api_client.api.translations_api import TranslationsApi
 from gooddata_api_client.api.usage_api import UsageApi
 from gooddata_api_client.api.user_groups_declarative_apis_api import UserGroupsDeclarativeAPIsApi
 from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntityAPIsApi
@@ -61,7 +62,6 @@ from gooddata_api_client.api.workspaces_declarative_apis_api import WorkspacesDe
 from gooddata_api_client.api.workspaces_entity_apis_api import WorkspacesEntityAPIsApi
 from gooddata_api_client.api.workspaces_settings_api import WorkspacesSettingsApi
 from gooddata_api_client.api.actions_api import ActionsApi
-from gooddata_api_client.api.data_source_entities_controller_api import DataSourceEntitiesControllerApi
 from gooddata_api_client.api.entities_api import EntitiesApi
 from gooddata_api_client.api.layout_api import LayoutApi
 from gooddata_api_client.api.organization_controller_api import OrganizationControllerApi

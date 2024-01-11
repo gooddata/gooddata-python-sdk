@@ -50,9 +50,9 @@ with gooddata_api_client.ApiClient() as api_client:
         depends_on=[
             DependsOn(
                 complement_filter=False,
-                label="null",
+                label="label_example",
                 values=[
-                    "null",
+                    "values_example",
                 ],
             ),
         ],
@@ -66,8 +66,8 @@ with gooddata_api_client.ApiClient() as api_client:
         label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
-        valid_label_elements=[
-            ValidLabelElementsItem(
+        validate_by=[
+            ValidateByItem(
                 id="id_example",
                 type="fact",
             ),

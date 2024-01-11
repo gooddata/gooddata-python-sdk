@@ -33,10 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.depends_on import DependsOn
     from gooddata_api_client.model.filter_by import FilterBy
-    from gooddata_api_client.model.valid_label_elements_item import ValidLabelElementsItem
+    from gooddata_api_client.model.validate_by_item import ValidateByItem
     globals()['DependsOn'] = DependsOn
     globals()['FilterBy'] = FilterBy
-    globals()['ValidLabelElementsItem'] = ValidLabelElementsItem
+    globals()['ValidateByItem'] = ValidateByItem
 
 
 class ElementsRequest(ModelNormal):
@@ -110,7 +110,7 @@ class ElementsRequest(ModelNormal):
             'filter_by': (FilterBy,),  # noqa: E501
             'pattern_filter': (str,),  # noqa: E501
             'sort_order': (str,),  # noqa: E501
-            'valid_label_elements': ([ValidLabelElementsItem],),  # noqa: E501
+            'validate_by': ([ValidateByItem],),  # noqa: E501
         }
 
     @cached_property
@@ -128,7 +128,7 @@ class ElementsRequest(ModelNormal):
         'filter_by': 'filterBy',  # noqa: E501
         'pattern_filter': 'patternFilter',  # noqa: E501
         'sort_order': 'sortOrder',  # noqa: E501
-        'valid_label_elements': 'validLabelElements',  # noqa: E501
+        'validate_by': 'validateBy',  # noqa: E501
     }
 
     read_only_vars = {
@@ -183,7 +183,7 @@ class ElementsRequest(ModelNormal):
             filter_by (FilterBy): [optional]  # noqa: E501
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
-            valid_label_elements ([ValidLabelElementsItem]): Return only items, what are computable on metric. This feature is experimental.. [optional]  # noqa: E501
+            validate_by ([ValidateByItem]): Return only items, what are computable on metric.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -281,7 +281,7 @@ class ElementsRequest(ModelNormal):
             filter_by (FilterBy): [optional]  # noqa: E501
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
-            valid_label_elements ([ValidLabelElementsItem]): Return only items, what are computable on metric. This feature is experimental.. [optional]  # noqa: E501
+            validate_by ([ValidateByItem]): Return only items, what are computable on metric.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

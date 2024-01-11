@@ -97,8 +97,8 @@ class DeclarativeUserDataFilter(
                 return UserIdentifier
         
             @staticmethod
-            def userGroup() -> typing.Type['UserGroupIdentifier']:
-                return UserGroupIdentifier
+            def userGroup() -> typing.Type['DeclarativeUserGroupIdentifier']:
+                return DeclarativeUserGroupIdentifier
             __annotations__ = {
                 "id": id,
                 "maql": maql,
@@ -132,7 +132,7 @@ class DeclarativeUserDataFilter(
     def __getitem__(self, name: typing_extensions.Literal["user"]) -> 'UserIdentifier': ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["userGroup"]) -> 'UserGroupIdentifier': ...
+    def __getitem__(self, name: typing_extensions.Literal["userGroup"]) -> 'DeclarativeUserGroupIdentifier': ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
@@ -161,7 +161,7 @@ class DeclarativeUserDataFilter(
     def get_item_oapg(self, name: typing_extensions.Literal["user"]) -> typing.Union['UserIdentifier', schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["userGroup"]) -> typing.Union['UserGroupIdentifier', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["userGroup"]) -> typing.Union['DeclarativeUserGroupIdentifier', schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
@@ -179,7 +179,7 @@ class DeclarativeUserDataFilter(
         description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
         tags: typing.Union[MetaOapg.properties.tags, list, tuple, schemas.Unset] = schemas.unset,
         user: typing.Union['UserIdentifier', schemas.Unset] = schemas.unset,
-        userGroup: typing.Union['UserGroupIdentifier', schemas.Unset] = schemas.unset,
+        userGroup: typing.Union['DeclarativeUserGroupIdentifier', schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'DeclarativeUserDataFilter':
@@ -197,5 +197,5 @@ class DeclarativeUserDataFilter(
             **kwargs,
         )
 
-from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+from gooddata_api_client.model.user_group_identifier import DeclarativeUserGroupIdentifier
 from gooddata_api_client.model.user_identifier import UserIdentifier
