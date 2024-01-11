@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **analytical_dashboard_extensions** | [**[DeclarativeAnalyticalDashboardExtension]**](DeclarativeAnalyticalDashboardExtension.md) | A list of dashboard permissions assigned to a related dashboard. | [optional] 
 **analytical_dashboards** | [**[DeclarativeAnalyticalDashboard]**](DeclarativeAnalyticalDashboard.md) | A list of analytical dashboards available in the model. | [optional] 
+**attribute_hierarchies** | [**[DeclarativeAttributeHierarchy]**](DeclarativeAttributeHierarchy.md) | A list of attribute hierarchies. | [optional] 
 **dashboard_plugins** | [**[DeclarativeDashboardPlugin]**](DeclarativeDashboardPlugin.md) | A list of dashboard plugins available in the model. | [optional] 
 **filter_contexts** | [**[DeclarativeFilterContext]**](DeclarativeFilterContext.md) | A list of filter contexts available in the model. | [optional] 
 **metrics** | [**[DeclarativeMetric]**](DeclarativeMetric.md) | A list of metrics available in the model. | [optional] 

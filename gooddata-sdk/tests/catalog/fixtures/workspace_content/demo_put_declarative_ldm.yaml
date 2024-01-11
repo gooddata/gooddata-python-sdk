@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: a68594c03f4270a7
+          traceId: 671f18cbbd4899dc
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1658,6 +1658,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -3095,6 +3096,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -3124,6 +3126,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []

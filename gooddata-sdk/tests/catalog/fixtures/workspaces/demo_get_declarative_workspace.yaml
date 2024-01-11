@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33931'
+          - '33957'
       body:
         string:
           analytics:
@@ -315,6 +315,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com
@@ -1800,7 +1801,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33931'
+          - '33957'
       body:
         string:
           analytics:
@@ -2041,6 +2042,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com

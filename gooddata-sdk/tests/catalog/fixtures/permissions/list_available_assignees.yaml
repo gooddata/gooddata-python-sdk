@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -78,8 +78,8 @@ interactions:
       body:
         string:
           userGroups:
-            - id: demoGroup
-              name: demo group
             - id: visitorsGroup
               name: visitors
+            - id: demoGroup
+              name: demo group
           users: []

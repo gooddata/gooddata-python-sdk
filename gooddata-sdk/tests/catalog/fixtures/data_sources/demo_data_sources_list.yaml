@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -82,8 +82,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds

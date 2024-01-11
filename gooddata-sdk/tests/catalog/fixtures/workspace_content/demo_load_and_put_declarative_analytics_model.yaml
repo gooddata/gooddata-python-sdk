@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: ad8402c4c7ce0e26
+          traceId: 8c75c9d2c4ba0664
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -1043,7 +1043,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '27705'
+          - '27731'
       body:
         string:
           analytics:
@@ -1284,6 +1284,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com
@@ -2513,7 +2514,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: b0242aeb-fd5b-4e11-859c-f3d35f2522ec
+              oauthClientId: 8e31e65d-514f-437f-85d0-ed6aa12a966e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -2758,6 +2759,7 @@ interactions:
               title: Product & Category
               description: ''
           analyticalDashboardExtensions: []
+          attributeHierarchies: []
           dashboardPlugins:
             - content:
                 url: https://www.example.com
@@ -3971,7 +3973,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '27705'
+          - '27731'
       body:
         string:
           analytics:
@@ -4212,6 +4214,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com
@@ -5577,6 +5580,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -7014,6 +7018,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -7043,6 +7048,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []

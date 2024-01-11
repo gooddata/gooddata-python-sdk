@@ -81,6 +81,7 @@ docs/DeclarativeAnalyticalDashboardPermissionsInner.md
 docs/DeclarativeAnalytics.md
 docs/DeclarativeAnalyticsLayer.md
 docs/DeclarativeAttribute.md
+docs/DeclarativeAttributeHierarchy.md
 docs/DeclarativeColorPalette.md
 docs/DeclarativeColumn.md
 docs/DeclarativeCspDirective.md
@@ -664,6 +665,7 @@ docs/UserPermission.md
 docs/UserSettingsApi.md
 docs/UsersDeclarativeAPIsApi.md
 docs/UsersEntityAPIsApi.md
+docs/ValidLabelElementsItem.md
 docs/VisualizationObjectApi.md
 docs/WorkspaceIdentifier.md
 docs/WorkspaceObjectControllerApi.md
@@ -797,6 +799,7 @@ gooddata_api_client/model/declarative_analytical_dashboard_permissions_inner.py
 gooddata_api_client/model/declarative_analytics.py
 gooddata_api_client/model/declarative_analytics_layer.py
 gooddata_api_client/model/declarative_attribute.py
+gooddata_api_client/model/declarative_attribute_hierarchy.py
 gooddata_api_client/model/declarative_color_palette.py
 gooddata_api_client/model/declarative_column.py
 gooddata_api_client/model/declarative_csp_directive.py
@@ -1348,6 +1351,7 @@ gooddata_api_client/model/user_management_user_groups_item.py
 gooddata_api_client/model/user_management_users.py
 gooddata_api_client/model/user_management_users_item.py
 gooddata_api_client/model/user_permission.py
+gooddata_api_client/model/valid_label_elements_item.py
 gooddata_api_client/model/workspace_identifier.py
 gooddata_api_client/model/workspace_permission_assignment.py
 gooddata_api_client/model/workspace_permission_assignments.py

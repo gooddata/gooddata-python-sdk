@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 3a452ad21e400d85
+          traceId: 12f05b9f009d9007
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -186,8 +186,8 @@ interactions:
                   value: KEY_ID
                 - name: projectId
                   value: PROJECT_ID
-              type: BIGQUERY
               name: Test
+              type: BIGQUERY
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -281,8 +281,8 @@ interactions:
                   value: KEY_ID
                 - name: projectId
                   value: PROJECT_ID
-              type: BIGQUERY
               name: Test
+              type: BIGQUERY
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

@@ -33,8 +33,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 def lazy_import():
     from gooddata_api_client.model.depends_on import DependsOn
     from gooddata_api_client.model.filter_by import FilterBy
+    from gooddata_api_client.model.valid_label_elements_item import ValidLabelElementsItem
     globals()['DependsOn'] = DependsOn
     globals()['FilterBy'] = FilterBy
+    globals()['ValidLabelElementsItem'] = ValidLabelElementsItem
 
 
 class ElementsRequest(ModelNormal):
@@ -108,6 +110,7 @@ class ElementsRequest(ModelNormal):
             'filter_by': (FilterBy,),  # noqa: E501
             'pattern_filter': (str,),  # noqa: E501
             'sort_order': (str,),  # noqa: E501
+            'valid_label_elements': ([ValidLabelElementsItem],),  # noqa: E501
         }
 
     @cached_property
@@ -125,6 +128,7 @@ class ElementsRequest(ModelNormal):
         'filter_by': 'filterBy',  # noqa: E501
         'pattern_filter': 'patternFilter',  # noqa: E501
         'sort_order': 'sortOrder',  # noqa: E501
+        'valid_label_elements': 'validLabelElements',  # noqa: E501
     }
 
     read_only_vars = {
@@ -172,13 +176,14 @@ class ElementsRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
+            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
             depends_on ([DependsOn]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501
             exact_filter ([str, none_type]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
             filter_by (FilterBy): [optional]  # noqa: E501
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
+            valid_label_elements ([ValidLabelElementsItem]): Return only items, what are computable on metric. This feature is experimental.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -269,13 +274,14 @@ class ElementsRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             complement_filter (bool): Inverse filters: * ```false``` - return items matching ```patternFilter``` and ```exactFilter``` * ```true``` - return items not matching ```patternFilter``` and ```exactFilter```. [optional] if omitted the server will use the default value of False  # noqa: E501
-            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100.0  # noqa: E501
+            data_sampling_percentage (float): Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.. [optional] if omitted the server will use the default value of 100  # noqa: E501
             depends_on ([DependsOn]): Return only items, whose are not filtered out by the parent filters.. [optional]  # noqa: E501
             exact_filter ([str, none_type]): Return only items, whose ```label``` title exactly matches one of ```filter```.. [optional]  # noqa: E501
             exclude_primary_label (bool): Excludes items from the result that differ only by primary label * ```false``` - return items with distinct primary label * ```true``` - return items with distinct requested label. [optional] if omitted the server will use the default value of False  # noqa: E501
             filter_by (FilterBy): [optional]  # noqa: E501
             pattern_filter (str): Return only items, whose ```label``` title case insensitively contains ```filter``` as substring.. [optional]  # noqa: E501
             sort_order (str): Sort order of returned items. Items are sorted by ```label``` title. If no sort order is specified then attribute's ```sortDirection``` is used, which is ASC by default. [optional]  # noqa: E501
+            valid_label_elements ([ValidLabelElementsItem]): Return only items, what are computable on metric. This feature is experimental.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

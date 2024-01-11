@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -691,6 +691,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -2128,6 +2129,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -2157,6 +2159,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []

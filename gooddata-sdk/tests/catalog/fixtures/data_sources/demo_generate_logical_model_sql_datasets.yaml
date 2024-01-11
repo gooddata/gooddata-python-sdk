@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -540,53 +540,6 @@ interactions:
                   - Products
                 title: Products
               - attributes:
-                  - description: Customer id
-                    id: Customers_sql_dataset_with_WDF.customer_id
-                    labels: []
-                    sourceColumn: customer_id
-                    sourceColumnDataType: INT
-                    tags:
-                      - Customers sql dataset with WDF
-                    title: Customer id
-                  - description: Customer name
-                    id: Customers_sql_dataset_with_WDF.customer_name
-                    labels: []
-                    sourceColumn: customer_name
-                    sourceColumnDataType: STRING
-                    tags:
-                      - Customers sql dataset with WDF
-                    title: Customer name
-                  - description: Region
-                    id: Customers_sql_dataset_with_WDF.region
-                    labels: []
-                    sourceColumn: region
-                    sourceColumnDataType: STRING
-                    tags:
-                      - Customers sql dataset with WDF
-                    title: Region
-                  - description: State
-                    id: Customers_sql_dataset_with_WDF.state
-                    labels: []
-                    sourceColumn: state
-                    sourceColumnDataType: STRING
-                    tags:
-                      - Customers sql dataset with WDF
-                    title: State
-                description: Customers sql dataset with WDF
-                facts: []
-                grain: []
-                id: Customers_sql_dataset_with_WDF
-                references: []
-                sql:
-                  dataSourceId: demo-test-ds
-                  statement: SELECT * FROM v_wdf_customers
-                tags:
-                  - Customers sql dataset with WDF
-                title: Customers sql dataset with WDF
-                workspaceDataFilterColumns:
-                  - dataType: STRING
-                    name: wdf__region
-              - attributes:
                   - description: Campaign id
                     id: Order_lines_duplicate_sql_dataset.campaign_id
                     labels: []
@@ -670,6 +623,53 @@ interactions:
                 tags:
                   - Order lines duplicate sql dataset
                 title: Order lines duplicate sql dataset
+              - attributes:
+                  - description: Customer id
+                    id: Customers_sql_dataset_with_WDF.customer_id
+                    labels: []
+                    sourceColumn: customer_id
+                    sourceColumnDataType: INT
+                    tags:
+                      - Customers sql dataset with WDF
+                    title: Customer id
+                  - description: Customer name
+                    id: Customers_sql_dataset_with_WDF.customer_name
+                    labels: []
+                    sourceColumn: customer_name
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Customers sql dataset with WDF
+                    title: Customer name
+                  - description: Region
+                    id: Customers_sql_dataset_with_WDF.region
+                    labels: []
+                    sourceColumn: region
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Customers sql dataset with WDF
+                    title: Region
+                  - description: State
+                    id: Customers_sql_dataset_with_WDF.state
+                    labels: []
+                    sourceColumn: state
+                    sourceColumnDataType: STRING
+                    tags:
+                      - Customers sql dataset with WDF
+                    title: State
+                description: Customers sql dataset with WDF
+                facts: []
+                grain: []
+                id: Customers_sql_dataset_with_WDF
+                references: []
+                sql:
+                  dataSourceId: demo-test-ds
+                  statement: SELECT * FROM v_wdf_customers
+                tags:
+                  - Customers sql dataset with WDF
+                title: Customers sql dataset with WDF
+                workspaceDataFilterColumns:
+                  - dataType: STRING
+                    name: wdf__region
             dateInstances:
               - granularities:
                   - MINUTE

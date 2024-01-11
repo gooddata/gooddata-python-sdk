@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -101,14 +101,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRlZjExYjZiNC04ZDMyLTQ4OTItODNhNC1jMDNlNmJmZTE2NTESBWxvY2Fs
+            - authId: CiRiNGU4OTFkYy1iMWVjLTRkNjAtYWUwZC1kNGRhNjFjNDI2MzQSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ1OTA1YjEyNy1mN2M5LTQ0ZjEtYmM5NS1kNmEyZjA3YTAzODgSBWxvY2Fs
+            - authId: CiRmNjdjZjVmZi0yOTMxLTRmZjQtOTVkYS01YmM1YzJmMGNkNjcSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []
@@ -214,14 +214,14 @@ interactions:
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiRlZjExYjZiNC04ZDMyLTQ4OTItODNhNC1jMDNlNmJmZTE2NTESBWxvY2Fs
+            - authId: CiRiNGU4OTFkYy1iMWVjLTRkNjAtYWUwZC1kNGRhNjFjNDI2MzQSBWxvY2Fs
               id: demo
               permissions: []
               settings: []
               userGroups:
                 - id: adminGroup
                   type: userGroup
-            - authId: CiQ1OTA1YjEyNy1mN2M5LTQ0ZjEtYmM5NS1kNmEyZjA3YTAzODgSBWxvY2Fs
+            - authId: CiRmNjdjZjVmZi0yOTMxLTRmZjQtOTVkYS01YmM1YzJmMGNkNjcSBWxvY2Fs
               id: demo2
               permissions: []
               settings: []

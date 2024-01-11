@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -181,10 +181,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: d08a1bea766c203bff4e92dd5c6ac4c16684c5e5
+              executionResult: 6ce47babc2319911b7a1af8d479d4b5526fb7695
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695/metadata
       body: null
       headers:
         Accept:
@@ -353,7 +353,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: d08a1bea766c203bff4e92dd5c6ac4c16684c5e5
+              executionResult: 6ce47babc2319911b7a1af8d479d4b5526fb7695
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -370,7 +370,7 @@ interactions:
           resultSize: 9257
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -1568,7 +1568,7 @@ interactions:
               - 2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5?offset=100%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695?offset=100%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -2568,7 +2568,7 @@ interactions:
               - 2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695/metadata
       body: null
       headers:
         Accept:
@@ -2737,7 +2737,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: d08a1bea766c203bff4e92dd5c6ac4c16684c5e5
+              executionResult: 6ce47babc2319911b7a1af8d479d4b5526fb7695
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -2754,7 +2754,7 @@ interactions:
           resultSize: 9257
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:
@@ -3952,7 +3952,7 @@ interactions:
               - 2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/d08a1bea766c203bff4e92dd5c6ac4c16684c5e5?offset=100%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/6ce47babc2319911b7a1af8d479d4b5526fb7695?offset=100%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

@@ -848,6 +848,7 @@
             }
           ],
           "analytical_dashboard_extensions": [],
+          "attribute_hierarchies": [],
           "dashboard_plugins": [
             {
               "id": "dashboard_plugin_1",
@@ -2813,6 +2814,7 @@
               ]
             }
           ],
+          "attribute_hierarchies": [],
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],
@@ -2839,6 +2841,7 @@
         "analytics": {
           "analytical_dashboards": [],
           "analytical_dashboard_extensions": [],
+          "attribute_hierarchies": [],
           "dashboard_plugins": [],
           "filter_contexts": [],
           "metrics": [],

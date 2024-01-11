@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 6ca686937fa4281a
+          traceId: be8cfd29c8b0657b
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/jwks

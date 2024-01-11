@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -335,7 +335,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: b0242aeb-fd5b-4e11-859c-f3d35f2522ec
+              oauthClientId: 8e31e65d-514f-437f-85d0-ed6aa12a966e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:
@@ -487,6 +487,6 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: b0242aeb-fd5b-4e11-859c-f3d35f2522ec
+              oauthClientId: 8e31e65d-514f-437f-85d0-ed6aa12a966e
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

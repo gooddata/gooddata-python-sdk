@@ -6,17 +6,11 @@
         "properties": {
           "message": {
             "description": "Warning message related to the column.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "name": {
             "description": "Column name.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           }
         },
         "required": [
@@ -316,17 +310,11 @@
           },
           "message": {
             "description": "Warning message related to the table.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           },
           "name": {
             "description": "Table name.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+            "type": "string"
           }
         },
         "required": [

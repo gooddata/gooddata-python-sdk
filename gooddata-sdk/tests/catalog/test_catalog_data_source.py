@@ -158,6 +158,10 @@ def test_generate_logical_model_with_sql_datasets(test_config: dict):
 
     expected_ldm = CatalogDeclarativeModel.from_dict(load_json(expected_json_path))
 
+    # TODO: generateLDM does not sort datasets by id - update fixture to be sorted lexicographically
+    #  and remove sort once fixed
+    generated_declarative_model.ldm.datasets.sort(key=lambda dataset: dataset.id)
+    expected_ldm.ldm.datasets.sort(key=lambda dataset: dataset.id)
     assert expected_ldm.ldm.datasets == generated_declarative_model.ldm.datasets
     assert len(expected_ldm.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 
@@ -180,6 +184,10 @@ def test_scan_pdm_and_generate_logical_model_with_sql_datasets(test_config: dict
 
     expected_ldm = CatalogDeclarativeModel.from_dict(load_json(expected_json_path))
 
+    # TODO: generateLDM does not sort datasets by id - update fixture to be sorted lexicographically
+    #  and remove sort once fixed
+    generated_declarative_model.ldm.datasets.sort(key=lambda dataset: dataset.id)
+    expected_ldm.ldm.datasets.sort(key=lambda dataset: dataset.id)
     assert expected_ldm.ldm.datasets == generated_declarative_model.ldm.datasets
     assert len(expected_ldm.ldm.date_instances) == len(generated_declarative_model.ldm.date_instances)
 

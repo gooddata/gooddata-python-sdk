@@ -784,7 +784,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -830,6 +830,13 @@
               "DESC"
             ],
             "type": "string"
+          },
+          "validLabelElements": {
+            "description": "Return only items, what are computable on metric. This feature is experimental.",
+            "items": {
+              "$ref": "#/components/schemas/ValidLabelElementsItem"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -921,7 +928,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -966,7 +973,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -1968,6 +1975,25 @@
         },
         "required": [
           "function"
+        ],
+        "type": "object"
+      },
+      "ValidLabelElementsItem": {
+        "nullable": true,
+        "properties": {
+          "id": {
+            "description": "Specifies entity used for valid elements computation.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Specifies entity type which could be label, attribute, fact, or metric.",
+            "pattern": "^(label)|(attribute)|(fact)|(metric)$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       }

@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -70,6 +70,7 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
+        X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
       body:
@@ -155,7 +156,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 715ac24138286c4b
+          traceId: 9ba23dc569f39181
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/userDataFilters
@@ -916,6 +917,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -2353,6 +2355,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -2382,6 +2385,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
