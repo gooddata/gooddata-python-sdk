@@ -11,6 +11,7 @@ from gooddata_api_client.model.declarative_analytical_dashboard import Declarati
 from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
 from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
 from gooddata_api_client.model.declarative_analytics_layer import DeclarativeAnalyticsLayer
+from gooddata_api_client.model.declarative_attribute_hierarchy import DeclarativeAttributeHierarchy
 from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDashboardPlugin
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
@@ -39,6 +40,7 @@ LAYOUT_DASHBOARD_PLUGINS_DIR = "dashboard_plugins"
 LAYOUT_FILTER_CONTEXTS_DIR = "filter_contexts"
 LAYOUT_METRICS_DIR = "metrics"
 LAYOUT_VISUALIZATION_OBJECTS_DIR = "visualization_objects"
+ATTRIBUTE_HIERARCHY_OBJECTS_DIR = "attribute_hierarchy_objects"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -63,6 +65,7 @@ class CatalogDeclarativeAnalytics(Base):
 class CatalogDeclarativeAnalyticsLayer(Base):
     analytical_dashboards: List[CatalogDeclarativeAnalyticalDashboard] = attr.field(factory=list)
     analytical_dashboard_extensions: List[CatalogDeclarativeAnalyticalDashboardExtension] = attr.field(factory=list)
+    attribute_hierarchies: List[CatalogDeclarativeAttributeHierarchy] = attr.field(factory=list)
     dashboard_plugins: List[CatalogDeclarativeDashboardPlugin] = attr.field(factory=list)
     filter_contexts: List[CatalogDeclarativeFilterContext] = attr.field(factory=list)
     metrics: List[CatalogDeclarativeMetric] = attr.field(factory=list)
@@ -114,6 +117,12 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         create_directory(folder)
         return folder
 
+    @staticmethod
+    def get_attribute_hierarchy_folder(analytics_model_folder: Path) -> Path:
+        folder = analytics_model_folder / ATTRIBUTE_HIERARCHY_OBJECTS_DIR
+        create_directory(folder)
+        return folder
+
     def store_to_disk(self, workspace_folder: Path) -> None:
         analytics_model_folder = self.get_analytics_model_folder(workspace_folder)
 
@@ -123,6 +132,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         filter_contexts_folder = self.get_filter_contexts_folder(analytics_model_folder)
         metrics_folder = self.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = self.get_visualization_objects_folder(analytics_model_folder)
+        attribute_hierarchy_folder = self.get_attribute_hierarchy_folder(analytics_model_folder)
 
         for analytical_dashboard in self.analytical_dashboards:
             analytical_dashboard.store_to_disk(analytical_dashboards_folder)
@@ -142,6 +152,9 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         for visualization_object in self.visualization_objects:
             visualization_object.store_to_disk(visualization_objects_folder)
 
+        for attribute_hierarchy in self.attribute_hierarchies:
+            attribute_hierarchy.store_to_disk(attribute_hierarchy_folder)
+
     @classmethod
     def load_from_disk(cls, workspace_folder: Path) -> CatalogDeclarativeAnalyticsLayer:
         analytics_model_folder = cls.get_analytics_model_folder(workspace_folder)
@@ -151,6 +164,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         filter_contexts_folder = cls.get_filter_contexts_folder(analytics_model_folder)
         metrics_folder = cls.get_metrics_folder(analytics_model_folder)
         visualization_objects_folder = cls.get_visualization_objects_folder(analytics_model_folder)
+        attribute_hierarchy_folder = cls.get_attribute_hierarchy_folder(analytics_model_folder)
 
         analytical_dashboard_files = get_sorted_yaml_files(analytical_dashboards_folder)
         analytical_dashboard_extension_files = get_sorted_yaml_files(analytical_dashboard_extensions_folder)
@@ -158,6 +172,7 @@ class CatalogDeclarativeAnalyticsLayer(Base):
         filter_context_files = get_sorted_yaml_files(filter_contexts_folder)
         metric_files = get_sorted_yaml_files(metrics_folder)
         visualization_object_files = get_sorted_yaml_files(visualization_objects_folder)
+        attribute_hierarchy_files = get_sorted_yaml_files(attribute_hierarchy_folder)
 
         analytical_dashboards = [
             CatalogDeclarativeAnalyticalDashboard.load_from_disk(analytical_dashboard_file)
@@ -180,9 +195,14 @@ class CatalogDeclarativeAnalyticsLayer(Base):
             CatalogDeclarativeVisualizationObject.load_from_disk(visualization_object_file)
             for visualization_object_file in visualization_object_files
         ]
+        attribute_hierarchy_objects = [
+            CatalogDeclarativeAttributeHierarchy.load_from_disk(attribute_hierarchy_file)
+            for attribute_hierarchy_file in attribute_hierarchy_files
+        ]
         return cls(
             analytical_dashboards=analytical_dashboards,
             analytical_dashboard_extensions=analytical_dashboard_extensions,
+            attribute_hierarchies=attribute_hierarchy_objects,
             dashboard_plugins=dashboard_plugins,
             filter_contexts=filter_contexts,
             metrics=metrics,
@@ -289,3 +309,10 @@ class CatalogDeclarativeVisualizationObject(CatalogAnalyticsBaseMeta):
     @staticmethod
     def client_class() -> Type[DeclarativeVisualizationObject]:
         return DeclarativeVisualizationObject
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeAttributeHierarchy(CatalogAnalyticsBaseMeta):
+    @staticmethod
+    def client_class() -> Type[DeclarativeAttributeHierarchy]:
+        return DeclarativeAttributeHierarchy
