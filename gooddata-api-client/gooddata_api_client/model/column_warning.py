@@ -82,8 +82,8 @@ class ColumnWarning(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message': ([str],),  # noqa: E501
-            'name': ([str],),  # noqa: E501
+            'message': (str,),  # noqa: E501
+            'name': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -107,8 +107,8 @@ class ColumnWarning(ModelNormal):
         """ColumnWarning - a model defined in OpenAPI
 
         Args:
-            message ([str]): Warning message related to the column.
-            name ([str]): Column name.
+            message (str): Warning message related to the column.
+            name (str): Column name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -198,8 +198,8 @@ class ColumnWarning(ModelNormal):
         """ColumnWarning - a model defined in OpenAPI
 
         Args:
-            message ([str]): Warning message related to the column.
-            name ([str]): Column name.
+            message (str): Warning message related to the column.
+            name (str): Column name.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

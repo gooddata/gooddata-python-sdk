@@ -359,7 +359,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
         depends_on=[
             DependsOn(
                 complement_filter=False,
@@ -379,6 +379,12 @@ with gooddata_api_client.ApiClient() as api_client:
         label="label_id",
         pattern_filter="pattern_filter_example",
         sort_order="ASC",
+        valid_label_elements=[
+            ValidLabelElementsItem(
+                id="id_example",
+                type="fact",
+            ),
+        ],
     ) # ElementsRequest | 
     offset = 0 # int | Request page with this offset. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 0
     limit = 1000 # int | Return only this number of items. Must be positive integer. The API is limited to the maximum of 10000 items. Therefore this parameter is limited to this number as well. (optional) if omitted the server will use the default value of 1000

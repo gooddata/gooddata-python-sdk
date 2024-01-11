@@ -492,6 +492,13 @@
             },
             "type": "array"
           },
+          "attributeHierarchies": {
+            "description": "A list of attribute hierarchies.",
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeAttributeHierarchy"
+            },
+            "type": "array"
+          },
           "dashboardPlugins": {
             "description": "A list of dashboard plugins available in the model.",
             "items": {
@@ -608,6 +615,70 @@
           "id",
           "labels",
           "sourceColumn",
+          "title"
+        ],
+        "type": "object"
+      },
+      "DeclarativeAttributeHierarchy": {
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/JsonNode"
+          },
+          "createdAt": {
+            "description": "Time of the entity creation.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "description": {
+            "description": "Attribute hierarchy object description.",
+            "example": "Simple number for total goods in current production.",
+            "maxLength": 10000,
+            "type": "string"
+          },
+          "id": {
+            "description": "Attribute hierarchy object ID.",
+            "example": "hierarchy-1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "modifiedAt": {
+            "description": "Time of the last entity modification.",
+            "example": "[\"2023-07-20 12:30\"]",
+            "nullable": true,
+            "pattern": "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "tags": {
+            "description": "A list of tags.",
+            "example": [
+              "Revenues"
+            ],
+            "items": {
+              "description": "A list of tags.",
+              "example": "[\"Revenues\"]",
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "description": "Attribute hierarchy object title.",
+            "example": "Count of goods",
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "id",
           "title"
         ],
         "type": "object"
