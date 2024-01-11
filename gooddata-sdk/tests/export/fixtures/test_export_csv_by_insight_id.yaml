@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -70,7 +70,6 @@ interactions:
           - Access-Control-Request-Headers
         X-Content-Type-Options:
           - nosniff
-        X-GDC-TRACE-ID: *id001
         X-XSS-Protection:
           - 1 ; mode=block
       body:
@@ -151,7 +150,7 @@ interactions:
                       rotation: auto
                 version: '2'
                 visualizationUrl: local:combo2
-              createdAt: 2023-12-14 14:18
+              createdAt: 2024-01-11 13:32
             relationships:
               createdBy:
                 data:
@@ -195,7 +194,7 @@ interactions:
               type: metric
               attributes:
                 title: '# of Active Customers'
-                createdAt: 2023-12-14 14:18
+                createdAt: 2024-01-11 13:32
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -205,7 +204,7 @@ interactions:
               type: metric
               attributes:
                 title: Revenue per Customer
-                createdAt: 2023-12-14 14:18
+                createdAt: 2024-01-11 13:32
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -375,10 +374,10 @@ interactions:
                         name: Revenue per Customer
                 localIdentifier: dim_1
             links:
-              executionResult: 7f4db3b690da6facea27a3c1769e4f681e19a450
+              executionResult: 0bd8ebe8e8ee75f00e319005c3262c26350f83de
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/7f4db3b690da6facea27a3c1769e4f681e19a450?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0bd8ebe8e8ee75f00e319005c3262c26350f83de?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:
@@ -448,40 +447,37 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '1422'
+          - '1394'
       body:
         string:
           data:
+            - - 57
+              - 177.33901960784314
+            - - 65
+              - 116.33793103448276
+            - - 60
+              - 112.81109090909091
+            - - 48
+              - 136.54933333333332
+            - - 63
+              - 369.3692156862745
+            - - 55
+              - 84.3002
+            - - 87
+              - 249.6326923076923
+            - - 87
+              - 208.97644736842105
+            - - 73
+              - 177.2809375
+            - - 56
+              - 170.1824
+            - - 88
+              - 178.174875
             - - 65
               - 174.79036363636362
-            - - 61
-              - 150.10735849056604
-            - - 70
-              - 110.63396825396825
-            - - 53
-              - 164.63276595744682
-            - - 54
-              - 247.32333333333332
-            - - 58
-              - 113.54166666666667
-            - - 76
-              - 213.47925373134328
-            - - 95
-              - 167.58869047619046
-            - - 110
-              - 237.2503
-            - - 91
-              - 154.40761904761905
-            - - 59
-              - 307.9370909090909
-            - - 63
-              - 252.81866666666667
           dimensionHeaders:
             - headerGroups:
                 - headers:
-                    - attributeHeader:
-                        labelValue: 2023-01
-                        primaryLabelValue: 2023-01
                     - attributeHeader:
                         labelValue: 2023-02
                         primaryLabelValue: 2023-02
@@ -515,6 +511,9 @@ interactions:
                     - attributeHeader:
                         labelValue: 2023-12
                         primaryLabelValue: 2023-12
+                    - attributeHeader:
+                        labelValue: 2024-01
+                        primaryLabelValue: 2024-01
             - headerGroups:
                 - headers:
                     - measureHeader:
@@ -536,7 +535,7 @@ interactions:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: 7f4db3b690da6facea27a3c1769e4f681e19a450
+        executionResult: 0bd8ebe8e8ee75f00e319005c3262c26350f83de
         fileName: Customers Trend
         format: CSV
         customOverride:
@@ -621,10 +620,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: d64932885fe4b54f790c79dd8cf2b51374af54e9
+          exportResult: c3bd25f152383f73c9a69c25a112431215568bd5
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/d64932885fe4b54f790c79dd8cf2b51374af54e9
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/c3bd25f152383f73c9a69c25a112431215568bd5
       body: null
       headers:
         Accept:
@@ -695,7 +694,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/d64932885fe4b54f790c79dd8cf2b51374af54e9
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/c3bd25f152383f73c9a69c25a112431215568bd5
       body: null
       headers:
         Accept:
@@ -724,7 +723,7 @@ interactions:
         Content-Disposition:
           - attachment; filename*=UTF-8''Customers%20Trend.csv
         Content-Length:
-          - '439'
+          - '411'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -771,28 +770,28 @@ interactions:
       body:
         string: '"date.month","amount_of_active_customers","revenue_per_customer"
 
-          "2023-01",65,174.79036363636362
+          "2023-02",57,177.33901960784314
 
-          "2023-02",61,150.10735849056604
+          "2023-03",65,116.33793103448276
 
-          "2023-03",70,110.63396825396825
+          "2023-04",60,112.81109090909091
 
-          "2023-04",53,164.63276595744682
+          "2023-05",48,136.54933333333332
 
-          "2023-05",54,247.32333333333332
+          "2023-06",63,369.3692156862745
 
-          "2023-06",58,113.54166666666667
+          "2023-07",55,84.3002
 
-          "2023-07",76,213.47925373134328
+          "2023-08",87,249.6326923076923
 
-          "2023-08",95,167.58869047619046
+          "2023-09",87,208.97644736842105
 
-          "2023-09",110,237.2503
+          "2023-10",73,177.2809375
 
-          "2023-10",91,154.40761904761905
+          "2023-11",56,170.1824
 
-          "2023-11",59,307.9370909090909
+          "2023-12",88,178.174875
 
-          "2023-12",63,252.81866666666667
+          "2024-01",65,174.79036363636362
 
           '

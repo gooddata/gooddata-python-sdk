@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 4509d31802a44ec2
+          traceId: de61e66216bd85b3
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -239,7 +239,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33931'
+          - '33957'
       body:
         string:
           analytics:
@@ -480,6 +480,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com
@@ -2462,6 +2463,7 @@ interactions:
               title: Product & Category
               description: ''
           analyticalDashboardExtensions: []
+          attributeHierarchies: []
           dashboardPlugins:
             - content:
                 url: https://www.example.com
@@ -3675,7 +3677,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '33773'
+          - '33799'
       body:
         string:
           analytics:
@@ -3916,6 +3918,7 @@ interactions:
                 description: ''
                 id: product_and_category
                 title: Product & Category
+            attributeHierarchies: []
             dashboardPlugins:
               - content:
                   url: https://www.example.com
@@ -5608,6 +5611,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -7045,6 +7049,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -7074,6 +7079,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []

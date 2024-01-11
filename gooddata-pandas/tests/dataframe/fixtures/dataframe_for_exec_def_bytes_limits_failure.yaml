@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -181,10 +181,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 0a226b0ff297374681a3eb6e697377f8e38c71af
+              executionResult: fdbaee19a8041af21992f5e6b556acb74f2cbf86
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0a226b0ff297374681a3eb6e697377f8e38c71af/metadata
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/fdbaee19a8041af21992f5e6b556acb74f2cbf86/metadata
       body: null
       headers:
         Accept:
@@ -353,7 +353,7 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: 0a226b0ff297374681a3eb6e697377f8e38c71af
+              executionResult: fdbaee19a8041af21992f5e6b556acb74f2cbf86
           resultSpec:
             dimensions:
               - localIdentifier: dim_0
@@ -370,7 +370,7 @@ interactions:
           resultSize: 4237
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/0a226b0ff297374681a3eb6e697377f8e38c71af?offset=0%2C0&limit=100%2C100
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/fdbaee19a8041af21992f5e6b556acb74f2cbf86?offset=0%2C0&limit=100%2C100
       body: null
       headers:
         Accept:

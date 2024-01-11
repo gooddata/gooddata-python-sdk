@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -161,12 +161,12 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_1
             links:
-              executionResult: e9c4d609575de7c0072b1ff75cce5c2cdeb64929
+              executionResult: 8078ed8c1d8a7cdf64149efd97a70605d1c7cf8a
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular
       body:
-        executionResult: e9c4d609575de7c0072b1ff75cce5c2cdeb64929
+        executionResult: 8078ed8c1d8a7cdf64149efd97a70605d1c7cf8a
         fileName: test_xlsx
         format: XLSX
         customOverride:
@@ -251,10 +251,10 @@ interactions:
           - 1 ; mode=block
       body:
         string:
-          exportResult: d37cdfa445e3c8ef82374bb20e69adf611f4d316
+          exportResult: 58c4e08b92233262158fe3b3a4f2247dd92ee2b2
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/d37cdfa445e3c8ef82374bb20e69adf611f4d316
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/58c4e08b92233262158fe3b3a4f2247dd92ee2b2
       body: null
       headers:
         Accept:
@@ -325,7 +325,7 @@ interactions:
         string: ''
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/d37cdfa445e3c8ef82374bb20e69adf611f4d316
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/export/tabular/58c4e08b92233262158fe3b3a4f2247dd92ee2b2
       body: null
       headers:
         Accept:
@@ -508,13 +508,13 @@ interactions:
           BzREgkKnU5EgZF+Vdr6GmVPXn68zRmWfmasr0+J3SI4IG2TV28zst1A06yalI3Lc6aDZpuoahv3/
           8OTjrph8zh4PFoLc88wirtb0tUfBxtupcM5Hbd1scd1b+1GbwuEDZV/QuKnw2WK+HfADiD6aT5QI
           EvFSqyy/+eYQdG5pxmWs/tkxahGC1op4X+TwqTm7scLZZ4t7c2d7Bl97Z7vaXi5RWzvI5KulP574
-          8D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwBJY62TJQEAAFACAAARAAAA
-          ZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7LcsxJQjbgbbk1EChKS29CWmTiFo/SGodv30V
-          J3ES8CnH1cx+O7uoWuxVm/yB89LoGpEsRwloboTU2xp9rJfpHCU+MC1YazTUqAePFs1DxS3lxsGb
-          MxZckOCTCNKeclujXQiWYuz5DhTzWXToKG6MUyzE0m2xZfyHbQEXef6IFQQmWGD4AEztSEQnpOAj
-          0v66dgAIjqEFBTp4TDKCL94ATvnJhkG5cioZeguT1rM4uvdejsau67JuNlhjfoK/Vq/vw6qp1IdT
-          cUBNJTjlDlgwrqnwdREP1zIfVvHEGwniqY/6xNtpkWMfiCQGoMe4Z+Vz9vyyXqKmyItZSoqUlGtS
-          UjKn5fz7MPKm/wJUpyF3E8+AY+7bT9D8A1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRv
+          8D7I3oGD0oQpWbxNegBHze7sLwPgYy9It/4GUEsDBBQAAAAIAAAAPwCkMnQrJQEAAFACAAARAAAA
+          ZG9jUHJvcHMvY29yZS54bWydks1qwzAQhO99CqO7LStJSxC2A23JqYFCXVp6E9ImEbV+kNQ6efvK
+          duwkkFOPq5n9dnZRsTqoJvkF56XRJSJZjhLQ3AipdyV6r9fpEiU+MC1YYzSU6Ageraq7glvKjYNX
+          Zyy4IMEnEaQ95bZE+xAsxdjzPSjms+jQUdwap1iIpdthy/g32wGe5fkDVhCYYIHhDpjaiYhOSMEn
+          pP1xTQ8QHEMDCnTwmGQEn70BnPI3G3rlwqlkOFq4aR3FyX3wcjK2bZu1894a8xP8uXl561dNpe5O
+          xQFVheCUO2DBuKrAl0U8XMN82MQTbyWIx2PUb7ydFhn6QCQxAB3ijsrH/Om5XqNqls8WaU5SQmoy
+          p4slvc+/upFX/WegOg35N3EEDLmvP0H1B1BLAwQUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAGRv
           Y1Byb3BzL2FwcC54bWydUsFO4zAQvfMVke/UabVaocoxWpVd9bCISi1wXBln0lh1bMszRClfj5Oq
           IYU94dObN0/PzzMWt11jsxYiGu8KNp/lLAOnfWncvmCPuz/XNyxDUq5U1jso2BGQ3corsYk+QCQD
           mCUHhwWricKSc9Q1NApnqe1Sp/KxUZTKuOe+qoyGO69fG3DEF3n+k0NH4Eoor8NoyE6Oy5a+a1p6
@@ -531,6 +531,6 @@ interactions:
           ACwGAAAUAAAAAAAAAAAAAACAgbwMAAB4bC9zaGFyZWRTdHJpbmdzLnhtbFBLAQIUAxQAAAAIAAAA
           PwCCg3RkHgMAAIUTAAANAAAAAAAAAAAAAACAgf0OAAB4bC9zdHlsZXMueG1sUEsBAhQDFAAAAAgA
           AAA/ABj6RlSwBQAAUhsAABMAAAAAAAAAAAAAAICBRhIAAHhsL3RoZW1lL3RoZW1lMS54bWxQSwEC
-          FAMUAAAACAAAAD8ASWOtkyUBAABQAgAAEQAAAAAAAAAAAAAAgIEnGAAAZG9jUHJvcHMvY29yZS54
+          FAMUAAAACAAAAD8ApDJ0KyUBAABQAgAAEQAAAAAAAAAAAAAAgIEnGAAAZG9jUHJvcHMvY29yZS54
           bWxQSwECFAMUAAAACAAAAD8ABHFFY3sBAAATAwAAEAAAAAAAAAAAAAAAgIF7GQAAZG9jUHJvcHMv
           YXBwLnhtbFBLBQYAAAAACgAKAIACAAAkGwAAAAA=

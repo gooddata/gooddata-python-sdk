@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '36054'
+          - '36132'
       body:
         string:
           workspaceDataFilters:
@@ -358,6 +358,7 @@ interactions:
                       description: ''
                       id: product_and_category
                       title: Product & Category
+                  attributeHierarchies: []
                   dashboardPlugins:
                     - content:
                         url: https://www.example.com
@@ -1795,6 +1796,7 @@ interactions:
                             type: allWorkspaceUsers
                           name: VIEW
                   analyticalDashboards: []
+                  attributeHierarchies: []
                   dashboardPlugins: []
                   filterContexts: []
                   metrics: []
@@ -1824,6 +1826,7 @@ interactions:
                 analytics:
                   analyticalDashboardExtensions: []
                   analyticalDashboards: []
+                  attributeHierarchies: []
                   dashboardPlugins: []
                   filterContexts: []
                   metrics: []
@@ -1910,7 +1913,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '36054'
+          - '36132'
       body:
         string:
           workspaceDataFilters:
@@ -2194,6 +2197,7 @@ interactions:
                       description: ''
                       id: product_and_category
                       title: Product & Category
+                  attributeHierarchies: []
                   dashboardPlugins:
                     - content:
                         url: https://www.example.com
@@ -3631,6 +3635,7 @@ interactions:
                             type: allWorkspaceUsers
                           name: VIEW
                   analyticalDashboards: []
+                  attributeHierarchies: []
                   dashboardPlugins: []
                   filterContexts: []
                   metrics: []
@@ -3660,6 +3665,7 @@ interactions:
                 analytics:
                   analyticalDashboardExtensions: []
                   analyticalDashboards: []
+                  attributeHierarchies: []
                   dashboardPlugins: []
                   filterContexts: []
                   metrics: []

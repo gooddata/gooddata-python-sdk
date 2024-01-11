@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 0e66ac1330992e4d
+          traceId: bde7a329d4e99453
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/dataSources
@@ -177,8 +177,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test
@@ -264,8 +264,8 @@ interactions:
               enableCaching: true
               cachePath:
                 - cache_schema
-              type: SNOWFLAKE
               name: Test
+              type: SNOWFLAKE
               schema: demo
           links:
             self: http://localhost:3000/api/v1/entities/dataSources/test

@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -168,7 +168,7 @@ interactions:
         Connection:
           - keep-alive
         Content-Length:
-          - '255'
+          - '275'
         Content-Security-Policy:
           - 'default-src ''self'' *.wistia.com *.wistia.net; script-src ''self'' ''unsafe-inline''
             ''unsafe-eval'' *.wistia.com *.wistia.net *.hsforms.net *.hsforms.com
@@ -220,7 +220,8 @@ interactions:
             attributes:
               name: Default Organization
               hostname: localhost
-              oauthClientId: a69fdb5a-efed-4a5b-a39d-774f4f256757
+              allowedOrigins: []
+              oauthClientId: 858c5858-c2cf-4e8b-bfde-e3e01086e909
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:

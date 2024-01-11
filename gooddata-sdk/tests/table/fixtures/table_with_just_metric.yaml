@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -106,10 +106,10 @@ interactions:
                         name: Order Amount
                 localIdentifier: dim_0
             links:
-              executionResult: 50ea0dc18eaee0581ef2849ba578b1c3e6fab4f9
+              executionResult: 7965c914228fcaed60c004f0c9daef5fb6ae98cd
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/50ea0dc18eaee0581ef2849ba578b1c3e6fab4f9?offset=0&limit=256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/7965c914228fcaed60c004f0c9daef5fb6ae98cd?offset=0&limit=256
       body: null
       headers:
         Accept:

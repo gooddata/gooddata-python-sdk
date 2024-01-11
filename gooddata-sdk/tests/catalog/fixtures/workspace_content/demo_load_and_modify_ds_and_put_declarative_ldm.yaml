@@ -1,4 +1,4 @@
-# (C) 2023 GoodData Corporation
+# (C) 2024 GoodData Corporation
 version: 1
 interactions:
   - request:
@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 855650b8ba771261
+          traceId: 9858e6b9c7b4d5d6
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -655,8 +655,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -1139,8 +1139,8 @@ interactions:
                 url: jdbc:postgresql://localhost:5432/demo
                 username: demouser
                 enableCaching: false
-                type: POSTGRESQL
                 name: demo-test-ds
+                type: POSTGRESQL
                 schema: demo
               links:
                 self: http://localhost:3000/api/v1/entities/dataSources/demo-test-ds
@@ -2230,6 +2230,7 @@ interactions:
                     id: product_and_category
                     title: Product & Category
                     description: ''
+                attributeHierarchies: []
                 dashboardPlugins:
                   - content:
                       url: https://www.example.com
@@ -3667,6 +3668,7 @@ interactions:
                           type: allWorkspaceUsers
                         name: VIEW
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
@@ -3696,6 +3698,7 @@ interactions:
               analytics:
                 analyticalDashboardExtensions: []
                 analyticalDashboards: []
+                attributeHierarchies: []
                 dashboardPlugins: []
                 filterContexts: []
                 metrics: []
