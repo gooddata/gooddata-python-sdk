@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
     from gooddata_api_client.model.declarative_user_identifier import DeclarativeUserIdentifier
-    from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+    globals()['DeclarativeUserGroupIdentifier'] = DeclarativeUserGroupIdentifier
     globals()['DeclarativeUserIdentifier'] = DeclarativeUserIdentifier
-    globals()['UserGroupIdentifier'] = UserGroupIdentifier
 
 
 class DeclarativeUserDataFilter(ModelNormal):
@@ -112,7 +112,7 @@ class DeclarativeUserDataFilter(ModelNormal):
             'description': (str,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'user': (DeclarativeUserIdentifier,),  # noqa: E501
-            'user_group': (UserGroupIdentifier,),  # noqa: E501
+            'user_group': (DeclarativeUserGroupIdentifier,),  # noqa: E501
         }
 
     @cached_property
@@ -179,7 +179,7 @@ class DeclarativeUserDataFilter(ModelNormal):
             description (str): User Data Filters setting description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             user (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            user_group (UserGroupIdentifier): [optional]  # noqa: E501
+            user_group (DeclarativeUserGroupIdentifier): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -276,7 +276,7 @@ class DeclarativeUserDataFilter(ModelNormal):
             description (str): User Data Filters setting description.. [optional]  # noqa: E501
             tags ([str]): A list of tags.. [optional]  # noqa: E501
             user (DeclarativeUserIdentifier): [optional]  # noqa: E501
-            user_group (UserGroupIdentifier): [optional]  # noqa: E501
+            user_group (DeclarativeUserGroupIdentifier): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

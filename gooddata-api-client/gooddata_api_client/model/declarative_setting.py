@@ -67,6 +67,7 @@ class DeclarativeSetting(ModelNormal):
             'MAPBOX_TOKEN': "MAPBOX_TOKEN",
             'WEEK_START': "WEEK_START",
             'SHOW_HIDDEN_CATALOG_ITEMS': "SHOW_HIDDEN_CATALOG_ITEMS",
+            'OPERATOR_OVERRIDES': "OPERATOR_OVERRIDES",
         },
     }
 

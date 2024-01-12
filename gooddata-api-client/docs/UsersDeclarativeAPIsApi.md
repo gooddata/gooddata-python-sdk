@@ -123,7 +123,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 user_groups=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),

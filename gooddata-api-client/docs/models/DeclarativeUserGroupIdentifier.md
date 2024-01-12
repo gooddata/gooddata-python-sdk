@@ -1,4 +1,4 @@
-# gooddata_api_client.model.user_group_identifier.UserGroupIdentifier
+# gooddata_api_client.model.declarative_user_group_identifier.DeclarativeUserGroupIdentifier
 
 A user group identifier.
 

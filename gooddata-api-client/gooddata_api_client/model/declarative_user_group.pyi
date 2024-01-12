@@ -64,12 +64,12 @@ class DeclarativeUserGroup(
                 class MetaOapg:
                     
                     @staticmethod
-                    def items() -> typing.Type['UserGroupIdentifier']:
-                        return UserGroupIdentifier
+                    def items() -> typing.Type['DeclarativeUserGroupIdentifier']:
+                        return DeclarativeUserGroupIdentifier
             
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple['UserGroupIdentifier'], typing.List['UserGroupIdentifier']],
+                    _arg: typing.Union[typing.Tuple['DeclarativeUserGroupIdentifier'], typing.List['DeclarativeUserGroupIdentifier']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'parents':
                     return super().__new__(
@@ -78,7 +78,7 @@ class DeclarativeUserGroup(
                         _configuration=_configuration,
                     )
             
-                def __getitem__(self, i: int) -> 'UserGroupIdentifier':
+                def __getitem__(self, i: int) -> 'DeclarativeUserGroupIdentifier':
                     return super().__getitem__(i)
             
             
@@ -176,4 +176,4 @@ class DeclarativeUserGroup(
         )
 
 from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
-from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+from gooddata_api_client.model.user_group_identifier import DeclarativeUserGroupIdentifier

@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**get_analytics_model**](LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
+[**get_data_source_permissions**](LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 [**get_data_sources_layout**](LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 [**get_logical_model**](LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 [**get_organization_layout**](LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -25,6 +26,7 @@ Method | HTTP request | Description
 [**put_users_user_groups_layout**](LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/v1/layout/usersAndUserGroups | Put all users and user groups
 [**put_workspace_layout**](LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
 [**set_analytics_model**](LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
+[**set_data_source_permissions**](LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 [**set_logical_model**](LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 [**set_organization_layout**](LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 [**set_organization_permissions**](LayoutApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
@@ -113,6 +115,73 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved current analytics model. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_data_source_permissions**
+> DeclarativeDataSourcePermissions get_data_source_permissions(data_source_id)
+
+Get permissions for the data source
+
+Retrieve current set of permissions of the data source in a declarative form.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_data_source_permissions import DeclarativeDataSourcePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get permissions for the data source
+        api_response = api_instance.get_data_source_permissions(data_source_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->get_data_source_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+
+### Return type
+
+[**DeclarativeDataSourcePermissions**](DeclarativeDataSourcePermissions.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Retrieved current set of permissions. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1197,7 +1266,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -1304,7 +1373,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 user_groups=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -1383,7 +1452,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -1423,7 +1492,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 user_groups=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -1973,6 +2042,84 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **set_data_source_permissions**
+> set_data_source_permissions(data_source_id, declarative_data_source_permissions)
+
+Set data source permissions.
+
+et data source permissions.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import layout_api
+from gooddata_api_client.model.declarative_data_source_permissions import DeclarativeDataSourcePermissions
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = layout_api.LayoutApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    declarative_data_source_permissions = DeclarativeDataSourcePermissions(
+        permissions=[
+            DeclarativeDataSourcePermission(
+                assignee=AssigneeIdentifier(
+                    id="id_example",
+                    type="user",
+                ),
+                name="MANAGE",
+            ),
+        ],
+    ) # DeclarativeDataSourcePermissions | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Set data source permissions.
+        api_instance.set_data_source_permissions(data_source_id, declarative_data_source_permissions)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling LayoutApi->set_data_source_permissions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **declarative_data_source_permissions** | [**DeclarativeDataSourcePermissions**](DeclarativeDataSourcePermissions.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **set_logical_model**
 > set_logical_model(workspace_id, declarative_model)
 
@@ -2299,7 +2446,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -2339,7 +2486,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     ),
                 ],
                 user_groups=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     ),
@@ -2676,7 +2823,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="employee123",
                             type="user",
                         ),
-                        user_group=UserGroupIdentifier(
+                        user_group=DeclarativeUserGroupIdentifier(
                             id="group.admins",
                             type="userGroup",
                         ),
@@ -2837,7 +2984,7 @@ with gooddata_api_client.ApiClient() as api_client:
                     id="employee123",
                     type="user",
                 ),
-                user_group=UserGroupIdentifier(
+                user_group=DeclarativeUserGroupIdentifier(
                     id="group.admins",
                     type="userGroup",
                 ),
@@ -3575,7 +3722,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="employee123",
                             type="user",
                         ),
-                        user_group=UserGroupIdentifier(
+                        user_group=DeclarativeUserGroupIdentifier(
                             id="group.admins",
                             type="userGroup",
                         ),

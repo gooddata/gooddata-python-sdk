@@ -944,6 +944,29 @@
         ],
         "type": "object"
       },
+      "DataSourcePermissionAssignment": {
+        "description": "Data source permission assignments",
+        "properties": {
+          "assigneeIdentifier": {
+            "$ref": "#/components/schemas/AssigneeIdentifier"
+          },
+          "permissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "USE"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assigneeIdentifier",
+          "permissions"
+        ],
+        "type": "object"
+      },
       "DataSourceSchemata": {
         "description": "Result of getSchemata. Contains list of available DB schema names.",
         "properties": {
@@ -1766,6 +1789,18 @@
           "assignee",
           "name"
         ],
+        "type": "object"
+      },
+      "DeclarativeDataSourcePermissions": {
+        "description": "Data source permissions.",
+        "properties": {
+          "permissions": {
+            "items": {
+              "$ref": "#/components/schemas/DeclarativeDataSourcePermission"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "DeclarativeDataSources": {
@@ -2641,7 +2676,8 @@
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
               "WEEK_START",
-              "SHOW_HIDDEN_CATALOG_ITEMS"
+              "SHOW_HIDDEN_CATALOG_ITEMS",
+              "OPERATOR_OVERRIDES"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -2808,7 +2844,7 @@
           },
           "userGroups": {
             "items": {
-              "$ref": "#/components/schemas/UserGroupIdentifier"
+              "$ref": "#/components/schemas/DeclarativeUserGroupIdentifier"
             },
             "type": "array"
           }
@@ -2862,7 +2898,7 @@
             "$ref": "#/components/schemas/DeclarativeUserIdentifier"
           },
           "userGroup": {
-            "$ref": "#/components/schemas/UserGroupIdentifier"
+            "$ref": "#/components/schemas/DeclarativeUserGroupIdentifier"
           }
         },
         "required": [
@@ -2904,7 +2940,7 @@
           },
           "parents": {
             "items": {
-              "$ref": "#/components/schemas/UserGroupIdentifier"
+              "$ref": "#/components/schemas/DeclarativeUserGroupIdentifier"
             },
             "type": "array"
           },
@@ -2917,6 +2953,34 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "DeclarativeUserGroupIdentifier": {
+        "description": "A user group identifier.",
+        "example": {
+          "id": "admins",
+          "type": "userGroup"
+        },
+        "properties": {
+          "id": {
+            "description": "Identifier of the user group.",
+            "example": "group.admins",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "A type.",
+            "enum": [
+              "userGroup"
+            ],
+            "example": "userGroup",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
         ],
         "type": "object"
       },
@@ -3544,15 +3608,13 @@
             "type": "boolean"
           },
           "label": {
-            "default": "null",
             "description": "Specifies on which label the filter depends on.",
             "type": "string"
           },
           "values": {
             "description": "Specifies values of the label for element filtering.",
             "items": {
-              "default": "null",
-              "description": "Specifies values of the label for element filtering.",
+              "nullable": true,
               "type": "string"
             },
             "type": "array"
@@ -3686,10 +3748,10 @@
             ],
             "type": "string"
           },
-          "validLabelElements": {
-            "description": "Return only items, what are computable on metric. This feature is experimental.",
+          "validateBy": {
+            "description": "Return only items, what are computable on metric.",
             "items": {
-              "$ref": "#/components/schemas/ValidLabelElementsItem"
+              "$ref": "#/components/schemas/ValidateByItem"
             },
             "type": "array"
           }
@@ -4014,6 +4076,100 @@
           "exportResult"
         ],
         "type": "object"
+      },
+      "File": {
+        "properties": {
+          "any": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "canResegment": {
+            "enum": [
+              "YES",
+              "NO"
+            ],
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "id": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "notes": {
+            "$ref": "#/components/schemas/Notes"
+          },
+          "original": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "otherAttributes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "skeleton": {
+            "$ref": "#/components/schemas/Skeleton"
+          },
+          "space": {
+            "type": "string",
+            "xml": {
+              "attribute": true,
+              "namespace": "http://www.w3.org/XML/1998/namespace"
+            }
+          },
+          "srcDir": {
+            "enum": [
+              "LTR",
+              "RTL",
+              "AUTO"
+            ],
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "translate": {
+            "enum": [
+              "YES",
+              "NO"
+            ],
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "trgDir": {
+            "enum": [
+              "LTR",
+              "RTL",
+              "AUTO"
+            ],
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "unitOrGroup": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "file",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "FilterBy": {
         "description": "Specifies what is used for filtering.",
@@ -7392,145 +7548,6 @@
         ],
         "type": "object"
       },
-      "JsonApiDataSourceTableOut": {
-        "description": "Tables in data source",
-        "properties": {
-          "attributes": {
-            "properties": {
-              "columns": {
-                "items": {
-                  "description": "Table columns in data source",
-                  "properties": {
-                    "dataType": {
-                      "enum": [
-                        "INT",
-                        "STRING",
-                        "DATE",
-                        "NUMERIC",
-                        "TIMESTAMP",
-                        "TIMESTAMP_TZ",
-                        "BOOLEAN"
-                      ],
-                      "type": "string"
-                    },
-                    "isPrimaryKey": {
-                      "type": "boolean"
-                    },
-                    "name": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "referencedTableColumn": {
-                      "maxLength": 255,
-                      "type": "string"
-                    },
-                    "referencedTableId": {
-                      "maxLength": 255,
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "dataType",
-                    "name"
-                  ],
-                  "type": "object"
-                },
-                "type": "array"
-              },
-              "namePrefix": {
-                "maxLength": 255,
-                "type": "string"
-              },
-              "path": {
-                "description": "Path to table.",
-                "example": [
-                  "table_schema",
-                  "table_name"
-                ],
-                "items": {
-                  "example": "table_name",
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "type": {
-                "enum": [
-                  "TABLE",
-                  "VIEW"
-                ],
-                "type": "string"
-              }
-            },
-            "required": [
-              "columns"
-            ],
-            "type": "object"
-          },
-          "id": {
-            "description": "API identifier of an object",
-            "example": "id1",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "Object type",
-            "enum": [
-              "dataSourceTable"
-            ],
-            "example": "dataSourceTable",
-            "type": "string"
-          }
-        },
-        "required": [
-          "attributes",
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
-      "JsonApiDataSourceTableOutDocument": {
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/JsonApiDataSourceTableOut"
-          },
-          "links": {
-            "$ref": "#/components/schemas/ObjectLinks"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
-      "JsonApiDataSourceTableOutList": {
-        "description": "A JSON:API document with a list of resources",
-        "properties": {
-          "data": {
-            "items": {
-              "$ref": "#/components/schemas/JsonApiDataSourceTableOutWithLinks"
-            },
-            "type": "array",
-            "uniqueItems": true
-          },
-          "links": {
-            "$ref": "#/components/schemas/ListLinks"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
-      "JsonApiDataSourceTableOutWithLinks": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiDataSourceTableOut"
-          },
-          {
-            "$ref": "#/components/schemas/ObjectLinksContainer"
-          }
-        ]
-      },
       "JsonApiDatasetLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
         "properties": {
@@ -9899,7 +9916,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -9959,7 +9977,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -10051,7 +10070,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -11477,7 +11497,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -11537,7 +11558,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -13102,7 +13124,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -13162,7 +13185,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -13280,7 +13304,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -13340,7 +13365,8 @@
                   "FORMAT_LOCALE",
                   "MAPBOX_TOKEN",
                   "WEEK_START",
-                  "SHOW_HIDDEN_CATALOG_ITEMS"
+                  "SHOW_HIDDEN_CATALOG_ITEMS",
+                  "OPERATOR_OVERRIDES"
                 ],
                 "type": "string"
               }
@@ -13432,6 +13458,19 @@
             "type": "object"
           }
         ]
+      },
+      "LocaleRequest": {
+        "properties": {
+          "locale": {
+            "description": "Requested locale in the form of language tag. Can contain special 'default' locale which points to original (not translated) values in entity properties.",
+            "example": "en-US",
+            "type": "string"
+          }
+        },
+        "required": [
+          "locale"
+        ],
+        "type": "object"
       },
       "MeasureDefinition": {
         "description": "Abstract metric definition type",
@@ -13560,6 +13599,71 @@
           "negativeAttributeFilter"
         ],
         "type": "object"
+      },
+      "Note": {
+        "properties": {
+          "appliesTo": {
+            "enum": [
+              "SOURCE",
+              "TARGET"
+            ],
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "category": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "content": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "otherAttributes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "priority": {
+            "format": "int32",
+            "type": "integer",
+            "xml": {
+              "attribute": true
+            }
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "note",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
+      },
+      "Notes": {
+        "properties": {
+          "note": {
+            "items": {
+              "$ref": "#/components/schemas/Note"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "note"
+        ],
+        "type": "object",
+        "xml": {
+          "name": "notes",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "ObjectLinks": {
         "properties": {
@@ -14167,7 +14271,8 @@
               "FORMAT_LOCALE",
               "MAPBOX_TOKEN",
               "WEEK_START",
-              "SHOW_HIDDEN_CATALOG_ITEMS"
+              "SHOW_HIDDEN_CATALOG_ITEMS",
+              "OPERATOR_OVERRIDES"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -14520,6 +14625,27 @@
           "measure"
         ],
         "type": "object"
+      },
+      "Skeleton": {
+        "properties": {
+          "content": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "href": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          }
+        },
+        "type": "object",
+        "xml": {
+          "name": "skeleton",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       },
       "SortKey": {
         "oneOf": [
@@ -15004,34 +15130,6 @@
         ],
         "type": "object"
       },
-      "UserGroupIdentifier": {
-        "description": "A user group identifier.",
-        "example": {
-          "id": "admins",
-          "type": "userGroup"
-        },
-        "properties": {
-          "id": {
-            "description": "Identifier of the user group.",
-            "example": "group.admins",
-            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
-            "type": "string"
-          },
-          "type": {
-            "description": "A type.",
-            "enum": [
-              "userGroup"
-            ],
-            "example": "userGroup",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "type"
-        ],
-        "type": "object"
-      },
       "UserGroupPermission": {
         "description": "List of user groups",
         "properties": {
@@ -15199,6 +15297,66 @@
         ],
         "type": "object"
       },
+      "UserManagementWorkspacePermissionAssignment": {
+        "description": "Workspace permission assignments for users and userGroups",
+        "properties": {
+          "hierarchyPermissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "ANALYZE",
+                "EXPORT",
+                "EXPORT_TABULAR",
+                "EXPORT_PDF",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "readOnly": true,
+            "type": "string"
+          },
+          "permissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "ANALYZE",
+                "EXPORT",
+                "EXPORT_TABULAR",
+                "EXPORT_PDF",
+                "VIEW"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "hierarchyPermissions",
+          "id",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "UserManagementWorkspacePermissionAssignments": {
+        "properties": {
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "workspaces"
+        ],
+        "type": "object"
+      },
       "UserPermission": {
         "description": "List of users",
         "properties": {
@@ -15228,7 +15386,7 @@
         ],
         "type": "object"
       },
-      "ValidLabelElementsItem": {
+      "ValidateByItem": {
         "nullable": true,
         "properties": {
           "id": {
@@ -15275,6 +15433,9 @@
       "WorkspacePermissionAssignment": {
         "description": "Workspace permission assignments",
         "properties": {
+          "assigneeIdentifier": {
+            "$ref": "#/components/schemas/AssigneeIdentifier"
+          },
           "hierarchyPermissions": {
             "items": {
               "enum": [
@@ -15288,13 +15449,6 @@
               "type": "string"
             },
             "type": "array"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "readOnly": true,
-            "type": "string"
           },
           "permissions": {
             "items": {
@@ -15312,25 +15466,58 @@
           }
         },
         "required": [
-          "hierarchyPermissions",
-          "id",
-          "permissions"
+          "assigneeIdentifier"
         ],
         "type": "object"
       },
-      "WorkspacePermissionAssignments": {
+      "Xliff": {
         "properties": {
-          "workspaces": {
+          "file": {
             "items": {
-              "$ref": "#/components/schemas/WorkspacePermissionAssignment"
+              "$ref": "#/components/schemas/File"
             },
             "type": "array"
+          },
+          "otherAttributes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "space": {
+            "type": "string",
+            "xml": {
+              "attribute": true,
+              "namespace": "http://www.w3.org/XML/1998/namespace"
+            }
+          },
+          "srcLang": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "trgLang": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
+          },
+          "version": {
+            "type": "string",
+            "xml": {
+              "attribute": true
+            }
           }
         },
         "required": [
-          "workspaces"
+          "file"
         ],
-        "type": "object"
+        "type": "object",
+        "xml": {
+          "name": "xliff",
+          "namespace": "urn:oasis:names:tc:xliff:document:2.0"
+        }
       }
     }
   },
@@ -15517,6 +15704,46 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/dataSources/{dataSourceId}/managePermissions": {
+      "post": {
+        "description": "Manage Permissions for a Data Source",
+        "operationId": "manageDataSourcePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "An array of data source permissions assignments",
+                "items": {
+                  "$ref": "#/components/schemas/DataSourcePermissionAssignment"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for a Data Source",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/dataSources/{dataSourceId}/scan": {
@@ -16112,7 +16339,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                  "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
                 }
               }
             },
@@ -16139,7 +16366,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
               }
             }
           },
@@ -16226,7 +16453,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                  "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
                 }
               }
             },
@@ -16253,7 +16480,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WorkspacePermissionAssignments"
+                "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
               }
             }
           },
@@ -17394,6 +17621,46 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/managePermissions": {
+      "post": {
+        "description": "Manage Permissions for a Workspace and its Workspace Hierarchy",
+        "operationId": "manageWorkspacePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "An array of workspace permissions assignments",
+                "items": {
+                  "$ref": "#/components/schemas/WorkspacePermissionAssignment"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Manage Permissions for a Workspace",
+        "tags": [
+          "Permissions",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities": {
       "get": {
         "description": "Finds API identifier overrides in given workspace hierarchy.",
@@ -17524,6 +17791,132 @@
           "description": "Minimal permission required to use this endpoint.",
           "permissions": [
             "VIEW"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/translations": {
+      "get": {
+        "description": "Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.",
+        "operationId": "getTranslationTags",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Retrieved list of translation tags."
+          }
+        },
+        "summary": "Get translation tags.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/translations/clean": {
+      "post": {
+        "description": "Cleans up all translations for a particular locale. Cleaning up the special 'default' locale value is forbidden.",
+        "operationId": "cleanTranslations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocaleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Translations were successfully removed."
+          }
+        },
+        "summary": "Cleans up translations.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/translations/set": {
+      "post": {
+        "description": "Set translation for existing entities in a particular locale.",
+        "operationId": "setTranslations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Xliff"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Translations were successfully set."
+          }
+        },
+        "summary": "Set translations for entities.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
           ]
         }
       }
@@ -18646,100 +19039,6 @@
         }
       }
     },
-    "/api/v1/entities/dataSources/{dataSourceId}/dataSourceTables": {
-      "get": {
-        "operationId": "getAllEntities@DataSourceTables",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dataSourceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=path==v1,v2,v3;type==DataSourceTableTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/page"
-          },
-          {
-            "$ref": "#/components/parameters/size"
-          },
-          {
-            "$ref": "#/components/parameters/sort"
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiDataSourceTableOutList"
-                }
-              }
-            },
-            "description": "Request successfully processed"
-          }
-        },
-        "tags": [
-          "Data Source - Entity APIs",
-          "entities",
-          "data-source-entities-controller"
-        ]
-      }
-    },
-    "/api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id}": {
-      "get": {
-        "operationId": "getEntity@DataSourceTables",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "dataSourceId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/idPathParameter"
-          },
-          {
-            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=path==v1,v2,v3;type==DataSourceTableTypeValue",
-            "in": "query",
-            "name": "filter",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/vnd.gooddata.api+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonApiDataSourceTableOutDocument"
-                }
-              }
-            },
-            "description": "Request successfully processed"
-          }
-        },
-        "tags": [
-          "Data Source - Entity APIs",
-          "entities",
-          "data-source-entities-controller"
-        ]
-      }
-    },
     "/api/v1/entities/dataSources/{id}": {
       "delete": {
         "description": "Data Source - represents data source for the workspace",
@@ -19305,7 +19604,7 @@
         "parameters": [
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19388,7 +19687,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19422,7 +19721,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19457,7 +19756,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -19508,7 +19807,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20815,7 +21114,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20910,7 +21209,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20946,7 +21245,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -20989,7 +21288,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -27753,7 +28052,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -27912,7 +28211,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -27953,7 +28252,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -28038,7 +28337,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -28096,7 +28395,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=content==JsonNodeValue;type==SettingConfigurationValue",
+            "example": "filter=content==JsonNodeValue;type==SettingTypeValue",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -28187,6 +28486,83 @@
         ],
         "x-gdc-security-info": {
           "description": "Permission required to set data sources layout.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/layout/dataSources/{dataSourceId}/permissions": {
+      "get": {
+        "description": "Retrieve current set of permissions of the data source in a declarative form.",
+        "operationId": "getDataSourcePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeclarativeDataSourcePermissions"
+                }
+              }
+            },
+            "description": "Retrieved current set of permissions."
+          }
+        },
+        "summary": "Get permissions for the data source",
+        "tags": [
+          "layout"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions required to manipulate permissions.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "description": "et data source permissions.",
+        "operationId": "setDataSourcePermissions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeclarativeDataSourcePermissions"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "summary": "Set data source permissions.",
+        "tags": [
+          "layout"
+        ],
+        "x-gdc-security-info": {
+          "description": "Permissions to modify the user data filters.",
           "permissions": [
             "MANAGE"
           ]
