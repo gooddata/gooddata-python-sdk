@@ -169,10 +169,8 @@ Class | Method | HTTP request | Description
 *DataSourceEntityAPIsApi* | [**create_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
 *DataSourceEntityAPIsApi* | [**delete_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
 *DataSourceEntityAPIsApi* | [**get_all_entities_data_source_identifiers**](docs/DataSourceEntityAPIsApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
-*DataSourceEntityAPIsApi* | [**get_all_entities_data_source_tables**](docs/DataSourceEntityAPIsApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
 *DataSourceEntityAPIsApi* | [**get_all_entities_data_sources**](docs/DataSourceEntityAPIsApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 *DataSourceEntityAPIsApi* | [**get_entity_data_source_identifiers**](docs/DataSourceEntityAPIsApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
-*DataSourceEntityAPIsApi* | [**get_entity_data_source_tables**](docs/DataSourceEntityAPIsApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
 *DataSourceEntityAPIsApi* | [**get_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *DataSourceEntityAPIsApi* | [**patch_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
 *DataSourceEntityAPIsApi* | [**update_entity_data_sources**](docs/DataSourceEntityAPIsApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
@@ -231,7 +229,9 @@ Class | Method | HTTP request | Description
 *PermissionsApi* | [**get_user_permissions**](docs/PermissionsApi.md#get_user_permissions) | **GET** /api/v1/layout/users/{userId}/permissions | Get permissions for the user
 *PermissionsApi* | [**get_workspace_permissions**](docs/PermissionsApi.md#get_workspace_permissions) | **GET** /api/v1/layout/workspaces/{workspaceId}/permissions | Get permissions for the workspace
 *PermissionsApi* | [**manage_dashboard_permissions**](docs/PermissionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+*PermissionsApi* | [**manage_data_source_permissions**](docs/PermissionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 *PermissionsApi* | [**manage_organization_permissions**](docs/PermissionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+*PermissionsApi* | [**manage_workspace_permissions**](docs/PermissionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 *PermissionsApi* | [**set_organization_permissions**](docs/PermissionsApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
 *PermissionsApi* | [**set_user_group_permissions**](docs/PermissionsApi.md#set_user_group_permissions) | **PUT** /api/v1/layout/userGroups/{userGroupId}/permissions | Set permissions for the user-group
 *PermissionsApi* | [**set_user_permissions**](docs/PermissionsApi.md#set_user_permissions) | **PUT** /api/v1/layout/users/{userId}/permissions | Set permissions for the user
@@ -249,6 +249,9 @@ Class | Method | HTTP request | Description
 *ScanningApi* | [**scan_sql**](docs/ScanningApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *TestConnectionApi* | [**test_data_source**](docs/TestConnectionApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *TestConnectionApi* | [**test_data_source_definition**](docs/TestConnectionApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
+*TranslationsApi* | [**clean_translations**](docs/TranslationsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
+*TranslationsApi* | [**get_translation_tags**](docs/TranslationsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+*TranslationsApi* | [**set_translations**](docs/TranslationsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 *UsageApi* | [**all_platform_usage**](docs/UsageApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *UsageApi* | [**particular_platform_usage**](docs/UsageApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 *UserGroupsDeclarativeAPIsApi* | [**get_user_groups_layout**](docs/UserGroupsDeclarativeAPIsApi.md#get_user_groups_layout) | **GET** /api/v1/layout/userGroups | Get all user groups
@@ -312,6 +315,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**all_platform_usage**](docs/ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *ActionsApi* | [**available_assignees**](docs/ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 *ActionsApi* | [**check_entity_overrides**](docs/ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
+*ActionsApi* | [**clean_translations**](docs/ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *ActionsApi* | [**compute_label_elements_post**](docs/ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 *ActionsApi* | [**compute_report**](docs/ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 *ActionsApi* | [**compute_valid_descendants**](docs/ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -328,6 +332,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**get_group_members**](docs/ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 *ActionsApi* | [**get_metadata**](docs/ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 *ActionsApi* | [**get_tabular_export**](docs/ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
+*ActionsApi* | [**get_translation_tags**](docs/ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 *ActionsApi* | [**inherited_entity_conflicts**](docs/ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 *ActionsApi* | [**inherited_entity_prefixes**](docs/ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
 *ActionsApi* | [**list_user_groups**](docs/ActionsApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/groups | 
@@ -335,7 +340,9 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**list_workspace_permissions_for_user**](docs/ActionsApi.md#list_workspace_permissions_for_user) | **GET** /api/v1/actions/userManagement/users/{userId}/permissions | 
 *ActionsApi* | [**list_workspace_permissions_for_user_group**](docs/ActionsApi.md#list_workspace_permissions_for_user_group) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 *ActionsApi* | [**manage_dashboard_permissions**](docs/ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
+*ActionsApi* | [**manage_data_source_permissions**](docs/ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 *ActionsApi* | [**manage_organization_permissions**](docs/ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
+*ActionsApi* | [**manage_workspace_permissions**](docs/ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 *ActionsApi* | [**manage_workspace_permissions_for_user**](docs/ActionsApi.md#manage_workspace_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
 *ActionsApi* | [**manage_workspace_permissions_for_user_group**](docs/ActionsApi.md#manage_workspace_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 *ActionsApi* | [**overridden_child_entities**](docs/ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
@@ -350,12 +357,11 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**retrieve_result**](docs/ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
+*ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 *ActionsApi* | [**test_data_source**](docs/ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 *ActionsApi* | [**test_data_source_definition**](docs/ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *ActionsApi* | [**workspace_resolve_all_settings**](docs/ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 *ActionsApi* | [**workspace_resolve_settings**](docs/ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
-*DataSourceEntitiesControllerApi* | [**get_all_entities_data_source_tables**](docs/DataSourceEntitiesControllerApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
-*DataSourceEntitiesControllerApi* | [**get_entity_data_source_tables**](docs/DataSourceEntitiesControllerApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
 *EntitiesApi* | [**create_entity_analytical_dashboards**](docs/EntitiesApi.md#create_entity_analytical_dashboards) | **POST** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Post Dashboards
 *EntitiesApi* | [**create_entity_api_tokens**](docs/EntitiesApi.md#create_entity_api_tokens) | **POST** /api/v1/entities/users/{userId}/apiTokens | Post a new API token for the user
 *EntitiesApi* | [**create_entity_attribute_hierarchies**](docs/EntitiesApi.md#create_entity_attribute_hierarchies) | **POST** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Post Attribute Hierarchies
@@ -409,7 +415,6 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_all_entities_custom_application_settings**](docs/EntitiesApi.md#get_all_entities_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Get all Custom Application Settings
 *EntitiesApi* | [**get_all_entities_dashboard_plugins**](docs/EntitiesApi.md#get_all_entities_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Get all Plugins
 *EntitiesApi* | [**get_all_entities_data_source_identifiers**](docs/EntitiesApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
-*EntitiesApi* | [**get_all_entities_data_source_tables**](docs/EntitiesApi.md#get_all_entities_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables | 
 *EntitiesApi* | [**get_all_entities_data_sources**](docs/EntitiesApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 *EntitiesApi* | [**get_all_entities_datasets**](docs/EntitiesApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 *EntitiesApi* | [**get_all_entities_entitlements**](docs/EntitiesApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
@@ -442,7 +447,6 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**get_entity_custom_application_settings**](docs/EntitiesApi.md#get_entity_custom_application_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Get a Custom Application Setting
 *EntitiesApi* | [**get_entity_dashboard_plugins**](docs/EntitiesApi.md#get_entity_dashboard_plugins) | **GET** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Get a Plugin
 *EntitiesApi* | [**get_entity_data_source_identifiers**](docs/EntitiesApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
-*EntitiesApi* | [**get_entity_data_source_tables**](docs/EntitiesApi.md#get_entity_data_source_tables) | **GET** /api/v1/entities/dataSources/{dataSourceId}/dataSourceTables/{id} | 
 *EntitiesApi* | [**get_entity_data_sources**](docs/EntitiesApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 *EntitiesApi* | [**get_entity_datasets**](docs/EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 *EntitiesApi* | [**get_entity_entitlements**](docs/EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
@@ -511,6 +515,7 @@ Class | Method | HTTP request | Description
 *EntitiesApi* | [**update_entity_workspace_settings**](docs/EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 *EntitiesApi* | [**update_entity_workspaces**](docs/EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
 *LayoutApi* | [**get_analytics_model**](docs/LayoutApi.md#get_analytics_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Get analytics model
+*LayoutApi* | [**get_data_source_permissions**](docs/LayoutApi.md#get_data_source_permissions) | **GET** /api/v1/layout/dataSources/{dataSourceId}/permissions | Get permissions for the data source
 *LayoutApi* | [**get_data_sources_layout**](docs/LayoutApi.md#get_data_sources_layout) | **GET** /api/v1/layout/dataSources | Get all data sources
 *LayoutApi* | [**get_logical_model**](docs/LayoutApi.md#get_logical_model) | **GET** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Get logical model
 *LayoutApi* | [**get_organization_layout**](docs/LayoutApi.md#get_organization_layout) | **GET** /api/v1/layout/organization | Get organization layout
@@ -531,6 +536,7 @@ Class | Method | HTTP request | Description
 *LayoutApi* | [**put_users_user_groups_layout**](docs/LayoutApi.md#put_users_user_groups_layout) | **PUT** /api/v1/layout/usersAndUserGroups | Put all users and user groups
 *LayoutApi* | [**put_workspace_layout**](docs/LayoutApi.md#put_workspace_layout) | **PUT** /api/v1/layout/workspaces/{workspaceId} | Set workspace layout
 *LayoutApi* | [**set_analytics_model**](docs/LayoutApi.md#set_analytics_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/analyticsModel | Set analytics model
+*LayoutApi* | [**set_data_source_permissions**](docs/LayoutApi.md#set_data_source_permissions) | **PUT** /api/v1/layout/dataSources/{dataSourceId}/permissions | Set data source permissions.
 *LayoutApi* | [**set_logical_model**](docs/LayoutApi.md#set_logical_model) | **PUT** /api/v1/layout/workspaces/{workspaceId}/logicalModel | Set logical model
 *LayoutApi* | [**set_organization_layout**](docs/LayoutApi.md#set_organization_layout) | **PUT** /api/v1/layout/organization | Set organization layout
 *LayoutApi* | [**set_organization_permissions**](docs/LayoutApi.md#set_organization_permissions) | **PUT** /api/v1/layout/organization/permissions | Set organization permissions
@@ -740,6 +746,7 @@ Class | Method | HTTP request | Description
  - [DataColumnLocator](docs/DataColumnLocator.md)
  - [DataColumnLocators](docs/DataColumnLocators.md)
  - [DataSourceParameter](docs/DataSourceParameter.md)
+ - [DataSourcePermissionAssignment](docs/DataSourcePermissionAssignment.md)
  - [DataSourceSchemata](docs/DataSourceSchemata.md)
  - [DataSourceTableIdentifier](docs/DataSourceTableIdentifier.md)
  - [DatasetGrain](docs/DatasetGrain.md)
@@ -765,6 +772,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeDashboardPlugin](docs/DeclarativeDashboardPlugin.md)
  - [DeclarativeDataSource](docs/DeclarativeDataSource.md)
  - [DeclarativeDataSourcePermission](docs/DeclarativeDataSourcePermission.md)
+ - [DeclarativeDataSourcePermissions](docs/DeclarativeDataSourcePermissions.md)
  - [DeclarativeDataSources](docs/DeclarativeDataSources.md)
  - [DeclarativeDataset](docs/DeclarativeDataset.md)
  - [DeclarativeDatasetExtension](docs/DeclarativeDatasetExtension.md)
@@ -793,6 +801,7 @@ Class | Method | HTTP request | Description
  - [DeclarativeUserDataFilter](docs/DeclarativeUserDataFilter.md)
  - [DeclarativeUserDataFilters](docs/DeclarativeUserDataFilters.md)
  - [DeclarativeUserGroup](docs/DeclarativeUserGroup.md)
+ - [DeclarativeUserGroupIdentifier](docs/DeclarativeUserGroupIdentifier.md)
  - [DeclarativeUserGroupPermission](docs/DeclarativeUserGroupPermission.md)
  - [DeclarativeUserGroupPermissions](docs/DeclarativeUserGroupPermissions.md)
  - [DeclarativeUserGroups](docs/DeclarativeUserGroups.md)
@@ -832,6 +841,7 @@ Class | Method | HTTP request | Description
  - [ExecutionResultPaging](docs/ExecutionResultPaging.md)
  - [ExecutionSettings](docs/ExecutionSettings.md)
  - [ExportResponse](docs/ExportResponse.md)
+ - [File](docs/File.md)
  - [FilterBy](docs/FilterBy.md)
  - [FilterDefinition](docs/FilterDefinition.md)
  - [FilterDefinitionForSimpleMeasure](docs/FilterDefinitionForSimpleMeasure.md)
@@ -982,12 +992,6 @@ Class | Method | HTTP request | Description
  - [JsonApiDataSourcePatch](docs/JsonApiDataSourcePatch.md)
  - [JsonApiDataSourcePatchAttributes](docs/JsonApiDataSourcePatchAttributes.md)
  - [JsonApiDataSourcePatchDocument](docs/JsonApiDataSourcePatchDocument.md)
- - [JsonApiDataSourceTableOut](docs/JsonApiDataSourceTableOut.md)
- - [JsonApiDataSourceTableOutAttributes](docs/JsonApiDataSourceTableOutAttributes.md)
- - [JsonApiDataSourceTableOutAttributesColumnsInner](docs/JsonApiDataSourceTableOutAttributesColumnsInner.md)
- - [JsonApiDataSourceTableOutDocument](docs/JsonApiDataSourceTableOutDocument.md)
- - [JsonApiDataSourceTableOutList](docs/JsonApiDataSourceTableOutList.md)
- - [JsonApiDataSourceTableOutWithLinks](docs/JsonApiDataSourceTableOutWithLinks.md)
  - [JsonApiDatasetLinkage](docs/JsonApiDatasetLinkage.md)
  - [JsonApiDatasetOut](docs/JsonApiDatasetOut.md)
  - [JsonApiDatasetOutAttributes](docs/JsonApiDatasetOutAttributes.md)
@@ -1224,6 +1228,7 @@ Class | Method | HTTP request | Description
  - [LabelIdentifier](docs/LabelIdentifier.md)
  - [ListLinks](docs/ListLinks.md)
  - [ListLinksAllOf](docs/ListLinksAllOf.md)
+ - [LocaleRequest](docs/LocaleRequest.md)
  - [ManageDashboardPermissionsRequestInner](docs/ManageDashboardPermissionsRequestInner.md)
  - [MeasureDefinition](docs/MeasureDefinition.md)
  - [MeasureExecutionResultHeader](docs/MeasureExecutionResultHeader.md)
@@ -1234,6 +1239,8 @@ Class | Method | HTTP request | Description
  - [MeasureValueFilter](docs/MeasureValueFilter.md)
  - [NegativeAttributeFilter](docs/NegativeAttributeFilter.md)
  - [NegativeAttributeFilterNegativeAttributeFilter](docs/NegativeAttributeFilterNegativeAttributeFilter.md)
+ - [Note](docs/Note.md)
+ - [Notes](docs/Notes.md)
  - [ObjectLinks](docs/ObjectLinks.md)
  - [ObjectLinksContainer](docs/ObjectLinksContainer.md)
  - [OrganizationPermissionAssignment](docs/OrganizationPermissionAssignment.md)
@@ -1280,6 +1287,7 @@ Class | Method | HTTP request | Description
  - [Settings](docs/Settings.md)
  - [SimpleMeasureDefinition](docs/SimpleMeasureDefinition.md)
  - [SimpleMeasureDefinitionMeasure](docs/SimpleMeasureDefinitionMeasure.md)
+ - [Skeleton](docs/Skeleton.md)
  - [SortKey](docs/SortKey.md)
  - [SortKeyAttribute](docs/SortKeyAttribute.md)
  - [SortKeyAttributeAttribute](docs/SortKeyAttributeAttribute.md)
@@ -1300,7 +1308,6 @@ Class | Method | HTTP request | Description
  - [TotalResultHeader](docs/TotalResultHeader.md)
  - [UserAssignee](docs/UserAssignee.md)
  - [UserGroupAssignee](docs/UserGroupAssignee.md)
- - [UserGroupIdentifier](docs/UserGroupIdentifier.md)
  - [UserGroupPermission](docs/UserGroupPermission.md)
  - [UserManagementUserGroupMember](docs/UserManagementUserGroupMember.md)
  - [UserManagementUserGroupMembers](docs/UserManagementUserGroupMembers.md)
@@ -1308,11 +1315,13 @@ Class | Method | HTTP request | Description
  - [UserManagementUserGroupsItem](docs/UserManagementUserGroupsItem.md)
  - [UserManagementUsers](docs/UserManagementUsers.md)
  - [UserManagementUsersItem](docs/UserManagementUsersItem.md)
+ - [UserManagementWorkspacePermissionAssignment](docs/UserManagementWorkspacePermissionAssignment.md)
+ - [UserManagementWorkspacePermissionAssignments](docs/UserManagementWorkspacePermissionAssignments.md)
  - [UserPermission](docs/UserPermission.md)
- - [ValidLabelElementsItem](docs/ValidLabelElementsItem.md)
+ - [ValidateByItem](docs/ValidateByItem.md)
  - [WorkspaceIdentifier](docs/WorkspaceIdentifier.md)
  - [WorkspacePermissionAssignment](docs/WorkspacePermissionAssignment.md)
- - [WorkspacePermissionAssignments](docs/WorkspacePermissionAssignments.md)
+ - [Xliff](docs/Xliff.md)
 
 
 ## Documentation For Authorization

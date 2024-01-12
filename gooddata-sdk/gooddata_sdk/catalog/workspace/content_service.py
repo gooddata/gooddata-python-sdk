@@ -12,6 +12,7 @@ from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn
 from gooddata_sdk.catalog.types import ValidObjects
+from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
     CatalogDeclarativeAnalytics,
 )
@@ -554,7 +555,11 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         return by_type
 
     def get_label_elements(
-        self, workspace_id: str, label_id: LabelElementsInputType, depends_on: Optional[List[CatalogDependsOn]] = None
+        self,
+        workspace_id: str,
+        label_id: LabelElementsInputType,
+        depends_on: Optional[List[CatalogDependsOn]] = None,
+        validate_by: Optional[List[CatalogValidateByItem]] = None,
     ) -> List[str]:
         """
         Get existing values for a label.
@@ -569,6 +574,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
                 String may not contain "label/" prefix, we append it if necessary.
             depends_on (Optional[List[CatalogDependsOn]]):
                 Optional parameter specifying dependencies on other labels.
+            validate_by (Optional[List[CatalogValidateByItem]]):
+                Optional parameter specifying validation metrics, attributes, labels or facts.
         Returns:
             list of label values
         """
@@ -576,11 +583,16 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         if depends_on is None:
             depends_on = []
 
+        if validate_by is None:
+            validate_by = []
+
         # API expects ID without type prefix
         parts = str(label_id).split("/")
         if len(parts) == 2:
             label_id = parts[1]
-        request = ElementsRequest(label=label_id, depends_on=[d.to_api() for d in depends_on])
+        request = ElementsRequest(
+            label=label_id, depends_on=[d.to_api() for d in depends_on], validate_by=[v.to_api() for v in validate_by]
+        )
         # TODO - fix return type of Paging.next in Backend + add support for this API to SDK
         values = self._actions_api.compute_label_elements_post(workspace_id, request, _check_return_type=False)
         return [v["title"] for v in values["elements"]]

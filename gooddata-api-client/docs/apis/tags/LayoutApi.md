@@ -1384,7 +1384,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     )
@@ -1499,7 +1499,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                     )
                 ],
                 user_groups=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     )
@@ -1586,7 +1586,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     )
@@ -2399,7 +2399,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                 id="employees.all",
                 name="admins",
                 parents=[
-                    UserGroupIdentifier(
+                    DeclarativeUserGroupIdentifier(
                         id="group.admins",
                         type="userGroup",
                     )
@@ -2647,7 +2647,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                             id="employee123",
                             type="user",
                         ),
-                        user_group=UserGroupIdentifier(),
+                        user_group=DeclarativeUserGroupIdentifier(),
                     )
                 ],
             )
@@ -2854,7 +2854,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                     id="employee123",
                     type="user",
                 ),
-                user_group=UserGroupIdentifier(
+                user_group=DeclarativeUserGroupIdentifier(
                     id="group.admins",
                     type="userGroup",
                 ),
@@ -3582,7 +3582,7 @@ with gooddata_api_client.ApiClient(configuration) as api_client:
                             id="employee123",
                             type="user",
                         ),
-                        user_group=UserGroupIdentifier(
+                        user_group=DeclarativeUserGroupIdentifier(
                             id="group.admins",
                             type="userGroup",
                         ),

@@ -83,7 +83,7 @@ class DependsOn(ModelNormal):
         """
         return {
             'label': (str,),  # noqa: E501
-            'values': ([str],),  # noqa: E501
+            'values': ([str, none_type],),  # noqa: E501
             'complement_filter': (bool,),  # noqa: E501
         }
 
@@ -105,14 +105,14 @@ class DependsOn(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, values, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, label, values, *args, **kwargs):  # noqa: E501
         """DependsOn - a model defined in OpenAPI
 
         Args:
-            values ([str]): Specifies values of the label for element filtering.
+            label (str): Specifies on which label the filter depends on.
+            values ([str, none_type]): Specifies values of the label for element filtering.
 
         Keyword Args:
-            label (str): Specifies on which label the filter depends on.. defaults to "null"  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -146,7 +146,6 @@ class DependsOn(ModelNormal):
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
-        label = kwargs.get('label', "null")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', True)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -198,14 +197,14 @@ class DependsOn(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, values, *args, **kwargs):  # noqa: E501
+    def __init__(self, label, values, *args, **kwargs):  # noqa: E501
         """DependsOn - a model defined in OpenAPI
 
         Args:
-            values ([str]): Specifies values of the label for element filtering.
+            label (str): Specifies on which label the filter depends on.
+            values ([str, none_type]): Specifies values of the label for element filtering.
 
         Keyword Args:
-            label (str): Specifies on which label the filter depends on.. defaults to "null"  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -239,7 +238,6 @@ class DependsOn(ModelNormal):
             complement_filter (bool): Inverse filtering mode.. [optional] if omitted the server will use the default value of False  # noqa: E501
         """
 
-        label = kwargs.get('label', "null")
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

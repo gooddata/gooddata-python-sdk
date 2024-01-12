@@ -17,7 +17,7 @@ from gooddata_api_client.model.declarative_workspace_model import DeclarativeWor
 from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import (
-    CatalogUserGroupIdentifier,
+    CatalogDeclarativeUserGroupIdentifier,
     CatalogUserIdentifier,
     CatalogWorkspaceIdentifier,
 )
@@ -254,7 +254,7 @@ class CatalogDeclarativeUserDataFilter(Base):
     title: str
     maql: str
     user: Optional[CatalogUserIdentifier] = None
-    user_group: Optional[CatalogUserGroupIdentifier] = None
+    user_group: Optional[CatalogDeclarativeUserGroupIdentifier] = None
     description: Optional[str] = None
 
     @staticmethod

@@ -31,10 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
     from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
-    from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
+    globals()['DeclarativeUserGroupIdentifier'] = DeclarativeUserGroupIdentifier
     globals()['DeclarativeUserGroupPermission'] = DeclarativeUserGroupPermission
-    globals()['UserGroupIdentifier'] = UserGroupIdentifier
 
 
 class DeclarativeUserGroup(ModelNormal):
@@ -100,7 +100,7 @@ class DeclarativeUserGroup(ModelNormal):
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'parents': ([UserGroupIdentifier],),  # noqa: E501
+            'parents': ([DeclarativeUserGroupIdentifier],),  # noqa: E501
             'permissions': ([DeclarativeUserGroupPermission],),  # noqa: E501
         }
 
@@ -161,7 +161,7 @@ class DeclarativeUserGroup(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): Name of UserGroup. [optional]  # noqa: E501
-            parents ([UserGroupIdentifier]): [optional]  # noqa: E501
+            parents ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
             permissions ([DeclarativeUserGroupPermission]): [optional]  # noqa: E501
         """
 
@@ -253,7 +253,7 @@ class DeclarativeUserGroup(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): Name of UserGroup. [optional]  # noqa: E501
-            parents ([UserGroupIdentifier]): [optional]  # noqa: E501
+            parents ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
             permissions ([DeclarativeUserGroupPermission]): [optional]  # noqa: E501
         """
 

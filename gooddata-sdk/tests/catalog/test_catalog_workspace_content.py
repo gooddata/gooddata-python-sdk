@@ -17,6 +17,7 @@ from gooddata_sdk import (
     CatalogDependentEntitiesRequest,
     CatalogDependsOn,
     CatalogEntityIdentifier,
+    CatalogValidateByItem,
     CatalogWorkspace,
     DataSourceValidator,
     GoodDataSdk,
@@ -370,12 +371,15 @@ def test_analytics_store_load(test_config):
 def test_label_elements(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     depends_on: CatalogDependsOn = CatalogDependsOn(label="order_status", values=["Canceled", "Delivered"])
+    validate_by: CatalogValidateByItem = CatalogValidateByItem(id="revenue_top_10_percent", type="metric")
     label_values = sdk.catalog_workspace_content.get_label_elements(
-        test_config["workspace"], "order_status", [depends_on]
+        test_config["workspace"], "order_status", [depends_on], []
     )
     assert label_values == ["Canceled", "Delivered"]
-    label_values = sdk.catalog_workspace_content.get_label_elements(test_config["workspace"], "label/order_status")
-    assert label_values == ["Canceled", "Delivered", "Returned"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "label/order_status", [], [validate_by]
+    )
+    assert label_values == ["Delivered"]
     label_values = sdk.catalog_workspace_content.get_label_elements(
         test_config["workspace"], ObjId(id="order_status", type="label")
     )

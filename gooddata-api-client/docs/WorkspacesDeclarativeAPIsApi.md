@@ -836,7 +836,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             id="employee123",
                             type="user",
                         ),
-                        user_group=UserGroupIdentifier(
+                        user_group=DeclarativeUserGroupIdentifier(
                             id="group.admins",
                             type="userGroup",
                         ),

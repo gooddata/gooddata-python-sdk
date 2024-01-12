@@ -32,11 +32,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.declarative_setting import DeclarativeSetting
+    from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
     from gooddata_api_client.model.declarative_user_permission import DeclarativeUserPermission
-    from gooddata_api_client.model.user_group_identifier import UserGroupIdentifier
     globals()['DeclarativeSetting'] = DeclarativeSetting
+    globals()['DeclarativeUserGroupIdentifier'] = DeclarativeUserGroupIdentifier
     globals()['DeclarativeUserPermission'] = DeclarativeUserPermission
-    globals()['UserGroupIdentifier'] = UserGroupIdentifier
 
 
 class DeclarativeUser(ModelNormal):
@@ -116,7 +116,7 @@ class DeclarativeUser(ModelNormal):
             'lastname': (str,),  # noqa: E501
             'permissions': ([DeclarativeUserPermission],),  # noqa: E501
             'settings': ([DeclarativeSetting],),  # noqa: E501
-            'user_groups': ([UserGroupIdentifier],),  # noqa: E501
+            'user_groups': ([DeclarativeUserGroupIdentifier],),  # noqa: E501
         }
 
     @cached_property
@@ -185,7 +185,7 @@ class DeclarativeUser(ModelNormal):
             lastname (str): User last name. [optional]  # noqa: E501
             permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
-            user_groups ([UserGroupIdentifier]): [optional]  # noqa: E501
+            user_groups ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -281,7 +281,7 @@ class DeclarativeUser(ModelNormal):
             lastname (str): User last name. [optional]  # noqa: E501
             permissions ([DeclarativeUserPermission]): [optional]  # noqa: E501
             settings ([DeclarativeSetting]): A list of user settings.. [optional]  # noqa: E501
-            user_groups ([UserGroupIdentifier]): [optional]  # noqa: E501
+            user_groups ([DeclarativeUserGroupIdentifier]): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
