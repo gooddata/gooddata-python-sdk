@@ -53,6 +53,7 @@ class _AccumulatedData:
     grand_totals_headers: List[Optional[List[Dict[str, _DataHeaders]]]] = field(
         init=False, factory=lambda: [None, None]
     )
+    total_of_grant_totals_processed: bool = field(init=False, default=False)
 
     def accumulate_data(self, from_result: ExecutionResult) -> None:
         """
@@ -124,9 +125,11 @@ class _AccumulatedData:
 
             # if dims are empty then data contain total of column and row grandtotals so extend existing data array
             if len(dims) == 0:
-                grand_totals_item = cast(List[_DataArray], self.grand_totals[0])
-                for total_idx, total_data in enumerate(grand_total["data"]):
-                    grand_totals_item[total_idx].extend(total_data)
+                if not self.total_of_grant_totals_processed:
+                    grand_totals_item = cast(List[_DataArray], self.grand_totals[0])
+                    for total_idx, total_data in enumerate(grand_total["data"]):
+                        grand_totals_item[total_idx].extend(total_data)
+                    self.total_of_grant_totals_processed = True
                 continue
 
             assert len(dims) == 1, "Only 2-dimensional results are supported"
