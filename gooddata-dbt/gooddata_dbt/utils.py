@@ -43,13 +43,15 @@ def report_message_to_git_vendor(logger: Logger, degradations: int, allowed_degr
     # Running in CI pipeline, report performance of executions to the merge/pull request to notify code reviewer
     gitlab_token = os.getenv("GITLAB_TOKEN")
     merge_request_id = os.getenv("CI_MERGE_REQUEST_IID")
-    github_token = os.getenv("GITHUB_TOKEN")
+    # Token/PR ID are exposed by GitHub actions in various ways depending on the event type
+    # Let's decouple this code from it and expect GitHub workflows to set custom env variables
+    github_token = os.getenv("GOODDATA_GITHUB_TOKEN")
+    pull_request_id_str = os.getenv("GOODDATA_GITHUB_PULL_REQUEST_ID")
     pull_request_id = None
-    github_ref_name = os.getenv("GITHUB_REF_NAME")
-    if github_ref_name:
-        pull_request_id = int(github_ref_name.split("/")[0])
+    if pull_request_id_str is not None:
+        pull_request_id = int(pull_request_id_str)
     # Mention actor in GitHub comment to notify him. E-mail notifications are not sent to GitHub actors by default.
-    github_actor = os.getenv("GITHUB_ACTOR")
+    github_actor = os.getenv("GOODDATA_GITHUB_ACTOR")
     prefix = ""
     if github_actor:
         prefix = f"@{github_actor} "
