@@ -3,7 +3,8 @@
 
 set -e
 
-latest_version=$( curl -L -s https://pypi.org/pypi/gooddata-sdk/json | jq -r '.releases | keys | .[]' | sort -Vr | awk 'NR==1 {print}')
+# TODO: once alpha releases are removed, remove the grep -vE 'a[0-9]+$' part
+latest_version=$( curl -L -s https://pypi.org/pypi/gooddata-sdk/json | jq -r '.releases | keys | .[]' | grep -vE 'a[0-9]+$' | sort -Vr | awk 'NR==1 {print}')
 
 if [[ $latest_version =~ ^[0-9]+\.[0-9]+\.[0-9]+\.dev[0-9]+$ ]]; then
     # split the version number string into its components
