@@ -1,5 +1,6 @@
 # (C) 2023 GoodData Corporation
 import os
+import re
 import time
 from logging import Logger
 
@@ -46,10 +47,17 @@ def report_message_to_git_vendor(logger: Logger, degradations: int, allowed_degr
     # Token/PR ID are exposed by GitHub actions in various ways depending on the event type
     # Let's decouple this code from it and expect GitHub workflows to set custom env variables
     github_token = os.getenv("GOODDATA_GITHUB_TOKEN")
-    pull_request_id_str = os.getenv("GOODDATA_GITHUB_PULL_REQUEST_ID")
+    pr_id_str = os.getenv("GOODDATA_GITHUB_PULL_REQUEST_ID")
     pull_request_id = None
-    if pull_request_id_str is not None:
-        pull_request_id = int(pull_request_id_str)
+    if pr_id_str is not None and pr_id_str != "":
+        if re.search(r"^[0-9]+$", pr_id_str) is not None:
+            pull_request_id = int(pr_id_str)
+        else:
+            logger.warning(
+                f"Pull request ID '{pr_id_str}' is not a number, "
+                + "will not be able to report performance to GitHub pull request"
+            )
+
     # Mention actor in GitHub comment to notify him. E-mail notifications are not sent to GitHub actors by default.
     github_actor = os.getenv("GOODDATA_GITHUB_ACTOR")
     prefix = ""
