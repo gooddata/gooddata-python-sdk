@@ -17,7 +17,10 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.7
     hooks:
+      # Run the linter.
       - id: ruff
+      # Run the formatter.
+      - id: ruff-format
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.1
     hooks:
