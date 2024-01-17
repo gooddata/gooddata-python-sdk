@@ -353,12 +353,12 @@ def process_organization(
                         deploy_ldm(
                             logger, args, gd_config.all_model_ids, sdk_wrapper, data_product.model_ids, workspace_id
                         )
-                        if data_product.localization:
-                            create_localized_workspaces(logger, data_product, sdk_wrapper.sdk_facade, workspace_id)
                     elif args.method == "store_analytics":
                         store_analytics(logger, sdk_wrapper.sdk, workspace_id, data_product)
                     elif args.method == "deploy_analytics":
                         deploy_analytics(logger, sdk_wrapper, workspace_id, data_product)
+                        if data_product.localization:
+                            create_localized_workspaces(logger, data_product, sdk_wrapper.sdk_facade, workspace_id)
                     elif args.method == "test_insights":
                         parallelism = gd_config.global_properties.test_insights_parallelism or 1
                         asyncio.run(
