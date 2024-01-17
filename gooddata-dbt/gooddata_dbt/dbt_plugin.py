@@ -315,7 +315,7 @@ def dbt_cloud_run(args: Namespace, logger: logging.Logger, all_model_ids: List[s
     environment_id = dbt_conn.get_environment_id(args.job_id)
     logger.info(f"Found environment with {environment_id=} for job_id={args.job_id}")
 
-    environment = dbt_conn.read_environment(environment_id, args.project_id, args.job_id)
+    environment = dbt_conn.read_environment(environment_id, args.project_id)
     dbt_conn.make_profiles(environment, path_to_profiles=Path(args.profiles_dir))
     logger.info(f"Profile file stored to {args.profiles_dir}")
 

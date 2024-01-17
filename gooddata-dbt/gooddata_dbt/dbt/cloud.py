@@ -10,7 +10,7 @@ import attrs
 import requests
 import yaml
 from cattrs import structure
-from gooddata_dbt.dbt.environment import Environment
+from gooddata_dbt.dbt.environment import DbtCloudEnvironment
 from requests import Response
 
 from gooddata_sdk.utils import safeget
@@ -249,33 +249,31 @@ class DbtConnection(DbtCloudBase):
         self,
         environment_id: str,
         project_id: str,
-        job_id: str,
-        schema_key: str = "DBT_OUTPUT_SCHEMA",
-        user_key: str = "DBT_DB_USER",
-        password_key: str = "DBT_DB_PASS",
-    ) -> Environment:
-        url = f"{self.base_v2}/accounts/{self.credentials.account_id}/environments/{environment_id}"
+    ) -> DbtCloudEnvironment:
+        url = (
+            f"{self.base_v3}/accounts/{self.credentials.account_id}/projects/{project_id}/"
+            + f"environments/{environment_id}"
+        )
         response = self._call_get_dbt_endpoint(url)
         result = response.json()
-        connection = safeget(result, ["data", "connection"])
-        env_vars = self.read_env_vars(project_id, job_id)
-        environment_dict = {
-            **connection,
-            "environment_name": safeget(result, ["data", "name"]),
-            "schema": env_vars[schema_key],
-            "user_key": user_key,
-            "password_key": password_key,
-        }
-        # TODO - works only for Snowflake and expects special env variables. Make it compatible with profiles.py
-        environment = Environment.from_dict(environment_dict)
-        return environment
+        return DbtCloudEnvironment.from_dict(result["data"])
 
     @staticmethod
-    def make_profiles(environment: Environment, path_to_profiles: Path, profile_file: str = "profiles.yml") -> None:
+    def make_profiles(
+        environment: DbtCloudEnvironment,
+        path_to_profiles: Path,
+        profile_file: str = "profiles.yml",
+    ) -> None:
         if not os.path.isdir(path_to_profiles):
             os.makedirs(path_to_profiles)
         profile_file_path = path_to_profiles / profile_file
-        data = {environment.profile: {"outputs": {environment.target: environment.to_profile()}}}
+        profile = os.getenv("ELT_ENVIRONMENT")
+        target = os.getenv("DBT_TARGET")
+        db_pass = os.getenv("DBT_DB_PASS")
+        schema_name = os.getenv("DBT_OUTPUT_SCHEMA")
+        if not profile or not target or not db_pass or not schema_name:
+            raise ValueError("Env variables ELT_ENVIRONMENT, DBT_TARGET, DBT_DB_PASS, DBT_OUTPUT_SCHEMA must be set.")
+        data = {profile: {"outputs": {target: environment.to_profile(db_pass, schema_name)}}}
 
         with open(profile_file_path, "w", encoding="utf-8") as f:
             yaml.safe_dump(data, f, allow_unicode=True, sort_keys=False, encoding="utf-8")
