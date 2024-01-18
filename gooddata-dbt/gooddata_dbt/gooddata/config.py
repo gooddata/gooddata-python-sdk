@@ -10,7 +10,6 @@ from gooddata_dbt.dbt.base import Base
 class GoodDataConfigEnvironment(Base):
     id: str
     name: str
-    elt_environment: str
 
 
 @attrs.define(auto_attribs=True, kw_only=True)
