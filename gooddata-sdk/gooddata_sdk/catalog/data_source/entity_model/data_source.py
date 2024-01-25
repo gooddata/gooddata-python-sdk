@@ -244,3 +244,14 @@ class CatalogDataSourceDatabricks(CatalogDataSource):
 
         self.db_vendor = self.type.lower()
         self.url = self._make_url()
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class MotherDuckAttributes(DatabaseAttributes):
+    db_name: str
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceMotherDuck(CatalogDataSource):
+    _URL_TMPL: ClassVar[str] = "jdbc:duckdb:md:{db_name}"
+    type: str = "DUCKDB"

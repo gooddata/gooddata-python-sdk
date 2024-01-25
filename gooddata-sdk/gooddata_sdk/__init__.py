@@ -31,6 +31,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
     CatalogDataSourceGreenplum,
+    CatalogDataSourceMotherDuck,
     CatalogDataSourceMsSql,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
@@ -38,6 +39,7 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
     CatalogDataSourceVertica,
     DatabricksAttributes,
     GreenplumAttributes,
+    MotherDuckAttributes,
     MsSqlAttributes,
     PostgresAttributes,
     RedshiftAttributes,
@@ -47,7 +49,12 @@ from gooddata_sdk.catalog.data_source.entity_model.data_source import (
 from gooddata_sdk.catalog.data_source.service import CatalogDataSourceService
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
 from gooddata_sdk.catalog.depends_on import CatalogDependsOn
-from gooddata_sdk.catalog.entity import AttrCatalogEntity, BasicCredentials, TokenCredentialsFromFile
+from gooddata_sdk.catalog.entity import (
+    AttrCatalogEntity,
+    BasicCredentials,
+    TokenCredentialsFromEnvVar,
+    TokenCredentialsFromFile,
+)
 from gooddata_sdk.catalog.export.request import (
     ExportCustomLabel,
     ExportCustomMetric,
