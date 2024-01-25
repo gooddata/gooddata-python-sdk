@@ -474,7 +474,9 @@ class DbtModelTables:
                 "tags": [table.gooddata_ldm_title] + table.tags,
                 "data_source_table_id": {
                     "data_source_id": data_source_id,
-                    "id": f"{self.schema_name}__{table.name}",
+                    # TODO - add support for multiple schemas
+                    #  would have to be reflected in LDM IDs too
+                    "id": table.name,
                     "path": [self.schema_name, table.name],
                     "type": "dataSource",
                 },
