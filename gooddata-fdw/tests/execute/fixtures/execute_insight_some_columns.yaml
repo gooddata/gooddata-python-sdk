@@ -174,7 +174,7 @@ interactions:
                       direction: asc
                 version: '2'
                 visualizationUrl: local:table
-              createdAt: 2024-01-11 10:30
+              createdAt: 2024-01-25 12:25
             relationships:
               createdBy:
                 data:
@@ -221,7 +221,7 @@ interactions:
               attributes:
                 title: Revenue
                 description: ''
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -274,7 +274,7 @@ interactions:
               type: metric
               attributes:
                 title: '% Revenue in Category'
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -478,10 +478,10 @@ interactions:
                         name: Revenue
                 localIdentifier: dim_1
             links:
-              executionResult: 2cdd20b517a275e9f7d43d03aa0a9e383698762b
+              executionResult: 2157c069105ab360e8902ff6e96d29fbd0585207
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2cdd20b517a275e9f7d43d03aa0a9e383698762b?offset=0%2C0&limit=512%2C256
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/2157c069105ab360e8902ff6e96d29fbd0585207?offset=0%2C0&limit=512%2C256
       body: null
       headers:
         Accept:

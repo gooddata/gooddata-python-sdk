@@ -157,7 +157,7 @@ interactions:
                         type: label
                 localIdentifier: dim_1
             links:
-              executionResult: ada524f4b782ea67db643e77732938acc570c007
+              executionResult: 3847ab4d023f4d1283bd0ae66f389639b1f3621a
   - request:
       method: GET
       uri: http://localhost:3000/api/v1/entities/workspaces/demo/attributes?include=labels%2Cdatasets&page=0&size=500
@@ -432,6 +432,37 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: state
+              type: attribute
+              attributes:
+                title: State
+                description: State
+                tags:
+                  - Customers
+                areRelationsValid: true
+                sourceColumn: state
+                sourceColumnDataType: STRING
+              relationships:
+                defaultView:
+                  data:
+                    id: state
+                    type: label
+                dataset:
+                  data:
+                    id: customers
+                    type: dataset
+                labels:
+                  data:
+                    - id: geo__state__location
+                      type: label
+                    - id: state
+                      type: label
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: order_id
               type: attribute
               attributes:
@@ -702,37 +733,6 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: state
-              type: attribute
-              attributes:
-                title: State
-                description: State
-                tags:
-                  - Customers
-                areRelationsValid: true
-                sourceColumn: state
-                sourceColumnDataType: STRING
-              relationships:
-                defaultView:
-                  data:
-                    id: state
-                    type: label
-                dataset:
-                  data:
-                    id: customers
-                    type: dataset
-                labels:
-                  data:
-                    - id: state
-                      type: label
-                    - id: geo__state__location
-                      type: label
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/attributes/state
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
           included:
             - id: product_name
               type: label
@@ -772,15 +772,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
+                      id: date
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: customer_id
-                        dataType: INT
+                      - column: date
+                        dataType: DATE
                         target:
-                          id: customer_id
-                          type: attribute
+                          id: date
+                          type: date
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -796,15 +796,15 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
+                      id: customers
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: date
-                        dataType: DATE
+                      - column: customer_id
+                        dataType: INT
                         target:
-                          id: date
-                          type: date
+                          id: customer_id
+                          type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -1279,9 +1279,9 @@ interactions:
                   data:
                     - id: campaign_channel_id
                       type: attribute
-                    - id: campaign_channels.category
-                      type: attribute
                     - id: type
+                      type: attribute
+                    - id: campaign_channels.category
                       type: attribute
                 facts:
                   data:
@@ -1314,9 +1314,9 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: campaign_name
-                      type: attribute
                     - id: campaign_id
+                      type: attribute
+                    - id: campaign_name
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/campaigns
@@ -1343,43 +1343,16 @@ interactions:
               relationships:
                 attributes:
                   data:
-                    - id: customer_id
-                      type: attribute
                     - id: customer_name
                       type: attribute
-                    - id: state
+                    - id: customer_id
                       type: attribute
                     - id: region
                       type: attribute
+                    - id: state
+                      type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/customers
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
-            - id: date
-              type: dataset
-              attributes:
-                title: Date
-                tags:
-                  - Date
-                areRelationsValid: true
-                type: DATE
-              relationships:
-                attributes:
-                  data:
-                    - id: date.month
-                      type: attribute
-                    - id: date.day
-                      type: attribute
-                    - id: date.quarter
-                      type: attribute
-                    - id: date.week
-                      type: attribute
-                    - id: date.year
-                      type: attribute
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
               meta:
                 origin:
                   originType: NATIVE
@@ -1396,15 +1369,15 @@ interactions:
                     type: attribute
                 referenceProperties:
                   - identifier:
-                      id: customers
+                      id: date
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: customer_id
-                        dataType: INT
+                      - column: date
+                        dataType: DATE
                         target:
-                          id: customer_id
-                          type: attribute
+                          id: date
+                          type: date
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -1420,15 +1393,15 @@ interactions:
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
-                      id: date
+                      id: customers
                       type: dataset
                     multivalue: false
                     sources:
-                      - column: date
-                        dataType: DATE
+                      - column: customer_id
+                        dataType: INT
                         target:
-                          id: date
-                          type: date
+                          id: customer_id
+                          type: attribute
                     sourceColumns: null
                     sourceColumnDataTypes: null
                   - identifier:
@@ -1449,20 +1422,20 @@ interactions:
                   - order_lines
                 areRelationsValid: true
                 workspaceDataFilterColumns:
-                  - name: wdf__region
-                    dataType: STRING
                   - name: wdf__state
                     dataType: STRING
+                  - name: wdf__region
+                    dataType: STRING
                 workspaceDataFilterReferences:
-                  - filterId:
-                      id: wdf__state
-                      type: workspaceDataFilter
-                    filterColumn: wdf__state
-                    filterColumnDataType: STRING
                   - filterId:
                       id: wdf__region
                       type: workspaceDataFilter
                     filterColumn: wdf__region
+                    filterColumnDataType: STRING
+                  - filterId:
+                      id: wdf__state
+                      type: workspaceDataFilter
+                    filterColumn: wdf__state
                     filterColumnDataType: STRING
                 type: NORMAL
               relationships:
@@ -1470,15 +1443,15 @@ interactions:
                   data:
                     - id: order_id
                       type: attribute
-                    - id: order_status
-                      type: attribute
                     - id: order_line_id
+                      type: attribute
+                    - id: order_status
                       type: attribute
                 facts:
                   data:
-                    - id: quantity
-                      type: fact
                     - id: price
+                      type: fact
+                    - id: quantity
                       type: fact
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/order_lines
@@ -1507,12 +1480,39 @@ interactions:
                   data:
                     - id: products.category
                       type: attribute
-                    - id: product_id
-                      type: attribute
                     - id: product_name
+                      type: attribute
+                    - id: product_id
                       type: attribute
               links:
                 self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/products
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
+            - id: date
+              type: dataset
+              attributes:
+                title: Date
+                tags:
+                  - Date
+                areRelationsValid: true
+                type: DATE
+              relationships:
+                attributes:
+                  data:
+                    - id: date.day
+                      type: attribute
+                    - id: date.month
+                      type: attribute
+                    - id: date.week
+                      type: attribute
+                    - id: date.quarter
+                      type: attribute
+                    - id: date.year
+                      type: attribute
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/datasets/date
               meta:
                 origin:
                   originType: NATIVE
@@ -1859,7 +1859,7 @@ interactions:
               attributes:
                 title: '# of Active Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
@@ -1874,7 +1874,7 @@ interactions:
               attributes:
                 title: '# of Orders'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
@@ -1889,7 +1889,7 @@ interactions:
               attributes:
                 title: '# of Top Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
@@ -1906,7 +1906,7 @@ interactions:
                 title: '# of Valid Orders'
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
@@ -1922,7 +1922,7 @@ interactions:
               attributes:
                 title: Campaign Spend
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
@@ -1937,7 +1937,7 @@ interactions:
               attributes:
                 title: Order Amount
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
@@ -1952,7 +1952,7 @@ interactions:
               attributes:
                 title: '% Revenue'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
@@ -1967,7 +1967,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -1983,7 +1983,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10% Customers'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -1994,28 +1994,12 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
-            - id: revenue-outdoor
-              type: metric
-              attributes:
-                title: Revenue (Outdoor)
-                areRelationsValid: true
-                createdAt: 2024-01-11 10:30
-                content:
-                  format: $#,##0
-                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
-                    ("Outdoor")
-              links:
-                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
-              meta:
-                origin:
-                  originType: NATIVE
-                  originId: demo
             - id: percent_revenue_from_top_10_percent_products
               type: metric
               attributes:
                 title: '% Revenue from Top 10% Products'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
@@ -2031,7 +2015,7 @@ interactions:
               attributes:
                 title: '% Revenue from Top 10 Products'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
@@ -2047,7 +2031,7 @@ interactions:
               attributes:
                 title: '% Revenue in Category'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
@@ -2063,7 +2047,7 @@ interactions:
               attributes:
                 title: '% Revenue per Product'
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
@@ -2080,7 +2064,7 @@ interactions:
                 title: Revenue
                 description: ''
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
@@ -2096,7 +2080,7 @@ interactions:
               attributes:
                 title: Revenue (Clothing)
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2112,7 +2096,7 @@ interactions:
               attributes:
                 title: Revenue (Electronic)
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2128,7 +2112,7 @@ interactions:
               attributes:
                 title: Revenue (Home)
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
@@ -2139,12 +2123,28 @@ interactions:
                 origin:
                   originType: NATIVE
                   originId: demo
+            - id: revenue-outdoor
+              type: metric
+              attributes:
+                title: Revenue (Outdoor)
+                areRelationsValid: true
+                createdAt: 2024-01-25 12:25
+                content:
+                  format: $#,##0
+                  maql: SELECT {metric/revenue} WHERE {label/products.category} IN
+                    ("Outdoor")
+              links:
+                self: http://localhost:3000/api/v1/entities/workspaces/demo/metrics/revenue-outdoor
+              meta:
+                origin:
+                  originType: NATIVE
+                  originId: demo
             - id: revenue_per_customer
               type: metric
               attributes:
                 title: Revenue per Customer
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
@@ -2159,7 +2159,7 @@ interactions:
               attributes:
                 title: Revenue per Dollar Spent
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
@@ -2174,7 +2174,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
@@ -2189,7 +2189,7 @@ interactions:
               attributes:
                 title: Revenue / Top 10%
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
@@ -2204,7 +2204,7 @@ interactions:
               attributes:
                 title: Total Revenue
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
@@ -2219,7 +2219,7 @@ interactions:
               attributes:
                 title: Total Revenue (No Filters)
                 areRelationsValid: true
-                createdAt: 2024-01-11 10:30
+                createdAt: 2024-01-25 12:25
                 content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
@@ -2234,7 +2234,7 @@ interactions:
             next: http://localhost:3000/api/v1/entities/workspaces/demo/metrics?page=1&size=500
   - request:
       method: GET
-      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/ada524f4b782ea67db643e77732938acc570c007?offset=0%2C0&limit=1%2C1000
+      uri: http://localhost:3000/api/v1/actions/workspaces/demo/execution/afm/execute/result/3847ab4d023f4d1283bd0ae66f389639b1f3621a?offset=0%2C0&limit=1%2C1000
       body: null
       headers:
         Accept:

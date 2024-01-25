@@ -74,7 +74,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '6227'
+          - '6088'
       body:
         string:
           ldm:
@@ -388,21 +388,11 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
-                  - MINUTE
-                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
-                  - MINUTE_OF_HOUR
-                  - HOUR_OF_DAY
-                  - DAY_OF_WEEK
-                  - DAY_OF_MONTH
-                  - DAY_OF_YEAR
-                  - WEEK_OF_YEAR
-                  - MONTH_OF_YEAR
-                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'
