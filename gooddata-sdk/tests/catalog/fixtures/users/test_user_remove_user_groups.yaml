@@ -79,7 +79,7 @@ interactions:
             id: demo2
             type: user
             attributes:
-              authenticationId: CiRmNjdjZjVmZi0yOTMxLTRmZjQtOTVkYS01YmM1YzJmMGNkNjcSBWxvY2Fs
+              authenticationId: CiQ1OTA1YjEyNy1mN2M5LTQ0ZjEtYmM5NS1kNmEyZjA3YTAzODgSBWxvY2Fs
             relationships:
               userGroups:
                 data:

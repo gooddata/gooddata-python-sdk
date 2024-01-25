@@ -239,7 +239,7 @@ interactions:
         X-XSS-Protection:
           - 1 ; mode=block
         content-length:
-          - '37194'
+          - '37056'
       body:
         string:
           analytics:
@@ -292,7 +292,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -339,7 +339,7 @@ interactions:
                           type: dashboardPlugin
                       version: '2'
                   version: '2'
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -489,7 +489,7 @@ interactions:
                               drills: []
                               properties: {}
                   version: '2'
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -501,7 +501,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -511,7 +511,7 @@ interactions:
               - content:
                   url: https://www.example.com
                   version: '2'
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -560,7 +560,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/customer_id},{attribute/order_line_id})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -569,7 +569,7 @@ interactions:
               - content:
                   format: '#,##0'
                   maql: SELECT COUNT({attribute/order_id})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -579,7 +579,7 @@ interactions:
                   format: '#,##0'
                   maql: 'SELECT {metric/amount_of_active_customers} WHERE (SELECT
                     {metric/revenue} BY {attribute/customer_id}) >  10000 '
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -589,7 +589,7 @@ interactions:
                   format: '#,##0.00'
                   maql: SELECT {metric/amount_of_orders} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -599,7 +599,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/spend})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -608,7 +608,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT SUM({fact/price}*{fact/quantity})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -617,7 +617,7 @@ interactions:
               - content:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / {metric/total_revenue}
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -627,7 +627,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -637,7 +637,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/customer_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -647,7 +647,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10_percent}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -657,7 +657,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: "SELECT\n (SELECT {metric/revenue} WHERE (SELECT {metric/revenue_top_10}\
                     \ BY {attribute/product_id}) > 0)\n  /\n {metric/revenue}"
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -667,7 +667,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY {attribute/products.category},
                     ALL OTHER)
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -677,7 +677,7 @@ interactions:
                   format: '#,##0.0%'
                   maql: SELECT {metric/revenue} / (SELECT {metric/revenue} BY ALL
                     {attribute/product_id})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -687,7 +687,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/order_amount} WHERE NOT ({label/order_status}
                     IN ("Returned", "Canceled"))
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -698,7 +698,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Clothing")
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -708,7 +708,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ( "Electronics")
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -718,7 +718,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Home")
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -728,7 +728,7 @@ interactions:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE {label/products.category} IN
                     ("Outdoor")
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -737,7 +737,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT AVG(SELECT {metric/revenue} BY {attribute/customer_id})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -746,7 +746,7 @@ interactions:
               - content:
                   format: $#,##0.0
                   maql: SELECT {metric/revenue} / {metric/campaign_spend}
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -755,7 +755,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10) OF ({metric/revenue})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -764,7 +764,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} WHERE TOP(10%) OF ({metric/revenue})
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -773,7 +773,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/revenue} BY ALL OTHER
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -782,7 +782,7 @@ interactions:
               - content:
                   format: $#,##0
                   maql: SELECT {metric/total_revenue} WITHOUT PARENT FILTER
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -847,7 +847,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -895,9 +895,9 @@ interactions:
                           identifier:
                             id: date
                             type: dataset
-                        from: -11
+                        from: -12
                         granularity: GDC.time.month
-                        to: 0
+                        to: -1
                   properties:
                     controls:
                       colorMapping:
@@ -923,7 +923,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1002,7 +1002,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1061,7 +1061,7 @@ interactions:
                       stackMeasuresToPercent: true
                   version: '2'
                   visualizationUrl: local:area
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1118,7 +1118,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:treemap
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1171,7 +1171,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:donut
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1246,7 +1246,7 @@ interactions:
                           visible: false
                   version: '2'
                   visualizationUrl: local:column
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1303,7 +1303,7 @@ interactions:
                         enabled: true
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1402,7 +1402,7 @@ interactions:
                         direction: asc
                   version: '2'
                   visualizationUrl: local:table
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1458,7 +1458,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:line
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1497,7 +1497,7 @@ interactions:
                   properties: {}
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1553,7 +1553,7 @@ interactions:
                         min: '0'
                   version: '2'
                   visualizationUrl: local:scatter
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1621,7 +1621,7 @@ interactions:
                         rotation: auto
                   version: '2'
                   visualizationUrl: local:combo2
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1678,7 +1678,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -1735,7 +1735,7 @@ interactions:
                         position: bottom
                   version: '2'
                   visualizationUrl: local:bar
-                createdAt: 2024-01-11 11:34
+                createdAt: 2024-01-25 12:25
                 createdBy:
                   id: admin
                   type: user
@@ -2052,21 +2052,11 @@ interactions:
             dateInstances:
               - description: ''
                 granularities:
-                  - MINUTE
-                  - HOUR
                   - DAY
                   - WEEK
                   - MONTH
                   - QUARTER
                   - YEAR
-                  - MINUTE_OF_HOUR
-                  - HOUR_OF_DAY
-                  - DAY_OF_WEEK
-                  - DAY_OF_MONTH
-                  - DAY_OF_YEAR
-                  - WEEK_OF_YEAR
-                  - MONTH_OF_YEAR
-                  - QUARTER_OF_YEAR
                 granularitiesFormatting:
                   titleBase: ''
                   titlePattern: '%titleBase - %granularityTitle'

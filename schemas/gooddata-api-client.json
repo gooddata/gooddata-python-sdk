@@ -2677,7 +2677,8 @@
               "MAPBOX_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
-              "OPERATOR_OVERRIDES"
+              "OPERATOR_OVERRIDES",
+              "TIMEZONE_VALIDATION_ENABLED"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -3701,7 +3702,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100,
+            "default": 100.0,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -3908,7 +3909,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1,
+                1.0,
                 2.5
               ],
               [
@@ -3953,7 +3954,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1,
+                1.0,
                 2.5
               ],
               [
@@ -9917,7 +9918,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -9978,7 +9980,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -10071,7 +10074,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -11498,7 +11502,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -11559,7 +11564,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -13125,7 +13131,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -13186,7 +13193,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -13305,7 +13313,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -13366,7 +13375,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -14272,7 +14282,8 @@
               "MAPBOX_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
-              "OPERATOR_OVERRIDES"
+              "OPERATOR_OVERRIDES",
+              "TIMEZONE_VALIDATION_ENABLED"
             ],
             "example": "TIMEZONE",
             "type": "string"

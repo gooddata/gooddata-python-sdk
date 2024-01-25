@@ -79,7 +79,7 @@ interactions:
             to access it.
           status: 404
           title: Not Found
-          traceId: 8c75c9d2c4ba0664
+          traceId: e095ae5a275482cc
   - request:
       method: POST
       uri: http://localhost:3000/api/v1/entities/workspaces
@@ -2514,7 +2514,7 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 8e31e65d-514f-437f-85d0-ed6aa12a966e
+              oauthClientId: 5c3f05ef-64c8-48f0-a5bc-0301af5616f6
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default
   - request:

@@ -829,9 +829,9 @@
                           "type": "dataset"
                         }
                       },
-                      "from": -11,
+                      "from": -12,
                       "granularity": "GDC.time.month",
-                      "to": 0
+                      "to": -1
                     }
                   }
                 ],
