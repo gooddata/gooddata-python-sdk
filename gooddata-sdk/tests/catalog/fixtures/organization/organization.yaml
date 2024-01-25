@@ -151,6 +151,6 @@ interactions:
               name: Default Organization
               hostname: localhost
               allowedOrigins: []
-              oauthClientId: 858c5858-c2cf-4e8b-bfde-e3e01086e909
+              oauthClientId: f9f965bc-c0cd-4712-9c76-239cef3f0aea
           links:
             self: http://localhost:3000/api/v1/entities/admin/organizations/default

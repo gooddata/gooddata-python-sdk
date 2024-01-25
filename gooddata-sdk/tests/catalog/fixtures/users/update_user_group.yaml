@@ -161,6 +161,12 @@ interactions:
               attributes: {}
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminGroup
+            - id: demoGroup
+              type: userGroup
+              attributes:
+                name: demo group
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminQA1Group
               type: userGroup
               attributes: {}
@@ -171,12 +177,6 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/adminQA1Group
-            - id: demoGroup
-              type: userGroup
-              attributes:
-                name: demo group
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: visitorsGroup
               type: userGroup
               attributes:
@@ -694,12 +694,6 @@ interactions:
       body:
         string:
           data:
-            - id: demoGroup
-              type: userGroup
-              attributes:
-                name: demo group
-              links:
-                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
             - id: adminGroup
               type: userGroup
               attributes: {}
@@ -726,6 +720,12 @@ interactions:
                       type: userGroup
               links:
                 self: http://localhost:3000/api/v1/entities/userGroups/visitorsGroup
+            - id: demoGroup
+              type: userGroup
+              attributes:
+                name: demo group
+              links:
+                self: http://localhost:3000/api/v1/entities/userGroups/demoGroup
           included:
             - id: adminGroup
               type: userGroup

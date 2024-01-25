@@ -1897,7 +1897,8 @@
               "MAPBOX_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
-              "OPERATOR_OVERRIDES"
+              "OPERATOR_OVERRIDES",
+              "TIMEZONE_VALIDATION_ENABLED"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -8590,7 +8591,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -8651,7 +8653,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -8744,7 +8747,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -10171,7 +10175,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -10232,7 +10237,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -11798,7 +11804,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -11859,7 +11866,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -11978,7 +11986,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -12039,7 +12048,8 @@
                   "MAPBOX_TOKEN",
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
-                  "OPERATOR_OVERRIDES"
+                  "OPERATOR_OVERRIDES",
+                  "TIMEZONE_VALIDATION_ENABLED"
                 ],
                 "type": "string"
               }
@@ -12490,7 +12500,8 @@
               "MAPBOX_TOKEN",
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
-              "OPERATOR_OVERRIDES"
+              "OPERATOR_OVERRIDES",
+              "TIMEZONE_VALIDATION_ENABLED"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -26082,10 +26093,6 @@
     }
   },
   "servers": [
-    {
-      "description": "Generated server url",
-      "url": "http://localhost:3000"
-    },
     {
       "description": "GoodData.CN endpoint",
       "url": "/"
