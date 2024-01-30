@@ -31,7 +31,9 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_attributes_interactions import JsonApiAnalyticalDashboardOutAttributesInteractions
     from gooddata_api_client.model.json_api_metric_in_attributes_content import JsonApiMetricInAttributesContent
+    globals()['JsonApiAnalyticalDashboardOutAttributesInteractions'] = JsonApiAnalyticalDashboardOutAttributesInteractions
     globals()['JsonApiMetricInAttributesContent'] = JsonApiMetricInAttributesContent
 
 
@@ -98,6 +100,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             'are_relations_valid': (bool,),  # noqa: E501
             'created_at': (datetime,),  # noqa: E501
             'description': (str,),  # noqa: E501
+            'interactions': (JsonApiAnalyticalDashboardOutAttributesInteractions,),  # noqa: E501
             'modified_at': (datetime,),  # noqa: E501
             'tags': ([str],),  # noqa: E501
             'title': (str,),  # noqa: E501
@@ -113,6 +116,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
         'are_relations_valid': 'areRelationsValid',  # noqa: E501
         'created_at': 'createdAt',  # noqa: E501
         'description': 'description',  # noqa: E501
+        'interactions': 'interactions',  # noqa: E501
         'modified_at': 'modifiedAt',  # noqa: E501
         'tags': 'tags',  # noqa: E501
         'title': 'title',  # noqa: E501
@@ -165,6 +169,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            interactions (JsonApiAnalyticalDashboardOutAttributesInteractions): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501
@@ -260,6 +265,7 @@ class JsonApiMetricOutAttributes(ModelNormal):
             are_relations_valid (bool): [optional]  # noqa: E501
             created_at (datetime): [optional]  # noqa: E501
             description (str): [optional]  # noqa: E501
+            interactions (JsonApiAnalyticalDashboardOutAttributesInteractions): [optional]  # noqa: E501
             modified_at (datetime): [optional]  # noqa: E501
             tags ([str]): [optional]  # noqa: E501
             title (str): [optional]  # noqa: E501

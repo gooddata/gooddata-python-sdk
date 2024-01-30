@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **are_relations_valid** | **bool** |  | [optional] 
 **created_at** | **datetime** |  | [optional] 
 **description** | **str** |  | [optional] 
+**interactions** | [**JsonApiAnalyticalDashboardOutAttributesInteractions**](JsonApiAnalyticalDashboardOutAttributesInteractions.md) |  | [optional] 
 **modified_at** | **datetime** |  | [optional] 
 **tags** | **[str]** |  | [optional] 
 **title** | **str** |  | [optional] 

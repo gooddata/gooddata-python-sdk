@@ -61,6 +61,7 @@ class DeclarativeDateDataset(ModelNormal):
 
     allowed_values = {
         ('granularities',): {
+            'SECOND': "SECOND",
             'MINUTE': "MINUTE",
             'HOUR': "HOUR",
             'DAY': "DAY",

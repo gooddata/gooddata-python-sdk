@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**create_entity_user_groups**](OrganizationModelControllerApi.md#create_entity_user_groups) | **POST** /api/v1/entities/userGroups | Post User Group entities
 [**create_entity_users**](OrganizationModelControllerApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
 [**create_entity_workspaces**](OrganizationModelControllerApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
+[**create_entity_zapier_subscriptions**](OrganizationModelControllerApi.md#create_entity_zapier_subscriptions) | **POST** /api/v1/entities/zapierSubscriptions | Post Zapier subscription
 [**delete_entity_color_palettes**](OrganizationModelControllerApi.md#delete_entity_color_palettes) | **DELETE** /api/v1/entities/colorPalettes/{id} | Delete a Color Pallette
 [**delete_entity_csp_directives**](OrganizationModelControllerApi.md#delete_entity_csp_directives) | **DELETE** /api/v1/entities/cspDirectives/{id} | Delete CSP Directives
 [**delete_entity_data_sources**](OrganizationModelControllerApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
@@ -22,6 +23,7 @@ Method | HTTP request | Description
 [**delete_entity_user_groups**](OrganizationModelControllerApi.md#delete_entity_user_groups) | **DELETE** /api/v1/entities/userGroups/{id} | Delete UserGroup entity
 [**delete_entity_users**](OrganizationModelControllerApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
 [**delete_entity_workspaces**](OrganizationModelControllerApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
+[**delete_entity_zapier_subscriptions**](OrganizationModelControllerApi.md#delete_entity_zapier_subscriptions) | **DELETE** /api/v1/entities/zapierSubscriptions/{id} | Delete Zapier subscription
 [**get_all_entities_color_palettes**](OrganizationModelControllerApi.md#get_all_entities_color_palettes) | **GET** /api/v1/entities/colorPalettes | Get all Color Pallettes
 [**get_all_entities_csp_directives**](OrganizationModelControllerApi.md#get_all_entities_csp_directives) | **GET** /api/v1/entities/cspDirectives | Get CSP Directives
 [**get_all_entities_data_source_identifiers**](OrganizationModelControllerApi.md#get_all_entities_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers | Get all Data Source Identifiers
@@ -34,6 +36,7 @@ Method | HTTP request | Description
 [**get_all_entities_user_identifiers**](OrganizationModelControllerApi.md#get_all_entities_user_identifiers) | **GET** /api/v1/entities/userIdentifiers | Get UserIdentifier entities
 [**get_all_entities_users**](OrganizationModelControllerApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
 [**get_all_entities_workspaces**](OrganizationModelControllerApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
+[**get_all_entities_zapier_subscriptions**](OrganizationModelControllerApi.md#get_all_entities_zapier_subscriptions) | **GET** /api/v1/entities/zapierSubscriptions | 
 [**get_entity_color_palettes**](OrganizationModelControllerApi.md#get_entity_color_palettes) | **GET** /api/v1/entities/colorPalettes/{id} | Get Color Pallette
 [**get_entity_csp_directives**](OrganizationModelControllerApi.md#get_entity_csp_directives) | **GET** /api/v1/entities/cspDirectives/{id} | Get CSP Directives
 [**get_entity_data_source_identifiers**](OrganizationModelControllerApi.md#get_entity_data_source_identifiers) | **GET** /api/v1/entities/dataSourceIdentifiers/{id} | Get Data Source Identifier
@@ -46,6 +49,7 @@ Method | HTTP request | Description
 [**get_entity_user_identifiers**](OrganizationModelControllerApi.md#get_entity_user_identifiers) | **GET** /api/v1/entities/userIdentifiers/{id} | Get UserIdentifier entity
 [**get_entity_users**](OrganizationModelControllerApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
 [**get_entity_workspaces**](OrganizationModelControllerApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
+[**get_entity_zapier_subscriptions**](OrganizationModelControllerApi.md#get_entity_zapier_subscriptions) | **GET** /api/v1/entities/zapierSubscriptions/{id} | 
 [**patch_entity_color_palettes**](OrganizationModelControllerApi.md#patch_entity_color_palettes) | **PATCH** /api/v1/entities/colorPalettes/{id} | Patch Color Pallette
 [**patch_entity_csp_directives**](OrganizationModelControllerApi.md#patch_entity_csp_directives) | **PATCH** /api/v1/entities/cspDirectives/{id} | Patch CSP Directives
 [**patch_entity_data_sources**](OrganizationModelControllerApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
@@ -55,6 +59,7 @@ Method | HTTP request | Description
 [**patch_entity_user_groups**](OrganizationModelControllerApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
 [**patch_entity_users**](OrganizationModelControllerApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
 [**patch_entity_workspaces**](OrganizationModelControllerApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
+[**patch_entity_zapier_subscriptions**](OrganizationModelControllerApi.md#patch_entity_zapier_subscriptions) | **PATCH** /api/v1/entities/zapierSubscriptions/{id} | 
 [**update_entity_color_palettes**](OrganizationModelControllerApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
 [**update_entity_csp_directives**](OrganizationModelControllerApi.md#update_entity_csp_directives) | **PUT** /api/v1/entities/cspDirectives/{id} | Put CSP Directives
 [**update_entity_data_sources**](OrganizationModelControllerApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
@@ -64,6 +69,7 @@ Method | HTTP request | Description
 [**update_entity_user_groups**](OrganizationModelControllerApi.md#update_entity_user_groups) | **PUT** /api/v1/entities/userGroups/{id} | Put UserGroup entity
 [**update_entity_users**](OrganizationModelControllerApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
 [**update_entity_workspaces**](OrganizationModelControllerApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
+[**update_entity_zapier_subscriptions**](OrganizationModelControllerApi.md#update_entity_zapier_subscriptions) | **PUT** /api/v1/entities/zapierSubscriptions/{id} | 
 
 
 # **create_entity_color_palettes**
@@ -853,6 +859,80 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument create_entity_zapier_subscriptions(json_api_zapier_subscription_in_document)
+
+Post Zapier subscription
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_in_document import JsonApiZapierSubscriptionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    json_api_zapier_subscription_in_document = JsonApiZapierSubscriptionInDocument(
+        data=JsonApiZapierSubscriptionIn(
+            attributes=JsonApiZapierSubscriptionInAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Zapier subscription
+        api_response = api_instance.create_entity_zapier_subscriptions(json_api_zapier_subscription_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->create_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_zapier_subscription_in_document** | [**JsonApiZapierSubscriptionInDocument**](JsonApiZapierSubscriptionInDocument.md)|  |
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_color_palettes**
 > delete_entity_color_palettes(id)
 
@@ -1490,6 +1570,79 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_workspaces(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->delete_entity_workspaces: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_zapier_subscriptions**
+> delete_entity_zapier_subscriptions(id)
+
+Delete Zapier subscription
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete Zapier subscription
+        api_instance.delete_entity_zapier_subscriptions(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Delete Zapier subscription
+        api_instance.delete_entity_zapier_subscriptions(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->delete_entity_zapier_subscriptions: %s\n" % e)
 ```
 
 
@@ -2431,6 +2584,79 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutList**](JsonApiWorkspaceOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutList get_all_entities_zapier_subscriptions()
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_list import JsonApiZapierSubscriptionOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_zapier_subscriptions(filter=filter, page=page, size=size, sort=sort)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_all_entities_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutList**](JsonApiZapierSubscriptionOutList.md)
 
 ### Authorization
 
@@ -3402,6 +3628,80 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument get_entity_zapier_subscriptions(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_zapier_subscriptions(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_zapier_subscriptions(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->get_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_color_palettes**
 > JsonApiColorPaletteOutDocument patch_entity_color_palettes(id, json_api_color_palette_patch_document)
 
@@ -4262,6 +4562,91 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_patch_document import JsonApiZapierSubscriptionPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_zapier_subscription_patch_document = JsonApiZapierSubscriptionPatchDocument(
+        data=JsonApiZapierSubscriptionPatch(
+            attributes=JsonApiZapierSubscriptionPatchAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionPatchDocument | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->patch_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_zapier_subscription_patch_document** | [**JsonApiZapierSubscriptionPatchDocument**](JsonApiZapierSubscriptionPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_color_palettes**
 > JsonApiColorPaletteOutDocument update_entity_color_palettes(id, json_api_color_palette_in_document)
 
@@ -5103,6 +5488,91 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutDocument**](JsonApiWorkspaceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import organization_model_controller_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_in_document import JsonApiZapierSubscriptionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = organization_model_controller_api.OrganizationModelControllerApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_zapier_subscription_in_document = JsonApiZapierSubscriptionInDocument(
+        data=JsonApiZapierSubscriptionIn(
+            attributes=JsonApiZapierSubscriptionInAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionInDocument | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling OrganizationModelControllerApi->update_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_zapier_subscription_in_document** | [**JsonApiZapierSubscriptionInDocument**](JsonApiZapierSubscriptionInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
 
 ### Authorization
 

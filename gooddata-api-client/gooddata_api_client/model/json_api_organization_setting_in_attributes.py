@@ -69,6 +69,10 @@ class JsonApiOrganizationSettingInAttributes(ModelNormal):
             'SHOW_HIDDEN_CATALOG_ITEMS': "SHOW_HIDDEN_CATALOG_ITEMS",
             'OPERATOR_OVERRIDES': "OPERATOR_OVERRIDES",
             'TIMEZONE_VALIDATION_ENABLED': "TIMEZONE_VALIDATION_ENABLED",
+            'OPENAI_CONFIG': "OPENAI_CONFIG",
+            'ZAPIER_TOKEN': "ZAPIER_TOKEN",
+            'ANOMALY_SENSITIVITY': "ANOMALY_SENSITIVITY",
+            'JUPYTER_CONFIG': "JUPYTER_CONFIG",
         },
     }
 

@@ -65,12 +65,12 @@ class AbsoluteDateFilterAbsoluteDateFilter(ModelNormal):
     validations = {
         ('_from',): {
             'regex': {
-                'pattern': r'^\d{4}-\d{1,2}-\d{1,2}( \d{1,2}:\d{1,2})?$',  # noqa: E501
+                'pattern': r'^\d{4}-\d{1,2}-\d{1,2}( \d{1,2}:\d{1,2}(:\d{1,2})?)?$',  # noqa: E501
             },
         },
         ('to',): {
             'regex': {
-                'pattern': r'^\d{4}-\d{1,2}-\d{1,2}( \d{1,2}:\d{1,2})?$',  # noqa: E501
+                'pattern': r'^\d{4}-\d{1,2}-\d{1,2}( \d{1,2}:\d{1,2}(:\d{1,2})?)?$',  # noqa: E501
             },
         },
     }

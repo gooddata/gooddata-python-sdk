@@ -1804,7 +1804,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeDateDataset(
                     description="A customer order date",
                     granularities=[
-                        "MINUTE",
+                        "SECOND",
                     ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",
@@ -2269,7 +2269,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 DeclarativeDateDataset(
                     description="A customer order date",
                     granularities=[
-                        "MINUTE",
+                        "SECOND",
                     ],
                     granularities_formatting=GranularitiesFormatting(
                         title_base="title_base_example",
@@ -2777,7 +2777,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeDateDataset(
                                 description="A customer order date",
                                 granularities=[
-                                    "MINUTE",
+                                    "SECOND",
                                 ],
                                 granularities_formatting=GranularitiesFormatting(
                                     title_base="title_base_example",
@@ -3676,7 +3676,7 @@ with gooddata_api_client.ApiClient() as api_client:
                             DeclarativeDateDataset(
                                 description="A customer order date",
                                 granularities=[
-                                    "MINUTE",
+                                    "SECOND",
                                 ],
                                 granularities_formatting=GranularitiesFormatting(
                                     title_base="title_base_example",

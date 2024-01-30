@@ -52,13 +52,13 @@
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
               "from": {
-                "example": "2020-07-01 18:23",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "example": "2020-07-01 18:23:59",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               },
               "to": {
-                "example": "2020-07-16 23:59",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "example": "2020-07-16 23:59:59",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               }
             },
@@ -374,6 +374,55 @@
         ],
         "type": "object"
       },
+      "AnomalyDetectionRequest": {
+        "properties": {
+          "sensitivity": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "sensitivity"
+        ],
+        "type": "object"
+      },
+      "AnomalyDetectionResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "anomalyFlag": {
+                "items": {
+                  "type": "boolean"
+                },
+                "type": "array"
+              },
+              "attribute": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "values": {
+                "items": {
+                  "nullable": true,
+                  "type": "number"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "anomalyFlag",
+          "attribute",
+          "values"
+        ],
+        "type": "object"
+      },
       "ArithmeticMeasureDefinition": {
         "description": "Metric representing arithmetics between metrics.",
         "properties": {
@@ -488,6 +537,7 @@
               },
               "granularity": {
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -576,6 +626,73 @@
           "primaryLabelValue"
         ],
         "type": "object"
+      },
+      "CacheResponse": {
+        "properties": {
+          "flightPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "flightPath"
+        ],
+        "type": "object"
+      },
+      "ClusteringRequest": {
+        "properties": {
+          "numberOfClusters": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "numberOfClusters"
+        ],
+        "type": "object"
+      },
+      "ClusteringResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "clusters": {
+                "items": {
+                  "items": {
+                    "items": {
+                      "$ref": "#/components/schemas/ClusteringResultValue"
+                    },
+                    "type": "array"
+                  },
+                  "type": "array"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "clusters"
+        ],
+        "type": "object"
+      },
+      "ClusteringResultValue": {
+        "oneOf": [
+          {
+            "nullable": true,
+            "type": "number"
+          },
+          {
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "nullable": true,
+            "type": "boolean"
+          }
+        ]
       },
       "ComparisonMeasureValueFilter": {
         "description": "Filter the result by comparing specified metric to given constant value, using given comparison operator.",
@@ -782,7 +899,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -858,6 +975,7 @@
           "granularity": {
             "description": "Granularity of requested label in case of date attribute",
             "enum": [
+              "SECOND",
               "MINUTE",
               "HOUR",
               "DAY",
@@ -926,7 +1044,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -971,7 +1089,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -1141,6 +1259,60 @@
         ],
         "type": "object"
       },
+      "ForecastRequest": {
+        "properties": {
+          "forecastPeriod": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "forecastPeriod"
+        ],
+        "type": "object"
+      },
+      "ForecastResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "attribute": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "origin": {
+                "items": {
+                  "nullable": true,
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "predictions": {
+                "items": {
+                  "items": {
+                    "nullable": true,
+                    "type": "number"
+                  },
+                  "nullable": true,
+                  "type": "array"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "attribute",
+          "origin",
+          "predictions"
+        ],
+        "type": "object"
+      },
       "HeaderGroup": {
         "description": "Contains the information specific for a group of headers. These groups correlate to attributes and metric groups.",
         "properties": {
@@ -1198,6 +1370,121 @@
         "required": [
           "inline"
         ],
+        "type": "object"
+      },
+      "KeyDriversDimension": {
+        "properties": {
+          "attribute": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "attributeName": {
+            "type": "string"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AttributeFormat"
+          },
+          "granularity": {
+            "enum": [
+              "SECOND",
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "labelName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute",
+          "attributeName",
+          "label",
+          "labelName"
+        ],
+        "type": "object"
+      },
+      "KeyDriversRequest": {
+        "properties": {
+          "auxMetrics": {
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "metric": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "sortDirection": {
+            "description": "Sorting elements - ascending/descending order.",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "metric"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResponse": {
+        "properties": {
+          "dimensionality": {
+            "items": {
+              "$ref": "#/components/schemas/KeyDriversDimension"
+            },
+            "type": "array"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "dimensionality",
+          "links"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResult": {
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "MachineLearningResponse": {
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "MachineLearningResult": {
         "type": "object"
       },
       "MeasureDefinition": {
@@ -1592,6 +1879,7 @@
               "granularity": {
                 "description": "Date granularity specifying particular date attribute in given dimension.",
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -2003,6 +2291,411 @@
   },
   "openapi": "3.0.1",
   "paths": {
+    "/api/v1/actions/workspaces/{workspaceId}/cache/anomalyDetection/{resultId}": {
+      "delete": {
+        "operationId": "deleteAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyDetectionResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/cache/clustering/{resultId}": {
+      "delete": {
+        "operationId": "deleteClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusteringResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/cache/forecast/{resultId}": {
+      "delete": {
+        "operationId": "deleteForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants": {
       "post": {
         "description": "(BETA) Returns map of lists of attributes that can be used as descendants of the given attributes.",
@@ -2490,6 +3183,521 @@
             "VIEW"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {
+      "post": {
+        "operationId": "processKeyDriversRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyDriversRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId}": {
+      "get": {
+        "operationId": "getResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/result/{resultId}": {
+      "get": {
+        "operationId": "getAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnomalyDetectionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/{resultId}": {
+      "post": {
+        "operationId": "processAnomalyDetection",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/result/{resultId}": {
+      "get": {
+        "operationId": "getClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusteringResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/{resultId}": {
+      "post": {
+        "operationId": "processClusteringRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusteringRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/result/{resultId}": {
+      "get": {
+        "operationId": "getForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/{resultId}": {
+      "post": {
+        "operationId": "processForecastRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
       }
     }
   },

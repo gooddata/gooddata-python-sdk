@@ -10,7 +10,15 @@ Method | HTTP request | Description
 [**compute_valid_objects**](ComputationApi.md#compute_valid_objects) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidObjects | Valid objects
 [**create_tabular_export**](ComputationApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 [**explain_afm**](ComputationApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+[**get_anomaly_detection_result**](ComputationApi.md#get_anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/result/{resultId} | 
+[**get_clustering_result**](ComputationApi.md#get_clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/result/{resultId} | 
+[**get_forecast_result**](ComputationApi.md#get_forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/result/{resultId} | 
+[**get_result**](ComputationApi.md#get_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | 
 [**get_tabular_export**](ComputationApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
+[**process_anomaly_detection**](ComputationApi.md#process_anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/{resultId} | 
+[**process_clustering_request**](ComputationApi.md#process_clustering_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/{resultId} | 
+[**process_forecast_request**](ComputationApi.md#process_forecast_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/{resultId} | 
+[**process_key_drivers_request**](ComputationApi.md#process_key_drivers_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | 
 [**retrieve_execution_metadata**](ComputationApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ComputationApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
 
@@ -46,7 +54,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
         depends_on=[
             DependsOn(
                 complement_filter=False,
@@ -676,6 +684,318 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_anomaly_detection_result**
+> AnomalyDetectionResult get_anomaly_detection_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_anomaly_detection_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_anomaly_detection_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_anomaly_detection_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_anomaly_detection_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**AnomalyDetectionResult**](AnomalyDetectionResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_clustering_result**
+> ClusteringResult get_clustering_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.clustering_result import ClusteringResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_clustering_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_clustering_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_clustering_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_clustering_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**ClusteringResult**](ClusteringResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_forecast_result**
+> ForecastResult get_forecast_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.forecast_result import ForecastResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_forecast_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_forecast_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_forecast_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_forecast_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**ForecastResult**](ForecastResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_result**
+> KeyDriversResult get_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.key_drivers_result import KeyDriversResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->get_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**KeyDriversResult**](KeyDriversResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_tabular_export**
 > get_tabular_export(workspace_id, export_id)
 
@@ -741,6 +1061,346 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | Binary export result. |  * Content-Disposition -  <br>  |
 **202** | Request is accepted, provided exportId exists, but export is not yet ready. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_anomaly_detection**
+> MachineLearningResponse process_anomaly_detection(workspace_id, result_id, anomaly_detection_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    anomaly_detection_request = AnomalyDetectionRequest(
+        sensitivity=3.14,
+    ) # AnomalyDetectionRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_anomaly_detection(workspace_id, result_id, anomaly_detection_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_anomaly_detection: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_anomaly_detection(workspace_id, result_id, anomaly_detection_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_anomaly_detection: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **anomaly_detection_request** | [**AnomalyDetectionRequest**](AnomalyDetectionRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_clustering_request**
+> MachineLearningResponse process_clustering_request(workspace_id, result_id, clustering_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.clustering_request import ClusteringRequest
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    clustering_request = ClusteringRequest(
+        number_of_clusters=1,
+    ) # ClusteringRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_clustering_request(workspace_id, result_id, clustering_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_clustering_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_clustering_request(workspace_id, result_id, clustering_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_clustering_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **clustering_request** | [**ClusteringRequest**](ClusteringRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_forecast_request**
+> MachineLearningResponse process_forecast_request(workspace_id, result_id, forecast_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from gooddata_api_client.model.forecast_request import ForecastRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    forecast_request = ForecastRequest(
+        forecast_period=1,
+    ) # ForecastRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_forecast_request(workspace_id, result_id, forecast_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_forecast_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_forecast_request(workspace_id, result_id, forecast_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_forecast_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **forecast_request** | [**ForecastRequest**](ForecastRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_key_drivers_request**
+> KeyDriversResponse process_key_drivers_request(workspace_id, key_drivers_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import computation_api
+from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
+from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = computation_api.ComputationApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    key_drivers_request = KeyDriversRequest(
+        aux_metrics=[
+            MeasureItem(
+                definition=MeasureDefinition(),
+                local_identifier="metric_1",
+            ),
+        ],
+        metric=MeasureItem(
+            definition=MeasureDefinition(),
+            local_identifier="metric_1",
+        ),
+        sort_direction="ASC",
+    ) # KeyDriversRequest | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_key_drivers_request(workspace_id, key_drivers_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_key_drivers_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_key_drivers_request(workspace_id, key_drivers_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ComputationApi->process_key_drivers_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **key_drivers_request** | [**KeyDriversRequest**](KeyDriversRequest.md)|  |
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**KeyDriversResponse**](KeyDriversResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

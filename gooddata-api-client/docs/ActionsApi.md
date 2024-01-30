@@ -7,8 +7,12 @@ Method | HTTP request | Description
 [**add_group_members**](ActionsApi.md#add_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/addMembers | 
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
+[**cache_anomaly_detection_result**](ActionsApi.md#cache_anomaly_detection_result) | **POST** /api/v1/actions/workspaces/{workspaceId}/cache/anomalyDetection/{resultId} | 
+[**cache_clustering_result**](ActionsApi.md#cache_clustering_result) | **POST** /api/v1/actions/workspaces/{workspaceId}/cache/clustering/{resultId} | 
+[**cache_forecast_result**](ActionsApi.md#cache_forecast_result) | **POST** /api/v1/actions/workspaces/{workspaceId}/cache/forecast/{resultId} | 
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
 [**clean_translations**](ActionsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
+[**compute_column_statistics**](ActionsApi.md#compute_column_statistics) | **POST** /api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics | 
 [**compute_label_elements_post**](ActionsApi.md#compute_label_elements_post) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/collectLabelElements | Listing of label values. The resulting data are limited by the static platform limit to the maximum of 10000 rows.
 [**compute_report**](ActionsApi.md#compute_report) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute | Executes analytical request and returns link to the result
 [**compute_valid_descendants**](ActionsApi.md#compute_valid_descendants) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/computeValidDescendants | (BETA) Valid descendants
@@ -16,18 +20,41 @@ Method | HTTP request | Description
 [**create_pdf_export**](ActionsApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
 [**create_tabular_export**](ActionsApi.md#create_tabular_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/tabular | Create tabular export request
 [**dashboard_permissions**](ActionsApi.md#dashboard_permissions) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/permissions | Get Dashboard Permissions
+[**delete_anomaly_detection_result**](ActionsApi.md#delete_anomaly_detection_result) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/cache/anomalyDetection/{resultId} | 
+[**delete_clustering_result**](ActionsApi.md#delete_clustering_result) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/cache/clustering/{resultId} | 
+[**delete_forecast_result**](ActionsApi.md#delete_forecast_result) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/cache/forecast/{resultId} | 
+[**dislike_analytical_dashboard**](ActionsApi.md#dislike_analytical_dashboard) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/dislike | 
+[**dislike_metric**](ActionsApi.md#dislike_metric) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/dislike | 
+[**dislike_visualization_object**](ActionsApi.md#dislike_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/dislike | 
 [**explain_afm**](ActionsApi.md#explain_afm) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/afm/explain | AFM explain resource.
+[**favorite_analytical_dashboard**](ActionsApi.md#favorite_analytical_dashboard) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/favorite | 
+[**favorite_metric**](ActionsApi.md#favorite_metric) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/favorite | 
+[**favorite_visualization_object**](ActionsApi.md#favorite_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/favorite | 
+[**fetch_anomaly_detection_result**](ActionsApi.md#fetch_anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/cache/anomalyDetection/{resultId} | 
+[**fetch_clustering_result**](ActionsApi.md#fetch_clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/cache/clustering/{resultId} | 
+[**fetch_forecast_result**](ActionsApi.md#fetch_forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/cache/forecast/{resultId} | 
+[**find_recent_analytics**](ActionsApi.md#find_recent_analytics) | **GET** /api/v1/actions/workspaces/{workspaceId}/recent | 
+[**find_recommendations**](ActionsApi.md#find_recommendations) | **POST** /api/v1/actions/workspaces/{workspaceId}/findRecommendations | 
 [**generate_logical_model**](ActionsApi.md#generate_logical_model) | **POST** /api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel | Generate logical data model (LDM) from physical data model (PDM)
+[**get_anomaly_detection_result**](ActionsApi.md#get_anomaly_detection_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/result/{resultId} | 
+[**get_clustering_result**](ActionsApi.md#get_clustering_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/result/{resultId} | 
 [**get_data_source_schemata**](ActionsApi.md#get_data_source_schemata) | **GET** /api/v1/actions/dataSources/{dataSourceId}/scanSchemata | Get a list of schema names of a database
 [**get_dependent_entities_graph**](ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 [**get_dependent_entities_graph_from_entry_points**](ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
+[**get_forecast_result**](ActionsApi.md#get_forecast_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/result/{resultId} | 
 [**get_group_members**](ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
+[**get_notifications_for_current_user**](ActionsApi.md#get_notifications_for_current_user) | **GET** /api/v1/actions/workspaces/{workspaceId}/notifications | 
+[**get_result**](ActionsApi.md#get_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId} | 
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
+[**like_analytical_dashboard**](ActionsApi.md#like_analytical_dashboard) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/like | 
+[**like_metric**](ActionsApi.md#like_metric) | **POST** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/like | 
+[**like_visualization_object**](ActionsApi.md#like_visualization_object) | **POST** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/like | 
+[**list_subscriptions**](ActionsApi.md#list_subscriptions) | **GET** /api/v1/actions/workspaces/{workspaceId}/subscriptions | 
 [**list_user_groups**](ActionsApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/groups | 
 [**list_users**](ActionsApi.md#list_users) | **GET** /api/v1/actions/userManagement/users | 
 [**list_workspace_permissions_for_user**](ActionsApi.md#list_workspace_permissions_for_user) | **GET** /api/v1/actions/userManagement/users/{userId}/permissions | 
@@ -38,8 +65,14 @@ Method | HTTP request | Description
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
 [**manage_workspace_permissions_for_user**](ActionsApi.md#manage_workspace_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
 [**manage_workspace_permissions_for_user_group**](ActionsApi.md#manage_workspace_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
+[**mark_all_notifications_as_read**](ActionsApi.md#mark_all_notifications_as_read) | **POST** /api/v1/actions/workspaces/{workspaceId}/markAllNotificationsAsRead | 
+[**mark_notification_as_read**](ActionsApi.md#mark_notification_as_read) | **POST** /api/v1/actions/workspaces/{workspaceId}/markNotificationAsRead | 
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
+[**process_anomaly_detection**](ActionsApi.md#process_anomaly_detection) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/{resultId} | 
+[**process_clustering_request**](ActionsApi.md#process_clustering_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/{resultId} | 
+[**process_forecast_request**](ActionsApi.md#process_forecast_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/{resultId} | 
+[**process_key_drivers_request**](ActionsApi.md#process_key_drivers_request) | **POST** /api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers | 
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
 [**remove_group_members**](ActionsApi.md#remove_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/removeMembers | 
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
@@ -48,11 +81,23 @@ Method | HTTP request | Description
 [**resolve_settings_without_workspace**](ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 [**retrieve_execution_metadata**](ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 [**retrieve_result**](ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
+[**retrieve_translations**](ActionsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 [**scan_data_source**](ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 [**scan_sql**](ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 [**set_translations**](ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
+[**subscribe_to_tag**](ActionsApi.md#subscribe_to_tag) | **POST** /api/v1/actions/workspaces/{workspaceId}/tags/{objectId}/subscribe | 
 [**test_data_source**](ActionsApi.md#test_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/test | Test data source connection by data source id
 [**test_data_source_definition**](ActionsApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
+[**undislike_analytical_dashboard**](ActionsApi.md#undislike_analytical_dashboard) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/dislike | 
+[**undislike_metric**](ActionsApi.md#undislike_metric) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/dislike | 
+[**undislike_visualization_object**](ActionsApi.md#undislike_visualization_object) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/dislike | 
+[**unfavorite_analytical_dashboard**](ActionsApi.md#unfavorite_analytical_dashboard) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/favorite | 
+[**unfavorite_metric**](ActionsApi.md#unfavorite_metric) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/favorite | 
+[**unfavorite_visualization_object**](ActionsApi.md#unfavorite_visualization_object) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/favorite | 
+[**unlike_analytical_dashboard**](ActionsApi.md#unlike_analytical_dashboard) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/like | 
+[**unlike_metric**](ActionsApi.md#unlike_metric) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/like | 
+[**unlike_visualization_object**](ActionsApi.md#unlike_visualization_object) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/like | 
+[**unsubscribe_from_tag**](ActionsApi.md#unsubscribe_from_tag) | **DELETE** /api/v1/actions/workspaces/{workspaceId}/tags/{objectId}/subscribe | 
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
@@ -258,6 +303,213 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **cache_anomaly_detection_result**
+> CacheResponse cache_anomaly_detection_result(workspace_id, result_id, anomaly_detection_result)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
+from gooddata_api_client.model.cache_response import CacheResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    anomaly_detection_result = AnomalyDetectionResult() # AnomalyDetectionResult | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.cache_anomaly_detection_result(workspace_id, result_id, anomaly_detection_result)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->cache_anomaly_detection_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **anomaly_detection_result** | [**AnomalyDetectionResult**](AnomalyDetectionResult.md)|  |
+
+### Return type
+
+[**CacheResponse**](CacheResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **cache_clustering_result**
+> CacheResponse cache_clustering_result(workspace_id, result_id, clustering_result)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.clustering_result import ClusteringResult
+from gooddata_api_client.model.cache_response import CacheResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    clustering_result = ClusteringResult() # ClusteringResult | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.cache_clustering_result(workspace_id, result_id, clustering_result)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->cache_clustering_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **clustering_result** | [**ClusteringResult**](ClusteringResult.md)|  |
+
+### Return type
+
+[**CacheResponse**](CacheResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **cache_forecast_result**
+> CacheResponse cache_forecast_result(workspace_id, result_id, forecast_result)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.forecast_result import ForecastResult
+from gooddata_api_client.model.cache_response import CacheResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    forecast_result = ForecastResult() # ForecastResult | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.cache_forecast_result(workspace_id, result_id, forecast_result)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->cache_forecast_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **forecast_result** | [**ForecastResult**](ForecastResult.md)|  |
+
+### Return type
+
+[**CacheResponse**](CacheResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **check_entity_overrides**
 > [IdentifierDuplications] check_entity_overrides(workspace_id, hierarchy_object_identification)
 
@@ -403,6 +655,85 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **compute_column_statistics**
+> ColumnStatisticsResponse compute_column_statistics(data_source_id, column_statistics_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.column_statistics_response import ColumnStatisticsResponse
+from gooddata_api_client.model.column_statistics_request import ColumnStatisticsRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    data_source_id = "dataSourceId_example" # str | 
+    column_statistics_request = ColumnStatisticsRequest(
+        column_name="column_name_example",
+        frequency=FrequencyProperties(
+            value_limit=1,
+        ),
+        _from=ColumnStatisticsRequestFrom(None),
+        histogram=HistogramProperties(
+            bucket_count=1,
+        ),
+        statistics=[
+            "COUNT",
+        ],
+    ) # ColumnStatisticsRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.compute_column_statistics(data_source_id, column_statistics_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->compute_column_statistics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **data_source_id** | **str**|  |
+ **column_statistics_request** | [**ColumnStatisticsRequest**](ColumnStatisticsRequest.md)|  |
+
+### Return type
+
+[**ColumnStatisticsResponse**](ColumnStatisticsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **compute_label_elements_post**
 > ElementsResponse compute_label_elements_post(workspace_id, elements_request)
 
@@ -434,7 +765,7 @@ with gooddata_api_client.ApiClient() as api_client:
     workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
     elements_request = ElementsRequest(
         complement_filter=False,
-        data_sampling_percentage=100.0,
+        data_sampling_percentage=100,
         depends_on=[
             DependsOn(
                 complement_filter=False,
@@ -1070,6 +1401,390 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_anomaly_detection_result**
+> delete_anomaly_detection_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_anomaly_detection_result(workspace_id, result_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_anomaly_detection_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_clustering_result**
+> delete_clustering_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_clustering_result(workspace_id, result_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_clustering_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_forecast_result**
+> delete_forecast_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_forecast_result(workspace_id, result_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->delete_forecast_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | No Content |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **dislike_analytical_dashboard**
+> dislike_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.dislike_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->dislike_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **dislike_metric**
+> dislike_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.dislike_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->dislike_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **dislike_visualization_object**
+> dislike_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.dislike_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->dislike_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **explain_afm**
 > explain_afm(workspace_id, afm_execution)
 
@@ -1205,6 +1920,558 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **favorite_analytical_dashboard**
+> favorite_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.favorite_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->favorite_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **favorite_metric**
+> favorite_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.favorite_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->favorite_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **favorite_visualization_object**
+> favorite_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.favorite_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->favorite_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **fetch_anomaly_detection_result**
+> FetchAnomalyDetectionResult200Response fetch_anomaly_detection_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.fetch_anomaly_detection_result200_response import FetchAnomalyDetectionResult200Response
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.fetch_anomaly_detection_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->fetch_anomaly_detection_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+[**FetchAnomalyDetectionResult200Response**](FetchAnomalyDetectionResult200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **fetch_clustering_result**
+> FetchAnomalyDetectionResult200Response fetch_clustering_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.fetch_anomaly_detection_result200_response import FetchAnomalyDetectionResult200Response
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.fetch_clustering_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->fetch_clustering_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+[**FetchAnomalyDetectionResult200Response**](FetchAnomalyDetectionResult200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **fetch_forecast_result**
+> FetchAnomalyDetectionResult200Response fetch_forecast_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.fetch_anomaly_detection_result200_response import FetchAnomalyDetectionResult200Response
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.fetch_forecast_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->fetch_forecast_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+
+### Return type
+
+[**FetchAnomalyDetectionResult200Response**](FetchAnomalyDetectionResult200Response.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **find_recent_analytics**
+> [RecentAnalyticalObject] find_recent_analytics(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.recent_analytical_object import RecentAnalyticalObject
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    limit = 5 # int |  (optional) if omitted the server will use the default value of 5
+    subscribed_only = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.find_recent_analytics(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->find_recent_analytics: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.find_recent_analytics(workspace_id, limit=limit, subscribed_only=subscribed_only)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->find_recent_analytics: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **limit** | **int**|  | [optional] if omitted the server will use the default value of 5
+ **subscribed_only** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**[RecentAnalyticalObject]**](RecentAnalyticalObject.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **find_recommendations**
+> [Recommendation] find_recommendations(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.find_recommendations_request import FindRecommendationsRequest
+from gooddata_api_client.model.recommendation import Recommendation
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    limit = 5 # int |  (optional) if omitted the server will use the default value of 5
+    types = [
+        "analyticalDashboard",
+    ] # [str] | List of entity types to be recommended, if not provided return all. (optional)
+    find_recommendations_request = FindRecommendationsRequest(
+        peer_multiplier=3.14,
+        weights={
+            "key": 3.14,
+        },
+    ) # FindRecommendationsRequest |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.find_recommendations(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->find_recommendations: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.find_recommendations(workspace_id, limit=limit, types=types, find_recommendations_request=find_recommendations_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->find_recommendations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **limit** | **int**|  | [optional] if omitted the server will use the default value of 5
+ **types** | **[str]**| List of entity types to be recommended, if not provided return all. | [optional]
+ **find_recommendations_request** | [**FindRecommendationsRequest**](FindRecommendationsRequest.md)|  | [optional]
+
+### Return type
+
+[**[Recommendation]**](Recommendation.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **generate_logical_model**
 > DeclarativeModel generate_logical_model(data_source_id, generate_ldm_request)
 
@@ -1318,6 +2585,162 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | LDM generated successfully. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_anomaly_detection_result**
+> AnomalyDetectionResult get_anomaly_detection_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.anomaly_detection_result import AnomalyDetectionResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_anomaly_detection_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_anomaly_detection_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_anomaly_detection_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_anomaly_detection_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**AnomalyDetectionResult**](AnomalyDetectionResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_clustering_result**
+> ClusteringResult get_clustering_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.clustering_result import ClusteringResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_clustering_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_clustering_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_clustering_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_clustering_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**ClusteringResult**](ClusteringResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1600,6 +3023,84 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_forecast_result**
+> ForecastResult get_forecast_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.forecast_result import ForecastResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Result identifier
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_forecast_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_forecast_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_forecast_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_forecast_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result identifier |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**ForecastResult**](ForecastResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_group_members**
 > UserManagementUserGroupMembers get_group_members(user_group_id)
 
@@ -1728,6 +3229,150 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Json metadata representation |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_notifications_for_current_user**
+> [GetNotificationsForCurrentUser200ResponseInner] get_notifications_for_current_user(workspace_id)
+
+
+
+Gets all the notifications for the current user.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.get_notifications_for_current_user200_response_inner import GetNotificationsForCurrentUser200ResponseInner
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_notifications_for_current_user(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_notifications_for_current_user: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**[GetNotificationsForCurrentUser200ResponseInner]**](GetNotificationsForCurrentUser200ResponseInner.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_result**
+> KeyDriversResult get_result(workspace_id, result_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.key_drivers_result import KeyDriversResult
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "a9b28f9dc55f37ea9f4a5fb0c76895923591e781" # str | Result ID
+    offset = 1 # int |  (optional)
+    limit = 1 # int |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_result(workspace_id, result_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_result(workspace_id, result_id, offset=offset, limit=limit)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->get_result: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Result ID |
+ **offset** | **int**|  | [optional]
+ **limit** | **int**|  | [optional]
+
+### Return type
+
+[**KeyDriversResult**](KeyDriversResult.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1995,6 +3640,262 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Prefixes used in parent entities |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **like_analytical_dashboard**
+> like_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.like_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->like_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **like_metric**
+> like_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.like_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->like_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **like_visualization_object**
+> like_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.like_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->like_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_subscriptions**
+> [EntityIdentifier] list_subscriptions(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.entity_identifier import EntityIdentifier
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.list_subscriptions(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->list_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+[**[EntityIdentifier]**](EntityIdentifier.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2705,6 +4606,135 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **mark_all_notifications_as_read**
+> mark_all_notifications_as_read(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.mark_all_notifications_as_read(workspace_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->mark_all_notifications_as_read: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **mark_notification_as_read**
+> mark_notification_as_read(workspace_id, mark_notification_as_read_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.mark_notification_as_read_request import MarkNotificationAsReadRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    mark_notification_as_read_request = MarkNotificationAsReadRequest(
+        notification_id=1,
+    ) # MarkNotificationAsReadRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.mark_notification_as_read(workspace_id, mark_notification_as_read_request)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->mark_notification_as_read: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **mark_notification_as_read_request** | [**MarkNotificationAsReadRequest**](MarkNotificationAsReadRequest.md)|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **overridden_child_entities**
 > [IdentifierDuplications] overridden_child_entities(workspace_id)
 
@@ -2825,6 +4855,346 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**[PlatformUsage]**](PlatformUsage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_anomaly_detection**
+> MachineLearningResponse process_anomaly_detection(workspace_id, result_id, anomaly_detection_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.anomaly_detection_request import AnomalyDetectionRequest
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    anomaly_detection_request = AnomalyDetectionRequest(
+        sensitivity=3.14,
+    ) # AnomalyDetectionRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_anomaly_detection(workspace_id, result_id, anomaly_detection_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_anomaly_detection: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_anomaly_detection(workspace_id, result_id, anomaly_detection_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_anomaly_detection: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **anomaly_detection_request** | [**AnomalyDetectionRequest**](AnomalyDetectionRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_clustering_request**
+> MachineLearningResponse process_clustering_request(workspace_id, result_id, clustering_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.clustering_request import ClusteringRequest
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    clustering_request = ClusteringRequest(
+        number_of_clusters=1,
+    ) # ClusteringRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_clustering_request(workspace_id, result_id, clustering_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_clustering_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_clustering_request(workspace_id, result_id, clustering_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_clustering_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **clustering_request** | [**ClusteringRequest**](ClusteringRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_forecast_request**
+> MachineLearningResponse process_forecast_request(workspace_id, result_id, forecast_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.machine_learning_response import MachineLearningResponse
+from gooddata_api_client.model.forecast_request import ForecastRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    result_id = "/6bUUGjjNSwg0_bs" # str | Input result identifier
+    forecast_request = ForecastRequest(
+        forecast_period=1,
+    ) # ForecastRequest | 
+    skip_cache = False # bool |  (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_forecast_request(workspace_id, result_id, forecast_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_forecast_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_forecast_request(workspace_id, result_id, forecast_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_forecast_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **result_id** | **str**| Input result identifier |
+ **forecast_request** | [**ForecastRequest**](ForecastRequest.md)|  |
+ **skip_cache** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**MachineLearningResponse**](MachineLearningResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **process_key_drivers_request**
+> KeyDriversResponse process_key_drivers_request(workspace_id, key_drivers_request)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.key_drivers_response import KeyDriversResponse
+from gooddata_api_client.model.key_drivers_request import KeyDriversRequest
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "/6bUUGjjNSwg0_bs" # str | Workspace identifier
+    key_drivers_request = KeyDriversRequest(
+        aux_metrics=[
+            MeasureItem(
+                definition=MeasureDefinition(),
+                local_identifier="metric_1",
+            ),
+        ],
+        metric=MeasureItem(
+            definition=MeasureDefinition(),
+            local_identifier="metric_1",
+        ),
+        sort_direction="ASC",
+    ) # KeyDriversRequest | 
+    skip_cache = False # bool | Ignore all caches during execution of current request. (optional) if omitted the server will use the default value of False
+    debug_arrow = True # bool |  (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.process_key_drivers_request(workspace_id, key_drivers_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_key_drivers_request: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.process_key_drivers_request(workspace_id, key_drivers_request, skip_cache=skip_cache, debug_arrow=debug_arrow)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->process_key_drivers_request: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**| Workspace identifier |
+ **key_drivers_request** | [**KeyDriversRequest**](KeyDriversRequest.md)|  |
+ **skip_cache** | **bool**| Ignore all caches during execution of current request. | [optional] if omitted the server will use the default value of False
+ **debug_arrow** | **bool**|  | [optional]
+
+### Return type
+
+[**KeyDriversResponse**](KeyDriversResponse.md)
 
 ### Authorization
 
@@ -3407,6 +5777,78 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **retrieve_translations**
+> Xliff retrieve_translations(workspace_id, locale_request)
+
+Retrieve translations for entities.
+
+Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from gooddata_api_client.model.locale_request import LocaleRequest
+from gooddata_api_client.model.xliff import Xliff
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    locale_request = LocaleRequest(
+        locale="en-US",
+    ) # LocaleRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Retrieve translations for entities.
+        api_response = api_instance.retrieve_translations(workspace_id, locale_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->retrieve_translations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **locale_request** | [**LocaleRequest**](LocaleRequest.md)|  |
+
+### Return type
+
+[**Xliff**](Xliff.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/xml
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | XLIFF file containing translations for a particular locale. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **scan_data_source**
 > ScanResultPdm scan_data_source(data_source_id, scan_request)
 
@@ -3672,6 +6114,70 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **subscribe_to_tag**
+> subscribe_to_tag(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.subscribe_to_tag(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->subscribe_to_tag: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **test_data_source**
 > TestResponse test_data_source(data_source_id, test_request)
 
@@ -3836,6 +6342,646 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | The result of the test of a data source connection. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **undislike_analytical_dashboard**
+> undislike_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.undislike_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->undislike_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **undislike_metric**
+> undislike_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.undislike_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->undislike_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **undislike_visualization_object**
+> undislike_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.undislike_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->undislike_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unfavorite_analytical_dashboard**
+> unfavorite_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unfavorite_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unfavorite_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unfavorite_metric**
+> unfavorite_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unfavorite_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unfavorite_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unfavorite_visualization_object**
+> unfavorite_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unfavorite_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unfavorite_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unlike_analytical_dashboard**
+> unlike_analytical_dashboard(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unlike_analytical_dashboard(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unlike_analytical_dashboard: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unlike_metric**
+> unlike_metric(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unlike_metric(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unlike_metric: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unlike_visualization_object**
+> unlike_visualization_object(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unlike_visualization_object(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unlike_visualization_object: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unsubscribe_from_tag**
+> unsubscribe_from_tag(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import actions_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = actions_api.ActionsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.unsubscribe_from_tag(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling ActionsApi->unsubscribe_from_tag: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

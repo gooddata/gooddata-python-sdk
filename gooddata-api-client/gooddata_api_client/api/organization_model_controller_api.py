@@ -64,6 +64,10 @@ from gooddata_api_client.model.json_api_workspace_in_document import JsonApiWork
 from gooddata_api_client.model.json_api_workspace_out_document import JsonApiWorkspaceOutDocument
 from gooddata_api_client.model.json_api_workspace_out_list import JsonApiWorkspaceOutList
 from gooddata_api_client.model.json_api_workspace_patch_document import JsonApiWorkspacePatchDocument
+from gooddata_api_client.model.json_api_zapier_subscription_in_document import JsonApiZapierSubscriptionInDocument
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_out_list import JsonApiZapierSubscriptionOutList
+from gooddata_api_client.model.json_api_zapier_subscription_patch_document import JsonApiZapierSubscriptionPatchDocument
 
 
 class OrganizationModelControllerApi(object):
@@ -602,6 +606,56 @@ class OrganizationModelControllerApi(object):
             },
             api_client=api_client
         )
+        self.create_entity_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiZapierSubscriptionOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions',
+                'operation_id': 'create_entity_zapier_subscriptions',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'json_api_zapier_subscription_in_document',
+                ],
+                'required': [
+                    'json_api_zapier_subscription_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'json_api_zapier_subscription_in_document':
+                        (JsonApiZapierSubscriptionInDocument,),
+                },
+                'attribute_map': {
+                },
+                'location_map': {
+                    'json_api_zapier_subscription_in_document': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.delete_entity_color_palettes_endpoint = _Endpoint(
             settings={
                 'response_type': None,
@@ -1080,6 +1134,65 @@ class OrganizationModelControllerApi(object):
                 'auth': [],
                 'endpoint_path': '/api/v1/entities/workspaces/{id}',
                 'operation_id': 'delete_entity_workspaces',
+                'http_method': 'DELETE',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
+        self.delete_entity_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': None,
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions/{id}',
+                'operation_id': 'delete_entity_zapier_subscriptions',
                 'http_method': 'DELETE',
                 'servers': None,
             },
@@ -1981,6 +2094,69 @@ class OrganizationModelControllerApi(object):
             },
             api_client=api_client
         )
+        self.get_all_entities_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiZapierSubscriptionOutList,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions',
+                'operation_id': 'get_all_entities_zapier_subscriptions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'filter',
+                    'page',
+                    'size',
+                    'sort',
+                ],
+                'required': [],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'filter':
+                        (str,),
+                    'page':
+                        (int,),
+                    'size':
+                        (int,),
+                    'sort':
+                        ([str],),
+                },
+                'attribute_map': {
+                    'filter': 'filter',
+                    'page': 'page',
+                    'size': 'size',
+                    'sort': 'sort',
+                },
+                'location_map': {
+                    'filter': 'query',
+                    'page': 'query',
+                    'size': 'query',
+                    'sort': 'query',
+                },
+                'collection_format_map': {
+                    'sort': 'multi',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.get_entity_color_palettes_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiColorPaletteOutDocument,),
@@ -2805,6 +2981,67 @@ class OrganizationModelControllerApi(object):
             },
             api_client=api_client
         )
+        self.get_entity_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiZapierSubscriptionOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions/{id}',
+                'operation_id': 'get_entity_zapier_subscriptions',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client
+        )
         self.patch_entity_color_palettes_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiColorPaletteOutDocument,),
@@ -3455,6 +3692,74 @@ class OrganizationModelControllerApi(object):
             },
             api_client=api_client
         )
+        self.patch_entity_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiZapierSubscriptionOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions/{id}',
+                'operation_id': 'patch_entity_zapier_subscriptions',
+                'http_method': 'PATCH',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_zapier_subscription_patch_document',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                    'json_api_zapier_subscription_patch_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_zapier_subscription_patch_document':
+                        (JsonApiZapierSubscriptionPatchDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_zapier_subscription_patch_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
         self.update_entity_color_palettes_endpoint = _Endpoint(
             settings={
                 'response_type': (JsonApiColorPaletteOutDocument,),
@@ -4093,6 +4398,74 @@ class OrganizationModelControllerApi(object):
                 },
                 'collection_format_map': {
                     'include': 'csv',
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/vnd.gooddata.api+json'
+                ],
+                'content_type': [
+                    'application/vnd.gooddata.api+json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.update_entity_zapier_subscriptions_endpoint = _Endpoint(
+            settings={
+                'response_type': (JsonApiZapierSubscriptionOutDocument,),
+                'auth': [],
+                'endpoint_path': '/api/v1/entities/zapierSubscriptions/{id}',
+                'operation_id': 'update_entity_zapier_subscriptions',
+                'http_method': 'PUT',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'id',
+                    'json_api_zapier_subscription_in_document',
+                    'filter',
+                ],
+                'required': [
+                    'id',
+                    'json_api_zapier_subscription_in_document',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                    'id',
+                ]
+            },
+            root_map={
+                'validations': {
+                    ('id',): {
+
+                        'regex': {
+                            'pattern': r'^(?!\.)[.A-Za-z0-9_-]{1,255}$',  # noqa: E501
+                        },
+                    },
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'id':
+                        (str,),
+                    'json_api_zapier_subscription_in_document':
+                        (JsonApiZapierSubscriptionInDocument,),
+                    'filter':
+                        (str,),
+                },
+                'attribute_map': {
+                    'id': 'id',
+                    'filter': 'filter',
+                },
+                'location_map': {
+                    'id': 'path',
+                    'json_api_zapier_subscription_in_document': 'body',
+                    'filter': 'query',
+                },
+                'collection_format_map': {
                 }
             },
             headers_map={
@@ -4855,6 +5228,88 @@ class OrganizationModelControllerApi(object):
             json_api_workspace_in_document
         return self.create_entity_workspaces_endpoint.call_with_http_info(**kwargs)
 
+    def create_entity_zapier_subscriptions(
+        self,
+        json_api_zapier_subscription_in_document,
+        **kwargs
+    ):
+        """Post Zapier subscription  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.create_entity_zapier_subscriptions(json_api_zapier_subscription_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            json_api_zapier_subscription_in_document (JsonApiZapierSubscriptionInDocument):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiZapierSubscriptionOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['json_api_zapier_subscription_in_document'] = \
+            json_api_zapier_subscription_in_document
+        return self.create_entity_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
+
     def delete_entity_color_palettes(
         self,
         id,
@@ -5607,6 +6062,89 @@ class OrganizationModelControllerApi(object):
         kwargs['id'] = \
             id
         return self.delete_entity_workspaces_endpoint.call_with_http_info(**kwargs)
+
+    def delete_entity_zapier_subscriptions(
+        self,
+        id,
+        **kwargs
+    ):
+        """Delete Zapier subscription  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.delete_entity_zapier_subscriptions(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            None
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.delete_entity_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
 
     def get_all_entities_color_palettes(
         self,
@@ -6593,6 +7131,87 @@ class OrganizationModelControllerApi(object):
         kwargs['_host_index'] = kwargs.get('_host_index')
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         return self.get_all_entities_workspaces_endpoint.call_with_http_info(**kwargs)
+
+    def get_all_entities_zapier_subscriptions(
+        self,
+        **kwargs
+    ):
+        """get_all_entities_zapier_subscriptions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_all_entities_zapier_subscriptions(async_req=True)
+        >>> result = thread.get()
+
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
+            size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
+            sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiZapierSubscriptionOutList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        return self.get_all_entities_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
 
     def get_entity_color_palettes(
         self,
@@ -7604,6 +8223,89 @@ class OrganizationModelControllerApi(object):
             id
         return self.get_entity_workspaces_endpoint.call_with_http_info(**kwargs)
 
+    def get_entity_zapier_subscriptions(
+        self,
+        id,
+        **kwargs
+    ):
+        """get_entity_zapier_subscriptions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.get_entity_zapier_subscriptions(id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiZapierSubscriptionOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        return self.get_entity_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
+
     def patch_entity_color_palettes(
         self,
         id,
@@ -8396,6 +9098,93 @@ class OrganizationModelControllerApi(object):
             json_api_workspace_patch_document
         return self.patch_entity_workspaces_endpoint.call_with_http_info(**kwargs)
 
+    def patch_entity_zapier_subscriptions(
+        self,
+        id,
+        json_api_zapier_subscription_patch_document,
+        **kwargs
+    ):
+        """patch_entity_zapier_subscriptions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_zapier_subscription_patch_document (JsonApiZapierSubscriptionPatchDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiZapierSubscriptionOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_zapier_subscription_patch_document'] = \
+            json_api_zapier_subscription_patch_document
+        return self.patch_entity_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
+
     def update_entity_color_palettes(
         self,
         id,
@@ -9187,4 +9976,91 @@ class OrganizationModelControllerApi(object):
         kwargs['json_api_workspace_in_document'] = \
             json_api_workspace_in_document
         return self.update_entity_workspaces_endpoint.call_with_http_info(**kwargs)
+
+    def update_entity_zapier_subscriptions(
+        self,
+        id,
+        json_api_zapier_subscription_in_document,
+        **kwargs
+    ):
+        """update_entity_zapier_subscriptions  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str):
+            json_api_zapier_subscription_in_document (JsonApiZapierSubscriptionInDocument):
+
+        Keyword Args:
+            filter (str): Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            _request_auths (list): set to override the auth_settings for an a single
+                request; this effectively ignores the authentication
+                in the spec for a single request.
+                Default is None
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            JsonApiZapierSubscriptionOutDocument
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['_request_auths'] = kwargs.get('_request_auths', None)
+        kwargs['id'] = \
+            id
+        kwargs['json_api_zapier_subscription_in_document'] = \
+            json_api_zapier_subscription_in_document
+        return self.update_entity_zapier_subscriptions_endpoint.call_with_http_info(**kwargs)
 

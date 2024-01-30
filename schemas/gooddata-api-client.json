@@ -97,13 +97,13 @@
                 "$ref": "#/components/schemas/AfmObjectIdentifierDataset"
               },
               "from": {
-                "example": "2020-07-01 18:23",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "example": "2020-07-01 18:23:59",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               },
               "to": {
-                "example": "2020-07-16 23:59",
-                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2})?$",
+                "example": "2020-07-16 23:59:59",
+                "pattern": "^\\d{4}-\\d{1,2}-\\d{1,2}( \\d{1,2}:\\d{1,2}(:\\d{1,2})?)?$",
                 "type": "string"
               }
             },
@@ -419,6 +419,95 @@
         ],
         "type": "object"
       },
+      "AnomalyDetectionRequest": {
+        "properties": {
+          "sensitivity": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "sensitivity"
+        ],
+        "type": "object"
+      },
+      "AnomalyDetectionResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "anomalyFlag": {
+                "items": {
+                  "type": "boolean"
+                },
+                "type": "array"
+              },
+              "attribute": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "values": {
+                "items": {
+                  "nullable": true,
+                  "type": "number"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "anomalyFlag",
+          "attribute",
+          "values"
+        ],
+        "type": "object"
+      },
+      "AnomalyUserNotification": {
+        "properties": {
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "currentValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "markedAsRead": {
+            "type": "boolean"
+          },
+          "type": {
+            "enum": [
+              "anomaly"
+            ],
+            "type": "string"
+          },
+          "visualizationObjectTitle": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "currentValue",
+          "id",
+          "markedAsRead",
+          "type",
+          "visualizationObjectTitle",
+          "workspace"
+        ],
+        "type": "object"
+      },
       "ApiEntitlement": {
         "properties": {
           "expiry": {
@@ -603,6 +692,7 @@
               },
               "granularity": {
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -713,6 +803,188 @@
           "userGroups",
           "users"
         ],
+        "type": "object"
+      },
+      "CacheResponse": {
+        "properties": {
+          "flightPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "flightPath"
+        ],
+        "type": "object"
+      },
+      "ClusteringRequest": {
+        "properties": {
+          "numberOfClusters": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "numberOfClusters"
+        ],
+        "type": "object"
+      },
+      "ClusteringResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "clusters": {
+                "items": {
+                  "items": {
+                    "items": {
+                      "$ref": "#/components/schemas/ClusteringResultValue"
+                    },
+                    "type": "array"
+                  },
+                  "type": "array"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "clusters"
+        ],
+        "type": "object"
+      },
+      "ClusteringResultValue": {
+        "oneOf": [
+          {
+            "nullable": true,
+            "type": "number"
+          },
+          {
+            "nullable": true,
+            "type": "string"
+          },
+          {
+            "nullable": true,
+            "type": "boolean"
+          }
+        ]
+      },
+      "ColumnLocation": {
+        "type": "object"
+      },
+      "ColumnStatistic": {
+        "properties": {
+          "type": {
+            "enum": [
+              "COUNT",
+              "COUNT_NULL",
+              "COUNT_UNIQUE",
+              "AVG",
+              "STDDEV",
+              "MIN",
+              "MAX",
+              "PERCENTILE_25",
+              "PERCENTILE_50",
+              "PERCENTILE_75"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticWarning": {
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "message"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticsRequest": {
+        "description": "A request with a column to retrieve statistics for.",
+        "properties": {
+          "columnName": {
+            "type": "string"
+          },
+          "frequency": {
+            "$ref": "#/components/schemas/FrequencyProperties"
+          },
+          "from": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SqlQuery"
+              },
+              {
+                "$ref": "#/components/schemas/Table"
+              }
+            ]
+          },
+          "histogram": {
+            "$ref": "#/components/schemas/HistogramProperties"
+          },
+          "statistics": {
+            "items": {
+              "enum": [
+                "COUNT",
+                "COUNT_NULL",
+                "COUNT_UNIQUE",
+                "AVG",
+                "STDDEV",
+                "MIN",
+                "MAX",
+                "PERCENTILE_25",
+                "PERCENTILE_50",
+                "PERCENTILE_75"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "columnName",
+          "from"
+        ],
+        "type": "object"
+      },
+      "ColumnStatisticsResponse": {
+        "properties": {
+          "frequency": {
+            "$ref": "#/components/schemas/Frequency"
+          },
+          "histogram": {
+            "$ref": "#/components/schemas/Histogram"
+          },
+          "statistics": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnStatistic"
+            },
+            "type": "array"
+          },
+          "warnings": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnStatisticWarning"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "ColumnWarning": {
@@ -1745,7 +2017,9 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL",
+              "DUCKDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1968,6 +2242,7 @@
             "description": "An array of date granularities. All listed granularities will be available for date dataset.",
             "items": {
               "enum": [
+                "SECOND",
                 "MINUTE",
                 "HOUR",
                 "DAY",
@@ -2678,7 +2953,11 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG",
+              "ZAPIER_TOKEN",
+              "ANOMALY_SENSITIVITY",
+              "JUPYTER_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -3702,7 +3981,7 @@
             "type": "boolean"
           },
           "dataSamplingPercentage": {
-            "default": 100.0,
+            "default": 100,
             "deprecated": true,
             "description": "Specifies percentage of source table data scanned during the computation. This field is deprecated and is no longer used during the elements computation.",
             "format": "float",
@@ -3778,6 +4057,7 @@
           "granularity": {
             "description": "Granularity of requested label in case of date attribute",
             "enum": [
+              "SECOND",
               "MINUTE",
               "HOUR",
               "DAY",
@@ -3861,7 +4141,8 @@
               "userDataFilter",
               "prompt",
               "visualizationObject",
-              "filterContext"
+              "filterContext",
+              "tag"
             ],
             "example": "metric",
             "type": "string"
@@ -3909,7 +4190,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -3954,7 +4235,7 @@
             "description": "A multi-dimensional array of computed results. The most common one being a 2-dimensional array. The arrays can be composed of Double or null values.",
             "example": [
               [
-                1.0,
+                1,
                 2.5
               ],
               [
@@ -4229,6 +4510,114 @@
         ],
         "type": "object"
       },
+      "FindRecommendationsRequest": {
+        "properties": {
+          "peerMultiplier": {
+            "format": "double",
+            "type": "number"
+          },
+          "weights": {
+            "additionalProperties": {
+              "format": "double",
+              "type": "number"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "ForecastRequest": {
+        "properties": {
+          "forecastPeriod": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "forecastPeriod"
+        ],
+        "type": "object"
+      },
+      "ForecastResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MachineLearningResult"
+          },
+          {
+            "properties": {
+              "attribute": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "origin": {
+                "items": {
+                  "nullable": true,
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "predictions": {
+                "items": {
+                  "items": {
+                    "nullable": true,
+                    "type": "number"
+                  },
+                  "nullable": true,
+                  "type": "array"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "attribute",
+          "origin",
+          "predictions"
+        ],
+        "type": "object"
+      },
+      "Frequency": {
+        "properties": {
+          "buckets": {
+            "items": {
+              "$ref": "#/components/schemas/FrequencyBucket"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "buckets"
+        ],
+        "type": "object"
+      },
+      "FrequencyBucket": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "count"
+        ],
+        "type": "object"
+      },
+      "FrequencyProperties": {
+        "properties": {
+          "valueLimit": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "GenerateLdmRequest": {
         "description": "A request containing all information needed for generation of logical model.",
         "properties": {
@@ -4424,6 +4813,54 @@
         "required": [
           "id",
           "type"
+        ],
+        "type": "object"
+      },
+      "Histogram": {
+        "properties": {
+          "buckets": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramBucket"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "buckets"
+        ],
+        "type": "object"
+      },
+      "HistogramBucket": {
+        "properties": {
+          "count": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "lowerBound": {
+            "format": "double",
+            "type": "number"
+          },
+          "upperBound": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "count",
+          "lowerBound",
+          "upperBound"
+        ],
+        "type": "object"
+      },
+      "HistogramProperties": {
+        "properties": {
+          "bucketCount": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bucketCount"
         ],
         "type": "object"
       },
@@ -4625,6 +5062,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -5055,6 +5518,15 @@
           "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
         },
         "type": "array"
+      },
+      "JsonApiAnalyticalDashboardToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
+          }
+        ]
       },
       "JsonApiApiTokenIn": {
         "description": "JSON:API representation of apiToken entity.",
@@ -5586,6 +6058,7 @@
               },
               "granularity": {
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -7036,7 +7509,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               }
@@ -7198,7 +7673,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -7329,7 +7806,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -7500,7 +7979,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -8652,6 +9133,15 @@
         },
         "type": "array"
       },
+      "JsonApiFilterContextToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextLinkage"
+          }
+        ]
+      },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
         "properties": {
@@ -9184,6 +9674,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -9919,7 +10435,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -9981,7 +10501,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10075,7 +10599,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -11503,7 +12031,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -11565,7 +12097,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -11762,6 +12298,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -12118,6 +12680,456 @@
           "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
         },
         "type": "array"
+      },
+      "JsonApiVisualizationObjectToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertIn": {
+        "description": "JSON:API representation of widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOut": {
+        "description": "JSON:API representation of widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertPatch": {
+        "description": "JSON:API representation of patching widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiWorkspaceDataFilterIn": {
         "description": "JSON:API representation of workspaceDataFilter entity.",
@@ -13132,7 +14144,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -13194,7 +14210,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -13314,7 +14334,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -13376,7 +14400,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -13423,9 +14451,283 @@
           }
         ]
       },
+      "JsonApiZapierSubscriptionIn": {
+        "description": "JSON:API representation of zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOut": {
+        "description": "JSON:API representation of zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiZapierSubscriptionPatch": {
+        "description": "JSON:API representation of patching zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
       "JsonNode": {
         "description": "A definition of the metric in JSON format.",
         "example": "{ \"content\": { \"maql\": \"SELECT 1\", \"format\": \"%0.2f\" } \"}",
+        "type": "object"
+      },
+      "KeyDriversDimension": {
+        "properties": {
+          "attribute": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "attributeName": {
+            "type": "string"
+          },
+          "format": {
+            "$ref": "#/components/schemas/AttributeFormat"
+          },
+          "granularity": {
+            "enum": [
+              "SECOND",
+              "MINUTE",
+              "HOUR",
+              "DAY",
+              "WEEK",
+              "MONTH",
+              "QUARTER",
+              "YEAR",
+              "MINUTE_OF_HOUR",
+              "HOUR_OF_DAY",
+              "DAY_OF_WEEK",
+              "DAY_OF_MONTH",
+              "DAY_OF_YEAR",
+              "WEEK_OF_YEAR",
+              "MONTH_OF_YEAR",
+              "QUARTER_OF_YEAR"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "$ref": "#/components/schemas/RestApiIdentifier"
+          },
+          "labelName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "attribute",
+          "attributeName",
+          "label",
+          "labelName"
+        ],
+        "type": "object"
+      },
+      "KeyDriversRequest": {
+        "properties": {
+          "auxMetrics": {
+            "items": {
+              "$ref": "#/components/schemas/MeasureItem"
+            },
+            "type": "array"
+          },
+          "metric": {
+            "$ref": "#/components/schemas/MeasureItem"
+          },
+          "sortDirection": {
+            "description": "Sorting elements - ascending/descending order.",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "metric"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResponse": {
+        "properties": {
+          "dimensionality": {
+            "items": {
+              "$ref": "#/components/schemas/KeyDriversDimension"
+            },
+            "type": "array"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "dimensionality",
+          "links"
+        ],
+        "type": "object"
+      },
+      "KeyDriversResult": {
+        "properties": {
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
         "type": "object"
       },
       "LabelIdentifier": {
@@ -13479,6 +14781,32 @@
         },
         "required": [
           "locale"
+        ],
+        "type": "object"
+      },
+      "MachineLearningResponse": {
+        "properties": {
+          "links": {
+            "$ref": "#/components/schemas/ExecutionLinks"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "type": "object"
+      },
+      "MachineLearningResult": {
+        "type": "object"
+      },
+      "MarkNotificationAsReadRequest": {
+        "properties": {
+          "notificationId": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "notificationId"
         ],
         "type": "object"
       },
@@ -14128,6 +15456,124 @@
         ],
         "type": "object"
       },
+      "RecentAnalyticalObject": {
+        "properties": {
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "interactionsByUser": {
+            "items": {
+              "enum": [
+                "view",
+                "like",
+                "dislike",
+                "favorite",
+                "subscribe"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "analyticalDashboard",
+              "attribute",
+              "attributeHierarchy",
+              "dashboardPlugin",
+              "dataset",
+              "fact",
+              "label",
+              "metric",
+              "userDataFilter",
+              "prompt",
+              "visualizationObject",
+              "filterContext",
+              "workspaceSettings",
+              "customApplicationSetting",
+              "workspaceDataFilter",
+              "workspaceDataFilterSetting",
+              "widgetAlert",
+              "tag"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "Recommendation": {
+        "properties": {
+          "identifier": {
+            "$ref": "#/components/schemas/EntityIdentifier"
+          },
+          "interactionsByUser": {
+            "items": {
+              "enum": [
+                "view",
+                "like",
+                "dislike",
+                "favorite",
+                "subscribe"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "reason": {
+            "enum": [
+              "MOST_VIEWED",
+              "MOST_VIEWED_BY_PEERS",
+              "POPULAR",
+              "POPULAR_BY_PEERS",
+              "TRENDING"
+            ],
+            "type": "string"
+          },
+          "score": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "identifier",
+          "interactionsByUser",
+          "reason",
+          "score"
+        ],
+        "type": "object"
+      },
       "ReferenceIdentifier": {
         "description": "A reference identifier.",
         "properties": {
@@ -14199,6 +15645,7 @@
               "granularity": {
                 "description": "Date granularity specifying particular date attribute in given dimension.",
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -14283,7 +15730,11 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG",
+              "ZAPIER_TOKEN",
+              "ANOMALY_SENSITIVITY",
+              "JUPYTER_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -14801,6 +16252,44 @@
         ],
         "type": "object"
       },
+      "SqlQuery": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ColumnLocation"
+          },
+          {
+            "properties": {
+              "sql": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "sql"
+        ],
+        "type": "object"
+      },
+      "Table": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ColumnLocation"
+          },
+          {
+            "properties": {
+              "tableName": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "required": [
+          "tableName"
+        ],
+        "type": "object"
+      },
       "TableWarning": {
         "description": "Warnings related to single table.",
         "properties": {
@@ -14902,7 +16391,9 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL",
+              "DUCKDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -15416,6 +16907,63 @@
         ],
         "type": "object"
       },
+      "WidgetAlertUserNotification": {
+        "properties": {
+          "alertId": {
+            "type": "string"
+          },
+          "analyticalDashboardTitle": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "currentValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "markedAsRead": {
+            "type": "boolean"
+          },
+          "threshold": {
+            "format": "double",
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "widgetAlert"
+            ],
+            "type": "string"
+          },
+          "visualizationObjectTitle": {
+            "type": "string"
+          },
+          "whenTriggered": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alertId",
+          "analyticalDashboardTitle",
+          "currentValue",
+          "id",
+          "markedAsRead",
+          "threshold",
+          "type",
+          "visualizationObjectTitle",
+          "whenTriggered",
+          "workspace"
+        ],
+        "type": "object"
+      },
       "WorkspaceIdentifier": {
         "description": "A workspace identifier.",
         "example": "{ id: demo, type: workspace }",
@@ -15666,6 +17214,46 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/dataSources/{dataSourceId}/computeColumnStatistics": {
+      "post": {
+        "operationId": "computeColumnStatistics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dataSourceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColumnStatisticsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColumnStatisticsResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/dataSources/{dataSourceId}/generateLogicalModel": {
@@ -16641,6 +18229,591 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/cache/anomalyDetection/{resultId}": {
+      "delete": {
+        "operationId": "deleteAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyDetectionResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/cache/clustering/{resultId}": {
+      "delete": {
+        "operationId": "deleteClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusteringResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/cache/forecast/{resultId}": {
+      "delete": {
+        "operationId": "deleteForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "get": {
+        "operationId": "fetchForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AnomalyDetectionResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClusteringResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ForecastResult"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "cacheForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastResult"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CacheResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides": {
       "post": {
         "description": "Finds entities with given ID in hierarchy (e.g. to check possible future conflicts).",
@@ -17272,6 +19445,521 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers": {
+      "post": {
+        "operationId": "processKeyDriversRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Ignore all caches during execution of current request.",
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KeyDriversRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/computeKeyDrivers/result/{resultId}": {
+      "get": {
+        "operationId": "getResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result ID",
+            "example": "a9b28f9dc55f37ea9f4a5fb0c76895923591e781",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyDriversResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/result/{resultId}": {
+      "get": {
+        "operationId": "getAnomalyDetectionResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnomalyDetectionResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/anomalyDetection/{resultId}": {
+      "post": {
+        "operationId": "processAnomalyDetection",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/result/{resultId}": {
+      "get": {
+        "operationId": "getClusteringResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusteringResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/clustering/{resultId}": {
+      "post": {
+        "operationId": "processClusteringRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusteringRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/result/{resultId}": {
+      "get": {
+        "operationId": "getForecastResult",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResult"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/execution/ml/forecast/{resultId}": {
+      "post": {
+        "operationId": "processForecastRequest",
+        "parameters": [
+          {
+            "description": "Workspace identifier",
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Input result identifier",
+            "in": "path",
+            "name": "resultId",
+            "required": true,
+            "schema": {
+              "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "skip-cache",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "header",
+            "name": "debug-arrow",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MachineLearningResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "Computation",
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/export/tabular": {
       "post": {
         "description": "An tabular export job will be created based on the export request and put to queue to be executed. The result of the operation will be an exportResult identifier that will be assembled by the client into a url that can be polled.",
@@ -17548,6 +20236,75 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/findRecommendations": {
+      "post": {
+        "operationId": "findRecommendations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 5,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of entity types to be recommended, if not provided return all.",
+            "in": "query",
+            "name": "types",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "analyticalDashboard",
+                  "visualizationObject",
+                  "metric"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindRecommendationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Recommendation"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts": {
       "get": {
         "description": "Finds API identifier conflicts in given workspace hierarchy.",
@@ -17672,6 +20429,284 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/markAllNotificationsAsRead": {
+      "post": {
+        "operationId": "markAllNotificationsAsRead",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/markNotificationAsRead": {
+      "post": {
+        "operationId": "markNotificationAsRead",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkNotificationAsReadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/notifications": {
+      "get": {
+        "description": "Gets all the notifications for the current user.",
+        "operationId": "getNotificationsForCurrentUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/WidgetAlertUserNotification"
+                      },
+                      {
+                        "$ref": "#/components/schemas/AnomalyUserNotification"
+                      }
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities": {
       "get": {
         "description": "Finds API identifier overrides in given workspace hierarchy.",
@@ -17712,6 +20747,58 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/recent": {
+      "get": {
+        "operationId": "findRecentAnalytics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 5,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subscribedOnly",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RecentAnalyticalObject"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/resolveSettings": {
@@ -17806,6 +20893,99 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/subscriptions": {
+      "get": {
+        "operationId": "listSubscriptions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EntityIdentifier"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/tags/{objectId}/subscribe": {
+      "delete": {
+        "operationId": "unsubscribeFromTag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "subscribeToTag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/translations": {
       "get": {
         "description": "Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.",
@@ -17890,6 +21070,55 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/translations/retrieve": {
+      "post": {
+        "description": "Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.",
+        "operationId": "retrieveTranslations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocaleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Xliff"
+                }
+              }
+            },
+            "description": "XLIFF file containing translations for a particular locale."
+          }
+        },
+        "summary": "Retrieve translations for entities.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/translations/set": {
       "post": {
         "description": "Set translation for existing entities in a particular locale.",
@@ -17930,6 +21159,186 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/entities/admin/cookieSecurityConfigurations/{id}": {
@@ -26966,6 +30375,575 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/widgetAlerts": {
+      "get": {
+        "operationId": "getAllEntities@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Widget Alerts",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Widget Alerts",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings": {
       "get": {
         "operationId": "getAllEntities@WorkspaceDataFilterSettings",
@@ -28442,6 +32420,249 @@
           "entities",
           "workspace-object-controller"
         ]
+      }
+    },
+    "/api/v1/entities/zapierSubscriptions": {
+      "get": {
+        "operationId": "getAllEntities@ZapierSubscriptions",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@ZapierSubscriptions",
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Zapier subscription",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/zapierSubscriptions/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete Zapier subscription",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/layout/dataSources": {

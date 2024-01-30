@@ -63,6 +63,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
 
     allowed_values = {
         ('granularity',): {
+            'SECOND': "SECOND",
             'MINUTE': "MINUTE",
             'HOUR': "HOUR",
             'DAY': "DAY",

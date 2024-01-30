@@ -5,7 +5,7 @@ NO_CLIENT_GD_PROJECTS_ABS = $(filter-out %client, $(wildcard $(CURDIR)/*gooddata
 NO_CLIENT_GD_PROJECTS_DIRS = $(foreach dir, $(NO_CLIENT_GD_PROJECTS_ABS), $(notdir $(dir)))
 # TODO: replace API_VERSION in the future by call to API
 API_VERSION="v1"
-URL="http://localhost:3000/api/${API_VERSION}/schemas"
+URL="https://demo-se.labs.cloud.gooddata.com/api/${API_VERSION}/schemas"
 
 include ci_tests.mk
 

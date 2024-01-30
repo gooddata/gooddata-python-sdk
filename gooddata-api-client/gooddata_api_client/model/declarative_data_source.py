@@ -79,6 +79,8 @@ class DeclarativeDataSource(ModelNormal):
             'DATABRICKS': "DATABRICKS",
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
+            'MYSQL': "MYSQL",
+            'DUCKDB': "DUCKDB",
         },
     }
 

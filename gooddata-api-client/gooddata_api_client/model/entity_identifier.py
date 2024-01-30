@@ -68,6 +68,7 @@ class EntityIdentifier(ModelNormal):
             'PROMPT': "prompt",
             'VISUALIZATIONOBJECT': "visualizationObject",
             'FILTERCONTEXT': "filterContext",
+            'TAG': "tag",
         },
     }
 

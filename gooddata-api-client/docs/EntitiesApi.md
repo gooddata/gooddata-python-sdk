@@ -22,10 +22,12 @@ Method | HTTP request | Description
 [**create_entity_user_settings**](EntitiesApi.md#create_entity_user_settings) | **POST** /api/v1/entities/users/{userId}/userSettings | Post new user settings for the user
 [**create_entity_users**](EntitiesApi.md#create_entity_users) | **POST** /api/v1/entities/users | Post User entities
 [**create_entity_visualization_objects**](EntitiesApi.md#create_entity_visualization_objects) | **POST** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Post Visualization Objects
+[**create_entity_widget_alerts**](EntitiesApi.md#create_entity_widget_alerts) | **POST** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts | Post Widget Alerts
 [**create_entity_workspace_data_filter_settings**](EntitiesApi.md#create_entity_workspace_data_filter_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | Post Settings for Workspace Data Filters
 [**create_entity_workspace_data_filters**](EntitiesApi.md#create_entity_workspace_data_filters) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Post Workspace Data Filters
 [**create_entity_workspace_settings**](EntitiesApi.md#create_entity_workspace_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Post Settings for Workspaces
 [**create_entity_workspaces**](EntitiesApi.md#create_entity_workspaces) | **POST** /api/v1/entities/workspaces | Post Workspace entities
+[**create_entity_zapier_subscriptions**](EntitiesApi.md#create_entity_zapier_subscriptions) | **POST** /api/v1/entities/zapierSubscriptions | Post Zapier subscription
 [**delete_entity_analytical_dashboards**](EntitiesApi.md#delete_entity_analytical_dashboards) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Delete a Dashboard
 [**delete_entity_api_tokens**](EntitiesApi.md#delete_entity_api_tokens) | **DELETE** /api/v1/entities/users/{userId}/apiTokens/{id} | Delete an API Token for a user
 [**delete_entity_attribute_hierarchies**](EntitiesApi.md#delete_entity_attribute_hierarchies) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Delete an Attribute Hierarchy
@@ -44,10 +46,12 @@ Method | HTTP request | Description
 [**delete_entity_user_settings**](EntitiesApi.md#delete_entity_user_settings) | **DELETE** /api/v1/entities/users/{userId}/userSettings/{id} | Delete a setting for a user
 [**delete_entity_users**](EntitiesApi.md#delete_entity_users) | **DELETE** /api/v1/entities/users/{id} | Delete User entity
 [**delete_entity_visualization_objects**](EntitiesApi.md#delete_entity_visualization_objects) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Delete a Visualization Object
+[**delete_entity_widget_alerts**](EntitiesApi.md#delete_entity_widget_alerts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId} | Delete a Widget Alert
 [**delete_entity_workspace_data_filter_settings**](EntitiesApi.md#delete_entity_workspace_data_filter_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Delete a Settings for Workspace Data Filter
 [**delete_entity_workspace_data_filters**](EntitiesApi.md#delete_entity_workspace_data_filters) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Delete a Workspace Data Filter
 [**delete_entity_workspace_settings**](EntitiesApi.md#delete_entity_workspace_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Delete a Setting for Workspace
 [**delete_entity_workspaces**](EntitiesApi.md#delete_entity_workspaces) | **DELETE** /api/v1/entities/workspaces/{id} | Delete Workspace entity
+[**delete_entity_zapier_subscriptions**](EntitiesApi.md#delete_entity_zapier_subscriptions) | **DELETE** /api/v1/entities/zapierSubscriptions/{id} | Delete Zapier subscription
 [**get_all_entities_analytical_dashboards**](EntitiesApi.md#get_all_entities_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards | Get all Dashboards
 [**get_all_entities_api_tokens**](EntitiesApi.md#get_all_entities_api_tokens) | **GET** /api/v1/entities/users/{userId}/apiTokens | List all api tokens for a user
 [**get_all_entities_attribute_hierarchies**](EntitiesApi.md#get_all_entities_attribute_hierarchies) | **GET** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies | Get all Attribute Hierarchies
@@ -73,10 +77,12 @@ Method | HTTP request | Description
 [**get_all_entities_user_settings**](EntitiesApi.md#get_all_entities_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings | List all settings for a user
 [**get_all_entities_users**](EntitiesApi.md#get_all_entities_users) | **GET** /api/v1/entities/users | Get User entities
 [**get_all_entities_visualization_objects**](EntitiesApi.md#get_all_entities_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects | Get all Visualization Objects
+[**get_all_entities_widget_alerts**](EntitiesApi.md#get_all_entities_widget_alerts) | **GET** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts | Get all Widget Alerts
 [**get_all_entities_workspace_data_filter_settings**](EntitiesApi.md#get_all_entities_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings | Get all Settings for Workspace Data Filters
 [**get_all_entities_workspace_data_filters**](EntitiesApi.md#get_all_entities_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters | Get all Workspace Data Filters
 [**get_all_entities_workspace_settings**](EntitiesApi.md#get_all_entities_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings | Get all Setting for Workspaces
 [**get_all_entities_workspaces**](EntitiesApi.md#get_all_entities_workspaces) | **GET** /api/v1/entities/workspaces | Get Workspace entities
+[**get_all_entities_zapier_subscriptions**](EntitiesApi.md#get_all_entities_zapier_subscriptions) | **GET** /api/v1/entities/zapierSubscriptions | 
 [**get_all_options**](EntitiesApi.md#get_all_options) | **GET** /api/v1/options | Links for all configuration options
 [**get_data_source_drivers**](EntitiesApi.md#get_data_source_drivers) | **GET** /api/v1/options/availableDrivers | Get all available data source drivers
 [**get_entity_analytical_dashboards**](EntitiesApi.md#get_entity_analytical_dashboards) | **GET** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Get a Dashboard
@@ -106,10 +112,12 @@ Method | HTTP request | Description
 [**get_entity_user_settings**](EntitiesApi.md#get_entity_user_settings) | **GET** /api/v1/entities/users/{userId}/userSettings/{id} | Get a setting for a user
 [**get_entity_users**](EntitiesApi.md#get_entity_users) | **GET** /api/v1/entities/users/{id} | Get User entity
 [**get_entity_visualization_objects**](EntitiesApi.md#get_entity_visualization_objects) | **GET** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Get a Visualization Object
+[**get_entity_widget_alerts**](EntitiesApi.md#get_entity_widget_alerts) | **GET** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId} | Get a Widget Alert
 [**get_entity_workspace_data_filter_settings**](EntitiesApi.md#get_entity_workspace_data_filter_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Get a Setting for Workspace Data Filter
 [**get_entity_workspace_data_filters**](EntitiesApi.md#get_entity_workspace_data_filters) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Get a Workspace Data Filter
 [**get_entity_workspace_settings**](EntitiesApi.md#get_entity_workspace_settings) | **GET** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Get a Setting for Workspace
 [**get_entity_workspaces**](EntitiesApi.md#get_entity_workspaces) | **GET** /api/v1/entities/workspaces/{id} | Get Workspace entity
+[**get_entity_zapier_subscriptions**](EntitiesApi.md#get_entity_zapier_subscriptions) | **GET** /api/v1/entities/zapierSubscriptions/{id} | 
 [**get_organization**](EntitiesApi.md#get_organization) | **GET** /api/v1/entities/organization | Get current organization info
 [**patch_entity_analytical_dashboards**](EntitiesApi.md#patch_entity_analytical_dashboards) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Patch a Dashboard
 [**patch_entity_attribute_hierarchies**](EntitiesApi.md#patch_entity_attribute_hierarchies) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Patch an Attribute Hierarchy
@@ -129,10 +137,12 @@ Method | HTTP request | Description
 [**patch_entity_user_groups**](EntitiesApi.md#patch_entity_user_groups) | **PATCH** /api/v1/entities/userGroups/{id} | Patch UserGroup entity
 [**patch_entity_users**](EntitiesApi.md#patch_entity_users) | **PATCH** /api/v1/entities/users/{id} | Patch User entity
 [**patch_entity_visualization_objects**](EntitiesApi.md#patch_entity_visualization_objects) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Patch a Visualization Object
+[**patch_entity_widget_alerts**](EntitiesApi.md#patch_entity_widget_alerts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId} | Patch a Widget Alert
 [**patch_entity_workspace_data_filter_settings**](EntitiesApi.md#patch_entity_workspace_data_filter_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Patch a Settings for Workspace Data Filter
 [**patch_entity_workspace_data_filters**](EntitiesApi.md#patch_entity_workspace_data_filters) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Patch a Workspace Data Filter
 [**patch_entity_workspace_settings**](EntitiesApi.md#patch_entity_workspace_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Patch a Setting for Workspace
 [**patch_entity_workspaces**](EntitiesApi.md#patch_entity_workspaces) | **PATCH** /api/v1/entities/workspaces/{id} | Patch Workspace entity
+[**patch_entity_zapier_subscriptions**](EntitiesApi.md#patch_entity_zapier_subscriptions) | **PATCH** /api/v1/entities/zapierSubscriptions/{id} | 
 [**update_entity_analytical_dashboards**](EntitiesApi.md#update_entity_analytical_dashboards) | **PUT** /api/v1/entities/workspaces/{workspaceId}/analyticalDashboards/{objectId} | Put Dashboards
 [**update_entity_attribute_hierarchies**](EntitiesApi.md#update_entity_attribute_hierarchies) | **PUT** /api/v1/entities/workspaces/{workspaceId}/attributeHierarchies/{objectId} | Put an Attribute Hierarchy
 [**update_entity_color_palettes**](EntitiesApi.md#update_entity_color_palettes) | **PUT** /api/v1/entities/colorPalettes/{id} | Put Color Pallette
@@ -152,10 +162,12 @@ Method | HTTP request | Description
 [**update_entity_user_settings**](EntitiesApi.md#update_entity_user_settings) | **PUT** /api/v1/entities/users/{userId}/userSettings/{id} | Put new user settings for the user
 [**update_entity_users**](EntitiesApi.md#update_entity_users) | **PUT** /api/v1/entities/users/{id} | Put User entity
 [**update_entity_visualization_objects**](EntitiesApi.md#update_entity_visualization_objects) | **PUT** /api/v1/entities/workspaces/{workspaceId}/visualizationObjects/{objectId} | Put a Visualization Object
+[**update_entity_widget_alerts**](EntitiesApi.md#update_entity_widget_alerts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId} | Put a Widget Alert
 [**update_entity_workspace_data_filter_settings**](EntitiesApi.md#update_entity_workspace_data_filter_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings/{objectId} | Put a Settings for Workspace Data Filter
 [**update_entity_workspace_data_filters**](EntitiesApi.md#update_entity_workspace_data_filters) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceDataFilters/{objectId} | Put a Workspace Data Filter
 [**update_entity_workspace_settings**](EntitiesApi.md#update_entity_workspace_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/workspaceSettings/{objectId} | Put a Setting for a Workspace
 [**update_entity_workspaces**](EntitiesApi.md#update_entity_workspaces) | **PUT** /api/v1/entities/workspaces/{id} | Put Workspace entity
+[**update_entity_zapier_subscriptions**](EntitiesApi.md#update_entity_zapier_subscriptions) | **PUT** /api/v1/entities/zapierSubscriptions/{id} | 
 
 
 # **create_entity_analytical_dashboards**
@@ -1787,6 +1799,118 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **create_entity_widget_alerts**
+> JsonApiWidgetAlertOutDocument create_entity_widget_alerts(workspace_id, json_api_widget_alert_in_document)
+
+Post Widget Alerts
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_widget_alert_in_document import JsonApiWidgetAlertInDocument
+from gooddata_api_client.model.json_api_widget_alert_out_document import JsonApiWidgetAlertOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_widget_alert_in_document = JsonApiWidgetAlertInDocument(
+        data=JsonApiWidgetAlertIn(
+            attributes=JsonApiWidgetAlertInAttributes(
+                action_name="action_name_example",
+                are_relations_valid=True,
+                description="description_example",
+                tags=[
+                    "tags_example",
+                ],
+                threshold=3.14,
+                title="title_example",
+                when_triggered="when_triggered_example",
+            ),
+            id="id1",
+            relationships=JsonApiWidgetAlertInRelationships(
+                analytical_dashboard=JsonApiWidgetAlertInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                filter_context=JsonApiWidgetAlertInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiWidgetAlertInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="widgetAlert",
+        ),
+    ) # JsonApiWidgetAlertInDocument | 
+    include = [
+        "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Widget Alerts
+        api_response = api_instance.create_entity_widget_alerts(workspace_id, json_api_widget_alert_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post Widget Alerts
+        api_response = api_instance.create_entity_widget_alerts(workspace_id, json_api_widget_alert_in_document, include=include, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_widget_alert_in_document** | [**JsonApiWidgetAlertInDocument**](JsonApiWidgetAlertInDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWidgetAlertOutDocument**](JsonApiWidgetAlertOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument create_entity_workspace_data_filter_settings(workspace_id, json_api_workspace_data_filter_setting_in_document)
 
@@ -2167,6 +2291,80 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutDocument**](JsonApiWorkspaceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument create_entity_zapier_subscriptions(json_api_zapier_subscription_in_document)
+
+Post Zapier subscription
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_in_document import JsonApiZapierSubscriptionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    json_api_zapier_subscription_in_document = JsonApiZapierSubscriptionInDocument(
+        data=JsonApiZapierSubscriptionIn(
+            attributes=JsonApiZapierSubscriptionInAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionInDocument | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Zapier subscription
+        api_response = api_instance.create_entity_zapier_subscriptions(json_api_zapier_subscription_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **json_api_zapier_subscription_in_document** | [**JsonApiZapierSubscriptionInDocument**](JsonApiZapierSubscriptionInDocument.md)|  |
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
 
 ### Authorization
 
@@ -3530,6 +3728,81 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_widget_alerts**
+> delete_entity_widget_alerts(workspace_id, object_id)
+
+Delete a Widget Alert
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete a Widget Alert
+        api_instance.delete_entity_widget_alerts(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Delete a Widget Alert
+        api_instance.delete_entity_widget_alerts(workspace_id, object_id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_workspace_data_filter_settings**
 > delete_entity_workspace_data_filter_settings(workspace_id, object_id)
 
@@ -3798,6 +4071,79 @@ with gooddata_api_client.ApiClient() as api_client:
         api_instance.delete_entity_workspaces(id, filter=filter)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->delete_entity_workspaces: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **delete_entity_zapier_subscriptions**
+> delete_entity_zapier_subscriptions(id)
+
+Delete Zapier subscription
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Delete Zapier subscription
+        api_instance.delete_entity_zapier_subscriptions(id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Delete Zapier subscription
+        api_instance.delete_entity_zapier_subscriptions(id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_zapier_subscriptions: %s\n" % e)
 ```
 
 
@@ -5990,6 +6336,102 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_all_entities_widget_alerts**
+> JsonApiWidgetAlertOutList get_all_entities_widget_alerts(workspace_id)
+
+Get all Widget Alerts
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_widget_alert_out_list import JsonApiWidgetAlertOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get all Widget Alerts
+        api_response = api_instance.get_all_entities_widget_alerts(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get all Widget Alerts
+        api_response = api_instance.get_all_entities_widget_alerts(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWidgetAlertOutList**](JsonApiWidgetAlertOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_all_entities_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutList get_all_entities_workspace_data_filter_settings(workspace_id)
 
@@ -6339,6 +6781,79 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutList**](JsonApiWorkspaceOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutList get_all_entities_zapier_subscriptions()
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_list import JsonApiZapierSubscriptionOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_zapier_subscriptions(filter=filter, page=page, size=size, sort=sort)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutList**](JsonApiZapierSubscriptionOutList.md)
 
 ### Authorization
 
@@ -8716,6 +9231,94 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **get_entity_widget_alerts**
+> JsonApiWidgetAlertOutDocument get_entity_widget_alerts(workspace_id, object_id)
+
+Get a Widget Alert
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_widget_alert_out_document import JsonApiWidgetAlertOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=origin,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Get a Widget Alert
+        api_response = api_instance.get_entity_widget_alerts(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Get a Widget Alert
+        api_response = api_instance.get_entity_widget_alerts(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiWidgetAlertOutDocument**](JsonApiWidgetAlertOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **get_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument get_entity_workspace_data_filter_settings(workspace_id, object_id)
 
@@ -9043,6 +9646,80 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutDocument**](JsonApiWorkspaceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument get_entity_zapier_subscriptions(id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_zapier_subscriptions(id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_zapier_subscriptions(id, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
 
 ### Authorization
 
@@ -10871,6 +11548,118 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **patch_entity_widget_alerts**
+> JsonApiWidgetAlertOutDocument patch_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_patch_document)
+
+Patch a Widget Alert
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_widget_alert_out_document import JsonApiWidgetAlertOutDocument
+from gooddata_api_client.model.json_api_widget_alert_patch_document import JsonApiWidgetAlertPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_widget_alert_patch_document = JsonApiWidgetAlertPatchDocument(
+        data=JsonApiWidgetAlertPatch(
+            attributes=JsonApiWidgetAlertInAttributes(
+                action_name="action_name_example",
+                are_relations_valid=True,
+                description="description_example",
+                tags=[
+                    "tags_example",
+                ],
+                threshold=3.14,
+                title="title_example",
+                when_triggered="when_triggered_example",
+            ),
+            id="id1",
+            relationships=JsonApiWidgetAlertInRelationships(
+                analytical_dashboard=JsonApiWidgetAlertInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                filter_context=JsonApiWidgetAlertInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiWidgetAlertInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="widgetAlert",
+        ),
+    ) # JsonApiWidgetAlertPatchDocument | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Patch a Widget Alert
+        api_response = api_instance.patch_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Patch a Widget Alert
+        api_response = api_instance.patch_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_patch_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_widget_alert_patch_document** | [**JsonApiWidgetAlertPatchDocument**](JsonApiWidgetAlertPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiWidgetAlertOutDocument**](JsonApiWidgetAlertOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **patch_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument patch_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_patch_document)
 
@@ -11251,6 +12040,91 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutDocument**](JsonApiWorkspaceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_patch_document import JsonApiZapierSubscriptionPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_zapier_subscription_patch_document = JsonApiZapierSubscriptionPatchDocument(
+        data=JsonApiZapierSubscriptionPatch(
+            attributes=JsonApiZapierSubscriptionPatchAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionPatchDocument | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_zapier_subscriptions(id, json_api_zapier_subscription_patch_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_zapier_subscription_patch_document** | [**JsonApiZapierSubscriptionPatchDocument**](JsonApiZapierSubscriptionPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
 
 ### Authorization
 
@@ -13101,6 +13975,118 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **update_entity_widget_alerts**
+> JsonApiWidgetAlertOutDocument update_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_in_document)
+
+Put a Widget Alert
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_widget_alert_in_document import JsonApiWidgetAlertInDocument
+from gooddata_api_client.model.json_api_widget_alert_out_document import JsonApiWidgetAlertOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_widget_alert_in_document = JsonApiWidgetAlertInDocument(
+        data=JsonApiWidgetAlertIn(
+            attributes=JsonApiWidgetAlertInAttributes(
+                action_name="action_name_example",
+                are_relations_valid=True,
+                description="description_example",
+                tags=[
+                    "tags_example",
+                ],
+                threshold=3.14,
+                title="title_example",
+                when_triggered="when_triggered_example",
+            ),
+            id="id1",
+            relationships=JsonApiWidgetAlertInRelationships(
+                analytical_dashboard=JsonApiWidgetAlertInRelationshipsAnalyticalDashboard(
+                    data=JsonApiAnalyticalDashboardToOneLinkage(None),
+                ),
+                filter_context=JsonApiWidgetAlertInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiWidgetAlertInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="widgetAlert",
+        ),
+    ) # JsonApiWidgetAlertInDocument | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Put a Widget Alert
+        api_response = api_instance.update_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_widget_alerts: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Put a Widget Alert
+        api_response = api_instance.update_entity_widget_alerts(workspace_id, object_id, json_api_widget_alert_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_widget_alerts: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_widget_alert_in_document** | [**JsonApiWidgetAlertInDocument**](JsonApiWidgetAlertInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiWidgetAlertOutDocument**](JsonApiWidgetAlertOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **update_entity_workspace_data_filter_settings**
 > JsonApiWorkspaceDataFilterSettingOutDocument update_entity_workspace_data_filter_settings(workspace_id, object_id, json_api_workspace_data_filter_setting_in_document)
 
@@ -13481,6 +14467,91 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiWorkspaceOutDocument**](JsonApiWorkspaceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_zapier_subscriptions**
+> JsonApiZapierSubscriptionOutDocument update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_zapier_subscription_out_document import JsonApiZapierSubscriptionOutDocument
+from gooddata_api_client.model.json_api_zapier_subscription_in_document import JsonApiZapierSubscriptionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    id = "/6bUUGjjNSwg0_bs" # str | 
+    json_api_zapier_subscription_in_document = JsonApiZapierSubscriptionInDocument(
+        data=JsonApiZapierSubscriptionIn(
+            attributes=JsonApiZapierSubscriptionInAttributes(
+                url="url_example",
+            ),
+            id="id1",
+            type="zapierSubscription",
+        ),
+    ) # JsonApiZapierSubscriptionInDocument | 
+    filter = "filter=url==someString" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_zapier_subscriptions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_zapier_subscriptions(id, json_api_zapier_subscription_in_document, filter=filter)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_zapier_subscriptions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **str**|  |
+ **json_api_zapier_subscription_in_document** | [**JsonApiZapierSubscriptionInDocument**](JsonApiZapierSubscriptionInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+[**JsonApiZapierSubscriptionOutDocument**](JsonApiZapierSubscriptionOutDocument.md)
 
 ### Authorization
 

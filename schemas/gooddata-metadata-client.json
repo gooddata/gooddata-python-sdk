@@ -46,6 +46,46 @@
       }
     },
     "schemas": {
+      "AnomalyUserNotification": {
+        "properties": {
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "currentValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "markedAsRead": {
+            "type": "boolean"
+          },
+          "type": {
+            "enum": [
+              "anomaly"
+            ],
+            "type": "string"
+          },
+          "visualizationObjectTitle": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "currentValue",
+          "id",
+          "markedAsRead",
+          "type",
+          "visualizationObjectTitle",
+          "workspace"
+        ],
+        "type": "object"
+      },
       "ApiEntitlement": {
         "properties": {
           "expiry": {
@@ -965,7 +1005,9 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL",
+              "DUCKDB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1188,6 +1230,7 @@
             "description": "An array of date granularities. All listed granularities will be available for date dataset.",
             "items": {
               "enum": [
+                "SECOND",
                 "MINUTE",
                 "HOUR",
                 "DAY",
@@ -1898,7 +1941,11 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG",
+              "ZAPIER_TOKEN",
+              "ANOMALY_SENSITIVITY",
+              "JUPYTER_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -2855,7 +2902,8 @@
               "userDataFilter",
               "prompt",
               "visualizationObject",
-              "filterContext"
+              "filterContext",
+              "tag"
             ],
             "example": "metric",
             "type": "string"
@@ -2960,6 +3008,22 @@
           "name": "file",
           "namespace": "urn:oasis:names:tc:xliff:document:2.0"
         }
+      },
+      "FindRecommendationsRequest": {
+        "properties": {
+          "peerMultiplier": {
+            "format": "double",
+            "type": "number"
+          },
+          "weights": {
+            "additionalProperties": {
+              "format": "double",
+              "type": "number"
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
       },
       "GenerateLdmRequest": {
         "description": "A request containing all information needed for generation of logical model.",
@@ -3298,6 +3362,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -3728,6 +3818,15 @@
           "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
         },
         "type": "array"
+      },
+      "JsonApiAnalyticalDashboardToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardLinkage"
+          }
+        ]
       },
       "JsonApiApiTokenIn": {
         "description": "JSON:API representation of apiToken entity.",
@@ -4259,6 +4358,7 @@
               },
               "granularity": {
                 "enum": [
+                  "SECOND",
                   "MINUTE",
                   "HOUR",
                   "DAY",
@@ -5709,7 +5809,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               }
@@ -5871,7 +5973,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -6002,7 +6106,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -6173,7 +6279,9 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL",
+                  "DUCKDB"
                 ],
                 "type": "string"
               },
@@ -7325,6 +7433,15 @@
         },
         "type": "array"
       },
+      "JsonApiFilterContextToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextLinkage"
+          }
+        ]
+      },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
         "properties": {
@@ -7857,6 +7974,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -8592,7 +8735,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -8654,7 +8801,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -8748,7 +8899,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10176,7 +10331,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10238,7 +10397,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -10435,6 +10598,32 @@
               "description": {
                 "maxLength": 10000,
                 "type": "string"
+              },
+              "interactions": {
+                "properties": {
+                  "byUser": {
+                    "items": {
+                      "enum": [
+                        "view",
+                        "like",
+                        "dislike",
+                        "favorite",
+                        "subscribe"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array",
+                    "uniqueItems": true
+                  },
+                  "statistics": {
+                    "additionalProperties": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               },
               "modifiedAt": {
                 "format": "date-time",
@@ -10791,6 +10980,456 @@
           "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
         },
         "type": "array"
+      },
+      "JsonApiVisualizationObjectToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertIn": {
+        "description": "JSON:API representation of widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOut": {
+        "description": "JSON:API representation of widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "meta": {
+            "properties": {
+              "origin": {
+                "properties": {
+                  "originId": {
+                    "description": "defines id of the workspace where the entity comes from",
+                    "type": "string"
+                  },
+                  "originType": {
+                    "description": "defines type of the origin of the entity",
+                    "enum": [
+                      "NATIVE",
+                      "PARENT"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "originId",
+                  "originType"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiAnalyticalDashboardOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiWidgetAlertOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiWidgetAlertPatch": {
+        "description": "JSON:API representation of patching widgetAlert entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "actionName": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "threshold": {
+                "format": "double",
+                "type": "number"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              },
+              "whenTriggered": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "analyticalDashboard": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiAnalyticalDashboardToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "widgetAlert"
+            ],
+            "example": "widgetAlert",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiWidgetAlertPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiWidgetAlertPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiWorkspaceDataFilterIn": {
         "description": "JSON:API representation of workspaceDataFilter entity.",
@@ -11805,7 +12444,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -11867,7 +12510,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -11987,7 +12634,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12049,7 +12700,11 @@
                   "WEEK_START",
                   "SHOW_HIDDEN_CATALOG_ITEMS",
                   "OPERATOR_OVERRIDES",
-                  "TIMEZONE_VALIDATION_ENABLED"
+                  "TIMEZONE_VALIDATION_ENABLED",
+                  "OPENAI_CONFIG",
+                  "ZAPIER_TOKEN",
+                  "ANOMALY_SENSITIVITY",
+                  "JUPYTER_CONFIG"
                 ],
                 "type": "string"
               }
@@ -12095,6 +12750,179 @@
             "$ref": "#/components/schemas/JsonApiWorkspaceLinkage"
           }
         ]
+      },
+      "JsonApiZapierSubscriptionIn": {
+        "description": "JSON:API representation of zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOut": {
+        "description": "JSON:API representation of zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionOut"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiZapierSubscriptionPatch": {
+        "description": "JSON:API representation of patching zapierSubscription entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "url": {
+                "description": "URL to call Zapier at",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "zapierSubscription"
+            ],
+            "example": "zapierSubscription",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiZapierSubscriptionPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiZapierSubscriptionPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonNode": {
         "description": "A definition of the metric in JSON format.",
@@ -12152,6 +12980,18 @@
         },
         "required": [
           "locale"
+        ],
+        "type": "object"
+      },
+      "MarkNotificationAsReadRequest": {
+        "properties": {
+          "notificationId": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "notificationId"
         ],
         "type": "object"
       },
@@ -12406,6 +13246,124 @@
         ],
         "type": "object"
       },
+      "RecentAnalyticalObject": {
+        "properties": {
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "interactionsByUser": {
+            "items": {
+              "enum": [
+                "view",
+                "like",
+                "dislike",
+                "favorite",
+                "subscribe"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "modifiedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "modifiedBy": {
+            "$ref": "#/components/schemas/DeclarativeUserIdentifier"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "analyticalDashboard",
+              "attribute",
+              "attributeHierarchy",
+              "dashboardPlugin",
+              "dataset",
+              "fact",
+              "label",
+              "metric",
+              "userDataFilter",
+              "prompt",
+              "visualizationObject",
+              "filterContext",
+              "workspaceSettings",
+              "customApplicationSetting",
+              "workspaceDataFilter",
+              "workspaceDataFilterSetting",
+              "widgetAlert",
+              "tag"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "Recommendation": {
+        "properties": {
+          "identifier": {
+            "$ref": "#/components/schemas/EntityIdentifier"
+          },
+          "interactionsByUser": {
+            "items": {
+              "enum": [
+                "view",
+                "like",
+                "dislike",
+                "favorite",
+                "subscribe"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "reason": {
+            "enum": [
+              "MOST_VIEWED",
+              "MOST_VIEWED_BY_PEERS",
+              "POPULAR",
+              "POPULAR_BY_PEERS",
+              "TRENDING"
+            ],
+            "type": "string"
+          },
+          "score": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "identifier",
+          "interactionsByUser",
+          "reason",
+          "score"
+        ],
+        "type": "object"
+      },
       "ReferenceIdentifier": {
         "description": "A reference identifier.",
         "properties": {
@@ -12501,7 +13459,11 @@
               "WEEK_START",
               "SHOW_HIDDEN_CATALOG_ITEMS",
               "OPERATOR_OVERRIDES",
-              "TIMEZONE_VALIDATION_ENABLED"
+              "TIMEZONE_VALIDATION_ENABLED",
+              "OPENAI_CONFIG",
+              "ZAPIER_TOKEN",
+              "ANOMALY_SENSITIVITY",
+              "JUPYTER_CONFIG"
             ],
             "example": "TIMEZONE",
             "type": "string"
@@ -12929,6 +13891,63 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "WidgetAlertUserNotification": {
+        "properties": {
+          "alertId": {
+            "type": "string"
+          },
+          "analyticalDashboardTitle": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "currentValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "markedAsRead": {
+            "type": "boolean"
+          },
+          "threshold": {
+            "format": "double",
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "widgetAlert"
+            ],
+            "type": "string"
+          },
+          "visualizationObjectTitle": {
+            "type": "string"
+          },
+          "whenTriggered": {
+            "type": "string"
+          },
+          "workspace": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alertId",
+          "analyticalDashboardTitle",
+          "currentValue",
+          "id",
+          "markedAsRead",
+          "threshold",
+          "type",
+          "visualizationObjectTitle",
+          "whenTriggered",
+          "workspace"
         ],
         "type": "object"
       },
@@ -13801,6 +14820,186 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeAnalyticalDashboard",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides": {
       "post": {
         "description": "Finds entities with given ID in hierarchy (e.g. to check possible future conflicts).",
@@ -13943,6 +15142,75 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/findRecommendations": {
+      "post": {
+        "operationId": "findRecommendations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 5,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of entity types to be recommended, if not provided return all.",
+            "in": "query",
+            "name": "types",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "analyticalDashboard",
+                  "visualizationObject",
+                  "metric"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindRecommendationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Recommendation"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts": {
       "get": {
         "description": "Finds API identifier conflicts in given workspace hierarchy.",
@@ -14067,6 +15335,284 @@
         ]
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/markAllNotificationsAsRead": {
+      "post": {
+        "operationId": "markAllNotificationsAsRead",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/markNotificationAsRead": {
+      "post": {
+        "operationId": "markNotificationAsRead",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkNotificationAsReadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/metrics/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeMetric",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/notifications": {
+      "get": {
+        "description": "Gets all the notifications for the current user.",
+        "operationId": "getNotificationsForCurrentUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/WidgetAlertUserNotification"
+                      },
+                      {
+                        "$ref": "#/components/schemas/AnomalyUserNotification"
+                      }
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities": {
       "get": {
         "description": "Finds API identifier overrides in given workspace hierarchy.",
@@ -14107,6 +15653,58 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/recent": {
+      "get": {
+        "operationId": "findRecentAnalytics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 5,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subscribedOnly",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RecentAnalyticalObject"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/actions/workspaces/{workspaceId}/resolveSettings": {
@@ -14201,6 +15799,99 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/subscriptions": {
+      "get": {
+        "operationId": "listSubscriptions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EntityIdentifier"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/tags/{objectId}/subscribe": {
+      "delete": {
+        "operationId": "unsubscribeFromTag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "subscribeToTag",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/translations": {
       "get": {
         "description": "Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.",
@@ -14285,6 +15976,55 @@
         }
       }
     },
+    "/api/v1/actions/workspaces/{workspaceId}/translations/retrieve": {
+      "post": {
+        "description": "Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.",
+        "operationId": "retrieveTranslations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocaleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Xliff"
+                }
+              }
+            },
+            "description": "XLIFF file containing translations for a particular locale."
+          }
+        },
+        "summary": "Retrieve translations for entities.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
     "/api/v1/actions/workspaces/{workspaceId}/translations/set": {
       "post": {
         "description": "Set translation for existing entities in a particular locale.",
@@ -14325,6 +16065,186 @@
             "MANAGE"
           ]
         }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/dislike": {
+      "delete": {
+        "operationId": "undislikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "dislikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/favorite": {
+      "delete": {
+        "operationId": "unfavoriteVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "favoriteVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/visualizationObjects/{objectId}/like": {
+      "delete": {
+        "operationId": "unlikeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
+      },
+      "post": {
+        "operationId": "likeVisualizationObject",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "actions"
+        ]
       }
     },
     "/api/v1/entities/admin/cookieSecurityConfigurations/{id}": {
@@ -23361,6 +25281,575 @@
         }
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/widgetAlerts": {
+      "get": {
+        "operationId": "getAllEntities@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get all Widget Alerts",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Widget Alerts",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/widgetAlerts/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=origin,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "origin",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Get a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
+      },
+      "patch": {
+        "operationId": "patchEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Patch a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@WidgetAlerts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;analyticalDashboard.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,analyticalDashboard,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "analyticalDashboards",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "analyticalDashboard",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiWidgetAlertInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiWidgetAlertOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Put a Widget Alert",
+        "tags": [
+          "Widget Alerts",
+          "entities",
+          "workspace-object-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/workspaceDataFilterSettings": {
       "get": {
         "operationId": "getAllEntities@WorkspaceDataFilterSettings",
@@ -24837,6 +27326,249 @@
           "entities",
           "workspace-object-controller"
         ]
+      }
+    },
+    "/api/v1/entities/zapierSubscriptions": {
+      "get": {
+        "operationId": "getAllEntities@ZapierSubscriptions",
+        "parameters": [
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@ZapierSubscriptions",
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Zapier subscription",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/entities/zapierSubscriptions/{id}": {
+      "delete": {
+        "operationId": "deleteEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "summary": "Delete Zapier subscription",
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      },
+      "put": {
+        "operationId": "updateEntity@ZapierSubscriptions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/idPathParameter"
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=url==someString",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiZapierSubscriptionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiZapierSubscriptionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "organization-model-controller"
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
       }
     },
     "/api/v1/layout/dataSources": {
