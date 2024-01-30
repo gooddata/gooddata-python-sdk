@@ -2,6 +2,11 @@ name: Dev release from master
 
 on:
   workflow_dispatch:
+    inputs:
+      BRANCH_NAME:
+        type: string
+        description: 'Branch name to release from'
+        default: "master"
 
 jobs:
   dev-release:
@@ -16,7 +21,10 @@ jobs:
           - gooddata-sdk
           - gooddata-dbt
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.BRANCH_NAME }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
