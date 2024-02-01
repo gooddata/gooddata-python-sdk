@@ -172,11 +172,11 @@ class DbtProfiles:
 
     @staticmethod
     def inject_env_vars(output_def: Dict) -> None:
-        env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']+)')?\) \}\}")
+        env_re = re.compile(r"\{\{ env_var\('([^']+)'(,\s*'([^']+)')?\)(\s*\|\s*int)? \}\}")
         for output_key, output_value in output_def.items():
             if (env_match := env_re.search(str(output_value))) is not None:
                 default_value = None
-                if len(env_match.groups()) == 3:
+                if len(env_match.groups()) >= 3:
                     default_value = env_match.group(3)
                 final_value = os.getenv(env_match.group(1)) or default_value
                 output_def[output_key] = env_re.sub(final_value, str(output_value))
