@@ -26,7 +26,7 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v4
-        - uses: actions/setup-python@v4
+        - uses: actions/setup-python@v5
           with:
             python-version-file: '.python-version'
             cache: 'pip'
@@ -93,7 +93,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
         - name: Create documentation rel/${{ github.event.inputs.bump_type }} branch
           run: |
             git config user.name GitHub Actions
