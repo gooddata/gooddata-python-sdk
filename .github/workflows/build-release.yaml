@@ -32,7 +32,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version-file: '.python-version'
     - name: Install dependencies
@@ -44,7 +44,7 @@ jobs:
           cd ${{ matrix.component }}
           python -m build
     - name: Persist ${{ matrix.component }} artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: artifacts_${{ matrix.component }}
         path: ${{ matrix.component }}/dist/
@@ -55,7 +55,7 @@ jobs:
     needs: build
     steps:
       - name: Obtain artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: dist/
       - name: Create GitHub release
@@ -80,7 +80,7 @@ jobs:
           - gooddata-dbt
     steps:
       - name: Obtain ${{ matrix.component }} artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: artifacts_${{ matrix.component }}
           path: dist/${{ matrix.component }}
