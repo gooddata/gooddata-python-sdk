@@ -10,7 +10,7 @@ REQUIRES = [
     "gooddata-api-client~=1.13.0",
     "python-dateutil>=2.5.3",
     "pyyaml>=5.1",
-    "attrs>=21.4.0,<=23.1.0",
+    "attrs>=21.4.0,<=23.2.0",
     "cattrs>=22.1.0,<=23.2.3",
     "brotli==1.1.0",
 ]
