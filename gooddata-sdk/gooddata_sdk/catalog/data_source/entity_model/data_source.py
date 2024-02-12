@@ -110,6 +110,7 @@ class CatalogDataSource(CatalogDataSourceBase):
                 # url contains {db_vendor}, e.g. jdbc:{db_vendor}://....
                 # we inject custom or default (DS_TYPE.lower()) value there
                 db_vendor=self.db_vendor,
+                schema=self.schema,
             )
             return f"{base_url}?{parameters}" if parameters else base_url
         else:
@@ -152,6 +153,12 @@ class VerticaAttributes(PostgresAttributes):
 @attr.s(auto_attribs=True, kw_only=True)
 class GreenplumAttributes(PostgresAttributes):
     pass
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class MySqlAttributes(DatabaseAttributes):
+    host: str
+    port: str = "3306"
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -244,3 +251,10 @@ class CatalogDataSourceDatabricks(CatalogDataSource):
 
         self.db_vendor = self.type.lower()
         self.url = self._make_url()
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceMySql(CatalogDataSource):
+    _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/{schema}"
+    type: str = "MYSQL"
+    db_vendor: str = "mysql"

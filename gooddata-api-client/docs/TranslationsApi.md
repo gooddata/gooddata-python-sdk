@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**clean_translations**](TranslationsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 [**get_translation_tags**](TranslationsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+[**retrieve_translations**](TranslationsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 [**set_translations**](TranslationsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 
 
@@ -142,6 +143,78 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Retrieved list of translation tags. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **retrieve_translations**
+> Xliff retrieve_translations(workspace_id, locale_request)
+
+Retrieve translations for entities.
+
+Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import translations_api
+from gooddata_api_client.model.locale_request import LocaleRequest
+from gooddata_api_client.model.xliff import Xliff
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = translations_api.TranslationsApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    locale_request = LocaleRequest(
+        locale="en-US",
+    ) # LocaleRequest | 
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Retrieve translations for entities.
+        api_response = api_instance.retrieve_translations(workspace_id, locale_request)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling TranslationsApi->retrieve_translations: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **locale_request** | [**LocaleRequest**](LocaleRequest.md)|  |
+
+### Return type
+
+[**Xliff**](Xliff.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/xml
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | XLIFF file containing translations for a particular locale. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

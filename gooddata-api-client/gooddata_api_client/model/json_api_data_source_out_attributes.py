@@ -77,6 +77,7 @@ class JsonApiDataSourceOutAttributes(ModelNormal):
             'DATABRICKS': "DATABRICKS",
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
+            'MYSQL': "MYSQL",
         },
     }
 

@@ -17,6 +17,7 @@ from gooddata_sdk import (
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
     CatalogDataSourceMsSql,
+    CatalogDataSourceMySql,
     CatalogDataSourcePostgres,
     CatalogDataSourceRedshift,
     CatalogDataSourceSnowflake,
@@ -31,6 +32,7 @@ from gooddata_sdk import (
     ExecutionDefinition,
     GoodDataSdk,
     MsSqlAttributes,
+    MySqlAttributes,
     PostgresAttributes,
     RedshiftAttributes,
     ScanSqlRequest,
@@ -728,3 +730,17 @@ def test_catalog_data_source_databricks(test_config):
         ),
     )
     assert data_source.url == "jdbc:databricks://Host:443/default;httpPath=xyz123abc"
+
+
+def test_catalog_data_source_mysql(test_config):
+    data_source = CatalogDataSourceMySql(
+        id="test",
+        name="Test",
+        db_specific_attributes=MySqlAttributes(host="localhost", port="3306"),
+        schema="my_schema",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demospass",
+        ),
+    )
+    assert data_source.url == "jdbc:mysql://localhost:3306/my_schema"
