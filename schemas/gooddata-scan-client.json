@@ -364,7 +364,8 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"

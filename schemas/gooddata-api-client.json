@@ -1745,7 +1745,8 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -7036,7 +7037,8 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL"
                 ],
                 "type": "string"
               }
@@ -7198,7 +7200,8 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL"
                 ],
                 "type": "string"
               },
@@ -7329,7 +7332,8 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL"
                 ],
                 "type": "string"
               },
@@ -7500,7 +7504,8 @@
                   "SYNAPSESQL",
                   "DATABRICKS",
                   "GDSTORAGE",
-                  "CLICKHOUSE"
+                  "CLICKHOUSE",
+                  "MYSQL"
                 ],
                 "type": "string"
               },
@@ -14902,7 +14907,8 @@
               "SYNAPSESQL",
               "DATABRICKS",
               "GDSTORAGE",
-              "CLICKHOUSE"
+              "CLICKHOUSE",
+              "MYSQL"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -17878,6 +17884,55 @@
           }
         },
         "summary": "Cleans up translations.",
+        "tags": [
+          "Translations",
+          "actions"
+        ],
+        "x-gdc-security-info": {
+          "description": "Minimal permission required to use this endpoint.",
+          "permissions": [
+            "MANAGE"
+          ]
+        }
+      }
+    },
+    "/api/v1/actions/workspaces/{workspaceId}/translations/retrieve": {
+      "post": {
+        "description": "Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.",
+        "operationId": "retrieveTranslations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocaleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/Xliff"
+                }
+              }
+            },
+            "description": "XLIFF file containing translations for a particular locale."
+          }
+        },
+        "summary": "Retrieve translations for entities.",
         "tags": [
           "Translations",
           "actions"
