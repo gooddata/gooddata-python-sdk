@@ -251,6 +251,7 @@ Class | Method | HTTP request | Description
 *TestConnectionApi* | [**test_data_source_definition**](docs/TestConnectionApi.md#test_data_source_definition) | **POST** /api/v1/actions/dataSource/test | Test connection by data source definition
 *TranslationsApi* | [**clean_translations**](docs/TranslationsApi.md#clean_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/clean | Cleans up translations.
 *TranslationsApi* | [**get_translation_tags**](docs/TranslationsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
+*TranslationsApi* | [**retrieve_translations**](docs/TranslationsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 *TranslationsApi* | [**set_translations**](docs/TranslationsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.
 *UsageApi* | [**all_platform_usage**](docs/UsageApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 *UsageApi* | [**particular_platform_usage**](docs/UsageApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
@@ -355,6 +356,7 @@ Class | Method | HTTP request | Description
 *ActionsApi* | [**resolve_settings_without_workspace**](docs/ActionsApi.md#resolve_settings_without_workspace) | **POST** /api/v1/actions/resolveSettings | Values for selected settings without workspace.
 *ActionsApi* | [**retrieve_execution_metadata**](docs/ActionsApi.md#retrieve_execution_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId}/metadata | Get a single execution result&#39;s metadata.
 *ActionsApi* | [**retrieve_result**](docs/ActionsApi.md#retrieve_result) | **GET** /api/v1/actions/workspaces/{workspaceId}/execution/afm/execute/result/{resultId} | Get a single execution result
+*ActionsApi* | [**retrieve_translations**](docs/ActionsApi.md#retrieve_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/retrieve | Retrieve translations for entities.
 *ActionsApi* | [**scan_data_source**](docs/ActionsApi.md#scan_data_source) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scan | Scan a database to get a physical data model (PDM)
 *ActionsApi* | [**scan_sql**](docs/ActionsApi.md#scan_sql) | **POST** /api/v1/actions/dataSources/{dataSourceId}/scanSql | Collect metadata about SQL query
 *ActionsApi* | [**set_translations**](docs/ActionsApi.md#set_translations) | **POST** /api/v1/actions/workspaces/{workspaceId}/translations/set | Set translations for entities.

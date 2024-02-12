@@ -77,6 +77,7 @@ class TestDefinitionRequest(ModelNormal):
             'DATABRICKS': "DATABRICKS",
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
+            'MYSQL': "MYSQL",
         },
     }
 
