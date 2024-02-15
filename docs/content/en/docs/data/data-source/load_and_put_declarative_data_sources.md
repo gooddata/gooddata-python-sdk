@@ -55,4 +55,12 @@ sdk.catalog_data_source.put_declarative_data_sources(
 )
 ```
 
+Example of the credential file:
+
+```yaml
+data_sources:
+  demo-test-ds: "demopass"
+  demo-bigquery-ds: "~/home/secrets.json"
+```
+
 The result is identical.
