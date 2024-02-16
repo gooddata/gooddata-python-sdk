@@ -19,7 +19,7 @@ Workspace identification string. e.g. "demo"
 {{< parameter p_name="dashboard_id" p_type="str" >}}
 Dashboard identification string. e.g. "campaign"
 {{< /parameter >}}
-{{< parameter p_name="permissions_for_assignee" p_type="List[CatalogPermissionsForAssignee]" >}}
+{{< parameter p_name="permissions_for_assignee" p_type="List[Union[CatalogPermissionsForAssigneeIdentifier, CatalogPermissionsForAssigneeRule]]" >}}
 Object containing list of users, user groups, or rules and desired dashboard permissions. Set empty list permissions for user/user group means remove dashboard permissions.
 {{< /parameter >}}
 {{% /parameters-block %}}
@@ -34,7 +34,7 @@ manage_dashboard_permissions(
     workspace_id="demo",
     dashboard_id="sales",
     permissions_for_assignee=[
-        CatalogPermissionsForAssignee(
+        CatalogPermissionsForAssigneeIdentifier(
             assignee_identifier=CatalogAssigneeIdentifier(id="demoGroup", type="userGroup"),
             permissions=["EDIT"],
         ),
