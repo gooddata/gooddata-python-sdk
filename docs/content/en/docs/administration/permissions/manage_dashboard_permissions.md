@@ -8,7 +8,7 @@ superheading: "catalog_permission."
 
 
 
-``manage_dashboard_permissions(workspace_id: str, dashboard_id: str, permissions_for_assignee: List[Union[CatalogPermissionsForAssignee, CatalogPermissionsForAssigneeRule]] ) -> None``
+``manage_dashboard_permissions(workspace_id: str, dashboard_id: str, permissions_for_assignee: List[Union[CatalogPermissionsForAssigneeIdentifier, CatalogPermissionsForAssigneeRule]] ) -> None``
 
 Provide managing dashboard permissions for user and user groups.
 
