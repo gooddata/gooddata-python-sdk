@@ -10,6 +10,7 @@
 version = "dev"
 dirpath = "dev"
 url = "/dev/"
+sitemapExclude = true
 [[versions]]
 version = "1.13"
 dirpath = "latest"
