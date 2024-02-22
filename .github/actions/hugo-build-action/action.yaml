@@ -25,6 +25,13 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: npm ci
       shell: bash
+    - name: Cache hugo dependencies
+      uses: actions/cache@v4
+      with:
+        path: /home/runner/.cache/hugo_cache
+        key: ${{ runner.os }}-hugomod-${{ hashFiles('docs/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-hugomod-
     - name: Build
       working-directory: ${{ inputs.working-directory }}
       env:
