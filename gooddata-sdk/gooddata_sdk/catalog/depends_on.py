@@ -1,11 +1,11 @@
 # (C) 2023 GoodData Corporation
 from __future__ import annotations
 
-from typing import List, Optional, Type
+from typing import List, Type
 
 import attr
 
-from gooddata_api_client.model.depends_on import DependsOn
+from gooddata_api_client.model.elements_request_depends_on_inner import ElementsRequestDependsOnInner
 from gooddata_sdk.catalog.base import Base
 
 
@@ -13,8 +13,8 @@ from gooddata_sdk.catalog.base import Base
 class CatalogDependsOn(Base):
     label: str
     values: List[str]
-    complement_filter: Optional[bool] = None
+    complement_filter: bool = False
 
     @staticmethod
-    def client_class() -> Type[DependsOn]:
-        return DependsOn
+    def client_class() -> Type[ElementsRequestDependsOnInner]:
+        return ElementsRequestDependsOnInner
