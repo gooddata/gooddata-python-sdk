@@ -390,6 +390,7 @@ class Insight:
         side_loads: Optional[SideLoads] = None,
     ) -> None:
         self._vo = from_vis_obj
+        self._filters = [InsightFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
         self._side_loads = SideLoads([]) if side_loads is None else side_loads
 
     @property
@@ -415,7 +416,11 @@ class Insight:
 
     @property
     def filters(self) -> list[InsightFilter]:
-        return [InsightFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
+        return self._filters
+
+    @filters.setter
+    def filters(self, filters: list[InsightFilter]) -> None:
+        self._filters = filters
 
     @property
     def sorts(self) -> list[Any]:
