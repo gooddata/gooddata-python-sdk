@@ -113,6 +113,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             'cache_settings': (JsonApiOrganizationOutAttributesCacheSettings,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
+            'jit_enabled': (bool,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_issuer_id': (str,),  # noqa: E501
@@ -130,6 +131,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
         'cache_settings': 'cacheSettings',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
+        'jit_enabled': 'jitEnabled',  # noqa: E501
         'name': 'name',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_issuer_id': 'oauthIssuerId',  # noqa: E501
@@ -182,6 +184,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             cache_settings (JsonApiOrganizationOutAttributesCacheSettings): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501
@@ -276,6 +279,7 @@ class JsonApiOrganizationOutAttributes(ModelNormal):
             cache_settings (JsonApiOrganizationOutAttributesCacheSettings): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_issuer_id (str): Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider.. [optional]  # noqa: E501

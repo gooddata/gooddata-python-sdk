@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **schema** | **str** | A scheme/database with the data. | 
 **type** | **str** | Type of database. | 
 **cache_path** | **[str]** | Path to schema, where intermediate caches are stored. | [optional] 
+**cache_strategy** | **str** | Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached. | [optional] 
 **decoded_parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 
 **enable_caching** | **bool** | Enable caching of intermediate results. | [optional] 
 **parameters** | [**[Parameter]**](Parameter.md) |  | [optional] 

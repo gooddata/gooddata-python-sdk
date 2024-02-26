@@ -204,6 +204,7 @@ class DataSourceEntityAPIsApi(object):
                     ('meta_include',): {
 
                         "PERMISSIONS": "permissions",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -284,6 +285,7 @@ class DataSourceEntityAPIsApi(object):
                     ('meta_include',): {
 
                         "PERMISSIONS": "permissions",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

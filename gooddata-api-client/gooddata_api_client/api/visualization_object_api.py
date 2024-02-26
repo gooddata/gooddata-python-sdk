@@ -253,6 +253,7 @@ class VisualizationObjectApi(object):
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

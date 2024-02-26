@@ -78,6 +78,12 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
+            'MARIADB': "MARIADB",
+        },
+        ('cache_strategy',): {
+            'None': None,
+            'ALWAYS': "ALWAYS",
+            'NEVER': "NEVER",
         },
     }
 
@@ -128,12 +134,13 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'name': (str,),  # noqa: E501
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'cache_path': ([str],),  # noqa: E501
-            'enable_caching': (bool,),  # noqa: E501
-            'parameters': ([JsonApiDataSourceInAttributesParametersInner],),  # noqa: E501
+            'cache_path': ([str], none_type,),  # noqa: E501
+            'cache_strategy': (str, none_type,),  # noqa: E501
+            'enable_caching': (bool, none_type,),  # noqa: E501
+            'parameters': ([JsonApiDataSourceInAttributesParametersInner], none_type,),  # noqa: E501
             'password': (str, none_type,),  # noqa: E501
             'token': (str, none_type,),  # noqa: E501
-            'url': (str,),  # noqa: E501
+            'url': (str, none_type,),  # noqa: E501
             'username': (str, none_type,),  # noqa: E501
         }
 
@@ -147,6 +154,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
         'cache_path': 'cachePath',  # noqa: E501
+        'cache_strategy': 'cacheStrategy',  # noqa: E501
         'enable_caching': 'enableCaching',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
         'password': 'password',  # noqa: E501
@@ -166,9 +174,9 @@ class JsonApiDataSourceInAttributes(ModelNormal):
         """JsonApiDataSourceInAttributes - a model defined in OpenAPI
 
         Args:
-            name (str):
-            schema (str):
-            type (str):
+            name (str): User-facing name of the data source.
+            schema (str): The schema to use as the root of the data for the data source.
+            type (str): Type of the database providing the data for the data source.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -201,13 +209,14 @@ class JsonApiDataSourceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str]): [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
-            parameters ([JsonApiDataSourceInAttributesParametersInner]): [optional]  # noqa: E501
-            password (str, none_type): [optional]  # noqa: E501
-            token (str, none_type): [optional]  # noqa: E501
-            url (str): [optional]  # noqa: E501
-            username (str, none_type): [optional]  # noqa: E501
+            cache_path ([str], none_type): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
+            enable_caching (bool, none_type): Enable CTAS caching of intermediate results in the database.. [optional]  # noqa: E501
+            parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
+            password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
+            token (str, none_type): The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).. [optional]  # noqa: E501
+            url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
+            username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -266,9 +275,9 @@ class JsonApiDataSourceInAttributes(ModelNormal):
         """JsonApiDataSourceInAttributes - a model defined in OpenAPI
 
         Args:
-            name (str):
-            schema (str):
-            type (str):
+            name (str): User-facing name of the data source.
+            schema (str): The schema to use as the root of the data for the data source.
+            type (str): Type of the database providing the data for the data source.
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -301,13 +310,14 @@ class JsonApiDataSourceInAttributes(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            cache_path ([str]): [optional]  # noqa: E501
-            enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
-            parameters ([JsonApiDataSourceInAttributesParametersInner]): [optional]  # noqa: E501
-            password (str, none_type): [optional]  # noqa: E501
-            token (str, none_type): [optional]  # noqa: E501
-            url (str): [optional]  # noqa: E501
-            username (str, none_type): [optional]  # noqa: E501
+            cache_path ([str], none_type): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            cache_strategy (str, none_type): Determines how the results coming from a particular datasource should be cached.. [optional]  # noqa: E501
+            enable_caching (bool, none_type): Enable CTAS caching of intermediate results in the database.. [optional]  # noqa: E501
+            parameters ([JsonApiDataSourceInAttributesParametersInner], none_type): Additional parameters to be used when connecting to the database providing the data for the data source.. [optional]  # noqa: E501
+            password (str, none_type): The password to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
+            token (str, none_type): The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).. [optional]  # noqa: E501
+            url (str, none_type): The URL of the database providing the data for the data source.. [optional]  # noqa: E501
+            username (str, none_type): The username to use to connect to the database providing the data for the data source.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

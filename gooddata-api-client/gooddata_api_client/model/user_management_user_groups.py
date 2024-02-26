@@ -88,6 +88,7 @@ class UserManagementUserGroups(ModelNormal):
         """
         lazy_import()
         return {
+            'total_count': (int,),  # noqa: E501
             'user_groups': ([UserManagementUserGroupsItem],),  # noqa: E501
         }
 
@@ -97,6 +98,7 @@ class UserManagementUserGroups(ModelNormal):
 
 
     attribute_map = {
+        'total_count': 'totalCount',  # noqa: E501
         'user_groups': 'userGroups',  # noqa: E501
     }
 
@@ -107,11 +109,12 @@ class UserManagementUserGroups(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, user_groups, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, total_count, user_groups, *args, **kwargs):  # noqa: E501
         """UserManagementUserGroups - a model defined in OpenAPI
 
         Args:
-            user_groups ([UserManagementUserGroupsItem]): List of groups
+            total_count (int): Total number of groups
+            user_groups ([UserManagementUserGroupsItem]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -175,6 +178,7 @@ class UserManagementUserGroups(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.total_count = total_count
         self.user_groups = user_groups
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -196,11 +200,12 @@ class UserManagementUserGroups(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, user_groups, *args, **kwargs):  # noqa: E501
+    def __init__(self, total_count, user_groups, *args, **kwargs):  # noqa: E501
         """UserManagementUserGroups - a model defined in OpenAPI
 
         Args:
-            user_groups ([UserManagementUserGroupsItem]): List of groups
+            total_count (int): Total number of groups
+            user_groups ([UserManagementUserGroupsItem]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -262,6 +267,7 @@ class UserManagementUserGroups(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.total_count = total_count
         self.user_groups = user_groups
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

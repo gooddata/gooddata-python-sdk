@@ -88,6 +88,7 @@ class UserManagementUsers(ModelNormal):
         """
         lazy_import()
         return {
+            'total_count': (int,),  # noqa: E501
             'users': ([UserManagementUsersItem],),  # noqa: E501
         }
 
@@ -97,6 +98,7 @@ class UserManagementUsers(ModelNormal):
 
 
     attribute_map = {
+        'total_count': 'totalCount',  # noqa: E501
         'users': 'users',  # noqa: E501
     }
 
@@ -107,11 +109,12 @@ class UserManagementUsers(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, users, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, total_count, users, *args, **kwargs):  # noqa: E501
         """UserManagementUsers - a model defined in OpenAPI
 
         Args:
-            users ([UserManagementUsersItem]): List of users
+            total_count (int): The total number of users is based on applied filters.
+            users ([UserManagementUsersItem]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -175,6 +178,7 @@ class UserManagementUsers(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.total_count = total_count
         self.users = users
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
@@ -196,11 +200,12 @@ class UserManagementUsers(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, users, *args, **kwargs):  # noqa: E501
+    def __init__(self, total_count, users, *args, **kwargs):  # noqa: E501
         """UserManagementUsers - a model defined in OpenAPI
 
         Args:
-            users ([UserManagementUsersItem]): List of users
+            total_count (int): The total number of users is based on applied filters.
+            users ([UserManagementUsersItem]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -262,6 +267,7 @@ class UserManagementUsers(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.total_count = total_count
         self.users = users
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

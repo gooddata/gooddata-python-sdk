@@ -55,6 +55,7 @@ from gooddata_api_client.api.user_groups_entity_apis_api import UserGroupsEntity
 from gooddata_api_client.api.user_data_filters_api import UserDataFiltersApi
 from gooddata_api_client.api.user_identifiers_api import UserIdentifiersApi
 from gooddata_api_client.api.user_settings_api import UserSettingsApi
+from gooddata_api_client.api.user_management_api import UserManagementApi
 from gooddata_api_client.api.users_declarative_apis_api import UsersDeclarativeAPIsApi
 from gooddata_api_client.api.users_entity_apis_api import UsersEntityAPIsApi
 from gooddata_api_client.api.visualization_object_api import VisualizationObjectApi
