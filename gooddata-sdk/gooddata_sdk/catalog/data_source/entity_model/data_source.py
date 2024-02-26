@@ -162,6 +162,11 @@ class MySqlAttributes(DatabaseAttributes):
 
 
 @attr.s(auto_attribs=True, kw_only=True)
+class MariaDbAttributes(MySqlAttributes):
+    pass
+
+
+@attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourcePostgres(CatalogDataSource):
     _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/{db_name}"
     type: str = "POSTGRESQL"
@@ -258,3 +263,9 @@ class CatalogDataSourceMySql(CatalogDataSource):
     _URL_TMPL: ClassVar[str] = "jdbc:{db_vendor}://{host}:{port}/{schema}"
     type: str = "MYSQL"
     db_vendor: str = "mysql"
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDataSourceMariaDb(CatalogDataSourceMySql):
+    type: str = "MARIADB"
+    db_vendor: str = "mariadb"
