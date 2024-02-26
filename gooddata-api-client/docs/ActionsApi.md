@@ -4,7 +4,6 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**add_group_members**](ActionsApi.md#add_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/addMembers | 
 [**all_platform_usage**](ActionsApi.md#all_platform_usage) | **GET** /api/v1/actions/collectUsage | Info about the platform usage.
 [**available_assignees**](ActionsApi.md#available_assignees) | **GET** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/availableAssignees | Get Available Assignees
 [**check_entity_overrides**](ActionsApi.md#check_entity_overrides) | **POST** /api/v1/actions/workspaces/{workspaceId}/checkEntityOverrides | Finds entities with given ID in hierarchy.
@@ -22,26 +21,18 @@ Method | HTTP request | Description
 [**get_dependent_entities_graph**](ActionsApi.md#get_dependent_entities_graph) | **GET** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph
 [**get_dependent_entities_graph_from_entry_points**](ActionsApi.md#get_dependent_entities_graph_from_entry_points) | **POST** /api/v1/actions/workspaces/{workspaceId}/dependentEntitiesGraph | Computes the dependent entities graph from given entry points
 [**get_exported_file**](ActionsApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
-[**get_group_members**](ActionsApi.md#get_group_members) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/members | 
 [**get_metadata**](ActionsApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 [**get_tabular_export**](ActionsApi.md#get_tabular_export) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/tabular/{exportId} | Retrieve exported files
 [**get_translation_tags**](ActionsApi.md#get_translation_tags) | **GET** /api/v1/actions/workspaces/{workspaceId}/translations | Get translation tags.
 [**inherited_entity_conflicts**](ActionsApi.md#inherited_entity_conflicts) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityConflicts | Finds identifier conflicts in workspace hierarchy.
 [**inherited_entity_prefixes**](ActionsApi.md#inherited_entity_prefixes) | **GET** /api/v1/actions/workspaces/{workspaceId}/inheritedEntityPrefixes | Get used entity prefixes in hierarchy
-[**list_user_groups**](ActionsApi.md#list_user_groups) | **GET** /api/v1/actions/userManagement/groups | 
-[**list_users**](ActionsApi.md#list_users) | **GET** /api/v1/actions/userManagement/users | 
-[**list_workspace_permissions_for_user**](ActionsApi.md#list_workspace_permissions_for_user) | **GET** /api/v1/actions/userManagement/users/{userId}/permissions | 
-[**list_workspace_permissions_for_user_group**](ActionsApi.md#list_workspace_permissions_for_user_group) | **GET** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**manage_dashboard_permissions**](ActionsApi.md#manage_dashboard_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/analyticalDashboards/{dashboardId}/managePermissions | Manage Permissions for a Dashboard
 [**manage_data_source_permissions**](ActionsApi.md#manage_data_source_permissions) | **POST** /api/v1/actions/dataSources/{dataSourceId}/managePermissions | Manage Permissions for a Data Source
 [**manage_organization_permissions**](ActionsApi.md#manage_organization_permissions) | **POST** /api/v1/actions/organization/managePermissions | Manage Permissions for a Organization
 [**manage_workspace_permissions**](ActionsApi.md#manage_workspace_permissions) | **POST** /api/v1/actions/workspaces/{workspaceId}/managePermissions | Manage Permissions for a Workspace
-[**manage_workspace_permissions_for_user**](ActionsApi.md#manage_workspace_permissions_for_user) | **POST** /api/v1/actions/userManagement/users/{userId}/permissions | 
-[**manage_workspace_permissions_for_user_group**](ActionsApi.md#manage_workspace_permissions_for_user_group) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/permissions | 
 [**overridden_child_entities**](ActionsApi.md#overridden_child_entities) | **GET** /api/v1/actions/workspaces/{workspaceId}/overriddenChildEntities | Finds identifier overrides in workspace hierarchy.
 [**particular_platform_usage**](ActionsApi.md#particular_platform_usage) | **POST** /api/v1/actions/collectUsage | Info about the platform usage for particular items.
 [**register_upload_notification**](ActionsApi.md#register_upload_notification) | **POST** /api/v1/actions/dataSources/{dataSourceId}/uploadNotification | Register an upload notification
-[**remove_group_members**](ActionsApi.md#remove_group_members) | **POST** /api/v1/actions/userManagement/userGroups/{userGroupId}/removeMembers | 
 [**resolve_all_entitlements**](ActionsApi.md#resolve_all_entitlements) | **GET** /api/v1/actions/resolveEntitlements | Values for all public entitlements.
 [**resolve_all_settings_without_workspace**](ActionsApi.md#resolve_all_settings_without_workspace) | **GET** /api/v1/actions/resolveSettings | Values for all settings without workspace.
 [**resolve_requested_entitlements**](ActionsApi.md#resolve_requested_entitlements) | **POST** /api/v1/actions/resolveEntitlements | Values for requested public entitlements.
@@ -57,77 +48,6 @@ Method | HTTP request | Description
 [**workspace_resolve_all_settings**](ActionsApi.md#workspace_resolve_all_settings) | **GET** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for all settings.
 [**workspace_resolve_settings**](ActionsApi.md#workspace_resolve_settings) | **POST** /api/v1/actions/workspaces/{workspaceId}/resolveSettings | Values for selected settings.
 
-
-# **add_group_members**
-> add_group_members(user_group_id, user_management_user_group_members)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_user_group_members import UserManagementUserGroupMembers
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-    user_management_user_group_members = UserManagementUserGroupMembers(
-        members=[
-            UserManagementUserGroupMember(
-                id="id_example",
-            ),
-        ],
-    ) # UserManagementUserGroupMembers | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_instance.add_group_members(user_group_id, user_management_user_group_members)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->add_group_members: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
- **user_management_user_group_members** | [**UserManagementUserGroupMembers**](UserManagementUserGroupMembers.md)|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **all_platform_usage**
 > [PlatformUsage] all_platform_usage()
@@ -437,13 +357,7 @@ with gooddata_api_client.ApiClient() as api_client:
         complement_filter=False,
         data_sampling_percentage=100.0,
         depends_on=[
-            DependsOn(
-                complement_filter=False,
-                label="label_example",
-                values=[
-                    "values_example",
-                ],
-            ),
+            ElementsRequestDependsOnInner(None),
         ],
         exact_filter=[
             "exact_filter_example",
@@ -961,8 +875,23 @@ with gooddata_api_client.ApiClient() as api_client:
         format="CSV",
         settings=Settings(
             merge_headers=True,
+            pdf_page_size="a4 landscape",
+            pdf_table_style=[
+                PdfTableStyle(
+                    properties=[
+                        PdfTableStyleProperty(
+                            key="key_example",
+                            value="value_example",
+                        ),
+                    ],
+                    selector="selector_example",
+                ),
+            ],
+            pdf_top_left_content="Good",
+            pdf_top_right_content="Morning",
             show_filters=False,
         ),
+        visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
     ) # TabularExportRequest | 
 
     # example passing only required values which don't have defaults set
@@ -1601,70 +1530,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **get_group_members**
-> UserManagementUserGroupMembers get_group_members(user_group_id)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_user_group_members import UserManagementUserGroupMembers
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.get_group_members(user_group_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->get_group_members: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
-
-### Return type
-
-[**UserManagementUserGroupMembers**](UserManagementUserGroupMembers.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **get_metadata**
 > get_metadata(workspace_id, export_id)
 
@@ -1788,7 +1653,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
+ - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, text/html
 
 
 ### HTTP response details
@@ -1996,254 +1861,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Prefixes used in parent entities |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list_user_groups**
-> UserManagementUserGroups list_user_groups()
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_user_groups import UserManagementUserGroups
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-
-    # example, this endpoint has no required or optional parameters
-    try:
-        api_response = api_instance.list_user_groups()
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->list_user_groups: %s\n" % e)
-```
-
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**UserManagementUserGroups**](UserManagementUserGroups.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list_users**
-> UserManagementUsers list_users()
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_users import UserManagementUsers
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-
-    # example, this endpoint has no required or optional parameters
-    try:
-        api_response = api_instance.list_users()
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->list_users: %s\n" % e)
-```
-
-
-### Parameters
-This endpoint does not need any parameter.
-
-### Return type
-
-[**UserManagementUsers**](UserManagementUsers.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list_workspace_permissions_for_user**
-> UserManagementWorkspacePermissionAssignments list_workspace_permissions_for_user(user_id)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_id = "userId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.list_workspace_permissions_for_user(user_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->list_workspace_permissions_for_user: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_id** | **str**|  |
-
-### Return type
-
-[**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **list_workspace_permissions_for_user_group**
-> UserManagementWorkspacePermissionAssignments list_workspace_permissions_for_user_group(user_group_id)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_response = api_instance.list_workspace_permissions_for_user_group(user_group_id)
-        pprint(api_response)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->list_workspace_permissions_for_user_group: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
-
-### Return type
-
-[**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: Not defined
- - **Accept**: application/json
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | OK |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -2552,160 +2169,6 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **manage_workspace_permissions_for_user**
-> manage_workspace_permissions_for_user(user_id, user_management_workspace_permission_assignments)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_id = "userId_example" # str | 
-    user_management_workspace_permission_assignments = UserManagementWorkspacePermissionAssignments(
-        workspaces=[
-            UserManagementWorkspacePermissionAssignment(
-                hierarchy_permissions=[
-                    "MANAGE",
-                ],
-                id="id_example",
-                permissions=[
-                    "MANAGE",
-                ],
-            ),
-        ],
-    ) # UserManagementWorkspacePermissionAssignments | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_instance.manage_workspace_permissions_for_user(user_id, user_management_workspace_permission_assignments)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->manage_workspace_permissions_for_user: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_id** | **str**|  |
- **user_management_workspace_permission_assignments** | [**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **manage_workspace_permissions_for_user_group**
-> manage_workspace_permissions_for_user_group(user_group_id, user_management_workspace_permission_assignments)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_workspace_permission_assignments import UserManagementWorkspacePermissionAssignments
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-    user_management_workspace_permission_assignments = UserManagementWorkspacePermissionAssignments(
-        workspaces=[
-            UserManagementWorkspacePermissionAssignment(
-                hierarchy_permissions=[
-                    "MANAGE",
-                ],
-                id="id_example",
-                permissions=[
-                    "MANAGE",
-                ],
-            ),
-        ],
-    ) # UserManagementWorkspacePermissionAssignments | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_instance.manage_workspace_permissions_for_user_group(user_group_id, user_management_workspace_permission_assignments)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->manage_workspace_permissions_for_user_group: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
- **user_management_workspace_permission_assignments** | [**UserManagementWorkspacePermissionAssignments**](UserManagementWorkspacePermissionAssignments.md)|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **overridden_child_entities**
 > [IdentifierDuplications] overridden_child_entities(workspace_id)
 
@@ -2907,77 +2370,6 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **204** | An upload notification has been successfully registered. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **remove_group_members**
-> remove_group_members(user_group_id, user_management_user_group_members)
-
-
-
-### Example
-
-
-```python
-import time
-import gooddata_api_client
-from gooddata_api_client.api import actions_api
-from gooddata_api_client.model.user_management_user_group_members import UserManagementUserGroupMembers
-from pprint import pprint
-# Defining the host is optional and defaults to http://localhost
-# See configuration.py for a list of all supported configuration parameters.
-configuration = gooddata_api_client.Configuration(
-    host = "http://localhost"
-)
-
-
-# Enter a context with an instance of the API client
-with gooddata_api_client.ApiClient() as api_client:
-    # Create an instance of the API class
-    api_instance = actions_api.ActionsApi(api_client)
-    user_group_id = "userGroupId_example" # str | 
-    user_management_user_group_members = UserManagementUserGroupMembers(
-        members=[
-            UserManagementUserGroupMember(
-                id="id_example",
-            ),
-        ],
-    ) # UserManagementUserGroupMembers | 
-
-    # example passing only required values which don't have defaults set
-    try:
-        api_instance.remove_group_members(user_group_id, user_management_user_group_members)
-    except gooddata_api_client.ApiException as e:
-        print("Exception when calling ActionsApi->remove_group_members: %s\n" % e)
-```
-
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **user_group_id** | **str**|  |
- **user_management_user_group_members** | [**UserManagementUserGroupMembers**](UserManagementUserGroupMembers.md)|  |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: Not defined
-
-
-### HTTP response details
-
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | No Content |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

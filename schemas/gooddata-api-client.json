@@ -1093,7 +1093,7 @@
         "type": "object"
       },
       "DateFilter": {
-        "description": "Abstract filter definition type for dates",
+        "description": "Abstract filter definition type for dates.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AbsoluteDateFilter"
@@ -1674,6 +1674,14 @@
             },
             "type": "array"
           },
+          "cacheStrategy": {
+            "description": "Determines how the results coming from a particular datasource should be cached.\n- ALWAYS: The results from the datasource should be cached normally (the default).\n- NEVER: The results from the datasource should never be cached.",
+            "enum": [
+              "ALWAYS",
+              "NEVER"
+            ],
+            "type": "string"
+          },
           "decodedParameters": {
             "items": {
               "$ref": "#/components/schemas/Parameter"
@@ -1746,7 +1754,8 @@
               "DATABRICKS",
               "GDSTORAGE",
               "CLICKHOUSE",
-              "MYSQL"
+              "MYSQL",
+              "MARIADB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -3602,30 +3611,62 @@
         "type": "object"
       },
       "DependsOn": {
-        "nullable": true,
-        "properties": {
-          "complementFilter": {
-            "default": false,
-            "description": "Inverse filtering mode.",
-            "type": "boolean"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DependsOnItem"
           },
-          "label": {
-            "description": "Specifies on which label the filter depends on.",
-            "type": "string"
-          },
-          "values": {
-            "description": "Specifies values of the label for element filtering.",
-            "items": {
-              "nullable": true,
-              "type": "string"
+          {
+            "properties": {
+              "complementFilter": {
+                "default": false,
+                "description": "Inverse filtering mode.",
+                "type": "boolean"
+              },
+              "label": {
+                "description": "Specifies on which label the filter depends on.",
+                "type": "string"
+              },
+              "values": {
+                "description": "Specifies values of the label for element filtering.",
+                "items": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": "array"
+              }
             },
-            "type": "array"
+            "type": "object"
           }
-        },
+        ],
+        "description": "Filter definition type specified by label and values.",
         "required": [
           "label",
           "values"
         ],
+        "type": "object"
+      },
+      "DependsOnDateFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DependsOnItem"
+          },
+          {
+            "properties": {
+              "dateFilter": {
+                "$ref": "#/components/schemas/DateFilter"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Filter definition type for dates.",
+        "required": [
+          "dateFilter"
+        ],
+        "type": "object"
+      },
+      "DependsOnItem": {
+        "nullable": true,
         "type": "object"
       },
       "Dimension": {
@@ -3712,7 +3753,14 @@
           "dependsOn": {
             "description": "Return only items, whose are not filtered out by the parent filters.",
             "items": {
-              "$ref": "#/components/schemas/DependsOn"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependsOn"
+                },
+                {
+                  "$ref": "#/components/schemas/DependsOnDateFilter"
+                }
+              ]
             },
             "type": "array"
           },
@@ -4893,6 +4941,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -5150,6 +5206,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -5453,6 +5517,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -5796,6 +5868,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -5952,6 +6032,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -6284,6 +6372,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -6497,6 +6593,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -6856,6 +6960,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -7038,7 +7150,8 @@
                   "DATABRICKS",
                   "GDSTORAGE",
                   "CLICKHOUSE",
-                  "MYSQL"
+                  "MYSQL",
+                  "MARIADB"
                 ],
                 "type": "string"
               }
@@ -7114,6 +7227,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -7137,21 +7258,35 @@
           "attributes": {
             "properties": {
               "cachePath": {
+                "description": "Path to schema, where intermediate caches are stored.",
                 "items": {
                   "type": "string"
                 },
+                "nullable": true,
                 "type": "array"
               },
+              "cacheStrategy": {
+                "description": "Determines how the results coming from a particular datasource should be cached.",
+                "enum": [
+                  "ALWAYS",
+                  "NEVER"
+                ],
+                "nullable": true,
+                "type": "string"
+              },
               "enableCaching": {
-                "description": "Enable caching of intermediate results.",
+                "description": "Enable CTAS caching of intermediate results in the database.",
                 "example": false,
+                "nullable": true,
                 "type": "boolean"
               },
               "name": {
+                "description": "User-facing name of the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
+                "description": "Additional parameters to be used when connecting to the database providing the data for the data source.",
                 "items": {
                   "properties": {
                     "name": {
@@ -7167,23 +7302,28 @@
                   ],
                   "type": "object"
                 },
+                "nullable": true,
                 "type": "array"
               },
               "password": {
+                "description": "The password to use to connect to the database providing the data for the data source.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
               },
               "schema": {
+                "description": "The schema to use as the root of the data for the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "token": {
+                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).",
                 "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
               },
               "type": {
+                "description": "Type of the database providing the data for the data source.",
                 "enum": [
                   "POSTGRESQL",
                   "REDSHIFT",
@@ -7201,15 +7341,19 @@
                   "DATABRICKS",
                   "GDSTORAGE",
                   "CLICKHOUSE",
-                  "MYSQL"
+                  "MYSQL",
+                  "MARIADB"
                 ],
                 "type": "string"
               },
               "url": {
+                "description": "The URL of the database providing the data for the data source.",
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "username": {
+                "description": "The username to use to connect to the database providing the data for the data source.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -7261,12 +7405,24 @@
           "attributes": {
             "properties": {
               "cachePath": {
+                "description": "Path to schema, where intermediate caches are stored.",
                 "items": {
                   "type": "string"
                 },
+                "nullable": true,
                 "type": "array"
               },
+              "cacheStrategy": {
+                "description": "Determines how the results coming from a particular datasource should be cached.",
+                "enum": [
+                  "ALWAYS",
+                  "NEVER"
+                ],
+                "nullable": true,
+                "type": "string"
+              },
               "decodedParameters": {
+                "description": "Decoded parameters to be used when connecting to the database providing the data for the data source.",
                 "items": {
                   "properties": {
                     "name": {
@@ -7282,18 +7438,22 @@
                   ],
                   "type": "object"
                 },
+                "nullable": true,
                 "type": "array"
               },
               "enableCaching": {
-                "description": "Enable caching of intermediate results.",
+                "description": "Enable CTAS caching of intermediate results in the database.",
                 "example": false,
+                "nullable": true,
                 "type": "boolean"
               },
               "name": {
+                "description": "User-facing name of the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
+                "description": "Additional parameters to be used when connecting to the database providing the data for the data source.",
                 "items": {
                   "properties": {
                     "name": {
@@ -7309,13 +7469,16 @@
                   ],
                   "type": "object"
                 },
+                "nullable": true,
                 "type": "array"
               },
               "schema": {
+                "description": "The schema to use as the root of the data for the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "type": {
+                "description": "Type of the database providing the data for the data source.",
                 "enum": [
                   "POSTGRESQL",
                   "REDSHIFT",
@@ -7333,15 +7496,19 @@
                   "DATABRICKS",
                   "GDSTORAGE",
                   "CLICKHOUSE",
-                  "MYSQL"
+                  "MYSQL",
+                  "MARIADB"
                 ],
                 "type": "string"
               },
               "url": {
+                "description": "The URL of the database providing the data for the data source.",
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "username": {
+                "description": "The username to use to connect to the database providing the data for the data source.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -7418,6 +7585,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -7441,21 +7616,35 @@
           "attributes": {
             "properties": {
               "cachePath": {
+                "description": "Path to schema, where intermediate caches are stored.",
                 "items": {
                   "type": "string"
                 },
+                "nullable": true,
                 "type": "array"
               },
+              "cacheStrategy": {
+                "description": "Determines how the results coming from a particular datasource should be cached.",
+                "enum": [
+                  "ALWAYS",
+                  "NEVER"
+                ],
+                "nullable": true,
+                "type": "string"
+              },
               "enableCaching": {
-                "description": "Enable caching of intermediate results.",
+                "description": "Enable CTAS caching of intermediate results in the database.",
                 "example": false,
+                "nullable": true,
                 "type": "boolean"
               },
               "name": {
+                "description": "User-facing name of the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "parameters": {
+                "description": "Additional parameters to be used when connecting to the database providing the data for the data source.",
                 "items": {
                   "properties": {
                     "name": {
@@ -7471,23 +7660,28 @@
                   ],
                   "type": "object"
                 },
+                "nullable": true,
                 "type": "array"
               },
               "password": {
+                "description": "The password to use to connect to the database providing the data for the data source.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
               },
               "schema": {
+                "description": "The schema to use as the root of the data for the data source.",
                 "maxLength": 255,
                 "type": "string"
               },
               "token": {
+                "description": "The token to use to connect to the database providing the data for the data source (for example a BigQuery Sevice Acount).",
                 "maxLength": 10000,
                 "nullable": true,
                 "type": "string"
               },
               "type": {
+                "description": "Type of the database providing the data for the data source.",
                 "enum": [
                   "POSTGRESQL",
                   "REDSHIFT",
@@ -7505,15 +7699,19 @@
                   "DATABRICKS",
                   "GDSTORAGE",
                   "CLICKHOUSE",
-                  "MYSQL"
+                  "MYSQL",
+                  "MARIADB"
                 ],
                 "type": "string"
               },
               "url": {
+                "description": "The URL of the database providing the data for the data source.",
                 "maxLength": 255,
+                "nullable": true,
                 "type": "string"
               },
               "username": {
+                "description": "The username to use to connect to the database providing the data for the data source.",
                 "maxLength": 255,
                 "nullable": true,
                 "type": "string"
@@ -7920,6 +8118,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -8016,6 +8222,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -8032,6 +8246,390 @@
             "$ref": "#/components/schemas/ObjectLinksContainer"
           }
         ]
+      },
+      "JsonApiExportDefinitionIn": {
+        "description": "JSON:API representation of exportDefinition entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "requestPayload": {
+                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
+                "example": {
+                  "format": "PDF",
+                  "visualizationObjectId": "<id>"
+                },
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "requestPayload"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportDefinition"
+            ],
+            "example": "exportDefinition",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionInDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionIn"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionOut": {
+        "description": "JSON:API representation of exportDefinition entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "modifiedAt": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "requestPayload": {
+                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
+                "example": {
+                  "format": "PDF",
+                  "visualizationObjectId": "<id>"
+                },
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "requestPayload"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "createdBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "modifiedBy": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiUserIdentifierToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportDefinition"
+            ],
+            "example": "exportDefinition",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionOutDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionOut"
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiExportDefinitionOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ObjectLinks"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionOutIncludes": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextOutWithLinks"
+          },
+          {
+            "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
+          }
+        ]
+      },
+      "JsonApiExportDefinitionOutList": {
+        "description": "A JSON:API document with a list of resources",
+        "properties": {
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/JsonApiExportDefinitionOutWithLinks"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "included": {
+            "description": "Included resources",
+            "items": {
+              "$ref": "#/components/schemas/JsonApiExportDefinitionOutIncludes"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "links": {
+            "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionOutWithLinks": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionOut"
+          },
+          {
+            "$ref": "#/components/schemas/ObjectLinksContainer"
+          }
+        ]
+      },
+      "JsonApiExportDefinitionPatch": {
+        "description": "JSON:API representation of patching exportDefinition entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "requestPayload": {
+                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
+                "example": {
+                  "format": "PDF",
+                  "visualizationObjectId": "<id>"
+                },
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "filterContext": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              },
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportDefinition"
+            ],
+            "example": "exportDefinition",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "id",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionPatchDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
       },
       "JsonApiFactLinkage": {
         "description": "The \\\"type\\\" and \\\"id\\\" to non-empty members.",
@@ -8198,6 +8796,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -8493,6 +9099,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -8657,6 +9271,15 @@
         },
         "type": "array"
       },
+      "JsonApiFilterContextToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiFilterContextLinkage"
+          }
+        ]
+      },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
         "properties": {
@@ -8780,6 +9403,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -9029,6 +9660,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -9404,6 +10043,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -9597,6 +10244,10 @@
                 "maxLength": 255,
                 "type": "string"
               },
+              "jitEnabled": {
+                "description": "Flag to enable/disable JIT provisioning in the given organization",
+                "type": "boolean"
+              },
               "name": {
                 "maxLength": 255,
                 "type": "string"
@@ -9695,6 +10346,10 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "jitEnabled": {
+                "description": "Flag to enable/disable JIT provisioning in the given organization",
+                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,
@@ -9837,6 +10492,10 @@
               "hostname": {
                 "maxLength": 255,
                 "type": "string"
+              },
+              "jitEnabled": {
+                "description": "Flag to enable/disable JIT provisioning in the given organization",
+                "type": "boolean"
               },
               "name": {
                 "maxLength": 255,
@@ -10040,6 +10699,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -10242,6 +10909,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -10630,6 +11305,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -10997,6 +11680,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -11176,6 +11867,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -11396,6 +12095,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -11624,6 +12331,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -11960,6 +12675,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -12123,6 +12846,15 @@
           "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
         },
         "type": "array"
+      },
+      "JsonApiVisualizationObjectToOneLinkage": {
+        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
+        "nullable": true,
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/JsonApiVisualizationObjectLinkage"
+          }
+        ]
       },
       "JsonApiWorkspaceDataFilterIn": {
         "description": "JSON:API representation of workspaceDataFilter entity.",
@@ -12336,6 +13068,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -12637,6 +13377,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -13019,6 +13767,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -13279,6 +14035,14 @@
           },
           "links": {
             "$ref": "#/components/schemas/ListLinks"
+          },
+          "meta": {
+            "properties": {
+              "page": {
+                "$ref": "#/components/schemas/PageMetadata"
+              }
+            },
+            "type": "object"
           }
         },
         "required": [
@@ -13724,6 +14488,31 @@
         ],
         "type": "object"
       },
+      "PageMetadata": {
+        "properties": {
+          "number": {
+            "description": "The number of the current page",
+            "format": "int32",
+            "type": "integer"
+          },
+          "size": {
+            "description": "The size of the current page",
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "description": "The total number of elements",
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalPages": {
+            "description": "The total number of pages",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
       "Paging": {
         "description": "Current page description.",
         "properties": {
@@ -13796,6 +14585,55 @@
         ],
         "type": "object"
       },
+      "PdfTableStyle": {
+        "description": "Custom CSS styles for the table. (PDF, HTML)",
+        "example": [
+          {
+            "properties": [
+              {
+                "key": "font-size",
+                "value": "30px"
+              }
+            ],
+            "selector": "th"
+          }
+        ],
+        "properties": {
+          "properties": {
+            "description": "List of CSS properties.",
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyleProperty"
+            },
+            "type": "array"
+          },
+          "selector": {
+            "description": "CSS selector where to apply given properties.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ],
+        "type": "object"
+      },
+      "PdfTableStyleProperty": {
+        "description": "CSS property.",
+        "properties": {
+          "key": {
+            "description": "CSS property key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "CSS property value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
       "PdmLdmRequest": {
         "description": "PDM additions wrapper.",
         "properties": {
@@ -13840,6 +14678,32 @@
         "required": [
           "statement",
           "title"
+        ],
+        "type": "object"
+      },
+      "PermissionsAssignment": {
+        "properties": {
+          "assignees": {
+            "items": {
+              "$ref": "#/components/schemas/AssigneeIdentifier"
+            },
+            "type": "array"
+          },
+          "dataSources": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementDataSourcePermissionAssignment"
+            },
+            "type": "array"
+          },
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "assignees"
         ],
         "type": "object"
       },
@@ -14576,23 +15440,52 @@
         "type": "object"
       },
       "Settings": {
-        "description": "XLSX specific settings.",
+        "description": "Additional settings.",
         "properties": {
           "mergeHeaders": {
-            "description": "Merge equal headers in neighbouring cells.",
+            "description": "Merge equal headers in neighbouring cells. (XLSX)",
             "example": true,
             "type": "boolean"
           },
+          "pdfPageSize": {
+            "description": "Page size and orientation. (PDF)",
+            "example": "a4 landscape",
+            "type": "string"
+          },
+          "pdfTableStyle": {
+            "description": "Custom CSS styles for the table. (PDF, HTML)",
+            "example": [
+              {
+                "properties": [
+                  {
+                    "key": "font-size",
+                    "value": "30px"
+                  }
+                ],
+                "selector": "th"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyle"
+            },
+            "type": "array"
+          },
+          "pdfTopLeftContent": {
+            "description": "Top left header content. (PDF)",
+            "example": "Good",
+            "type": "string"
+          },
+          "pdfTopRightContent": {
+            "description": "Top right header content. (PDF)",
+            "example": "Morning",
+            "type": "string"
+          },
           "showFilters": {
-            "description": "Print applied filters on top of the document.",
+            "description": "Print applied filters on top of the document. (Not supported yet)",
             "example": false,
             "type": "boolean"
           }
         },
-        "required": [
-          "mergeHeaders",
-          "showFilters"
-        ],
         "type": "object"
       },
       "SimpleMeasureDefinition": {
@@ -14850,17 +15743,23 @@
             "description": "Expected file format.",
             "enum": [
               "CSV",
-              "XLSX"
+              "XLSX",
+              "HTML",
+              "PDF"
             ],
             "example": "CSV",
             "type": "string"
           },
           "settings": {
             "$ref": "#/components/schemas/Settings"
+          },
+          "visualizationObject": {
+            "description": "Visualization object identifier. Alternative to executionResult property. (HTML/PDF only)",
+            "example": "f7c359bc-c230-4487-b15b-ad9685bcb537",
+            "type": "string"
           }
         },
         "required": [
-          "executionResult",
           "fileName",
           "format"
         ],
@@ -14908,7 +15807,8 @@
               "DATABRICKS",
               "GDSTORAGE",
               "CLICKHOUSE",
-              "MYSQL"
+              "MYSQL",
+              "MARIADB"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -15147,6 +16047,21 @@
         ],
         "type": "object"
       },
+      "UserGroupIdentifier": {
+        "description": "A list of groups where user is a member",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "UserGroupPermission": {
         "description": "List of user groups",
         "properties": {
@@ -15168,6 +16083,56 @@
         },
         "required": [
           "id"
+        ],
+        "type": "object"
+      },
+      "UserManagementDataSourcePermissionAssignment": {
+        "description": "Datasource permission assignments for users and userGroups",
+        "properties": {
+          "id": {
+            "description": "Id of the datasource",
+            "type": "string"
+          },
+          "name": {
+            "description": "Name of the datasource",
+            "readOnly": true,
+            "type": "string"
+          },
+          "permissions": {
+            "items": {
+              "enum": [
+                "MANAGE",
+                "USE"
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "permissions"
+        ],
+        "type": "object"
+      },
+      "UserManagementPermissionAssignments": {
+        "properties": {
+          "dataSources": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementDataSourcePermissionAssignment"
+            },
+            "type": "array"
+          },
+          "workspaces": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "dataSources",
+          "workspaces"
         ],
         "type": "object"
       },
@@ -15202,8 +16167,12 @@
       },
       "UserManagementUserGroups": {
         "properties": {
+          "totalCount": {
+            "description": "Total number of groups",
+            "format": "int32",
+            "type": "integer"
+          },
           "userGroups": {
-            "description": "List of groups",
             "items": {
               "$ref": "#/components/schemas/UserManagementUserGroupsItem"
             },
@@ -15211,6 +16180,7 @@
           }
         },
         "required": [
+          "totalCount",
           "userGroups"
         ],
         "type": "object"
@@ -15218,7 +16188,13 @@
       "UserManagementUserGroupsItem": {
         "description": "List of groups",
         "properties": {
-          "groupId": {
+          "dataSources": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementDataSourcePermissionAssignment"
+            },
+            "type": "array"
+          },
+          "id": {
             "type": "string"
           },
           "name": {
@@ -15232,21 +16208,20 @@
             "type": "boolean"
           },
           "userCount": {
-            "description": "Child groups where group belongs to",
+            "description": "The number of users belonging to the group",
             "format": "int32",
             "type": "integer"
           },
           "workspaces": {
-            "description": "Workspaces where group can access",
             "items": {
-              "description": "Workspaces where group can access",
-              "type": "string"
+              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
             },
             "type": "array"
           }
         },
         "required": [
-          "groupId",
+          "dataSources",
+          "id",
           "organizationAdmin",
           "userCount",
           "workspaces"
@@ -15255,8 +16230,12 @@
       },
       "UserManagementUsers": {
         "properties": {
+          "totalCount": {
+            "description": "The total number of users is based on applied filters.",
+            "format": "int32",
+            "type": "integer"
+          },
           "users": {
-            "description": "List of users",
             "items": {
               "$ref": "#/components/schemas/UserManagementUsersItem"
             },
@@ -15264,6 +16243,7 @@
           }
         },
         "required": [
+          "totalCount",
           "users"
         ],
         "type": "object"
@@ -15271,18 +16251,19 @@
       "UserManagementUsersItem": {
         "description": "List of users",
         "properties": {
+          "dataSources": {
+            "items": {
+              "$ref": "#/components/schemas/UserManagementDataSourcePermissionAssignment"
+            },
+            "type": "array"
+          },
           "email": {
             "description": "User email address",
             "example": "user@example.com",
             "type": "string"
           },
-          "groups": {
-            "description": "Groups where user belongs to",
-            "items": {
-              "description": "Groups where user belongs to",
-              "type": "string"
-            },
-            "type": "array"
+          "id": {
+            "type": "string"
           },
           "name": {
             "description": "User name",
@@ -15294,22 +16275,24 @@
             "example": false,
             "type": "boolean"
           },
-          "userId": {
-            "type": "string"
+          "userGroups": {
+            "items": {
+              "$ref": "#/components/schemas/UserGroupIdentifier"
+            },
+            "type": "array"
           },
           "workspaces": {
-            "description": "Workspaces where can access",
             "items": {
-              "description": "Workspaces where can access",
-              "type": "string"
+              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
             },
             "type": "array"
           }
         },
         "required": [
-          "groups",
+          "dataSources",
+          "id",
           "organizationAdmin",
-          "userId",
+          "userGroups",
           "workspaces"
         ],
         "type": "object"
@@ -15357,20 +16340,6 @@
           "hierarchyPermissions",
           "id",
           "permissions"
-        ],
-        "type": "object"
-      },
-      "UserManagementWorkspacePermissionAssignments": {
-        "properties": {
-          "workspaces": {
-            "items": {
-              "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignment"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "workspaces"
         ],
         "type": "object"
       },
@@ -16255,9 +17224,142 @@
         ]
       }
     },
-    "/api/v1/actions/userManagement/groups": {
+    "/api/v1/actions/userManagement/assignPermissions": {
+      "post": {
+        "operationId": "assignPermissions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermissionsAssignment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "User management"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/removeUsersUserGroups": {
+      "post": {
+        "operationId": "removeUsersUserGroups",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/AssigneeIdentifier"
+                },
+                "type": "array"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "User management"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/revokePermissions": {
+      "post": {
+        "operationId": "revokePermissions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermissionsAssignment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "User management"
+        ]
+      }
+    },
+    "/api/v1/actions/userManagement/userGroups": {
       "get": {
         "operationId": "listUserGroups",
+        "parameters": [
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": "page=0",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": "size=20",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by user name. Note that user name is case insensitive.",
+            "example": "name=charles",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by workspaceId.",
+            "example": "workspace=demo",
+            "in": "query",
+            "name": "workspace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by dataSourceId.",
+            "example": "dataSource=demo-test-ds",
+            "in": "query",
+            "name": "dataSource",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -16271,7 +17373,7 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
@@ -16304,7 +17406,7 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
@@ -16334,13 +17436,13 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
     "/api/v1/actions/userManagement/userGroups/{userGroupId}/permissions": {
       "get": {
-        "operationId": "listWorkspacePermissionsForUserGroup",
+        "operationId": "listPermissionsForUserGroup",
         "parameters": [
           {
             "in": "path",
@@ -16356,7 +17458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
+                  "$ref": "#/components/schemas/UserManagementPermissionAssignments"
                 }
               }
             },
@@ -16364,11 +17466,11 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       },
       "post": {
-        "operationId": "manageWorkspacePermissionsForUserGroup",
+        "operationId": "managePermissionsForUserGroup",
         "parameters": [
           {
             "in": "path",
@@ -16383,7 +17485,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
+                "$ref": "#/components/schemas/UserManagementPermissionAssignments"
               }
             }
           },
@@ -16395,7 +17497,7 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
@@ -16428,13 +17530,85 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
     "/api/v1/actions/userManagement/users": {
       "get": {
         "operationId": "listUsers",
+        "parameters": [
+          {
+            "description": "Zero-based page index (0..N)",
+            "example": "page=0",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "The size of the page to be returned.",
+            "example": "size=20",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by user name. Note that user name is case insensitive.",
+            "example": "name=charles",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by workspaceId.",
+            "example": "workspace=demo",
+            "in": "query",
+            "name": "workspace",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by userGroupId.",
+            "example": "group=admin",
+            "in": "query",
+            "name": "group",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          },
+          {
+            "description": "Filter by dataSourceId.",
+            "example": "dataSource=demo-test-ds",
+            "in": "query",
+            "name": "dataSource",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "style": "form"
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -16448,13 +17622,13 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
     "/api/v1/actions/userManagement/users/{userId}/permissions": {
       "get": {
-        "operationId": "listWorkspacePermissionsForUser",
+        "operationId": "listPermissionsForUser",
         "parameters": [
           {
             "in": "path",
@@ -16470,7 +17644,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
+                  "$ref": "#/components/schemas/UserManagementPermissionAssignments"
                 }
               }
             },
@@ -16478,11 +17652,11 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       },
       "post": {
-        "operationId": "manageWorkspacePermissionsForUser",
+        "operationId": "managePermissionsForUser",
         "parameters": [
           {
             "in": "path",
@@ -16497,7 +17671,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserManagementWorkspacePermissionAssignments"
+                "$ref": "#/components/schemas/UserManagementPermissionAssignments"
               }
             }
           },
@@ -16509,7 +17683,7 @@
           }
         },
         "tags": [
-          "actions"
+          "User management"
         ]
       }
     },
@@ -17352,8 +18526,10 @@
         "responses": {
           "200": {
             "content": {
+              "application/pdf": {},
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {},
-              "text/csv": {}
+              "text/csv": {},
+              "text/html": {}
             },
             "description": "Binary export result.",
             "headers": {
@@ -17369,6 +18545,12 @@
           },
           "202": {
             "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
                 "schema": {
                   "format": "binary",
@@ -17376,6 +18558,12 @@
                 }
               },
               "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/html": {
                 "schema": {
                   "format": "binary",
                   "type": "string"
@@ -18368,6 +19556,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -18622,6 +19832,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -18859,7 +20091,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,all",
+            "example": "metaInclude=permissions,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -18869,6 +20101,7 @@
               "items": {
                 "enum": [
                   "permissions",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -18996,7 +20229,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,all",
+            "example": "metaInclude=permissions,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -19006,6 +20239,7 @@
               "items": {
                 "enum": [
                   "permissions",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -19332,6 +20566,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -19414,6 +20670,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -19685,6 +20963,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -19938,6 +21238,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -20212,6 +21534,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -20565,6 +21909,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -20666,6 +22032,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -21022,6 +22410,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -21195,6 +22605,28 @@
           },
           {
             "$ref": "#/components/parameters/sort"
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
           }
         ],
         "responses": {
@@ -21437,7 +22869,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+            "example": "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -21450,6 +22882,7 @@
                   "permissions",
                   "hierarchy",
                   "dataModelDatasets",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -21924,7 +23357,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=permissions,origin,accessInfo,all",
+            "example": "metaInclude=permissions,origin,accessInfo,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -21936,6 +23369,7 @@
                   "permissions",
                   "origin",
                   "accessInfo",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -22498,7 +23932,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -22508,6 +23942,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -23043,7 +24478,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -23053,6 +24488,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -23244,7 +24680,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -23254,6 +24690,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -23675,7 +25112,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -23685,6 +25122,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -24216,7 +25654,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -24226,6 +25664,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -24361,6 +25800,474 @@
         ]
       }
     },
+    "/api/v1/entities/workspaces/{workspaceId}/exportDefinitions": {
+      "get": {
+        "operationId": "getAllEntities@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "origin",
+            "required": false,
+            "schema": {
+              "default": "ALL",
+              "description": "Defines scope of origin of objects. All by default.",
+              "enum": [
+                "ALL",
+                "PARENTS",
+                "NATIVE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/size"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Include Meta objects.",
+            "example": "metaInclude=page,all",
+            "explode": false,
+            "in": "query",
+            "name": "metaInclude",
+            "required": false,
+            "schema": {
+              "description": "Included meta objects",
+              "items": {
+                "enum": [
+                  "page",
+                  "all",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array",
+              "uniqueItems": true
+            },
+            "style": "form"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutList"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "post": {
+        "operationId": "createEntity@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportDefinitionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "summary": "Post Export Definitions",
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
+    "/api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId}": {
+      "delete": {
+        "operationId": "deleteEntity@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/Deleted"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "get": {
+        "operationId": "getEntity@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          },
+          {
+            "in": "header",
+            "name": "X-GDC-VALIDATE-RELATIONS",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "patch": {
+        "operationId": "patchEntity@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportDefinitionPatchDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      },
+      "put": {
+        "operationId": "updateEntity@ExportDefinitions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspaceId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "objectId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "in": "query",
+            "name": "filter",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
+            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "explode": false,
+            "in": "query",
+            "name": "include",
+            "required": false,
+            "schema": {
+              "items": {
+                "enum": [
+                  "visualizationObjects",
+                  "filterContexts",
+                  "userIdentifiers",
+                  "visualizationObject",
+                  "filterContext",
+                  "createdBy",
+                  "modifiedBy",
+                  "ALL"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "style": "form"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/vnd.gooddata.api+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JsonApiExportDefinitionInDocument"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.gooddata.api+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonApiExportDefinitionOutDocument"
+                }
+              }
+            },
+            "description": "Request successfully processed"
+          }
+        },
+        "tags": [
+          "entities",
+          "workspace-object-controller"
+        ]
+      }
+    },
     "/api/v1/entities/workspaces/{workspaceId}/facts": {
       "get": {
         "operationId": "getAllEntities@Facts",
@@ -24437,7 +26344,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -24447,6 +26354,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -24668,7 +26576,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -24678,6 +26586,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -25206,7 +27115,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25216,6 +27125,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -25442,7 +27352,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -25452,6 +27362,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -26007,7 +27918,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -26017,6 +27928,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -26539,7 +28451,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -26549,6 +28461,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -27097,7 +29010,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -27107,6 +29020,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -27631,7 +29545,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -27641,6 +29555,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -28145,7 +30060,7 @@
           },
           {
             "description": "Include Meta objects.",
-            "example": "metaInclude=origin,all",
+            "example": "metaInclude=origin,page,all",
             "explode": false,
             "in": "query",
             "name": "metaInclude",
@@ -28155,6 +30070,7 @@
               "items": {
                 "enum": [
                   "origin",
+                  "page",
                   "all",
                   "ALL"
                 ],
@@ -29759,6 +31675,10 @@
     }
   ],
   "tags": [
+    {
+      "description": "Use case APIs for user management",
+      "name": "User management"
+    },
     {
       "description": "| execution of some form of computation (RPC over JSON)",
       "name": "actions"

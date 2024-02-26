@@ -226,7 +226,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set

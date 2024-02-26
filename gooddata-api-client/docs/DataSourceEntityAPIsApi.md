@@ -48,6 +48,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -226,7 +227,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -306,7 +307,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -549,6 +550,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -654,6 +656,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[

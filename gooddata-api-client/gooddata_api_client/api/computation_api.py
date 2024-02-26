@@ -526,8 +526,10 @@ class ComputationApi(object):
             },
             headers_map={
                 'accept': [
+                    'application/pdf',
                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'text/csv'
+                    'text/csv',
+                    'text/html'
                 ],
                 'content_type': [],
             },

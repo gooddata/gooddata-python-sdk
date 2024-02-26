@@ -78,6 +78,7 @@ class TestDefinitionRequest(ModelNormal):
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
+            'MARIADB': "MARIADB",
         },
     }
 

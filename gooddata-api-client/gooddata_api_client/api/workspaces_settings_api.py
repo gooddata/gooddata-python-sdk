@@ -358,6 +358,7 @@ class WorkspacesSettingsApi(object):
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
@@ -462,6 +463,7 @@ class WorkspacesSettingsApi(object):
                     ('meta_include',): {
 
                         "ORIGIN": "origin",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },
