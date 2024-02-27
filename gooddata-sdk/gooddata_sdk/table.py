@@ -1,15 +1,28 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
-from typing import Any, Generator, Optional, Union
+from operator import attrgetter
+from typing import Any, Generator, List, Optional, Union
+
+from attrs import define, field, frozen
+from attrs.setters import frozen as frozen_attr
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.execution import (
+    ExecutionDefinition,
+    ExecutionResponse,
+    ExecutionResult,
+    TotalDefinition,
+    TotalDimension,
+)
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 from gooddata_sdk.compute.service import ComputeService
-from gooddata_sdk.insight import Insight
+from gooddata_sdk.insight import BucketType, Insight, InsightBucket, InsightMetric, InsightTotal
+
+_MEASURE_GROUP_IDENTIFIER = "measureGroup"
+_TOTAL_ORDER = ["SUM", "MAX", "MIN", "AVG", "MED"]
 
 _TABLE_ROW_BATCH_SIZE = 512
 """
@@ -21,6 +34,16 @@ _MAX_METRICS = 256
 Maximum number of metrics that this code is prepared to handle. This is to simplify the paging business - so that
 code only pages 'down' across one (row) dimension.
 """
+
+_GET_BUCKET_TYPE_OF_DIM_INDEX = {
+    0: BucketType.ROWS,
+    1: BucketType.COLS,
+}
+
+_GET_DIM_INDEX_OF_BUCKET_TYPE = {
+    BucketType.ROWS: 0,
+    BucketType.COLS: 1,
+}
 
 
 class ExecutionTable:
@@ -193,12 +216,286 @@ def _as_table(response: ExecutionResponse) -> ExecutionTable:
     return ExecutionTable(response=response, first_page=first_page)
 
 
+@frozen
+class TableDimension:
+    item_ids: List[str]
+    idx: int
+    sorting: Any
+
+
+@frozen
+class TotalDefinitionOrdering:
+    function_order: int
+    order: int
+    total: TotalDefinition
+
+    @classmethod
+    def create(cls, total: TotalDefinition, measures: list[InsightMetric]) -> TotalDefinitionOrdering:
+        metric_ordering = [m.local_id for m in measures]
+        return cls(
+            function_order=_TOTAL_ORDER.index(total.aggregation.upper()),
+            order=metric_ordering.index(total.metric_local_id),
+            total=total,
+        )
+
+
+def _create_dimension(bucket: InsightBucket, measures_item_identifier: Optional[str] = None) -> TableDimension:
+    item_ids = [a.local_id for a in bucket.attributes]
+    if measures_item_identifier is not None:
+        item_ids.append(measures_item_identifier)
+    return TableDimension(
+        item_ids=item_ids,
+        idx=_GET_DIM_INDEX_OF_BUCKET_TYPE[bucket.type],
+        sorting=None,
+    )
+
+
+def _create_dimensions(insight: Insight) -> list[TableDimension]:
+    # TODO: measures item id placement should reflect table transposition setting
+    measures_item_identifier = _MEASURE_GROUP_IDENTIFIER if insight.metrics else None
+    row_bucket = insight.get_bucket_of_type(BucketType.ROWS)
+    col_bucket = insight.get_bucket_of_type(BucketType.COLS)
+    return [
+        _create_dimension(row_bucket),
+        _create_dimension(col_bucket, measures_item_identifier),
+    ]
+
+
+def _marginal_total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+    return f"marginal_total_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
+
+
+def _sub_total_column_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+    return f"subtotal_column_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
+
+
+def _sub_total_row_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+    return f"subtotal_row_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
+
+
+def _grand_total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+    return f"total_of_totals_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
+
+
+def _total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+    return f"total_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
+
+
+def _convert_total_dimensions(
+    total: InsightTotal, dimension: TableDimension, idx: int, all_dims: list[TableDimension]
+) -> Any:
+    item_idx = dimension.item_ids.index(total.attribute_id)
+    total_dim_items = dimension.item_ids[0:item_idx]
+    if _MEASURE_GROUP_IDENTIFIER in dimension.item_ids and _MEASURE_GROUP_IDENTIFIER not in total_dim_items:
+        total_dim_items.append(_MEASURE_GROUP_IDENTIFIER)
+    total_dims = [TotalDimension(idx=d.idx, items=d.item_ids) for d in all_dims if d.idx != idx]
+    if len(total_dim_items) > 0:
+        total_dims.append(TotalDimension(idx=idx, items=total_dim_items))
+    return total_dims
+
+
+@define
+class TotalsComputeInfo:
+    row_attr_ids: List[str] = field(on_setattr=frozen_attr)
+    col_attr_ids: List[str] = field(on_setattr=frozen_attr)
+    measure_group_rows: List[str] = field(on_setattr=frozen_attr)
+    measure_group_cols: List[str] = field(on_setattr=frozen_attr)
+    has_row_and_column_grand_totals: bool = False
+    has_row_and_column_sub_totals: bool = False
+    has_row_subtotal_and_column_grand_total: bool = False
+    has_column_subtotal_and_row_grand_total: bool = False
+    row_dimension_index: int = 0
+    column_dimension_index: int = 0
+    row_subtotal_dimension_index: int = 0
+    column_subtotal_dimension_index: int = 0
+
+    def reset_to_defaults(self) -> None:
+        self.has_row_and_column_grand_totals = False
+        self.has_row_and_column_sub_totals = False
+        self.has_row_subtotal_and_column_grand_total = False
+        self.has_column_subtotal_and_row_grand_total = False
+        self.row_dimension_index = 0
+        self.column_dimension_index = 0
+        self.row_subtotal_dimension_index = 0
+        self.column_subtotal_dimension_index = 0
+
+    def update_compute_info(self, col_total_attr_id: str, row_total_attr_id: str) -> None:
+        # Check for grand totals rows/columns
+        # Grand total is always defined on the very first attribute of the attribute/columns bucket
+        if row_total_attr_id == self.row_attr_ids[0] and col_total_attr_id == self.col_attr_ids[0]:
+            self.has_row_and_column_grand_totals = True
+        # Check for subtotals rows/columns
+        if row_total_attr_id != self.row_attr_ids[0] and col_total_attr_id != self.col_attr_ids[0]:
+            self.has_row_and_column_sub_totals = True
+            self.row_dimension_index = self.row_attr_ids.index(row_total_attr_id)
+            self.column_dimension_index = self.col_attr_ids.index(col_total_attr_id)
+        # Check for rows subtotals within columns grand totals
+        if row_total_attr_id != self.row_attr_ids[0] and col_total_attr_id == self.col_attr_ids[0]:
+            self.has_row_subtotal_and_column_grand_total = True
+            self.row_subtotal_dimension_index = self.row_attr_ids.index(row_total_attr_id)
+        # Check for columns subtotals within rows grand totals
+        if row_total_attr_id == self.row_attr_ids[0] and col_total_attr_id != self.col_attr_ids[0]:
+            self.has_column_subtotal_and_row_grand_total = True
+            self.column_subtotal_dimension_index = self.col_attr_ids.index(col_total_attr_id)
+
+
+def _get_additional_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+    totals: list[TotalDefinition] = []
+    row_bucket = insight.get_bucket_of_type(BucketType.ROWS)
+    col_bucket = insight.get_bucket_of_type(BucketType.COLS)
+
+    tci = TotalsComputeInfo(
+        row_attr_ids=[a.local_id for a in row_bucket.attributes],
+        col_attr_ids=[a.local_id for a in col_bucket.attributes],
+        measure_group_rows=[_MEASURE_GROUP_IDENTIFIER] if _MEASURE_GROUP_IDENTIFIER in dimensions[0].item_ids else [],
+        measure_group_cols=[_MEASURE_GROUP_IDENTIFIER] if _MEASURE_GROUP_IDENTIFIER in dimensions[1].item_ids else [],
+    )
+    for row_index, row_total in enumerate(row_bucket.totals):
+        tci.reset_to_defaults()
+        for col_index, col_total in enumerate(col_bucket.totals):
+            # Check for totals from same measure and type
+            if row_total.measure_id == col_total.measure_id and row_total.type == col_total.type:
+                tci.update_compute_info(col_total.attribute_id, row_total.attribute_id)
+
+            if tci.has_row_and_column_sub_totals:
+                totals.append(_extend_marginal_totals(col_index, row_total, tci))
+
+        if tci.has_row_subtotal_and_column_grand_total:
+            totals.append(_extend_marginal_totals_of_rows(row_index, row_total, tci))
+
+        if tci.has_column_subtotal_and_row_grand_total:
+            totals.append(_extend_marginal_totals_of_cols(row_index, row_total, tci))
+
+        if tci.has_row_and_column_grand_totals:
+            totals.append(_extend_grand_totals(row_index, row_total, tci))
+
+    return totals
+
+
+def _extend_grand_totals(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+    # Extend grand totals payload
+    row_dim = [TotalDimension(idx=0, items=tci.measure_group_rows)] if tci.measure_group_rows else []
+    col_dim = [TotalDimension(idx=1, items=tci.measure_group_cols)] if tci.measure_group_cols else []
+    return TotalDefinition(
+        local_id=_grand_total_local_identifier(row_total, row_index),
+        aggregation=row_total.type,
+        metric_local_id=row_total.measure_id,
+        total_dims=row_dim + col_dim,
+    )
+
+
+def _extend_marginal_totals_of_cols(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+    # Extend marginal of columns within rows grand totals payload
+    row_dim = [TotalDimension(idx=0, items=tci.measure_group_rows)] if tci.measure_group_rows else []
+    col_dim = [
+        TotalDimension(
+            idx=1,
+            items=tci.col_attr_ids[: tci.column_subtotal_dimension_index] + tci.measure_group_cols,
+        )
+    ]
+    return TotalDefinition(
+        local_id=_sub_total_row_local_identifier(row_total, row_index),
+        aggregation=row_total.type,
+        metric_local_id=row_total.measure_id,
+        total_dims=row_dim + col_dim,
+    )
+
+
+def _extend_marginal_totals_of_rows(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+    # Extend marginal totals of rows within column grand totals payload
+    return TotalDefinition(
+        local_id=_sub_total_column_local_identifier(row_total, row_index),
+        aggregation=row_total.type,
+        metric_local_id=row_total.measure_id,
+        total_dims=[
+            TotalDimension(
+                idx=0,
+                items=tci.row_attr_ids[: tci.row_subtotal_dimension_index] + tci.measure_group_rows,
+            ),
+            TotalDimension(
+                idx=1,
+                items=tci.measure_group_cols,
+            ),
+        ],
+    )
+
+
+def _extend_marginal_totals(col_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+    # Extend marginal totals payload
+    return TotalDefinition(
+        local_id=_marginal_total_local_identifier(row_total, col_index),
+        aggregation=row_total.type,
+        metric_local_id=row_total.measure_id,
+        total_dims=[
+            TotalDimension(
+                idx=0,
+                items=tci.row_attr_ids[: tci.row_dimension_index] + tci.measure_group_rows,
+            ),
+            TotalDimension(
+                idx=1,
+                items=tci.col_attr_ids[: tci.column_dimension_index] + tci.measure_group_cols,
+            ),
+        ],
+    )
+
+
+def _get_computable_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+    processed_totals = []
+    for dim in dimensions:
+        bucket_type = _GET_BUCKET_TYPE_OF_DIM_INDEX[dim.idx]
+        bucket = insight.get_bucket_of_type(bucket_type)
+        dim_totals_with_order = []
+        for total in bucket.totals:
+            total_def = TotalDefinition(
+                local_id=_total_local_identifier(total, dim.idx),
+                aggregation=total.type,
+                metric_local_id=total.measure_id,
+                total_dims=_convert_total_dimensions(
+                    total,
+                    dim,
+                    dim.idx,
+                    dimensions,
+                ),
+            )
+            dim_totals_with_order.append(TotalDefinitionOrdering.create(total_def, insight.metrics))
+        dim_totals_with_order.sort(key=attrgetter("function_order", "order"))
+        processed_totals.append([t.total for t in dim_totals_with_order])
+
+    totals = [total for dim_totals in processed_totals if dim_totals for total in dim_totals]
+
+    if not insight.has_row_and_col_totals():
+        return totals
+
+    new_totals = _get_additional_totals(insight, dimensions)
+    return totals + new_totals
+
+
+def _get_exec_for_pivot(insight: Insight) -> ExecutionDefinition:
+    dimensions = _create_dimensions(insight)
+    totals = _get_computable_totals(insight, dimensions)
+    return ExecutionDefinition(
+        attributes=[a.as_computable() for a in insight.attributes],
+        metrics=[m.as_computable() for m in insight.metrics],
+        filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
+        dimensions=[d.item_ids for d in dimensions],
+        totals=totals,
+    )
+
+
+def get_exec_for_non_pivot(insight: Insight) -> ExecutionDefinition:
+    return _prepare_tabular_definition(
+        attributes=[a.as_computable() for a in insight.attributes],
+        metrics=[m.as_computable() for m in insight.metrics],
+        filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
+    )
+
+
 class TableService:
     """
     The TableService provides a convenient way to drive computations and access the results in a tabular fashion.
 
     Compared to the ComputeService, with this one here you do not have to worry about the layout of the result and
-    do not have to have to work with execution response, access the data using paging.
+    do not have to work with execution response, access the data using paging.
 
     The ExecutionTable returned by the TableService allows you to iterate over the rows of the calculated data.
     """
@@ -207,14 +504,13 @@ class TableService:
         self._compute = ComputeService(api_client)
 
     def for_insight(self, workspace_id: str, insight: Insight) -> ExecutionTable:
-        exec_def = _prepare_tabular_definition(
-            attributes=[a.as_computable() for a in insight.attributes],
-            metrics=[m.as_computable() for m in insight.metrics],
-            filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
+        # Assume the received insight is a pivot table if it contains row ("attribute") bucket
+        exec_def = (
+            _get_exec_for_pivot(insight)
+            if insight.has_bucket_of_type(BucketType.ROWS)
+            else get_exec_for_non_pivot(insight)
         )
-
         response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
-
         return _as_table(response)
 
     def for_items(

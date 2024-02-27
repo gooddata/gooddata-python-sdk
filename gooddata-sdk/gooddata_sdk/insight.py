@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import functools
+from collections import defaultdict
+from enum import Enum
 from typing import Any, Optional, Union, cast
 
 from gooddata_sdk.client import GoodDataApiClient
@@ -69,6 +71,30 @@ _ARITHMETIC_CONVERSION = {
     "multiplication": "MULTIPLICATION",
     "ratio": "RATIO",
     "change": "CHANGE",
+}
+
+
+class BucketType(Enum):
+    UNDEFINED = 0
+    MEASURES = 1
+    ROWS = 2
+    COLS = 3
+
+
+_LOCAL_ID_TO_BUCKET_TYPE = defaultdict(
+    lambda: BucketType.UNDEFINED,
+    {
+        "measures": BucketType.MEASURES,
+        "attribute": BucketType.ROWS,
+        "columns": BucketType.COLS,
+    },
+)
+
+_BUCKET_TYPE_TO_LOCAL_ID = {
+    BucketType.UNDEFINED: "undefined",
+    BucketType.MEASURES: "measures",
+    BucketType.ROWS: "attribute",
+    BucketType.COLS: "columns",
 }
 
 
@@ -334,6 +360,29 @@ class InsightAttribute:
         return f"attribute(local_id={self.local_id}, show_all_values={self.show_all_values})"
 
 
+class InsightTotal:
+    def __init__(self, total: dict[str, Any]) -> None:
+        self._t = total
+
+    @property
+    def type(self) -> str:
+        return self._t["type"]
+
+    @property
+    def measure_id(self) -> str:
+        return self._t["measureIdentifier"]
+
+    @property
+    def attribute_id(self) -> str:
+        return self._t["attributeIdentifier"]
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    def __repr__(self) -> str:
+        return f"total(type={self.type}, measureIdentifier={self.measure_id}, attributeIdentifier={self.attribute_id})"
+
+
 class InsightFilter:
     def __init__(self, f: dict[str, Any]) -> None:
         self._filter = f
@@ -353,6 +402,8 @@ class InsightBucket:
         self._b = bucket
         self._metrics: Optional[list[InsightMetric]] = None
         self._attributes: Optional[list[InsightAttribute]] = None
+        self._totals: Optional[list[InsightTotal]] = None
+        self.type = _LOCAL_ID_TO_BUCKET_TYPE[self.local_id]
 
     @property
     def local_id(self) -> str:
@@ -376,11 +427,18 @@ class InsightBucket:
 
         return self._attributes
 
+    @property
+    def totals(self) -> list[InsightTotal]:
+        if self._totals is None:
+            self._totals = [InsightTotal(total) for total in self._b["totals"]] if "totals" in self._b else []
+
+        return self._totals
+
     def __str__(self) -> str:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"bucket(local_id={self.local_id}, items_count={len(self.items)})"
+        return f"bucket(local_id={self.local_id}, items_count={len(self.items)}, total_count={len(self.totals)})"
 
 
 class Insight:
@@ -441,6 +499,24 @@ class Insight:
     @property
     def attributes(self) -> list[InsightAttribute]:
         return [a for b in self.buckets for a in b.attributes]
+
+    def get_bucket_of_type(self, bucket_type: BucketType) -> InsightBucket:
+        for b in self.buckets:
+            if b.type == bucket_type:
+                return b
+        # Return empty bucket if not found
+        return InsightBucket({"items": [], "localIdentifier": _BUCKET_TYPE_TO_LOCAL_ID[bucket_type]})
+
+    def has_bucket_of_type(self, bucket_type: BucketType) -> bool:
+        for b in self.buckets:
+            if b.type == bucket_type:
+                return True
+        return False
+
+    def has_row_and_col_totals(self) -> bool:
+        row_bucket = self.get_bucket_of_type(BucketType.ROWS)
+        col_bucket = self.get_bucket_of_type(BucketType.COLS)
+        return len(row_bucket.totals) > 0 and len(col_bucket.totals) > 0
 
     @property
     def side_loads(self) -> SideLoads:
