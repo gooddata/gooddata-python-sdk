@@ -1,0 +1,138 @@
+{
+    "execution": {
+        "attributes": [
+            {
+                "label": {
+                    "identifier": {
+                        "id": "customer_name",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "7a4045fd00ac44579f52406df679435f"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "products.category",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "6a003ffd14994237ba64c4a02c488429"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "product_name",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "75ea396d0c8b48098e31dccf8b5801d3"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "state",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "a0b3aca54a2c43a9bb5d6d4f8d700cfc"
+            }
+        ],
+        "filters": [
+            {
+                "relative_date_filter": {
+                    "dataset": {
+                        "identifier": {
+                            "id": "date",
+                            "type": "dataset"
+                        }
+                    },
+                    "_from": 0,
+                    "granularity": "YEAR",
+                    "to": 0
+                }
+            }
+        ],
+        "measures": [
+            {
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": {
+                                "id": "percent_revenue_per_product",
+                                "type": "metric"
+                            }
+                        },
+                        "compute_ratio": false,
+                        "filters": []
+                    }
+                },
+                "local_identifier": "08d8346c1ce7438994b251991c0fbf65"
+            },
+            {
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": {
+                                "id": "revenue",
+                                "type": "metric"
+                            }
+                        },
+                        "compute_ratio": false,
+                        "filters": []
+                    }
+                },
+                "local_identifier": "b2350c06688b4da9b3833ebcce65527f"
+            }
+        ]
+    },
+    "result_spec": {
+        "dimensions": [
+            {
+                "item_identifiers": [
+                    "7a4045fd00ac44579f52406df679435f",
+                    "6a003ffd14994237ba64c4a02c488429",
+                    "75ea396d0c8b48098e31dccf8b5801d3"
+                ],
+                "local_identifier": "dim_0"
+            },
+            {
+                "item_identifiers": [
+                    "a0b3aca54a2c43a9bb5d6d4f8d700cfc",
+                    "measureGroup"
+                ],
+                "local_identifier": "dim_1"
+            }
+        ],
+        "totals": [
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_7a4045fd00ac44579f52406df679435f_0",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "a0b3aca54a2c43a9bb5d6d4f8d700cfc",
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "AVG",
+                "local_identifier": "total_avg_08d8346c1ce7438994b251991c0fbf65_by_7a4045fd00ac44579f52406df679435f_0",
+                "metric": "08d8346c1ce7438994b251991c0fbf65",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "a0b3aca54a2c43a9bb5d6d4f8d700cfc",
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

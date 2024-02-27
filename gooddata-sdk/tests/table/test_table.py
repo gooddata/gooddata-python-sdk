@@ -1,16 +1,29 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
+import pytest
 from tests_support.vcrpy_utils import get_vcr
 
-from gooddata_sdk import Attribute, GoodDataSdk, ObjId, PositiveAttributeFilter, SimpleMetric
+from gooddata_sdk import Attribute, GoodDataSdk, Insight, ObjId, PositiveAttributeFilter, SimpleMetric, table
 
 gd_vcr = get_vcr()
 
 _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
+_snapshot_dir = _current_dir / "snapshots"
+_vis_objs_dir = _fixtures_dir / "vis_objs"
+
+
+def load_json(path):
+    with path.open("r") as f:
+        return json.load(f)
+
+
+def _insight_filename_to_snapshot_name(path):
+    return path.name.replace(".json", ".snapshot.json")
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "table_with_just_attribute.yaml"))
@@ -98,3 +111,32 @@ def test_table_with_attribute_show_all_values(test_config: dict):
     assert table_counts[True] <= date_values_count
     # there are filtered dates when show_all_values is False
     assert table_counts[True] > table_counts[False]
+
+
+@pytest.mark.parametrize("filename", [f.absolute() for f in _vis_objs_dir.iterdir()])
+def test_pivot_to_exec_def(filename, snapshot):
+    """
+    The test makes use of visualisation object json fixtures contained in `_vis_objs_dir`.
+
+    All the input vis objects contain:
+    - 2 metrics in columns
+    - 3 row attrs
+    - no columns attrs.
+    Any additional vis object fields are expressed in abbreviations.
+
+    Abbreviations explanation:
+    1rt = 1 row total
+    1rrt = 1 row running total
+    1ct = 1 col total
+    1crt = 1 col running total
+    1cattr = 1 additional col attributes
+    """
+    vis_obj = load_json(filename)
+    insight = Insight(vis_obj)
+
+    exec_def = table._get_exec_for_pivot(insight)
+    result = exec_def.as_api_model().to_dict()
+
+    snapshot.snapshot_dir = _snapshot_dir
+
+    snapshot.assert_match(json.dumps(result, indent=4), filename.name.replace(".json", ".snapshot.json"))
