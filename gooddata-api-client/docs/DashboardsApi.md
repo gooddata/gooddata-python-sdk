@@ -224,7 +224,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=permissions,origin,accessInfo,all",
+        "metaInclude=permissions,origin,accessInfo,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set

@@ -74,6 +74,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
+            'MARIADB': "MARIADB",
         },
     }
 

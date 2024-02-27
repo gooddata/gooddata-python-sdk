@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **allowed_origins** | **[str]** |  | [optional] 
 **early_access** | **str** |  | [optional] 
 **hostname** | **str** |  | [optional] 
+**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **name** | **str** |  | [optional] 
 **oauth_client_id** | **str** |  | [optional] 
 **oauth_client_secret** | **str** |  | [optional] 

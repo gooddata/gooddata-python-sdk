@@ -1,5 +1,6 @@
 # DependsOn
 
+Filter definition type specified by label and values.
 
 ## Properties
 Name | Type | Description | Notes

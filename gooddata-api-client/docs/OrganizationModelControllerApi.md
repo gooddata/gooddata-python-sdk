@@ -253,6 +253,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -1553,12 +1554,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Color Pallettes
-        api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_color_palettes: %s\n" % e)
@@ -1573,6 +1577,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1629,12 +1634,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get CSP Directives
-        api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_csp_directives: %s\n" % e)
@@ -1649,6 +1657,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1704,7 +1713,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -1784,7 +1793,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -1863,12 +1872,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get Entitlements
-        api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_entitlements: %s\n" % e)
@@ -1883,6 +1895,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -1939,12 +1952,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Jwks
-        api_response = api_instance.get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_jwks: %s\n" % e)
@@ -1959,6 +1975,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2013,12 +2030,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get Organization entities
-        api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_organization_settings: %s\n" % e)
@@ -2033,6 +2053,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2087,12 +2108,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Theming entities
-        api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_themes: %s\n" % e)
@@ -2107,6 +2131,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2166,12 +2191,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get UserGroup entities
-        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_user_groups: %s\n" % e)
@@ -2187,6 +2215,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2243,12 +2272,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get UserIdentifier entities
-        api_response = api_instance.get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_user_identifiers: %s\n" % e)
@@ -2263,6 +2295,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2322,12 +2355,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get User entities
-        api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling OrganizationModelControllerApi->get_all_entities_users: %s\n" % e)
@@ -2343,6 +2379,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -2403,7 +2440,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -3616,6 +3653,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -4476,6 +4514,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[

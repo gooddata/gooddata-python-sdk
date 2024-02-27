@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_list_meta import JsonApiAnalyticalDashboardOutListMeta
     from gooddata_api_client.model.json_api_metric_out_includes import JsonApiMetricOutIncludes
     from gooddata_api_client.model.json_api_visualization_object_out_with_links import JsonApiVisualizationObjectOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
+    globals()['JsonApiAnalyticalDashboardOutListMeta'] = JsonApiAnalyticalDashboardOutListMeta
     globals()['JsonApiMetricOutIncludes'] = JsonApiMetricOutIncludes
     globals()['JsonApiVisualizationObjectOutWithLinks'] = JsonApiVisualizationObjectOutWithLinks
     globals()['ListLinks'] = ListLinks
@@ -99,6 +101,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
             'data': ([JsonApiVisualizationObjectOutWithLinks],),  # noqa: E501
             'included': ([JsonApiMetricOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
+            'meta': (JsonApiAnalyticalDashboardOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +113,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,6 +162,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -249,6 +254,7 @@ class JsonApiVisualizationObjectOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiMetricOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

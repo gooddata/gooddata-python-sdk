@@ -65,6 +65,8 @@ class TabularExportRequest(ModelNormal):
         ('format',): {
             'CSV': "CSV",
             'XLSX': "XLSX",
+            'HTML': "HTML",
+            'PDF': "PDF",
         },
     }
 
@@ -94,11 +96,12 @@ class TabularExportRequest(ModelNormal):
         """
         lazy_import()
         return {
-            'execution_result': (str,),  # noqa: E501
             'file_name': (str,),  # noqa: E501
             'format': (str,),  # noqa: E501
             'custom_override': (CustomOverride,),  # noqa: E501
+            'execution_result': (str,),  # noqa: E501
             'settings': (Settings,),  # noqa: E501
+            'visualization_object': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -107,11 +110,12 @@ class TabularExportRequest(ModelNormal):
 
 
     attribute_map = {
-        'execution_result': 'executionResult',  # noqa: E501
         'file_name': 'fileName',  # noqa: E501
         'format': 'format',  # noqa: E501
         'custom_override': 'customOverride',  # noqa: E501
+        'execution_result': 'executionResult',  # noqa: E501
         'settings': 'settings',  # noqa: E501
+        'visualization_object': 'visualizationObject',  # noqa: E501
     }
 
     read_only_vars = {
@@ -121,11 +125,10 @@ class TabularExportRequest(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, execution_result, file_name, format, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, file_name, format, *args, **kwargs):  # noqa: E501
         """TabularExportRequest - a model defined in OpenAPI
 
         Args:
-            execution_result (str): Execution result identifier.
             file_name (str): Filename of downloaded file without extension.
             format (str): Expected file format.
 
@@ -161,7 +164,9 @@ class TabularExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (CustomOverride): [optional]  # noqa: E501
+            execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -193,7 +198,6 @@ class TabularExportRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.execution_result = execution_result
         self.file_name = file_name
         self.format = format
         for var_name, var_value in kwargs.items():
@@ -216,11 +220,10 @@ class TabularExportRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, execution_result, file_name, format, *args, **kwargs):  # noqa: E501
+    def __init__(self, file_name, format, *args, **kwargs):  # noqa: E501
         """TabularExportRequest - a model defined in OpenAPI
 
         Args:
-            execution_result (str): Execution result identifier.
             file_name (str): Filename of downloaded file without extension.
             format (str): Expected file format.
 
@@ -256,7 +259,9 @@ class TabularExportRequest(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             custom_override (CustomOverride): [optional]  # noqa: E501
+            execution_result (str): Execution result identifier.. [optional]  # noqa: E501
             settings (Settings): [optional]  # noqa: E501
+            visualization_object (str): Visualization object identifier. Alternative to executionResult property. (HTML/PDF only). [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -286,7 +291,6 @@ class TabularExportRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.execution_result = execution_result
         self.file_name = file_name
         self.format = format
         for var_name, var_value in kwargs.items():

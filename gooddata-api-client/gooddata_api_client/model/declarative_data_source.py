@@ -80,6 +80,11 @@ class DeclarativeDataSource(ModelNormal):
             'GDSTORAGE': "GDSTORAGE",
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
+            'MARIADB': "MARIADB",
+        },
+        ('cache_strategy',): {
+            'ALWAYS': "ALWAYS",
+            'NEVER': "NEVER",
         },
     }
 
@@ -137,6 +142,7 @@ class DeclarativeDataSource(ModelNormal):
             'schema': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
             'cache_path': ([str],),  # noqa: E501
+            'cache_strategy': (str,),  # noqa: E501
             'decoded_parameters': ([Parameter],),  # noqa: E501
             'enable_caching': (bool,),  # noqa: E501
             'parameters': ([Parameter],),  # noqa: E501
@@ -158,6 +164,7 @@ class DeclarativeDataSource(ModelNormal):
         'schema': 'schema',  # noqa: E501
         'type': 'type',  # noqa: E501
         'cache_path': 'cachePath',  # noqa: E501
+        'cache_strategy': 'cacheStrategy',  # noqa: E501
         'decoded_parameters': 'decodedParameters',  # noqa: E501
         'enable_caching': 'enableCaching',  # noqa: E501
         'parameters': 'parameters',  # noqa: E501
@@ -216,6 +223,7 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            cache_strategy (str): Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501
@@ -320,6 +328,7 @@ class DeclarativeDataSource(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             cache_path ([str]): Path to schema, where intermediate caches are stored.. [optional]  # noqa: E501
+            cache_strategy (str): Determines how the results coming from a particular datasource should be cached. - ALWAYS: The results from the datasource should be cached normally (the default). - NEVER: The results from the datasource should never be cached.. [optional]  # noqa: E501
             decoded_parameters ([Parameter]): [optional]  # noqa: E501
             enable_caching (bool): Enable caching of intermediate results.. [optional]  # noqa: E501
             parameters ([Parameter]): [optional]  # noqa: E501

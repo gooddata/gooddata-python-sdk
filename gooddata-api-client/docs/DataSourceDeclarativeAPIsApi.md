@@ -104,6 +104,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "[ "dfs", "data" ]. Example used in Apache Drill.",
                 ],
+                cache_strategy="ALWAYS",
                 decoded_parameters=[
                     Parameter(
                         name="name_example",

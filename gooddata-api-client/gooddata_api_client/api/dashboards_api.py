@@ -261,6 +261,7 @@ class DashboardsApi(object):
                         "PERMISSIONS": "permissions",
                         "ORIGIN": "origin",
                         "ACCESSINFO": "accessInfo",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

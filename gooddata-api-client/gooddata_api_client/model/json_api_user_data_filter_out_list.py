@@ -31,9 +31,11 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_list_meta import JsonApiAnalyticalDashboardOutListMeta
     from gooddata_api_client.model.json_api_user_data_filter_out_includes import JsonApiUserDataFilterOutIncludes
     from gooddata_api_client.model.json_api_user_data_filter_out_with_links import JsonApiUserDataFilterOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
+    globals()['JsonApiAnalyticalDashboardOutListMeta'] = JsonApiAnalyticalDashboardOutListMeta
     globals()['JsonApiUserDataFilterOutIncludes'] = JsonApiUserDataFilterOutIncludes
     globals()['JsonApiUserDataFilterOutWithLinks'] = JsonApiUserDataFilterOutWithLinks
     globals()['ListLinks'] = ListLinks
@@ -99,6 +101,7 @@ class JsonApiUserDataFilterOutList(ModelNormal):
             'data': ([JsonApiUserDataFilterOutWithLinks],),  # noqa: E501
             'included': ([JsonApiUserDataFilterOutIncludes],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
+            'meta': (JsonApiAnalyticalDashboardOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -110,6 +113,7 @@ class JsonApiUserDataFilterOutList(ModelNormal):
         'data': 'data',  # noqa: E501
         'included': 'included',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -158,6 +162,7 @@ class JsonApiUserDataFilterOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiUserDataFilterOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -249,6 +254,7 @@ class JsonApiUserDataFilterOutList(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             included ([JsonApiUserDataFilterOutIncludes]): Included resources. [optional]  # noqa: E501
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
