@@ -16,6 +16,7 @@ from gooddata_sdk import (
     CatalogDataSource,
     CatalogDataSourceBigQuery,
     CatalogDataSourceDatabricks,
+    CatalogDataSourceMariaDb,
     CatalogDataSourceMsSql,
     CatalogDataSourceMySql,
     CatalogDataSourcePostgres,
@@ -31,6 +32,7 @@ from gooddata_sdk import (
     DatabricksAttributes,
     ExecutionDefinition,
     GoodDataSdk,
+    MariaDbAttributes,
     MsSqlAttributes,
     MySqlAttributes,
     PostgresAttributes,
@@ -744,3 +746,17 @@ def test_catalog_data_source_mysql(test_config):
         ),
     )
     assert data_source.url == "jdbc:mysql://localhost:3306/my_schema"
+
+
+def test_catalog_data_source_mariadb(test_config):
+    data_source = CatalogDataSourceMariaDb(
+        id="test",
+        name="Test",
+        db_specific_attributes=MariaDbAttributes(host="localhost", port="3306"),
+        schema="my_schema",
+        credentials=BasicCredentials(
+            username="demouser",
+            password="demospass",
+        ),
+    )
+    assert data_source.url == "jdbc:mariadb://localhost:3306/my_schema"

@@ -109,6 +109,7 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             'allowed_origins': ([str],),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'hostname': (str,),  # noqa: E501
+            'jit_enabled': (bool,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'oauth_client_id': (str,),  # noqa: E501
             'oauth_client_secret': (str,),  # noqa: E501
@@ -126,6 +127,7 @@ class JsonApiOrganizationInAttributes(ModelNormal):
         'allowed_origins': 'allowedOrigins',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'hostname': 'hostname',  # noqa: E501
+        'jit_enabled': 'jitEnabled',  # noqa: E501
         'name': 'name',  # noqa: E501
         'oauth_client_id': 'oauthClientId',  # noqa: E501
         'oauth_client_secret': 'oauthClientSecret',  # noqa: E501
@@ -178,6 +180,7 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             allowed_origins ([str]): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_client_secret (str): [optional]  # noqa: E501
@@ -272,6 +275,7 @@ class JsonApiOrganizationInAttributes(ModelNormal):
             allowed_origins ([str]): [optional]  # noqa: E501
             early_access (str): [optional]  # noqa: E501
             hostname (str): [optional]  # noqa: E501
+            jit_enabled (bool): Flag to enable/disable JIT provisioning in the given organization. [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
             oauth_client_id (str): [optional]  # noqa: E501
             oauth_client_secret (str): [optional]  # noqa: E501

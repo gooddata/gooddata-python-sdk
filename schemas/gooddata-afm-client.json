@@ -669,7 +669,7 @@
         "type": "object"
       },
       "DateFilter": {
-        "description": "Abstract filter definition type for dates",
+        "description": "Abstract filter definition type for dates.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/AbsoluteDateFilter"
@@ -681,30 +681,62 @@
         "type": "object"
       },
       "DependsOn": {
-        "nullable": true,
-        "properties": {
-          "complementFilter": {
-            "default": false,
-            "description": "Inverse filtering mode.",
-            "type": "boolean"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DependsOnItem"
           },
-          "label": {
-            "description": "Specifies on which label the filter depends on.",
-            "type": "string"
-          },
-          "values": {
-            "description": "Specifies values of the label for element filtering.",
-            "items": {
-              "nullable": true,
-              "type": "string"
+          {
+            "properties": {
+              "complementFilter": {
+                "default": false,
+                "description": "Inverse filtering mode.",
+                "type": "boolean"
+              },
+              "label": {
+                "description": "Specifies on which label the filter depends on.",
+                "type": "string"
+              },
+              "values": {
+                "description": "Specifies values of the label for element filtering.",
+                "items": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "type": "array"
+              }
             },
-            "type": "array"
+            "type": "object"
           }
-        },
+        ],
+        "description": "Filter definition type specified by label and values.",
         "required": [
           "label",
           "values"
         ],
+        "type": "object"
+      },
+      "DependsOnDateFilter": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DependsOnItem"
+          },
+          {
+            "properties": {
+              "dateFilter": {
+                "$ref": "#/components/schemas/DateFilter"
+              }
+            },
+            "type": "object"
+          }
+        ],
+        "description": "Filter definition type for dates.",
+        "required": [
+          "dateFilter"
+        ],
+        "type": "object"
+      },
+      "DependsOnItem": {
+        "nullable": true,
         "type": "object"
       },
       "Dimension": {
@@ -791,7 +823,14 @@
           "dependsOn": {
             "description": "Return only items, whose are not filtered out by the parent filters.",
             "items": {
-              "$ref": "#/components/schemas/DependsOn"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/DependsOn"
+                },
+                {
+                  "$ref": "#/components/schemas/DependsOnDateFilter"
+                }
+              ]
             },
             "type": "array"
           },

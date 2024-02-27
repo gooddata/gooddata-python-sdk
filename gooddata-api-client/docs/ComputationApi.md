@@ -48,13 +48,7 @@ with gooddata_api_client.ApiClient() as api_client:
         complement_filter=False,
         data_sampling_percentage=100.0,
         depends_on=[
-            DependsOn(
-                complement_filter=False,
-                label="label_example",
-                values=[
-                    "values_example",
-                ],
-            ),
+            ElementsRequestDependsOnInner(None),
         ],
         exact_filter=[
             "exact_filter_example",
@@ -498,8 +492,23 @@ with gooddata_api_client.ApiClient() as api_client:
         format="CSV",
         settings=Settings(
             merge_headers=True,
+            pdf_page_size="a4 landscape",
+            pdf_table_style=[
+                PdfTableStyle(
+                    properties=[
+                        PdfTableStyleProperty(
+                            key="key_example",
+                            value="value_example",
+                        ),
+                    ],
+                    selector="selector_example",
+                ),
+            ],
+            pdf_top_left_content="Good",
+            pdf_top_right_content="Morning",
             show_filters=False,
         ),
+        visualization_object="f7c359bc-c230-4487-b15b-ad9685bcb537",
     ) # TabularExportRequest | 
 
     # example passing only required values which don't have defaults set
@@ -732,7 +741,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv
+ - **Accept**: application/pdf, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/csv, text/html
 
 
 ### HTTP response details

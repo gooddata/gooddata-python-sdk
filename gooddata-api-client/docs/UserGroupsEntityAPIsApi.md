@@ -222,12 +222,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get UserGroup entities
-        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling UserGroupsEntityAPIsApi->get_all_entities_user_groups: %s\n" % e)
@@ -243,6 +246,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 

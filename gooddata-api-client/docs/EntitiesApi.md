@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**create_entity_custom_application_settings**](EntitiesApi.md#create_entity_custom_application_settings) | **POST** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings | Post Custom Application Settings
 [**create_entity_dashboard_plugins**](EntitiesApi.md#create_entity_dashboard_plugins) | **POST** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins | Post Plugins
 [**create_entity_data_sources**](EntitiesApi.md#create_entity_data_sources) | **POST** /api/v1/entities/dataSources | Post Data Sources
+[**create_entity_export_definitions**](EntitiesApi.md#create_entity_export_definitions) | **POST** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | Post Export Definitions
 [**create_entity_filter_contexts**](EntitiesApi.md#create_entity_filter_contexts) | **POST** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Post Context Filters
 [**create_entity_jwks**](EntitiesApi.md#create_entity_jwks) | **POST** /api/v1/entities/jwks | Post Jwks
 [**create_entity_metrics**](EntitiesApi.md#create_entity_metrics) | **POST** /api/v1/entities/workspaces/{workspaceId}/metrics | Post Metrics
@@ -34,6 +35,7 @@ Method | HTTP request | Description
 [**delete_entity_custom_application_settings**](EntitiesApi.md#delete_entity_custom_application_settings) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Delete a Custom Application Setting
 [**delete_entity_dashboard_plugins**](EntitiesApi.md#delete_entity_dashboard_plugins) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Delete a Plugin
 [**delete_entity_data_sources**](EntitiesApi.md#delete_entity_data_sources) | **DELETE** /api/v1/entities/dataSources/{id} | Delete Data Source entity
+[**delete_entity_export_definitions**](EntitiesApi.md#delete_entity_export_definitions) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
 [**delete_entity_filter_contexts**](EntitiesApi.md#delete_entity_filter_contexts) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Delete a Context Filter
 [**delete_entity_jwks**](EntitiesApi.md#delete_entity_jwks) | **DELETE** /api/v1/entities/jwks/{id} | Delete Jwk
 [**delete_entity_metrics**](EntitiesApi.md#delete_entity_metrics) | **DELETE** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Delete a Metric
@@ -60,6 +62,7 @@ Method | HTTP request | Description
 [**get_all_entities_data_sources**](EntitiesApi.md#get_all_entities_data_sources) | **GET** /api/v1/entities/dataSources | Get Data Source entities
 [**get_all_entities_datasets**](EntitiesApi.md#get_all_entities_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets | Get all Datasets
 [**get_all_entities_entitlements**](EntitiesApi.md#get_all_entities_entitlements) | **GET** /api/v1/entities/entitlements | Get Entitlements
+[**get_all_entities_export_definitions**](EntitiesApi.md#get_all_entities_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions | 
 [**get_all_entities_facts**](EntitiesApi.md#get_all_entities_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts | Get all Facts
 [**get_all_entities_filter_contexts**](EntitiesApi.md#get_all_entities_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts | Get all Context Filters
 [**get_all_entities_jwks**](EntitiesApi.md#get_all_entities_jwks) | **GET** /api/v1/entities/jwks | Get all Jwks
@@ -92,6 +95,7 @@ Method | HTTP request | Description
 [**get_entity_data_sources**](EntitiesApi.md#get_entity_data_sources) | **GET** /api/v1/entities/dataSources/{id} | Get Data Source entity
 [**get_entity_datasets**](EntitiesApi.md#get_entity_datasets) | **GET** /api/v1/entities/workspaces/{workspaceId}/datasets/{objectId} | Get a Dataset
 [**get_entity_entitlements**](EntitiesApi.md#get_entity_entitlements) | **GET** /api/v1/entities/entitlements/{id} | Get Entitlement
+[**get_entity_export_definitions**](EntitiesApi.md#get_entity_export_definitions) | **GET** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
 [**get_entity_facts**](EntitiesApi.md#get_entity_facts) | **GET** /api/v1/entities/workspaces/{workspaceId}/facts/{objectId} | Get a Fact
 [**get_entity_filter_contexts**](EntitiesApi.md#get_entity_filter_contexts) | **GET** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Get a Context Filter
 [**get_entity_jwks**](EntitiesApi.md#get_entity_jwks) | **GET** /api/v1/entities/jwks/{id} | Get Jwk
@@ -119,6 +123,7 @@ Method | HTTP request | Description
 [**patch_entity_custom_application_settings**](EntitiesApi.md#patch_entity_custom_application_settings) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Patch a Custom Application Setting
 [**patch_entity_dashboard_plugins**](EntitiesApi.md#patch_entity_dashboard_plugins) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Patch a Plugin
 [**patch_entity_data_sources**](EntitiesApi.md#patch_entity_data_sources) | **PATCH** /api/v1/entities/dataSources/{id} | Patch Data Source entity
+[**patch_entity_export_definitions**](EntitiesApi.md#patch_entity_export_definitions) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
 [**patch_entity_filter_contexts**](EntitiesApi.md#patch_entity_filter_contexts) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Patch a Context Filter
 [**patch_entity_jwks**](EntitiesApi.md#patch_entity_jwks) | **PATCH** /api/v1/entities/jwks/{id} | Patch Jwk
 [**patch_entity_metrics**](EntitiesApi.md#patch_entity_metrics) | **PATCH** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Patch a Metric
@@ -141,6 +146,7 @@ Method | HTTP request | Description
 [**update_entity_custom_application_settings**](EntitiesApi.md#update_entity_custom_application_settings) | **PUT** /api/v1/entities/workspaces/{workspaceId}/customApplicationSettings/{objectId} | Put a Custom Application Setting
 [**update_entity_dashboard_plugins**](EntitiesApi.md#update_entity_dashboard_plugins) | **PUT** /api/v1/entities/workspaces/{workspaceId}/dashboardPlugins/{objectId} | Put a Plugin
 [**update_entity_data_sources**](EntitiesApi.md#update_entity_data_sources) | **PUT** /api/v1/entities/dataSources/{id} | Put Data Source entity
+[**update_entity_export_definitions**](EntitiesApi.md#update_entity_export_definitions) | **PUT** /api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId} | 
 [**update_entity_filter_contexts**](EntitiesApi.md#update_entity_filter_contexts) | **PUT** /api/v1/entities/workspaces/{workspaceId}/filterContexts/{objectId} | Put a Context Filter
 [**update_entity_jwks**](EntitiesApi.md#update_entity_jwks) | **PUT** /api/v1/entities/jwks/{id} | Put Jwk
 [**update_entity_metrics**](EntitiesApi.md#update_entity_metrics) | **PUT** /api/v1/entities/workspaces/{workspaceId}/metrics/{objectId} | Put a Metric
@@ -805,6 +811,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -857,6 +864,109 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiDataSourceOutDocument**](JsonApiDataSourceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**201** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **create_entity_export_definitions**
+> JsonApiExportDefinitionOutDocument create_entity_export_definitions(workspace_id, json_api_export_definition_in_document)
+
+Post Export Definitions
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
+from gooddata_api_client.model.json_api_export_definition_in_document import JsonApiExportDefinitionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    json_api_export_definition_in_document = JsonApiExportDefinitionInDocument(
+        data=JsonApiExportDefinitionIn(
+            attributes=JsonApiExportDefinitionInAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                request_payload={},
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            relationships=JsonApiExportDefinitionInRelationships(
+                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="exportDefinition",
+        ),
+    ) # JsonApiExportDefinitionInDocument | 
+    include = [
+        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        # Post Export Definitions
+        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Post Export Definitions
+        api_response = api_instance.create_entity_export_definitions(workspace_id, json_api_export_definition_in_document, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->create_entity_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **json_api_export_definition_in_document** | [**JsonApiExportDefinitionInDocument**](JsonApiExportDefinitionInDocument.md)|  |
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
 
 ### Authorization
 
@@ -2784,6 +2894,79 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **delete_entity_export_definitions**
+> delete_entity_export_definitions(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_instance.delete_entity_export_definitions(workspace_id, object_id)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_instance.delete_entity_export_definitions(workspace_id, object_id, filter=filter)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->delete_entity_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**204** | Successfully deleted |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **delete_entity_filter_contexts**
 > delete_entity_filter_contexts(workspace_id, object_id)
 
@@ -3868,7 +4051,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=permissions,origin,accessInfo,all",
+        "metaInclude=permissions,origin,accessInfo,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -3958,6 +4141,9 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -3971,7 +4157,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # List all api tokens for a user
-        api_response = api_instance.get_all_entities_api_tokens(user_id, filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_api_tokens(user_id, filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_api_tokens: %s\n" % e)
@@ -3987,6 +4173,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4048,7 +4235,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4144,7 +4331,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4233,12 +4420,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Color Pallettes
-        api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_color_palettes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_color_palettes: %s\n" % e)
@@ -4253,6 +4443,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4309,12 +4500,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get CSP Directives
-        api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_csp_directives(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_csp_directives: %s\n" % e)
@@ -4329,6 +4523,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -4387,7 +4582,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4482,7 +4677,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4572,7 +4767,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4652,7 +4847,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=permissions,all",
+        "metaInclude=permissions,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4736,7 +4931,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -4827,12 +5022,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get Entitlements
-        api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_entitlements(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_entitlements: %s\n" % e)
@@ -4847,10 +5045,105 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
 [**JsonApiEntitlementOutList**](JsonApiEntitlementOutList.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_all_entities_export_definitions**
+> JsonApiExportDefinitionOutList get_all_entities_export_definitions(workspace_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_definition_out_list import JsonApiExportDefinitionOutList
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    origin = "ALL" # str |  (optional) if omitted the server will use the default value of "ALL"
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    page = 0 # int | Zero-based page index (0..N) (optional) if omitted the server will use the default value of 0
+    size = 20 # int | The size of the page to be returned (optional) if omitted the server will use the default value of 20
+    sort = [
+        "sort_example",
+    ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_all_entities_export_definitions(workspace_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_all_entities_export_definitions(workspace_id, origin=origin, filter=filter, include=include, page=page, size=size, sort=sort, x_gdc_validate_relations=x_gdc_validate_relations, meta_include=meta_include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_all_entities_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **origin** | **str**|  | [optional] if omitted the server will use the default value of "ALL"
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
+ **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
+ **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
+
+### Return type
+
+[**JsonApiExportDefinitionOutList**](JsonApiExportDefinitionOutList.md)
 
 ### Authorization
 
@@ -4908,7 +5201,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -5004,7 +5297,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -5095,12 +5388,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Jwks
-        api_response = api_instance.get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_jwks(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_jwks: %s\n" % e)
@@ -5115,6 +5411,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5176,7 +5473,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -5272,7 +5569,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -5361,12 +5658,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get Organization entities
-        api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_organization_settings(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_organization_settings: %s\n" % e)
@@ -5381,6 +5681,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5435,12 +5736,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get all Theming entities
-        api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_themes(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_themes: %s\n" % e)
@@ -5455,6 +5759,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5516,7 +5821,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -5610,12 +5915,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get UserGroup entities
-        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_groups(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_user_groups: %s\n" % e)
@@ -5631,6 +5939,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5687,12 +5996,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get UserIdentifier entities
-        api_response = api_instance.get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_identifiers(filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_user_identifiers: %s\n" % e)
@@ -5707,6 +6019,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5762,6 +6075,9 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -5775,7 +6091,7 @@ with gooddata_api_client.ApiClient() as api_client:
     # and optional values
     try:
         # List all settings for a user
-        api_response = api_instance.get_all_entities_user_settings(user_id, filter=filter, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_user_settings(user_id, filter=filter, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_user_settings: %s\n" % e)
@@ -5791,6 +6107,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5850,12 +6167,15 @@ with gooddata_api_client.ApiClient() as api_client:
     sort = [
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
+    meta_include = [
+        "metaInclude=page,all",
+    ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
     # and optional values
     try:
         # Get User entities
-        api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort)
+        api_response = api_instance.get_all_entities_users(filter=filter, include=include, page=page, size=size, sort=sort, meta_include=meta_include)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
         print("Exception when calling EntitiesApi->get_all_entities_users: %s\n" % e)
@@ -5871,6 +6191,7 @@ Name | Type | Description  | Notes
  **page** | **int**| Zero-based page index (0..N) | [optional] if omitted the server will use the default value of 0
  **size** | **int**| The size of the page to be returned | [optional] if omitted the server will use the default value of 20
  **sort** | **[str]**| Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. | [optional]
+ **meta_include** | **[str]**| Include Meta objects. | [optional]
 
 ### Return type
 
@@ -5932,7 +6253,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -6028,7 +6349,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -6124,7 +6445,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -6217,7 +6538,7 @@ with gooddata_api_client.ApiClient() as api_client:
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
     meta_include = [
-        "metaInclude=origin,all",
+        "metaInclude=origin,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -6311,7 +6632,7 @@ with gooddata_api_client.ApiClient() as api_client:
         "sort_example",
     ] # [str] | Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. (optional)
     meta_include = [
-        "metaInclude=config,permissions,hierarchy,dataModelDatasets,all",
+        "metaInclude=config,permissions,hierarchy,dataModelDatasets,page,all",
     ] # [str] | Include Meta objects. (optional)
 
     # example passing only required values which don't have defaults set
@@ -7535,6 +7856,88 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiEntitlementOutDocument**](JsonApiEntitlementOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_entity_export_definitions**
+> JsonApiExportDefinitionOutDocument get_entity_export_definitions(workspace_id, object_id)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+    x_gdc_validate_relations = False # bool |  (optional) if omitted the server will use the default value of False
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.get_entity_export_definitions(workspace_id, object_id)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.get_entity_export_definitions(workspace_id, object_id, filter=filter, include=include, x_gdc_validate_relations=x_gdc_validate_relations)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->get_entity_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+ **x_gdc_validate_relations** | **bool**|  | [optional] if omitted the server will use the default value of False
+
+### Return type
+
+[**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
 
 ### Authorization
 
@@ -9819,6 +10222,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -9870,6 +10274,111 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiDataSourceOutDocument**](JsonApiDataSourceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **patch_entity_export_definitions**
+> JsonApiExportDefinitionOutDocument patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
+from gooddata_api_client.model.json_api_export_definition_patch_document import JsonApiExportDefinitionPatchDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_export_definition_patch_document = JsonApiExportDefinitionPatchDocument(
+        data=JsonApiExportDefinitionPatch(
+            attributes=JsonApiExportDefinitionPatchAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                request_payload={},
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            relationships=JsonApiExportDefinitionInRelationships(
+                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="exportDefinition",
+        ),
+    ) # JsonApiExportDefinitionPatchDocument | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.patch_entity_export_definitions(workspace_id, object_id, json_api_export_definition_patch_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->patch_entity_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_export_definition_patch_document** | [**JsonApiExportDefinitionPatchDocument**](JsonApiExportDefinitionPatchDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
 
 ### Authorization
 
@@ -10302,6 +10811,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 early_access="early_access_example",
                 hostname="hostname_example",
+                jit_enabled=True,
                 name="name_example",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",
@@ -11959,6 +12469,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 cache_path=[
                     "cache_path_example",
                 ],
+                cache_strategy="ALWAYS",
                 enable_caching=False,
                 name="name_example",
                 parameters=[
@@ -12010,6 +12521,111 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JsonApiDataSourceOutDocument**](JsonApiDataSourceOutDocument.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/vnd.gooddata.api+json
+ - **Accept**: application/vnd.gooddata.api+json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Request successfully processed |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **update_entity_export_definitions**
+> JsonApiExportDefinitionOutDocument update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document)
+
+
+
+### Example
+
+
+```python
+import time
+import gooddata_api_client
+from gooddata_api_client.api import entities_api
+from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
+from gooddata_api_client.model.json_api_export_definition_in_document import JsonApiExportDefinitionInDocument
+from pprint import pprint
+# Defining the host is optional and defaults to http://localhost
+# See configuration.py for a list of all supported configuration parameters.
+configuration = gooddata_api_client.Configuration(
+    host = "http://localhost"
+)
+
+
+# Enter a context with an instance of the API client
+with gooddata_api_client.ApiClient() as api_client:
+    # Create an instance of the API class
+    api_instance = entities_api.EntitiesApi(api_client)
+    workspace_id = "workspaceId_example" # str | 
+    object_id = "objectId_example" # str | 
+    json_api_export_definition_in_document = JsonApiExportDefinitionInDocument(
+        data=JsonApiExportDefinitionIn(
+            attributes=JsonApiExportDefinitionInAttributes(
+                are_relations_valid=True,
+                description="description_example",
+                request_payload={},
+                tags=[
+                    "tags_example",
+                ],
+                title="title_example",
+            ),
+            id="id1",
+            relationships=JsonApiExportDefinitionInRelationships(
+                filter_context=JsonApiExportDefinitionInRelationshipsFilterContext(
+                    data=JsonApiFilterContextToOneLinkage(None),
+                ),
+                visualization_object=JsonApiExportDefinitionInRelationshipsVisualizationObject(
+                    data=JsonApiVisualizationObjectToOneLinkage(None),
+                ),
+            ),
+            type="exportDefinition",
+        ),
+    ) # JsonApiExportDefinitionInDocument | 
+    filter = "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321" # str | Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123'). (optional)
+    include = [
+        "include=visualizationObject,filterContext,createdBy,modifiedBy",
+    ] # [str] | Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. (optional)
+
+    # example passing only required values which don't have defaults set
+    try:
+        api_response = api_instance.update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_export_definitions: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        api_response = api_instance.update_entity_export_definitions(workspace_id, object_id, json_api_export_definition_in_document, filter=filter, include=include)
+        pprint(api_response)
+    except gooddata_api_client.ApiException as e:
+        print("Exception when calling EntitiesApi->update_entity_export_definitions: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **workspace_id** | **str**|  |
+ **object_id** | **str**|  |
+ **json_api_export_definition_in_document** | [**JsonApiExportDefinitionInDocument**](JsonApiExportDefinitionInDocument.md)|  |
+ **filter** | **str**| Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title&#x3D;&#x3D;&#39;Some Title&#39;;description&#x3D;&#x3D;&#39;desc&#39;). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty&#x3D;&#x3D;&#39;Value 123&#39;). | [optional]
+ **include** | **[str]**| Array of included collections or individual relationships. Includes are separated by commas (e.g. include&#x3D;entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \&quot;ALL\&quot; is present, all possible includes are used (include&#x3D;ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together. | [optional]
+
+### Return type
+
+[**JsonApiExportDefinitionOutDocument**](JsonApiExportDefinitionOutDocument.md)
 
 ### Authorization
 
@@ -12442,6 +13058,7 @@ with gooddata_api_client.ApiClient() as api_client:
                 ],
                 early_access="early_access_example",
                 hostname="hostname_example",
+                jit_enabled=True,
                 name="name_example",
                 oauth_client_id="oauth_client_id_example",
                 oauth_client_secret="oauth_client_secret_example",

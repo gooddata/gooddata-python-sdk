@@ -91,24 +91,102 @@
         ],
         "type": "object"
       },
+      "PdfTableStyle": {
+        "description": "Custom CSS styles for the table. (PDF, HTML)",
+        "example": [
+          {
+            "properties": [
+              {
+                "key": "font-size",
+                "value": "30px"
+              }
+            ],
+            "selector": "th"
+          }
+        ],
+        "properties": {
+          "properties": {
+            "description": "List of CSS properties.",
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyleProperty"
+            },
+            "type": "array"
+          },
+          "selector": {
+            "description": "CSS selector where to apply given properties.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "selector"
+        ],
+        "type": "object"
+      },
+      "PdfTableStyleProperty": {
+        "description": "CSS property.",
+        "properties": {
+          "key": {
+            "description": "CSS property key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "CSS property value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
       "Settings": {
-        "description": "XLSX specific settings.",
+        "description": "Additional settings.",
         "properties": {
           "mergeHeaders": {
-            "description": "Merge equal headers in neighbouring cells.",
+            "description": "Merge equal headers in neighbouring cells. (XLSX)",
             "example": true,
             "type": "boolean"
           },
+          "pdfPageSize": {
+            "description": "Page size and orientation. (PDF)",
+            "example": "a4 landscape",
+            "type": "string"
+          },
+          "pdfTableStyle": {
+            "description": "Custom CSS styles for the table. (PDF, HTML)",
+            "example": [
+              {
+                "properties": [
+                  {
+                    "key": "font-size",
+                    "value": "30px"
+                  }
+                ],
+                "selector": "th"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/PdfTableStyle"
+            },
+            "type": "array"
+          },
+          "pdfTopLeftContent": {
+            "description": "Top left header content. (PDF)",
+            "example": "Good",
+            "type": "string"
+          },
+          "pdfTopRightContent": {
+            "description": "Top right header content. (PDF)",
+            "example": "Morning",
+            "type": "string"
+          },
           "showFilters": {
-            "description": "Print applied filters on top of the document.",
+            "description": "Print applied filters on top of the document. (Not supported yet)",
             "example": false,
             "type": "boolean"
           }
         },
-        "required": [
-          "mergeHeaders",
-          "showFilters"
-        ],
         "type": "object"
       },
       "TabularExportRequest": {
@@ -131,17 +209,23 @@
             "description": "Expected file format.",
             "enum": [
               "CSV",
-              "XLSX"
+              "XLSX",
+              "HTML",
+              "PDF"
             ],
             "example": "CSV",
             "type": "string"
           },
           "settings": {
             "$ref": "#/components/schemas/Settings"
+          },
+          "visualizationObject": {
+            "description": "Visualization object identifier. Alternative to executionResult property. (HTML/PDF only)",
+            "example": "f7c359bc-c230-4487-b15b-ad9685bcb537",
+            "type": "string"
           }
         },
         "required": [
-          "executionResult",
           "fileName",
           "format"
         ],
@@ -229,8 +313,10 @@
         "responses": {
           "200": {
             "content": {
+              "application/pdf": {},
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {},
-              "text/csv": {}
+              "text/csv": {},
+              "text/html": {}
             },
             "description": "Binary export result.",
             "headers": {
@@ -246,6 +332,12 @@
           },
           "202": {
             "content": {
+              "application/pdf": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
               "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
                 "schema": {
                   "format": "binary",
@@ -253,6 +345,12 @@
                 }
               },
               "text/csv": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              },
+              "text/html": {
                 "schema": {
                   "format": "binary",
                   "type": "string"

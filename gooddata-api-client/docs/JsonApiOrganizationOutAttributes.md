@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **cache_settings** | [**JsonApiOrganizationOutAttributesCacheSettings**](JsonApiOrganizationOutAttributesCacheSettings.md) |  | [optional] 
 **early_access** | **str** |  | [optional] 
 **hostname** | **str** |  | [optional] 
+**jit_enabled** | **bool** | Flag to enable/disable JIT provisioning in the given organization | [optional] 
 **name** | **str** |  | [optional] 
 **oauth_client_id** | **str** |  | [optional] 
 **oauth_issuer_id** | **str** | Any string identifying the OIDC provider. This value is used as suffix for OAuth2 callback (redirect) URL. If not defined, the standard callback URL is used. This value is valid only for external OIDC providers, not for the internal DEX provider. | [optional] 

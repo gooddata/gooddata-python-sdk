@@ -276,19 +276,31 @@ class AppearanceApi(object):
                     'page',
                     'size',
                     'sort',
+                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "PAGE": "page",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'filter':
@@ -299,21 +311,26 @@ class AppearanceApi(object):
                         (int,),
                     'sort':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
                     'sort': 'sort',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -339,19 +356,31 @@ class AppearanceApi(object):
                     'page',
                     'size',
                     'sort',
+                    'meta_include',
                 ],
                 'required': [],
                 'nullable': [
                 ],
                 'enum': [
+                    'meta_include',
                 ],
                 'validation': [
+                    'meta_include',
                 ]
             },
             root_map={
                 'validations': {
+                    ('meta_include',): {
+
+                    },
                 },
                 'allowed_values': {
+                    ('meta_include',): {
+
+                        "PAGE": "page",
+                        "ALL": "all",
+                        "ALL": "ALL"
+                    },
                 },
                 'openapi_types': {
                     'filter':
@@ -362,21 +391,26 @@ class AppearanceApi(object):
                         (int,),
                     'sort':
                         ([str],),
+                    'meta_include':
+                        ([str],),
                 },
                 'attribute_map': {
                     'filter': 'filter',
                     'page': 'page',
                     'size': 'size',
                     'sort': 'sort',
+                    'meta_include': 'metaInclude',
                 },
                 'location_map': {
                     'filter': 'query',
                     'page': 'query',
                     'size': 'query',
                     'sort': 'query',
+                    'meta_include': 'query',
                 },
                 'collection_format_map': {
                     'sort': 'multi',
+                    'meta_include': 'csv',
                 }
             },
             headers_map={
@@ -1130,6 +1164,7 @@ class AppearanceApi(object):
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1211,6 +1246,7 @@ class AppearanceApi(object):
             page (int): Zero-based page index (0..N). [optional] if omitted the server will use the default value of 0
             size (int): The size of the page to be returned. [optional] if omitted the server will use the default value of 20
             sort ([str]): Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.. [optional]
+            meta_include ([str]): Include Meta objects.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object

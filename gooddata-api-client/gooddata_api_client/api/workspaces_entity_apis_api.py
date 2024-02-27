@@ -229,6 +229,7 @@ class WorkspacesEntityAPIsApi(object):
                         "PERMISSIONS": "permissions",
                         "HIERARCHY": "hierarchy",
                         "DATAMODELDATASETS": "dataModelDatasets",
+                        "PAGE": "page",
                         "ALL": "all",
                         "ALL": "ALL"
                     },

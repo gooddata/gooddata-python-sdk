@@ -31,8 +31,10 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
+    from gooddata_api_client.model.json_api_analytical_dashboard_out_list_meta import JsonApiAnalyticalDashboardOutListMeta
     from gooddata_api_client.model.json_api_data_source_out_with_links import JsonApiDataSourceOutWithLinks
     from gooddata_api_client.model.list_links import ListLinks
+    globals()['JsonApiAnalyticalDashboardOutListMeta'] = JsonApiAnalyticalDashboardOutListMeta
     globals()['JsonApiDataSourceOutWithLinks'] = JsonApiDataSourceOutWithLinks
     globals()['ListLinks'] = ListLinks
 
@@ -94,6 +96,7 @@ class JsonApiDataSourceOutList(ModelNormal):
         return {
             'data': ([JsonApiDataSourceOutWithLinks],),  # noqa: E501
             'links': (ListLinks,),  # noqa: E501
+            'meta': (JsonApiAnalyticalDashboardOutListMeta,),  # noqa: E501
         }
 
     @cached_property
@@ -104,6 +107,7 @@ class JsonApiDataSourceOutList(ModelNormal):
     attribute_map = {
         'data': 'data',  # noqa: E501
         'links': 'links',  # noqa: E501
+        'meta': 'meta',  # noqa: E501
     }
 
     read_only_vars = {
@@ -151,6 +155,7 @@ class JsonApiDataSourceOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -241,6 +246,7 @@ class JsonApiDataSourceOutList(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             links (ListLinks): [optional]  # noqa: E501
+            meta (JsonApiAnalyticalDashboardOutListMeta): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

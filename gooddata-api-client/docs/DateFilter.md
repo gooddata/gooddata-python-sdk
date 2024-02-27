@@ -1,6 +1,6 @@
 # DateFilter
 
-Abstract filter definition type for dates
+Abstract filter definition type for dates.
 
 ## Properties
 Name | Type | Description | Notes

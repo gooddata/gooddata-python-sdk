@@ -5,10 +5,11 @@ List of users
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**groups** | **[str]** | Groups where user belongs to | 
+**data_sources** | [**[UserManagementDataSourcePermissionAssignment]**](UserManagementDataSourcePermissionAssignment.md) |  | 
+**id** | **str** |  | 
 **organization_admin** | **bool** | Is user organization admin | 
-**user_id** | **str** |  | 
-**workspaces** | **[str]** | Workspaces where can access | 
+**user_groups** | [**[UserGroupIdentifier]**](UserGroupIdentifier.md) |  | 
+**workspaces** | [**[UserManagementWorkspacePermissionAssignment]**](UserManagementWorkspacePermissionAssignment.md) |  | 
 **email** | **str** | User email address | [optional] 
 **name** | **str** | User name | [optional] 
 **any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
