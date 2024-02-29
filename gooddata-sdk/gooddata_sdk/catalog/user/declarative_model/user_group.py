@@ -7,10 +7,10 @@ from typing import List, Optional, Type
 import attr
 
 from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
+from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
 from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
-from gooddata_sdk import CatalogDeclarativeWorkspaceHierarchyPermission
-from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogDeclarativeUserGroupIdentifier
+from gooddata_sdk.catalog.base import Base, value_in_allowed
+from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier, CatalogDeclarativeUserGroupIdentifier
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file
 
 LAYOUT_USER_GROUPS_DIR = "user_groups"
@@ -48,8 +48,18 @@ class CatalogDeclarativeUserGroup(Base):
     id: str
     name: Optional[str] = None
     parents: Optional[List[CatalogDeclarativeUserGroupIdentifier]] = None
-    permissions: List[CatalogDeclarativeWorkspaceHierarchyPermission] = attr.field(factory=list)
+    permissions: List[CatalogDeclarativeUserGroupPermission] = attr.field(factory=list)
 
     @staticmethod
     def client_class() -> Type[DeclarativeUserGroup]:
         return DeclarativeUserGroup
+
+
+@attr.s(auto_attribs=True, kw_only=True)
+class CatalogDeclarativeUserGroupPermission(Base):
+    name: str = attr.field(validator=value_in_allowed)
+    assignee: CatalogAssigneeIdentifier
+
+    @staticmethod
+    def client_class() -> Type[DeclarativeUserGroupPermission]:
+        return DeclarativeUserGroupPermission
