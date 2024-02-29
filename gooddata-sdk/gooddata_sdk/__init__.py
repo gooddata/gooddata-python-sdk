@@ -101,10 +101,15 @@ from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogOrganizationPermissionAssignment,
 )
 from gooddata_sdk.catalog.rule import CatalogAssigneeRule
-from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
+from gooddata_sdk.catalog.user.declarative_model.user import (
+    CatalogDeclarativeUser,
+    CatalogDeclarativeUserPermission,
+    CatalogDeclarativeUsers,
+)
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups
 from gooddata_sdk.catalog.user.declarative_model.user_group import (
     CatalogDeclarativeUserGroup,
+    CatalogDeclarativeUserGroupPermission,
     CatalogDeclarativeUserGroups,
 )
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
