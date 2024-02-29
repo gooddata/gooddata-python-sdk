@@ -75,6 +75,10 @@ _ARITHMETIC_CONVERSION = {
 
 
 class BucketType(Enum):
+    """
+    Enum used for differentiating between types of Insight buckets.
+    """
+
     UNDEFINED = 0
     MEASURES = 1
     ROWS = 2
@@ -89,6 +93,7 @@ _LOCAL_ID_TO_BUCKET_TYPE = defaultdict(
         "columns": BucketType.COLS,
     },
 )
+"""Mapping of bucket localIdentifiers to their respective BucketType counterparts."""
 
 _BUCKET_TYPE_TO_LOCAL_ID = {
     BucketType.UNDEFINED: "undefined",

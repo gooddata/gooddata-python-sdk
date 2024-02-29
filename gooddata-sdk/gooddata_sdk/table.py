@@ -218,6 +218,8 @@ def _as_table(response: ExecutionResponse) -> ExecutionTable:
 
 @frozen
 class TableDimension:
+    """Dataclass used during total and dimension computation."""
+
     item_ids: List[str]
     idx: int
     sorting: Any
@@ -225,6 +227,8 @@ class TableDimension:
 
 @frozen
 class TotalDefinitionOrdering:
+    """Dataclass used for ordering of total definitions."""
+
     function_order: int
     order: int
     total: TotalDefinition
@@ -296,6 +300,8 @@ def _convert_total_dimensions(
 
 @define
 class TotalsComputeInfo:
+    """Dataclass containing different values used for special case construction of pivot table totals."""
+
     row_attr_ids: List[str] = field(on_setattr=frozen_attr)
     col_attr_ids: List[str] = field(on_setattr=frozen_attr)
     measure_group_rows: List[str] = field(on_setattr=frozen_attr)
@@ -310,6 +316,7 @@ class TotalsComputeInfo:
     column_subtotal_dimension_index: int = 0
 
     def reset_to_defaults(self) -> None:
+        """Resets mutable fields to theirs default values."""
         self.has_row_and_column_grand_totals = False
         self.has_row_and_column_sub_totals = False
         self.has_row_subtotal_and_column_grand_total = False
@@ -320,6 +327,7 @@ class TotalsComputeInfo:
         self.column_subtotal_dimension_index = 0
 
     def update_compute_info(self, col_total_attr_id: str, row_total_attr_id: str) -> None:
+        """Update decision and index variables for totals construction."""
         # Check for grand totals rows/columns
         # Grand total is always defined on the very first attribute of the attribute/columns bucket
         if row_total_attr_id == self.row_attr_ids[0] and col_total_attr_id == self.col_attr_ids[0]:
@@ -340,6 +348,17 @@ class TotalsComputeInfo:
 
 
 def _get_additional_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+    """Construct special cases of pivot table totals.
+
+    These special cases are -
+      1. Grand totals - is the value obtained from row and column totals.
+      2. Marginal totals - is the value obtained within the subgroups from row and column subtotals.
+
+    For `Grand Totals`, in Tiger AFM, you specify that you want total of totals with total that have only
+    "measureGroup" present.
+    For `Marginal Total`, in Tiger AFM, would need to iterate through both dimensions and obtain the missing
+    totalDimensions items based on the attribute and column identifiers order in buckets.
+    """
     totals: list[TotalDefinition] = []
     row_bucket = insight.get_bucket_of_type(BucketType.ROWS)
     col_bucket = insight.get_bucket_of_type(BucketType.COLS)
@@ -440,6 +459,14 @@ def _extend_marginal_totals(col_index: int, row_total: InsightTotal, tci: Totals
 
 
 def _get_computable_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+    """
+    Extracts total definitions from execution definition dimensions and converts them into total specifications for
+    Tiger AFM. Execution definition defines totals by a measure, aggregation function, and the attribute for whose
+    values we want the totals. In Tiger, measure and aggregation function remains the same, but the `totalDimensions`
+    with `totalDimensionItems` are best understood as coordinates for the resulting structure where the totals
+    should be placed. This implicitly decides which attributes should be used. This allows for multidimensional totals,
+    but such totals are impossible to define in the execution definition.
+    """
     processed_totals = []
     for dim in dimensions:
         bucket_type = _GET_BUCKET_TYPE_OF_DIM_INDEX[dim.idx]
