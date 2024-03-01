@@ -1,13 +1,13 @@
 ---
-title: "export_tabular_by_insight_id"
-linkTitle: "export_tabular_by_insight_id"
+title: "export_tabular_by_visualization_id"
+linkTitle: "export_tabular_by_visualization_id"
 weight: 110
 superheading: "export."
 ---
 
-``export_tabular_by_insight_id(
+``export_tabular_by_visualization_id(
         workspace_id: str,
-        insight_id: str,
+        visualization_id: str,
         file_format: str,
         file_name: Optional[str] = None,
         settings: Optional[ExportSettings] = None,
@@ -17,7 +17,7 @@ superheading: "export."
         max_retry: float = 5.0,
     )``
 
-    Exports the tabular data for an Insight by its ID.
+    Exports the tabular data for an visualization by its ID.
 
 
 
@@ -25,8 +25,8 @@ superheading: "export."
 {{< parameter p_name="workspace_id" p_type="string" >}}
 The ID of the GoodData Workspace.
 {{< /parameter >}}
-{{< parameter p_name="insight_id" p_type="string" >}}
-The ID of the GoodData Insight.
+{{< parameter p_name="visualization_id" p_type="string" >}}
+The ID of the GoodData visualization.
 {{< /parameter >}}
 {{< parameter p_name="file_format" p_type="string" >}}
 The format of the file to be exported.
@@ -63,7 +63,7 @@ host = "https://www.example.com"
 token = "<your_personal_access_token>"
 sdk = GoodDataSdk.create(host, token)
 
-sdk.export.export_tabular_by_insight_id(
-        workspace_id="demo", insight_id="campaign_spend", file_format="CSV")
+sdk.export.export_tabular_by_visualization_id(
+        workspace_id="demo", visualization_id="campaign_spend", file_format="CSV")
 
 ```
