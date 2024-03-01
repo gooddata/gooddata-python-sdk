@@ -60,8 +60,8 @@ class InsightExecutor(Executor):
         self, quals: list[Qual], columns: list[str], sort_keys: Optional[list[Any]] = None
     ) -> Generator[dict[str, Any], None, None]:
         results_reader = InsightTableResultReader(self._table_columns, columns)
-        insight = self._sdk.insights.get_insight(self._workspace, self._insight)
-        table = self._sdk.tables.for_insight(self._workspace, insight)
+        insight = self._sdk.visualizations.get_visualization(self._workspace, self._insight)
+        table = self._sdk.tables.for_visualization(self._workspace, insight)
 
         return results_reader.read_all_rows(table)
 

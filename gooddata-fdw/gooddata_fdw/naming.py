@@ -41,7 +41,7 @@ def _ensure_unique(candidate: str, used_names: dict[str, bool]) -> str:
 
 
 class InsightTableNamingStrategy:
-    def table_name_for_insight(self, insight: sdk.Insight) -> str:
+    def table_name_for_insight(self, insight: sdk.Visualization) -> str:
         raise NotImplementedError()
 
 
@@ -49,7 +49,7 @@ class DefaultInsightTableNaming(InsightTableNamingStrategy):
     def __init__(self) -> None:
         self._uniques: dict[str, bool] = dict()
 
-    def table_name_for_insight(self, insight: sdk.Insight) -> str:
+    def table_name_for_insight(self, insight: sdk.Visualization) -> str:
         new_name = _sanitize_str_for_postgres(insight.title, self._uniques)
         self._uniques[new_name] = True
 
@@ -57,10 +57,10 @@ class DefaultInsightTableNaming(InsightTableNamingStrategy):
 
 
 class InsightColumnNamingStrategy:
-    def col_name_for_attribute(self, attr: sdk.InsightAttribute) -> str:
+    def col_name_for_attribute(self, attr: sdk.VisualizationAttribute) -> str:
         raise NotImplementedError()
 
-    def col_name_for_metric(self, attr: sdk.InsightMetric) -> str:
+    def col_name_for_metric(self, attr: sdk.VisualizationMetric) -> str:
         raise NotImplementedError()
 
 
@@ -68,13 +68,13 @@ class DefaultInsightColumnNaming(InsightColumnNamingStrategy):
     def __init__(self) -> None:
         self._uniques: dict[str, bool] = dict()
 
-    def col_name_for_attribute(self, attr: sdk.InsightAttribute) -> str:
+    def col_name_for_attribute(self, attr: sdk.VisualizationAttribute) -> str:
         new_name = _sanitize_str_for_postgres(attr.label_id, self._uniques)
         self._uniques[new_name] = True
 
         return new_name
 
-    def col_name_for_metric(self, metric: sdk.InsightMetric) -> str:
+    def col_name_for_metric(self, metric: sdk.VisualizationMetric) -> str:
         # if simple measure, use the item identifier (nice, readable)
         # otherwise try alias
         # otherwise try title

@@ -14,7 +14,14 @@ from gooddata_fdw.naming import (
     InsightColumnNamingStrategy,
 )
 from gooddata_fdw.pg_logging import _log_debug, _log_info, _log_warn
-from gooddata_sdk import CatalogWorkspaceContent, GoodDataSdk, Insight, InsightAttribute, InsightMetric, ObjId
+from gooddata_sdk import (
+    CatalogWorkspaceContent,
+    GoodDataSdk,
+    ObjId,
+    Visualization,
+    VisualizationAttribute,
+    VisualizationMetric,
+)
 
 
 def _metric_format_to_precision(metric_format: Optional[str]) -> Optional[str]:
@@ -85,7 +92,7 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
         _log_debug("loading full catalog")
         catalog = self._sdk.catalog_workspace_content.get_full_catalog(self._workspace)
         _log_debug("loading all insights")
-        insights = self._sdk.insights.get_insights(self._workspace)
+        insights = self._sdk.visualizations.get_visualizations(self._workspace)
 
         tables = []
         for insight in insights:
@@ -108,7 +115,9 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
 
         return tables
 
-    def _table_columns_from_insight(self, insight: Insight, catalog: CatalogWorkspaceContent) -> list[ColumnDefinition]:
+    def _table_columns_from_insight(
+        self, insight: Visualization, catalog: CatalogWorkspaceContent
+    ) -> list[ColumnDefinition]:
         column_naming = DefaultInsightColumnNaming()
         attr_cols = [self._attribute_to_table_column(attr, column_naming, catalog) for attr in insight.attributes]
         metric_cols = [self._metric_to_table_column(metric, column_naming, catalog) for metric in insight.metrics]
@@ -117,7 +126,7 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
 
     @staticmethod
     def _attribute_to_table_column(
-        attr: InsightAttribute, column_naming: InsightColumnNamingStrategy, catalog: CatalogWorkspaceContent
+        attr: VisualizationAttribute, column_naming: InsightColumnNamingStrategy, catalog: CatalogWorkspaceContent
     ) -> ColumnDefinition:
         column_name = column_naming.col_name_for_attribute(attr)
         _log_debug(f'creating col def "{column_name}" for attribute "{attr.label_id}"')
@@ -132,7 +141,7 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
         )
 
     def _metric_to_table_column(
-        self, metric: InsightMetric, column_naming: InsightColumnNamingStrategy, catalog: CatalogWorkspaceContent
+        self, metric: VisualizationMetric, column_naming: InsightColumnNamingStrategy, catalog: CatalogWorkspaceContent
     ) -> ColumnDefinition:
         column_name = column_naming.col_name_for_metric(metric)
         metric_format = self._get_insight_metric_format(metric, catalog)
@@ -156,7 +165,7 @@ class InsightsWorkspaceImporter(WorkspaceImporter):
 
     # InsightMetric do not contain format in case of stored metrics
     @staticmethod
-    def _get_insight_metric_format(metric: InsightMetric, catalog: CatalogWorkspaceContent) -> Optional[str]:
+    def _get_insight_metric_format(metric: VisualizationMetric, catalog: CatalogWorkspaceContent) -> Optional[str]:
         if metric.format:
             return metric.format
         elif metric.item_id:
