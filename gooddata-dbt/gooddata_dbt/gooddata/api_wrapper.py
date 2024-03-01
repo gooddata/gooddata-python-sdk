@@ -17,7 +17,7 @@ from gooddata_sdk import (
     CatalogScanModelRequest,
     CatalogWorkspace,
     GoodDataSdk,
-    Insight,
+    Visualization,
 )
 
 DataSource = Union[CatalogDataSourcePostgres, CatalogDataSourceSnowflake, CatalogDataSourceVertica]
@@ -29,18 +29,18 @@ class GoodDataApiWrapper:
         self.logger = logger
         self.dry_run = dry_run
 
-    def get_insights(self, workspace_id: str) -> List[Insight]:
+    def get_visualizations(self, workspace_id: str) -> List[Visualization]:
         if self.dry_run:
             self.logger.info("Dry run - skipping insights listing")
             return []
         else:
-            return self.sdk.insights.get_insights(workspace_id)
+            return self.sdk.visualizations.get_visualizations(workspace_id)
 
-    def execute_insight(self, workspace_id: str, insight: Insight) -> None:
+    def execute_visualization(self, workspace_id: str, visualization: Visualization) -> None:
         if self.dry_run:
-            self.logger.info("Dry run - skipping insights execution")
+            self.logger.info("Dry run - skipping visualization execution")
         else:
-            self.sdk.tables.for_insight(workspace_id, insight)
+            self.sdk.tables.for_visualization(workspace_id, visualization)
 
     def scan_data_source(self, data_source_id: str, scan_request: CatalogScanModelRequest) -> CatalogDeclarativeTables:
         if self.dry_run:

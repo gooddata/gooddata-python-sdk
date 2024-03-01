@@ -19,7 +19,7 @@ from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import get_duration, report_message_to_git_vendor
 
-from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Insight
+from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Visualization
 
 # TODO - upgrade AIO, cleanup, start from scratch, test everything
 
@@ -135,69 +135,77 @@ def store_analytics(
     )
 
 
-async def execute_insight(sdk_wrapper: GoodDataSdkWrapper, workspace_id: str, insight: Insight) -> None:
-    sdk_wrapper.sdk_facade.execute_insight(workspace_id, insight)
+async def execute_visualization(
+    sdk_wrapper: GoodDataSdkWrapper, workspace_id: str, visualization: Visualization
+) -> None:
+    sdk_wrapper.sdk_facade.execute_visualization(workspace_id, visualization)
 
 
-async def test_insight(
+async def test_visualization(
     logger: logging.Logger,
     sdk_wrapper: GoodDataSdkWrapper,
     workspace_id: str,
-    insight: Insight,
+    visualization: Visualization,
 ) -> dict:
-    logger.info(f"Executing insight {insight.id=} {insight.title=} ...")
+    logger.info(f"Executing visualization {visualization.id=} {visualization.title=} ...")
     start = time()
     try:
-        await execute_insight(sdk_wrapper, workspace_id, insight)
+        await execute_visualization(sdk_wrapper, workspace_id, visualization)
         duration = get_duration(start)
-        logger.info(f"Test successful {insight.id=} {insight.title=} duration={duration}(ms)")
-        return {"id": insight.id, "title": insight.title, "duration": duration, "status": "success"}
+        logger.info(f"Test successful {visualization.id=} {visualization.title=} duration={duration}(ms)")
+        return {"id": visualization.id, "title": visualization.title, "duration": duration, "status": "success"}
     except Exception as e:
         duration = get_duration(start)
-        logger.error(f"Test failed {insight.id=} {insight.title=} duration={duration}(ms) reason={str(e)}")
-        return {"id": insight.id, "title": insight.title, "duration": duration, "status": "failed", "reason": str(e)}
+        logger.error(f"Test failed {visualization.id=} {visualization.title=} duration={duration}(ms) reason={str(e)}")
+        return {
+            "id": visualization.id,
+            "title": visualization.title,
+            "duration": duration,
+            "status": "failed",
+            "reason": str(e),
+        }
 
 
-async def safe_test_insight(
+async def safe_test_visualization(
     logger: logging.Logger,
     sdk_wrapper: GoodDataSdkWrapper,
     workspace_id: str,
-    insight: Insight,
+    visualization: Visualization,
     semaphore: Semaphore,
 ) -> dict:
     async with semaphore:  # semaphore limits num of simultaneous executions
-        return await test_insight(
+        return await test_visualization(
             logger,
             sdk_wrapper,
             workspace_id,
-            insight,
+            visualization,
         )
 
 
-async def test_insights(
+async def test_visualizations(
     logger: logging.Logger,
     sdk_wrapper: GoodDataSdkWrapper,
     workspace_id: str,
     skip_tests: Optional[List[str]],
-    test_insights_parallelism: int = 1,
+    test_visualizations_parallelism: int = 1,
 ) -> None:
     start = time()
-    logger.info(f"Test insights {workspace_id=}")
-    insights = sdk_wrapper.sdk_facade.get_insights(workspace_id)
-    semaphore = asyncio.Semaphore(test_insights_parallelism)
+    logger.info(f"Test visualizations {workspace_id=}")
+    visualizations = sdk_wrapper.sdk_facade.get_visualizations(workspace_id)
+    semaphore = asyncio.Semaphore(test_visualizations_parallelism)
     tasks = []
-    for insight in insights:
-        if skip_tests is not None and insight.id in skip_tests:
-            logger.info(f"Skip test insight={insight.title} (requested in gooddata.yaml)")
+    for visualization in visualizations:
+        if skip_tests is not None and visualization.id in skip_tests:
+            logger.info(f"Skip test visualization={visualization.title} (requested in gooddata.yaml)")
         else:
-            tasks.append(safe_test_insight(logger, sdk_wrapper, workspace_id, insight, semaphore))
+            tasks.append(safe_test_visualization(logger, sdk_wrapper, workspace_id, visualization, semaphore))
     results = await asyncio.gather(*tasks)
     duration = get_duration(start)
     errors = [result for result in results if result["status"] == "failed"]
     if len(errors) > 0:
-        raise Exception(f"Test insights failed {workspace_id=} {duration=}(ms) {errors=}")
+        raise Exception(f"Test visualizations failed {workspace_id=} {duration=}(ms) {errors=}")
     else:
-        logger.info(f"Test insights finished {workspace_id=} {duration=}(ms)")
+        logger.info(f"Test visualizations finished {workspace_id=} {duration=}(ms)")
 
 
 def create_localized_workspaces(
@@ -359,10 +367,10 @@ def process_organization(
                         deploy_analytics(logger, sdk_wrapper, workspace_id, data_product)
                         if data_product.localization:
                             create_localized_workspaces(logger, data_product, sdk_wrapper.sdk_facade, workspace_id)
-                    elif args.method == "test_insights":
-                        parallelism = gd_config.global_properties.test_insights_parallelism or 1
+                    elif args.method == "test_visualizations":
+                        parallelism = gd_config.global_properties.test_visualizations_parallelism or 1
                         asyncio.run(
-                            test_insights(logger, sdk_wrapper, workspace_id, data_product.skip_tests, parallelism)
+                            test_visualizations(logger, sdk_wrapper, workspace_id, data_product.skip_tests, parallelism)
                         )
                     else:
                         raise Exception(f"Unsupported method requested in args: {args.method}")
