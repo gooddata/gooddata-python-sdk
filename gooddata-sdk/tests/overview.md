@@ -7,7 +7,7 @@ to simplify assertions in tests that verify different conversion logic.
 ## Unit tests with snapshots
 
 Check out the documentation of [pytest-snapshot](https://pypi.org/project/pytest-snapshot/) to learn more and then look at
-some of the test for [compute_model](./compute_model) or [insight](./insight) to compute model conversions.
+some of the test for [compute_model](./compute_model) or [visualization](./visualization) to compute model conversions.
 
 There are three important things to remember:
 
@@ -27,7 +27,7 @@ There are three important things to remember:
 
 ### Type conversion tests
 
-There are a bunch of tests in [compute_model](./compute_model) and [insight](./insight) whose purpose is to verify
+There are a bunch of tests in [compute_model](./compute_model) and [insight](./visualization) whose purpose is to verify
 that conversion from internal models to the API models (stored in gooddata-api-client) work
 as intended.
 

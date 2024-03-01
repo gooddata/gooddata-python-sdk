@@ -5,6 +5,7 @@ import functools
 from collections import defaultdict
 from enum import Enum
 from typing import Any, Optional, Union, cast
+from warnings import warn
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
@@ -31,8 +32,10 @@ from gooddata_sdk.compute.model.metric import (
 from gooddata_sdk.utils import IdObjType, SideLoads, load_all_entities, safeget
 
 #
-# Conversion from types stored in insight into the goodata_afm_client models. Insight is created by GD.UI SDK
-# and is persisted in the freeform 'vis object' in the metadata. The types from SDK model are stored there.
+# Conversion from types stored in visualization into the gooddata_afm_client models.
+# Visualization is created by GD.UI SDK
+# and is persisted in the freeform 'vis object' in the metadata.
+# The types from SDK model are stored there.
 #
 
 _GRANULARITY_CONVERSION = {
@@ -76,7 +79,7 @@ _ARITHMETIC_CONVERSION = {
 
 class BucketType(Enum):
     """
-    Enum used for differentiating between types of Insight buckets.
+    Enum used for differentiating between types of Visualization buckets.
     """
 
     UNDEFINED = 0
@@ -260,9 +263,9 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
 #
 
 
-class InsightMetric:
+class VisualizationMetric:
     """
-    Represents metric placed on an insight.
+    Represents metric placed on a visualization.
 
     Note: this has different shape than object passed to execution.
     """
@@ -330,7 +333,7 @@ class InsightMetric:
         return f"metric(local_id={self.local_id})"
 
 
-class InsightAttribute:
+class VisualizationAttribute:
     def __init__(self, attribute: dict[str, Any]) -> None:
         self._attribute = attribute
         self._a: dict[str, Any] = attribute["attribute"]
@@ -365,7 +368,7 @@ class InsightAttribute:
         return f"attribute(local_id={self.local_id}, show_all_values={self.show_all_values})"
 
 
-class InsightTotal:
+class VisualizationTotal:
     def __init__(self, total: dict[str, Any]) -> None:
         self._t = total
 
@@ -388,7 +391,7 @@ class InsightTotal:
         return f"total(type={self.type}, measureIdentifier={self.measure_id}, attributeIdentifier={self.attribute_id})"
 
 
-class InsightFilter:
+class VisualizationFilter:
     def __init__(self, f: dict[str, Any]) -> None:
         self._filter = f
 
@@ -402,12 +405,12 @@ class InsightFilter:
         return repr(self._filter)
 
 
-class InsightBucket:
+class VisualizationBucket:
     def __init__(self, bucket: dict[str, Any]) -> None:
         self._b = bucket
-        self._metrics: Optional[list[InsightMetric]] = None
-        self._attributes: Optional[list[InsightAttribute]] = None
-        self._totals: Optional[list[InsightTotal]] = None
+        self._metrics: Optional[list[VisualizationMetric]] = None
+        self._attributes: Optional[list[VisualizationAttribute]] = None
+        self._totals: Optional[list[VisualizationTotal]] = None
         self.type = _LOCAL_ID_TO_BUCKET_TYPE[self.local_id]
 
     @property
@@ -419,23 +422,23 @@ class InsightBucket:
         return self._b["items"]
 
     @property
-    def metrics(self) -> list[InsightMetric]:
+    def metrics(self) -> list[VisualizationMetric]:
         if self._metrics is None:
-            self._metrics = [InsightMetric(item) for item in self.items if "measure" in item]
+            self._metrics = [VisualizationMetric(item) for item in self.items if "measure" in item]
 
         return self._metrics
 
     @property
-    def attributes(self) -> list[InsightAttribute]:
+    def attributes(self) -> list[VisualizationAttribute]:
         if self._attributes is None:
-            self._attributes = [InsightAttribute(item) for item in self.items if "attribute" in item]
+            self._attributes = [VisualizationAttribute(item) for item in self.items if "attribute" in item]
 
         return self._attributes
 
     @property
-    def totals(self) -> list[InsightTotal]:
+    def totals(self) -> list[VisualizationTotal]:
         if self._totals is None:
-            self._totals = [InsightTotal(total) for total in self._b["totals"]] if "totals" in self._b else []
+            self._totals = [VisualizationTotal(total) for total in self._b["totals"]] if "totals" in self._b else []
 
         return self._totals
 
@@ -446,14 +449,14 @@ class InsightBucket:
         return f"bucket(local_id={self.local_id}, items_count={len(self.items)}, total_count={len(self.totals)})"
 
 
-class Insight:
+class Visualization:
     def __init__(
         self,
         from_vis_obj: dict[str, Any],
         side_loads: Optional[SideLoads] = None,
     ) -> None:
         self._vo = from_vis_obj
-        self._filters = [InsightFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
+        self._filters = [VisualizationFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
         self._side_loads = SideLoads([]) if side_loads is None else side_loads
 
     @property
@@ -474,15 +477,15 @@ class Insight:
         return self._vo["attributes"].get("areRelationsValid", "true")
 
     @property
-    def buckets(self) -> list[InsightBucket]:
-        return [InsightBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
+    def buckets(self) -> list[VisualizationBucket]:
+        return [VisualizationBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
 
     @property
-    def filters(self) -> list[InsightFilter]:
+    def filters(self) -> list[VisualizationFilter]:
         return self._filters
 
     @filters.setter
-    def filters(self, filters: list[InsightFilter]) -> None:
+    def filters(self, filters: list[VisualizationFilter]) -> None:
         self._filters = filters
 
     @property
@@ -498,19 +501,19 @@ class Insight:
         return self._vo["attributes"]["content"]["visualizationUrl"]
 
     @property
-    def metrics(self) -> list[InsightMetric]:
+    def metrics(self) -> list[VisualizationMetric]:
         return [m for b in self.buckets for m in b.metrics]
 
     @property
-    def attributes(self) -> list[InsightAttribute]:
+    def attributes(self) -> list[VisualizationAttribute]:
         return [a for b in self.buckets for a in b.attributes]
 
-    def get_bucket_of_type(self, bucket_type: BucketType) -> InsightBucket:
+    def get_bucket_of_type(self, bucket_type: BucketType) -> VisualizationBucket:
         for b in self.buckets:
             if b.type == bucket_type:
                 return b
         # Return empty bucket if not found
-        return InsightBucket({"items": [], "localIdentifier": _BUCKET_TYPE_TO_LOCAL_ID[bucket_type]})
+        return VisualizationBucket({"items": [], "localIdentifier": _BUCKET_TYPE_TO_LOCAL_ID[bucket_type]})
 
     def has_bucket_of_type(self, bucket_type: BucketType) -> bool:
         for b in self.buckets:
@@ -531,25 +534,29 @@ class Insight:
         if not self._side_loads:
             return None
 
-        # otherwise try to use the id object as is
+        # otherwise, try to use the id object as is
         return self._side_loads.find(id_obj)
 
     def __str__(self) -> str:
         return self.__repr__()
 
     def __repr__(self) -> str:
-        return f"insight(title='{self.title}', id='{self.id}', buckets='{str(self.buckets)}')'"
+        return f"visualization(title='{self.title}', id='{self.id}', buckets='{str(self.buckets)}')'"
 
 
-class InsightService:
+class VisualizationService:
     """
-    Insight Service allows retrieval of insights from a local GD workspace. The insights are returned as instances of
-    Insight which allows convenient introspection and necessary functions to convert the insight into a form where it
+    Visualization Service allows retrieval of visualizations from a local GD workspace.
+    The visualizations are returned as instances of
+    Visualization,
+    which allows convenient introspection and necessary functions to convert the visualization into a form where it
     can be sent for computation.
 
-    Note: the insights are created using GD Analytical Designer or using GoodData.UI SDK. They are stored as
-    visualization objects with a free-form body. This body is specific for AD & SDK.
-    The Insight wrapper exists to take care of these discrepancies.
+    Note: the visualizations are created using GD Analytical Designer or using GoodData.UI SDK.
+    They are stored as
+    visualization objects with a free-form body.
+    This body is specific for AD & SDK.
+    The Visualization wrapper exists to take care of these discrepancies.
     """
 
     # Note on the disabled checking:
@@ -561,17 +568,19 @@ class InsightService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._entities_api = api_client.entities_api
 
-    def get_insights(self, workspace_id: str) -> list[Insight]:
+    def get_visualizations(self, workspace_id: str) -> list[Visualization]:
         """
-        Gets all insights for a workspace. The insights will contain side loaded metadata for all execution entities
+        Gets all visualizations for a workspace.
+        The visualizations will contain side loaded metadata for all execution entities
         that they reference.
 
         Args:
              workspace_id (str):
                 Workspace identification string e.g. "demo"
         Returns:
-             list[Insight]:
-                All available insights, each insight will contain side loaded metadata about the entities it references
+             list[Visualization]:
+                All available visualizations,
+                each visualization will contain side loaded metadata about the entities it references
         """
         get_func = functools.partial(
             self._entities_api.get_all_entities_visualization_objects,
@@ -583,27 +592,129 @@ class InsightService:
         vis_objects = load_all_entities(get_func)
         side_loads = SideLoads(vis_objects.included)
 
-        return [Insight(vis_obj, side_loads) for vis_obj in vis_objects.data]
+        return [Visualization(vis_obj, side_loads) for vis_obj in vis_objects.data]
 
-    def get_insight(self, workspace_id: str, insight_id: str) -> Insight:
-        """Gets a single insight from a workspace.
+    def get_visualization(self, workspace_id: str, visualization_id: str) -> Visualization:
+        """Gets a single visualization from a workspace.
 
         Args:
             workspace_id (str):
                 Workspace identification string e.g. "demo"
-            insight_id (str):
-                Insight identifier string e.g. "bikes"
+            visualization_id (str):
+                Visualization identifier string e.g. "bikes"
 
         Returns:
-            Insight:
-                A single Insight object contains side loaded metadata about the entities it references
+            Visualization:
+                A single visualization object contains side loaded metadata about the entities it references
         """
         vis_obj = self._entities_api.get_entity_visualization_objects(
             workspace_id,
-            object_id=insight_id,
+            object_id=visualization_id,
             include=["ALL"],
             _check_return_type=False,
         )
         side_loads = SideLoads(vis_obj.included)
 
-        return Insight(vis_obj.data, side_loads)
+        return Visualization(vis_obj.data, side_loads)
+
+    def get_insights(self, workspace_id: str) -> list[Visualization]:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'get_visualizations' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.get_visualizations(workspace_id)
+
+    def get_insight(self, workspace_id: str, insight_id: str) -> Visualization:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'get_visualization' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.get_visualization(workspace_id, insight_id)
+
+
+# Note: the classes below are going to be deprecated
+
+
+class InsightMetric(VisualizationMetric):
+    def __init__(self, metric: dict[str, Any]) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationMetric' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(metric)
+
+
+class InsightAttribute(VisualizationAttribute):
+    def __init__(self, attribute: dict[str, Any]) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationAttribute' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(attribute)
+
+
+class InsightTotal(VisualizationTotal):
+    def __init__(self, total: dict[str, Any]) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationTotal' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(total)
+
+
+class InsightFilter(VisualizationFilter):
+    def __init__(self, f: dict[str, Any]) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationFilter' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(f)
+
+
+class InsightBucket(VisualizationBucket):
+    def __init__(self, bucket: dict[str, Any]) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationBucket' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(bucket)
+
+
+class Insight(Visualization):
+    def __init__(
+        self,
+        from_vis_obj: dict[str, Any],
+        side_loads: Optional[SideLoads] = None,
+    ) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'Visualization' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(from_vis_obj, side_loads)
+
+
+class InsightService(VisualizationService):
+    def __init__(self, api_client: GoodDataApiClient) -> None:
+        warn(
+            "This class is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'VisualizationService' class instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(api_client)

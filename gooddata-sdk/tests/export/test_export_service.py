@@ -70,14 +70,14 @@ def _tabular_export_base(test_config, export_format: str):
     _validate_clean(goal_path)
 
 
-def _tabular_by_insight_id_base(test_config, export_format: str):
+def _tabular_by_visualization_id_base(test_config, export_format: str):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     workspace_id = test_config["workspace"]
-    insight_id = test_config["insight_id"]
-    insight_name = test_config["insight_name"]
-    goal_path = _exports_dir / f"{insight_name}.{export_format.lower()}"
-    sdk.export.export_tabular_by_insight_id(
-        workspace_id=workspace_id, insight_id=insight_id, file_format=export_format, store_path=_exports_dir
+    visualization_id = test_config["visualization_id"]
+    visualization_name = test_config["visualization_name"]
+    goal_path = _exports_dir / f"{visualization_name}.{export_format.lower()}"
+    sdk.export.export_tabular_by_visualization_id(
+        workspace_id=workspace_id, visualization_id=visualization_id, file_format=export_format, store_path=_exports_dir
     )
     _validate_clean(goal_path)
 
@@ -92,11 +92,11 @@ def test_export_excel(test_config):
     _tabular_export_base(test_config, "XLSX")
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_export_csv_by_insight_id.yaml"))
-def test_export_by_insight_id_csv(test_config):
-    _tabular_by_insight_id_base(test_config, "CSV")
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_export_csv_by_visualization_id.yaml"))
+def test_export_by_visualization_id_csv(test_config):
+    _tabular_by_visualization_id_base(test_config, "CSV")
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "test_export_excel_by_insight_id.yaml"))
-def test_export_by_insight_id_excel(test_config):
-    _tabular_by_insight_id_base(test_config, "XLSX")
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_export_excel_by_visualization_id.yaml"))
+def test_export_by_visualization_id_excel(test_config):
+    _tabular_by_visualization_id_base(test_config, "XLSX")

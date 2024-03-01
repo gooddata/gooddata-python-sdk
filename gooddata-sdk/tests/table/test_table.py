@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from tests_support.vcrpy_utils import get_vcr
 
-from gooddata_sdk import Attribute, GoodDataSdk, Insight, ObjId, PositiveAttributeFilter, SimpleMetric, table
+from gooddata_sdk import Attribute, GoodDataSdk, ObjId, PositiveAttributeFilter, SimpleMetric, Visualization, table
 
 gd_vcr = get_vcr()
 
@@ -22,7 +22,7 @@ def load_json(path):
         return json.load(f)
 
 
-def _insight_filename_to_snapshot_name(path):
+def _visualization_filename_to_snapshot_name(path):
     return path.name.replace(".json", ".snapshot.json")
 
 
@@ -132,9 +132,9 @@ def test_pivot_to_exec_def(filename, snapshot):
     1cattr = 1 additional col attributes
     """
     vis_obj = load_json(filename)
-    insight = Insight(vis_obj)
+    visualization = Visualization(vis_obj)
 
-    exec_def = table._get_exec_for_pivot(insight)
+    exec_def = table._get_exec_for_pivot(visualization)
     result = exec_def.as_api_model().to_dict()
 
     snapshot.snapshot_dir = _snapshot_dir
