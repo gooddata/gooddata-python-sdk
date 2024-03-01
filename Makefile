@@ -100,7 +100,6 @@ remove-cassettes:
 
 .PHONY: new-docs
 new-docs:
-	git submodule update --init --recursive --depth 1; \
 	cd docs; \
 	npm install; \
 	hugo server
