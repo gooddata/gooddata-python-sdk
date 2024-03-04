@@ -33,9 +33,9 @@ data_products:
     environment_setup_id: default
     model_ids:
       - hubspot
-    # If execution of an insight fails, and you need some time to fix it
+    # If execution of an visualization fails, and you need some time to fix it
     skip_tests:
-      - "<insight_id>"
+      - "<visualization_id>"
 
 # You can deliver data products to multiple organizations. Each organization can contain different (sub)set of products
 organizations:

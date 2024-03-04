@@ -11,11 +11,11 @@ _current_dir = Path(__file__).parent.absolute()
 _fixtures_dir = _current_dir / "fixtures"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_insight_date.yaml"))
-def test_dataframe_for_insight_date(gdf: DataFrameFactory):
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_visualization_date.yaml"))
+def test_dataframe_for_visualization_date(gdf: DataFrameFactory):
     # 2 metrics grouped by date dimension with data for last 12 months
     # exact numbers cannot be checked as date data are changed each AIO build
-    df = gdf.for_insight(insight_id="customers_trend")
+    df = gdf.for_visualization(visualization_id="customers_trend")
 
     assert len(df) == 12
     assert len(df.index.names) == 1
@@ -26,10 +26,10 @@ def test_dataframe_for_insight_date(gdf: DataFrameFactory):
     assert df.columns[1] == "revenue_per_customer"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_insight.yaml"))
-def test_dataframe_for_insight(gdf: DataFrameFactory):
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_visualization.yaml"))
+def test_dataframe_for_visualization(gdf: DataFrameFactory):
     # 4 metrics grouped by 2 attributes, filters are set to all
-    df = gdf.for_insight(insight_id="revenue_and_quantity_by_product_and_category")
+    df = gdf.for_visualization(visualization_id="revenue_and_quantity_by_product_and_category")
 
     assert df.index.names[0] == "products.category"
     assert df.index.names[1] == "product_name"
@@ -39,10 +39,10 @@ def test_dataframe_for_insight(gdf: DataFrameFactory):
     assert df.columns[3] == "revenue"
 
 
-@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_insight_no_index.yaml"))
-def test_dataframe_for_insight_no_index(gdf: DataFrameFactory):
+@gd_vcr.use_cassette(str(_fixtures_dir / "dataframe_for_visualization_no_index.yaml"))
+def test_dataframe_for_visualization_no_index(gdf: DataFrameFactory):
     # 4 metrics grouped by 2 attributes, filters are set to all
-    df = gdf.for_insight(insight_id="revenue_and_quantity_by_product_and_category", auto_index=False)
+    df = gdf.for_visualization(visualization_id="revenue_and_quantity_by_product_and_category", auto_index=False)
 
     assert df.columns[0] == "products.category"
     assert df.columns[1] == "product_name"

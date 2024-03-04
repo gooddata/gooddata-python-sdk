@@ -190,8 +190,8 @@ def parse_arguments(description: str) -> argparse.Namespace:
     set_gooddata_upper_case_args(store_analytics)
     store_analytics.set_defaults(method="store_analytics")
 
-    test_insights = subparsers.add_parser("test_insights")
-    set_environment_id_arg(test_insights)
-    test_insights.set_defaults(method="test_insights")
+    test_visualizations = subparsers.add_parser("test_visualizations")
+    set_environment_id_arg(test_visualizations)
+    test_visualizations.set_defaults(method="test_visualizations")
 
     return parser.parse_args()

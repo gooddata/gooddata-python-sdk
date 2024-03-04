@@ -48,7 +48,7 @@ class GoodDataConfigOrganization(Base):
 
 @attrs.define(auto_attribs=True, kw_only=True)
 class GoodDataGlobalConfig(Base):
-    test_insights_parallelism: Optional[int] = 1
+    test_visualizations_parallelism: Optional[int] = 1
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

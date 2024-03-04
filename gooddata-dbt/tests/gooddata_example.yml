@@ -23,11 +23,11 @@ data_products:
      - github
      - faa
     # Example of why and how to use skip_tests:
-    # TODO - this insight cannot be calculated by Python SDK:
+    # TODO - this visualization cannot be calculated by Python SDK:
     #  The limit for maximum size of the dimension without metrics was exceeded(100_000).
-    #  Fix it either in Python SDK or in the insight
+    #  Fix it either in Python SDK or in the visualization
     skip_tests:
-      - "insight_1"
+      - "visualization_1"
     localization:
       from_language: en
       to:
@@ -56,4 +56,4 @@ organizations:
 
 # Global configuration for all data products
 global_properties:
-  test_insights_parallelism: 2
+  test_visualizations_parallelism: 2

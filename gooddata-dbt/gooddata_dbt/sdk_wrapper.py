@@ -54,11 +54,11 @@ class GoodDataSdkWrapper:
         self.sdk.support.wait_till_available(timeout=timeout)
         self.logger.info(f"Host {host} is up")
 
-    def pre_cache_insights(self, workspaces: Optional[List] = None) -> None:
+    def pre_cache_visualizations(self, workspaces: Optional[List] = None) -> None:
         if not workspaces:
             workspaces = [w.id for w in self.sdk.catalog_workspace.list_workspaces()]
         for workspace_id in workspaces:
-            insights = self.sdk.insights.get_insights(workspace_id)
+            visualizations = self.sdk.visualizations.get_visualizations(workspace_id)
 
-            for insight in insights:
-                self.sdk.tables.for_insight(workspace_id, insight)
+            for visualization in visualizations:
+                self.sdk.tables.for_visualization(workspace_id, visualization)

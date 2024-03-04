@@ -687,9 +687,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
             for metric in workspace_content.analytics.metrics or []:
                 self.add_title_description(to_translate, metric.title, metric.description)
         if workspace_content.analytics:
-            for insight in workspace_content.analytics.visualization_objects or []:
-                self.add_title_description(to_translate, insight.title, insight.description)
-                for bucket in insight.content["buckets"]:
+            for visualization in workspace_content.analytics.visualization_objects or []:
+                self.add_title_description(to_translate, visualization.title, visualization.description)
+                for bucket in visualization.content["buckets"]:
                     for item in bucket["items"]:
                         if "measure" in item:
                             if "alias" in item["measure"]:
@@ -741,9 +741,9 @@ class CatalogWorkspaceService(CatalogServiceBase):
             for metric in new_workspace_content.analytics.metrics or []:
                 self.set_title_description(metric, translated)
         if new_workspace_content.analytics:
-            for insight in new_workspace_content.analytics.visualization_objects or []:
-                self.set_title_description(insight, translated)
-                for bucket in insight.content["buckets"]:
+            for visualization in new_workspace_content.analytics.visualization_objects or []:
+                self.set_title_description(visualization, translated)
+                for bucket in visualization.content["buckets"]:
                     for item in bucket["items"]:
                         if "measure" in item:
                             if "alias" in item["measure"]:

@@ -211,10 +211,21 @@ from gooddata_sdk.compute.model.metric import (
     SimpleMetric,
 )
 from gooddata_sdk.compute.service import ComputeService
-from gooddata_sdk.insight import Insight, InsightAttribute, InsightBucket, InsightMetric, InsightService
 from gooddata_sdk.sdk import GoodDataSdk
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.utils import SideLoads
+from gooddata_sdk.visualization import (
+    Insight,
+    InsightAttribute,
+    InsightBucket,
+    InsightMetric,
+    InsightService,
+    Visualization,
+    VisualizationAttribute,
+    VisualizationBucket,
+    VisualizationMetric,
+    VisualizationService,
+)
 
 # by default don't log anything
 logging.getLogger(__name__).addHandler(logging.NullHandler())

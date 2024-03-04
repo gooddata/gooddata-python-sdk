@@ -52,25 +52,28 @@ Integrate GoodData analytics into your continuous delivery practices by, for exa
 
 ```python
 # Reads visualizations from workspace
-insights = sdk.insights.get_insights("123")
+visualizations = sdk.visualizations.get_visualizations("123")
 
 # Iterate through visualizations and check if they are valid
-for insight in insights:
+for visualization in visualizations:
     try:
-        sdk.tables.for_insight("123", insight)
+        sdk.visualizations.for_visualization("123", visualization)
     except Exception:
-        print(f"Visualization {insight.title} is broken.")
+        print(f"Visualization {visualization.title} is broken.")
 
 ```
 
 #### Create data pipelines
 
-Export your data, levarage services like machine learning to transform your data and import the data back into GoodData to visualize the results and gain insights. In the Example below, we demonstrate GoodPandas, which can leverage machine learning practices.
+Export your data,
+levarage services like machine learning to transform your data
+and import the data back into GoodData to visualize the results and gain visualizations.
+In the Example below, we demonstrate GoodPandas, which can leverage machine learning practices.
 ```python
 pandas = GoodPandas(os.getenv('HOST'), os.getenv('TOKEN'))
 df = pandas.data_frames(workspace_id="123")
 
-campaign_spend = df.for_insight("campaign_spend")
+campaign_spend = df.for_visualization("campaign_spend")
 
 # Now you have a dataframe with data from your visualization
 # You can do linear regression, clustering, predictions, analysis, etc.
