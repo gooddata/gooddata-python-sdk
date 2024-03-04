@@ -119,7 +119,10 @@ exec_def = ExecutionDefinition(
         SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
     ],
     filters=[],
-    dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+    dimensions=[
+        TableDimension(item_ids=["state", "region"]),
+        TableDimension(item_ids=["product_category", "measureGroup"]),
+    ],
 )
 df, df_metadata = frames.for_exec_def(exec_def=exec_def)
 

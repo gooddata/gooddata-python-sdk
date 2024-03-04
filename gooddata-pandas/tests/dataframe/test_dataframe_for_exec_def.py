@@ -12,6 +12,7 @@ from gooddata_sdk import (
     ResultSizeBytesLimitExceeded,
     ResultSizeDimensionsLimitsExceeded,
     SimpleMetric,
+    TableDimension,
     TotalDefinition,
     TotalDimension,
 )
@@ -62,7 +63,10 @@ def test_dataframe_for_exec_def_two_dim1(test_config, gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "region"]),
+            TableDimension(item_ids=["product_category", "measureGroup"]),
+        ],
     )
     exec_result_id = _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(48, 8))
 
@@ -93,7 +97,10 @@ def test_dataframe_for_exec_def_dimensions_limits_failure(test_config, gdf: Data
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "region"]),
+            TableDimension(item_ids=["product_category", "measureGroup"]),
+        ],
     )
 
     result_size_dimensions_limits = (1, 1)
@@ -121,7 +128,10 @@ def test_dataframe_for_exec_def_bytes_limits_failure(test_config, gdf: DataFrame
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "region"], ["product_category", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "region"]),
+            TableDimension(item_ids=["product_category", "measureGroup"]),
+        ],
     )
 
     result_size_bytes_limit = 2047
@@ -148,7 +158,10 @@ def test_dataframe_for_exec_def_two_dim2(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["region", "state", "product_category"], ["measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["region", "state", "product_category"]),
+            TableDimension(item_ids=["measureGroup"]),
+        ],
     )
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(182, 2))
 
@@ -166,7 +179,10 @@ def test_dataframe_for_exec_def_two_dim3(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["product_category"], ["region", "state", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["product_category"]),
+            TableDimension(item_ids=["region", "state", "measureGroup"]),
+        ],
     )
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(4, 96))
 
@@ -187,7 +203,10 @@ def test_dataframe_for_exec_def_totals1(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["product_category"], ["region", "state", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["product_category"]),
+            TableDimension(item_ids=["region", "state", "measureGroup"]),
+        ],
         totals=[
             TotalDefinition(
                 local_id="grand_total1",
@@ -223,7 +242,10 @@ def test_dataframe_for_exec_def_totals2(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["region", "product_category"], ["state", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["region", "product_category"]),
+            TableDimension(item_ids=["state", "measureGroup"]),
+        ],
         totals=[
             TotalDefinition(
                 local_id="grand_total1",
@@ -258,7 +280,10 @@ def test_dataframe_for_exec_def_totals3(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["region", "state", "measureGroup"], ["product_category"]],
+        dimensions=[
+            TableDimension(item_ids=["region", "state", "measureGroup"]),
+            TableDimension(item_ids=["product_category"]),
+        ],
         totals=[
             TotalDefinition(
                 local_id="grand_total1",
@@ -293,7 +318,10 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "measureGroup"], ["region", "product_category"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "measureGroup"]),
+            TableDimension(item_ids=["region", "product_category"]),
+        ],
         totals=[
             TotalDefinition(
                 local_id="grand_total1",
@@ -327,7 +355,10 @@ def test_dataframe_for_exec_def_totals4(gdf: DataFrameFactory):
 #             SimpleMetric(local_id="m_quantity", item=ObjId(id="quantity", type="fact")),
 #         ],
 #         filters=[],
-#         dimensions=[["a_region"], ["a_cat", "measureGroup"]],
+#         dimensions=[
+#             TableDimension(item_ids=["a_region"]),
+#             TableDimension(item_ids=["a_cat", "measureGroup"]),
+#         ],
 #         totals=[
 #             TotalDefinition(
 #                 local_id="grand_total1",
@@ -359,7 +390,7 @@ def test_dataframe_for_exec_def_one_dim1(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["region", "state", "product_category", "measureGroup"]],
+        dimensions=[TableDimension(item_ids=["region", "state", "product_category", "measureGroup"])],
     )
     # TODO: remove page_size=500 once UNI-591 is resolved
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(364, 1), page_size=500)
@@ -378,6 +409,9 @@ def test_dataframe_for_exec_def_one_dim2(gdf: DataFrameFactory):
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[[], ["region", "state", "product_category", "measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=[]),
+            TableDimension(item_ids=["region", "state", "product_category", "measureGroup"]),
+        ],
     )
     _run_and_validate_results(gdf=gdf, exec_def=exec_def, expected=(1, 364))

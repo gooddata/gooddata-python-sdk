@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
+from attr.setters import frozen as frozen_attr
 from attrs import define, field
 
 import gooddata_api_client.models as models
@@ -40,19 +41,30 @@ class TotalDefinition:
     total_dims: list[TotalDimension]
 
 
+@define
+class TableDimension:
+    """Dataclass used during total and dimension computation."""
+
+    item_ids: Optional[List[str]] = field(on_setattr=frozen_attr)
+    """table dimension item local identifiers"""
+
+    sorting: List[dict] = field(default=[])
+    """sorting defined for the given table dimension"""
+
+
 class ExecutionDefinition:
     def __init__(
         self,
         attributes: Optional[list[Attribute]],
         metrics: Optional[list[Metric]],
         filters: Optional[list[Filter]],
-        dimensions: list[Optional[list[str]]],
+        dimensions: list[TableDimension],
         totals: Optional[list[TotalDefinition]] = None,
     ) -> None:
         self._attributes = attributes or []
         self._metrics = metrics or []
         self._filters = filters or []
-        self._dimensions = [dim for dim in dimensions if dim is not None]
+        self._dimensions = [dim for dim in dimensions if dim.item_ids is not None]
         self._totals = totals
 
     @property
@@ -77,7 +89,7 @@ class ExecutionDefinition:
         return self.filters is not None and len(self.filters) > 0
 
     @property
-    def dimensions(self) -> list[list[str]]:
+    def dimensions(self) -> list[TableDimension]:
         return self._dimensions
 
     def is_one_dim(self) -> bool:
@@ -86,10 +98,63 @@ class ExecutionDefinition:
     def is_two_dim(self) -> bool:
         return len(self.dimensions) == 2
 
+    def _create_value_sort_key(self, sort_key: dict) -> models.SortKey:
+        sort_key_value = sort_key["value"]
+        return models.SortKey(
+            value=models.SortKeyValueValue(
+                data_column_locators=sort_key_value["dataColumnLocators"], direction=sort_key_value["direction"]
+            )
+        )
+
+    def _create_attribute_sort_key(self, sort_key: dict) -> models.SortKey:
+        sort_key_attribute = sort_key["attribute"]
+        # ASC direction is default for Tiger backend.
+        # Don't send it to execution to prevent override of possible default sort label direction.
+        # It has the same meaning as TigerSortDirection.DEFAULT which does not exist.
+        if sort_key_attribute["direction"] == "ASC":
+            return models.SortKey(
+                attribute=models.SortKeyAttributeAttribute(
+                    attribute_identifier=sort_key_attribute["attributeIdentifier"],
+                    sort_type=sort_key_attribute["sortType"],
+                )
+            )
+        return models.SortKey(
+            attribute=models.SortKeyAttributeAttribute(
+                attribute_identifier=sort_key_attribute["attributeIdentifier"],
+                direction=sort_key_attribute["direction"],
+                sort_type=sort_key_attribute["sortType"],
+            )
+        )
+
+    def _create_sort_keys(self, sort_keys: list[dict]) -> list[models.SortKey]:
+        api_sort_keys: list[models.SortKey] = []
+        for sort_key in sort_keys:
+            value = sort_key.get("value")
+            attribute = sort_key.get("attribute")
+            if value is not None:
+                api_sort_keys.append(self._create_value_sort_key(sort_key))
+            if attribute is not None:
+                api_sort_keys.append(self._create_attribute_sort_key(sort_key))
+        return api_sort_keys
+
     def _create_dimensions(self) -> list[models.Dimension]:
         dimensions = []
         for idx, dim in enumerate(self._dimensions):
-            dimensions.append(models.Dimension(local_identifier=f"dim_{idx}", item_identifiers=dim))
+            if dim.sorting:
+                dimensions.append(
+                    models.Dimension(
+                        item_identifiers=dim.item_ids,
+                        local_identifier=f"dim_{idx}",
+                        sorting=self._create_sort_keys(dim.sorting),
+                    )
+                )
+            else:
+                dimensions.append(
+                    models.Dimension(
+                        item_identifiers=dim.item_ids,
+                        local_identifier=f"dim_{idx}",
+                    )
+                )
 
         return dimensions
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from operator import attrgetter
-from typing import Any, Callable, Generator, List, Optional, Union
+from typing import Any, Callable, Dict, Generator, List, Optional, Union
 from warnings import warn
 
 from attrs import define, field, frozen
@@ -11,13 +11,9 @@ from attrs.setters import frozen as frozen_attr
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.execution import (
-    ExecutionDefinition,
-    ExecutionResponse,
-    ExecutionResult,
-    TotalDefinition,
-    TotalDimension,
-)
+from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.execution import TableDimension as ExecTableDimension
+from gooddata_sdk.compute.model.execution import TotalDefinition, TotalDimension
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 from gooddata_sdk.compute.service import ComputeService
@@ -62,16 +58,26 @@ _GET_DIM_INDEX_OF_BUCKET_TYPE = {
     BucketType.COLS: 1,
 }
 
-_SORT_DIRECTION_TO_API = {
-    SortDirection.ASC: "ASC",
-    SortDirection.DESC: "DESC",
-}
-
 _ATTR_SORT_TYPE_TO_API = {
     AttributeSortType.UNDEFINED: "",
     AttributeSortType.DEFAULT: "DEFAULT",
     AttributeSortType.AREA: "AREA",
 }
+
+
+@define
+class TableDimension:
+    """Dataclass used during total and dimension computation."""
+
+    item_ids: List[str] = field(on_setattr=frozen_attr)
+    idx: int = field(on_setattr=frozen_attr)
+    sorting: List[Dict] = field(default=[])
+
+    def to_exec_table_dimension(self) -> ExecTableDimension:
+        return ExecTableDimension(
+            item_ids=self.item_ids,
+            sorting=self.sorting,
+        )
 
 
 class ExecutionTable:
@@ -219,8 +225,12 @@ def _prepare_tabular_definition(
     attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]
 ) -> ExecutionDefinition:
     dims = [
-        [a.local_id for a in attributes] if len(attributes) else None,
-        ["measureGroup"] if len(metrics) else None,
+        ExecTableDimension(
+            item_ids=[a.local_id for a in attributes] if attributes else None,
+        ),
+        ExecTableDimension(
+            item_ids=[_MEASURE_GROUP_IDENTIFIER] if metrics else None,
+        ),
     ]
 
     return ExecutionDefinition(attributes=attributes, metrics=metrics, filters=filters, dimensions=dims)
@@ -242,15 +252,6 @@ def _as_table(response: ExecutionResponse) -> ExecutionTable:
     first_page = response.read_result(offset=first_page_offset, limit=first_page_limit)
 
     return ExecutionTable(response=response, first_page=first_page)
-
-
-@define
-class TableDimension:
-    """Dataclass used during total and dimension computation."""
-
-    item_ids: List[str] = field(on_setattr=frozen_attr)
-    idx: int = field(on_setattr=frozen_attr)
-    sorting: List[SortKeyValue] = field(default=[])
 
 
 @frozen
@@ -321,7 +322,7 @@ class SortKeyAttribute:
         return {
             "attribute": {
                 "attributeIdentifier": self.attribute_identifier,
-                "direction": _SORT_DIRECTION_TO_API[self.direction],
+                "direction": self.direction.upper(),
                 "sortType": _ATTR_SORT_TYPE_TO_API[self.attribute_sort_type],
             }
         }
@@ -339,7 +340,7 @@ class SortKeyValue:
         return {
             "value": {
                 "dataColumnLocators": {self.measure_dim_identifier: {k: v for k, v in locator_tuples}},
-                "direction": _SORT_DIRECTION_TO_API[self.direction],
+                "direction": self.direction.upper(),
             }
         }
 
@@ -718,7 +719,7 @@ def _get_exec_for_pivot(visualization: Visualization) -> ExecutionDefinition:
         attributes=[a.as_computable() for a in visualization.attributes],
         metrics=[m.as_computable() for m in visualization.metrics],
         filters=[cf for cf in [f.as_computable() for f in visualization.filters] if not cf.is_noop()],
-        dimensions=[d.item_ids for d in dimensions],
+        dimensions=[dim.to_exec_table_dimension() for dim in dimensions],
         totals=totals,
     )
 
