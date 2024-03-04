@@ -104,6 +104,55 @@ _BUCKET_TYPE_TO_LOCAL_ID = {
     BucketType.ROWS: "attribute",
     BucketType.COLS: "columns",
 }
+"""Mapping of bucket BucketTypes to their respective localIdentifier counterparts."""
+
+
+class SortType(Enum):
+    """
+    Enum used for differentiating between SortItem API objects used in conjunction with _SORT_KEY_TO_SORT_TYPE.
+    """
+
+    UNDEFINED = 0
+    ATTRIBUTE = 1
+    MEASURE = 2
+
+
+_SORT_KEY_TO_SORT_TYPE = defaultdict(
+    lambda: SortType.UNDEFINED,
+    {
+        "attributeSortItem": SortType.ATTRIBUTE,
+        "measureSortItem": SortType.MEASURE,
+    },
+)
+"""Mapping of SortItem key values to their respective Enum types."""
+
+
+class SortDirection(str, Enum):
+    """
+    Enum used for differentiating between ascending and descending order direction.
+    """
+
+    ASC = "asc"
+    DESC = "desc"
+
+
+class LocatorItemType(str, Enum):
+    """
+    Enum used for differentiating between dataColumnLocators API objects.
+    """
+
+    MEASURE = "measureLocatorItem"
+    ATTRIBUTE = "attributeLocatorItem"
+
+
+class AttributeSortType(Enum):
+    """
+    Enum used for differentiating between different AttributeSortKey sort types.
+    """
+
+    UNDEFINED = 0
+    DEFAULT = 1
+    AREA = 2
 
 
 #
@@ -405,6 +454,61 @@ class VisualizationFilter:
         return repr(self._filter)
 
 
+class VisualizationSortLocator:
+    def __init__(self, locator: dict[str, str], locator_type: LocatorItemType) -> None:
+        self._locator = locator
+        self.type = locator_type
+
+    @property
+    def locator(self) -> dict[str, str]:
+        return self._locator
+
+
+class VisualizationSort:
+    def __init__(self, sort: dict[str, Any]) -> None:
+        sort_keys = list(sort.keys())
+        sort_key = sort_keys[0] if sort_keys else ""
+        self._sort = sort[sort_key] if sort_key else {}
+        self._locators: Optional[list[VisualizationSortLocator]] = None
+        self.type = _SORT_KEY_TO_SORT_TYPE[sort_key]
+
+    @property
+    def direction(self) -> SortDirection:
+        return SortDirection(self._sort["direction"])
+
+    @property
+    def attribute_identifier(self) -> str:
+        return self._sort["attributeIdentifier"] if self.type == SortType.ATTRIBUTE else ""
+
+    @property
+    def aggregation(self) -> Optional[str]:
+        return self._sort.get("aggregation")
+
+    @property
+    def attribute_sort_type(self) -> AttributeSortType:
+        if self.type != SortType.ATTRIBUTE:
+            return AttributeSortType.UNDEFINED
+        return AttributeSortType.AREA if self.aggregation else AttributeSortType.DEFAULT
+
+    def _create_locator(self, locator: dict[str, dict[str, str]]) -> VisualizationSortLocator:
+        # Single key-value pair is expected in the locator param
+        ((locator_key, locator_val),) = locator.items()
+        return VisualizationSortLocator(
+            locator=locator_val,
+            locator_type=LocatorItemType(locator_key),
+        )
+
+    @property
+    def locators(self) -> list[VisualizationSortLocator]:
+        if self._locators is None:
+            self._locators = (
+                [self._create_locator(locator) for locator in self._sort["locators"] if locator]
+                if self.type == SortType.MEASURE
+                else []
+            )
+        return self._locators
+
+
 class VisualizationBucket:
     def __init__(self, bucket: dict[str, Any]) -> None:
         self._b = bucket
@@ -456,7 +560,9 @@ class Visualization:
         side_loads: Optional[SideLoads] = None,
     ) -> None:
         self._vo = from_vis_obj
-        self._filters = [VisualizationFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
+        self._buckets: Optional[list[VisualizationBucket]] = None
+        self._filters: Optional[list[VisualizationFilter]] = None
+        self._sorts: Optional[list[VisualizationSort]] = None
         self._side_loads = SideLoads([]) if side_loads is None else side_loads
 
     @property
@@ -478,19 +584,25 @@ class Visualization:
 
     @property
     def buckets(self) -> list[VisualizationBucket]:
-        return [VisualizationBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
+        if self._buckets is None:
+            self._buckets = [VisualizationBucket(b) for b in self._vo["attributes"]["content"]["buckets"]]
+        return self._buckets
 
     @property
     def filters(self) -> list[VisualizationFilter]:
+        if self._filters is None:
+            self._filters = [VisualizationFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
         return self._filters
 
-    @filters.setter
-    def filters(self, filters: list[VisualizationFilter]) -> None:
-        self._filters = filters
-
     @property
-    def sorts(self) -> list[Any]:
-        return self._vo["attributes"]["content"]["sorts"]
+    def sorts(self) -> list[VisualizationSort]:
+        if self._sorts is None:
+            self._sorts = (
+                [VisualizationSort(s) for s in self._vo["attributes"]["content"]["sorts"]]
+                if "sorts" in self._vo["attributes"]["content"]
+                else []
+            )
+        return self._sorts
 
     @property
     def properties(self) -> dict[str, Any]:
