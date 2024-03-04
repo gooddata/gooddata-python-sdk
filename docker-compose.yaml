@@ -41,6 +41,12 @@ services:
       HEADER_HOST: localhost
     command: ["python3", "upload_demo_layout.py"]
 
+  docs:
+    build:
+      context: .
+      dockerfile: docs/Dockerfile
+    ports:
+      - "1313:1313"
 
 volumes:
   gooddata-cn-ce-data:

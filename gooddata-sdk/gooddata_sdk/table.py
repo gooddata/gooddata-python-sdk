@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from operator import attrgetter
 from typing import Any, Generator, List, Optional, Union
+from warnings import warn
 
 from attrs import define, field, frozen
 from attrs.setters import frozen as frozen_attr
@@ -19,7 +20,14 @@ from gooddata_sdk.compute.model.execution import (
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 from gooddata_sdk.compute.service import ComputeService
-from gooddata_sdk.insight import BucketType, Insight, InsightBucket, InsightMetric, InsightTotal
+from gooddata_sdk.visualization import (
+    BucketType,
+    Insight,
+    Visualization,
+    VisualizationBucket,
+    VisualizationMetric,
+    VisualizationTotal,
+)
 
 _MEASURE_GROUP_IDENTIFIER = "measureGroup"
 _TOTAL_ORDER = ["SUM", "MAX", "MIN", "AVG", "MED"]
@@ -234,7 +242,7 @@ class TotalDefinitionOrdering:
     total: TotalDefinition
 
     @classmethod
-    def create(cls, total: TotalDefinition, measures: list[InsightMetric]) -> TotalDefinitionOrdering:
+    def create(cls, total: TotalDefinition, measures: list[VisualizationMetric]) -> TotalDefinitionOrdering:
         metric_ordering = [m.local_id for m in measures]
         return cls(
             function_order=_TOTAL_ORDER.index(total.aggregation.upper()),
@@ -243,7 +251,7 @@ class TotalDefinitionOrdering:
         )
 
 
-def _create_dimension(bucket: InsightBucket, measures_item_identifier: Optional[str] = None) -> TableDimension:
+def _create_dimension(bucket: VisualizationBucket, measures_item_identifier: Optional[str] = None) -> TableDimension:
     item_ids = [a.local_id for a in bucket.attributes]
     if measures_item_identifier is not None:
         item_ids.append(measures_item_identifier)
@@ -254,39 +262,39 @@ def _create_dimension(bucket: InsightBucket, measures_item_identifier: Optional[
     )
 
 
-def _create_dimensions(insight: Insight) -> list[TableDimension]:
+def _create_dimensions(visualization: Visualization) -> list[TableDimension]:
     # TODO: measures item id placement should reflect table transposition setting
-    measures_item_identifier = _MEASURE_GROUP_IDENTIFIER if insight.metrics else None
-    row_bucket = insight.get_bucket_of_type(BucketType.ROWS)
-    col_bucket = insight.get_bucket_of_type(BucketType.COLS)
+    measures_item_identifier = _MEASURE_GROUP_IDENTIFIER if visualization.metrics else None
+    row_bucket = visualization.get_bucket_of_type(BucketType.ROWS)
+    col_bucket = visualization.get_bucket_of_type(BucketType.COLS)
     return [
         _create_dimension(row_bucket),
         _create_dimension(col_bucket, measures_item_identifier),
     ]
 
 
-def _marginal_total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+def _marginal_total_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
     return f"marginal_total_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
 
 
-def _sub_total_column_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+def _sub_total_column_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
     return f"subtotal_column_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
 
 
-def _sub_total_row_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+def _sub_total_row_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
     return f"subtotal_row_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
 
 
-def _grand_total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+def _grand_total_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
     return f"total_of_totals_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
 
 
-def _total_local_identifier(total: InsightTotal, dim_idx: int) -> str:
+def _total_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
     return f"total_{total.type}_{total.measure_id}_by_{total.attribute_id}_{dim_idx}"
 
 
 def _convert_total_dimensions(
-    total: InsightTotal, dimension: TableDimension, idx: int, all_dims: list[TableDimension]
+    total: VisualizationTotal, dimension: TableDimension, idx: int, all_dims: list[TableDimension]
 ) -> Any:
     item_idx = dimension.item_ids.index(total.attribute_id)
     total_dim_items = dimension.item_ids[0:item_idx]
@@ -347,7 +355,7 @@ class TotalsComputeInfo:
             self.column_subtotal_dimension_index = self.col_attr_ids.index(col_total_attr_id)
 
 
-def _get_additional_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+def _get_additional_totals(visualization: Visualization, dimensions: list[TableDimension]) -> list[TotalDefinition]:
     """Construct special cases of pivot table totals.
 
     These special cases are -
@@ -360,8 +368,8 @@ def _get_additional_totals(insight: Insight, dimensions: list[TableDimension]) -
     totalDimensions items based on the attribute and column identifiers order in buckets.
     """
     totals: list[TotalDefinition] = []
-    row_bucket = insight.get_bucket_of_type(BucketType.ROWS)
-    col_bucket = insight.get_bucket_of_type(BucketType.COLS)
+    row_bucket = visualization.get_bucket_of_type(BucketType.ROWS)
+    col_bucket = visualization.get_bucket_of_type(BucketType.COLS)
 
     tci = TotalsComputeInfo(
         row_attr_ids=[a.local_id for a in row_bucket.attributes],
@@ -391,7 +399,7 @@ def _get_additional_totals(insight: Insight, dimensions: list[TableDimension]) -
     return totals
 
 
-def _extend_grand_totals(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+def _extend_grand_totals(row_index: int, row_total: VisualizationTotal, tci: TotalsComputeInfo) -> TotalDefinition:
     # Extend grand totals payload
     row_dim = [TotalDimension(idx=0, items=tci.measure_group_rows)] if tci.measure_group_rows else []
     col_dim = [TotalDimension(idx=1, items=tci.measure_group_cols)] if tci.measure_group_cols else []
@@ -403,7 +411,9 @@ def _extend_grand_totals(row_index: int, row_total: InsightTotal, tci: TotalsCom
     )
 
 
-def _extend_marginal_totals_of_cols(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+def _extend_marginal_totals_of_cols(
+    row_index: int, row_total: VisualizationTotal, tci: TotalsComputeInfo
+) -> TotalDefinition:
     # Extend marginal of columns within rows grand totals payload
     row_dim = [TotalDimension(idx=0, items=tci.measure_group_rows)] if tci.measure_group_rows else []
     col_dim = [
@@ -420,7 +430,9 @@ def _extend_marginal_totals_of_cols(row_index: int, row_total: InsightTotal, tci
     )
 
 
-def _extend_marginal_totals_of_rows(row_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+def _extend_marginal_totals_of_rows(
+    row_index: int, row_total: VisualizationTotal, tci: TotalsComputeInfo
+) -> TotalDefinition:
     # Extend marginal totals of rows within column grand totals payload
     return TotalDefinition(
         local_id=_sub_total_column_local_identifier(row_total, row_index),
@@ -439,7 +451,7 @@ def _extend_marginal_totals_of_rows(row_index: int, row_total: InsightTotal, tci
     )
 
 
-def _extend_marginal_totals(col_index: int, row_total: InsightTotal, tci: TotalsComputeInfo) -> TotalDefinition:
+def _extend_marginal_totals(col_index: int, row_total: VisualizationTotal, tci: TotalsComputeInfo) -> TotalDefinition:
     # Extend marginal totals payload
     return TotalDefinition(
         local_id=_marginal_total_local_identifier(row_total, col_index),
@@ -458,11 +470,11 @@ def _extend_marginal_totals(col_index: int, row_total: InsightTotal, tci: Totals
     )
 
 
-def _get_computable_totals(insight: Insight, dimensions: list[TableDimension]) -> list[TotalDefinition]:
+def _get_computable_totals(visualization: Visualization, dimensions: list[TableDimension]) -> list[TotalDefinition]:
     """
     Extracts total definitions from execution definition dimensions and converts them into total specifications for
     Tiger AFM. Execution definition defines totals by a measure, aggregation function, and the attribute for whose
-    values we want the totals. In Tiger, measure and aggregation function remains the same, but the `totalDimensions`
+    values we want the totals. In Tiger, measure and aggregation function remain the same, but the `totalDimensions`
     with `totalDimensionItems` are best understood as coordinates for the resulting structure where the totals
     should be placed. This implicitly decides which attributes should be used. This allows for multidimensional totals,
     but such totals are impossible to define in the execution definition.
@@ -470,7 +482,7 @@ def _get_computable_totals(insight: Insight, dimensions: list[TableDimension]) -
     processed_totals = []
     for dim in dimensions:
         bucket_type = _GET_BUCKET_TYPE_OF_DIM_INDEX[dim.idx]
-        bucket = insight.get_bucket_of_type(bucket_type)
+        bucket = visualization.get_bucket_of_type(bucket_type)
         dim_totals_with_order = []
         for total in bucket.totals:
             total_def = TotalDefinition(
@@ -484,36 +496,36 @@ def _get_computable_totals(insight: Insight, dimensions: list[TableDimension]) -
                     dimensions,
                 ),
             )
-            dim_totals_with_order.append(TotalDefinitionOrdering.create(total_def, insight.metrics))
+            dim_totals_with_order.append(TotalDefinitionOrdering.create(total_def, visualization.metrics))
         dim_totals_with_order.sort(key=attrgetter("function_order", "order"))
         processed_totals.append([t.total for t in dim_totals_with_order])
 
     totals = [total for dim_totals in processed_totals if dim_totals for total in dim_totals]
 
-    if not insight.has_row_and_col_totals():
+    if not visualization.has_row_and_col_totals():
         return totals
 
-    new_totals = _get_additional_totals(insight, dimensions)
+    new_totals = _get_additional_totals(visualization, dimensions)
     return totals + new_totals
 
 
-def _get_exec_for_pivot(insight: Insight) -> ExecutionDefinition:
-    dimensions = _create_dimensions(insight)
-    totals = _get_computable_totals(insight, dimensions)
+def _get_exec_for_pivot(visualization: Visualization) -> ExecutionDefinition:
+    dimensions = _create_dimensions(visualization)
+    totals = _get_computable_totals(visualization, dimensions)
     return ExecutionDefinition(
-        attributes=[a.as_computable() for a in insight.attributes],
-        metrics=[m.as_computable() for m in insight.metrics],
-        filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
+        attributes=[a.as_computable() for a in visualization.attributes],
+        metrics=[m.as_computable() for m in visualization.metrics],
+        filters=[cf for cf in [f.as_computable() for f in visualization.filters] if not cf.is_noop()],
         dimensions=[d.item_ids for d in dimensions],
         totals=totals,
     )
 
 
-def get_exec_for_non_pivot(insight: Insight) -> ExecutionDefinition:
+def get_exec_for_non_pivot(visualization: Visualization) -> ExecutionDefinition:
     return _prepare_tabular_definition(
-        attributes=[a.as_computable() for a in insight.attributes],
-        metrics=[m.as_computable() for m in insight.metrics],
-        filters=[cf for cf in [f.as_computable() for f in insight.filters] if not cf.is_noop()],
+        attributes=[a.as_computable() for a in visualization.attributes],
+        metrics=[m.as_computable() for m in visualization.metrics],
+        filters=[cf for cf in [f.as_computable() for f in visualization.filters] if not cf.is_noop()],
     )
 
 
@@ -530,15 +542,24 @@ class TableService:
     def __init__(self, api_client: GoodDataApiClient) -> None:
         self._compute = ComputeService(api_client)
 
-    def for_insight(self, workspace_id: str, insight: Insight) -> ExecutionTable:
-        # Assume the received insight is a pivot table if it contains row ("attribute") bucket
+    def for_visualization(self, workspace_id: str, visualization: Visualization) -> ExecutionTable:
+        # Assume the received visualization is a pivot table if it contains row ("attribute") bucket
         exec_def = (
-            _get_exec_for_pivot(insight)
-            if insight.has_bucket_of_type(BucketType.ROWS)
-            else get_exec_for_non_pivot(insight)
+            _get_exec_for_pivot(visualization)
+            if visualization.has_bucket_of_type(BucketType.ROWS)
+            else get_exec_for_non_pivot(visualization)
         )
         response = self._compute.for_exec_def(workspace_id=workspace_id, exec_def=exec_def)
         return _as_table(response)
+
+    def for_insight(self, workspace_id: str, insight: Insight) -> ExecutionTable:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'for_visualization' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.for_visualization(workspace_id=workspace_id, visualization=insight)
 
     def for_items(
         self, workspace_id: str, items: list[Union[Attribute, Metric]], filters: Optional[list[Filter]] = None

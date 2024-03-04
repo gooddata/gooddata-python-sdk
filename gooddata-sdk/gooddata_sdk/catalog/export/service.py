@@ -2,6 +2,7 @@
 import time
 from pathlib import Path
 from typing import Callable, Optional, Tuple, Union
+from warnings import warn
 
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
@@ -16,8 +17,8 @@ from gooddata_sdk import (
     SimpleMetric,
 )
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
-from gooddata_sdk.insight import InsightService
 from gooddata_sdk.table import ExecutionTable, TableService
+from gooddata_sdk.visualization import VisualizationService
 
 
 class ExportService(CatalogServiceBase):
@@ -41,8 +42,8 @@ class ExportService(CatalogServiceBase):
             Export a PDF of a GoodData Dashboard.
         export_tabular:
             Export Tabular data from a GoodData Dashboard.
-        export_tabular_by_insight_id:
-            Exports the tabular data of a particular insight id.
+        export_tabular_by_visualization_id:
+            Exports the tabular data of a particular visualization id.
     """
 
     def __init__(self, api_client: GoodDataApiClient) -> None:
@@ -252,7 +253,8 @@ class ExportService(CatalogServiceBase):
     @staticmethod
     def _custom_overrides_labels(exec_table: ExecutionTable, metrics_format: str = "#,##0") -> ExportCustomOverride:
         """
-        Insights by default use generated hash as local_id therefore we might want to use dummy logic to replace it.
+        Visualizations by default use generated hash as local_id,
+        therefore, we might want to use dummy logic to replace it.
         For attributes by label.id
         For metrics by item.id
         """
@@ -267,19 +269,33 @@ class ExportService(CatalogServiceBase):
         }
         return ExportCustomOverride(labels=labels, metrics=metrics)
 
-    def _get_insight_exec_table(self, workspace_id: str, insight_id: str) -> Tuple[ExecutionTable, str]:
+    def _get_visualization_exec_table(self, workspace_id: str, visualization_id: str) -> Tuple[ExecutionTable, str]:
         try:
-            insight = InsightService(self._client).get_insight(workspace_id=workspace_id, insight_id=insight_id)
-            return TableService(self._client).for_insight(workspace_id=workspace_id, insight=insight), insight.title
+            visualization = VisualizationService(self._client).get_visualization(
+                workspace_id=workspace_id, visualization_id=visualization_id
+            )
+            return TableService(self._client).for_visualization(
+                workspace_id=workspace_id, visualization=visualization
+            ), visualization.title
         except NotFoundException:
             raise ValueError(
-                f"Either workspace workspace_id='{workspace_id}' or insight insight_id='{insight_id}' does not exist."
+                f"Either workspace workspace_id='{workspace_id}' "
+                f"or visualization visualization_id='{visualization_id}' does not exist."
             )
 
-    def export_tabular_by_insight_id(
+    def _get_insight_exec_table(self, workspace_id: str, insight_id: str) -> Tuple[ExecutionTable, str]:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use '_get_visualization_exec_table' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._get_visualization_exec_table(workspace_id, insight_id)
+
+    def export_tabular_by_visualization_id(
         self,
         workspace_id: str,
-        insight_id: str,
+        visualization_id: str,
         file_format: str,
         file_name: Optional[str] = None,
         settings: Optional[ExportSettings] = None,
@@ -289,15 +305,15 @@ class ExportService(CatalogServiceBase):
         max_retry: float = 5.0,
     ) -> None:
         """
-        Exports the tabular data of a particular insight id.
+        Exports the tabular data of a particular visualization id.
 
         Args:
-            workspace_id (str): The workspace id from which the insight is to be exported.
-            insight_id (str): The id of the insight to be exported.
+            workspace_id (str): The workspace id from which the visualization is to be exported.
+            visualization_id (str): The id of the visualization to be exported.
             file_format (str): The format of the file to be exported.
             file_name (Optional[str], optional): The name which the exported file should have. Defaults to None.
             settings (Optional[ExportSettings], optional): Any additional settings for the export. Defaults to None.
-            store_path (Union[str, Path], optional): The path to store the exported file. Defaults to Path.cwd().
+            store_path (Union[str, Path], optional): The path to store the exported file. Default to Path.cwd().
             timeout (float, optional): The maximum time to wait for the export to finish. Defaults to 60.0.
             retry (float, optional):
                 Initial wait time (in seconds) before retrying to get the exported content. Defaults to 0.2.
@@ -306,9 +322,9 @@ class ExportService(CatalogServiceBase):
         Returns:
             None
         """
-        exec_table, insight_tile = self._get_insight_exec_table(workspace_id, insight_id)
+        exec_table, visualization_tile = self._get_visualization_exec_table(workspace_id, visualization_id)
         custom_override = self._custom_overrides_labels(exec_table)
-        file_name = file_name if file_name is not None else insight_tile
+        file_name = file_name if file_name is not None else visualization_tile
         export_request = ExportRequest(
             format=file_format,
             execution_result=exec_table.result_id,
@@ -323,4 +339,34 @@ class ExportService(CatalogServiceBase):
             timeout=timeout,
             retry=retry,
             max_retry=max_retry,
+        )
+
+    def export_tabular_by_insight_id(
+        self,
+        workspace_id: str,
+        insight_id: str,
+        file_format: str,
+        file_name: Optional[str] = None,
+        settings: Optional[ExportSettings] = None,
+        store_path: Union[str, Path] = Path.cwd(),
+        timeout: float = 60.0,
+        retry: float = 0.2,
+        max_retry: float = 5.0,
+    ) -> None:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'export_tabular_by_visualization_id' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.export_tabular_by_visualization_id(
+            workspace_id,
+            insight_id,
+            file_format,
+            file_name,
+            settings,
+            store_path,
+            timeout,
+            retry,
+            max_retry,
         )

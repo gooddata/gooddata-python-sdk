@@ -56,8 +56,8 @@ The plugin provides the following use cases:
   - Reads content of `gooddata_layout` folder and deploys analytics model to GoodData
 - store_analytics
   - Reads analytics model from GoodData instance and stores it to disk to `gooddata_layout` folder
-- test_insights
-  - Lists all insights(reports) from GoodData instance, and executes each report to validate it
+- test_visualizations
+  - Lists all visualizations execution from GoodData instance, and executes each report to validate it
 - dbt_cloud
   - Runs dbt cloud job through their API. Alternative to running dbt-core locally.
   - If running in CI pipeline, it can also notify about performance degradations in a form of GitHub/Gitlab comment.

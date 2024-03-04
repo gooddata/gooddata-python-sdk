@@ -1,22 +1,22 @@
 ---
-title: "for_insight"
-linkTitle: "for_insight"
+title: "for_visualization"
+linkTitle: "for_visualization"
 weight: 10
 superheading: "tables."
 ---
 
 
 
-``for_insight(workspace_id: str, insight: Insight)``
+``for_visualization(workspace_id: str, visualization: Visualization)``
 
-Gets data as an ExecutionTable from the given visualization.
+Get data as an ExecutionTable from the given visualization.
 
-{{% parameters-block  title="Parameters" %}}
+{{% parameters-block title="Parameters" %}}
 {{< parameter p_name="workspace_id" p_type="string" >}}
 Workspace identification string e.g. "demo"
 {{< /parameter >}}
-{{< parameter p_name="insight" p_type="Insight" >}}
-Insight object, representing a visualization.
+{{< parameter p_name="visualization" p_type="Visualization" >}}
+Visualization object, representing a visualization.
 {{< /parameter >}}
 {{% /parameters-block %}}
 
@@ -30,9 +30,9 @@ Visualization data wrapper object.
 
 ```python
 # Get visualization
-campaign_spend_insight = sdk.insights.get_insight(workspace_id="123", insight_id="campaign_spend")
+campaign_spend = sdk.visualizations.get_visualization(workspace_id="123", visualization_id="campaign_spend")
 # Get the visualization as Execution Table
-sdk.tables.for_insight(workspace_id="123", insight=campaign_spend_insight)
+sdk.tables.for_visualization(workspace_id="123", visualization=campaign_spend)
 
 # ExecutionTable(
 #   response=Execution(

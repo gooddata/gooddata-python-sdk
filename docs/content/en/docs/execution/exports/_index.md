@@ -11,7 +11,7 @@ Create dashboard exports or automate your pipelines. Can be for [example](#examp
 
 * [export_pdf](./export_pdf/)
 * [export_tabular](./export_tabular/)
-* [export_tabular_by_insight_id](./export_tabular_by_insight_id/)
+* [export_tabular_by_visualization_id](./export_tabular_by_visualization_id/)
 
 
 ## Example
@@ -58,10 +58,10 @@ def send_mail(send_from, send_to, subject, text, files, server):
 
 
 def export_tabular():
-    # Export a particular insight in the desired format (CSV / XLSX)
-    sdk.export.export_tabular_by_insight_id(
+    # Export a particular visualization in the desired format (CSV / XLSX)
+    sdk.export.export_tabular_by_visualization_id(
         workspace_id = "demo",
-        insight_id = "revenue",
+        visualization_id = "revenue",
         file_format = "CSV",
         file_name = "revenue_export.csv"
     )

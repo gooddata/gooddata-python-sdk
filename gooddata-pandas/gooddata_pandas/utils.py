@@ -8,14 +8,21 @@ from typing import Any, Dict, Optional, Union
 import pandas
 from pandas import Index, MultiIndex
 
-from gooddata_sdk import Attribute, CatalogAttribute, InsightAttribute, InsightMetric, Metric, ObjId, SimpleMetric
+from gooddata_sdk import (
+    Attribute,
+    CatalogAttribute,
+    Metric,
+    ObjId,
+    SimpleMetric,
+    VisualizationAttribute,
+    VisualizationMetric,
+)
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]
 IndexDef = Union[LabelItemDef, Dict[str, LabelItemDef]]
 ColumnsDef = Dict[str, DataItemDef]
-
 
 # register external pandas types to converters
 IntegerConverter.set_external_fnc(lambda self, value: pandas.to_numeric(value))
@@ -162,10 +169,10 @@ def make_pandas_index(index: dict) -> Optional[Union[Index, MultiIndex]]:
     return _idx
 
 
-class DefaultInsightColumnNaming:
+class DefaultVisualizationColumnNaming:
     def __init__(self) -> None:
         """
-        Initialize a DefaultInsightColumnNaming instance with an empty dictionary for unique names.
+        Initialize a DefaultVisualizationColumnNaming instance with an empty dictionary for unique names.
         """
         self._uniques: dict[str, int] = dict()
 
@@ -206,24 +213,24 @@ class DefaultInsightColumnNaming:
         self._uniques[unique_candidate] = 1
         return unique_candidate
 
-    def col_name_for_attribute(self, attr: InsightAttribute) -> str:
+    def col_name_for_attribute(self, attr: VisualizationAttribute) -> str:
         """
         Generate a unique column name for the given attribute.
 
         Args:
-            attr (InsightAttribute): The attribute.
+            attr (VisualizationAttribute): The attribute.
 
         Returns:
             str: The unique column name.
         """
         return self._ensure_unique(attr.label_id)
 
-    def col_name_for_metric(self, measure: InsightMetric) -> str:
+    def col_name_for_metric(self, measure: VisualizationMetric) -> str:
         """
         Generate a unique column name for the given metric.
 
         Args:
-          measure (InsightMetric): The metric.
+          measure (VisualizationMetric): The metric.
 
         Returns:
             str: The unique column name.

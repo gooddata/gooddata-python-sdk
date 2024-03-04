@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import Optional, Tuple, Union
+from warnings import warn
 
 import pandas
 
@@ -15,7 +16,7 @@ from gooddata_pandas.result_convertor import (
 )
 from gooddata_pandas.utils import (
     ColumnsDef,
-    DefaultInsightColumnNaming,
+    DefaultVisualizationColumnNaming,
     IndexDef,
     LabelItemDef,
     _to_item,
@@ -43,7 +44,7 @@ class DataFrameFactory:
             -> pandas.DataFrame:
         - for_items(self, items: ColumnsDef, filter_by: Optional[Union[Filter, list[Filter]]] = None,
             auto_index: bool = True) -> pandas.DataFrame:
-        - for_insight(self, insight_id: str, auto_index: bool = True)
+        - for_visualization(self, visualization_id: str, auto_index: bool = True)
             -> pandas.DataFrame:
         - result_cache_metadata_for_exec_result_id(self, result_id: str)
             -> ResultCacheMetadata:
@@ -159,27 +160,38 @@ class DataFrameFactory:
             filter_by=filter_by,
         )
 
-    def for_insight(self, insight_id: str, auto_index: bool = True) -> pandas.DataFrame:
+    def for_visualization(self, visualization_id: str, auto_index: bool = True) -> pandas.DataFrame:
         """
-        Creates a data frame with columns based on the content of the insight with the provided identifier.
+        Creates a data frame with columns based on the content of the visualization with the provided identifier.
 
         Args:
-            insight_id (str): Insight identifier.
+            visualization_id (str): Visualization identifier.
             auto_index (bool): Default True. Enables creation of DataFrame with index depending on the contents
-                of the insight.
+                of the visualization.
 
         Returns:
             pandas.DataFrame: A DataFrame instance.
         """
-        naming = DefaultInsightColumnNaming()
-        insight = self._sdk.insights.get_insight(workspace_id=self._workspace_id, insight_id=insight_id)
-        filter_by = [f.as_computable() for f in insight.filters]
+        naming = DefaultVisualizationColumnNaming()
+        visualization = self._sdk.visualizations.get_visualization(
+            workspace_id=self._workspace_id, visualization_id=visualization_id
+        )
+        filter_by = [f.as_computable() for f in visualization.filters]
         columns: ColumnsDef = {
-            **{naming.col_name_for_attribute(a): a.as_computable() for a in insight.attributes},
-            **{naming.col_name_for_metric(m): m.as_computable() for m in insight.metrics},
+            **{naming.col_name_for_attribute(a): a.as_computable() for a in visualization.attributes},
+            **{naming.col_name_for_metric(m): m.as_computable() for m in visualization.metrics},
         }
 
         return self.for_items(columns, filter_by=filter_by, auto_index=auto_index)
+
+    def for_insight(self, insight_id: str, auto_index: bool = True) -> pandas.DataFrame:
+        warn(
+            "This method is deprecated and it will be removed in v1.20.0 release. "
+            "Please use 'for_visualization' method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.for_visualization(insight_id, auto_index)
 
     def result_cache_metadata_for_exec_result_id(self, result_id: str) -> ResultCacheMetadata:
         """
