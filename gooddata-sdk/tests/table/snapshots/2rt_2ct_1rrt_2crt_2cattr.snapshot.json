@@ -103,7 +103,15 @@
                     "6a003ffd14994237ba64c4a02c488429",
                     "75ea396d0c8b48098e31dccf8b5801d3"
                 ],
-                "local_identifier": "dim_0"
+                "local_identifier": "dim_0",
+                "sorting": [
+                    {
+                        "attribute": {
+                            "attribute_identifier": "7a4045fd00ac44579f52406df679435f",
+                            "sort_type": "DEFAULT"
+                        }
+                    }
+                ]
             },
             {
                 "item_identifiers": [
