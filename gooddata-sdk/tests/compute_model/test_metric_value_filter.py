@@ -18,6 +18,11 @@ def _scenario_to_snapshot_name(scenario: str):
 _simple_measure = SimpleMetric(local_id="local_id2", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="local_id4", label="label.id")
 
+description_labels = {
+    "local_id1": "Local ID",
+    "metric.id": "Metric ID",
+}
+
 test_metric_value_filter = [
     [
         "comparison filter using local id",
@@ -26,6 +31,7 @@ test_metric_value_filter = [
             operator="EQUAL_TO",
             values=10,
         ),
+        "Local ID: = 10.0",
     ],
     [
         "comparison filter using object id",
@@ -34,23 +40,27 @@ test_metric_value_filter = [
             operator="EQUAL_TO",
             values=10.0,
         ),
+        "Metric ID: = 10.0",
     ],
     [
         "comparison filter with treat nulls as",
         MetricValueFilter(metric="local_id1", operator="EQUAL_TO", values=10, treat_nulls_as=1),
+        "Local ID: = 10.0",
     ],
     [
         "range filter",
         MetricValueFilter(metric="local_id1", operator="BETWEEN", values=(2, 3)),
+        "Local ID: between 2 - 3",
     ],
     [
         "range filter with treat nulls as",
         MetricValueFilter(metric="local_id1", operator="BETWEEN", values=(2, 3), treat_nulls_as=1),
+        "Local ID: between 2 - 3",
     ],
 ]
 
 
-@pytest.mark.parametrize("scenario,filter", test_metric_value_filter)
+@pytest.mark.parametrize("scenario,filter", [sublist[:2] for sublist in test_metric_value_filter])
 def test_attribute_filters_to_api_model(scenario, filter, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
@@ -60,3 +70,8 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
         json.dumps(filter.as_api_model().to_dict(), indent=4, sort_keys=True) + "\n",
         _scenario_to_snapshot_name(scenario),
     )
+
+
+@pytest.mark.parametrize("scenario,filter,description", test_metric_value_filter)
+def test_date_filters_description(scenario, filter, description):
+    assert filter.description(description_labels) == description

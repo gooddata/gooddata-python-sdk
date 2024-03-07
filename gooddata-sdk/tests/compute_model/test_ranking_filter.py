@@ -18,6 +18,11 @@ def _scenario_to_snapshot_name(scenario: str):
 _simple_measure = SimpleMetric(local_id="local_id2", item=ObjId(type="metric", id="metric_id"))
 _attribute = Attribute(local_id="local_id4", label="label.id")
 
+description_labels = {
+    "local_id1": "Local ID 1",
+    "local_id3": "Local ID 3",
+}
+
 test_ranking_filter = [
     [
         "ranking filter using just local ids",
@@ -27,6 +32,7 @@ test_ranking_filter = [
             operator="TOP",
             value=10,
         ),
+        "Top 10 out of Local ID 3 based on Local ID 1",
     ],
     [
         "ranking filter using mix of ids for measures",
@@ -36,6 +42,7 @@ test_ranking_filter = [
             operator="TOP",
             value=10,
         ),
+        "Top 10 out of Local ID 3 based on Local ID 1",
     ],
     [
         "ranking filter using mix of ids for dimensionality",
@@ -45,6 +52,7 @@ test_ranking_filter = [
             operator="TOP",
             value=10,
         ),
+        "Top 10 out of Local ID 3 based on Local ID 1",
     ],
     [
         "bottom ranking filter",
@@ -54,11 +62,12 @@ test_ranking_filter = [
             operator="BOTTOM",
             value=10,
         ),
+        "Bottom 10 out of Local ID 3 based on Local ID 1",
     ],
 ]
 
 
-@pytest.mark.parametrize("scenario,filter", test_ranking_filter)
+@pytest.mark.parametrize("scenario,filter", [sublist[:2] for sublist in test_ranking_filter])
 def test_attribute_filters_to_api_model(scenario, filter, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
@@ -68,3 +77,8 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
         json.dumps(filter.as_api_model().to_dict(), indent=4, sort_keys=True),
         _scenario_to_snapshot_name(scenario),
     )
+
+
+@pytest.mark.parametrize("scenario,filter,description", test_ranking_filter)
+def test_date_filters_description(scenario, filter, description):
+    assert filter.description(description_labels) == description
