@@ -14,6 +14,7 @@ from gooddata_sdk import (
     GoodDataSdk,
     ObjId,
     SimpleMetric,
+    TableDimension,
 )
 
 gd_vcr = get_vcr()
@@ -37,7 +38,10 @@ def _get_execution_result(sdk: GoodDataSdk, workspace_id: str) -> str:
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "region"], ["measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "region"]),
+            TableDimension(item_ids=["measureGroup"]),
+        ],
     )
     return sdk.compute.for_exec_def(workspace_id, exec_def).result_id
 

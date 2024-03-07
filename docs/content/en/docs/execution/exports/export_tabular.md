@@ -57,7 +57,10 @@ exec_def = ExecutionDefinition(
             SimpleMetric(local_id="order_amount", item=ObjId(id="order_amount", type="metric")),
         ],
         filters=[],
-        dimensions=[["state", "region"], ["measureGroup"]],
+        dimensions=[
+            TableDimension(item_ids=["state", "region"]),
+            TableDimension(item_ids=["measureGroup"]),
+        ],
     )
 execution_result=sdk.compute.for_exec_def(workspace_id, exec_def).result_id
 export_request = ExportRequest(

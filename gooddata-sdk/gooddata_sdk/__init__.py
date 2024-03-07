@@ -187,6 +187,7 @@ from gooddata_sdk.compute.model.execution import (
     ResultSizeBytesLimitExceeded,
     ResultSizeDimensions,
     ResultSizeDimensionsLimitsExceeded,
+    TableDimension,
     TotalDefinition,
     TotalDimension,
 )

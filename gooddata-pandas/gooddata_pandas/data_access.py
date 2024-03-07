@@ -23,6 +23,7 @@ from gooddata_sdk import (
     Metric,
     MetricValueFilter,
     ObjId,
+    TableDimension,
 )
 
 
@@ -229,8 +230,12 @@ class ExecutionDefinitionBuilder:
             and dimensions.
         """
         dimensions = [
-            ["measureGroup"] if len(self._metrics) else None,
-            [a.local_id for a in self._attributes] if len(self._attributes) else None,
+            TableDimension(
+                item_ids=["measureGroup"] if self._metrics else None,
+            ),
+            TableDimension(
+                item_ids=[a.local_id for a in self._attributes] if self._attributes else None,
+            ),
         ]
 
         filters = self._update_filter_ids(filter_by)
