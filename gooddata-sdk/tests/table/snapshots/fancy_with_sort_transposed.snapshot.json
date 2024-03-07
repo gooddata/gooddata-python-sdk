@@ -1,0 +1,228 @@
+{
+    "execution": {
+        "attributes": [
+            {
+                "label": {
+                    "identifier": {
+                        "id": "products.category",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "6a003ffd14994237ba64c4a02c488429"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "product_name",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "75ea396d0c8b48098e31dccf8b5801d3"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "region",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "f06c3e7d31bc466e878e990b2b379f8c"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "state",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "52c625146bd245559dc236e187d6244d"
+            }
+        ],
+        "filters": [],
+        "measures": [
+            {
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": {
+                                "id": "percent_revenue_per_product",
+                                "type": "metric"
+                            }
+                        },
+                        "compute_ratio": false,
+                        "filters": []
+                    }
+                },
+                "local_identifier": "08d8346c1ce7438994b251991c0fbf65"
+            },
+            {
+                "definition": {
+                    "measure": {
+                        "item": {
+                            "identifier": {
+                                "id": "revenue",
+                                "type": "metric"
+                            }
+                        },
+                        "compute_ratio": false,
+                        "filters": []
+                    }
+                },
+                "local_identifier": "b2350c06688b4da9b3833ebcce65527f"
+            }
+        ]
+    },
+    "result_spec": {
+        "dimensions": [
+            {
+                "item_identifiers": [
+                    "6a003ffd14994237ba64c4a02c488429",
+                    "75ea396d0c8b48098e31dccf8b5801d3",
+                    "measureGroup"
+                ],
+                "local_identifier": "dim_0",
+                "sorting": [
+                    {
+                        "attribute": {
+                            "attribute_identifier": "75ea396d0c8b48098e31dccf8b5801d3",
+                            "sort_type": "DEFAULT"
+                        }
+                    }
+                ]
+            },
+            {
+                "item_identifiers": [
+                    "f06c3e7d31bc466e878e990b2b379f8c",
+                    "52c625146bd245559dc236e187d6244d"
+                ],
+                "local_identifier": "dim_1"
+            }
+        ],
+        "totals": [
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_6a003ffd14994237ba64c4a02c488429_0",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "f06c3e7d31bc466e878e990b2b379f8c",
+                            "52c625146bd245559dc236e187d6244d"
+                        ]
+                    },
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_08d8346c1ce7438994b251991c0fbf65_by_52c625146bd245559dc236e187d6244d_1",
+                "metric": "08d8346c1ce7438994b251991c0fbf65",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3",
+                            "measureGroup"
+                        ]
+                    },
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "f06c3e7d31bc466e878e990b2b379f8c"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_08d8346c1ce7438994b251991c0fbf65_by_f06c3e7d31bc466e878e990b2b379f8c_1",
+                "metric": "08d8346c1ce7438994b251991c0fbf65",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3",
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_52c625146bd245559dc236e187d6244d_1",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3",
+                            "measureGroup"
+                        ]
+                    },
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "f06c3e7d31bc466e878e990b2b379f8c"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_f06c3e7d31bc466e878e990b2b379f8c_1",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3",
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "subtotal_row_sum_b2350c06688b4da9b3833ebcce65527f_by_6a003ffd14994237ba64c4a02c488429_0",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "measureGroup"
+                        ]
+                    },
+                    {
+                        "dimension_identifier": "dim_1",
+                        "total_dimension_items": [
+                            "f06c3e7d31bc466e878e990b2b379f8c"
+                        ]
+                    }
+                ]
+            },
+            {
+                "function": "SUM",
+                "local_identifier": "total_of_totals_sum_b2350c06688b4da9b3833ebcce65527f_by_6a003ffd14994237ba64c4a02c488429_0",
+                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "measureGroup"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
