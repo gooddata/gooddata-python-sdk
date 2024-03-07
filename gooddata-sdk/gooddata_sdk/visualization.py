@@ -149,7 +149,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
 
         # there is filter present, but uses all time
         if ("from" not in f) or ("to" not in f):
-            return AllTimeFilter()
+            return AllTimeFilter(_ref_extract_obj_id(f["dataSet"]))
 
         return RelativeDateFilter(
             dataset=_ref_extract_obj_id(f["dataSet"]),
@@ -536,6 +536,27 @@ class Visualization:
 
         # otherwise, try to use the id object as is
         return self._side_loads.find(id_obj)
+
+    def get_labels_and_formats(self) -> tuple[dict[str, str], dict[str, str]]:
+        """
+        Extracts labels and custom measure formats from the insight.
+
+        :return: tuple of labels dict ({"label_id":"Label"}) and formats dict ({"measure_id":"#,##0.00"})
+        """
+        labels = {}
+        formats = {}
+        for bucket in self.buckets:
+            for item in bucket.items:
+                for item_values in item.values():
+                    label = item_values.get("alias", item_values.get("title", None))
+                    if label is not None:
+                        labels[item_values["localIdentifier"]] = label
+                    if "format" in item_values:
+                        formats[item_values["localIdentifier"]] = item_values["format"]
+        return labels, formats
+
+    def get_filters_description(self, labels: dict[str, str]) -> list[str]:
+        return [f.as_computable().description(labels) for f in self.filters]
 
     def __str__(self) -> str:
         return self.__repr__()

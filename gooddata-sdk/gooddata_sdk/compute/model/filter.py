@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Optional, Union
 
 import gooddata_api_client.models as afm_models
@@ -17,6 +18,17 @@ from gooddata_api_client.models import RelativeDateFilterRelativeDateFilter as R
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.metric import Metric
+
+_DATE_FORMAT_INPUT = "%Y-%m-%d"
+_DATE_FORMAT_OUTPUT = "%-m/%-d/%Y"
+_METRIC_VALUE_FILTER_OPERATOR_LABEL = {
+    "EQUAL_TO": "=",
+    "GREATER_THAN": ">",
+    "GREATER_THAN_OR_EQUAL_TO": ">=",
+    "LESS_THAN": "<",
+    "LESS_THAN_OR_EQUAL_TO": "<=",
+    "NOT_EQUAL_TO": "!=",
+}
 
 
 def _extract_id_or_local_id(val: Union[ObjId, Attribute, Metric, str]) -> Union[ObjId, str]:
@@ -70,6 +82,11 @@ class PositiveAttributeFilter(AttributeFilter):
         body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
+    def description(self, labels: dict[str, str]) -> str:
+        label_id = self.label.id if isinstance(self.label, ObjId) else self.label
+        values = ", ".join(self.values) if len(self.values) else "All"
+        return f"{labels.get(label_id, label_id)}: {values}"
+
 
 class NegativeAttributeFilter(AttributeFilter):
     def is_noop(self) -> bool:
@@ -80,6 +97,11 @@ class NegativeAttributeFilter(AttributeFilter):
         elements = afm_models.AttributeFilterElements(values=self.values)
         body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
+
+    def description(self, labels: dict[str, str]) -> str:
+        label_id = self.label.id if isinstance(self.label, ObjId) else self.label
+        values = "All except " + ", ".join(self.values) if len(self.values) else "All"
+        return f"{labels.get(label_id, label_id)}: {values}"
 
 
 _GRANULARITY: set[str] = {
@@ -146,6 +168,45 @@ class RelativeDateFilter(Filter):
         )
         return afm_models.RelativeDateFilter(body)
 
+    def description(self, labels: dict[str, str]) -> str:
+        # TODO compare with other period is not implemented as it's not defined in the filter but in measures
+        from_shift = self.from_shift
+        to_shift = self.to_shift
+        gr = self.granularity
+        range_str = "All time"
+        if from_shift == -1 and to_shift == -1:
+            range_str = "Yesterday" if gr == "DAY" else "Last " + gr.lower()
+        elif from_shift == 0 and to_shift == 0:
+            range_str = "Today" if gr == "DAY" else "This " + gr.lower()
+        elif from_shift == 1 and to_shift == 1:
+            range_str = "Tomorrow" if gr == "DAY" else "Next " + gr.lower()
+        else:
+            if to_shift == 0:
+                range_str = f"Last {abs(from_shift) + 1} " + gr.lower() + "s"
+            elif from_shift == 0:
+                range_str = f"Next {to_shift + 1} " + gr.lower() + "s"
+            else:
+                abs_from_shift = abs(from_shift)
+                abs_to_shift = abs(to_shift)
+                plural_from_shift = "s" if abs_from_shift > 1 else ""
+                plural_to_shift = "s" if abs_to_shift > 1 else ""
+                if from_shift < 0 < to_shift:
+                    range_str = (
+                        f"From {abs_from_shift} {gr.lower()}{plural_from_shift} ago "
+                        f"to {to_shift} {gr.lower()}{plural_to_shift} ahead"
+                    )
+                elif from_shift < 0 and to_shift < 0:
+                    range_str = (
+                        f"From {abs_from_shift} {gr.lower()}{plural_from_shift} "
+                        f"to {abs_to_shift} {gr.lower()}{plural_to_shift} ago"
+                    )
+                elif from_shift > 0 and to_shift > 0:
+                    range_str = (
+                        f"From {from_shift} {gr.lower()}{plural_from_shift} "
+                        f"to {to_shift} {gr.lower()}{plural_to_shift} ahead"
+                    )
+        return f"{labels.get(self.dataset.id, self.dataset.id)}: {range_str}"
+
 
 # noinspection PyAbstractClass
 class AllTimeFilter(Filter):
@@ -159,8 +220,19 @@ class AllTimeFilter(Filter):
     The main feature of this filter is noop.
     """
 
+    def __init__(self, dataset: ObjId) -> None:
+        super(AllTimeFilter, self).__init__()
+        self._dataset = dataset
+
+    @property
+    def dataset(self) -> ObjId:
+        return self._dataset
+
     def is_noop(self) -> bool:
         return True
+
+    def description(self, labels: dict[str, str]) -> str:
+        return f"{labels.get(self.dataset.id, self.dataset.id)}: All time"
 
 
 class AbsoluteDateFilter(Filter):
@@ -202,6 +274,12 @@ class AbsoluteDateFilter(Filter):
             and self._from_date == other._from_date
             and self._to_date == other._to_date
         )
+
+    def description(self, labels: dict[str, str]) -> str:
+        # TODO long-term this should reflect locales once requested
+        from_date = datetime.strptime(self.from_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(_DATE_FORMAT_OUTPUT)
+        to_date = datetime.strptime(self.to_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(_DATE_FORMAT_OUTPUT)
+        return f"{labels.get(self.dataset.id, self.dataset.id)}: {from_date} - {to_date}"
 
 
 _METRIC_VALUE_FILTER_OPERATORS = {
@@ -296,6 +374,17 @@ class MetricValueFilter(Filter):
             body = RangeMeasureValueFilterBody(**kwargs)
             return afm_models.RangeMeasureValueFilter(body)
 
+    def description(self, labels: dict[str, str]) -> str:
+        metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
+        if self.operator in ["BETWEEN", "NOT_BETWEEN"] and len(self.values) == 2:
+            not_between = "not" if self.operator == "NOT_BETWEEN" else ""
+            return f"{labels.get(metric_id, metric_id)}: {not_between}between {self.values[0]} - {self.values[1]}"
+        else:
+            return (
+                f"{labels.get(metric_id, metric_id)}: "
+                f"{_METRIC_VALUE_FILTER_OPERATOR_LABEL.get(self.operator, self.operator)} {self.values[0]}"
+            )
+
 
 _RANKING_OPERATORS = {"TOP", "BOTTOM"}
 
@@ -349,3 +438,17 @@ class RankingFilter(Filter):
             measures=measures, operator=self.operator, value=self.value, _check_type=False, **dimensionality
         )
         return afm_models.RankingFilter(body)
+
+    def description(self, labels: dict[str, str]) -> str:
+        # TODO more metrics and dimensions not supported now as it's not supported on FE as well
+        dimensionality_ids = (
+            [d.id if isinstance(d, ObjId) else d for d in self.dimensionality] if self.dimensionality else []
+        )
+        dimensionality_str = (
+            f" out of {labels.get(dimensionality_ids[0], dimensionality_ids[0])} based on" if dimensionality_ids else ""
+        )
+        metric_ids = [m.id if isinstance(m, ObjId) else m for m in self.metrics]
+        return (
+            f"{self.operator.capitalize()} {self.value}{dimensionality_str} "
+            f"{labels.get(metric_ids[0], metric_ids[0])}"
+        )
