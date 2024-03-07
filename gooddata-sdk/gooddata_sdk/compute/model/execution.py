@@ -330,6 +330,29 @@ class Execution:
     def dimensions(self) -> Any:
         return self.bare_exec_response._exec_response["dimensions"]
 
+    def get_labels_and_formats(self) -> tuple[dict[str, str], dict[str, str]]:
+        """
+        Extracts labels and custom measure formats from the execution response.
+
+        :return: tuple of labels dict ({"label_id":"Label"}) and formats dict ({"measure_id":"#,##0.00"})
+        """
+        labels = {}
+        formats = {}
+        for dim in self.dimensions:
+            for hdr in dim["headers"]:
+                if "attributeHeader" in hdr:
+                    labels[hdr["attributeHeader"]["localIdentifier"]] = hdr["attributeHeader"].get(
+                        "alias", hdr["attributeHeader"]["labelName"]
+                    )
+                    labels[hdr["attributeHeader"]["label"]["id"]] = labels[hdr["attributeHeader"]["localIdentifier"]]
+                elif "measureGroupHeaders" in hdr:
+                    for m_group in hdr["measureGroupHeaders"]:
+                        if "name" in m_group:
+                            labels[m_group["localIdentifier"]] = m_group.get("alias", m_group["name"])
+                        if "format" in m_group:
+                            formats[m_group["localIdentifier"]] = m_group["format"]
+        return labels, formats
+
     def read_result(self, limit: Union[int, list[int]], offset: Union[None, int, list[int]] = None) -> ExecutionResult:
         return self.bare_exec_response.read_result(limit, offset)
 
