@@ -85,3 +85,12 @@ class Filter(ExecModelEntity):
 
     def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
+
+    def description(self, labels: dict[str, str]) -> str:
+        """
+        Description of the filter as it's visible for customer in UI.
+
+        :param labels: Dict of labels in a form of `id: label`. Measures and attributes are expected to be here.
+        :return: Filter's human-readable description
+        """
+        raise NotImplementedError()

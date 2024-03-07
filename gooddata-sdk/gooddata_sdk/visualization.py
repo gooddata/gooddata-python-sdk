@@ -149,7 +149,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
 
         # there is filter present, but uses all time
         if ("from" not in f) or ("to" not in f):
-            return AllTimeFilter()
+            return AllTimeFilter(_ref_extract_obj_id(f["dataSet"]))
 
         return RelativeDateFilter(
             dataset=_ref_extract_obj_id(f["dataSet"]),

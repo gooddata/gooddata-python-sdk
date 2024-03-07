@@ -15,6 +15,10 @@ def _scenario_to_snapshot_name(scenario: str):
     return f"{scenario.replace(' ', '_')}.snapshot.json"
 
 
+description_labels = {
+    "dataset.id": "DataSet ID",
+}
+
 test_filters = [
     [
         "absolute date filter",
@@ -23,6 +27,7 @@ test_filters = [
             from_date="2021-07-01 18:23",
             to_date="2021-07-16 18:23",
         ),
+        "DataSet ID: 7/1/2021 - 7/16/2021",
     ],
     [
         "relative date filter",
@@ -32,12 +37,13 @@ test_filters = [
             from_shift=-10,
             to_shift=-1,
         ),
+        "DataSet ID: From 10 days to 1 day ago",
     ],
 ]
 
 
-@pytest.mark.parametrize("scenario,filter", test_filters)
-def test_attribute_filters_to_api_model(scenario, filter, snapshot):
+@pytest.mark.parametrize("scenario,filter", [sublist[:2] for sublist in test_filters])
+def test_date_filters_to_api_model(scenario, filter, snapshot):
     # it is essential to define snapshot dir using absolute path, otherwise snapshots cannot be found when
     # running in tox
     snapshot.snapshot_dir = os.path.join(_current_dir, "date_filters")
@@ -48,11 +54,16 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
     )
 
 
+@pytest.mark.parametrize("scenario,filter,description", test_filters)
+def test_date_filters_description(scenario, filter, description):
+    assert filter.description(description_labels) == description
+
+
 def test_cannot_create_api_model_from_all_time_filter():
     """As All time filter from GoodData.CN does not contain from and to fields,
     we are not sure how to make valid model from it. We prefer to fail, until
     we decide what to do with this situation.
     """
     with pytest.raises(NotImplementedError):
-        f = AllTimeFilter()
+        f = AllTimeFilter(dataset=ObjId(type="dataset", id="dataset.id"))
         f.as_api_model()
