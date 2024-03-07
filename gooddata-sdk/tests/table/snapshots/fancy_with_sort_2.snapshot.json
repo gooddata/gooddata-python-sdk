@@ -27,9 +27,36 @@
                     }
                 },
                 "local_identifier": "75ea396d0c8b48098e31dccf8b5801d3"
+            },
+            {
+                "label": {
+                    "identifier": {
+                        "id": "region",
+                        "type": "label"
+                    }
+                },
+                "local_identifier": "c43c12684eaa49daaae0672b5b3b8750"
             }
         ],
         "filters": [
+            {
+                "positive_attribute_filter": {
+                    "_in": {
+                        "values": [
+                            "Biolid",
+                            "ChalkTalk",
+                            "Compglass",
+                            "Elentrix"
+                        ]
+                    },
+                    "label": {
+                        "identifier": {
+                            "id": "product_name",
+                            "type": "label"
+                        }
+                    }
+                }
+            },
             {
                 "relative_date_filter": {
                     "dataset": {
@@ -89,7 +116,7 @@
                 "sorting": [
                     {
                         "attribute": {
-                            "attribute_identifier": "7a4045fd00ac44579f52406df679435f",
+                            "attribute_identifier": "6a003ffd14994237ba64c4a02c488429",
                             "sort_type": "DEFAULT"
                         }
                     }
@@ -97,6 +124,7 @@
             },
             {
                 "item_identifiers": [
+                    "c43c12684eaa49daaae0672b5b3b8750",
                     "measureGroup"
                 ],
                 "local_identifier": "dim_1"
@@ -105,9 +133,17 @@
         "totals": [
             {
                 "function": "SUM",
-                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_7a4045fd00ac44579f52406df679435f_0",
-                "metric": "b2350c06688b4da9b3833ebcce65527f",
+                "local_identifier": "total_sum_08d8346c1ce7438994b251991c0fbf65_by_c43c12684eaa49daaae0672b5b3b8750_1",
+                "metric": "08d8346c1ce7438994b251991c0fbf65",
                 "total_dimensions": [
+                    {
+                        "dimension_identifier": "dim_0",
+                        "total_dimension_items": [
+                            "7a4045fd00ac44579f52406df679435f",
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3"
+                        ]
+                    },
                     {
                         "dimension_identifier": "dim_1",
                         "total_dimension_items": [
@@ -118,28 +154,17 @@
             },
             {
                 "function": "SUM",
-                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_6a003ffd14994237ba64c4a02c488429_0",
+                "local_identifier": "total_sum_b2350c06688b4da9b3833ebcce65527f_by_c43c12684eaa49daaae0672b5b3b8750_1",
                 "metric": "b2350c06688b4da9b3833ebcce65527f",
                 "total_dimensions": [
                     {
-                        "dimension_identifier": "dim_1",
-                        "total_dimension_items": [
-                            "measureGroup"
-                        ]
-                    },
-                    {
                         "dimension_identifier": "dim_0",
                         "total_dimension_items": [
-                            "7a4045fd00ac44579f52406df679435f"
+                            "7a4045fd00ac44579f52406df679435f",
+                            "6a003ffd14994237ba64c4a02c488429",
+                            "75ea396d0c8b48098e31dccf8b5801d3"
                         ]
-                    }
-                ]
-            },
-            {
-                "function": "AVG",
-                "local_identifier": "total_avg_08d8346c1ce7438994b251991c0fbf65_by_7a4045fd00ac44579f52406df679435f_0",
-                "metric": "08d8346c1ce7438994b251991c0fbf65",
-                "total_dimensions": [
+                    },
                     {
                         "dimension_identifier": "dim_1",
                         "total_dimension_items": [

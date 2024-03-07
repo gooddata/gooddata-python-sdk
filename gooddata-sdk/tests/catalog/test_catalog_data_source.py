@@ -40,6 +40,7 @@ from gooddata_sdk import (
     ScanSqlRequest,
     SnowflakeAttributes,
     SqlColumn,
+    TableDimension,
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
@@ -56,7 +57,10 @@ def test_register_upload_notification(test_config):
     metrics = sdk.catalog_workspace_content.get_metrics_catalog(test_config["workspace"])
 
     exec_definition = ExecutionDefinition(
-        attributes=None, filters=None, metrics=[metrics[0].as_computable()], dimensions=[["measureGroup"]]
+        attributes=None,
+        filters=None,
+        metrics=[metrics[0].as_computable()],
+        dimensions=[TableDimension(item_ids=["measureGroup"])],
     )
     exec_response_1 = sdk.compute.for_exec_def(test_config["workspace"], exec_definition)
     sdk.catalog_data_source.register_upload_notification(test_config["data_source"])

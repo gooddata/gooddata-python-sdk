@@ -1,8 +1,9 @@
 # (C) 2021 GoodData Corporation
 from __future__ import annotations
 
+import logging
 from operator import attrgetter
-from typing import Any, Generator, List, Optional, Union
+from typing import Any, Callable, Dict, Generator, List, Optional, Union
 from warnings import warn
 
 from attrs import define, field, frozen
@@ -10,24 +11,28 @@ from attrs.setters import frozen as frozen_attr
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.execution import (
-    ExecutionDefinition,
-    ExecutionResponse,
-    ExecutionResult,
-    TotalDefinition,
-    TotalDimension,
-)
+from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.execution import TableDimension as ExecTableDimension
+from gooddata_sdk.compute.model.execution import TotalDefinition, TotalDimension
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 from gooddata_sdk.compute.service import ComputeService
 from gooddata_sdk.visualization import (
+    AttributeSortType,
     BucketType,
     Insight,
+    LocatorItemType,
+    SortDirection,
+    SortType,
     Visualization,
     VisualizationBucket,
     VisualizationMetric,
+    VisualizationSort,
+    VisualizationSortLocator,
     VisualizationTotal,
 )
+
+logger = logging.getLogger(__name__)
 
 _MEASURE_GROUP_IDENTIFIER = "measureGroup"
 _TOTAL_ORDER = ["SUM", "MAX", "MIN", "AVG", "MED"]
@@ -52,6 +57,27 @@ _GET_DIM_INDEX_OF_BUCKET_TYPE = {
     BucketType.ROWS: 0,
     BucketType.COLS: 1,
 }
+
+_ATTR_SORT_TYPE_TO_API = {
+    AttributeSortType.UNDEFINED: "",
+    AttributeSortType.DEFAULT: "DEFAULT",
+    AttributeSortType.AREA: "AREA",
+}
+
+
+@define
+class TableDimension:
+    """Dataclass used during total and dimension computation."""
+
+    item_ids: List[str] = field(on_setattr=frozen_attr)
+    idx: int = field(on_setattr=frozen_attr)
+    sorting: List[Dict] = field(default=[])
+
+    def to_exec_table_dimension(self) -> ExecTableDimension:
+        return ExecTableDimension(
+            item_ids=self.item_ids,
+            sorting=self.sorting,
+        )
 
 
 class ExecutionTable:
@@ -199,8 +225,12 @@ def _prepare_tabular_definition(
     attributes: list[Attribute], filters: list[Filter], metrics: list[Metric]
 ) -> ExecutionDefinition:
     dims = [
-        [a.local_id for a in attributes] if len(attributes) else None,
-        ["measureGroup"] if len(metrics) else None,
+        ExecTableDimension(
+            item_ids=[a.local_id for a in attributes] if attributes else None,
+        ),
+        ExecTableDimension(
+            item_ids=[_MEASURE_GROUP_IDENTIFIER] if metrics else None,
+        ),
     ]
 
     return ExecutionDefinition(attributes=attributes, metrics=metrics, filters=filters, dimensions=dims)
@@ -222,15 +252,6 @@ def _as_table(response: ExecutionResponse) -> ExecutionTable:
     first_page = response.read_result(offset=first_page_offset, limit=first_page_limit)
 
     return ExecutionTable(response=response, first_page=first_page)
-
-
-@frozen
-class TableDimension:
-    """Dataclass used during total and dimension computation."""
-
-    item_ids: List[str]
-    idx: int
-    sorting: Any
 
 
 @frozen
@@ -258,7 +279,188 @@ def _create_dimension(bucket: VisualizationBucket, measures_item_identifier: Opt
     return TableDimension(
         item_ids=item_ids,
         idx=_GET_DIM_INDEX_OF_BUCKET_TYPE[bucket.type],
-        sorting=None,
+    )
+
+
+def _get_dim_idx_for_predicate(
+    dims: list[TableDimension], predicate: Callable[[TableDimension], bool]
+) -> Optional[int]:
+    for dim_idx, dim in enumerate(dims):
+        if predicate(dim):
+            return dim_idx
+    return None
+
+
+@frozen
+class AttributeLocator:
+    attribute_identifier: str
+    element: str
+
+    def to_kv(self) -> tuple[str, str]:
+        return self.attribute_identifier, self.element
+
+
+@frozen
+class MeasureLocator:
+    measure_identifier: str
+
+    def to_kv(self) -> tuple[str, str]:
+        return _MEASURE_GROUP_IDENTIFIER, self.measure_identifier
+
+
+Locator = Union[AttributeLocator, MeasureLocator]
+
+
+@frozen
+class SortKeyAttribute:
+    sort_type: SortType
+    direction: SortDirection
+    attribute_identifier: str
+    attribute_sort_type: AttributeSortType
+
+    def to_dict(self) -> dict:
+        return {
+            "attribute": {
+                "attributeIdentifier": self.attribute_identifier,
+                "direction": self.direction.upper(),
+                "sortType": _ATTR_SORT_TYPE_TO_API[self.attribute_sort_type],
+            }
+        }
+
+
+@frozen
+class SortKeyValue:
+    sort_type: SortType
+    direction: SortDirection
+    measure_dim_identifier: str
+    data_column_locators: list[Locator]
+
+    def to_dict(self) -> dict:
+        locator_tuples = [locator.to_kv() for locator in self.data_column_locators]
+        return {
+            "value": {
+                "dataColumnLocators": {self.measure_dim_identifier: {k: v for k, v in locator_tuples}},
+                "direction": self.direction.upper(),
+            }
+        }
+
+
+SortKey = Union[SortKeyAttribute, SortKeyValue]
+
+
+def _create_data_col_locators(locators: list[VisualizationSortLocator]) -> list[Locator]:
+    converted_locators: list[Locator] = []
+    for locator in locators:
+        if locator.type == LocatorItemType.ATTRIBUTE:
+            converted_locators.append(
+                AttributeLocator(
+                    attribute_identifier=locator.locator["attributeIdentifier"],
+                    element=locator.locator["element"],
+                )
+            )
+        if locator.type == LocatorItemType.MEASURE:
+            converted_locators.append(
+                MeasureLocator(
+                    measure_identifier=locator.locator["measureIdentifier"],
+                )
+            )
+    return converted_locators
+
+
+def _create_dims_with_sorts(dims: list[TableDimension], sorts: list[VisualizationSort]) -> list[TableDimension]:
+    """
+    Places sorting into dimensions. Returns the same dimensions objects but with modified sorting.
+
+    Tiger does sorting differently from bear so this is somewhat more complicated than pure object conversions.
+
+    1. Sorting is now placed in the dimension that has to be sorted
+    2. When sorting by attribute (headers), then the attribute sort key must be placed into the dimension that
+       contains the attribute
+    3. When sorting by measure, we now fall back to 'bear-like' behavior: the dimension opposite to the one
+       that contains the measures will be sorted. It will be sorted using the measure (possibly scoped for
+       particular attribute values) located in the MeasureGroup dimension.
+
+    At the end, this function walks the sort items in the order defined by the user and distributes them into
+    the dimensions. The function is lenient for now and will log warnings and ignore anything weird that it
+    cannot process (e.g. measure sorting when there is no dim with MeasureGroup, or if there is only dim with
+    MeasureGroup and no other dim).
+
+    @param dims - dimensions to add sorting to
+    @param sorts - sort items defined by SDK user
+    """
+    if not sorts:
+        return dims
+
+    non_measure_dim_idx = _get_dim_idx_for_predicate(dims, lambda x: _MEASURE_GROUP_IDENTIFIER not in x.item_ids)
+    measure_dim_idx = _get_dim_idx_for_predicate(dims, lambda x: _MEASURE_GROUP_IDENTIFIER in x.item_ids)
+    measure_dim = dims[measure_dim_idx] if measure_dim_idx else None
+
+    sorting: list[list[SortKey]] = [[] for _ in dims]
+
+    for sort_item in sorts:
+        if sort_item.type == SortType.ATTRIBUTE:
+            _append_attribute_sort_key(dims, sort_item, sorting)
+        if sort_item.type == SortType.MEASURE:
+            _append_measure_sort_key(measure_dim, non_measure_dim_idx, sort_item, sorting)
+
+    return _merge_dims_with_sorting(dims, sorting)
+
+
+def _merge_dims_with_sorting(dims: list[TableDimension], sorting: list[list[SortKey]]) -> list[TableDimension]:
+    for dim in dims:
+        dim_sorting = sorting[dim.idx]
+        if dim_sorting:
+            dim.sorting = [ds.to_dict() for ds in dim_sorting]
+    return dims
+
+
+def _append_measure_sort_key(
+    measure_dim: Optional[TableDimension],
+    non_measure_dim_idx: Optional[int],
+    sort_item: VisualizationSort,
+    sorting: list[list[SortKey]],
+) -> None:
+    if non_measure_dim_idx is None:
+        logger.warning(
+            "Trying to use measure sort in an execution that only contains dimension with MeasureGroup. "
+            "This is not valid sort. Measure sort is used to sort the non-measure dimension by values "
+            "from measure dimension. Skipping."
+        )
+        return
+
+    if not measure_dim:
+        logger.warning("Trying to use measure sort in an execution that does not contain MeasureGroup. Skipping.")
+        return
+
+    sorting[non_measure_dim_idx].append(
+        SortKeyValue(
+            sort_type=sort_item.type,
+            direction=sort_item.direction,
+            measure_dim_identifier=f"dim_{measure_dim.idx}",
+            data_column_locators=_create_data_col_locators(sort_item.locators),
+        )
+    )
+
+
+def _append_attribute_sort_key(
+    dims: list[TableDimension], sort_item: VisualizationSort, sorting: list[list[SortKey]]
+) -> None:
+    dim_idx = _get_dim_idx_for_predicate(dims, lambda x: sort_item.attribute_identifier in x.item_ids)
+    if dim_idx is None:
+        log_msg = (
+            f'attempting to sort by attribute with localId "{sort_item.attribute_identifier}" '
+            "but this attribute is not in any dimension."
+        )
+        logger.warning(log_msg)
+        return
+
+    sorting[dim_idx].append(
+        SortKeyAttribute(
+            sort_type=sort_item.type,
+            direction=sort_item.direction,
+            attribute_identifier=sort_item.attribute_identifier,
+            attribute_sort_type=sort_item.attribute_sort_type,
+        )
     )
 
 
@@ -267,10 +469,11 @@ def _create_dimensions(visualization: Visualization) -> list[TableDimension]:
     measures_item_identifier = _MEASURE_GROUP_IDENTIFIER if visualization.metrics else None
     row_bucket = visualization.get_bucket_of_type(BucketType.ROWS)
     col_bucket = visualization.get_bucket_of_type(BucketType.COLS)
-    return [
+    dims = [
         _create_dimension(row_bucket),
         _create_dimension(col_bucket, measures_item_identifier),
     ]
+    return _create_dims_with_sorts(dims, visualization.sorts)
 
 
 def _marginal_total_local_identifier(total: VisualizationTotal, dim_idx: int) -> str:
@@ -516,7 +719,7 @@ def _get_exec_for_pivot(visualization: Visualization) -> ExecutionDefinition:
         attributes=[a.as_computable() for a in visualization.attributes],
         metrics=[m.as_computable() for m in visualization.metrics],
         filters=[cf for cf in [f.as_computable() for f in visualization.filters] if not cf.is_noop()],
-        dimensions=[d.item_ids for d in dimensions],
+        dimensions=[dim.to_exec_table_dimension() for dim in dimensions],
         totals=totals,
     )
 
