@@ -7,7 +7,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding="utf-8")
 
 REQUIRES = [
-    "gooddata-sdk~=1.14.0",
+    "gooddata-sdk~=1.15.0",
     "pyyaml>=5.1",
     "attrs>=21.4.0,<=23.2.0",
     "cattrs>=22.1.0,<=23.2.3",
@@ -20,7 +20,7 @@ setup(
     description="dbt plugin for GoodData",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="1.14.0",
+    version="1.15.0",
     author="GoodData",
     author_email="support@gooddata.com",
     license="MIT",
