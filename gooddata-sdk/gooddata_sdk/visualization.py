@@ -594,6 +594,10 @@ class Visualization:
             self._filters = [VisualizationFilter(f) for f in self._vo["attributes"]["content"]["filters"]]
         return self._filters
 
+    @filters.setter
+    def filters(self, filters: list[VisualizationFilter]) -> None:
+        self._filters = filters
+
     @property
     def sorts(self) -> list[VisualizationSort]:
         if self._sorts is None:
