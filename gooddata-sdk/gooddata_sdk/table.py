@@ -464,14 +464,23 @@ def _append_attribute_sort_key(
     )
 
 
+def _vis_is_transposed(visualization: Visualization) -> bool:
+    controls = visualization.properties.get("controls")
+    if not controls:
+        return False
+    return controls.get("measureGroupDimension") == "rows"
+
+
 def _create_dimensions(visualization: Visualization) -> list[TableDimension]:
-    # TODO: measures item id placement should reflect table transposition setting
     measures_item_identifier = _MEASURE_GROUP_IDENTIFIER if visualization.metrics else None
     row_bucket = visualization.get_bucket_of_type(BucketType.ROWS)
     col_bucket = visualization.get_bucket_of_type(BucketType.COLS)
+    is_transposed = _vis_is_transposed(visualization)
+    row_measure_item_identifier = measures_item_identifier if is_transposed else None
+    col_measure_item_identifier = None if is_transposed else measures_item_identifier
     dims = [
-        _create_dimension(row_bucket),
-        _create_dimension(col_bucket, measures_item_identifier),
+        _create_dimension(row_bucket, row_measure_item_identifier),
+        _create_dimension(col_bucket, col_measure_item_identifier),
     ]
     return _create_dims_with_sorts(dims, visualization.sorts)
 
