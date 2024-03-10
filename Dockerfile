@@ -26,9 +26,10 @@ RUN set -x \
   && true
 
 # install tox
-ENV PYTHON_TOX_VERSION 3.24.4
+ENV PYTHON_TOX_VERSION 4.14.0
+ENV PYTHON_TOX_UV_VERSION 1.5.1
 RUN set -x \
-  && pip3 install tox==${PYTHON_TOX_VERSION} \
+  && pip3 install tox==${PYTHON_TOX_VERSION} tox-uv==${PYTHON_TOX_UV_VERSION}\
   && true
 
 COPY .docker/entrypoint.sh /entrypoint.sh
