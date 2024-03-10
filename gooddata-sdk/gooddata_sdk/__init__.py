@@ -114,6 +114,12 @@ from gooddata_sdk.catalog.user.declarative_model.user_group import (
 )
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup
+from gooddata_sdk.catalog.user.management_model.management import (
+    CatalogDataSourcePermissionAssignment,
+    CatalogPermissionAssignments,
+    CatalogPermissionsAssignment,
+    CatalogWorkspacePermissionAssignment,
+)
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.content_service import CatalogWorkspaceContent, CatalogWorkspaceContentService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (

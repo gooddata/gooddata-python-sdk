@@ -54,6 +54,7 @@ class GoodDataApiClient:
         self._entities_api = apis.EntitiesApi(self._api_client)
         self._layout_api = apis.LayoutApi(self._api_client)
         self._actions_api = apis.ActionsApi(self._api_client)
+        self._user_management_api = apis.UserManagementApi(self._api_client)
 
     @staticmethod
     def _set_default_headers(headers: dict) -> None:
@@ -75,3 +76,7 @@ class GoodDataApiClient:
     @property
     def actions_api(self) -> apis.ActionsApi:
         return self._actions_api
+
+    @property
+    def user_management_api(self) -> apis.UserManagementApi:
+        return self._user_management_api

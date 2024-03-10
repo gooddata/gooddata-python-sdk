@@ -12,6 +12,10 @@ from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import Cat
 from gooddata_sdk.catalog.user.declarative_model.user_group import CatalogDeclarativeUserGroups
 from gooddata_sdk.catalog.user.entity_model.user import CatalogUser, CatalogUserDocument
 from gooddata_sdk.catalog.user.entity_model.user_group import CatalogUserGroup, CatalogUserGroupDocument
+from gooddata_sdk.catalog.user.management_model.management import (
+    CatalogPermissionAssignments,
+    CatalogPermissionsAssignment,
+)
 from gooddata_sdk.utils import load_all_entities, load_all_entities_dict
 
 
@@ -363,3 +367,27 @@ class CatalogUserService(CatalogServiceBase):
         """
         declarative_users_user_groups = self.load_declarative_users_user_groups(layout_root_path)
         self.put_declarative_users_user_groups(declarative_users_user_groups)
+
+    # User management use case APIs
+
+    def get_user_permissions(self, user_id: str) -> CatalogPermissionAssignments:
+        return CatalogPermissionAssignments.from_api(self._user_management_api.list_permissions_for_user(user_id))
+
+    def manage_user_permissions(self, user_id: str, permission_assignments: CatalogPermissionAssignments) -> None:
+        self._user_management_api.manage_permissions_for_user(user_id, permission_assignments.to_api())
+
+    def get_user_group_permissions(self, user_group_id: str) -> CatalogPermissionAssignments:
+        return CatalogPermissionAssignments.from_api(
+            self._user_management_api.list_permissions_for_user_group(user_group_id)
+        )
+
+    def manage_user_group_permissions(
+        self, user_group_id: str, permission_assignments: CatalogPermissionAssignments
+    ) -> None:
+        self._user_management_api.manage_permissions_for_user_group(user_group_id, permission_assignments.to_api())
+
+    def assign_permissions_bulk(self, permissions_assignment: CatalogPermissionsAssignment) -> None:
+        self._user_management_api.assign_permissions(permissions_assignment.to_api())
+
+    def revoke_permissions_bulk(self, permissions_assignment: CatalogPermissionsAssignment) -> None:
+        self._user_management_api.revoke_permissions(permissions_assignment.to_api())

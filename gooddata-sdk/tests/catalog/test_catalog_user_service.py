@@ -1,6 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 from typing import List
@@ -8,10 +9,12 @@ from typing import List
 from tests_support.vcrpy_utils import get_vcr
 
 from gooddata_sdk import (
+    CatalogAssigneeIdentifier,
     CatalogDeclarativeUser,
     CatalogDeclarativeUserGroup,
     CatalogDeclarativeUserGroups,
     CatalogDeclarativeUsersUserGroups,
+    CatalogPermissionsAssignment,
     CatalogUser,
     CatalogUserGroup,
     GoodDataApiClient,
@@ -497,6 +500,141 @@ def test_user_replace_user_groups(test_config):
     # base user without user groups
     user_2.replace_user_groups(user_groups)
     assert user_2.user_groups == user_groups
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_get_user_permissions.yaml"))
+def test_get_user_permissions(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["test_user"]
+    workspace_id = test_config["workspace"]
+    workspace_name = test_config["workspace_name"]
+    data_source_id = test_config["data_source"]
+
+    permissions = sdk.catalog_user.get_user_permissions(user_id)
+    assert len(permissions.workspaces) == 1
+    assert permissions.workspaces[0].id == workspace_id
+    assert permissions.workspaces[0].name == workspace_name
+    assert permissions.workspaces[0].permissions == ["ANALYZE"]
+    assert permissions.workspaces[0].hierarchy_permissions == ["MANAGE"]
+
+    assert len(permissions.data_sources) == 1
+    assert permissions.data_sources[0].id == data_source_id
+    assert permissions.data_sources[0].name == data_source_id
+    assert permissions.data_sources[0].permissions == ["MANAGE"]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_manage_user_permissions.yaml"))
+def test_manage_user_permissions(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["test_user"]
+
+    origin_permissions = sdk.catalog_user.get_user_permissions(user_id)
+    try:
+        new_permissions = copy.deepcopy(origin_permissions)
+        new_permissions.data_sources[0].permissions = ["USE"]
+        new_permissions.workspaces[0].permissions = ["MANAGE"]
+        sdk.catalog_user.manage_user_permissions(user_id, new_permissions)
+        updated_permissions = sdk.catalog_user.get_user_permissions(user_id)
+
+        assert updated_permissions.data_sources[0].permissions == ["USE"]
+        assert updated_permissions.workspaces[0].permissions == ["MANAGE"]
+        assert updated_permissions.workspaces[0].hierarchy_permissions == ["MANAGE"]
+    finally:
+        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_get_user_group_permissions.yaml"))
+def test_get_user_group_permissions(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    group_id = test_config["test_user_group"]
+    workspace_id = test_config["workspace"]
+    workspace_name = test_config["workspace_name"]
+    data_source_id = test_config["data_source"]
+
+    permissions = sdk.catalog_user.get_user_group_permissions(group_id)
+    assert len(permissions.workspaces) == 1
+    assert permissions.workspaces[0].id == workspace_id
+    assert permissions.workspaces[0].name == workspace_name
+    assert permissions.workspaces[0].permissions == ["VIEW"]
+    assert permissions.workspaces[0].hierarchy_permissions == ["ANALYZE"]
+
+    assert len(permissions.data_sources) == 1
+    assert permissions.data_sources[0].id == data_source_id
+    assert permissions.data_sources[0].name == data_source_id
+    assert permissions.data_sources[0].permissions == ["USE"]
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_manage_user_group_permissions.yaml"))
+def test_manage_user_group_permissions(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    group_id = test_config["test_user_group"]
+
+    origin_permissions = sdk.catalog_user.get_user_group_permissions(group_id)
+    try:
+        new_permissions = copy.deepcopy(origin_permissions)
+        new_permissions.data_sources[0].permissions = ["MANAGE"]
+        new_permissions.workspaces[0].permissions = ["VIEW"]
+        sdk.catalog_user.manage_user_group_permissions(group_id, new_permissions)
+        updated_permissions = sdk.catalog_user.get_user_group_permissions(group_id)
+
+        assert updated_permissions.data_sources[0].permissions == ["MANAGE"]
+        assert updated_permissions.workspaces[0].permissions == ["VIEW"]
+        assert updated_permissions.workspaces[0].hierarchy_permissions == ["ANALYZE"]
+    finally:
+        sdk.catalog_user.manage_user_group_permissions(group_id, origin_permissions)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_assign_permissions_bulk.yaml"))
+def test_assign_permissions_bulk(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["test_user"]
+    group_id = test_config["test_user_group"]
+
+    origin_permissions_user = sdk.catalog_user.get_user_permissions(user_id)
+    origin_permissions_user_group = sdk.catalog_user.get_user_group_permissions(group_id)
+    try:
+        permission_assignment = CatalogPermissionsAssignment(
+            assignees=[
+                CatalogAssigneeIdentifier(id=user_id, type="user"),
+                CatalogAssigneeIdentifier(id=group_id, type="userGroup"),
+            ],
+            workspaces=origin_permissions_user_group.workspaces,
+            data_sources=origin_permissions_user.data_sources,
+        )
+        sdk.catalog_user.assign_permissions_bulk(permission_assignment)
+
+        new_user_permissions = sdk.catalog_user.get_user_permissions(user_id)
+        new_group_permissions = sdk.catalog_user.get_user_permissions(user_id)
+
+        # we can compare permissions like this, because user and group have permissions to the same
+        # workspaces and data sources, we only modify permissions itself
+        assert new_group_permissions.workspaces == new_user_permissions.workspaces
+        assert new_group_permissions.data_sources == new_user_permissions.data_sources
+
+    finally:
+        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions_user)
+        sdk.catalog_user.manage_user_group_permissions(group_id, origin_permissions_user_group)
+
+
+@gd_vcr.use_cassette(str(_fixtures_dir / "test_revoke_permissions_bulk.yaml"))
+def test_revoke_permissions_bulk(test_config):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    user_id = test_config["test_user"]
+
+    origin_permissions = sdk.catalog_user.get_user_permissions(user_id)
+    try:
+        sdk.catalog_user.revoke_permissions_bulk(
+            CatalogPermissionsAssignment(
+                assignees=[CatalogAssigneeIdentifier(id=user_id, type="user")],
+                workspaces=origin_permissions.workspaces,
+                data_sources=origin_permissions.data_sources,
+            )
+        )
+        permissions = sdk.catalog_user.get_user_permissions(user_id)
+        assert len(permissions.workspaces) == 0
+        assert len(permissions.data_sources) == 0
+    finally:
+        sdk.catalog_user.manage_user_permissions(user_id, origin_permissions)
 
 
 # Help functions
