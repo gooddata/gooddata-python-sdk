@@ -71,6 +71,7 @@ class CatalogDeclarativeDataSource(Base):
     schema: str
     enable_caching: Optional[bool] = None
     cache_path: Optional[List[str]] = None
+    cache_strategy: Optional[str] = None
     username: Optional[str] = None
     parameters: Optional[List[CatalogParameter]] = None
     decoded_parameters: Optional[List[CatalogParameter]] = None

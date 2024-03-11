@@ -31,7 +31,16 @@ class CatalogDataSourceBase(Base):
         TokenCredentialsFromFile,
     ]
     _DELIMITER: ClassVar[str] = "&"
-    _ATTRIBUTES: ClassVar[List[str]] = ["enable_caching", "cache_path", "url", "parameters", "name", "type", "schema"]
+    _ATTRIBUTES: ClassVar[List[str]] = [
+        "enable_caching",
+        "cache_path",
+        "cache_strategy",
+        "url",
+        "parameters",
+        "name",
+        "type",
+        "schema",
+    ]
 
     id: str
     name: str
@@ -40,6 +49,7 @@ class CatalogDataSourceBase(Base):
     url: Optional[str] = None
     enable_caching: Optional[bool] = None
     cache_path: Optional[List[str]] = None
+    cache_strategy: Optional[str] = None
     parameters: Optional[List[Dict[str, str]]] = None
     decoded_parameters: Optional[List[Dict[str, str]]] = None
     credentials: Credentials = attr.field(repr=False)

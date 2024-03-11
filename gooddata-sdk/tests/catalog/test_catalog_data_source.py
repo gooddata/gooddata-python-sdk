@@ -508,6 +508,21 @@ def test_declarative_data_sources(test_config):
         sdk.catalog_data_source.test_data_sources_connection(data_sources_e, credentials_path)
 
 
+@gd_vcr.use_cassette(str(_fixtures_dir / "demo_cache_strategy.yaml"))
+def test_cache_strategy(test_config: dict):
+    sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
+    data_source_id = test_config["data_source"]
+
+    original = sdk.catalog_data_source.get_data_source(data_source_id=data_source_id)
+
+    try:
+        sdk.catalog_data_source.patch_data_source_attributes(data_source_id, {"cache_strategy": "NEVER"})
+        updated = sdk.catalog_data_source.get_data_source(data_source_id=data_source_id)
+        assert updated.cache_strategy == "NEVER"
+    finally:
+        sdk.catalog_data_source.create_or_update_data_source(original)
+
+
 @gd_vcr.use_cassette(str(_fixtures_dir / "demo_test_scan_model.yaml"))
 def test_scan_model(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
