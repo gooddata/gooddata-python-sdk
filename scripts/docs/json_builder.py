@@ -280,7 +280,7 @@ def parse_package(obj: ModuleType, module_name: str = None) -> dict:
         if item.name not in data:
             data[item.name] = {}
 
-        if item.ispkg:
+        if item.ispkg and item.name in vars(obj):
             data[item.name].update(parse_package(vars(obj)[item.name], module_name))
         else:
             if item.name in vars(obj):
