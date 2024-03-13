@@ -12,8 +12,8 @@ from gooddata_api_client.model.user_management_permission_assignments import Use
 from gooddata_api_client.model.user_management_workspace_permission_assignment import (
     UserManagementWorkspacePermissionAssignment,
 )
-from gooddata_sdk import CatalogAssigneeIdentifier
 from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

@@ -1,17 +1,19 @@
 # (C) 2022 GoodData Corporation
 from typing import List, Union
 
-from gooddata_sdk import (
-    CatalogAvailableAssignees,
-    CatalogDashboardPermissions,
+from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.permission.declarative_model.dashboard_assignees import CatalogAvailableAssignees
+from gooddata_sdk.catalog.permission.declarative_model.dashboard_permissions import CatalogDashboardPermissions
+from gooddata_sdk.catalog.permission.declarative_model.manage_dashboard_permissions import (
+    CatalogPermissionsForAssigneeIdentifier,
+    CatalogPermissionsForAssigneeRule,
+)
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeOrganizationPermission,
     CatalogDeclarativeWorkspacePermissions,
     CatalogOrganizationPermissionAssignment,
-    CatalogPermissionsForAssigneeIdentifier,
-    CatalogPermissionsForAssigneeRule,
-    GoodDataApiClient,
 )
-from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.client import GoodDataApiClient
 
 
 class CatalogPermissionService(CatalogServiceBase):
