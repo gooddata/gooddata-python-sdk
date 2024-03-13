@@ -16,12 +16,12 @@ from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDa
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
-from gooddata_sdk import (
+from gooddata_sdk.catalog.base import Base
+from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
+from gooddata_sdk.catalog.permission.declarative_model.permission import (
     CatalogDeclarativeDashboardPermissionsForAssignee,
     CatalogDeclarativeDashboardPermissionsForAssigneeRule,
 )
-from gooddata_sdk.catalog.base import Base
-from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import create_directory, get_sorted_yaml_files, read_layout_from_file, write_layout_to_file
 
 T = TypeVar("T", bound="CatalogAnalyticsObjectBase")

@@ -14,7 +14,6 @@ from typing import Any, Callable, Dict, List, Optional, Set
 import attrs
 
 from gooddata_api_client.exceptions import NotFoundException
-from gooddata_sdk import CatalogUserDataFilter
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (
@@ -25,7 +24,10 @@ from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import
     get_workspace_folder,
 )
 from gooddata_sdk.catalog.workspace.entity_model.content_objects.workspace_setting import CatalogWorkspaceSetting
-from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import CatalogUserDataFilterDocument
+from gooddata_sdk.catalog.workspace.entity_model.user_data_filter import (
+    CatalogUserDataFilter,
+    CatalogUserDataFilterDocument,
+)
 from gooddata_sdk.catalog.workspace.entity_model.workspace import CatalogWorkspace
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.utils import (
