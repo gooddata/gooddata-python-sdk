@@ -7,16 +7,16 @@ from warnings import warn
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
-from gooddata_sdk import (
+from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.catalog.export.request import (
     ExportCustomLabel,
     ExportCustomMetric,
     ExportCustomOverride,
     ExportRequest,
     ExportSettings,
-    GoodDataApiClient,
-    SimpleMetric,
 )
-from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
+from gooddata_sdk.client import GoodDataApiClient
+from gooddata_sdk.compute.model.metric import SimpleMetric
 from gooddata_sdk.table import ExecutionTable, TableService
 from gooddata_sdk.visualization import VisualizationService
 
