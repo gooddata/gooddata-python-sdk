@@ -7,7 +7,7 @@ from typing import Union
 
 from gooddata_sdk import AbsoluteDateFilter, Attribute, Filter, NegativeAttributeFilter, ObjId, PositiveAttributeFilter
 
-import gooddata_fdw.column_utils as column_utils
+from gooddata_fdw import column_utils
 from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.pg_logging import _log_debug, _log_info
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import gooddata_api_client.apis as apis
+from gooddata_api_client import apis
 from gooddata_api_client.model.json_api_organization_out_document import JsonApiOrganizationOutDocument
 
 from gooddata_sdk.catalog.organization.entity_model.organization import CatalogOrganization

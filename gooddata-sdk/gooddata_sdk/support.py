@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import time
 
-import gooddata_api_client.exceptions as exceptions
 import urllib3.exceptions as urllib3_ex
+from gooddata_api_client import exceptions
 
 from gooddata_sdk.client import GoodDataApiClient
 

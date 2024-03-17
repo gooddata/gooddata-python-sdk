@@ -13,8 +13,7 @@ from gooddata_sdk import (
     VisualizationMetric,
 )
 
-import gooddata_fdw.column_utils as column_utils
-import gooddata_fdw.options as options
+from gooddata_fdw import column_utils, options
 from gooddata_fdw.environment import ColumnDefinition, TableDefinition
 from gooddata_fdw.naming import (
     DefaultCatalogNamingStrategy,

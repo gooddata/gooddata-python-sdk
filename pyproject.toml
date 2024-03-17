@@ -11,10 +11,13 @@ exclude = [
 ]
 line-length = 120
 lint.select = [
-    "F",  # pyflakes
+    "E", # pycodestyle errors
+    "F", # pyflakes
     "I", # isort
-    "E", # pycodestyle
-    "W",
+    "PLR0402", # prevent unnecessary manual import aliases
+    "PLR1711", # prevent useless returns
+    "SIM2", # simplify boolean expressions
+    "W" # pycodestyle warnings
 ]
 
 [tool.ruff.lint.per-file-ignores]

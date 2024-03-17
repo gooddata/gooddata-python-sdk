@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
-import unittest.mock as mock
 from collections import OrderedDict
 from datetime import date
+from unittest import mock
 
 import pytest
 from gooddata_fdw.environment import ColumnDefinition

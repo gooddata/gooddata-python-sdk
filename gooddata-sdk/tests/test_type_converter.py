@@ -1,6 +1,6 @@
 # (C) 2021 GoodData Corporation
 import datetime
-import unittest.mock as mock
+from unittest import mock
 
 import gooddata_sdk.type_converter as conv
 import pytest
