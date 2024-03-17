@@ -32,7 +32,7 @@ format-diff:
 
 .PHONY: format-fix
 format-fix:
-	.venv/bin/ruff .
+	.venv/bin/ruff check .
 	.venv/bin/ruff format .
 	.venv/bin/isort .
 

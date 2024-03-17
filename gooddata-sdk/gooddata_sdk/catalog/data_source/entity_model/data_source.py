@@ -202,9 +202,9 @@ class SnowflakeAttributes(DatabaseAttributes):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceSnowflake(CatalogDataSource):
-    _URL_TMPL: ClassVar[
-        str
-    ] = "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
+    _URL_TMPL: ClassVar[str] = (
+        "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
+    )
     type: str = "SNOWFLAKE"
     db_specific_attributes: DatabaseAttributes
 

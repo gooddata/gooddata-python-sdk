@@ -1,6 +1,5 @@
 # (C) 2021 GoodData Corporation
-""" Module containing a class that provides access to metadata and afm services.
-"""
+"""Module containing a class that provides access to metadata and afm services."""
 
 from __future__ import annotations
 
