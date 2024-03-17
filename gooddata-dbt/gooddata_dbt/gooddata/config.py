@@ -3,6 +3,7 @@ from typing import List, Optional
 
 import attr
 import attrs
+
 from gooddata_dbt.dbt.base import Base
 
 

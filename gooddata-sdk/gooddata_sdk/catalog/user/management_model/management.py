@@ -3,7 +3,6 @@
 from typing import List, Optional, Type
 
 import attrs
-
 from gooddata_api_client.model.permissions_assignment import PermissionsAssignment
 from gooddata_api_client.model.user_management_data_source_permission_assignment import (
     UserManagementDataSourcePermissionAssignment,
@@ -12,6 +11,7 @@ from gooddata_api_client.model.user_management_permission_assignments import Use
 from gooddata_api_client.model.user_management_workspace_permission_assignment import (
     UserManagementWorkspacePermissionAssignment,
 )
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 

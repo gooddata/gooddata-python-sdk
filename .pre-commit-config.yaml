@@ -21,10 +21,6 @@ repos:
       - id: ruff
       # Run the formatter.
       - id: ruff-format
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
   - repo: local
     hooks:
       - id: copyright

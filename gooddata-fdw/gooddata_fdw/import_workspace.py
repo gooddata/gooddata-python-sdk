@@ -4,6 +4,15 @@ from __future__ import annotations
 import re
 from typing import NamedTuple, Optional, Type
 
+from gooddata_sdk import (
+    CatalogWorkspaceContent,
+    GoodDataSdk,
+    ObjId,
+    Visualization,
+    VisualizationAttribute,
+    VisualizationMetric,
+)
+
 import gooddata_fdw.column_utils as column_utils
 import gooddata_fdw.options as options
 from gooddata_fdw.environment import ColumnDefinition, TableDefinition
@@ -14,14 +23,6 @@ from gooddata_fdw.naming import (
     InsightColumnNamingStrategy,
 )
 from gooddata_fdw.pg_logging import _log_debug, _log_info, _log_warn
-from gooddata_sdk import (
-    CatalogWorkspaceContent,
-    GoodDataSdk,
-    ObjId,
-    Visualization,
-    VisualizationAttribute,
-    VisualizationMetric,
-)
 
 
 def _metric_format_to_precision(metric_format: Optional[str]) -> Optional[str]:

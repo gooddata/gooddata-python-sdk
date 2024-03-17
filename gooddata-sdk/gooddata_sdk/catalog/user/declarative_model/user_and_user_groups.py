@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import List, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_users_user_groups import DeclarativeUsersUserGroups
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUser, CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_group import (

@@ -5,7 +5,6 @@ import json
 import os
 
 import pytest
-
 from gooddata_sdk import ObjId, PopDateDataset, PopDatesetMetric, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

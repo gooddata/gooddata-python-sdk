@@ -11,10 +11,9 @@ exclude = [
 ]
 line-length = 120
 lint.select = [
-    # pyflakes
-    "F",
-    # pycodestyle
-    "E",
+    "F",  # pyflakes
+    "I", # isort
+    "E", # pycodestyle
     "W",
 ]
 
@@ -28,19 +27,6 @@ lint.select = [
 [tool.ruff.format]
 exclude = ['(gooddata-api-client|.*\.snapshot\..*)']
 
-[tool.isort]
-# make isort setup compatible with black
-profile = "black"
-multi_line_output = 3
-include_trailing_comma = true
-line_length = 120
-skip_glob = ["*/gooddata-api-client/*", "*/.snapshot/*"]
-src_paths = [
-    "gooddata-api-client",
-    "gooddata-sdk",
-    "gooddata-fdw",
-    "gooddata-pandas"
-]
 
 [tool.tbump]
 # Uncomment this if your project is hosted on GitHub:

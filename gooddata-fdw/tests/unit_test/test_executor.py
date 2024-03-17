@@ -2,10 +2,9 @@
 
 import unittest.mock as mock
 
-import pytest
-
 import gooddata_fdw.executor as executor
 import gooddata_fdw.options as options
+import pytest
 
 
 @pytest.mark.parametrize(

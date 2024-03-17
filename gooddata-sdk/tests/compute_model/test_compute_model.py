@@ -6,7 +6,6 @@ import os
 from typing import List, Optional
 
 import pytest
-
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.execution import compute_model_to_api_model

@@ -5,10 +5,11 @@ import datetime
 import re
 from typing import Union
 
+from gooddata_sdk import AbsoluteDateFilter, Attribute, Filter, NegativeAttributeFilter, ObjId, PositiveAttributeFilter
+
 import gooddata_fdw.column_utils as column_utils
 from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.pg_logging import _log_debug, _log_info
-from gooddata_sdk import AbsoluteDateFilter, Attribute, Filter, NegativeAttributeFilter, ObjId, PositiveAttributeFilter
 
 # Once AbsoluteDateFilter supports empty from/to, remove this workaround
 MIN_DATE = "0001-01-01"

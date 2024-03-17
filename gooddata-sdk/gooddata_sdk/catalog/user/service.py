@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import List
 
 from gooddata_api_client.exceptions import NotFoundException
+
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.user.declarative_model.user import CatalogDeclarativeUsers
 from gooddata_sdk.catalog.user.declarative_model.user_and_user_groups import CatalogDeclarativeUsersUserGroups

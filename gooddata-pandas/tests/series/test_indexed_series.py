@@ -1,11 +1,10 @@
 # (C) 2021 GoodData Corporation
 from pathlib import Path
 
-from numpy import float64
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_pandas import SeriesFactory
 from gooddata_sdk import PositiveAttributeFilter
+from numpy import float64
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

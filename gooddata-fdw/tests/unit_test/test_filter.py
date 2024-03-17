@@ -4,7 +4,6 @@ import datetime
 from collections import OrderedDict
 
 import pytest
-
 from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.filter import MAX_DATE, MIN_DATE, extract_filters_from_quals
 from gooddata_sdk import AbsoluteDateFilter, ObjId, PositiveAttributeFilter

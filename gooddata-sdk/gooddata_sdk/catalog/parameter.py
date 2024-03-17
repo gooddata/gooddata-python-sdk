@@ -2,8 +2,8 @@
 from typing import Type
 
 import attr
-
 from gooddata_api_client.model.parameter import Parameter
+
 from gooddata_sdk.catalog.base import Base
 
 

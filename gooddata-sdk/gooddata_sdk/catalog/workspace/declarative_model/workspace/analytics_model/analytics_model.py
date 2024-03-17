@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 import attr
 from cattrs import global_converter, structure
-
 from gooddata_api_client.model.declarative_analytical_dashboard import DeclarativeAnalyticalDashboard
 from gooddata_api_client.model.declarative_analytical_dashboard_extension import DeclarativeAnalyticalDashboardExtension
 from gooddata_api_client.model.declarative_analytics import DeclarativeAnalytics
@@ -16,6 +15,7 @@ from gooddata_api_client.model.declarative_dashboard_plugin import DeclarativeDa
 from gooddata_api_client.model.declarative_filter_context import DeclarativeFilterContext
 from gooddata_api_client.model.declarative_metric import DeclarativeMetric
 from gooddata_api_client.model.declarative_visualization_object import DeclarativeVisualizationObject
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.catalog.permission.declarative_model.permission import (

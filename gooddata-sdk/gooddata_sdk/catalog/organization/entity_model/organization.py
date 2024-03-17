@@ -4,10 +4,10 @@ from __future__ import annotations
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.json_api_organization_in import JsonApiOrganizationIn
 from gooddata_api_client.model.json_api_organization_in_attributes import JsonApiOrganizationInAttributes
 from gooddata_api_client.model.json_api_organization_in_document import JsonApiOrganizationInDocument
+
 from gooddata_sdk.catalog.base import Base
 
 

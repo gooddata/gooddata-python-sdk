@@ -2,9 +2,8 @@
 import datetime
 import unittest.mock as mock
 
-import pytest
-
 import gooddata_sdk.type_converter as conv
+import pytest
 
 
 class TestConverter:

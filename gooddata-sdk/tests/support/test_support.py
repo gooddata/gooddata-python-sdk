@@ -5,9 +5,8 @@ import time
 from pathlib import Path
 
 import pytest
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import GoodDataSdk
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

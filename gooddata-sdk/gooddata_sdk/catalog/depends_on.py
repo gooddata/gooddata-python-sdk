@@ -4,8 +4,8 @@ from __future__ import annotations
 from typing import List, Type
 
 import attr
-
 from gooddata_api_client.model.elements_request_depends_on_inner import ElementsRequestDependsOnInner
+
 from gooddata_sdk.catalog.base import Base
 
 

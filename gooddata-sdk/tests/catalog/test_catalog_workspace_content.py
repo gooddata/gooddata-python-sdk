@@ -7,8 +7,6 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import attrs
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import (
     CatalogDatasetWorkspaceDataFilterIdentifier,
     CatalogDeclarativeAnalytics,
@@ -24,6 +22,8 @@ from gooddata_sdk import (
     ObjId,
 )
 from gooddata_sdk.utils import recreate_directory
+from tests_support.vcrpy_utils import get_vcr
+
 from tests.catalog.test_catalog_workspace import _refresh_workspaces
 
 gd_vcr = get_vcr()

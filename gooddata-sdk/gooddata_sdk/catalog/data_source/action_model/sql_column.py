@@ -4,8 +4,8 @@ from __future__ import annotations
 from typing import Type
 
 import attr
-
 from gooddata_api_client.model.sql_column import SqlColumn as ApiSqlColumn
+
 from gooddata_sdk.catalog.base import Base
 
 

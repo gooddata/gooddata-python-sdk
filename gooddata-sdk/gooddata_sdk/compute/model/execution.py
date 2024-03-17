@@ -4,12 +4,12 @@ from __future__ import annotations
 import logging
 from typing import Any, List, Optional, Tuple, Union
 
+import gooddata_api_client.models as models
 from attr.setters import frozen as frozen_attr
 from attrs import define, field
-
-import gooddata_api_client.models as models
 from gooddata_api_client.model.afm import AFM
 from gooddata_api_client.model.result_spec import ResultSpec
+
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.filter import Filter

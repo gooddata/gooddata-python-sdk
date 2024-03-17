@@ -5,7 +5,6 @@ import functools
 from typing import Any, Dict, Type, Union
 
 import attr
-
 from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
 from gooddata_api_client.model.json_api_workspace_setting_in import JsonApiWorkspaceSettingIn
 from gooddata_api_client.model.json_api_workspace_setting_in_document import JsonApiWorkspaceSettingInDocument
@@ -14,6 +13,7 @@ from gooddata_api_client.model.json_api_workspace_setting_post_optional_id impor
 from gooddata_api_client.model.json_api_workspace_setting_post_optional_id_document import (
     JsonApiWorkspaceSettingPostOptionalIdDocument,
 )
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.utils import safeget
 

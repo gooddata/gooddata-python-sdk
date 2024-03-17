@@ -5,11 +5,11 @@ from typing import Any, Dict, List, Optional, Union, cast
 
 import attr
 import attrs
-
 from gooddata_api_client.model.json_api_attribute_out import JsonApiAttributeOut
 from gooddata_api_client.model.json_api_dataset_out import JsonApiDatasetOut
 from gooddata_api_client.model.json_api_fact_out import JsonApiFactOut
 from gooddata_api_client.model.json_api_label_out import JsonApiLabelOut
+
 from gooddata_sdk.catalog.entity import AttrCatalogEntity
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.compute.model.attribute import Attribute

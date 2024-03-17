@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-
 from gooddata_sdk import GoodDataSdk
 
 _current_dir = Path(__file__).parent.absolute()

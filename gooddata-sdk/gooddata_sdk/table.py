@@ -11,9 +11,14 @@ from attrs.setters import frozen as frozen_attr
 
 from gooddata_sdk.client import GoodDataApiClient
 from gooddata_sdk.compute.model.attribute import Attribute
-from gooddata_sdk.compute.model.execution import ExecutionDefinition, ExecutionResponse, ExecutionResult
+from gooddata_sdk.compute.model.execution import (
+    ExecutionDefinition,
+    ExecutionResponse,
+    ExecutionResult,
+    TotalDefinition,
+    TotalDimension,
+)
 from gooddata_sdk.compute.model.execution import TableDimension as ExecTableDimension
-from gooddata_sdk.compute.model.execution import TotalDefinition, TotalDimension
 from gooddata_sdk.compute.model.filter import Filter
 from gooddata_sdk.compute.model.metric import Metric
 from gooddata_sdk.compute.service import ComputeService

@@ -9,6 +9,8 @@ from typing import List, Optional
 
 import tabulate
 import yaml
+from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Visualization
+
 from gooddata_dbt.args import parse_arguments
 from gooddata_dbt.dbt.cloud import DbtConnection, DbtCredentials, DbtExecution
 from gooddata_dbt.dbt.profiles import DbtProfiles
@@ -18,8 +20,6 @@ from gooddata_dbt.gooddata.config import GoodDataConfig, GoodDataConfigOrganizat
 from gooddata_dbt.logger import get_logger
 from gooddata_dbt.sdk_wrapper import GoodDataSdkWrapper
 from gooddata_dbt.utils import get_duration, report_message_to_git_vendor
-
-from gooddata_sdk import CatalogDeclarativeModel, CatalogScanModelRequest, CatalogWorkspace, GoodDataSdk, Visualization
 
 # TODO - upgrade AIO, cleanup, start from scratch, test everything
 

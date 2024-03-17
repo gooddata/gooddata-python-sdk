@@ -4,7 +4,6 @@ from collections import OrderedDict
 from datetime import date
 
 import pytest
-
 from gooddata_fdw.environment import ColumnDefinition
 from gooddata_fdw.result_reader import InsightTableResultReader, TableResultReader
 

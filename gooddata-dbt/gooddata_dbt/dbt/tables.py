@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attrs
+from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
+from gooddata_sdk.utils import safeget
+
 from gooddata_dbt.dbt.base import (
     DATE_GRANULARITIES,
     DATETIME_DATA_TYPES,
@@ -20,9 +23,6 @@ from gooddata_dbt.dbt.base import (
     GoodDataSortDirection,
 )
 from gooddata_dbt.dbt.cloud import DbtConnection
-
-from gooddata_sdk import CatalogDeclarativeColumn, CatalogDeclarativeTable, CatalogDeclarativeTables
-from gooddata_sdk.utils import safeget
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

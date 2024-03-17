@@ -3,7 +3,6 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, Union, cast
 
 import pandas
 from attrs import define, field, frozen
-
 from gooddata_sdk import BareExecutionResponse, ExecutionResult, ResultCacheMetadata, ResultSizeDimensions
 
 _DEFAULT_PAGE_SIZE = 100

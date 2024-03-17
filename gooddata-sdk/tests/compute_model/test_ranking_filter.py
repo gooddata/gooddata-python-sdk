@@ -5,7 +5,6 @@ import json
 import os
 
 import pytest
-
 from gooddata_sdk import Attribute, ObjId, RankingFilter, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

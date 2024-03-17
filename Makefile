@@ -23,18 +23,15 @@ dev:
 .PHONY: format
 format:
 	.venv/bin/ruff format --check .
-	.venv/bin/isort --check .
 
 .PHONY: format-diff
 format-diff:
 	.venv/bin/ruff format --diff .
-	.venv/bin/isort --diff .
 
 .PHONY: format-fix
 format-fix:
 	.venv/bin/ruff check .
 	.venv/bin/ruff format .
-	.venv/bin/isort .
 
 
 define download_client

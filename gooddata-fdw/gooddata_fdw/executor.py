@@ -3,13 +3,14 @@ from __future__ import annotations
 
 from typing import Any, Generator, NamedTuple, Optional
 
+from gooddata_sdk import GoodDataSdk
+
 import gooddata_fdw.column_utils as column_utils
 import gooddata_fdw.column_validation as col_val
 from gooddata_fdw.environment import ColumnDefinition, Qual
 from gooddata_fdw.filter import extract_filters_from_quals
 from gooddata_fdw.options import ServerOptions, TableOptions
 from gooddata_fdw.result_reader import InsightTableResultReader, TableResultReader
-from gooddata_sdk import GoodDataSdk
 
 
 class InitData(NamedTuple):

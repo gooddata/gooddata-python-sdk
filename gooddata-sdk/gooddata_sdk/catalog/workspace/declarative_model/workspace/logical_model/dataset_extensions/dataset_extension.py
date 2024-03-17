@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import List, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_dataset_extension import DeclarativeDatasetExtension
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (
     CatalogDeclarativeWorkspaceDataFilterReferences,
