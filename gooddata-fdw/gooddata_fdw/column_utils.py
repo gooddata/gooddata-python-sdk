@@ -4,9 +4,10 @@ from __future__ import annotations
 from typing import Optional, Union
 
 import gooddata_sdk as sdk
-from gooddata_fdw.environment import ColumnDefinition
 from gooddata_sdk import Attribute, CatalogAttribute, Metric
 from gooddata_sdk.type_converter import AttributeConverterStore, Converter
+
+from gooddata_fdw.environment import ColumnDefinition
 
 
 def table_col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:

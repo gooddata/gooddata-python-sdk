@@ -2,8 +2,6 @@
 import os
 from pathlib import Path
 
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import (
     Attribute,
     ExecutionDefinition,
@@ -16,6 +14,7 @@ from gooddata_sdk import (
     SimpleMetric,
     TableDimension,
 )
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

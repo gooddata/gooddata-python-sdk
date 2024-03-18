@@ -3,8 +3,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_sdk import (
     CatalogCspDirective,
@@ -14,6 +12,7 @@ from gooddata_sdk import (
     CatalogRsaSpecification,
     GoodDataSdk,
 )
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

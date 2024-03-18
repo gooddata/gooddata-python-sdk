@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import List, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_analytical_dashboard_permission_for_assignee import (
     DeclarativeAnalyticalDashboardPermissionForAssignee,
 )
@@ -17,6 +16,7 @@ from gooddata_api_client.model.declarative_single_workspace_permission import De
 from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
 from gooddata_api_client.model.declarative_workspace_permissions import DeclarativeWorkspacePermissions
 from gooddata_api_client.model.organization_permission_assignment import OrganizationPermissionAssignment
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 from gooddata_sdk.catalog.rule import CatalogAssigneeRule

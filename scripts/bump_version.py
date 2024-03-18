@@ -1,7 +1,8 @@
 # (C) 2023 GoodData Corporation
 import sys
-import tomllib
 from pathlib import Path
+
+import tomllib
 
 _ROOT_DIR = Path(__file__).resolve().parent.parent
 

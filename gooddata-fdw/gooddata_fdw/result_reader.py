@@ -3,10 +3,11 @@ from __future__ import annotations
 
 from typing import Any, Generator
 
-import gooddata_fdw.column_validation as col_valid
-from gooddata_fdw.environment import ColumnDefinition
 from gooddata_sdk import ExecutionTable
 from gooddata_sdk.type_converter import DBTypeConverterStore
+
+import gooddata_fdw.column_validation as col_valid
+from gooddata_fdw.environment import ColumnDefinition
 
 
 class TableResultReader:

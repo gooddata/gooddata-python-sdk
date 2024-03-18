@@ -5,10 +5,10 @@ from pathlib import Path
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_user_group import DeclarativeUserGroup
 from gooddata_api_client.model.declarative_user_group_permission import DeclarativeUserGroupPermission
 from gooddata_api_client.model.declarative_user_groups import DeclarativeUserGroups
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier, CatalogDeclarativeUserGroupIdentifier
 from gooddata_sdk.utils import create_directory, read_layout_from_file, write_layout_to_file

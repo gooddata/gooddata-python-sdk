@@ -5,8 +5,17 @@ from typing import Optional, Tuple, Union
 from warnings import warn
 
 import pandas
-
 from gooddata_api_client import models
+from gooddata_sdk import (
+    Attribute,
+    BareExecutionResponse,
+    ExecutionDefinition,
+    Filter,
+    GoodDataSdk,
+    ResultCacheMetadata,
+    ResultSizeDimensions,
+)
+
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.result_convertor import (
     _DEFAULT_PAGE_SIZE,
@@ -21,15 +30,6 @@ from gooddata_pandas.utils import (
     LabelItemDef,
     _to_item,
     make_pandas_index,
-)
-from gooddata_sdk import (
-    Attribute,
-    BareExecutionResponse,
-    ExecutionDefinition,
-    Filter,
-    GoodDataSdk,
-    ResultCacheMetadata,
-    ResultSizeDimensions,
 )
 
 

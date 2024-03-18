@@ -2,12 +2,12 @@
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.dashboard_permissions import DashboardPermissions
 from gooddata_api_client.model.granted_permission import GrantedPermission
 from gooddata_api_client.model.rule_permission import RulePermission
 from gooddata_api_client.model.user_group_permission import UserGroupPermission
 from gooddata_api_client.model.user_permission import UserPermission
+
 from gooddata_sdk.catalog.base import Base
 
 

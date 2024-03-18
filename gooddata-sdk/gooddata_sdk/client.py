@@ -1,13 +1,13 @@
 # (C) 2021 GoodData Corporation
-""" Module containing a class that provides access to metadata and afm services.
-"""
+"""Module containing a class that provides access to metadata and afm services."""
 
 from __future__ import annotations
 
 from typing import Optional
 
 import gooddata_api_client as api_client
-import gooddata_api_client.apis as apis
+from gooddata_api_client import apis
+
 from gooddata_sdk import __version__
 
 USER_AGENT = f"gooddata-python-sdk/{__version__}"

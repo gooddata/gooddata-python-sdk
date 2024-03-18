@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.data_source_table_identifier import DataSourceTableIdentifier
 from gooddata_api_client.model.declarative_attribute import DeclarativeAttribute
 from gooddata_api_client.model.declarative_dataset import DeclarativeDataset
@@ -15,6 +14,7 @@ from gooddata_api_client.model.declarative_label import DeclarativeLabel
 from gooddata_api_client.model.declarative_reference import DeclarativeReference
 from gooddata_api_client.model.declarative_reference_source import DeclarativeReferenceSource
 from gooddata_api_client.model.declarative_workspace_data_filter_column import DeclarativeWorkspaceDataFilterColumn
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogGrainIdentifier, CatalogLabelIdentifier, CatalogReferenceIdentifier
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.logical_model.data_filter_references import (

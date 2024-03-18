@@ -7,6 +7,7 @@ from typing import List, Optional
 from gooddata_api_client.exceptions import NotFoundException
 from gooddata_api_client.model.json_api_csp_directive_in_document import JsonApiCspDirectiveInDocument
 from gooddata_api_client.model.json_api_organization_setting_in_document import JsonApiOrganizationSettingInDocument
+
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.organization.entity_model.directive import CatalogCspDirective
 from gooddata_sdk.catalog.organization.entity_model.jwk import CatalogJwk, CatalogJwkDocument

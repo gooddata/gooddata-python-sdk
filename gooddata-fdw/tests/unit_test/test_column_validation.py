@@ -1,7 +1,6 @@
 # (C) 2022 GoodData Corporation
-import pytest
-
 import gooddata_fdw.column_validation as col_val
+import pytest
 from gooddata_fdw.environment import ColumnDefinition
 
 

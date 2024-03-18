@@ -3,9 +3,9 @@ import argparse
 from logging import Logger
 from typing import List, Optional
 
-from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
-
 from gooddata_sdk import GoodDataSdk
+
+from gooddata_dbt.gooddata.api_wrapper import GoodDataApiWrapper
 
 
 class GoodDataSdkWrapper:

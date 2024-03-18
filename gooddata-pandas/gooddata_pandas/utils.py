@@ -6,8 +6,6 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 import pandas
-from pandas import Index, MultiIndex
-
 from gooddata_sdk import (
     Attribute,
     CatalogAttribute,
@@ -18,6 +16,7 @@ from gooddata_sdk import (
     VisualizationMetric,
 )
 from gooddata_sdk.type_converter import AttributeConverterStore, DateConverter, DatetimeConverter, IntegerConverter
+from pandas import Index, MultiIndex
 
 LabelItemDef = Union[Attribute, ObjId, str]
 DataItemDef = Union[Attribute, Metric, ObjId, str]

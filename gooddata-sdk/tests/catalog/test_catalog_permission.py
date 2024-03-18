@@ -6,8 +6,6 @@ from pathlib import Path
 from typing import List
 
 import pytest
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
     CatalogAssigneeRule,
@@ -23,6 +21,7 @@ from gooddata_sdk import (
     GoodDataApiClient,
     GoodDataSdk,
 )
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

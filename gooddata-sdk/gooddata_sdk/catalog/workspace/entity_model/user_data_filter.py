@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional, Type, Union
 
 import attr
-
 from gooddata_api_client.model.json_api_user_data_filter_in import JsonApiUserDataFilterIn
 from gooddata_api_client.model.json_api_user_data_filter_in_attributes import JsonApiUserDataFilterInAttributes
 from gooddata_api_client.model.json_api_user_data_filter_in_document import JsonApiUserDataFilterInDocument
@@ -13,6 +12,7 @@ from gooddata_api_client.model.json_api_user_data_filter_post_optional_id import
 from gooddata_api_client.model.json_api_user_data_filter_post_optional_id_document import (
     JsonApiUserDataFilterPostOptionalIdDocument,
 )
+
 from gooddata_sdk.catalog.base import Base
 
 

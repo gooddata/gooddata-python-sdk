@@ -2,8 +2,8 @@
 from typing import List, Type
 
 import attr
-
 from gooddata_api_client.model.manage_dashboard_permissions_request_inner import ManageDashboardPermissionsRequestInner
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogAssigneeIdentifier
 from gooddata_sdk.catalog.rule import CatalogAssigneeRule

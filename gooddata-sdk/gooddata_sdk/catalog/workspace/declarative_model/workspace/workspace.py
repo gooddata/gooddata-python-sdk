@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
 from gooddata_api_client.model.declarative_user_data_filters import DeclarativeUserDataFilters
 from gooddata_api_client.model.declarative_workspace import DeclarativeWorkspace
@@ -15,6 +14,7 @@ from gooddata_api_client.model.declarative_workspace_data_filter_setting import 
 from gooddata_api_client.model.declarative_workspace_data_filters import DeclarativeWorkspaceDataFilters
 from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
 from gooddata_api_client.model.declarative_workspaces import DeclarativeWorkspaces
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import (
     CatalogDeclarativeUserGroupIdentifier,

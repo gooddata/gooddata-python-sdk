@@ -4,13 +4,14 @@ from __future__ import annotations
 import traceback
 from typing import Any, Optional
 
+from gooddata_sdk import GoodDataSdk
+
 from gooddata_fdw import __version__
 from gooddata_fdw.environment import ColumnDefinition, ForeignDataWrapper, Qual, TableDefinition
 from gooddata_fdw.executor import ExecutorFactory, InitData
 from gooddata_fdw.import_workspace import ImporterInitData, WorkspaceImportersLocator
 from gooddata_fdw.options import ImportSchemaOptions, ServerOptions, TableOptions
 from gooddata_fdw.pg_logging import _log_debug, _log_error, _log_info
-from gooddata_sdk import GoodDataSdk
 
 USER_AGENT = f"gooddata-fdw/{__version__}"
 """Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""

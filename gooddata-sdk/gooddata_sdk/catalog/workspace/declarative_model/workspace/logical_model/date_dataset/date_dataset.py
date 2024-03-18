@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_date_dataset import DeclarativeDateDataset
 from gooddata_api_client.model.granularities_formatting import GranularitiesFormatting
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.utils import read_layout_from_file, write_layout_to_file
 

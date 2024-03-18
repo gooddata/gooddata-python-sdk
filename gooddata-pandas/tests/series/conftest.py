@@ -1,6 +1,5 @@
 # (C) 2021 GoodData Corporation
 import pytest
-
 from gooddata_pandas import GoodPandas, SeriesFactory
 
 

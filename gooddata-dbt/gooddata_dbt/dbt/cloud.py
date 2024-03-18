@@ -10,10 +10,10 @@ import attrs
 import requests
 import yaml
 from cattrs import structure
-from gooddata_dbt.dbt.environment import DbtCloudEnvironment
+from gooddata_sdk.utils import safeget
 from requests import Response
 
-from gooddata_sdk.utils import safeget
+from gooddata_dbt.dbt.environment import DbtCloudEnvironment
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

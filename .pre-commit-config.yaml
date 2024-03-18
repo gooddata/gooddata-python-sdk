@@ -15,16 +15,12 @@ repos:
         args: [ '--maxkb=890' ]
       - id: check-case-conflict
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.2.2
+    rev: v0.3.3
     hooks:
       # Run the linter.
       - id: ruff
       # Run the formatter.
       - id: ruff-format
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
   - repo: local
     hooks:
       - id: copyright

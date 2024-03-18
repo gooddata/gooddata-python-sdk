@@ -7,9 +7,6 @@ from unittest import mock
 from unittest.mock import MagicMock
 
 import pytest
-from tests_support.file_utils import load_json
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
 from gooddata_sdk import (
     BasicCredentials,
@@ -44,6 +41,8 @@ from gooddata_sdk import (
     TokenCredentialsFromFile,
     VerticaAttributes,
 )
+from tests_support.file_utils import load_json
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 
