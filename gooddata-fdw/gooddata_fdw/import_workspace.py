@@ -4,16 +4,6 @@ from __future__ import annotations
 import re
 from typing import NamedTuple, Optional, Type
 
-import gooddata_fdw.column_utils as column_utils
-import gooddata_fdw.options as options
-from gooddata_fdw.environment import ColumnDefinition, TableDefinition
-from gooddata_fdw.naming import (
-    DefaultCatalogNamingStrategy,
-    DefaultInsightColumnNaming,
-    DefaultInsightTableNaming,
-    InsightColumnNamingStrategy,
-)
-from gooddata_fdw.pg_logging import _log_debug, _log_info, _log_warn
 from gooddata_sdk import (
     CatalogWorkspaceContent,
     GoodDataSdk,
@@ -22,6 +12,16 @@ from gooddata_sdk import (
     VisualizationAttribute,
     VisualizationMetric,
 )
+
+from gooddata_fdw import column_utils, options
+from gooddata_fdw.environment import ColumnDefinition, TableDefinition
+from gooddata_fdw.naming import (
+    DefaultCatalogNamingStrategy,
+    DefaultInsightColumnNaming,
+    DefaultInsightTableNaming,
+    InsightColumnNamingStrategy,
+)
+from gooddata_fdw.pg_logging import _log_debug, _log_info, _log_warn
 
 
 def _metric_format_to_precision(metric_format: Optional[str]) -> Optional[str]:

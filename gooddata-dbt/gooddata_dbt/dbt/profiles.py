@@ -7,8 +7,6 @@ from urllib.parse import quote_plus
 
 import attrs
 import yaml
-from gooddata_dbt.dbt.base import Base
-
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,
@@ -18,6 +16,8 @@ from gooddata_sdk import (
     SnowflakeAttributes,
     VerticaAttributes,
 )
+
+from gooddata_dbt.dbt.base import Base
 
 
 @attrs.define(auto_attribs=True, kw_only=True)

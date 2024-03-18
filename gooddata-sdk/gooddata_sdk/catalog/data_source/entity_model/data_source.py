@@ -5,13 +5,13 @@ from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type, TypeVar
 
 import attr
 from cattrs import structure
-
 from gooddata_api_client.model.json_api_data_source_in import JsonApiDataSourceIn
 from gooddata_api_client.model.json_api_data_source_in_attributes import JsonApiDataSourceInAttributes
 from gooddata_api_client.model.json_api_data_source_in_document import JsonApiDataSourceInDocument
 from gooddata_api_client.model.json_api_data_source_patch import JsonApiDataSourcePatch
 from gooddata_api_client.model.json_api_data_source_patch_attributes import JsonApiDataSourcePatchAttributes
 from gooddata_api_client.model.json_api_data_source_patch_document import JsonApiDataSourcePatchDocument
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 from gooddata_sdk.catalog.entity import BasicCredentials, Credentials, TokenCredentials, TokenCredentialsFromFile
 
@@ -202,9 +202,9 @@ class SnowflakeAttributes(DatabaseAttributes):
 
 @attr.s(auto_attribs=True, kw_only=True)
 class CatalogDataSourceSnowflake(CatalogDataSource):
-    _URL_TMPL: ClassVar[
-        str
-    ] = "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
+    _URL_TMPL: ClassVar[str] = (
+        "jdbc:{db_vendor}://{account}.snowflakecomputing.com:{port}?warehouse={warehouse}&db={db_name}"
+    )
     type: str = "SNOWFLAKE"
     db_specific_attributes: DatabaseAttributes
 

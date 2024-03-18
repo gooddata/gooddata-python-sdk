@@ -5,9 +5,9 @@ import json
 import os
 
 import pytest
-
 from gooddata_sdk import Visualization
 from gooddata_sdk.compute.model.execution import compute_model_to_api_model
+
 from tests.visualization.fixtures import load_vis_obj
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))

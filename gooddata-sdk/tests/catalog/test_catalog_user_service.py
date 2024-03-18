@@ -6,8 +6,6 @@ import json
 from pathlib import Path
 from typing import List
 
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import (
     CatalogAssigneeIdentifier,
     CatalogDeclarativeUser,
@@ -21,6 +19,7 @@ from gooddata_sdk import (
     GoodDataSdk,
 )
 from gooddata_sdk.utils import recreate_directory
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

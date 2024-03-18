@@ -15,6 +15,7 @@ from gooddata_api_client.models import PositiveAttributeFilterPositiveAttributeF
 from gooddata_api_client.models import RangeMeasureValueFilterRangeMeasureValueFilter as RangeMeasureValueFilterBody
 from gooddata_api_client.models import RankingFilterRankingFilter as RankingFilterBody
 from gooddata_api_client.models import RelativeDateFilterRelativeDateFilter as RelativeDateFilterBody
+
 from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import Filter, ObjId
 from gooddata_sdk.compute.model.metric import Metric

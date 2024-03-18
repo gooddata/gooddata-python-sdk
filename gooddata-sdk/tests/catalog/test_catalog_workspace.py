@@ -6,8 +6,6 @@ from pathlib import Path
 from typing import List
 
 import yaml
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_sdk import (
     BasicCredentials,
     CatalogDataSourcePostgres,
@@ -25,6 +23,8 @@ from gooddata_sdk import (
 )
 from gooddata_sdk.catalog.identifier import CatalogUserIdentifier
 from gooddata_sdk.utils import recreate_directory
+from tests_support.vcrpy_utils import get_vcr
+
 from tests.catalog.utils import _refresh_workspaces
 
 gd_vcr = get_vcr()

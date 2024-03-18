@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Type
 
 import attr
-
 from gooddata_api_client.model.assignee_identifier import AssigneeIdentifier
 from gooddata_api_client.model.dataset_workspace_data_filter_identifier import DatasetWorkspaceDataFilterIdentifier
 from gooddata_api_client.model.declarative_user_group_identifier import DeclarativeUserGroupIdentifier
@@ -13,6 +12,7 @@ from gooddata_api_client.model.grain_identifier import GrainIdentifier
 from gooddata_api_client.model.label_identifier import LabelIdentifier
 from gooddata_api_client.model.reference_identifier import ReferenceIdentifier
 from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 

@@ -1,11 +1,9 @@
 # (C) 2022 GoodData Corporation
 
-import unittest.mock as mock
+from unittest import mock
 
 import pytest
-
-import gooddata_fdw.executor as executor
-import gooddata_fdw.options as options
+from gooddata_fdw import executor, options
 
 
 @pytest.mark.parametrize(

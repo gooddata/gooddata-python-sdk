@@ -4,8 +4,8 @@ from __future__ import annotations
 from typing import Any, Optional
 
 import attr
-
 from gooddata_api_client.model.json_api_metric_out import JsonApiMetricOut
+
 from gooddata_sdk.catalog.entity import AttrCatalogEntity
 from gooddata_sdk.compute.model.metric import Metric, SimpleMetric
 from gooddata_sdk.utils import safeget

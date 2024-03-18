@@ -4,10 +4,10 @@ from __future__ import annotations
 from typing import List, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.generate_ldm_request import GenerateLdmRequest
 from gooddata_api_client.model.pdm_ldm_request import PdmLdmRequest
 from gooddata_api_client.model.pdm_sql import PdmSql
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.data_source.action_model.sql_column import SqlColumn
 from gooddata_sdk.catalog.data_source.declarative_model.physical_model.table import CatalogDeclarativeTable

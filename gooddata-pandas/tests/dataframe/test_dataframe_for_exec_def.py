@@ -2,8 +2,6 @@
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-from tests_support.vcrpy_utils import get_vcr
-
 from gooddata_pandas import DataFrameFactory
 from gooddata_sdk import (
     Attribute,
@@ -16,6 +14,7 @@ from gooddata_sdk import (
     TotalDefinition,
     TotalDimension,
 )
+from tests_support.vcrpy_utils import get_vcr
 
 gd_vcr = get_vcr()
 

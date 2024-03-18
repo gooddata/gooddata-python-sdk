@@ -12,8 +12,8 @@ from time import time
 from typing import Any, Callable, Dict, List, Optional, Set
 
 import attrs
-
 from gooddata_api_client.exceptions import NotFoundException
+
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.workspace import (

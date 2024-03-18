@@ -2,12 +2,12 @@
 from typing import Dict, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.custom_label import CustomLabel as ApiCustomLabel
 from gooddata_api_client.model.custom_metric import CustomMetric as ApiCustomMetric
 from gooddata_api_client.model.custom_override import CustomOverride as ApiCustomOverride
 from gooddata_api_client.model.settings import Settings as ApiSettings
 from gooddata_api_client.model.tabular_export_request import TabularExportRequest
+
 from gooddata_sdk.catalog.base import Base
 
 

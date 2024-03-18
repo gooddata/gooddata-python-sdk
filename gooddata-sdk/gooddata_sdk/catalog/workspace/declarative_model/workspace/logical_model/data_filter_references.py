@@ -2,10 +2,10 @@
 from typing import Type
 
 import attr
-
 from gooddata_api_client.model.declarative_workspace_data_filter_references import (
     DeclarativeWorkspaceDataFilterReferences,
 )
+
 from gooddata_sdk.catalog.base import Base
 from gooddata_sdk.catalog.identifier import CatalogDatasetWorkspaceDataFilterIdentifier
 

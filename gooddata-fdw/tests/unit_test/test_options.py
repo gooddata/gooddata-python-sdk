@@ -1,8 +1,7 @@
 # (C) 2022 GoodData Corporation
 
 import pytest
-
-import gooddata_fdw.options as options
+from gooddata_fdw import options
 
 
 class DummyOk(options.BaseOptions):

@@ -4,8 +4,8 @@ from __future__ import annotations
 from typing import Type
 
 import attr
-
 from gooddata_api_client.model.assignee_rule import AssigneeRule
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 

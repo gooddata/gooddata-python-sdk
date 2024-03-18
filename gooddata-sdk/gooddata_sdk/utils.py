@@ -10,9 +10,9 @@ from shutil import rmtree
 from typing import Any, Callable, Dict, List, NamedTuple, Tuple, Union, cast, no_type_check
 
 import yaml
-
 from gooddata_api_client import ApiAttributeError
 from gooddata_api_client.model_utils import OpenApiModel
+
 from gooddata_sdk.compute.model.base import ObjId
 
 # Use typing collection types to support python < py3.9

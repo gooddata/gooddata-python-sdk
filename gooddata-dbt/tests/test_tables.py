@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Dict, Union
 
 from gooddata_dbt.dbt.tables import DbtModelTables
-
 from gooddata_sdk import CatalogDeclarativeModel, CatalogDeclarativeTables
 
 _CURR_DIR = Path(__file__).parent

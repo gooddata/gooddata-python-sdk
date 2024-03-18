@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, List, Optional, Tuple
 
 from gooddata_api_client.exceptions import NotFoundException
+
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.action_model.requests.ldm_request import (
     CatalogGenerateLdmRequest,

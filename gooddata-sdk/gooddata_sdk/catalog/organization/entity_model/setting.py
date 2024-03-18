@@ -4,9 +4,9 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.json_api_organization_setting_in import JsonApiOrganizationSettingIn
 from gooddata_api_client.model.json_api_organization_setting_in_attributes import JsonApiOrganizationSettingInAttributes
+
 from gooddata_sdk.catalog.base import Base
 
 

@@ -3,8 +3,6 @@ import logging
 from pathlib import Path
 from typing import Any, List, Union
 
-from gooddata_dbt.gooddata.config import GoodDataConfigLocalizationTo, GoodDataConfigProduct
-
 from gooddata_sdk import (
     CatalogDataSourcePostgres,
     CatalogDataSourceSnowflake,
@@ -19,6 +17,8 @@ from gooddata_sdk import (
     GoodDataSdk,
     Visualization,
 )
+
+from gooddata_dbt.gooddata.config import GoodDataConfigLocalizationTo, GoodDataConfigProduct
 
 DataSource = Union[CatalogDataSourcePostgres, CatalogDataSourceSnowflake, CatalogDataSourceVertica]
 

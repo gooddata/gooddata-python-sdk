@@ -11,6 +11,7 @@ present (likely during test run) it will use stub implementations.
 The stubbing only happens if the FDW code is called during test execution. Otherwise the import error is raised
 as usual to prevent some wicked behavior on mis-configured PostgreSQL.
 """
+
 from __future__ import annotations
 
 from typing import Any, Optional, Union

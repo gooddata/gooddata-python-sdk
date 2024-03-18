@@ -4,11 +4,12 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
+from gooddata_sdk import GoodDataSdk
+from gooddata_sdk.utils import PROFILES_FILE_PATH, good_pandas_profile_content
+
 from gooddata_pandas import __version__
 from gooddata_pandas.dataframe import DataFrameFactory
 from gooddata_pandas.series import SeriesFactory
-from gooddata_sdk import GoodDataSdk
-from gooddata_sdk.utils import PROFILES_FILE_PATH, good_pandas_profile_content
 
 USER_AGENT = f"gooddata-pandas/{__version__}"
 """Extra segment of the User-Agent header that will be appended to standard gooddata-sdk user agent."""

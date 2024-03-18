@@ -3,15 +3,6 @@ from __future__ import annotations
 
 from typing import Any, Optional, Union
 
-from gooddata_pandas.utils import (
-    ColumnsDef,
-    IndexDef,
-    LabelItemDef,
-    _str_to_obj_id,
-    _to_attribute,
-    _to_item,
-    _typed_attribute_value,
-)
 from gooddata_sdk import (
     Attribute,
     AttributeFilter,
@@ -24,6 +15,16 @@ from gooddata_sdk import (
     MetricValueFilter,
     ObjId,
     TableDimension,
+)
+
+from gooddata_pandas.utils import (
+    ColumnsDef,
+    IndexDef,
+    LabelItemDef,
+    _str_to_obj_id,
+    _to_attribute,
+    _to_item,
+    _typed_attribute_value,
 )
 
 

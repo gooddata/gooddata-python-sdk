@@ -4,10 +4,10 @@ from __future__ import annotations
 from typing import Optional, Union
 
 import pandas
+from gooddata_sdk import Attribute, Filter, GoodDataSdk, ObjId, SimpleMetric
 
 from gooddata_pandas.data_access import compute_and_extract
 from gooddata_pandas.utils import IndexDef, LabelItemDef, make_pandas_index
-from gooddata_sdk import Attribute, Filter, GoodDataSdk, ObjId, SimpleMetric
 
 
 class SeriesFactory:

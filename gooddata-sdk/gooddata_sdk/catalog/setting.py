@@ -4,9 +4,9 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Type
 
 import attr
-
 from gooddata_api_client.model.declarative_custom_application_setting import DeclarativeCustomApplicationSetting
 from gooddata_api_client.model.declarative_setting import DeclarativeSetting
+
 from gooddata_sdk.catalog.base import Base, value_in_allowed
 
 
