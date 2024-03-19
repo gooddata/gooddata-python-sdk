@@ -2,7 +2,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from importlib.util import find_spec
 from typing import Optional, Union
+
+if find_spec("icu") is not None:
+    from icu import Locale, SimpleDateFormat  # type: ignore[import-not-found]
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
@@ -22,6 +26,29 @@ from gooddata_sdk.compute.model.metric import Metric
 
 _DATE_FORMAT_INPUT = "%Y-%m-%d"
 _DATE_FORMAT_OUTPUT = "%-m/%-d/%Y"
+
+# input ICU format of date filters from datepicker
+_ICU_DATE_FORMAT_INPUT = "y-M-d HH:mm"
+
+# predefined default localized ICU date formats for date filters
+#   taken from UI SDK:
+#   https://github.com/gooddata/gooddata-ui-sdk/blob/master/libs/sdk-ui-filters/src/DateFilter/utils/FormattingUtils.ts
+_ICU_LOCALIZED_DATE_FORMAT_PATTERNS = {
+    "en-US": "M/d/y",
+    "en-GB": "dd/MM/y",
+    "cs-CZ": "d. M. y",
+    "de-DE": "d.M.y",
+    "es-ES": "d/M/y",
+    "fr-FR": "dd/MM/y",
+    "ja-JP": "y/M/d",
+    "nl-NL": "d-M-y",
+    "pt-BR": "dd/MM/y",
+    "pt-PT": "dd/MM/y",
+    "zh-Hans": "y/M/d",
+    "ru-RU": "dd.MM.y",
+    "it-IT": "dd/MM/y",
+}
+
 _METRIC_VALUE_FILTER_OPERATOR_LABEL = {
     "EQUAL_TO": "=",
     "GREATER_THAN": ">",
@@ -83,7 +110,7 @@ class PositiveAttributeFilter(AttributeFilter):
         body = PositiveAttributeFilterBody(label=label_id, _in=elements, _check_type=False)
         return afm_models.PositiveAttributeFilter(body, _check_type=False)
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
@@ -99,7 +126,7 @@ class NegativeAttributeFilter(AttributeFilter):
         body = NegativeAttributeFilterBody(label=label_id, not_in=elements, _check_type=False)
         return afm_models.NegativeAttributeFilter(body)
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         label_id = self.label.id if isinstance(self.label, ObjId) else self.label
         values = "All except " + ", ".join(self.values) if len(self.values) else "All"
         return f"{labels.get(label_id, label_id)}: {values}"
@@ -169,7 +196,7 @@ class RelativeDateFilter(Filter):
         )
         return afm_models.RelativeDateFilter(body)
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         # TODO compare with other period is not implemented as it's not defined in the filter but in measures
         from_shift = self.from_shift
         to_shift = self.to_shift
@@ -232,7 +259,7 @@ class AllTimeFilter(Filter):
     def is_noop(self) -> bool:
         return True
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         return f"{labels.get(self.dataset.id, self.dataset.id)}: All time"
 
 
@@ -276,11 +303,22 @@ class AbsoluteDateFilter(Filter):
             and self._to_date == other._to_date
         )
 
-    def description(self, labels: dict[str, str]) -> str:
-        # TODO long-term this should reflect locales once requested
-        from_date = datetime.strptime(self.from_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(_DATE_FORMAT_OUTPUT)
-        to_date = datetime.strptime(self.to_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(_DATE_FORMAT_OUTPUT)
-        return f"{labels.get(self.dataset.id, self.dataset.id)}: {from_date} - {to_date}"
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+        if format_locale is not None and find_spec("icu") is not None:
+            src_parser = SimpleDateFormat(_ICU_DATE_FORMAT_INPUT)
+            dest_formatter = SimpleDateFormat(
+                _ICU_LOCALIZED_DATE_FORMAT_PATTERNS.get(format_locale, _ICU_LOCALIZED_DATE_FORMAT_PATTERNS["en-US"]),
+                Locale.createCanonical(format_locale),
+            )
+            from_date = dest_formatter.format(src_parser.parse(self.from_date))
+            to_date = dest_formatter.format(src_parser.parse(self.to_date))
+            return f"{labels.get(self.dataset.id, self.dataset.id)}: {from_date} - {to_date}"
+        else:
+            from_date = datetime.strptime(self.from_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(
+                _DATE_FORMAT_OUTPUT
+            )
+            to_date = datetime.strptime(self.to_date.split(" ")[0], _DATE_FORMAT_INPUT).strftime(_DATE_FORMAT_OUTPUT)
+            return f"{labels.get(self.dataset.id, self.dataset.id)}: {from_date} - {to_date}"
 
 
 _METRIC_VALUE_FILTER_OPERATORS = {
@@ -375,7 +413,7 @@ class MetricValueFilter(Filter):
             body = RangeMeasureValueFilterBody(**kwargs)
             return afm_models.RangeMeasureValueFilter(body)
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
         if self.operator in ["BETWEEN", "NOT_BETWEEN"] and len(self.values) == 2:
             not_between = "not" if self.operator == "NOT_BETWEEN" else ""
@@ -440,7 +478,7 @@ class RankingFilter(Filter):
         )
         return afm_models.RankingFilter(body)
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         # TODO more metrics and dimensions not supported now as it's not supported on FE as well
         dimensionality_ids = (
             [d.id if isinstance(d, ObjId) else d for d in self.dimensionality] if self.dimensionality else []

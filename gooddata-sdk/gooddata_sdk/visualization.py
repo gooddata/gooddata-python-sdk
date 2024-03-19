@@ -671,8 +671,8 @@ class Visualization:
                         formats[item_values["localIdentifier"]] = item_values["format"]
         return labels, formats
 
-    def get_filters_description(self, labels: dict[str, str]) -> list[str]:
-        return [f.as_computable().description(labels) for f in self.filters]
+    def get_filters_description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> list[str]:
+        return [f.as_computable().description(labels, format_locale) for f in self.filters]
 
     def __str__(self) -> str:
         return self.__repr__()
