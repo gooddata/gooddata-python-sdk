@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import os
+from importlib.util import find_spec
 
 import pytest
 from gooddata_sdk import AbsoluteDateFilter, AllTimeFilter, ObjId, RelativeDateFilter
@@ -26,7 +27,10 @@ test_filters = [
             from_date="2021-07-01 18:23",
             to_date="2021-07-16 18:23",
         ),
-        "DataSet ID: 7/1/2021 - 7/16/2021",
+        {
+            "default": "DataSet ID: 7/1/2021 - 7/16/2021",
+            "cs-CZ": "DataSet ID: 1. 7. 2021 - 16. 7. 2021",
+        },
     ],
     [
         "relative date filter",
@@ -36,7 +40,9 @@ test_filters = [
             from_shift=-10,
             to_shift=-1,
         ),
-        "DataSet ID: From 10 days to 1 day ago",
+        {
+            "default": "DataSet ID: From 10 days to 1 day ago",
+        },
     ],
 ]
 
@@ -53,9 +59,16 @@ def test_date_filters_to_api_model(scenario, filter, snapshot):
     )
 
 
-@pytest.mark.parametrize("scenario,filter,description", test_filters)
-def test_date_filters_description(scenario, filter, description):
-    assert filter.description(description_labels) == description
+@pytest.mark.parametrize("scenario,filter,descriptions", test_filters)
+def test_date_filters_description(scenario, filter, descriptions):
+    for locale, description in descriptions.items():
+        if locale == "default":
+            assert filter.description(description_labels) == description
+        else:
+            if find_spec("icu"):
+                assert filter.description(description_labels, format_locale=locale) == description
+            else:
+                pytest.skip("ICU library not found")
 
 
 def test_cannot_create_api_model_from_all_time_filter():

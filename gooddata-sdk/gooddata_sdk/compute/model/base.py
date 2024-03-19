@@ -1,7 +1,7 @@
 # (C) 2022 GoodData Corporation
 from __future__ import annotations
 
-from typing import Union
+from typing import Optional, Union
 
 import gooddata_api_client.models as afm_models
 from gooddata_api_client.model_utils import OpenApiModel
@@ -86,11 +86,12 @@ class Filter(ExecModelEntity):
     def as_api_model(self) -> OpenApiModel:
         raise NotImplementedError()
 
-    def description(self, labels: dict[str, str]) -> str:
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
         """
         Description of the filter as it's visible for customer in UI.
 
         :param labels: Dict of labels in a form of `id: label`. Measures and attributes are expected to be here.
+        :param format_locale: Locale ICU format to use for dates formatting in the description (ie. "en-US" or "cs-CZ")
         :return: Filter's human-readable description
         """
         raise NotImplementedError()
