@@ -11,7 +11,7 @@ from gooddata_api_client.model.elements_request import ElementsRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.data_source.validation.data_source import DataSourceValidator
-from gooddata_sdk.catalog.depends_on import CatalogDependsOn
+from gooddata_sdk.catalog.depends_on import CatalogDependsOn, CatalogDependsOnDateFilter
 from gooddata_sdk.catalog.types import ValidObjects
 from gooddata_sdk.catalog.validate_by_item import CatalogValidateByItem
 from gooddata_sdk.catalog.workspace.declarative_model.workspace.analytics_model.analytics_model import (
@@ -44,6 +44,8 @@ ValidObjectTypes = Union[Attribute, Metric, Filter, CatalogLabel, CatalogFact, C
 ValidObjectsInputType = Union[ValidObjectTypes, List[ValidObjectTypes], ExecutionDefinition]
 
 LabelElementsInputType = Union[str, ObjId]
+
+DependsOnItem = Union[CatalogDependsOn, CatalogDependsOnDateFilter]
 
 
 class CatalogWorkspaceContentService(CatalogServiceBase):
@@ -559,7 +561,7 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
         self,
         workspace_id: str,
         label_id: LabelElementsInputType,
-        depends_on: Optional[List[CatalogDependsOn]] = None,
+        depends_on: Optional[List[DependsOnItem]] = None,
         validate_by: Optional[List[CatalogValidateByItem]] = None,
     ) -> List[str]:
         """
@@ -573,8 +575,8 @@ class CatalogWorkspaceContentService(CatalogServiceBase):
             label_id (str):
                 Label ID. We support string or ObjId types.
                 String may not contain "label/" prefix, we append it if necessary.
-            depends_on (Optional[List[CatalogDependsOn]]):
-                Optional parameter specifying dependencies on other labels.
+            depends_on (Optional[List[DependsOnItem]]):
+                Optional parameter specifying dependencies on other labels or date filters.
             validate_by (Optional[List[CatalogValidateByItem]]):
                 Optional parameter specifying validation metrics, attributes, labels or facts.
         Returns:
