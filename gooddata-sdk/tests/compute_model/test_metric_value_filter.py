@@ -5,7 +5,7 @@ import json
 import os
 
 import pytest
-from gooddata_sdk import Attribute, MetricValueFilter, ObjId, SimpleMetric
+from gooddata_sdk import AllMetricValueFilter, Attribute, MetricValueFilter, ObjId, SimpleMetric
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -74,3 +74,20 @@ def test_attribute_filters_to_api_model(scenario, filter, snapshot):
 @pytest.mark.parametrize("scenario,filter,description", test_metric_value_filter)
 def test_date_filters_description(scenario, filter, description):
     assert filter.description(description_labels) == description
+
+
+def test_all_metric_value_filter_description():
+    assert AllMetricValueFilter(metric="local_id1").description(description_labels) == "Local ID: All"
+    assert (
+        AllMetricValueFilter(metric=ObjId(type="metric", id="metric.id")).description(description_labels)
+        == "Metric ID: All"
+    )
+
+
+def test_cannot_create_api_model_from_all_metric_value_filter():
+    """
+    Analogy to AllTimeFilter test_cannot_create_api_model_from_all_time_filter() in test_date_filters.py
+    """
+    with pytest.raises(NotImplementedError):
+        f = AllMetricValueFilter(metric="local_id1")
+        f.as_api_model()

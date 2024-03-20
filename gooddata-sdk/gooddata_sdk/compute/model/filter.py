@@ -333,6 +333,23 @@ _METRIC_VALUE_FILTER_OPERATORS = {
 }
 
 
+class AllMetricValueFilter(Filter):
+    def __init__(self, metric: Union[ObjId, str, Metric]) -> None:
+        super(AllMetricValueFilter, self).__init__()
+        self._metric = _extract_id_or_local_id(metric)
+
+    @property
+    def metric(self) -> Union[ObjId, str]:
+        return self._metric
+
+    def is_noop(self) -> bool:
+        return True
+
+    def description(self, labels: dict[str, str], format_locale: Optional[str] = None) -> str:
+        metric_id = self.metric.id if isinstance(self.metric, ObjId) else self.metric
+        return f"{labels.get(metric_id, metric_id)}: All"
+
+
 class MetricValueFilter(Filter):
     def __init__(
         self,

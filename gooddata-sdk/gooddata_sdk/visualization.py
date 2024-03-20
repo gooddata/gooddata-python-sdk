@@ -12,6 +12,7 @@ from gooddata_sdk.compute.model.attribute import Attribute
 from gooddata_sdk.compute.model.base import ObjId
 from gooddata_sdk.compute.model.filter import (
     AbsoluteDateFilter,
+    AllMetricValueFilter,
     AllTimeFilter,
     Filter,
     MetricValueFilter,
@@ -213,6 +214,11 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
         return AbsoluteDateFilter(dataset=_ref_extract_obj_id(f["dataSet"]), from_date=f["from"], to_date=f["to"])
     elif "measureValueFilter" in filter_obj:
         f = filter_obj["measureValueFilter"]
+
+        # no condition means no limitation
+        if "condition" not in f:
+            return AllMetricValueFilter(metric=_ref_extract(f["measure"]))
+
         condition = f["condition"]
 
         if "comparison" in condition:
