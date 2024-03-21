@@ -10,6 +10,9 @@ remote_name=${1:-origin}
 target_branch=${2:-master}
 # if set to "keep_master", the "docs" from master will be preserved (only for preview!)
 keep_master=$3
+# Versions to keep
+versions_num=4
+
 
 echo "Validating target branch '$target_branch'"
 case "$target_branch" in
@@ -94,6 +97,17 @@ for branch in "$remote_name/master" $(git branch -rl "$remote_name/rel/*") ; do
     fi
 done
 
+# Keep only the four highest versions
+version_dirs=$(ls ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | sort -Vr)
+version_count=$(echo "$version_dirs" | wc -l)
+
+if [ "$version_count" -gt "$versions_num" ]; then
+    versions_to_remove=$(echo "$version_dirs" | tail -n +$((versions_num + 1)))
+    for version in $versions_to_remove; do
+        rm -rf "./versioned_docs/$version"
+        echo "removing $version"
+    done
+fi
 
 ## Moving the highest version to latest
 highest_version=$(ls -v1 ./versioned_docs/ | grep -E '^[0-9]+.[0-9]+$' | tail -n 1)
@@ -110,5 +124,3 @@ if [ "$keep_master" != "keep_master" ] ; then
     rm -rf "${content_dir}/docs"
 fi
 popd
-
-git reset --hard
