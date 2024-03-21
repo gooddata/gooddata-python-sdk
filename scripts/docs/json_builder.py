@@ -297,11 +297,12 @@ def import_submodules(pkg_name: str) -> dict[str, ModuleType]:
         pkg_name (str): package name
     """
     package = sys.modules[pkg_name]
-
-    return {
-        name: importlib.import_module(f"{pkg_name}.{name}")
-        for loader, name, is_pkg in pkgutil.walk_packages(package.__path__)
-    }
+    dictionary = {}
+    for loader, name, is_pkg in pkgutil.walk_packages(package.__path__):
+        try:
+            dictionary[name] = importlib.import_module(f"{pkg_name}.{name}")
+        except ImportError:
+            pass
 
 
 if __name__ == "__main__":
