@@ -14,6 +14,7 @@ from gooddata_sdk import (
     CatalogDeclarativeWorkspaceDataFilterReferences,
     CatalogDependentEntitiesRequest,
     CatalogDependsOn,
+    CatalogDependsOnDateFilter,
     CatalogEntityIdentifier,
     CatalogValidateByItem,
     CatalogWorkspace,
@@ -21,6 +22,7 @@ from gooddata_sdk import (
     GoodDataSdk,
     ObjId,
 )
+from gooddata_sdk.compute.model.filter import AbsoluteDateFilter, RelativeDateFilter
 from gooddata_sdk.utils import recreate_directory
 from tests_support.vcrpy_utils import get_vcr
 
@@ -372,6 +374,19 @@ def test_label_elements(test_config):
     sdk = GoodDataSdk.create(host_=test_config["host"], token_=test_config["token"])
     depends_on: CatalogDependsOn = CatalogDependsOn(label="order_status", values=["Canceled", "Delivered"])
     validate_by: CatalogValidateByItem = CatalogValidateByItem(id="revenue_top_10_percent", type="metric")
+    absolute_filter: AbsoluteDateFilter = AbsoluteDateFilter(
+        dataset=ObjId(type="dataset", id="date"),
+        from_date="2150-07-01",
+        to_date="2150-07-16",
+    )
+    relative_filter: RelativeDateFilter = RelativeDateFilter(
+        dataset=ObjId(type="dataset", id="date"),
+        granularity="DAY",
+        from_shift=3600,
+        to_shift=3700,
+    )
+    depends_on_date: CatalogDependsOn = CatalogDependsOnDateFilter(date_filter=absolute_filter)
+    depends_on_date_relative: CatalogDependsOn = CatalogDependsOnDateFilter(date_filter=relative_filter)
     label_values = sdk.catalog_workspace_content.get_label_elements(
         test_config["workspace"], "order_status", [depends_on], []
     )
@@ -384,6 +399,14 @@ def test_label_elements(test_config):
         test_config["workspace"], ObjId(id="order_status", type="label")
     )
     assert label_values == ["Canceled", "Delivered", "Returned"]
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "order_status", [depends_on_date], []
+    )
+    assert label_values == []
+    label_values = sdk.catalog_workspace_content.get_label_elements(
+        test_config["workspace"], "order_status", [depends_on_date_relative], []
+    )
+    assert label_values == []
 
 
 @gd_vcr.use_cassette(str(_fixtures_dir / "explicit_workspace_data_filter.yaml"))
