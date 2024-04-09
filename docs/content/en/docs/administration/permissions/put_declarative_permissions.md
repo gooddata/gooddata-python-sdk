@@ -27,6 +27,10 @@ Object Containing Workspace Permissions.
 ## Example
 
 ```python
+permissions=[CatalogDeclarativeSingleWorkspacePermission(name="ANALYZE", assignee=CatalogAssigneeIdentifier(id="demo", type="user"))]
+hierarchy_permissions=[CatalogDeclarativeWorkspaceHierarchyPermission(name="ANALYZE", assignee=CatalogAssigneeIdentifier(id="adminGroup", type="userGroup"))]
+declarative_permissions = CatalogDeclarativeWorkspacePermissions(permissions=permissions, hierarchy_permissions=hierarchy_permissions)
+
 # Update permissions on the server with your changes
 sdk.catalog_permission.put_declarative_permissions(workspace_id=workspace_id,
                                                     declarative_workspace_permissions=declarative_permissions)
