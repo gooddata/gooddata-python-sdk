@@ -12,7 +12,7 @@ env:
   NETLIFY_SITE_NAME: ${{ github.event.repository.name }}
 jobs:
   netlify-deploy:
-    runs-on: ubuntu-latest
+    runs-on: infra1-rxa-xlarge
     steps:
       - name: Checkout
         uses: actions/checkout@v4
