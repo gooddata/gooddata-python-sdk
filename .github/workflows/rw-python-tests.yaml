@@ -1,40 +1,14 @@
 name: tests
 on:
-  pull_request:
-    branches:
-      - master
-    paths:
-      - '.docker/**'
-      - 'gooddata-fdw/**'
-      - '!gooddata-fdw/docs/**'
-      - 'gooddata-pandas/**'
-      - '!gooddata-pandas/docs/**'
-      - 'gooddata-sdk/**'
-      - '!gooddata-sdk/docs/**'
-      - '*.mk'
-      - 'Makefile'
-      - '!docs/**'
-      - 'gooddata-api-client/**'
-      - 'gooddata-dbt/**'
-  push:
-    branches:
-      - master
-    paths:
-      - '.docker/**'
-      - 'gooddata-fdw/**'
-      - '!gooddata-fdw/docs/**'
-      - 'gooddata-pandas/**'
-      - '!gooddata-pandas/docs/**'
-      - 'gooddata-sdk/**'
-      - '!gooddata-sdk/docs/**'
-      - '*.mk'
-      - 'Makefile'
-      - '!docs/**'
-      - 'gooddata-api-client/**'
-      - 'gooddata-dbt/**'
+  workflow_call:
+    inputs:
+      changed-python-modules:
+        type: string
+        default: 'false'
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    if: ${{inputs.changed-python-modules == 'true'}}
     strategy:
       matrix:
         python_version: [py311, py310, py39, py38]
@@ -53,6 +27,7 @@ jobs:
           files: ./gooddata-sdk/coverage.xml,./gooddata-pandas/coverage.xml,./gooddata-fdw/coverage.xml
   lint-and-format-check:
     runs-on: ubuntu-latest
+    if: ${{inputs.changed-python-modules == 'true'}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,6 +46,7 @@ jobs:
           make format
   types-check:
     runs-on: ubuntu-latest
+    if: ${{inputs.changed-python-modules == 'true'}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,0 +1,46 @@
+name: Collect changes Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      commit-branch:
+        type: string
+        required: true
+    outputs:
+      changed-docs:
+        description: "Indicator of whether docs files or related config changed."
+        value: ${{ jobs.collect-changes.outputs.docs}}
+      changed-python-modules:
+        description: "Indicator of whether Python files or related config changed."
+        value: ${{ jobs.collect-changes.outputs.python-modules}}
+
+jobs:
+  collect-changes:
+    runs-on: infra1-small
+    outputs:
+      docs: "${{ steps.filter.outputs.docs}}"
+      python-modules: "${{ steps.filter.outputs.python-modules}}"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ inputs.commit-branch }}
+          filters: |
+            docs:
+              - 'gooddata-pandas/**'
+              - 'gooddata-sdk/**'
+              - 'docs/**'
+            python-modules:
+              - '.docker/**'
+              - 'gooddata-fdw/**'
+              - 'gooddata-pandas/**'
+              - 'gooddata-sdk/**'
+              - '*.mk'
+              - 'Makefile'
+              - 'gooddata-api-client/**'
+              - 'gooddata-dbt/**'
