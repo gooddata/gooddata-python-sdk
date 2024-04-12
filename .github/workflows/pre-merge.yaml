@@ -1,0 +1,43 @@
+name: Pre-merge pipeline
+
+on:
+  pull_request:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  collect-changes:
+    name: Collect changes
+    permissions:
+      contents: read
+      pull-requests: read
+    uses: ./.github/workflows/rw-collect-changes.yaml
+    with:
+      commit-branch: ${{ github.event.pull_request.base.ref }}
+
+  test-python:
+    name: Python tests
+    needs: [ collect-changes ]
+    uses: ./.github/workflows/rw-python-tests.yaml
+    with:
+      changed-python-modules: ${{ needs.collect-changes.outputs.changed-python-modules }}
+
+
+  status-check:
+    # do not change the name of this job, it is used by the required status check
+    # in GitHub, you WILL break merging if you change it
+    name: status-check
+    runs-on: infra1-small
+    if: always()
+    needs:
+      - test-python
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          allowed-skips: ${{ toJSON(needs) }}
+          jobs: ${{ toJSON(needs) }}
