@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - 'rel/**'
 
 concurrency:
   group: ${{ github.event.number }}
