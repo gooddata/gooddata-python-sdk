@@ -155,7 +155,7 @@ def signature_data(sig: inspect.Signature) -> SignatureData:
     """
     sig_params_data = []
 
-    for name, param in sig.parameters.items():
+    for param in sig.parameters.values():
         annotation = param.annotation
         if annotation == inspect.Parameter.empty:
             annotation = None
