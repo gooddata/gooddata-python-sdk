@@ -56,7 +56,7 @@ runs:
       KEEP_MASTER: ${{ inputs.keep_master }}
       THIS_BRANCH: ${{ inputs.this_branch }}
       BASE_URL: ${{ inputs.base_url }}
-      HUGO_ENV: public
+      HUGO_ENV: production
     shell: bash
     run: |
       cd docs
