@@ -12,37 +12,48 @@ inputs:
     required: false
     description: Environment variable
     default: public
+  keep-master:
+    required: false
+    description: Preview of the master branch
+    default: no
+  fetch-from:
+    required: false
+    description: repo to fetch the versions from
+    default: origin
 
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-go@v4
-      with:
-        go-version: '>=1.20.1'
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Setup Hugo
-      uses: peaceiris/actions-hugo@v3
-      with:
-        hugo-version: '0.117.0'
-        extended: true
-    - name: Install dependencies
-      working-directory: ${{ inputs.working-directory }}
-      run: npm ci
-      shell: bash
-    - name: Cache hugo dependencies
-      uses: actions/cache@v4
-      with:
-        path: /home/runner/.cache/hugo_cache
-        key: ${{ runner.os }}-hugomod-${{ hashFiles('docs/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-hugomod-
-    - name: Build
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        HUGO_ENV: ${{ inputs.hugo-env }}
-        BASE_URL: ${{ inputs.base-url }}
-      run: hugo --minify ${BASE_URL:+--baseURL $BASE_URL} --logLevel debug
-      shell: bash
+
+  - uses: actions/checkout@v4
+  - uses: actions/setup-go@v4
+    with:
+      go-version: '>=1.20.1'
+  - uses: actions/setup-node@v3
+    with:
+      node-version: 18
+  - name: Install dependencies
+    working-directory: ${{ inputs.working-directory }}
+    run: npm ci
+    shell: bash
+  - name: "Setup Hugo"
+    uses: peaceiris/actions-hugo@v2
+    with:
+      extended: true
+      hugo-version: '0.110.0'
+  - name: "Build"
+    env:
+      KEEP_MASTER: ${{ inputs.keep_master }}
+      THIS_BRANCH: ${{ inputs.this_branch }}
+      BASE_URL: ${{ inputs.base_url }}
+      HUGO_ENV: public
+    shell: bash
+    run: |
+      cd docs
+      rm -f generate.sh
+      wget https://raw.githubusercontent.com/gooddata/gooddata-python-sdk/master/scripts/generate.sh
+      chmod +x ./generate.sh
+      ./generate.sh ${{ inputs.fetch-from }} master ${{ inputs.keep-master}}
+      npm install
+      hugo version
+      hugo --minify ${BASE_URL:+--baseURL $BASE_URL}
