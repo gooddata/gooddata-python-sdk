@@ -11,12 +11,6 @@ See [Create a Physical Data Model](https://www.gooddata.com/docs/cloud/model-dat
 
 ## Methods
 
-* [get_declarative_pdm](./get_declarative_pdm/)
-* [put_declarative_pdm](./put_declarative_pdm/)
-* [store_declarative_pdm](./store_declarative_pdm/)
-* [load_declarative_pdm](./load_declarative_pdm/)
-* [load_and_put_declarative_pdm](./load_and_put_declarative_pdm/)
-* [scan_and_put_pdm](./scan_and_put_pdm/)
 * [store_pdm_to_disk](./store_pdm_to_disk/)
 * [load_pdm_from_disk](./load_pdm_from_disk/)
 
