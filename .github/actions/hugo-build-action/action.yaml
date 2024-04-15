@@ -53,9 +53,9 @@ runs:
       hugo-version: '0.110.0'
   - name: "Build"
     env:
-      KEEP_MASTER: ${{ inputs.keep_master }}
-      THIS_BRANCH: ${{ inputs.this_branch }}
-      BASE_URL: ${{ inputs.base_url }}
+      KEEP_MASTER: ${{ inputs.keep-master }}
+      THIS_BRANCH: ${{ inputs.this-branch }}
+      BASE_URL: ${{ inputs.base-url }}
       HUGO_ENV: production
     shell: bash
     run: |
