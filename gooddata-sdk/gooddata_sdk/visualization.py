@@ -268,7 +268,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
     if "measureDefinition" in measure_def:
         d = measure_def["measureDefinition"]
         aggregation = _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
-        compute_ratio = d.get("computeRatio")
+        compute_ratio = d.get("computeRatio", False)
 
         filters = [_convert_filter_to_computable(f) for f in d["filters"]] if "filters" in d else None
 
