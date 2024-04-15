@@ -17,7 +17,7 @@ def table_col_as_computable(col: ColumnDefinition) -> Union[Attribute, Metric]:
     if item_type == "label":
         return sdk.Attribute(local_id=col.column_name, label=item_id)
     else:
-        aggregation = col.options["agg"] if "agg" in col.options else None
+        aggregation = col.options.get("agg")
 
         return sdk.SimpleMetric(
             local_id=col.column_name,

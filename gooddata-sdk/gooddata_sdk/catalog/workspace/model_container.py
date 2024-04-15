@@ -85,7 +85,7 @@ class CatalogWorkspaceContent:
         else:
             obj_id_str = metric_id
 
-        return self._metric_idx[obj_id_str] if obj_id_str in self._metric_idx else None
+        return self._metric_idx.get(obj_id_str)
 
     def get_dataset(self, dataset_id: Union[str, ObjId]) -> Union[CatalogDataset, None]:
         """
@@ -106,7 +106,7 @@ class CatalogWorkspaceContent:
         else:
             obj_id_str = dataset_id
 
-        return self._datasets_idx[obj_id_str] if obj_id_str in self._datasets_idx else None
+        return self._datasets_idx.get(obj_id_str)
 
     def find_label_attribute(self, id_obj: IdObjType) -> Union[CatalogAttribute, None]:
         """Get attribute by label id."""

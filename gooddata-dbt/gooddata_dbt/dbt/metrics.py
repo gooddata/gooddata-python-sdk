@@ -62,7 +62,7 @@ class DbtModelMetrics:
     @property
     def metrics(self) -> List[DbtModelMetric]:
         result = []
-        for metric_name, metric_def in self.dbt_catalog["metrics"].items():
+        for metric_def in self.dbt_catalog["metrics"].values():
             result.append(DbtModelMetric.from_dict(metric_def))
         # Return only gooddata labelled tables marked by model_id (if requested in args)
         return [
