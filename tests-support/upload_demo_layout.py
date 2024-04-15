@@ -18,10 +18,8 @@ api_version = "v1"
 
 def rest_op(op, url_path, data=None, raise_ex=True):
     all_headers = {
-        **{
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        },
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
         **headers,
     }
     url = f"{host}/{url_path}"

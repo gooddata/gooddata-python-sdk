@@ -223,7 +223,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
 
         if "comparison" in condition:
             c = condition["comparison"]
-            treat_values_as_null = c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
+            treat_values_as_null = c.get("treatNullValuesAs")
 
             return MetricValueFilter(
                 metric=_ref_extract(f["measure"]),
@@ -233,7 +233,7 @@ def _convert_filter_to_computable(filter_obj: dict[str, Any]) -> Filter:
             )
         elif "range" in condition:
             c = condition["range"]
-            treat_values_as_null = c["treatNullValuesAs"] if "treatNullValuesAs" in c else None
+            treat_values_as_null = c.get("treatNullValuesAs")
             return MetricValueFilter(
                 metric=_ref_extract(f["measure"]),
                 operator=c["operator"],
@@ -268,7 +268,7 @@ def _convert_metric_to_computable(metric: dict[str, Any]) -> Metric:
     if "measureDefinition" in measure_def:
         d = measure_def["measureDefinition"]
         aggregation = _AGGREGATION_CONVERSION[d["aggregation"]] if "aggregation" in d else None
-        compute_ratio = d["computeRatio"] if "computeRatio" in d else False
+        compute_ratio = d.get("computeRatio")
 
         filters = [_convert_filter_to_computable(f) for f in d["filters"]] if "filters" in d else None
 
@@ -403,7 +403,7 @@ class VisualizationAttribute:
 
     @property
     def alias(self) -> Optional[str]:
-        return self._a["alias"] if "alias" in self._a else None
+        return self._a.get("alias")
 
     @property
     def label(self) -> dict[str, Any]:

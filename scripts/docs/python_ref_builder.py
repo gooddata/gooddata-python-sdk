@@ -128,7 +128,7 @@ def create_file_structure(data: dict, root: Path, url_root: str):
                 links[name] = {"path": f"{api_ref_root}/{name}".lower(), "kind": "class"}  # Lowercase for Hugo
 
             elif name == "functions":
-                for func_name, func in obj.items():
+                for func_name in obj.keys():
                     if func_name.startswith("_"):
                         continue  # Skip magic and private methods
 

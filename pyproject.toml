@@ -14,9 +14,13 @@ lint.select = [
     "E", # pycodestyle errors
     "F", # pyflakes
     "I", # isort
+    "PERF102", # perflint
+    "PIE",
     "PLR0402", # prevent unnecessary manual import aliases
     "PLR1711", # prevent useless returns
     "SIM2", # simplify boolean expressions
+    "SIM4", # simplify if statements
+    "SIM9", # simplify dict values
     "W" # pycodestyle warnings
 ]
 

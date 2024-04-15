@@ -230,7 +230,7 @@ class DbtModelTables:
     @staticmethod
     def read_dbt_models(dbt_catalog: Dict, upper_case: bool, all_model_ids: List[str]) -> List[DbtModelTable]:
         tables = []
-        for _, model_def in dbt_catalog["nodes"].items():
+        for model_def in dbt_catalog["nodes"].values():
             model_id = safeget(model_def, ["meta", "gooddata", "model_id"])
             if model_id in all_model_ids:
                 tables.append(DbtModelTable.from_dict(model_def))
