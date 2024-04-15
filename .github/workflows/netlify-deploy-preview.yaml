@@ -29,7 +29,7 @@ jobs:
           rsync --delete -av PR-tmp/docs/content/en/ docs/content/en/
           rm -rf PR-tmp
       - name: Generate Versioned Docs
-        uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-versioned-action@master
+        uses: gooddata/gooddata-python-sdk/.github/actions/hugo-build-action@master
         with:
           base-url: https://preview-${{ env.GITHUB_PR_NUMBER }}--${{ env.NETLIFY_SITE_NAME }}.netlify.app
           keep-master: keep_master
