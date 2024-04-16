@@ -306,6 +306,7 @@ def _create_header_mapper(
     dim: int,
     label_overrides: Optional[LabelOverrides] = None,
     use_local_ids_in_headers: bool = False,
+    use_primary_labels_in_attributes: bool = False,
 ) -> Callable[[Any, Optional[int]], Optional[str]]:
     """
     Prepares a header mapper function which translates header structures into appropriate labels used
@@ -317,6 +318,7 @@ def _create_header_mapper(
         label_overrides (Optional[LabelOverrides]): Label overrides. Defaults to None.
         use_local_ids_in_headers (bool): Use local identifiers of header attributes and metrics. Optional.
             Defaults to False.
+        use_primary_labels_in_attributes (bool): Use primary labels in attributes. Optional. Defaults to False.
 
     Returns:
         Callable[[Any, Optional[int]], Optional[str]]: Mapper function.
@@ -334,7 +336,10 @@ def _create_header_mapper(
             pass
         elif "attributeHeader" in header:
             if "labelValue" in header["attributeHeader"]:
-                label = header["attributeHeader"]["labelValue"]
+                if use_primary_labels_in_attributes:
+                    label = header["attributeHeader"]["primaryLabelValue"]
+                else:
+                    label = header["attributeHeader"]["labelValue"]
                 # explicitly handle '(empty value)' if it's None otherwise it's not recognizable in final MultiIndex
                 # backend represents ^^^ by "" (datasource value is "") or None (datasource value is NULL) therefore
                 # if both representation are used it's necessary to set label to unique header label (space) to avoid
@@ -376,6 +381,7 @@ def _headers_to_index(
     response: BareExecutionResponse,
     label_overrides: LabelOverrides,
     use_local_ids_in_headers: bool = False,
+    use_primary_labels_in_attributes: bool = False,
 ) -> Optional[pandas.Index]:
     """Converts headers to a pandas MultiIndex.
 
@@ -388,6 +394,8 @@ def _headers_to_index(
         response (BareExecutionResponse): The execution response object with all data.
         label_overrides (LabelOverrides): A dictionary containing label overrides for the headers.
         use_local_ids_in_headers (bool, optional): If True, uses local Ids in headers, otherwise not. Defaults to False.
+        use_primary_labels_in_attributes (bool, optional): If True, uses primary labels in attributes, otherwise not.
+            Defaults to False.
 
     Returns:
         Optional[pandas.Index]: A pandas MultiIndex object created from the headers, or None if the headers are empty.
@@ -400,6 +408,7 @@ def _headers_to_index(
         dim=dim_idx,
         label_overrides=label_overrides,
         use_local_ids_in_headers=use_local_ids_in_headers,
+        use_primary_labels_in_attributes=use_primary_labels_in_attributes,
     )
 
     return pandas.MultiIndex.from_arrays(
@@ -467,6 +476,7 @@ def convert_execution_response_to_dataframe(
     result_size_dimensions_limits: ResultSizeDimensions,
     result_size_bytes_limit: Optional[int] = None,
     use_local_ids_in_headers: bool = False,
+    use_primary_labels_in_attributes: bool = False,
     page_size: int = _DEFAULT_PAGE_SIZE,
 ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
     """
@@ -480,6 +490,8 @@ def convert_execution_response_to_dataframe(
         result_size_dimensions_limits (ResultSizeDimensions): Dimension limits for the dataframe.
         result_size_bytes_limit (Optional[int], default=None): Size limit in bytes for the dataframe.
         use_local_ids_in_headers (bool, default=False): Use local ids in headers if True, else use default settings.
+        use_primary_labels_in_attributes (bool, default=False): Use primary labels in attributes if True, else use
+            default settings.
         page_size (int, default=_DEFAULT_PAGE_SIZE): Size of the page.
 
     Returns:
@@ -503,6 +515,7 @@ def convert_execution_response_to_dataframe(
             response=execution_response,
             label_overrides=label_overrides,
             use_local_ids_in_headers=use_local_ids_in_headers,
+            use_primary_labels_in_attributes=use_primary_labels_in_attributes,
         ),
         columns=_headers_to_index(
             dim_idx=1,
@@ -510,6 +523,7 @@ def convert_execution_response_to_dataframe(
             response=execution_response,
             label_overrides=label_overrides,
             use_local_ids_in_headers=use_local_ids_in_headers,
+            use_primary_labels_in_attributes=use_primary_labels_in_attributes,
         ),
     )
 
