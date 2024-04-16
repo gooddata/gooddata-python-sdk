@@ -31,5 +31,5 @@ A single Visualization object contains side loaded metadata about the entities i
 
 ```python
 # Get all visualizations
-visualizations = sdk.visualizations.get_visualizations(workspace_id="123")
+visualizations = sdk.visualizations.get_visualizations(workspace_id="123", visualization_id="abc")
 ```
