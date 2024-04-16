@@ -13,6 +13,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 
 import attrs
 from gooddata_api_client.exceptions import NotFoundException
+from gooddata_api_client.model.resolve_settings_request import ResolveSettingsRequest
 
 from gooddata_sdk.catalog.catalog_service_base import CatalogServiceBase
 from gooddata_sdk.catalog.permission.service import CatalogPermissionService
@@ -188,10 +189,32 @@ class CatalogWorkspaceService(CatalogServiceBase):
         :param workspace_id: Workspace ID
         :return: Dict of settings
         """
+        # note: in case some settings were recently added and the API client was not regenerated it can fail on
+        #       invalid value when validating allowed types on the client side before request is sent to the server
         resolved_workspace_settings = [
             setting.to_dict()
             for setting in self._client.actions_api.workspace_resolve_all_settings(
                 workspace_id,
+                _check_return_type=False,
+            )
+        ]
+        return {setting["type"]: setting for setting in resolved_workspace_settings}
+
+    def resolve_workspace_settings(self, workspace_id: str, settings: list) -> dict:
+        """
+        Resolves values for given settings in a workspace by current user, workspace, organization, or default settings
+        and return them as a dictionary. Proper parsing is up to the caller.
+        TODO: long-term we should return a proper entity object.
+
+        :param workspace_id: Workspace ID
+        :param settings: List of settings to resolve
+        :return: Dict of settings
+        """
+        resolved_workspace_settings = [
+            setting.to_dict()
+            for setting in self._client.actions_api.workspace_resolve_settings(
+                workspace_id,
+                ResolveSettingsRequest(settings=settings),
                 _check_return_type=False,
             )
         ]

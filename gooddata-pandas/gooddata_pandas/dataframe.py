@@ -269,6 +269,7 @@ class DataFrameFactory:
         result_size_dimensions_limits: ResultSizeDimensions = (),
         result_size_bytes_limit: Optional[int] = None,
         use_local_ids_in_headers: bool = False,
+        use_primary_labels_in_attributes: bool = False,
         page_size: int = _DEFAULT_PAGE_SIZE,
     ) -> Tuple[pandas.DataFrame, DataFrameMetadata]:
         """
@@ -298,6 +299,7 @@ class DataFrameFactory:
             result_size_dimensions_limits (ResultSizeDimensions): A tuple containing maximum size of result dimensions.
             result_size_bytes_limit (Optional[int]): Maximum size of result in bytes.
             use_local_ids_in_headers (bool): Use local identifier in headers.
+            use_primary_labels_in_attributes (bool): Use primary labels in attributes.
             page_size (int): Number of records per page.
 
         Returns:
@@ -322,5 +324,6 @@ class DataFrameFactory:
             result_size_dimensions_limits=result_size_dimensions_limits,
             result_size_bytes_limit=result_size_bytes_limit,
             use_local_ids_in_headers=use_local_ids_in_headers,
+            use_primary_labels_in_attributes=use_primary_labels_in_attributes,
             page_size=page_size,
         )
