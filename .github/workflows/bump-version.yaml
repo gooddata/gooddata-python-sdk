@@ -65,7 +65,7 @@ jobs:
             PR_NUMBER=$(basename $PR_URL)
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
           env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GH_TOKEN: ${{ secrets.TOKEN_GITHUB_YENKINS }}
         - name: Approve the PR as yenkins-admin
           if: ${{ steps.commit.outputs.pushed == 'true' }}
           run: |
