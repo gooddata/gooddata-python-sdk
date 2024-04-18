@@ -91,6 +91,7 @@ jobs:
       needs:
         - bump-version
       runs-on: ubuntu-latest
+      if: "${{ github.event.inputs.bump_type != 'patch' }}"
       steps:
         - name: Checkout
           uses: actions/checkout@v4
