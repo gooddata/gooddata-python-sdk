@@ -8,7 +8,7 @@ superheading: "catalog_permission."
 
 
 
-``put_declarative_organization_permissions(org_permissions: CatalogDeclarativeOrganizationPermission)``
+``put_declarative_organization_permissions(org_permissions: List[CatalogDeclarativeOrganizationPermission])``
 
 Sets the permissions for the whole organization.
 
@@ -24,6 +24,8 @@ List of Organization Permissions.
 ## Example
 
 ```python
+declarative_org_permissions = [CatalogDeclarativeOrganizationPermission(name="MANAGE", assignee=CatalogAssigneeIdentifier(id="user1", type="user"))]
+
 # Update permissions on the server with your changes
-sdk.catalog_permission.put_declarative_organization_permissions(org_permissions=List[declarative_org_permissions])
+sdk.catalog_permission.put_declarative_organization_permissions(org_permissions=declarative_org_permissions)
 ```
