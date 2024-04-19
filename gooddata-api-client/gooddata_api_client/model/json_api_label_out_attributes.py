@@ -71,6 +71,7 @@ class JsonApiLabelOutAttributes(ModelNormal):
             'GEO': "GEO",
             'GEO_LONGITUDE': "GEO_LONGITUDE",
             'GEO_LATITUDE': "GEO_LATITUDE",
+            'IMAGE': "IMAGE",
         },
     }
 

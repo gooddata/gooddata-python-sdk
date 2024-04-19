@@ -1,12 +1,12 @@
-# gooddata_api_client.ExportingApi
+# gooddata_api_client.VisualExportApi
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**create_pdf_export**](ExportingApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
-[**get_exported_file**](ExportingApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
-[**get_metadata**](ExportingApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
+[**create_pdf_export**](VisualExportApi.md#create_pdf_export) | **POST** /api/v1/actions/workspaces/{workspaceId}/export/visual | Create visual - pdf export request
+[**get_exported_file**](VisualExportApi.md#get_exported_file) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId} | Retrieve exported files
+[**get_metadata**](VisualExportApi.md#get_metadata) | **GET** /api/v1/actions/workspaces/{workspaceId}/export/visual/{exportId}/metadata | Retrieve metadata context
 
 
 # **create_pdf_export**
@@ -22,7 +22,7 @@ An visual export job will be created based on the export request and put to queu
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import exporting_api
+from gooddata_api_client.api import visual_export_api
 from gooddata_api_client.model.export_response import ExportResponse
 from gooddata_api_client.model.pdf_export_request import PdfExportRequest
 from pprint import pprint
@@ -36,7 +36,7 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = exporting_api.ExportingApi(api_client)
+    api_instance = visual_export_api.VisualExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     pdf_export_request = PdfExportRequest(
         dashboard_id="761cd28b-3f57-4ac9-bbdc-1c552cc0d1d0",
@@ -50,7 +50,7 @@ with gooddata_api_client.ApiClient() as api_client:
         api_response = api_instance.create_pdf_export(workspace_id, pdf_export_request)
         pprint(api_response)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling ExportingApi->create_pdf_export: %s\n" % e)
+        print("Exception when calling VisualExportApi->create_pdf_export: %s\n" % e)
 ```
 
 
@@ -96,7 +96,7 @@ Returns 202 until original POST export request is not processed.Returns 200 with
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import exporting_api
+from gooddata_api_client.api import visual_export_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -108,7 +108,7 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = exporting_api.ExportingApi(api_client)
+    api_instance = visual_export_api.VisualExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
@@ -117,7 +117,7 @@ with gooddata_api_client.ApiClient() as api_client:
         # Retrieve exported files
         api_instance.get_exported_file(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling ExportingApi->get_exported_file: %s\n" % e)
+        print("Exception when calling VisualExportApi->get_exported_file: %s\n" % e)
 ```
 
 
@@ -164,7 +164,7 @@ This endpoints serves as a cache for user defined metadata for the front end ui 
 ```python
 import time
 import gooddata_api_client
-from gooddata_api_client.api import exporting_api
+from gooddata_api_client.api import visual_export_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost
 # See configuration.py for a list of all supported configuration parameters.
@@ -176,7 +176,7 @@ configuration = gooddata_api_client.Configuration(
 # Enter a context with an instance of the API client
 with gooddata_api_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = exporting_api.ExportingApi(api_client)
+    api_instance = visual_export_api.VisualExportApi(api_client)
     workspace_id = "workspaceId_example" # str | 
     export_id = "exportId_example" # str | 
 
@@ -185,7 +185,7 @@ with gooddata_api_client.ApiClient() as api_client:
         # Retrieve metadata context
         api_instance.get_metadata(workspace_id, export_id)
     except gooddata_api_client.ApiException as e:
-        print("Exception when calling ExportingApi->get_metadata: %s\n" % e)
+        print("Exception when calling VisualExportApi->get_metadata: %s\n" % e)
 ```
 
 

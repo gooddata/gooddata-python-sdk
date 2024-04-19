@@ -1719,7 +1719,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
                                     title="Customer name",
-                                    value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
+                                    value_type="TEXT",
                                 ),
                             ],
                             sort_column="customer_name",
@@ -2184,7 +2184,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                     source_column_data_type="STRING",
                                     tags=["Customers"],
                                     title="Customer name",
-                                    value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
+                                    value_type="TEXT",
                                 ),
                             ],
                             sort_column="customer_name",
@@ -2529,6 +2529,12 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="modeler.demo",
                     ),
                 ],
+                data_source=WorkspaceDataSource(
+                    id="snowflake.instance.1",
+                    schema_path=[
+                        "subPath",
+                    ],
+                ),
                 description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[
@@ -2693,7 +2699,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 source_column_data_type="STRING",
                                                 tags=["Customers"],
                                                 title="Customer name",
-                                                value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
+                                                value_type="TEXT",
                                             ),
                                         ],
                                         sort_column="customer_name",
@@ -3428,6 +3434,12 @@ with gooddata_api_client.ApiClient() as api_client:
                         id="modeler.demo",
                     ),
                 ],
+                data_source=WorkspaceDataSource(
+                    id="snowflake.instance.1",
+                    schema_path=[
+                        "subPath",
+                    ],
+                ),
                 description="description_example",
                 early_access="early_access_example",
                 hierarchy_permissions=[
@@ -3592,7 +3604,7 @@ with gooddata_api_client.ApiClient() as api_client:
                                                 source_column_data_type="STRING",
                                                 tags=["Customers"],
                                                 title="Customer name",
-                                                value_type="TEXT" | "HYPERLINK" | "GEO" | "GEO_LONGITUDE" | "GEO_LATITUDE",
+                                                value_type="TEXT",
                                             ),
                                         ],
                                         sort_column="customer_name",

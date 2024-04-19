@@ -75,6 +75,7 @@ class JsonApiDataSourceIdentifierOutAttributes(ModelNormal):
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
+            'ORACLE': "ORACLE",
         },
     }
 

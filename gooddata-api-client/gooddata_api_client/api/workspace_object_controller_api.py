@@ -49,6 +49,7 @@ from gooddata_api_client.model.json_api_export_definition_in_document import Jso
 from gooddata_api_client.model.json_api_export_definition_out_document import JsonApiExportDefinitionOutDocument
 from gooddata_api_client.model.json_api_export_definition_out_list import JsonApiExportDefinitionOutList
 from gooddata_api_client.model.json_api_export_definition_patch_document import JsonApiExportDefinitionPatchDocument
+from gooddata_api_client.model.json_api_export_definition_post_optional_id_document import JsonApiExportDefinitionPostOptionalIdDocument
 from gooddata_api_client.model.json_api_fact_out_document import JsonApiFactOutDocument
 from gooddata_api_client.model.json_api_fact_out_list import JsonApiFactOutList
 from gooddata_api_client.model.json_api_filter_context_in_document import JsonApiFilterContextInDocument
@@ -455,12 +456,12 @@ class WorkspaceObjectControllerApi(object):
             params_map={
                 'all': [
                     'workspace_id',
-                    'json_api_export_definition_in_document',
+                    'json_api_export_definition_post_optional_id_document',
                     'include',
                 ],
                 'required': [
                     'workspace_id',
-                    'json_api_export_definition_in_document',
+                    'json_api_export_definition_post_optional_id_document',
                 ],
                 'nullable': [
                 ],
@@ -477,10 +478,8 @@ class WorkspaceObjectControllerApi(object):
                     ('include',): {
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
-                        "FILTERCONTEXTS": "filterContexts",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
-                        "FILTERCONTEXT": "filterContext",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -489,8 +488,8 @@ class WorkspaceObjectControllerApi(object):
                 'openapi_types': {
                     'workspace_id':
                         (str,),
-                    'json_api_export_definition_in_document':
-                        (JsonApiExportDefinitionInDocument,),
+                    'json_api_export_definition_post_optional_id_document':
+                        (JsonApiExportDefinitionPostOptionalIdDocument,),
                     'include':
                         ([str],),
                 },
@@ -500,7 +499,7 @@ class WorkspaceObjectControllerApi(object):
                 },
                 'location_map': {
                     'workspace_id': 'path',
-                    'json_api_export_definition_in_document': 'body',
+                    'json_api_export_definition_post_optional_id_document': 'body',
                     'include': 'query',
                 },
                 'collection_format_map': {
@@ -2587,10 +2586,8 @@ class WorkspaceObjectControllerApi(object):
                     ('include',): {
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
-                        "FILTERCONTEXTS": "filterContexts",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
-                        "FILTERCONTEXT": "filterContext",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -4339,10 +4336,8 @@ class WorkspaceObjectControllerApi(object):
                     ('include',): {
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
-                        "FILTERCONTEXTS": "filterContexts",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
-                        "FILTERCONTEXT": "filterContext",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -5603,10 +5598,8 @@ class WorkspaceObjectControllerApi(object):
                     ('include',): {
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
-                        "FILTERCONTEXTS": "filterContexts",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
-                        "FILTERCONTEXT": "filterContext",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -6573,10 +6566,8 @@ class WorkspaceObjectControllerApi(object):
                     ('include',): {
 
                         "VISUALIZATIONOBJECTS": "visualizationObjects",
-                        "FILTERCONTEXTS": "filterContexts",
                         "USERIDENTIFIERS": "userIdentifiers",
                         "VISUALIZATIONOBJECT": "visualizationObject",
-                        "FILTERCONTEXT": "filterContext",
                         "CREATEDBY": "createdBy",
                         "MODIFIEDBY": "modifiedBy",
                         "ALL": "ALL"
@@ -7543,7 +7534,7 @@ class WorkspaceObjectControllerApi(object):
     def create_entity_export_definitions(
         self,
         workspace_id,
-        json_api_export_definition_in_document,
+        json_api_export_definition_post_optional_id_document,
         **kwargs
     ):
         """Post Export Definitions  # noqa: E501
@@ -7551,12 +7542,12 @@ class WorkspaceObjectControllerApi(object):
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 
-        >>> thread = api.create_entity_export_definitions(workspace_id, json_api_export_definition_in_document, async_req=True)
+        >>> thread = api.create_entity_export_definitions(workspace_id, json_api_export_definition_post_optional_id_document, async_req=True)
         >>> result = thread.get()
 
         Args:
             workspace_id (str):
-            json_api_export_definition_in_document (JsonApiExportDefinitionInDocument):
+            json_api_export_definition_post_optional_id_document (JsonApiExportDefinitionPostOptionalIdDocument):
 
         Keyword Args:
             include ([str]): Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).  __WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.. [optional]
@@ -7623,8 +7614,8 @@ class WorkspaceObjectControllerApi(object):
         kwargs['_request_auths'] = kwargs.get('_request_auths', None)
         kwargs['workspace_id'] = \
             workspace_id
-        kwargs['json_api_export_definition_in_document'] = \
-            json_api_export_definition_in_document
+        kwargs['json_api_export_definition_post_optional_id_document'] = \
+            json_api_export_definition_post_optional_id_document
         return self.create_entity_export_definitions_endpoint.call_with_http_info(**kwargs)
 
     def create_entity_filter_contexts(
@@ -8596,7 +8587,7 @@ class WorkspaceObjectControllerApi(object):
         object_id,
         **kwargs
     ):
-        """delete_entity_export_definitions  # noqa: E501
+        """Delete an Export Definition  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -9830,7 +9821,7 @@ class WorkspaceObjectControllerApi(object):
         workspace_id,
         **kwargs
     ):
-        """get_all_entities_export_definitions  # noqa: E501
+        """Get all Export Definitions  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -11269,7 +11260,7 @@ class WorkspaceObjectControllerApi(object):
         object_id,
         **kwargs
     ):
-        """get_entity_export_definitions  # noqa: E501
+        """Get an Export Definition  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -12535,7 +12526,7 @@ class WorkspaceObjectControllerApi(object):
         json_api_export_definition_patch_document,
         **kwargs
     ):
-        """patch_entity_export_definitions  # noqa: E501
+        """Patch an Export Definition  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
@@ -13637,7 +13628,7 @@ class WorkspaceObjectControllerApi(object):
         json_api_export_definition_in_document,
         **kwargs
     ):
-        """update_entity_export_definitions  # noqa: E501
+        """Put an Export Definition  # noqa: E501
 
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True

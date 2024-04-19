@@ -84,6 +84,7 @@ class JsonApiDataSourcePatchAttributes(ModelNormal):
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
+            'ORACLE': "ORACLE",
         },
     }
 

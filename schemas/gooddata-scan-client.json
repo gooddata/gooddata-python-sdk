@@ -366,7 +366,8 @@
               "GDSTORAGE",
               "CLICKHOUSE",
               "MYSQL",
-              "MARIADB"
+              "MARIADB",
+              "ORACLE"
             ],
             "example": "POSTGRESQL",
             "type": "string"

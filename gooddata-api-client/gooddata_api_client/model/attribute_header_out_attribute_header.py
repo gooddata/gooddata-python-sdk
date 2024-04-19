@@ -79,6 +79,14 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
             'MONTH_OF_YEAR': "MONTH_OF_YEAR",
             'QUARTER_OF_YEAR': "QUARTER_OF_YEAR",
         },
+        ('value_type',): {
+            'TEXT': "TEXT",
+            'HYPERLINK': "HYPERLINK",
+            'GEO': "GEO",
+            'GEO_LONGITUDE': "GEO_LONGITUDE",
+            'GEO_LATITUDE': "GEO_LATITUDE",
+            'IMAGE': "IMAGE",
+        },
     }
 
     validations = {
@@ -120,6 +128,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
             'primary_label': (RestApiIdentifier,),  # noqa: E501
             'format': (AttributeFormat,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
+            'value_type': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -136,6 +145,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
         'primary_label': 'primaryLabel',  # noqa: E501
         'format': 'format',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
+        'value_type': 'valueType',  # noqa: E501
     }
 
     read_only_vars = {
@@ -189,6 +199,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
+            value_type (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -290,6 +301,7 @@ class AttributeHeaderOutAttributeHeader(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): [optional]  # noqa: E501
+            value_type (str): [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

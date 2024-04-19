@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **cache_extra_limit** | **int** |  | [optional] 
+**data_source** | [**JsonApiWorkspaceInAttributesDataSource**](JsonApiWorkspaceInAttributesDataSource.md) |  | [optional] 
 **description** | **str** |  | [optional] 
 **early_access** | **str** |  | [optional] 
 **name** | **str** |  | [optional] 
