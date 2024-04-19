@@ -975,7 +975,8 @@
               "GDSTORAGE",
               "CLICKHOUSE",
               "MYSQL",
-              "MARIADB"
+              "MARIADB",
+              "ORACLE"
             ],
             "example": "POSTGRESQL",
             "type": "string"
@@ -1452,9 +1453,9 @@
               "HYPERLINK",
               "GEO",
               "GEO_LONGITUDE",
-              "GEO_LATITUDE"
+              "GEO_LATITUDE",
+              "IMAGE"
             ],
-            "example": "\"TEXT\" | \"HYPERLINK\" | \"GEO\" | \"GEO_LONGITUDE\" | \"GEO_LATITUDE\"",
             "type": "string"
           }
         },
@@ -2421,6 +2422,9 @@
               "$ref": "#/components/schemas/DeclarativeCustomApplicationSetting"
             },
             "type": "array"
+          },
+          "dataSource": {
+            "$ref": "#/components/schemas/WorkspaceDataSource"
           },
           "description": {
             "description": "Description of the workspace",
@@ -5785,7 +5789,8 @@
                   "GDSTORAGE",
                   "CLICKHOUSE",
                   "MYSQL",
-                  "MARIADB"
+                  "MARIADB",
+                  "ORACLE"
                 ],
                 "type": "string"
               }
@@ -5976,7 +5981,8 @@
                   "GDSTORAGE",
                   "CLICKHOUSE",
                   "MYSQL",
-                  "MARIADB"
+                  "MARIADB",
+                  "ORACLE"
                 ],
                 "type": "string"
               },
@@ -6131,7 +6137,8 @@
                   "GDSTORAGE",
                   "CLICKHOUSE",
                   "MYSQL",
-                  "MARIADB"
+                  "MARIADB",
+                  "ORACLE"
                 ],
                 "type": "string"
               },
@@ -6334,7 +6341,8 @@
                   "GDSTORAGE",
                   "CLICKHOUSE",
                   "MYSQL",
-                  "MARIADB"
+                  "MARIADB",
+                  "ORACLE"
                 ],
                 "type": "string"
               },
@@ -6925,17 +6933,6 @@
           },
           "relationships": {
             "properties": {
-              "filterContext": {
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
-                  }
-                },
-                "required": [
-                  "data"
-                ],
-                "type": "object"
-              },
               "visualizationObject": {
                 "properties": {
                   "data": {
@@ -7040,17 +7037,6 @@
                 ],
                 "type": "object"
               },
-              "filterContext": {
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
-                  }
-                },
-                "required": [
-                  "data"
-                ],
-                "type": "object"
-              },
               "modifiedBy": {
                 "properties": {
                   "data": {
@@ -7118,9 +7104,6 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/JsonApiVisualizationObjectOutWithLinks"
-          },
-          {
-            "$ref": "#/components/schemas/JsonApiFilterContextOutWithLinks"
           },
           {
             "$ref": "#/components/schemas/JsonApiUserIdentifierOutWithLinks"
@@ -7213,17 +7196,6 @@
           },
           "relationships": {
             "properties": {
-              "filterContext": {
-                "properties": {
-                  "data": {
-                    "$ref": "#/components/schemas/JsonApiFilterContextToOneLinkage"
-                  }
-                },
-                "required": [
-                  "data"
-                ],
-                "type": "object"
-              },
               "visualizationObject": {
                 "properties": {
                   "data": {
@@ -7258,6 +7230,90 @@
         "properties": {
           "data": {
             "$ref": "#/components/schemas/JsonApiExportDefinitionPatch"
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionPostOptionalId": {
+        "description": "JSON:API representation of exportDefinition entity.",
+        "properties": {
+          "attributes": {
+            "properties": {
+              "areRelationsValid": {
+                "type": "boolean"
+              },
+              "description": {
+                "maxLength": 10000,
+                "type": "string"
+              },
+              "requestPayload": {
+                "description": "Free-form JSON content to be used as export request payload for /export/tabular endpoint. Maximum supported length is 15000 characters.",
+                "example": {
+                  "format": "PDF",
+                  "visualizationObjectId": "<id>"
+                },
+                "type": "object"
+              },
+              "tags": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "requestPayload"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "API identifier of an object",
+            "example": "id1",
+            "pattern": "^(?!\\.)[.A-Za-z0-9_-]{1,255}$",
+            "type": "string"
+          },
+          "relationships": {
+            "properties": {
+              "visualizationObject": {
+                "properties": {
+                  "data": {
+                    "$ref": "#/components/schemas/JsonApiVisualizationObjectToOneLinkage"
+                  }
+                },
+                "required": [
+                  "data"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Object type",
+            "enum": [
+              "exportDefinition"
+            ],
+            "example": "exportDefinition",
+            "type": "string"
+          }
+        },
+        "required": [
+          "attributes",
+          "type"
+        ],
+        "type": "object"
+      },
+      "JsonApiExportDefinitionPostOptionalIdDocument": {
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JsonApiExportDefinitionPostOptionalId"
           }
         },
         "required": [
@@ -7905,15 +7961,6 @@
         },
         "type": "array"
       },
-      "JsonApiFilterContextToOneLinkage": {
-        "description": "References to other resource objects in a to-one (\\\"relationship\\\"). Relationships can be specified by including a member in a resource's links object.",
-        "nullable": true,
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/JsonApiFilterContextLinkage"
-          }
-        ]
-      },
       "JsonApiJwkIn": {
         "description": "JSON:API representation of jwk entity.",
         "properties": {
@@ -8182,7 +8229,8 @@
                   "HYPERLINK",
                   "GEO",
                   "GEO_LONGITUDE",
-                  "GEO_LATITUDE"
+                  "GEO_LATITUDE",
+                  "IMAGE"
                 ],
                 "type": "string"
               }
@@ -12138,6 +12186,29 @@
                 "format": "int64",
                 "type": "integer"
               },
+              "dataSource": {
+                "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
+                "properties": {
+                  "id": {
+                    "description": "The ID of the used data source.",
+                    "example": "snowflake.instance.1",
+                    "type": "string"
+                  },
+                  "schemaPath": {
+                    "description": "The full schema path as array of its path parts. Will be rendered as subPath1.subPath2...",
+                    "items": {
+                      "description": "The part of the schema path.",
+                      "example": "subPath",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
+              },
               "description": {
                 "maxLength": 255,
                 "type": "string"
@@ -12234,6 +12305,29 @@
               "cacheExtraLimit": {
                 "format": "int64",
                 "type": "integer"
+              },
+              "dataSource": {
+                "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
+                "properties": {
+                  "id": {
+                    "description": "The ID of the used data source.",
+                    "example": "snowflake.instance.1",
+                    "type": "string"
+                  },
+                  "schemaPath": {
+                    "description": "The full schema path as array of its path parts. Will be rendered as subPath1.subPath2...",
+                    "items": {
+                      "description": "The part of the schema path.",
+                      "example": "subPath",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
               },
               "description": {
                 "maxLength": 255,
@@ -12434,6 +12528,29 @@
               "cacheExtraLimit": {
                 "format": "int64",
                 "type": "integer"
+              },
+              "dataSource": {
+                "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
+                "properties": {
+                  "id": {
+                    "description": "The ID of the used data source.",
+                    "example": "snowflake.instance.1",
+                    "type": "string"
+                  },
+                  "schemaPath": {
+                    "description": "The full schema path as array of its path parts. Will be rendered as subPath1.subPath2...",
+                    "items": {
+                      "description": "The part of the schema path.",
+                      "example": "subPath",
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "id"
+                ],
+                "type": "object"
               },
               "description": {
                 "maxLength": 255,
@@ -12875,7 +12992,7 @@
       "LocaleRequest": {
         "properties": {
           "locale": {
-            "description": "Requested locale in the form of language tag. Can contain special 'default' locale which points to original (not translated) values in entity properties.",
+            "description": "Requested locale in the form of language tag (see RFC 5646).",
             "example": "en-US",
             "type": "string"
           }
@@ -13773,6 +13890,29 @@
             "description": "Permissions granted to the user",
             "items": {
               "$ref": "#/components/schemas/GrantedPermission"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "WorkspaceDataSource": {
+        "description": "The data source used for the particular workspace instead of the one defined in the LDM inherited from its parent workspace. Such data source cannot be defined for a single or a top-parent workspace.",
+        "properties": {
+          "id": {
+            "description": "The ID of the used data source.",
+            "example": "snowflake.instance.1",
+            "type": "string"
+          },
+          "schemaPath": {
+            "description": "The full schema path as array of its path parts. Will be rendered as subPath1.subPath2...",
+            "items": {
+              "description": "The part of the schema path.",
+              "example": "subPath",
+              "type": "string"
             },
             "type": "array"
           }
@@ -15258,7 +15398,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/translations": {
       "get": {
-        "description": "Provides a list of effective translation tags. The resulting array always contains a special 'default' value which points to original not-translated values specified directly in entity attributes.",
+        "description": "Provides a list of effective translation tags.",
         "operationId": "getTranslationTags",
         "parameters": [
           {
@@ -15300,7 +15440,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/translations/clean": {
       "post": {
-        "description": "Cleans up all translations for a particular locale. Cleaning up the special 'default' locale value is forbidden.",
+        "description": "Cleans up all translations for a particular locale.",
         "operationId": "cleanTranslations",
         "parameters": [
           {
@@ -15342,7 +15482,7 @@
     },
     "/api/v1/actions/workspaces/{workspaceId}/translations/retrieve": {
       "post": {
-        "description": "Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value. If you use the special 'default' locale value in the request, only source translations are returned.",
+        "description": "Retrieve all translation for existing entities in a particular locale. The source translations returned by this endpoint are always original, not translated, texts. Because the XLIFF schema definition has the 'xs:language' constraint for the 'srcLang' attribute, it is always set to 'en-US' value.",
         "operationId": "retrieveTranslations",
         "parameters": [
           {
@@ -22085,7 +22225,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22094,7 +22234,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "example": "include=visualizationObject,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22103,10 +22243,8 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
-                  "filterContexts",
                   "userIdentifiers",
                   "visualizationObject",
-                  "filterContext",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22170,10 +22308,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get all Export Definitions",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "post": {
         "operationId": "createEntity@ExportDefinitions",
@@ -22188,7 +22334,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "example": "include=visualizationObject,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22197,10 +22343,8 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
-                  "filterContexts",
                   "userIdentifiers",
                   "visualizationObject",
-                  "filterContext",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22216,7 +22360,7 @@
           "content": {
             "application/vnd.gooddata.api+json": {
               "schema": {
-                "$ref": "#/components/schemas/JsonApiExportDefinitionInDocument"
+                "$ref": "#/components/schemas/JsonApiExportDefinitionPostOptionalIdDocument"
               }
             }
           },
@@ -22236,9 +22380,16 @@
         },
         "summary": "Post Export Definitions",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/exportDefinitions/{objectId}": {
@@ -22263,7 +22414,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22276,10 +22427,18 @@
             "$ref": "#/components/responses/Deleted"
           }
         },
+        "summary": "Delete an Export Definition",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
       },
       "get": {
         "operationId": "getEntity@ExportDefinitions",
@@ -22302,7 +22461,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22311,7 +22470,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "example": "include=visualizationObject,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22320,10 +22479,8 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
-                  "filterContexts",
                   "userIdentifiers",
                   "visualizationObject",
-                  "filterContext",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22356,10 +22513,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Get an Export Definition",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to view this object type.",
+          "permissions": [
+            "VIEW"
+          ]
+        }
       },
       "patch": {
         "operationId": "patchEntity@ExportDefinitions",
@@ -22382,7 +22547,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22391,7 +22556,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "example": "include=visualizationObject,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22400,10 +22565,8 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
-                  "filterContexts",
                   "userIdentifiers",
                   "visualizationObject",
-                  "filterContext",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22437,10 +22600,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Patch an Export Definition",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
       },
       "put": {
         "operationId": "updateEntity@ExportDefinitions",
@@ -22463,7 +22634,7 @@
           },
           {
             "description": "Filtering parameter in RSQL. See https://github.com/jirutka/rsql-parser. You can specify any object parameter and parameter of related entity (for example title=='Some Title';description=='desc'). Additionally, if the entity relationship represents a polymorphic entity type, it can be casted to its subtypes (for example relatedEntity::subtype.subtypeProperty=='Value 123').",
-            "example": "filter=title==someString;description==someString;visualizationObject.id==321;filterContext.id==321",
+            "example": "filter=title==someString;description==someString;visualizationObject.id==321;createdBy.id==321",
             "in": "query",
             "name": "filter",
             "schema": {
@@ -22472,7 +22643,7 @@
           },
           {
             "description": "Array of included collections or individual relationships. Includes are separated by commas (e.g. include=entity1s,entity2s). Collection include represents the inclusion of every relationship between this entity and the given collection. Relationship include represents the inclusion of the particular relationships only. If single parameter \"ALL\" is present, all possible includes are used (include=ALL).\n\n__WARNING:__ Individual include types (collection, relationship or ALL) cannot be combined together.",
-            "example": "include=visualizationObject,filterContext,createdBy,modifiedBy",
+            "example": "include=visualizationObject,createdBy,modifiedBy",
             "explode": false,
             "in": "query",
             "name": "include",
@@ -22481,10 +22652,8 @@
               "items": {
                 "enum": [
                   "visualizationObjects",
-                  "filterContexts",
                   "userIdentifiers",
                   "visualizationObject",
-                  "filterContext",
                   "createdBy",
                   "modifiedBy",
                   "ALL"
@@ -22518,10 +22687,18 @@
             "description": "Request successfully processed"
           }
         },
+        "summary": "Put an Export Definition",
         "tags": [
+          "Export Definitions",
           "entities",
           "workspace-object-controller"
-        ]
+        ],
+        "x-gdc-security-info": {
+          "description": "Contains minimal permission level required to manage this object type.",
+          "permissions": [
+            "ANALYZE"
+          ]
+        }
       }
     },
     "/api/v1/entities/workspaces/{workspaceId}/facts": {

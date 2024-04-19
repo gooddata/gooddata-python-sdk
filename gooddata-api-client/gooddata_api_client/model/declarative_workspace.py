@@ -37,6 +37,7 @@ def lazy_import():
     from gooddata_api_client.model.declarative_user_data_filter import DeclarativeUserDataFilter
     from gooddata_api_client.model.declarative_workspace_hierarchy_permission import DeclarativeWorkspaceHierarchyPermission
     from gooddata_api_client.model.declarative_workspace_model import DeclarativeWorkspaceModel
+    from gooddata_api_client.model.workspace_data_source import WorkspaceDataSource
     from gooddata_api_client.model.workspace_identifier import WorkspaceIdentifier
     globals()['DeclarativeCustomApplicationSetting'] = DeclarativeCustomApplicationSetting
     globals()['DeclarativeSetting'] = DeclarativeSetting
@@ -44,6 +45,7 @@ def lazy_import():
     globals()['DeclarativeUserDataFilter'] = DeclarativeUserDataFilter
     globals()['DeclarativeWorkspaceHierarchyPermission'] = DeclarativeWorkspaceHierarchyPermission
     globals()['DeclarativeWorkspaceModel'] = DeclarativeWorkspaceModel
+    globals()['WorkspaceDataSource'] = WorkspaceDataSource
     globals()['WorkspaceIdentifier'] = WorkspaceIdentifier
 
 
@@ -124,6 +126,7 @@ class DeclarativeWorkspace(ModelNormal):
             'name': (str,),  # noqa: E501
             'cache_extra_limit': (int,),  # noqa: E501
             'custom_application_settings': ([DeclarativeCustomApplicationSetting],),  # noqa: E501
+            'data_source': (WorkspaceDataSource,),  # noqa: E501
             'description': (str,),  # noqa: E501
             'early_access': (str,),  # noqa: E501
             'hierarchy_permissions': ([DeclarativeWorkspaceHierarchyPermission],),  # noqa: E501
@@ -145,6 +148,7 @@ class DeclarativeWorkspace(ModelNormal):
         'name': 'name',  # noqa: E501
         'cache_extra_limit': 'cacheExtraLimit',  # noqa: E501
         'custom_application_settings': 'customApplicationSettings',  # noqa: E501
+        'data_source': 'dataSource',  # noqa: E501
         'description': 'description',  # noqa: E501
         'early_access': 'earlyAccess',  # noqa: E501
         'hierarchy_permissions': 'hierarchyPermissions',  # noqa: E501
@@ -203,6 +207,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
+            data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501
@@ -305,6 +310,7 @@ class DeclarativeWorkspace(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             cache_extra_limit (int): Extra cache limit allocated to specific workspace. In case there is extra cache budget setup for organization, it can be split between multiple workspaces.. [optional]  # noqa: E501
             custom_application_settings ([DeclarativeCustomApplicationSetting]): A list of workspace custom settings.. [optional]  # noqa: E501
+            data_source (WorkspaceDataSource): [optional]  # noqa: E501
             description (str): Description of the workspace. [optional]  # noqa: E501
             early_access (str): Early access defined on level Workspace. [optional]  # noqa: E501
             hierarchy_permissions ([DeclarativeWorkspaceHierarchyPermission]): [optional]  # noqa: E501

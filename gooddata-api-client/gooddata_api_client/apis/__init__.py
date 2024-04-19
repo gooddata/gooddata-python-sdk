@@ -31,7 +31,7 @@ from gooddata_api_client.api.data_source_entity_apis_api import DataSourceEntity
 from gooddata_api_client.api.datasets_api import DatasetsApi
 from gooddata_api_client.api.dependency_graph_api import DependencyGraphApi
 from gooddata_api_client.api.entitlement_api import EntitlementApi
-from gooddata_api_client.api.exporting_api import ExportingApi
+from gooddata_api_client.api.export_definitions_api import ExportDefinitionsApi
 from gooddata_api_client.api.facts_api import FactsApi
 from gooddata_api_client.api.generate_logical_data_model_api import GenerateLogicalDataModelApi
 from gooddata_api_client.api.hierarchy_api import HierarchyApi
@@ -47,6 +47,8 @@ from gooddata_api_client.api.permissions_api import PermissionsApi
 from gooddata_api_client.api.plugins_api import PluginsApi
 from gooddata_api_client.api.reporting_settings_api import ReportingSettingsApi
 from gooddata_api_client.api.scanning_api import ScanningApi
+from gooddata_api_client.api.smart_functions_api import SmartFunctionsApi
+from gooddata_api_client.api.tabular_export_api import TabularExportApi
 from gooddata_api_client.api.test_connection_api import TestConnectionApi
 from gooddata_api_client.api.translations_api import TranslationsApi
 from gooddata_api_client.api.usage_api import UsageApi
@@ -58,6 +60,7 @@ from gooddata_api_client.api.user_settings_api import UserSettingsApi
 from gooddata_api_client.api.user_management_api import UserManagementApi
 from gooddata_api_client.api.users_declarative_apis_api import UsersDeclarativeAPIsApi
 from gooddata_api_client.api.users_entity_apis_api import UsersEntityAPIsApi
+from gooddata_api_client.api.visual_export_api import VisualExportApi
 from gooddata_api_client.api.visualization_object_api import VisualizationObjectApi
 from gooddata_api_client.api.workspaces_declarative_apis_api import WorkspacesDeclarativeAPIsApi
 from gooddata_api_client.api.workspaces_entity_apis_api import WorkspacesEntityAPIsApi

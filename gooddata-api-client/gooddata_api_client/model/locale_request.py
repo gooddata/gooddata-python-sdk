@@ -105,7 +105,7 @@ class LocaleRequest(ModelNormal):
         """LocaleRequest - a model defined in OpenAPI
 
         Args:
-            locale (str): Requested locale in the form of language tag. Can contain special 'default' locale which points to original (not translated) values in entity properties.
+            locale (str): Requested locale in the form of language tag (see RFC 5646).
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -194,7 +194,7 @@ class LocaleRequest(ModelNormal):
         """LocaleRequest - a model defined in OpenAPI
 
         Args:
-            locale (str): Requested locale in the form of language tag. Can contain special 'default' locale which points to original (not translated) values in entity properties.
+            locale (str): Requested locale in the form of language tag (see RFC 5646).
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types

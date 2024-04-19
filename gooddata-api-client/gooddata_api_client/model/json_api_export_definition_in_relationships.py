@@ -31,9 +31,7 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 
 def lazy_import():
-    from gooddata_api_client.model.json_api_export_definition_in_relationships_filter_context import JsonApiExportDefinitionInRelationshipsFilterContext
     from gooddata_api_client.model.json_api_export_definition_in_relationships_visualization_object import JsonApiExportDefinitionInRelationshipsVisualizationObject
-    globals()['JsonApiExportDefinitionInRelationshipsFilterContext'] = JsonApiExportDefinitionInRelationshipsFilterContext
     globals()['JsonApiExportDefinitionInRelationshipsVisualizationObject'] = JsonApiExportDefinitionInRelationshipsVisualizationObject
 
 
@@ -90,7 +88,6 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
         """
         lazy_import()
         return {
-            'filter_context': (JsonApiExportDefinitionInRelationshipsFilterContext,),  # noqa: E501
             'visualization_object': (JsonApiExportDefinitionInRelationshipsVisualizationObject,),  # noqa: E501
         }
 
@@ -100,7 +97,6 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
 
 
     attribute_map = {
-        'filter_context': 'filterContext',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
     }
 
@@ -145,7 +141,6 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filter_context (JsonApiExportDefinitionInRelationshipsFilterContext): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 
@@ -232,7 +227,6 @@ class JsonApiExportDefinitionInRelationships(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            filter_context (JsonApiExportDefinitionInRelationshipsFilterContext): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
 

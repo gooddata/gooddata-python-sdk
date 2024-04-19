@@ -63,11 +63,6 @@
         ],
         "type": "object"
       },
-      "JsonNode": {
-        "description": "Metadata definition in open form JSON format.",
-        "example": "\"metadata\":{}",
-        "type": "object"
-      },
       "PdfExportRequest": {
         "description": "Export request object describing the export properties and metadata for pdf exports.",
         "properties": {
@@ -82,7 +77,9 @@
             "type": "string"
           },
           "metadata": {
-            "$ref": "#/components/schemas/JsonNode"
+            "description": "Metadata definition in open form JSON format.",
+            "example": "\"metadata\":{}",
+            "type": "object"
           }
         },
         "required": [
@@ -182,7 +179,7 @@
             "type": "string"
           },
           "showFilters": {
-            "description": "Print applied filters on top of the document. (Not supported yet)",
+            "description": "Print applied filters on top of the document. (PDF/HTML when visualizationObject is given)",
             "example": false,
             "type": "boolean"
           }
@@ -223,6 +220,14 @@
             "description": "Visualization object identifier. Alternative to executionResult property. (HTML/PDF only)",
             "example": "f7c359bc-c230-4487-b15b-ad9685bcb537",
             "type": "string"
+          },
+          "visualizationObjectCustomFilters": {
+            "description": "Optional custom filters (as array of IFilter objects defined in UI SDK) to be applied when visualizationObject is given. (HTML/PDF only)",
+            "example": "[{\"negativeAttributeFilter\":{\"displayForm\":{\"identifier\":{\"id\":\"products.category\",\"type\":\"label\"}},\"notIn\":{\"values\":[\"Books\"]}}}]",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -277,7 +282,7 @@
         },
         "summary": "Create tabular export request",
         "tags": [
-          "Computation",
+          "Tabular export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -362,7 +367,7 @@
         },
         "summary": "Retrieve exported files",
         "tags": [
-          "Computation",
+          "Tabular export",
           "actions"
         ],
         "x-gdc-security-info": {
@@ -411,8 +416,8 @@
         },
         "summary": "Create visual - pdf export request",
         "tags": [
-          "Exporting",
-          "actions"
+          "actions",
+          "Visual export"
         ],
         "x-gdc-security-info": {
           "description": "Permissions required to execute pdf export.",
@@ -475,8 +480,8 @@
         },
         "summary": "Retrieve exported files",
         "tags": [
-          "Exporting",
-          "actions"
+          "actions",
+          "Visual export"
         ],
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",
@@ -518,8 +523,8 @@
         },
         "summary": "Retrieve metadata context",
         "tags": [
-          "Exporting",
-          "actions"
+          "actions",
+          "Visual export"
         ],
         "x-gdc-security-info": {
           "description": "Minimal permission required to use this endpoint.",

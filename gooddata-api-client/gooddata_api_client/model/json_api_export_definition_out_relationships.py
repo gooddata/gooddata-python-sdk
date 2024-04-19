@@ -32,10 +32,8 @@ from gooddata_api_client.exceptions import ApiAttributeError
 
 def lazy_import():
     from gooddata_api_client.model.json_api_analytical_dashboard_out_relationships_created_by import JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
-    from gooddata_api_client.model.json_api_export_definition_in_relationships_filter_context import JsonApiExportDefinitionInRelationshipsFilterContext
     from gooddata_api_client.model.json_api_export_definition_in_relationships_visualization_object import JsonApiExportDefinitionInRelationshipsVisualizationObject
     globals()['JsonApiAnalyticalDashboardOutRelationshipsCreatedBy'] = JsonApiAnalyticalDashboardOutRelationshipsCreatedBy
-    globals()['JsonApiExportDefinitionInRelationshipsFilterContext'] = JsonApiExportDefinitionInRelationshipsFilterContext
     globals()['JsonApiExportDefinitionInRelationshipsVisualizationObject'] = JsonApiExportDefinitionInRelationshipsVisualizationObject
 
 
@@ -93,7 +91,6 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
         lazy_import()
         return {
             'created_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
-            'filter_context': (JsonApiExportDefinitionInRelationshipsFilterContext,),  # noqa: E501
             'modified_by': (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy,),  # noqa: E501
             'visualization_object': (JsonApiExportDefinitionInRelationshipsVisualizationObject,),  # noqa: E501
         }
@@ -105,7 +102,6 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
 
     attribute_map = {
         'created_by': 'createdBy',  # noqa: E501
-        'filter_context': 'filterContext',  # noqa: E501
         'modified_by': 'modifiedBy',  # noqa: E501
         'visualization_object': 'visualizationObject',  # noqa: E501
     }
@@ -152,7 +148,6 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
-            filter_context (JsonApiExportDefinitionInRelationshipsFilterContext): [optional]  # noqa: E501
             modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """
@@ -241,7 +236,6 @@ class JsonApiExportDefinitionOutRelationships(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             created_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
-            filter_context (JsonApiExportDefinitionInRelationshipsFilterContext): [optional]  # noqa: E501
             modified_by (JsonApiAnalyticalDashboardOutRelationshipsCreatedBy): [optional]  # noqa: E501
             visualization_object (JsonApiExportDefinitionInRelationshipsVisualizationObject): [optional]  # noqa: E501
         """

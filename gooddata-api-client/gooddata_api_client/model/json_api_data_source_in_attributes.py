@@ -79,6 +79,7 @@ class JsonApiDataSourceInAttributes(ModelNormal):
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
+            'ORACLE': "ORACLE",
         },
         ('cache_strategy',): {
             'None': None,

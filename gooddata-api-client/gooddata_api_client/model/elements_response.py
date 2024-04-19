@@ -114,6 +114,7 @@ class ElementsResponse(ModelNormal):
             'elements': ([Element],),  # noqa: E501
             'paging': (Paging,),  # noqa: E501
             'primary_label': (RestApiIdentifier,),  # noqa: E501
+            'cache_id': (str,),  # noqa: E501
             'format': (AttributeFormat,),  # noqa: E501
             'granularity': (str,),  # noqa: E501
         }
@@ -127,6 +128,7 @@ class ElementsResponse(ModelNormal):
         'elements': 'elements',  # noqa: E501
         'paging': 'paging',  # noqa: E501
         'primary_label': 'primaryLabel',  # noqa: E501
+        'cache_id': 'cacheId',  # noqa: E501
         'format': 'format',  # noqa: E501
         'granularity': 'granularity',  # noqa: E501
     }
@@ -177,6 +179,7 @@ class ElementsResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_id (str): The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
         """
@@ -272,6 +275,7 @@ class ElementsResponse(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            cache_id (str): The client can use this in subsequent requests (like paging or search) to get results from the same point in time as the previous request. This is useful when the underlying data source has caches disabled and the client wants to avoid seeing inconsistent results and to also avoid excessive queries to the database itself.. [optional]  # noqa: E501
             format (AttributeFormat): [optional]  # noqa: E501
             granularity (str): Granularity of requested label in case of date attribute. [optional]  # noqa: E501
         """

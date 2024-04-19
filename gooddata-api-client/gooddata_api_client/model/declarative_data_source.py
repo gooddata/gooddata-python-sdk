@@ -81,6 +81,7 @@ class DeclarativeDataSource(ModelNormal):
             'CLICKHOUSE': "CLICKHOUSE",
             'MYSQL': "MYSQL",
             'MARIADB': "MARIADB",
+            'ORACLE': "ORACLE",
         },
         ('cache_strategy',): {
             'ALWAYS': "ALWAYS",
